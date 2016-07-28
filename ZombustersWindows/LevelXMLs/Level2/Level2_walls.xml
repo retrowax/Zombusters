@@ -1,0 +1,163 @@
+﻿<?xml version="1.0"?>
+<ArrayOfCWall>
+  <!-- Superior Izquierda -->
+  <CWall>
+    <From>
+      <X>0</X>
+      <Y>42</Y>
+    </From>
+    <To>
+      <X>-250</X>
+      <Y>42</Y>
+    </To>
+  </CWall>
+
+  <CWall>
+    <From>
+      <X>0</X>
+      <Y>42</Y>
+    </From>
+    <To>
+      <X>64</X>
+      <Y>11</Y>
+    </To>
+  </CWall>
+
+  <CWall>
+    <From>
+      <X>64</X>
+      <Y>11</Y>
+    </From>
+    <To>
+      <X>64</X>
+      <Y>-261</Y>
+    </To>
+  </CWall>
+  <!-- END Superior Izquierda -->
+
+  <!-- Superior Derecha -->
+  <CWall>
+    <From>
+      <X>601</X>
+      <Y>0</Y>
+    </From>
+    <To>
+      <X>601</X>
+      <Y>-286</Y>
+    </To>
+  </CWall>
+
+  <CWall>
+    <From>
+      <X>600</X>
+      <Y>0</Y>
+    </From>
+    <To>
+      <X>770</X>
+      <Y>84</Y>
+    </To>
+  </CWall>
+
+  <CWall>
+    <From>
+      <X>770</X>
+      <Y>84</Y>
+    </From>
+    <To>
+      <X>746</X>
+      <Y>106</Y>
+    </To>
+  </CWall>
+
+  <CWall>
+    <From>
+      <X>746</X>
+      <Y>106</Y>
+    </From>
+    <To>
+      <X>831</X>
+      <Y>147</Y>
+    </To>
+  </CWall>
+
+  <CWall>
+    <From>
+      <X>831</X>
+      <Y>147</Y>
+    </From>
+    <To>
+      <X>863</X>
+      <Y>132</Y>
+    </To>
+  </CWall>
+
+  <CWall>
+    <From>
+      <X>863</X>
+      <Y>132</Y>
+    </From>
+    <To>
+      <X>1102</X>
+      <Y>252</Y>
+    </To>
+  </CWall>
+
+  <CWall>
+    <From>
+      <X>1102</X>
+      <Y>252</Y>
+    </From>
+    <To>
+      <X>1280</X>
+      <Y>163</Y>
+    </To>
+  </CWall>
+
+  <CWall>
+    <From>
+      <X>1280</X>
+      <Y>163</Y>
+    </From>
+    <To>
+      <X>1280</X>
+      <Y>-250</Y>
+    </To>
+  </CWall>
+  <!-- END Superior Derecha -->
+
+  <!-- Inferior Derecha -->
+  <CWall>
+    <From>
+      <X>1280</X>
+      <Y>488</Y>
+    </From>
+    <To>
+      <X>1580</X>
+      <Y>488</Y>
+    </To>
+  </CWall>
+
+  <CWall>
+    <From>
+      <X>1280</X>
+      <Y>488</Y>
+    </From>
+    <To>
+      <X>820</X>
+      <Y>720</Y>
+    </To>
+  </CWall>
+
+  <CWall>
+    <From>
+      <X>820</X>
+      <Y>720</Y>
+    </From>
+    <To>
+      <X>820</X>
+      <Y>990</Y>
+    </To>
+  </CWall>
+  <!-- END Inferior Derecha -->
+  
+</ArrayOfCWall>

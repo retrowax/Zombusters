@@ -1,0 +1,262 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Animations>
+  <ZombieDef FrameWidth="48" FrameHeight="55"
+              SheetRows="1" SheetColumns="8"
+              Speed="10"
+              SheetName="zombie"/>
+
+  <BurningZombieDef FrameWidth="50" FrameHeight="56"
+              SheetRows="1" SheetColumns="14"
+              Speed="10"
+              SheetName="burningzombie"/>
+
+  <ZombieDeathDef FrameWidth="50" FrameHeight="57"
+              SheetRows="1" SheetColumns="12"
+              Speed="15"
+              SheetName="zombiedeath"/>
+  
+  
+  
+  <!-- JADE IDLE AND RUN -->
+  <JadeIdleTrunkDef FrameWidth="42" FrameHeight="55"
+              SheetRows="1" SheetColumns="11"
+              Speed="15"
+              SheetName="girl_anim_iddle"/>
+  <JadeRunEDef FrameWidth="49" FrameHeight="24"
+              SheetRows="1" SheetColumns="8"
+              Speed="15"
+              SheetName="girl_anim_run_E"/>
+  
+  <!-- JADE PISTOL -->
+  <JadePistolShotDef FrameWidth="71" FrameHeight="51"
+              SheetRows="1" SheetColumns="8"
+              Speed="21"
+              SheetName="girl_anim_shot_E"/>
+  <JadePistolShotNEDef FrameWidth="71" FrameHeight="73"
+              SheetRows="1" SheetColumns="8"
+              Speed="21"
+              SheetName="girl_anim_shot_NE"/>
+  <JadePistolShotSEDef FrameWidth="71" FrameHeight="51"
+              SheetRows="1" SheetColumns="8"
+              Speed="21"
+              SheetName="girl_anim_shot_SE"/>
+  <JadePistolShotSouthDef FrameWidth="31" FrameHeight="70"
+              SheetRows="1" SheetColumns="8"
+              Speed="21"
+              SheetName="girl_anim_shot_S"/>
+  <JadePistolShotNorthDef FrameWidth="32" FrameHeight="85"
+              SheetRows="1" SheetColumns="8"
+              Speed="21"
+              SheetName="girl_anim_shot_N"/>
+
+  <!-- JADE SHOTGUN -->
+  <JadeShotgunShotDef FrameWidth="71" FrameHeight="51"
+              SheetRows="1" SheetColumns="3"
+              Speed="21"
+              SheetName="girl_anim_shotgun"/>
+  <JadeShotgunShotNEDef FrameWidth="59" FrameHeight="69"
+              SheetRows="1" SheetColumns="3"
+              Speed="21"
+              SheetName="girl_anim_shotgun_NE"/>
+  <JadeShotgunShotSEDef FrameWidth="58" FrameHeight="70"
+              SheetRows="1" SheetColumns="3"
+              Speed="21"
+              SheetName="girl_anim_shotgun_SE"/>
+  <JadeShotgunShotNorthDef FrameWidth="26" FrameHeight="87"
+              SheetRows="1" SheetColumns="3"
+              Speed="21"
+              SheetName="girl_anim_shotgun_N"/>
+  <JadeShotgunShotSouthDef FrameWidth="21" FrameHeight="90"
+              SheetRows="1" SheetColumns="3"
+              Speed="21"
+              SheetName="girl_anim_shotgun_S"/>
+
+
+
+
+  <!-- EGON IDLE AND RUN -->
+  <EgonIdleTrunkDef FrameWidth="23" FrameHeight="31"
+              SheetRows="1" SheetColumns="2"
+              Speed="2"
+              SheetName="peter_idle"/>
+  <EgonRunEDef FrameWidth="49" FrameHeight="24"
+              SheetRows="1" SheetColumns="8"
+              Speed="15"
+              SheetName="peter_run_E"/>
+
+  <!-- EGON PISTOL -->
+  <EgonPistolEDef FrameWidth="65" FrameHeight="56"
+              SheetRows="1" SheetColumns="8"
+              Speed="21"
+              SheetName="peter_pistol_E"/>
+  <EgonPistolNEDef FrameWidth="65" FrameHeight="77"
+              SheetRows="1" SheetColumns="8"
+              Speed="21"
+              SheetName="peter_pistol_NE"/>
+  <EgonPistolSEDef FrameWidth="49" FrameHeight="56"
+              SheetRows="1" SheetColumns="8"
+              Speed="21"
+              SheetName="peter_pistol_SE"/>
+  <EgonPistolSouthDef FrameWidth="29" FrameHeight="74"
+              SheetRows="1" SheetColumns="8"
+              Speed="21"
+              SheetName="peter_pistol_S"/>
+  <EgonPistolNorthDef FrameWidth="29" FrameHeight="63"
+              SheetRows="1" SheetColumns="8"
+              Speed="21"
+              SheetName="peter_pistol_N"/>
+
+  <!-- EGON SHOTGUN -->
+  <EgonShotgunEDef FrameWidth="69" FrameHeight="56"
+              SheetRows="1" SheetColumns="3"
+              Speed="21"
+              SheetName="peter_shotgun_E"/>
+  <EgonShotgunNEDef FrameWidth="53" FrameHeight="73"
+              SheetRows="1" SheetColumns="3"
+              Speed="21"
+              SheetName="peter_shotgun_NE"/>
+  <EgonShotgunSEDef FrameWidth="54" FrameHeight="66"
+              SheetRows="1" SheetColumns="3"
+              Speed="21"
+              SheetName="peter_shotgun_SE"/>
+  <EgonShotgunNorthDef FrameWidth="21" FrameHeight="69"
+              SheetRows="1" SheetColumns="3"
+              Speed="21"
+              SheetName="peter_shotgun_N"/>
+  <EgonShotgunSouthDef FrameWidth="20" FrameHeight="84"
+              SheetRows="1" SheetColumns="3"
+              Speed="21"
+              SheetName="peter_shotgun_S"/>
+
+
+
+  <!-- RAY IDLE AND RUN -->
+  <RayIdleTrunkDef FrameWidth="23" FrameHeight="31"
+              SheetRows="1" SheetColumns="2"
+              Speed="2"
+              SheetName="peter_idle"/>
+  <RayRunEDef FrameWidth="49" FrameHeight="24"
+              SheetRows="1" SheetColumns="8"
+              Speed="15"
+              SheetName="peter_run_E"/>
+
+  <!-- RAY PISTOL -->
+  <RayPistolEDef FrameWidth="65" FrameHeight="56"
+              SheetRows="1" SheetColumns="8"
+              Speed="21"
+              SheetName="peter_pistol_E"/>
+  <RayPistolNEDef FrameWidth="65" FrameHeight="77"
+              SheetRows="1" SheetColumns="8"
+              Speed="21"
+              SheetName="peter_pistol_NE"/>
+  <RayPistolSEDef FrameWidth="49" FrameHeight="56"
+              SheetRows="1" SheetColumns="8"
+              Speed="21"
+              SheetName="peter_pistol_SE"/>
+  <RayPistolSouthDef FrameWidth="29" FrameHeight="74"
+              SheetRows="1" SheetColumns="8"
+              Speed="21"
+              SheetName="peter_pistol_S"/>
+  <RayPistolNorthDef FrameWidth="29" FrameHeight="63"
+              SheetRows="1" SheetColumns="8"
+              Speed="21"
+              SheetName="peter_pistol_N"/>
+
+  <!-- RAY SHOTGUN -->
+  <RayShotgunEDef FrameWidth="69" FrameHeight="56"
+              SheetRows="1" SheetColumns="3"
+              Speed="21"
+              SheetName="peter_shotgun_E"/>
+  <RayShotgunNEDef FrameWidth="53" FrameHeight="73"
+              SheetRows="1" SheetColumns="3"
+              Speed="21"
+              SheetName="peter_shotgun_NE"/>
+  <RayShotgunSEDef FrameWidth="54" FrameHeight="66"
+              SheetRows="1" SheetColumns="3"
+              Speed="21"
+              SheetName="peter_shotgun_SE"/>
+  <RayShotgunNorthDef FrameWidth="21" FrameHeight="69"
+              SheetRows="1" SheetColumns="3"
+              Speed="21"
+              SheetName="peter_shotgun_N"/>
+  <RayShotgunSouthDef FrameWidth="20" FrameHeight="84"
+              SheetRows="1" SheetColumns="3"
+              Speed="21"
+              SheetName="peter_shotgun_S"/>  
+  
+  
+  
+  
+  
+
+  <!-- PETER IDLE AND RUN -->
+  <PeterIdleTrunkDef FrameWidth="23" FrameHeight="31"
+              SheetRows="1" SheetColumns="2"
+              Speed="2"
+              SheetName="peter_idle"/>
+  <PeterRunEDef FrameWidth="49" FrameHeight="24"
+              SheetRows="1" SheetColumns="8"
+              Speed="15"
+              SheetName="peter_run_E"/>
+
+  <!-- PETER PISTOL -->
+  <PeterPistolEDef FrameWidth="65" FrameHeight="56"
+              SheetRows="1" SheetColumns="8"
+              Speed="21"
+              SheetName="peter_pistol_E"/>
+  <PeterPistolNEDef FrameWidth="65" FrameHeight="77"
+              SheetRows="1" SheetColumns="8"
+              Speed="21"
+              SheetName="peter_pistol_NE"/>
+  <PeterPistolSEDef FrameWidth="49" FrameHeight="56"
+              SheetRows="1" SheetColumns="8"
+              Speed="21"
+              SheetName="peter_pistol_SE"/>
+  <PeterPistolSouthDef FrameWidth="29" FrameHeight="74"
+              SheetRows="1" SheetColumns="8"
+              Speed="21"
+              SheetName="peter_pistol_S"/>
+  <PeterPistolNorthDef FrameWidth="29" FrameHeight="63"
+              SheetRows="1" SheetColumns="8"
+              Speed="21"
+              SheetName="peter_pistol_N"/>
+
+  <!-- PETER SHOTGUN -->
+  <PeterShotgunEDef FrameWidth="69" FrameHeight="56"
+              SheetRows="1" SheetColumns="3"
+              Speed="21"
+              SheetName="peter_shotgun_E"/>
+  <PeterShotgunNEDef FrameWidth="53" FrameHeight="73"
+              SheetRows="1" SheetColumns="3"
+              Speed="21"
+              SheetName="peter_shotgun_NE"/>
+  <PeterShotgunSEDef FrameWidth="54" FrameHeight="66"
+              SheetRows="1" SheetColumns="3"
+              Speed="21"
+              SheetName="peter_shotgun_SE"/>
+  <PeterShotgunNorthDef FrameWidth="21" FrameHeight="69"
+              SheetRows="1" SheetColumns="3"
+              Speed="21"
+              SheetName="peter_shotgun_N"/>
+  <PeterShotgunSouthDef FrameWidth="20" FrameHeight="84"
+              SheetRows="1" SheetColumns="3"
+              Speed="21"
+              SheetName="peter_shotgun_S"/>
+  
+  
+  
+  
+  
+  <SaveDef FrameWidth="32" FrameHeight="32"
+              SheetRows="1" SheetColumns="5"
+              Speed="10"
+              SheetName="saveAnimation"/>
+  <crashCar FrameWidth="99" FrameHeight="60"
+              SheetRows="1" SheetColumns="3"
+              Speed="10"
+              SheetName="CocheArdiendo"/>
+  <FlameThrowerDef FrameWidth="88" FrameHeight="43"
+              SheetRows="1" SheetColumns="14"
+              Speed="20"
+              SheetName="flamethrower"/>
+</Animations>

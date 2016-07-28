@@ -1,0 +1,678 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="AchievementsMenuString" xml:space="preserve">
+    <value>DÉFIS</value>
+  </data>
+  <data name="AchievementsMMString" xml:space="preserve">
+    <value>Montrer la liste des Défis.</value>
+  </data>
+  <data name="AutosaveStartMenuString" xml:space="preserve">
+    <value>Zombusters utilise un système de sauvegarde automatique 
+pour enregisrer votre progression. La sauvegarde automatique 
+remplacera les précédentes informations sans demande de 
+confirmation. N'éteignez pas la console lorsque l'indicateur 
+de sauvegarde automatique est présent à l'écran.</value>
+  </data>
+  <data name="AutosaveTitleMenuString" xml:space="preserve">
+    <value>SAUVEGARDE</value>
+  </data>
+  <data name="BackString" xml:space="preserve">
+    <value>Retour</value>
+  </data>
+  <data name="BackWithoutSavingString" xml:space="preserve">
+    <value>Sortir sans sauvegarder</value>
+  </data>
+  <data name="CancelString" xml:space="preserve">
+    <value>Annuler </value>
+  </data>
+  <data name="ChangeCharacterMenuString" xml:space="preserve">
+    <value>Changer de personnage</value>
+  </data>
+  <data name="ChangeSoundVolumeMenuString" xml:space="preserve">
+    <value>Changer Volume des Sons / Musique</value>
+  </data>
+  <data name="CharacterSelectString" xml:space="preserve">
+    <value>CHOIX DE PERSONNAGE</value>
+  </data>
+  <data name="ClearedGameplayString" xml:space="preserve">
+    <value>TERMINÉE</value>
+  </data>
+  <data name="ConfigurationString" xml:space="preserve">
+    <value>Configuration</value>
+  </data>
+  <data name="ConfirmEndSession" xml:space="preserve">
+    <value>Êtes-vous sûr de vouloir terminer la session ?</value>
+  </data>
+  <data name="ConfirmExitSample" xml:space="preserve">
+    <value>Êtes-vous sûr de vouloir quitter cette démo?</value>
+  </data>
+  <data name="ConfirmForceStartGame" xml:space="preserve">
+    <value>Êtes-vous sûr de vouloir commencer le jeu ?</value>
+  </data>
+  <data name="ConfirmLeaveSession" xml:space="preserve">
+    <value>Êtes-vous sûr de vouloir sortir de la session ?</value>
+  </data>
+  <data name="ConfirmMarketplace" xml:space="preserve">
+    <value>Le jeu en ligne n'est pas disponible en mode démo.</value>
+  </data>
+  <data name="ConfirmQuitGame" xml:space="preserve">
+    <value>Êtes-vous sûr de vouloir quitter le jeu ?</value>
+  </data>
+  <data name="ConfirmReturnMainMenuMMString" xml:space="preserve">
+    <value>Vous reviendrez au menu de matchmaking</value>
+  </data>
+  <data name="ConfirmReturnMainMenuString" xml:space="preserve">
+    <value>Êtes-vous sûr de vouloir sortir ?</value>
+  </data>
+  <data name="CongratssEndGameString" xml:space="preserve">
+    <value>FÉLICITATIONS !</value>
+  </data>
+  <data name="ConnectControllerToJoinString" xml:space="preserve">
+    <value>Connectez la manette pour jouer</value>
+  </data>
+  <data name="CopyRightString" xml:space="preserve">
+    <value>© RETROWAX GAMES. 2011-2013. TOUS DROITS RESERVÉS.</value>
+  </data>
+  <data name="CreateGameMenuString" xml:space="preserve">
+    <value>CRÉER PARTIE</value>
+  </data>
+  <data name="CreateGameMMString" xml:space="preserve">
+    <value>Héberger une partie.</value>
+  </data>
+  <data name="CreateSession" xml:space="preserve">
+    <value>Créer une session</value>
+  </data>
+  <data name="CreditsMenuString" xml:space="preserve">
+    <value>GÉNÉRIQUE </value>
+  </data>
+  <data name="CreditsMMString" xml:space="preserve">
+    <value>Lancer le générique.</value>
+  </data>
+  <data name="CreditsThanksForPlayingString" xml:space="preserve">
+    <value>MERCI D'AVOIR JOUÉ !</value>
+  </data>
+  <data name="CustomMatchMenuString" xml:space="preserve">
+    <value>PARTIE PERSONNALISÉE</value>
+  </data>
+  <data name="CustomMatchMMString" xml:space="preserve">
+    <value>Chercher une session de jeu à partir d'une série 
+de paramètres.</value>
+  </data>
+  <data name="EndSession" xml:space="preserve">
+    <value>Fermer la session</value>
+  </data>
+  <data name="ErrorDisconnected" xml:space="preserve">
+    <value>La connexion de la session a été interrompue </value>
+  </data>
+  <data name="ErrorGamerPrivilege" xml:space="preserve">
+    <value>Vous devez utiliser un profil de joueur valide</value>
+  </data>
+  <data name="ErrorHostEndedSession" xml:space="preserve">
+    <value>L'hôte a fermé la session</value>
+  </data>
+  <data name="ErrorNetwork" xml:space="preserve">
+    <value>Il y a eu une erreur pendant...</value>
+  </data>
+  <data name="ErrorNetworkNotAvailable" xml:space="preserve">
+    <value>Connexion activée</value>
+  </data>
+  <data name="ErrorRemovedByHost" xml:space="preserve">
+    <value>L'hôte vous a expulsé de la session</value>
+  </data>
+  <data name="ErrorSessionFull" xml:space="preserve">
+    <value>La session est déjà pleine</value>
+  </data>
+  <data name="ErrorSessionNotFound" xml:space="preserve">
+    <value>Session introuvable. Elle a probablement été fermé.</value>
+  </data>
+  <data name="ErrorSessionNotJoinable" xml:space="preserve">
+    <value>Vous devez attendre l'hôte pour retourner</value>
+  </data>
+  <data name="ErrorTrialMode" xml:space="preserve">
+    <value>Cette fonction n'est pas disponible en mode démo</value>
+  </data>
+  <data name="ErrorUnknown" xml:space="preserve">
+    <value>Erreur inconnue</value>
+  </data>
+  <data name="Exit" xml:space="preserve">
+    <value>Quitter</value>
+  </data>
+  <data name="ExtrasMenuString" xml:space="preserve">
+    <value>EXTRAS</value>
+  </data>
+  <data name="ExtrasMMString" xml:space="preserve">
+    <value>Comment jouer, Scores et Générique.</value>
+  </data>
+  <data name="FindSessionMenuString" xml:space="preserve">
+    <value>CHERCHER SESSION</value>
+  </data>
+  <data name="FindSessionMMString" xml:space="preserve">
+    <value>Chercher une session pour jouer.</value>
+  </data>
+  <data name="FindSessions" xml:space="preserve">
+    <value>Chercher sessions</value>
+  </data>
+  <data name="FriendOpenGroupString" xml:space="preserve">
+    <value>Ce group est ouvert aux amis</value>
+  </data>
+  <data name="GameOverString" xml:space="preserve">
+    <value>PARTIE TERMINÉE</value>
+  </data>
+  <data name="GPRestartCurrentWaveString" xml:space="preserve">
+    <value>Recommencer à partir de la vague actuelle</value>
+  </data>
+  <data name="GPRestartFromBeginningString" xml:space="preserve">
+    <value>Recommencer à partir du début</value>
+  </data>
+  <data name="GPReturnLobbySupportString" xml:space="preserve">
+    <value>Vous aller retourner au lobby. Tous les progrès non sauvegardés seront perdus.</value>
+  </data>
+  <data name="GPReturnMMSupportString" xml:space="preserve">
+    <value>Vous retournerez au menu principal. La session va disparaître, les données non sauvegardées seront perdues.</value>
+  </data>
+  <data name="GPReturnToMainMenuString" xml:space="preserve">
+    <value>Retourner au Menu Principal</value>
+  </data>
+  <data name="HostSuffix" xml:space="preserve">
+    <value>hôte</value>
+  </data>
+  <data name="HowToPlayInGameString" xml:space="preserve">
+    <value>Comment jouer</value>
+  </data>
+  <data name="HTPAimShootString" xml:space="preserve">
+    <value>VISER + TIRER</value>
+  </data>
+  <data name="HTPChangeSongString" xml:space="preserve">
+    <value>CHANGER DE CHANSON</value>
+  </data>
+  <data name="HTPChangeWeaponString" xml:space="preserve">
+    <value>CHANGER ARME</value>
+  </data>
+  <data name="HTPExplanationString" xml:space="preserve">
+    <value>Utilisez le stick gauche pour déplacer votre personnage. 
+Utilisez le stick droit pour tirer sur les Zombies. 
+Tirez sur les ennemis pour accumuler des points et gagner 
+des Powerups. Ramassez les Powerups pour récupérer de la 
+vie ou de nouvelles armes.</value>
+  </data>
+  <data name="HTPGrenadeString" xml:space="preserve">
+    <value>GRENADES</value>
+  </data>
+  <data name="HTPMenuSupportString" xml:space="preserve">
+    <value>Comment jouer à Zombusters.</value>
+  </data>
+  <data name="HTPMoveString" xml:space="preserve">
+    <value>SE DÉPLACER</value>
+  </data>
+  <data name="HTPPauseString" xml:space="preserve">
+    <value>PAUSER LE JEU</value>
+  </data>
+  <data name="HTPReviveTeammateString" xml:space="preserve">
+    <value>RÉANIMER UN COÉQUIPIER</value>
+  </data>
+  <data name="HTPTauntString" xml:space="preserve">
+    <value>PROVOQUER</value>
+  </data>
+  <data name="InviteMenuString" xml:space="preserve">
+    <value>Inviter</value>
+  </data>
+  <data name="JoinSession" xml:space="preserve">
+    <value>Rejoindre une Session</value>
+  </data>
+  <data name="LeaderboardMenuString" xml:space="preserve">
+    <value>Scores</value>
+  </data>
+  <data name="LeaderboardMMString" xml:space="preserve">
+    <value>Consuter les scores de vos amis en ligne ou en local.</value>
+  </data>
+  <data name="LeaveMenuString" xml:space="preserve">
+    <value>Quitter</value>
+  </data>
+  <data name="LeaveSession" xml:space="preserve">
+    <value>Abandonner la Session</value>
+  </data>
+  <data name="LevelSelectionString" xml:space="preserve">
+    <value>SELECTION DE NIVEAU</value>
+  </data>
+  <data name="LevelSelectMenuString" xml:space="preserve">
+    <value>NIVEAU</value>
+  </data>
+  <data name="LevelSelectMMString" xml:space="preserve">
+    <value>Choisir le niveau pour jouer.</value>
+  </data>
+  <data name="Loading" xml:space="preserve">
+    <value>Chargement en cours...</value>
+  </data>
+  <data name="Lobby" xml:space="preserve">
+    <value>Lobby</value>
+  </data>
+  <data name="LobbyMenuString" xml:space="preserve">
+    <value>LOBBY</value>
+  </data>
+  <data name="LocalGameMMString" xml:space="preserve">
+    <value>Commencer une partie locale. Vous pouvez jouer 
+jusqu'à quatre joueurs sur la même console.</value>
+  </data>
+  <data name="LocalGameString" xml:space="preserve">
+    <value>PARTIE LOCALE</value>
+  </data>
+  <data name="MainMenu" xml:space="preserve">
+    <value>Menu Principal</value>
+  </data>
+  <data name="MainMenuLobbyString" xml:space="preserve">
+    <value>Dans le Lobby du Menu Principal</value>
+  </data>
+  <data name="MainMenuString" xml:space="preserve">
+    <value>MENU PRINCIPAL</value>
+  </data>
+  <data name="MatchmakingHostOwnGameString" xml:space="preserve">
+    <value>Voulez-vous héberger une nouvelle partie ?</value>
+  </data>
+  <data name="MatchmakingLobbyString" xml:space="preserve">
+    <value>Dans le Lobby du Matchmaking</value>
+  </data>
+  <data name="MatchmakingMenuString" xml:space="preserve">
+    <value>MATCHMAKING</value>
+  </data>
+  <data name="MatchmakingMMString" xml:space="preserve">
+    <value>Plongez  au coeur d'un combat frénétique sur Xbox LIVE.
+Jusqu'à quatre joueurs peuvent coopérer pour survivre 
+aux vagues incessantes d'une horde de Zombies.</value>
+  </data>
+  <data name="MaxPlayersMenuString" xml:space="preserve">
+    <value>MAX. JOUEURS</value>
+  </data>
+  <data name="MaxPlayersMMString" xml:space="preserve">
+    <value>Avec combien des joueurs souhaitez-vous jouer ?</value>
+  </data>
+  <data name="MessageBoxUsage" xml:space="preserve">
+    <value />
+  </data>
+  <data name="MessageGamerJoined" xml:space="preserve">
+    <value>{0} inscris</value>
+  </data>
+  <data name="MessageGamerLeft" xml:space="preserve">
+    <value>{0} restant</value>
+  </data>
+  <data name="MusicVolumeString" xml:space="preserve">
+    <value>Volume Musique</value>
+  </data>
+  <data name="MyGroupString" xml:space="preserve">
+    <value>MON GROUPE</value>
+  </data>
+  <data name="NetworkBusy" xml:space="preserve">
+    <value>Connexion en cours…</value>
+  </data>
+  <data name="NetworkMatchmakingMMString" xml:space="preserve">
+    <value>Choisissez le type de réseau pour vos parties Multijoueurs. 
+Jouer sur Xbox LIVE ou en réseau local.</value>
+  </data>
+  <data name="NetworkMatchmakingString" xml:space="preserve">
+    <value>TYPE DE RÉSEAU</value>
+  </data>
+  <data name="NoSessionsFound" xml:space="preserve">
+    <value>Aucune session trouvée </value>
+  </data>
+  <data name="P1PressStartString" xml:space="preserve">
+    <value>Joueur 1  Appuyer sur Start</value>
+  </data>
+  <data name="P2PressStartString" xml:space="preserve">
+    <value>Joueur 2  Appuyer sur Start</value>
+  </data>
+  <data name="P3PressStartString" xml:space="preserve">
+    <value>Joueur 3  Appuyer sur Start</value>
+  </data>
+  <data name="P4PressStartString" xml:space="preserve">
+    <value>Joueur 4  Appuyer sur Start</value>
+  </data>
+  <data name="PartyMenuString" xml:space="preserve">
+    <value>Inviter au Groupe</value>
+  </data>
+  <data name="Paused" xml:space="preserve">
+    <value>Pause</value>
+  </data>
+  <data name="PlayerFourString" xml:space="preserve">
+    <value>Joueur Quatre</value>
+  </data>
+  <data name="PlayerMatch" xml:space="preserve">
+    <value>LIVE</value>
+  </data>
+  <data name="PlayerOneString" xml:space="preserve">
+    <value>Joueur Un</value>
+  </data>
+  <data name="PlayerSignInString" xml:space="preserve">
+    <value>Appuyer sur le bouton GUIDE pour vous inscrire</value>
+  </data>
+  <data name="PlayerThreeString" xml:space="preserve">
+    <value>Joueur Trois</value>
+  </data>
+  <data name="PlayerTwoString" xml:space="preserve">
+    <value>Joueur Deux</value>
+  </data>
+  <data name="PlaylistMatchmakingMMString" xml:space="preserve">
+    <value>Commencer une playlist pour la configuration Matchmaking</value>
+  </data>
+  <data name="PlaylistMatchmakingString" xml:space="preserve">
+    <value>PLAYLIST</value>
+  </data>
+  <data name="PrepareNextWaveGameplayString" xml:space="preserve">
+    <value>Préparez-vous pour la vague suivante</value>
+  </data>
+  <data name="PressStartString" xml:space="preserve">
+    <value>Appuyer sur START</value>
+  </data>
+  <data name="PrivateSlotsMenuString" xml:space="preserve">
+    <value>EMPLACEMENTS PRIVÉS</value>
+  </data>
+  <data name="PrivateSlotsMMString" xml:space="preserve">
+    <value>Choisissez le nombre d'emplacements privés.</value>
+  </data>
+  <data name="QuickMatchMenuString" xml:space="preserve">
+    <value>PARTIE RAPIDE</value>
+  </data>
+  <data name="QuickMatchMMString" xml:space="preserve">
+    <value>Rejoindre rapidement la session d'un autre 
+joueur.</value>
+  </data>
+  <data name="QuitGame" xml:space="preserve">
+    <value>Quitter le jeu</value>
+  </data>
+  <data name="QuitToMainMenuInGameString" xml:space="preserve">
+    <value>Quitter vers le Menu Principal</value>
+  </data>
+  <data name="ReadySelPlayerString" xml:space="preserve">
+    <value>PRET</value>
+  </data>
+  <data name="RestartLevelInGameString" xml:space="preserve">
+    <value>Recommencer le Niveau</value>
+  </data>
+  <data name="ResumeGame" xml:space="preserve">
+    <value>Reprendre le Jeu</value>
+  </data>
+  <data name="ReturnToDashboardMMString" xml:space="preserve">
+    <value>Quitter le jeu et retourner à l'Interface Xbox.</value>
+  </data>
+  <data name="ReturnToDashboardString" xml:space="preserve">
+    <value>QUITTER VERS L'INTERFACE XBOX</value>
+  </data>
+  <data name="ReturnToLobby" xml:space="preserve">
+    <value>Retourner au Lobby</value>
+  </data>
+  <data name="SaveAndExitString" xml:space="preserve">
+    <value>Sauvegarder et quitter</value>
+  </data>
+  <data name="SelectString" xml:space="preserve">
+    <value>Sélectionner</value>
+  </data>
+  <data name="SettingsMenuString" xml:space="preserve">
+    <value>CONFIGURATION</value>
+  </data>
+  <data name="ShowGamerCardMenuString" xml:space="preserve">
+    <value>Afficher la Carte du Joueur</value>
+  </data>
+  <data name="SinglePlayer" xml:space="preserve">
+    <value>Mode Un Joueur</value>
+  </data>
+  <data name="SoundEffectVolumeString" xml:space="preserve">
+    <value>Volume SFX</value>
+  </data>
+  <data name="StartGameMenuString" xml:space="preserve">
+    <value>Commencer Partie</value>
+  </data>
+  <data name="StartMatchmakingMenuString" xml:space="preserve">
+    <value>COMMENCER MATCHMAKING</value>
+  </data>
+  <data name="StartMatchmakingMMString" xml:space="preserve">
+    <value>Commencer Matchmaking</value>
+  </data>
+  <data name="String" xml:space="preserve">
+    <value>même si tous les joueurs ne sont pas prêts ?</value>
+  </data>
+  <data name="String1" xml:space="preserve">
+    <value>Voulez-vous acheter le jeu ?</value>
+  </data>
+  <data name="String2" xml:space="preserve">
+    <value>pour accéder à cette fonction</value>
+  </data>
+  <data name="String3" xml:space="preserve">
+    <value>connexion en cours</value>
+  </data>
+  <data name="String4" xml:space="preserve">
+    <value>off ou bien non connecté </value>
+  </data>
+  <data name="String5" xml:space="preserve">
+    <value>ou bien la connexion n'est pas possible</value>
+  </data>
+  <data name="String6" xml:space="preserve">
+    <value>entre la machine local et la session du hôte</value>
+  </data>
+  <data name="String7" xml:space="preserve">
+    <value>le lobby avant de pouvoir rejoindre la session</value>
+  </data>
+  <data name="String8" xml:space="preserve">
+    <value>Bouton A, Espace, Enter = ok</value>
+  </data>
+  <data name="String9" xml:space="preserve">
+    <value>Bouton B, Esc = annuler</value>
+  </data>
+  <data name="SwitchReadyMenuString" xml:space="preserve">
+    <value>Changer Prêt / Pas Prêt</value>
+  </data>
+  <data name="SystemLink" xml:space="preserve">
+    <value>Réseau Local</value>
+  </data>
+  <data name="ToggleReadyMenuString" xml:space="preserve">
+    <value>Changer Prêt / Pas Prêt</value>
+  </data>
+  <data name="TrialModeMenuString" xml:space="preserve">
+    <value>Mode Démo</value>
+  </data>
+  <data name="UnlockFullGameMenuString" xml:space="preserve">
+    <value>Débloquer jeu complet</value>
+  </data>
+  <data name="WaitingForPlayersMenuString" xml:space="preserve">
+    <value>En attente de joueurs...</value>
+  </data>
+  <data name="WaveGameplayString" xml:space="preserve">
+    <value>VAGUE</value>
+  </data>
+  <data name="YouSavedCityEndGameString" xml:space="preserve">
+    <value>Vous avez sauvé la ville ! Vous êtes notre nouveau Héros !</value>
+  </data>
+  <data name="NumberEight" xml:space="preserve">
+    <value>Huit</value>
+  </data>
+  <data name="NumberFive" xml:space="preserve">
+    <value>Cinq</value>
+  </data>
+  <data name="NumberFour" xml:space="preserve">
+    <value>Quatre</value>
+  </data>
+  <data name="NumberNine" xml:space="preserve">
+    <value>Neuf</value>
+  </data>
+  <data name="NumberOne" xml:space="preserve">
+    <value>Un</value>
+  </data>
+  <data name="NumberSeven" xml:space="preserve">
+    <value>Sept</value>
+  </data>
+  <data name="NumberSix" xml:space="preserve">
+    <value>Six</value>
+  </data>
+  <data name="NumberTen" xml:space="preserve">
+    <value>Dix</value>
+  </data>
+  <data name="NumberThree" xml:space="preserve">
+    <value>Trois</value>
+  </data>
+  <data name="NumberTwo" xml:space="preserve">
+    <value>Deux</value>
+  </data>
+  <data name="ReconnectControllerString" xml:space="preserve">
+    <value>Veuillez reconnecter votre manette</value>
+  </data>
+  <data name="LeaderboardScoreString" xml:space="preserve">
+    <value>SCORE</value>
+  </data>
+  <data name="WPPlayNewGame" xml:space="preserve">
+    <value>Jouer</value>
+  </data>
+  <data name="WPPlayNewGameMMString" xml:space="preserve">
+    <value>Commencez une nouvelle partie.</value>
+  </data>
+  <data name="WPShakeToChangeSong" xml:space="preserve">
+    <value>Secouez votre appareil pour changer la chanson en cours de lecture</value>
+  </data>
+  <data name="WPTapScreen" xml:space="preserve">
+    <value>Appuyez sur l'écran pour commencer</value>
+  </data>
+  <data name="WPTip" xml:space="preserve">
+    <value>Conseil:</value>
+  </data>
+  <data name="VisitRetrowaxMenuStringWP" xml:space="preserve">
+    <value>Pour plus d'Info et de nouvelles!</value>
+  </data>
+  <data name="PCExplanationString" xml:space="preserve">
+    <value>Utilisez A, S, D, W ou les flèches pour déplacer votre personnage. 
+Utilisez le bouton gauche de la souris pour tirer sur les Zombies. 
+Tirez sur les ennemis pour accumuler des points et gagner 
+des Powerups. Ramassez les Powerups pour récupérer de la 
+vie ou de nouvelles armes.</value>
+  </data>
+  <data name="ReviewMenuString" xml:space="preserve">
+    <value>AVIS SUR CETTE APPLICATION</value>
+  </data>
+  <data name="ReviewMMString" xml:space="preserve">
+    <value>S'il vous plaît nous aider à examiner et Zombusters! Merci!</value>
+  </data>
+  <data name="RateThisAppCancel" xml:space="preserve">
+    <value>Plus tard</value>
+  </data>
+  <data name="RateThisAppOK" xml:space="preserve">
+    <value>Oui!</value>
+  </data>
+  <data name="RateThisAppText" xml:space="preserve">
+    <value>Vous avez aimé Zombusters? S'il vous plaît aider note cette application sur le marché. Je vous remercie!</value>
+  </data>
+  <data name="RateThisAppTitle" xml:space="preserve">
+    <value>Noter cette app</value>
+  </data>
+</root>

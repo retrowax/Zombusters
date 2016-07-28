@@ -1,0 +1,39 @@
+﻿<?xml version="1.0"?>
+<ArrayOfCWall>
+
+  <!-- Inferior Derecha -->
+  <CWall>
+    <From>
+      <X>1280</X>
+      <Y>514</Y>
+    </From>
+    <To>
+      <X>1500</X>
+      <Y>514</Y>
+    </To>
+  </CWall>
+
+  <CWall>
+    <From>
+      <X>1280</X>
+      <Y>514</Y>
+    </From>
+    <To>
+      <X>866</X>
+      <Y>720</Y>
+    </To>
+  </CWall>
+
+  <CWall>
+    <From>
+      <X>866</X>
+      <Y>720</Y>
+    </From>
+    <To>
+      <X>866</X>
+      <Y>900</Y>
+    </To>
+  </CWall>
+  <!-- END Inferior Derecha -->
+  
+</ArrayOfCWall>

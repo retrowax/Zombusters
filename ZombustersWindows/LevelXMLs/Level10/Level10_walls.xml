@@ -1,0 +1,38 @@
+﻿<?xml version="1.0"?>
+<ArrayOfCWall>
+  <!-- Superior Izquierda -->
+  <CWall>
+    <From>
+      <X>0</X>
+      <Y>300</Y>
+    </From>
+    <To>
+      <X>-250</X>
+      <Y>300</Y>
+    </To>
+  </CWall>
+
+  <CWall>
+    <From>
+      <X>0</X>
+      <Y>300</Y>
+    </From>
+    <To>
+      <X>600</X>
+      <Y>0</Y>
+    </To>
+  </CWall>
+
+  <CWall>
+    <From>
+      <X>600</X>
+      <Y>0</Y>
+    </From>
+    <To>
+      <X>600</X>
+      <Y>-250</Y>
+    </To>
+  </CWall>
+  <!-- END Superior Izquierda -->
+  
+</ArrayOfCWall>

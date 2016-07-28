@@ -1,0 +1,317 @@
+﻿<?xml version="1.0"?>
+<ArrayOfCFurniture>
+  <!-- Farolas SouthEast -->
+  <CFurniture>
+    <Type>Farola</Type>
+    <Orientation>SouthEast</Orientation>
+    <Position>
+      <X>1219</X>
+      <Y>268</Y>
+    </Position>
+    <ObstaclePosition>
+      <X>1220</X>
+      <Y>388</Y>
+    </ObstaclePosition>
+    <ObstacleRadius>5.0</ObstacleRadius>
+  </CFurniture>
+
+  <CFurniture>
+    <Type>Farola</Type>
+    <Orientation>SouthEast</Orientation>
+    <Position>
+      <X>1054</X>
+      <Y>351</Y>
+    </Position>
+    <ObstaclePosition>
+      <X>1056</X>
+      <Y>469</Y>
+    </ObstaclePosition>
+    <ObstacleRadius>5.0</ObstacleRadius>
+  </CFurniture>
+
+  <CFurniture>
+    <Type>Farola</Type>
+    <Orientation>SouthEast</Orientation>
+    <Position>
+      <X>902</X>
+      <Y>428</Y>
+    </Position>
+    <ObstaclePosition>
+      <X>905</X>
+      <Y>546</Y>
+    </ObstaclePosition>
+    <ObstacleRadius>5.0</ObstacleRadius>
+  </CFurniture>
+
+  <CFurniture>
+    <Type>Farola</Type>
+    <Orientation>SouthEast</Orientation>
+    <Position>
+      <X>738</X>
+      <Y>510</Y>
+    </Position>
+    <ObstaclePosition>
+      <X>740</X>
+      <Y>628</Y>
+    </ObstaclePosition>
+    <ObstacleRadius>5.0</ObstacleRadius>
+  </CFurniture>
+  <!-- END Farolas SouthEast-->
+
+  <!-- Farolas NorthWest -->
+  <CFurniture>
+    <Type>Farola</Type>
+    <Orientation>NorthWest</Orientation>
+    <Position>
+      <X>492</X>
+      <Y>-95</Y>
+    </Position>
+    <ObstaclePosition>
+      <X>537</X>
+      <Y>49</Y>
+    </ObstaclePosition>
+    <ObstacleRadius>5.0</ObstacleRadius>
+  </CFurniture>
+
+  <CFurniture>
+    <Type>Farola</Type>
+    <Orientation>NorthWest</Orientation>
+    <Position>
+      <X>334</X>
+      <Y>-15</Y>
+    </Position>
+    <ObstaclePosition>
+      <X>378</X>
+      <Y>127</Y>
+    </ObstaclePosition>
+    <ObstacleRadius>5.0</ObstacleRadius>
+  </CFurniture>
+
+  <CFurniture>
+    <Type>Farola</Type>
+    <Orientation>NorthWest</Orientation>
+    <Position>
+      <X>175</X>
+      <Y>65</Y>
+    </Position>
+    <ObstaclePosition>
+      <X>219</X>
+      <Y>208</Y>
+    </ObstaclePosition>
+    <ObstacleRadius>5.0</ObstacleRadius>
+  </CFurniture>
+
+  <CFurniture>
+    <Type>Farola</Type>
+    <Orientation>NorthWest</Orientation>
+    <Position>
+      <X>14</X>
+      <Y>143</Y>
+    </Position>
+    <ObstaclePosition>
+      <X>58</X>
+      <Y>285</Y>
+    </ObstaclePosition>
+    <ObstacleRadius>5.0</ObstacleRadius>
+  </CFurniture>
+  <!-- END Farolas NortWest -->
+
+  <!-- Arboles -->
+  <CFurniture>
+    <Type>Arbol</Type>
+    <Orientation>SouthEast</Orientation>
+    <Position>
+      <X>966</X>
+      <Y>-100</Y>
+    </Position>
+    <ObstaclePosition>
+      <X>1019</X>
+      <Y>50</Y>
+    </ObstaclePosition>
+    <ObstacleRadius>10.0</ObstacleRadius>
+  </CFurniture>
+
+  <CFurniture>
+    <Type>Arbol</Type>
+    <Orientation>SouthEast</Orientation>
+    <Position>
+      <X>806</X>
+      <Y>-20</Y>
+    </Position>
+    <ObstaclePosition>
+      <X>859</X>
+      <Y>128</Y>
+    </ObstaclePosition>
+    <ObstacleRadius>10.0</ObstacleRadius>
+  </CFurniture>
+
+  <CFurniture>
+    <Type>Arbol</Type>
+    <Orientation>SouthEast</Orientation>
+    <Position>
+      <X>648</X>
+      <Y>57</Y>
+    </Position>
+    <ObstaclePosition>
+      <X>701</X>
+      <Y>206</Y>
+    </ObstaclePosition>
+    <ObstacleRadius>10.0</ObstacleRadius>
+  </CFurniture>
+
+  <CFurniture>
+    <Type>Arbol</Type>
+    <Orientation>SouthEast</Orientation>
+    <Position>
+      <X>484</X>
+      <Y>138</Y>
+    </Position>
+    <ObstaclePosition>
+      <X>537</X>
+      <Y>287</Y>
+    </ObstaclePosition>
+    <ObstacleRadius>10.0</ObstacleRadius>
+  </CFurniture>
+
+  <CFurniture>
+    <Type>Arbol</Type>
+    <Orientation>SouthEast</Orientation>
+    <Position>
+      <X>322</X>
+      <Y>216</Y>
+    </Position>
+    <ObstaclePosition>
+      <X>375</X>
+      <Y>366</Y>
+    </ObstaclePosition>
+    <ObstacleRadius>10.0</ObstacleRadius>
+  </CFurniture>
+
+  <CFurniture>
+    <Type>Arbol</Type>
+    <Orientation>SouthEast</Orientation>
+    <Position>
+      <X>1167</X>
+      <Y>0</Y>
+    </Position>
+    <ObstaclePosition>
+      <X>1220</X>
+      <Y>146</Y>
+    </ObstaclePosition>
+    <ObstacleRadius>10.0</ObstacleRadius>
+  </CFurniture>
+
+  <CFurniture>
+    <Type>Arbol</Type>
+    <Orientation>SouthEast</Orientation>
+    <Position>
+      <X>1006</X>
+      <Y>76</Y>
+    </Position>
+    <ObstaclePosition>
+      <X>1059</X>
+      <Y>225</Y>
+    </ObstaclePosition>
+    <ObstacleRadius>10.0</ObstacleRadius>
+  </CFurniture>
+
+  <CFurniture>
+    <Type>Arbol</Type>
+    <Orientation>SouthEast</Orientation>
+    <Position>
+      <X>845</X>
+      <Y>158</Y>
+    </Position>
+    <ObstaclePosition>
+      <X>898</X>
+      <Y>308</Y>
+    </ObstaclePosition>
+    <ObstacleRadius>10.0</ObstacleRadius>
+  </CFurniture>
+
+  <CFurniture>
+    <Type>Arbol</Type>
+    <Orientation>SouthEast</Orientation>
+    <Position>
+      <X>688</X>
+      <Y>238</Y>
+    </Position>
+    <ObstaclePosition>
+      <X>741</X>
+      <Y>388</Y>
+    </ObstaclePosition>
+    <ObstacleRadius>10.0</ObstacleRadius>
+  </CFurniture>
+
+  <CFurniture>
+    <Type>Arbol</Type>
+    <Orientation>SouthEast</Orientation>
+    <Position>
+      <X>526</X>
+      <Y>317</Y>
+    </Position>
+    <ObstaclePosition>
+      <X>579</X>
+      <Y>467</Y>
+    </ObstaclePosition>
+    <ObstacleRadius>10.0</ObstacleRadius>
+  </CFurniture>
+
+  <CFurniture>
+    <Type>Arbol</Type>
+    <Orientation>SouthEast</Orientation>
+    <Position>
+      <X>1157</X>
+      <Y>365</Y>
+    </Position>
+    <ObstaclePosition>
+      <X>1210</X>
+      <Y>514</Y>
+    </ObstaclePosition>
+    <ObstacleRadius>10.0</ObstacleRadius>
+  </CFurniture>
+
+  <CFurniture>
+    <Type>Arbol</Type>
+    <Orientation>SouthEast</Orientation>
+    <Position>
+      <X>1054</X>
+      <Y>416</Y>
+    </Position>
+    <ObstaclePosition>
+      <X>1107</X>
+      <Y>565</Y>
+    </ObstaclePosition>
+    <ObstacleRadius>10.0</ObstacleRadius>
+  </CFurniture>
+
+  <CFurniture>
+    <Type>Arbol</Type>
+    <Orientation>SouthEast</Orientation>
+    <Position>
+      <X>936</X>
+      <Y>476</Y>
+    </Position>
+    <ObstaclePosition>
+      <X>989</X>
+      <Y>625</Y>
+    </ObstaclePosition>
+    <ObstacleRadius>10.0</ObstacleRadius>
+  </CFurniture>
+
+  <CFurniture>
+    <Type>Arbol</Type>
+    <Orientation>SouthEast</Orientation>
+    <Position>
+      <X>819</X>
+      <Y>536</Y>
+    </Position>
+    <ObstaclePosition>
+      <X>872</X>
+      <Y>685</Y>
+    </ObstaclePosition>
+    <ObstacleRadius>10.0</ObstacleRadius>
+  </CFurniture>
+  <!-- END Arboles -->
+  
+</ArrayOfCFurniture>

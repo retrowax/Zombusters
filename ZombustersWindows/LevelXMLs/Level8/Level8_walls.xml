@@ -1,0 +1,130 @@
+﻿<?xml version="1.0"?>
+<ArrayOfCWall>
+  <!-- Superior Izquierda -->
+  <CWall>
+    <From>
+      <X>0</X>
+      <Y>163</Y>
+    </From>
+    <To>
+      <X>-250</X>
+      <Y>163</Y>
+    </To>
+  </CWall>
+  
+  <CWall>
+    <From>
+      <X>0</X>
+      <Y>163</Y>
+    </From>
+    <To>
+      <X>177</X>
+      <Y>251</Y>
+    </To>
+  </CWall>
+
+  <CWall>
+    <From>
+      <X>177</X>
+      <Y>251</Y>
+    </From>
+    <To>
+      <X>680</X>
+      <Y>0</Y>
+    </To>
+  </CWall>
+
+  <CWall>
+    <From>
+      <X>680</X>
+      <Y>0</Y>
+    </From>
+    <To>
+      <X>680</X>
+      <Y>-250</Y>
+    </To>
+  </CWall>
+  <!-- END Superior Izquierda -->
+
+  <!-- Superior Derecha -->
+  <CWall>
+    <From>
+      <X>1215</X>
+      <Y>0</Y>
+    </From>
+    <To>
+      <X>1215</X>
+      <Y>-250</Y>
+    </To>
+  </CWall>
+
+  <CWall>
+    <From>
+      <X>1215</X>
+      <Y>0</Y>
+    </From>
+    <To>
+      <X>1215</X>
+      <Y>11</Y>
+    </To>
+  </CWall>
+
+  <CWall>
+    <From>
+      <X>1215</X>
+      <Y>11</Y>
+    </From>
+    <To>
+      <X>1280</X>
+      <Y>42</Y>
+    </To>
+  </CWall>
+
+  <CWall>
+    <From>
+      <X>1280</X>
+      <Y>42</Y>
+    </From>
+    <To>
+      <X>1500</X>
+      <Y>42</Y>
+    </To>
+  </CWall>
+  <!-- END Superior Derecha -->
+
+  <!-- Inferior Izquierda -->
+  <CWall>
+    <From>
+      <X>0</X>
+      <Y>490</Y>
+    </From>
+    <To>
+      <X>-250</X>
+      <Y>490</Y>
+    </To>
+  </CWall>
+
+  <CWall>
+    <From>
+      <X>0</X>
+      <Y>490</Y>
+    </From>
+    <To>
+      <X>460</X>
+      <Y>720</Y>
+    </To>
+  </CWall>
+
+  <CWall>
+    <From>
+      <X>460</X>
+      <Y>720</Y>
+    </From>
+    <To>
+      <X>460</X>
+      <Y>900</Y>
+    </To>
+  </CWall>
+  <!-- END Inferior Izquierda -->
+  
+</ArrayOfCWall>

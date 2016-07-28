@@ -1,0 +1,188 @@
+﻿DEVELOPED BY RETROWAX GAMES
+
+
+
+PROGRAMMING & GAME DESIGN
+
+Ferran Pons
+
+
+
+LEAD ARTIST
+
+Paco Illescas
+
+
+
+PIXEL ART & ANIMATIONS
+
+Ferran Pons
+
+
+
+PRODUCTION ASSISTANT
+
+Vanesa Rodriguez
+
+
+
+MUSIC
+
+'High Ground'
+Performed by London To Tokyo.
+Written by Simon Steadman. (ascap)
+Used by Permission. All Rights Reserved.
+
+'Dancing on a Dime'
+Performed by Bare Wires. (Live at WFMU on the Evan Funk Davies show)
+Used by Permission. All Rights Reserved.
+
+'High Dive'
+Performed by Black Math. (Phantom Power)
+Used by Permission. All Rights Reserved.
+
+'Suck City'
+Performed by Black Math. (Phantom Power)
+Used by Permission. All Rights Reserved.
+
+'Bad Attraction'
+Performed by Brad Sucks. (I Don't Know What I'm Doing)
+Used by Permission. All Rights Reserved.
+
+'Understood by your Dad'
+Performed by Brad Sucks. (Out of It)
+Used by Permission. All Rights Reserved.
+
+'Wolfram'
+Performed by Kraus. (I Could Destroy You with a Single Thought)
+Used by Permission. All Rights Reserved.
+
+'Opening The Portal'
+Performed by Nuit Noire. (split 7'' with His Electro Blue Voice)
+Used by Permission. All Rights Reserved.
+Used Courtesy of AVANT! Records.
+
+'I Don't Like You'
+Performed by The Black Bug. (I Don't Like You 7'')
+Used by Permission. All Rights Reserved.
+Used Courtesy of AVANT! Records.
+
+'In The Hall Of The Mountain King'
+Performed by The Itchy Creeps. (The Itchy Creeps)
+Used by Permission. All Rights Reserved.
+Used Courtesy of Happy Puppy Records.
+
+'As You Know'
+Performed by THIS CO. (THIS CO.)
+Used by Permission. All Rights Reserved.
+
+'Take It Away'
+Performed by THIS CO. (THIS CO.)
+Used by Permission. All Rights Reserved.
+
+
+
+MUSIC EQ
+
+Juanfran Rodriguez
+
+
+
+SOUND FX
+
+Ferran Pons
+Juanfran Rodriguez
+
+
+
+QA (Playtest)
+
+Ivan Oleart
+Jose Aranda
+Peter Schraut (XNA Community)
+Krazy Insane (XNA Community)
+Ion Vapor Studios (XNA Community)
+DavidParker (XNA Community)
+
+
+
+LOCALIZATION
+
+Ferran Pons
+
+
+TRANSLATIONS
+
+Carles Prats
+Peter Schraut
+Paolo Bernagozzi
+William David
+
+
+
+SPECIAL THANKS
+
+Vanesa Rodriguez
+Paco Illescas
+JuanFran Rodriguez
+Ivan Oleart
+Carles Prats
+Jose Aranda
+Paolo Bernagozzi
+Simon Steadman (London To Tokyo)
+Carlos Vergara (THIS CO.)
+Andrea (AVANT! Records)
+Jimmy (Black Math)
+Brad (Brad Sucks)
+Lee (Happy Puppy Records)
+Matthew Melton (Bare Wires)
+Kraus
+Peter Schraut
+Swing Swing Submarine
+
+
+SHOUT-OUT
+
+Cristian De Arcos
+Ramon Santamaria
+David Bordas
+Iker Aneiros
+Alberto Marin
+Gonzalo Rodriguez
+Daniel Santos
+Alfonso Peñalver
+Hugo Martinez
+German Civera 
+Jonathan Moralo
+Jeremy Brontesi
+Josue Candela
++ MY EA MADRID PEOPLE!
++ CB ALELLA TEAM!
+
+
+
+
+
+
+
+THIS GAME IS DEDICATED TO MY FAMILY
+SPECIALLY TO MY PARENTS RAMON AND JUANA 
+WITHOUT THEM THIS DREAM COULD NOT BE A REALITY
+
+ALSO I WANT TO THANK TO ALL THE PEOPLE INVOLVED
+IN THIS PROJECT, YOU ARE AWESOME!!
+
+AN SPECIAL EXTRA THANKS TO VANESA RODRIGUEZ
+FOR HER PATIENCE, UNDERSTANDING AND LOVE!!
+
+AN SPECIAL EXTRA-EXTRA DEDICATION 
+TO MY SON PAU!! (born Feb. 2013)
+
+
+
+
+
+
+
+
+"If you can dream it, you can do it." (Walt Disney)

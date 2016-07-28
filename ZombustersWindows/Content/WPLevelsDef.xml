@@ -1,0 +1,63 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Levels>
+  <Level1 P1SpawnPos="290,260" P2SpawnPos="1099,260" P3SpawnPos="955,392" P4SpawnPos="1099,392" 
+          ZSpawnZone1Origin="600,800" ZSpawnZone1End="-200,-10"
+          ZSpawnZone2Origin="-200,-10" ZSpawnZone2End="350,480"
+          ZSpawnZone3Origin="810,1010" ZSpawnZone3End="0,480"
+          ZSpawnZone4Origin="0,800" ZSpawnZone4End="490,730" />
+          <!-- Arriba, Izquierda, Derecha, Abajo -->
+
+  <Level2 P1SpawnPos="237,313" P2SpawnPos="392,313" P3SpawnPos="237,444" P4SpawnPos="392,444"
+          ZSpawnZone1Origin="65,600" ZSpawnZone1End="-200,-10"
+          ZSpawnZone2Origin="-200,-10" ZSpawnZone2End="45,480"
+          ZSpawnZone3Origin="810,1010" ZSpawnZone3End="255,450"
+          ZSpawnZone4Origin="0,710" ZSpawnZone4End="490,730" />
+
+  <Level3 P1SpawnPos="450,200" P2SpawnPos="1086,381" P3SpawnPos="972,498" P4SpawnPos="1086,498"
+          ZSpawnZone1Origin="370,800" ZSpawnZone1End="-200,-10"
+          ZSpawnZone2Origin="-200,-10" ZSpawnZone2End="400,480"
+          ZSpawnZone3Origin="810,1010" ZSpawnZone3End="0,510"
+          ZSpawnZone4Origin="0,800" ZSpawnZone4End="490,730" />
+
+  <Level4 P1SpawnPos="217,367" P2SpawnPos="335,426" P3SpawnPos="457,488" P4SpawnPos="578,548"
+          ZSpawnZone1Origin="0,800" ZSpawnZone1End="-200,-10"
+          ZSpawnZone2Origin="-200,-10" ZSpawnZone2End="0,330"
+          ZSpawnZone3Origin="810,1010" ZSpawnZone3End="0,480"
+          ZSpawnZone4Origin="640,800" ZSpawnZone4End="490,730" />
+
+  <Level5 P1SpawnPos="552,402" P2SpawnPos="649,354" P3SpawnPos="747,307" P4SpawnPos="848,257"
+          ZSpawnZone1Origin="0,800" ZSpawnZone1End="-200,-10"
+          ZSpawnZone2Origin="-200,-10" ZSpawnZone2End="0,480"
+          ZSpawnZone3Origin="810,1010" ZSpawnZone3End="0,450"
+          ZSpawnZone4Origin="0,760" ZSpawnZone4End="490,730" />
+
+  <Level6 P1SpawnPos="483,397" P2SpawnPos="561,355" P3SpawnPos="674,300" P4SpawnPos="763,397"
+          ZSpawnZone1Origin="350,800" ZSpawnZone1End="-200,-10"
+          ZSpawnZone2Origin="-200,-10" ZSpawnZone2End="200,480"
+          ZSpawnZone3Origin="810,1010" ZSpawnZone3End="200,480"
+          ZSpawnZone4Origin="0,800" ZSpawnZone4End="490,730" />
+
+  <Level7 P1SpawnPos="438,310" P2SpawnPos="587,235" P3SpawnPos="693,440" P4SpawnPos="840,368"
+          ZSpawnZone1Origin="700,800" ZSpawnZone1End="-200,-10"
+          ZSpawnZone2Origin="-200,-10" ZSpawnZone2End="300,480"
+          ZSpawnZone3Origin="810,1010" ZSpawnZone3End="150,480"
+          ZSpawnZone4Origin="150,800" ZSpawnZone4End="490,730" />
+
+  <Level8 P1SpawnPos="290,350" P2SpawnPos="1021,313" P3SpawnPos="887,439" P4SpawnPos="1021,439"
+          ZSpawnZone1Origin="700,800" ZSpawnZone1End="-200,-10"
+          ZSpawnZone2Origin="-200,-10" ZSpawnZone2End="300,480"
+          ZSpawnZone3Origin="810,1010" ZSpawnZone3End="45,480"
+          ZSpawnZone4Origin="450,800" ZSpawnZone4End="490,730" />
+
+  <Level9 P1SpawnPos="476,258" P2SpawnPos="556,303" P3SpawnPos="663,343" P4SpawnPos="763,380"
+          ZSpawnZone1Origin="0,800" ZSpawnZone1End="-200,-10"
+          ZSpawnZone2Origin="-200,-10" ZSpawnZone2End="0,480"
+          ZSpawnZone3Origin="810,1010" ZSpawnZone3End="300,480"
+          ZSpawnZone4Origin="300,800" ZSpawnZone4End="490,730" />
+
+  <Level10 P1SpawnPos="290,260" P2SpawnPos="808,367" P3SpawnPos="904,367" P4SpawnPos="998,367"
+          ZSpawnZone1Origin="650,800" ZSpawnZone1End="-200,-10"
+          ZSpawnZone2Origin="-200,-10" ZSpawnZone2End="350,480"
+          ZSpawnZone3Origin="810,1010" ZSpawnZone3End="0,480"
+          ZSpawnZone4Origin="0,800" ZSpawnZone4End="490,730" />
+</Levels>

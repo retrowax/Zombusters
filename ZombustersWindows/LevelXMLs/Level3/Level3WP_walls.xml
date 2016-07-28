@@ -1,0 +1,50 @@
+﻿<?xml version="1.0"?>
+<ArrayOfCWall>
+  <!-- Superior Izquierda -->
+  <CWall>
+    <From>
+      <X>360</X>
+      <Y>-255</Y>
+    </From>
+    <To>
+      <X>360</X>
+      <Y>0</Y>
+    </To>
+  </CWall>
+
+  <CWall>
+    <From>
+      <X>360</X>
+      <Y>0</Y>
+    </From>
+    <To>
+      <X>279</X>
+      <Y>115</Y>
+    </To>
+  </CWall>
+
+  <CWall>
+    <From>
+      <X>279</X>
+      <Y>115</Y>
+    </From>
+    <To>
+      <X>92</X>
+      <Y>228</Y>
+    </To>
+  </CWall>
+
+  <CWall>
+    <From>
+      <X>92</X>
+      <Y>228</Y>
+    </From>
+    <To>
+      <X>-5</X>
+      <Y>180</Y>
+    </To>
+  </CWall>
+
+  <!-- END Superior Izquierda -->
+  
+</ArrayOfCWall>
