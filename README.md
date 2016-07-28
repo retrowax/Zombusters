@@ -43,6 +43,8 @@ It will let you sticked on your seat until the end. Its 2D graphics and isometri
 <br><br><br>
 
 
+**IMPORTANT!: This is a work in progress project. It's possible that at any moment the project will not run or have bugs!** 
+
 ### Download
 
 For now, if you want to play this game, you can download the **commercial version** released (v1.0.0) for PC Windows **for free** [here](releases/ZombustersInstaller-v.1.0.0.msi).
