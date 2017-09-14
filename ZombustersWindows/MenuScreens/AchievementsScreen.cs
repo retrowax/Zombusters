@@ -6,7 +6,7 @@ using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 #if !WINDOWS_PHONE
-using Microsoft.Xna.Framework.Storage;
+//using Microsoft.Xna.Framework.Storage;
 #endif
 using GameStateManagement;
 using ZombustersWindows.Subsystem_Managers;
@@ -108,7 +108,7 @@ namespace ZombustersWindows
         public override void Draw(GameTime gameTime)
         {
             Vector2 textPosition;
-            Color color = new Color(0, 255, 0, TransitionAlpha);
+            Color color = new Color(0, 255, 0, (int)TransitionAlpha);
 
             base.Draw(gameTime);
             
@@ -123,7 +123,7 @@ namespace ZombustersWindows
 
             batch.DrawString(_titleFont, "Achievements", textPosition, color);
 
-            color = new Color(255, 255, 255, TransitionAlpha);
+            color = new Color(255, 255, 255, (int)TransitionAlpha);
 
             int numDisplayed = (int)MathHelper.Clamp(_achievements.Count, 0, MaxAchievementsDisplayed);
 

@@ -6,7 +6,7 @@ using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 #if !WINDOWS_PHONE
-using Microsoft.Xna.Framework.Storage;
+//using Microsoft.Xna.Framework.Storage;
 #endif
 using GameStateManagement;
 using System.Xml;
@@ -18,7 +18,7 @@ using ZombustersWindows;
 
 namespace ZombustersWindows.Subsystem_Managers
 {
-#if !WINDOWS_PHONE
+#if WINDOWS_PHONE
     public class StorageDeviceManager : DrawableGameComponent
     {
         MyGame game;

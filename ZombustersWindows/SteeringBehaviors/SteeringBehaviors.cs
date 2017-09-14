@@ -7,7 +7,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
 #if !WINDOWS_PHONE
-using Microsoft.Xna.Framework.Storage;
+//using Microsoft.Xna.Framework.Storage;
 #endif
 
 namespace ZombustersWindows

@@ -99,7 +99,7 @@ namespace ZombustersWindows
             //SeekerInstance.Pitch = 0.75f;
             //SeekerInstance.IsLooped = true;
 
-            Shot = Game.Content.Load<SoundEffect>("SoundFX/pistol_shot");
+            /*Shot = Game.Content.Load<SoundEffect>("SoundFX/pistol_shot");
 
 
             Explosion = Game.Content.Load<SoundEffect>("SoundFX/explosion1");
@@ -119,14 +119,14 @@ namespace ZombustersWindows
             //FlameThrowerInstance.Pitch = 1.4f;
             MachineGunInstance.IsLooped = false;
 
-            Splash = Game.Content.Load<SoundEffect>("SoundFX/LogoSplashSound");
+            Splash = Game.Content.Load<SoundEffect>("SoundFX/LogoSplashSound");*/
 
 #if !WINDOWS_PHONE
             // Get the category.
             //audioCategory = audioEngine.GetCategory("Global");
             //audioCategory.SetVolume(this.FXVolume * 1.5f);
 #endif
-            ShotInstance = Shot.CreateInstance();
+            /*ShotInstance = Shot.CreateInstance();
             ShotInstance.Volume = FXVolume;
             ShotInstance.IsLooped = false;
 
@@ -140,7 +140,7 @@ namespace ZombustersWindows
 
             ManScreamInstance = ManScream.CreateInstance();
             ManScreamInstance.Volume = FXVolume;
-            ManScreamInstance.IsLooped = false;
+            ManScreamInstance.IsLooped = false;*/
 
             //SplashInstance = Splash.CreateInstance();
             //SplashInstance.Volume = FXVolume;
@@ -162,7 +162,7 @@ namespace ZombustersWindows
             }
 
 #if !WINDOWS_PHONE
-            FlameThrowerInstance.Volume = FXVolume;
+            //FlameThrowerInstance.Volume = FXVolume;
 //            audioCategory.SetVolume(this.FXVolume * 1.5f);
 //            audioEngine.Update();
 #endif
@@ -173,11 +173,11 @@ namespace ZombustersWindows
         private Queue<SoundEffectInstance> Sounds;
         private void AddSound(SoundEffect sound, float volume, float pitch)
         {
-            SoundEffectInstance handle = sound.CreateInstance();
+            /*SoundEffectInstance handle = sound.CreateInstance();
             handle.Volume = volume;
             handle.Pitch = pitch;
             handle.Play();
-            Sounds.Enqueue(handle);
+            Sounds.Enqueue(handle);*/
         }
         public void PlaySplashSound()
         {

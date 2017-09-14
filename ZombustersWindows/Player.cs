@@ -12,7 +12,7 @@ using Microsoft.Xna.Framework;
 
 using Microsoft.Xna.Framework.Graphics;
 using System.IO;
-using Microsoft.Xna.Framework.Storage;
+//using Microsoft.Xna.Framework.Storage;
 using System.Xml.Serialization;
 using System.IO.IsolatedStorage;
 
@@ -24,8 +24,8 @@ namespace ZombustersWindows
         public PlayerIndex Controller;
         public bool IsRemote;
         public InputMode Options;
-        public StorageDevice Device;
-        public StorageContainer Container;
+        //public StorageDevice Device;
+        //public StorageContainer Container;
         public OptionsState optionsState;
         public AudioManager audioManager;
         public bool isReady;

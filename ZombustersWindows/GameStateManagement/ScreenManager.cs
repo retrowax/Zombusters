@@ -338,7 +338,7 @@ namespace GameStateManagement
 
             spriteBatch.Draw(blankTexture,
                              new Rectangle(0, 0, viewport.Width, viewport.Height),
-                             new Color(0, 0, 0, (byte)alpha));
+                             new Color(0, 0, 0, alpha));
 
             spriteBatch.End();
         }
