@@ -6,7 +6,14 @@ before_install:
   - wget http://www.monogame.net/releases/v3.6/monogame-sdk.run
   - find * -type f -exec chmod 777 {} \; # lazy just make all executable
 install:
-  - sudo apt-get install -qq monodevelop libopenal-dev referenceassemblies-pcl ttf-mscorefonts-installer gtk-sharp3; # install needed packages for the monogame sdk
+  - sudo apt-get install gtk-sharp3
+  - sudo apt-get install libopenal-dev referenceassemblies-pcl ttf-mscorefonts-installer
+  - sudo apt-get install -qq monodevelop
   - sudo ./generate.sh && yes Y|sudo ./monogame-sdk.run; # install monogame sdk
+
+  #- nuget restore
+  #- nuget install NUnit.Runners -Version 2.6.4 -OutputDirectory testrunner
 script:
+  - msbuild
+  #- mono ./testrunner/NUnit.Runners.2.6.4/tools/nunit-console.exe ./MonoGameSample.UnitTests/bin/Debug/MonoGameSample.UnitTests.dll
   - (cd ZombustersWindows/Content && mono /opt/monogame-pipeline/MGCB.exe /rebuild /@:"Content.mgcb" /outputDir:"../bin/Release/Content")
