@@ -5,11 +5,6 @@ VisualStudioVersion = 15.0.27004.2005
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ZombustersWindows", "ZombustersWindows\ZombustersWindows.csproj", "{29A4CB64-5FC5-4E7B-9599-1E763B602360}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{527ED728-3426-4AAB-B653-F70982B84276}"
-	ProjectSection(SolutionItems) = preProject
-		travis.yml = travis.yml
-	EndProjectSection
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
