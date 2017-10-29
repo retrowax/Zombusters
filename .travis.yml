@@ -7,7 +7,17 @@ install:
   # Extracted from http://community.monogame.net/t/running-monogame-sdk-run-on-linux-without-confirmation-travis-ci/9567
   - sudo apt-get install gtk-sharp3
   - sudo apt-get install libopenal-dev referenceassemblies-pcl ttf-mscorefonts-installer
-  - sudo ./monogame-sdk.run
+
+  # Extract contents and overwrite postinstall.sh to not prompt for input
+  # See: https://github.com/MonoGame/MonoGame/issues/5879
+  - chmod +x monogame-sdk.run
+  - sudo ./monogame-sdk.run --noexec --keep --target ./monogame
+  - sudo chmod 777 ./monogame/postinstall.sh
+  - cp Build/postinstall.sh ./monogame
+  - cd monogame
+  - sudo chmod +x postinstall.sh
+  - sudo ./postinstall.sh
+  - cd ..
 
   #- nuget restore
   #- nuget install NUnit.Runners -Version 2.6.4 -OutputDirectory testrunner
