@@ -5,10 +5,11 @@ before_install:
   - find * -type f -exec chmod 777 {} \; # lazy just make all executable
 install:
   # Extracted from http://community.monogame.net/t/running-monogame-sdk-run-on-linux-without-confirmation-travis-ci/9567
+  - sudo apt-get update
   - sudo apt-get install gtk-sharp3
   - sudo apt-get install libopenal-dev referenceassemblies-pcl ttf-mscorefonts-installer
   - sudo apt-get install libmono-microsoft-build2.0-cil
-  - sudo apt-get install mono-runtime=3.2.7
+  - sudo apt-get install mono-runtime=3.2.6
   - sudo apt-get install libmono-system-web2.0-cil
   - sudo apt-get install libmono-system-runtime2.0-cil
   - sudo apt-get install monodevelop
