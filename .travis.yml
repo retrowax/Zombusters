@@ -8,7 +8,7 @@ install:
   - sudo apt-get install gtk-sharp3
   - sudo apt-get install libopenal-dev referenceassemblies-pcl ttf-mscorefonts-installer
   - sudo apt-get install libmono-microsoft-build2.0-cil
-  - sudo apt-get install mono-runtime=3.2.8
+  - sudo apt-get install mono-runtime=3.2.7
   - sudo apt-get install libmono-system-web2.0-cil
   - sudo apt-get install libmono-system-runtime2.0-cil
   - sudo apt-get install monodevelop
