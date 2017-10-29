@@ -10,7 +10,7 @@ install:
 
   - echo y | sudo ./monogame-sdk.run
 
-  #- nuget restore
+  - nuget restore
   #- nuget install NUnit.Runners -Version 2.6.4 -OutputDirectory testrunner
 script:
   - msbuild
