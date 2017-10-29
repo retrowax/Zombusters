@@ -190,66 +190,66 @@ namespace ZombustersWindows
         }
         public void PlayShot()
         {
-            if (!bPaused)
+            /*if (!bPaused)
             {
                 if ((!bPaused) && (ShotInstance.State != SoundState.Playing))
                     ShotInstance.Play();
-            }
+            }*/
         }
         public void PlayZombieDying()
         {
-            if (!bPaused)
+            /*if (!bPaused)
             {
                 if (random.Next(0, 3) == 1)
                 {
                     if ((!bPaused) && (ZombieDyingInstance.State != SoundState.Playing))
                         ZombieDyingInstance.Play();
                 }
-            }
+            }*/
         }
         public void PlayWomanScream()
         {
-            if (!bPaused)
+            /*if (!bPaused)
             {
                 if ((!bPaused) && (WomanScreamInstance.State != SoundState.Playing))
                     WomanScreamInstance.Play();
-            }
+            }*/
         }
 
         public void PlayManScream()
         {
-            if (!bPaused)
+            /*if (!bPaused)
             {
                 if ((!bPaused) && (ManScreamInstance.State != SoundState.Playing))
                     ManScreamInstance.Play();
-            }
+            }*/
         }
 
         public void PlayFlameThrower()
         {
-            if ((!bPaused) && (FlameThrowerInstance.State != SoundState.Playing))
-                FlameThrowerInstance.Play();
+            /*if ((!bPaused) && (FlameThrowerInstance.State != SoundState.Playing))
+                FlameThrowerInstance.Play();*/
         }
         public void StopFlameThrower()
         {
-            if (FlameThrowerInstance.State == SoundState.Playing)
-                FlameThrowerInstance.Stop();
+            /*if (FlameThrowerInstance.State == SoundState.Playing)
+                FlameThrowerInstance.Stop();*/
         }
 
         public void PlayMachineGun()
         {
-            if (!bPaused)
+            /*if (!bPaused)
             {
                 if ((!bPaused) && (MachineGunInstance.State != SoundState.Playing))
                     MachineGunInstance.Play();
-            }
+            }*/
             //if ((!bPaused) && (MachineGunInstance.State != SoundState.Playing))
                 //MachineGunInstance.Play();
         }
         public void StopMachineGun()
         {
-            if (MachineGunInstance.State == SoundState.Playing)
-                MachineGunInstance.Stop();
+            /*if (MachineGunInstance.State == SoundState.Playing)
+                MachineGunInstance.Stop();*/
         }
 
         public void PlayExplosion()

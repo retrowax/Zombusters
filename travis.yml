@@ -1,0 +1,5 @@
+language: csharp
+solution: ZombustersWindows.sln
+install:
+  - sudo apt-get install -y MonoGame.Framework.WindowsDX
+  - nuget restore ZombustersWindows.sln
