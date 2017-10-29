@@ -13,3 +13,75 @@
 
 #---------------------------------- Content ---------------------------------#
 
+#begin Music/BareWires_DancingOnADime.mp3
+/importer:Mp3Importer
+/processor:SongProcessor
+/processorParam:Quality=Best
+/build:Music/BareWires_DancingOnADime.mp3
+
+#begin Music/BlackMath_HighDive.mp3
+/importer:Mp3Importer
+/processor:SongProcessor
+/processorParam:Quality=Best
+/build:Music/BlackMath_HighDive.mp3
+
+#begin Music/BlackMath_SuckCity.mp3
+/importer:Mp3Importer
+/processor:SongProcessor
+/processorParam:Quality=Best
+/build:Music/BlackMath_SuckCity.mp3
+
+#begin Music/BradSucks_BadAttraction.mp3
+/importer:Mp3Importer
+/processor:SongProcessor
+/processorParam:Quality=Best
+/build:Music/BradSucks_BadAttraction.mp3
+
+#begin Music/BradSucks_UnderstoodByYourDad.mp3
+/importer:Mp3Importer
+/processor:SongProcessor
+/processorParam:Quality=Best
+/build:Music/BradSucks_UnderstoodByYourDad.mp3
+
+#begin Music/Kraus_Wolfram.mp3
+/importer:Mp3Importer
+/processor:SongProcessor
+/processorParam:Quality=Best
+/build:Music/Kraus_Wolfram.mp3
+
+#begin Music/LondonToTokyo_HighGround.mp3
+/importer:Mp3Importer
+/processor:SongProcessor
+/processorParam:Quality=Best
+/build:Music/LondonToTokyo_HighGround.mp3
+
+#begin Music/NuitNoire_OpeningThePortal.mp3
+/importer:Mp3Importer
+/processor:SongProcessor
+/processorParam:Quality=Best
+/build:Music/NuitNoire_OpeningThePortal.mp3
+
+#begin Music/TheBlackBug_IDontLikeYou.mp3
+/importer:Mp3Importer
+/processor:SongProcessor
+/processorParam:Quality=Best
+/build:Music/TheBlackBug_IDontLikeYou.mp3
+
+#begin Music/TheItchyCreeps_ITHOTM.mp3
+/importer:Mp3Importer
+/processor:SongProcessor
+/processorParam:Quality=Best
+/build:Music/TheItchyCreeps_ITHOTM.mp3
+
+#begin Music/ThisCo_AsYouKnow.mp3
+/importer:Mp3Importer
+/processor:SongProcessor
+/processorParam:Quality=Best
+/build:Music/ThisCo_AsYouKnow.mp3
+
+#begin Music/ThisCo_TakeItAway.mp3
+/importer:Mp3Importer
+/processor:SongProcessor
+/processorParam:Quality=Best
+/build:Music/ThisCo_TakeItAway.mp3
+

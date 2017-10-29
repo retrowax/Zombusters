@@ -149,7 +149,7 @@ namespace ZombustersWindows
                     nextSong = songNum;
                 }
 
-                //PlaySong(_songsList[nextSong], false);
+                PlaySong(_songsList[nextSong], false);
             }
         }
 
@@ -175,7 +175,7 @@ namespace ZombustersWindows
                 throw new InvalidOperationException(string.Format("Song '{0}' has already been loaded", songName));
             }
 
-            //_songs.Add(songName, _content.Load<Song>(songPath));
+            _songs.Add(songName, _content.Load<Song>(songPath));
         }
 
         /// <summary>
