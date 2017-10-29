@@ -269,7 +269,7 @@ namespace ZombustersWindows
                                                           (int)textSize.Y + vPad * 2);
 
             // Fade the popup alpha during transitions.
-            Color color = new Color(255, 255, 255, TransitionAlpha);
+            Color color = new Color(255, 255, 255, (int)TransitionAlpha);
 
             // Pulsate the size of the selected menu entry.
             double time = gameTime.TotalGameTime.TotalSeconds;

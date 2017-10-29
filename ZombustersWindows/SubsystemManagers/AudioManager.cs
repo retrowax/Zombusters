@@ -7,7 +7,7 @@ using Microsoft.Xna.Framework.Media;
 
 namespace ZombustersWindows
 {
-    
+
     public class AudioManager : DrawableGameComponent
     {
         private float FXVolume;
@@ -57,7 +57,7 @@ namespace ZombustersWindows
         //Cue engineSound = null;
 #endif
 
-        //private Song Music;
+        private Song Music;
         //private SoundEffect MenuLoop;
         //private SoundEffectInstance MenuLoopInstance;
 
@@ -79,7 +79,8 @@ namespace ZombustersWindows
 
         protected override void LoadContent()
         {
-            //Music = Game.Content.Load<Song>("Music/Song1");
+            //Music = Game.Content.Load<Song>("Music/LondonToTokyo_HighGround");
+            //Music = Song.FromUri("LondonToTokyo_HighGround", new Uri("Content/Music/LondonToTokyo_HighGround.mp3", UriKind.Relative));
             MediaPlayer.Volume = MusicVolume;
             MediaPlayer.IsRepeating = true;
 
@@ -162,9 +163,9 @@ namespace ZombustersWindows
             }
 
 #if !WINDOWS_PHONE
-            FlameThrowerInstance.Volume = FXVolume;
-//            audioCategory.SetVolume(this.FXVolume * 1.5f);
-//            audioEngine.Update();
+            //FlameThrowerInstance.Volume = FXVolume;
+            //            audioCategory.SetVolume(this.FXVolume * 1.5f);
+            //            audioEngine.Update();
 #endif
 
             base.Update(gameTime);
@@ -244,7 +245,7 @@ namespace ZombustersWindows
                     MachineGunInstance.Play();
             }
             //if ((!bPaused) && (MachineGunInstance.State != SoundState.Playing))
-                //MachineGunInstance.Play();
+            //MachineGunInstance.Play();
         }
         public void StopMachineGun()
         {
@@ -308,7 +309,7 @@ namespace ZombustersWindows
         {
             PauseSounds();
             MediaPlayer.Pause();
-        }               
+        }
         public void ResumeAll()
         {
             if (bPaused)
@@ -317,7 +318,7 @@ namespace ZombustersWindows
 
                 //if (SeekerInstance.State == SoundState.Paused)
                 //    SeekerInstance.Resume();
-                
+
                 foreach (SoundEffectInstance item in Sounds)
                 {
                     if (item.State == SoundState.Paused)

@@ -8,7 +8,7 @@ using ZombustersWindows.Subsystem_Managers;
 using Microsoft.Xna.Framework.Input.Touch;
 using ZombustersWindows.MainScreens;
 using ZombustersWindows.Localization;
-using Steamworks;
+//using Steamworks;
 
 namespace ZombustersWindows
 {
@@ -89,7 +89,7 @@ namespace ZombustersWindows
         public int maxLocalGamers = 4;
         public Random rand;
         public List<Texture2D> NoisedMap;
-        public StorageDeviceManager storageDeviceManager;
+        //public StorageDeviceManager storageDeviceManager;
         public GameState currentGameState;
         
         public Vector2 position = new Vector2(-200, 0);
@@ -97,8 +97,8 @@ namespace ZombustersWindows
         public bool directionRight = true;
         public TopScoreListContainer mScores;
 #if DEBUG
-        public FrameRateCounter FrameRateComponent;
-        public DebugInfoComponent DebugComponent;
+        //public FrameRateCounter FrameRateComponent;
+        //public DebugInfoComponent DebugComponent;
 #endif
         public MusicComponent musicComponent;
         public Texture2D LivePowerUp, ExtraLivePowerUp, ShotgunAmmoPowerUp, MachinegunAmmoPowerUp, FlamethrowerAmmoPowerUp, ImmunePowerUp, heart, shotgunammoUI, pistolammoUI, grenadeammoUI, flamethrowerammoUI, blackTexture;
@@ -137,10 +137,10 @@ namespace ZombustersWindows
             NoisedMap = new List<Texture2D>(4);
             rand = new Random(4);
 #if DEBUG
-            FrameRateComponent = new FrameRateCounter(this);
+            /*FrameRateComponent = new FrameRateCounter(this);
             Components.Add(FrameRateComponent);
             DebugComponent = new DebugInfoComponent(this);
-            Components.Add(DebugComponent);
+            Components.Add(DebugComponent);*/
             //Guide.SimulateTrialMode = true;
 #endif
             musicComponent = new MusicComponent(this);
@@ -149,7 +149,7 @@ namespace ZombustersWindows
         }
 
         protected override void Initialize() {
-            SteamAPI.Init();
+            //SteamAPI.Init();
             currentPlayers = new Avatar[maxGamers];
             for (int i = 0; i < maxGamers; i++) {
                 currentPlayers[i] = new Avatar();
@@ -183,7 +183,7 @@ namespace ZombustersWindows
         }
 
         protected override void Update(GameTime gameTime) {
-            SteamAPI.RunCallbacks();
+            //SteamAPI.RunCallbacks();
             if (currentGameState != GameState.Paused) {
                 if (!bPaused && bStateReady) {
                     TotalGameSeconds += (float)gameTime.ElapsedGameTime.TotalSeconds;

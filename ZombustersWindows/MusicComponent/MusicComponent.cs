@@ -432,7 +432,7 @@ namespace ZombustersWindows
                 if (ShowText)
                 {
                     // Draw Retrowax Trax Background
-                    batch.Draw(retroTraxBkgTexture, new Vector2(drawPosition.X + 50, drawPosition.Y + 2), new Color(255, 255, 255, (byte)MathHelper.Clamp(200, 0, 255)));
+                    batch.Draw(retroTraxBkgTexture, new Vector2(drawPosition.X + 50, drawPosition.Y + 2), new Color(255, 255, 255, MathHelper.Clamp(200, 0, 255)));
                 }
 
                 // Draw Retrowax Trax Logo
