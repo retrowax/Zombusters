@@ -13,6 +13,6 @@ install:
   - nuget restore
   #- nuget install NUnit.Runners -Version 2.6.4 -OutputDirectory testrunner
 script:
-  - msbuild /p:Configuration=Release
+  - sudo msbuild /p:Configuration=Release
   #- mono ./testrunner/NUnit.Runners.2.6.4/tools/nunit-console.exe ./MonoGameSample.UnitTests/bin/Debug/MonoGameSample.UnitTests.dll
   #- (cd ZombustersWindows/Content && mono /opt/monogame-pipeline/MGCB.exe /rebuild /@:"Content.mgcb" /outputDir:"../bin/Release/Content")
