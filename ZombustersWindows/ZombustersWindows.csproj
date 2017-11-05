@@ -1126,18 +1126,42 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <None Include="app.config" />
-    <None Include="Content\Music\BareWires_DancingOnADime.ogg" />
-    <None Include="Content\Music\BlackMath_HighDive.ogg" />
-    <None Include="Content\Music\BlackMath_SuckCity.ogg" />
-    <None Include="Content\Music\BradSucks_BadAttraction.ogg" />
-    <None Include="Content\Music\BradSucks_UnderstoodByYourDad.ogg" />
-    <None Include="Content\Music\Kraus_Wolfram.ogg" />
-    <None Include="Content\Music\LondonToTokyo_HighGround.ogg" />
-    <None Include="Content\Music\NuitNoire_OpeningThePortal.ogg" />
-    <None Include="Content\Music\TheBlackBug_IDontLikeYou.ogg" />
-    <None Include="Content\Music\TheItchyCreeps_ITHOTM.ogg" />
-    <None Include="Content\Music\ThisCo_AsYouKnow.ogg" />
-    <None Include="Content\Music\ThisCo_TakeItAway.ogg" />
+    <Content Include="Content\Music\BareWires_DancingOnADime.ogg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Music\BlackMath_HighDive.ogg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Music\BlackMath_SuckCity.ogg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Music\BradSucks_BadAttraction.ogg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Music\BradSucks_UnderstoodByYourDad.ogg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Music\Kraus_Wolfram.ogg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Music\LondonToTokyo_HighGround.ogg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Music\NuitNoire_OpeningThePortal.ogg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Music\TheBlackBug_IDontLikeYou.ogg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Music\TheItchyCreeps_ITHOTM.ogg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Music\ThisCo_AsYouKnow.ogg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Music\ThisCo_TakeItAway.ogg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
