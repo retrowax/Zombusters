@@ -198,42 +198,6 @@
     <Content Include="Content\LevelsDef.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\Music\BareWires_DancingOnADime.mp3">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Content\Music\BlackMath_HighDive.mp3">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Content\Music\BlackMath_SuckCity.mp3">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Content\Music\BradSucks_BadAttraction.mp3">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Content\Music\BradSucks_UnderstoodByYourDad.mp3">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Content\Music\Kraus_Wolfram.mp3">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Content\Music\LondonToTokyo_HighGround.mp3">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Content\Music\NuitNoire_OpeningThePortal.mp3">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Content\Music\TheBlackBug_IDontLikeYou.mp3">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Content\Music\TheItchyCreeps_ITHOTM.mp3">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Content\Music\ThisCo_AsYouKnow.mp3">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Content\Music\ThisCo_TakeItAway.mp3">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
     <Content Include="Content\WPLevelsDef.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -1162,6 +1126,18 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <None Include="app.config" />
+    <None Include="Content\Music\BareWires_DancingOnADime.ogg" />
+    <None Include="Content\Music\BlackMath_HighDive.ogg" />
+    <None Include="Content\Music\BlackMath_SuckCity.ogg" />
+    <None Include="Content\Music\BradSucks_BadAttraction.ogg" />
+    <None Include="Content\Music\BradSucks_UnderstoodByYourDad.ogg" />
+    <None Include="Content\Music\Kraus_Wolfram.ogg" />
+    <None Include="Content\Music\LondonToTokyo_HighGround.ogg" />
+    <None Include="Content\Music\NuitNoire_OpeningThePortal.ogg" />
+    <None Include="Content\Music\TheBlackBug_IDontLikeYou.ogg" />
+    <None Include="Content\Music\TheItchyCreeps_ITHOTM.ogg" />
+    <None Include="Content\Music\ThisCo_AsYouKnow.ogg" />
+    <None Include="Content\Music\ThisCo_TakeItAway.ogg" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
