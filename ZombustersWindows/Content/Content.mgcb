@@ -3,7 +3,7 @@
 
 /outputDir:bin/Windows
 /intermediateDir:obj/Windows
-/platform:Windows
+/platform:DesktopGL
 /config:
 /profile:Reach
 /compress:False
@@ -12,4 +12,76 @@
 
 
 #---------------------------------- Content ---------------------------------#
+
+#begin Music/BareWires_DancingOnADime.ogg
+/importer:OggImporter
+/processor:SongProcessor
+/processorParam:Quality=Best
+/build:Music/BareWires_DancingOnADime.ogg
+
+#begin Music/BlackMath_HighDive.ogg
+/importer:OggImporter
+/processor:SongProcessor
+/processorParam:Quality=Best
+/build:Music/BlackMath_HighDive.ogg
+
+#begin Music/BlackMath_SuckCity.ogg
+/importer:OggImporter
+/processor:SongProcessor
+/processorParam:Quality=Best
+/build:Music/BlackMath_SuckCity.ogg
+
+#begin Music/BradSucks_BadAttraction.ogg
+/importer:OggImporter
+/processor:SongProcessor
+/processorParam:Quality=Best
+/build:Music/BradSucks_BadAttraction.ogg
+
+#begin Music/BradSucks_UnderstoodByYourDad.ogg
+/importer:OggImporter
+/processor:SongProcessor
+/processorParam:Quality=Best
+/build:Music/BradSucks_UnderstoodByYourDad.ogg
+
+#begin Music/Kraus_Wolfram.ogg
+/importer:OggImporter
+/processor:SongProcessor
+/processorParam:Quality=Best
+/build:Music/Kraus_Wolfram.ogg
+
+#begin Music/LondonToTokyo_HighGround.ogg
+/importer:OggImporter
+/processor:SongProcessor
+/processorParam:Quality=Best
+/build:Music/LondonToTokyo_HighGround.ogg
+
+#begin Music/NuitNoire_OpeningThePortal.ogg
+/importer:OggImporter
+/processor:SongProcessor
+/processorParam:Quality=Best
+/build:Music/NuitNoire_OpeningThePortal.ogg
+
+#begin Music/TheBlackBug_IDontLikeYou.ogg
+/importer:OggImporter
+/processor:SongProcessor
+/processorParam:Quality=Best
+/build:Music/TheBlackBug_IDontLikeYou.ogg
+
+#begin Music/TheItchyCreeps_ITHOTM.ogg
+/importer:OggImporter
+/processor:SongProcessor
+/processorParam:Quality=Best
+/build:Music/TheItchyCreeps_ITHOTM.ogg
+
+#begin Music/ThisCo_AsYouKnow.ogg
+/importer:OggImporter
+/processor:SongProcessor
+/processorParam:Quality=Best
+/build:Music/ThisCo_AsYouKnow.ogg
+
+#begin Music/ThisCo_TakeItAway.ogg
+/importer:OggImporter
+/processor:SongProcessor
+/processorParam:Quality=Best
+/build:Music/ThisCo_TakeItAway.ogg
 

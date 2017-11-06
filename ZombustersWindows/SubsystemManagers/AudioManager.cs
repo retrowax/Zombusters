@@ -57,7 +57,7 @@ namespace ZombustersWindows
         //Cue engineSound = null;
 #endif
 
-        private Song Music;
+        //private Song Music;
         //private SoundEffect MenuLoop;
         //private SoundEffectInstance MenuLoopInstance;
 
