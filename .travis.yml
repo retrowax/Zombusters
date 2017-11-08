@@ -1,8 +1,13 @@
+sudo: required
 language: csharp
 solution: ZombustersWindows.sln
+services:
+  - docker
 before_install:
   - wget http://www.monogame.net/releases/v3.6/monogame-sdk.run
   - find * -type f -exec chmod 777 {} \; # lazy just make all executable
+  - docker pull suchja/wix
+
 install:
   # Extracted from http://community.monogame.net/t/running-monogame-sdk-run-on-linux-without-confirmation-travis-ci/9567
   - sudo apt-get install gtk-sharp3
@@ -13,12 +18,10 @@ install:
   - nuget restore
   #- nuget install NUnit.Runners -Version 2.6.4 -OutputDirectory testrunner
   #- ./travis/install_wine.sh
-  - sudo apt-get install wine
-sudo: required
+  #- sudo apt-get install wine
 script:
   - find * -type f -exec chmod 777 {} \;
   - msbuild /p:Configuration=Release
 
   #- mono ./testrunner/NUnit.Runners.2.6.4/tools/nunit-console.exe ./MonoGameSample.UnitTests/bin/Debug/MonoGameSample.UnitTests.dll
   #- (cd ZombustersWindows/Content && mono /opt/monogame-pipeline/MGCB.exe /rebuild /@:"Content.mgcb" /outputDir:"../bin/Release/Content")
-  -
