@@ -12,7 +12,7 @@ install:
 
   - nuget restore
   #- nuget install NUnit.Runners -Version 2.6.4 -OutputDirectory testrunner
-  - ./travis/install-wine.sh
+  - ./travis/install_wine.sh
 sudo: required
 script:
   - find * -type f -exec chmod 777 {} \;
