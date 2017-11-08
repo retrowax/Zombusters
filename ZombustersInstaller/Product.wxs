@@ -1,0 +1,1265 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi"><?define ZombustersWindows_TargetDir=$(var.ZombustersWindows.TargetDir)?>
+	<Product Id="*" Name="ZombustersInstaller" Language="1033" Version="1.0.0.0" Manufacturer="Retrowax" UpgradeCode="600e34d1-a99c-4d69-8808-097a643377e7">
+		<Package InstallerVersion="200" Compressed="yes" InstallScope="perMachine" />
+
+		<MajorUpgrade DowngradeErrorMessage="A newer version of [ProductName] is already installed." />
+		<MediaTemplate />
+
+		<Feature Id="ProductFeature" Title="ZombustersInstaller" Level="1">
+			<ComponentGroupRef Id="ProductComponents" />
+			<ComponentGroupRef Id="de_files" />
+			<ComponentGroupRef Id="es_files" />
+			<ComponentGroupRef Id="fr_files" />
+			<ComponentGroupRef Id="it_files" />
+			<ComponentGroupRef Id="Content_files" />
+			<ComponentGroupRef Id="ProgramFilesFolder_files" />
+			<ComponentGroupRef Id="LevelXMLs_files" />
+			<ComponentGroupRef Id="LevelXMLs_Level10_files" />
+			<ComponentGroupRef Id="LevelXMLs_Level1_files" />
+			<ComponentGroupRef Id="LevelXMLs_Level2_files" />
+			<ComponentGroupRef Id="LevelXMLs_Level3_files" />
+			<ComponentGroupRef Id="LevelXMLs_Level4_files" />
+			<ComponentGroupRef Id="LevelXMLs_Level5_files" />
+			<ComponentGroupRef Id="LevelXMLs_Level6_files" />
+			<ComponentGroupRef Id="LevelXMLs_Level7_files" />
+			<ComponentGroupRef Id="LevelXMLs_Level8_files" />
+			<ComponentGroupRef Id="LevelXMLs_Level9_files" />
+			<ComponentGroupRef Id="Content_Achievements_files" />
+			<ComponentGroupRef Id="Content_fx_files" />
+			<ComponentGroupRef Id="Content_InGame_files" />
+			<ComponentGroupRef Id="Content_InGame_Egon_files" />
+			<ComponentGroupRef Id="Content_InGame_GUI_files" />
+			<ComponentGroupRef Id="Content_InGame_Jade_files" />
+			<ComponentGroupRef Id="Content_InGame_Peter_files" />
+			<ComponentGroupRef Id="Content_InGame_Ray_files" />
+			<ComponentGroupRef Id="Content_InGame_SelectPlayer_files" />
+			<ComponentGroupRef Id="Content_Keyboard_files" />
+			<ComponentGroupRef Id="Content_Maps_Furniture_files" />
+			<ComponentGroupRef Id="Content_Maps_files" />
+			<ComponentGroupRef Id="Content_Menu_files" />
+			<ComponentGroupRef Id="Content_SoundFX_files" />
+			<ComponentGroupRef Id="Content_UI_files" />
+			<ComponentGroupRef Id="Content_Music_files" />
+		</Feature>
+	</Product>
+
+	<Fragment>
+		<Directory Id="TARGETDIR" Name="SourceDir">
+			<Directory Id="ProgramFilesFolder">
+				<Directory Id="INSTALLFOLDER" Name="ZombustersInstaller">
+				  <Directory Id="Content_Achievements" Name="Achievements" />
+				  <Directory Id="Content_fx" Name="fx" />
+				  <Directory Id="Content_InGame" Name="InGame">
+				    <Directory Id="Content_InGame_Egon" Name="Egon" />
+				    <Directory Id="Content_InGame_GUI" Name="GUI" />
+				    <Directory Id="Content_InGame_Jade" Name="Jade" />
+				    <Directory Id="Content_InGame_Peter" Name="Peter" />
+				    <Directory Id="Content_InGame_Ray" Name="Ray" />
+				    <Directory Id="Content_InGame_SelectPlayer" Name="SelectPlayer" />
+				  </Directory>
+				  <Directory Id="Content_Keyboard" Name="Keyboard" />
+				  <Directory Id="Content_Maps" Name="Maps">
+				    <Directory Id="Content_Maps_Furniture" Name="Furniture" />
+				  </Directory>
+				  <Directory Id="Content_Menu" Name="Menu" />
+				  <Directory Id="Content_Music" Name="Music" />
+				  <Directory Id="Content_SoundFX" Name="SoundFX" />
+				  <Directory Id="Content_UI" Name="UI" />
+				</Directory>
+				<Directory Id="de" Name="de" />
+				<Directory Id="es" Name="es" />
+				<Directory Id="fr" Name="fr" />
+				<Directory Id="it" Name="it" />
+				<Directory Id="LevelXMLs" Name="LevelXMLs">
+				  <Directory Id="LevelXMLs_Level1" Name="Level1" />
+				  <Directory Id="LevelXMLs_Level10" Name="Level10" />
+				  <Directory Id="LevelXMLs_Level2" Name="Level2" />
+				  <Directory Id="LevelXMLs_Level3" Name="Level3" />
+				  <Directory Id="LevelXMLs_Level4" Name="Level4" />
+				  <Directory Id="LevelXMLs_Level5" Name="Level5" />
+				  <Directory Id="LevelXMLs_Level6" Name="Level6" />
+				  <Directory Id="LevelXMLs_Level7" Name="Level7" />
+				  <Directory Id="LevelXMLs_Level8" Name="Level8" />
+				  <Directory Id="LevelXMLs_Level9" Name="Level9" />
+				</Directory>
+				<Directory Id="Content" Name="Content" />
+			</Directory>
+		</Directory>
+	</Fragment>
+
+	<Fragment>
+		<ComponentGroup Id="ProductComponents" Directory="INSTALLFOLDER">
+			<!-- TODO: Remove the comments around this Component element and the ComponentRef below in order to add resources to this installer. -->
+			<!-- <Component Id="ProductComponent"> -->
+				<!-- TODO: Insert files, registry keys, and other resources here. -->
+			<!-- </Component> -->
+		</ComponentGroup>
+	</Fragment>
+	<Fragment>
+	  <ComponentGroup Id="de_files" Directory="de">
+	    <Component Id="de_ZombustersWindows.resources.dll" Guid="fd079e45-1f9b-4a55-9e39-ca8c56796800">
+	      <File Id="de_ZombustersWindows.resources.dll" Name="ZombustersWindows.resources.dll" Source="$(var.ZombustersWindows_TargetDir)de\ZombustersWindows.resources.dll" />
+	    </Component>
+	  </ComponentGroup>
+	</Fragment>
+
+  <Fragment>
+    <ComponentGroup Id="es_files" Directory="es">
+      <Component Id="es_ZombustersWindows.resources.dll" Guid="7440cdc7-8e39-4aaf-893c-2067cd3abc5c">
+        <File Id="es_ZombustersWindows.resources.dll" Name="ZombustersWindows.resources.dll" Source="$(var.ZombustersWindows_TargetDir)es\ZombustersWindows.resources.dll" />
+      </Component>
+    </ComponentGroup>
+  </Fragment>
+
+  <Fragment>
+    <ComponentGroup Id="fr_files" Directory="fr">
+      <Component Id="fr_ZombustersWindows.resources.dll" Guid="bf94e4fa-c7ab-467e-936a-a59dabadf712">
+        <File Id="fr_ZombustersWindows.resources.dll" Name="ZombustersWindows.resources.dll" Source="$(var.ZombustersWindows_TargetDir)fr\ZombustersWindows.resources.dll" />
+      </Component>
+    </ComponentGroup>
+  </Fragment>
+
+  <Fragment>
+    <ComponentGroup Id="it_files" Directory="it">
+      <Component Id="it_ZombustersWindows.resources.dll" Guid="fb79cc37-39c6-4277-b7df-b6e79d6732c0">
+        <File Id="it_ZombustersWindows.resources.dll" Name="ZombustersWindows.resources.dll" Source="$(var.ZombustersWindows_TargetDir)it\ZombustersWindows.resources.dll" />
+      </Component>
+    </ComponentGroup>
+  </Fragment>
+
+  <Fragment>
+    <ComponentGroup Id="Content_files" Directory="Content">
+      <Component Id="Content_AnimationDef.xml" Guid="28354100-9185-4e38-baf0-6d91c3fe056b">
+        <File Id="Content_AnimationDef.xml" Name="AnimationDef.xml" Source="$(var.ZombustersWindows_TargetDir)Content\AnimationDef.xml" />
+      </Component>
+      <Component Id="Content_LevelsDef.xml" Guid="b305add3-5479-4ac5-9f86-7a9f1674e434">
+        <File Id="Content_LevelsDef.xml" Name="LevelsDef.xml" Source="$(var.ZombustersWindows_TargetDir)Content\LevelsDef.xml" />
+      </Component>
+      <Component Id="Content_WPLevelsDef.xml" Guid="171eabaf-adb3-429d-a0e7-9eabf2f722b3">
+        <File Id="Content_WPLevelsDef.xml" Name="WPLevelsDef.xml" Source="$(var.ZombustersWindows_TargetDir)Content\WPLevelsDef.xml" />
+      </Component>
+      <Component Id="Content_background_title.xnb" Guid="766ecb57-f698-434c-b3b0-0f665492f960">
+        <File Id="Content_background_title.xnb" Name="background_title.xnb" Source="$(var.ZombustersWindows_TargetDir)Content\background_title.xnb" />
+      </Component>
+      <Component Id="Content_blank.xnb" Guid="f7b3017d-0051-4403-86b2-e115ac3d8f62">
+        <File Id="Content_blank.xnb" Name="blank.xnb" Source="$(var.ZombustersWindows_TargetDir)Content\blank.xnb" />
+      </Component>
+      <Component Id="Content_border.xnb" Guid="d6100922-ab0c-4ff7-a36e-111c01ee4663">
+        <File Id="Content_border.xnb" Name="border.xnb" Source="$(var.ZombustersWindows_TargetDir)Content\border.xnb" />
+      </Component>
+      <Component Id="Content_Cloud001.xnb" Guid="9118d3cc-1ec8-4187-832b-87cc963f15e5">
+        <File Id="Content_Cloud001.xnb" Name="Cloud001.xnb" Source="$(var.ZombustersWindows_TargetDir)Content\Cloud001.xnb" />
+      </Component>
+      <Component Id="Content_clouds3.xnb" Guid="e659dfa2-e5fc-42dc-8212-566bbb4bd2bc">
+        <File Id="Content_clouds3.xnb" Name="clouds3.xnb" Source="$(var.ZombustersWindows_TargetDir)Content\clouds3.xnb" />
+      </Component>
+      <Component Id="Content_controller.xnb" Guid="7c2e2de3-6e60-43ae-b823-a595b3769495">
+        <File Id="Content_controller.xnb" Name="controller.xnb" Source="$(var.ZombustersWindows_TargetDir)Content\controller.xnb" />
+      </Component>
+      <Component Id="Content_corner.xnb" Guid="0aaa485a-5e67-4a8e-84e9-b5735b5265d4">
+        <File Id="Content_corner.xnb" Name="corner.xnb" Source="$(var.ZombustersWindows_TargetDir)Content\corner.xnb" />
+      </Component>
+      <Component Id="Content_default.xgs" Guid="94b1b8a4-28ce-402b-a7b5-87cee6dde8e7">
+        <File Id="Content_default.xgs" Name="default.xgs" Source="$(var.ZombustersWindows_TargetDir)Content\default.xgs" />
+      </Component>
+      <Component Id="Content_Flame.xnb" Guid="3a35f316-a1e9-4a85-8d24-39e7d08f12df">
+        <File Id="Content_Flame.xnb" Name="Flame.xnb" Source="$(var.ZombustersWindows_TargetDir)Content\Flame.xnb" />
+      </Component>
+      <Component Id="Content_Flame2.xnb" Guid="c9c141a4-62d2-40b5-8fa7-027943e15ebf">
+        <File Id="Content_Flame2.xnb" Name="Flame2.xnb" Source="$(var.ZombustersWindows_TargetDir)Content\Flame2.xnb" />
+      </Component>
+      <Component Id="Content_InputText.xnb" Guid="1d5917d8-c729-4d0a-b855-fff71d46bc64">
+        <File Id="Content_InputText.xnb" Name="InputText.xnb" Source="$(var.ZombustersWindows_TargetDir)Content\InputText.xnb" />
+      </Component>
+      <Component Id="Content_InputText2.xnb" Guid="1099f09b-a339-40b3-83bc-b7a769d111db">
+        <File Id="Content_InputText2.xnb" Name="InputText2.xnb" Source="$(var.ZombustersWindows_TargetDir)Content\InputText2.xnb" />
+      </Component>
+      <Component Id="Content_LargeArcade.xnb" Guid="1416676e-b6ce-445f-aa04-b41b434c1727">
+        <File Id="Content_LargeArcade.xnb" Name="LargeArcade.xnb" Source="$(var.ZombustersWindows_TargetDir)Content\LargeArcade.xnb" />
+      </Component>
+      <Component Id="Content_LogoRetroWax.xnb" Guid="1413a568-8d67-4945-a910-c65bf7833c74">
+        <File Id="Content_LogoRetroWax.xnb" Name="LogoRetroWax.xnb" Source="$(var.ZombustersWindows_TargetDir)Content\LogoRetroWax.xnb" />
+      </Component>
+      <Component Id="Content_LogoRetroWaxWP.xnb" Guid="475af839-2f04-49b6-bbd8-d4c286907be2">
+        <File Id="Content_LogoRetroWaxWP.xnb" Name="LogoRetroWaxWP.xnb" Source="$(var.ZombustersWindows_TargetDir)Content\LogoRetroWaxWP.xnb" />
+      </Component>
+      <Component Id="Content_Sound_Bank.xsb" Guid="264b1a0a-fc91-474a-a3ef-4025c84cb605">
+        <File Id="Content_Sound_Bank.xsb" Name="Sound Bank.xsb" Source="$(var.ZombustersWindows_TargetDir)Content\Sound Bank.xsb" />
+      </Component>
+      <Component Id="Content_starfield.xnb" Guid="d8986b0e-ba90-4893-a361-0ac7f9420562">
+        <File Id="Content_starfield.xnb" Name="starfield.xnb" Source="$(var.ZombustersWindows_TargetDir)Content\starfield.xnb" />
+      </Component>
+      <Component Id="Content_title.xnb" Guid="2f58e1e0-50b1-4aca-94ec-0ab6740d6faf">
+        <File Id="Content_title.xnb" Name="title.xnb" Source="$(var.ZombustersWindows_TargetDir)Content\title.xnb" />
+      </Component>
+      <Component Id="Content_Wave_Bank.xwb" Guid="66c04b01-1113-436c-a362-feecf3d5454c">
+        <File Id="Content_Wave_Bank.xwb" Name="Wave Bank.xwb" Source="$(var.ZombustersWindows_TargetDir)Content\Wave Bank.xwb" />
+      </Component>
+      <Component Id="Content_whitepixel.xnb" Guid="35cf20b1-878f-4100-a5a8-3e0853b7c2cc">
+        <File Id="Content_whitepixel.xnb" Name="whitepixel.xnb" Source="$(var.ZombustersWindows_TargetDir)Content\whitepixel.xnb" />
+      </Component>
+      <Component Id="Content_xboxControllerButtonA.xnb" Guid="ffbb5921-3e6c-4dcd-98ce-53c7734aed06">
+        <File Id="Content_xboxControllerButtonA.xnb" Name="xboxControllerButtonA.xnb" Source="$(var.ZombustersWindows_TargetDir)Content\xboxControllerButtonA.xnb" />
+      </Component>
+      <Component Id="Content_xboxControllerButtonB.xnb" Guid="b83194d3-6158-4709-8098-4b40d749d11a">
+        <File Id="Content_xboxControllerButtonB.xnb" Name="xboxControllerButtonB.xnb" Source="$(var.ZombustersWindows_TargetDir)Content\xboxControllerButtonB.xnb" />
+      </Component>
+      <Component Id="Content_xboxControllerButtonX.xnb" Guid="5653f6fe-2891-4681-b98c-52a5752e421a">
+        <File Id="Content_xboxControllerButtonX.xnb" Name="xboxControllerButtonX.xnb" Source="$(var.ZombustersWindows_TargetDir)Content\xboxControllerButtonX.xnb" />
+      </Component>
+      <Component Id="Content_xboxControllerButtonY.xnb" Guid="12a67494-b001-4332-b136-42e62034f48b">
+        <File Id="Content_xboxControllerButtonY.xnb" Name="xboxControllerButtonY.xnb" Source="$(var.ZombustersWindows_TargetDir)Content\xboxControllerButtonY.xnb" />
+      </Component>
+      <Component Id="Content_xboxControllerDPad.xnb" Guid="29529188-582b-41a3-aab0-8f9dfb8ce8c4">
+        <File Id="Content_xboxControllerDPad.xnb" Name="xboxControllerDPad.xnb" Source="$(var.ZombustersWindows_TargetDir)Content\xboxControllerDPad.xnb" />
+      </Component>
+      <Component Id="Content_xboxControllerLeftShoulder.xnb" Guid="594e85e2-790a-426e-96ba-aeb43de775ab">
+        <File Id="Content_xboxControllerLeftShoulder.xnb" Name="xboxControllerLeftShoulder.xnb" Source="$(var.ZombustersWindows_TargetDir)Content\xboxControllerLeftShoulder.xnb" />
+      </Component>
+      <Component Id="Content_xboxControllerLeftThumbstick.xnb" Guid="b6089411-adc8-496f-833f-39b6ed879001">
+        <File Id="Content_xboxControllerLeftThumbstick.xnb" Name="xboxControllerLeftThumbstick.xnb" Source="$(var.ZombustersWindows_TargetDir)Content\xboxControllerLeftThumbstick.xnb" />
+      </Component>
+      <Component Id="Content_xboxControllerLeftTrigger.xnb" Guid="8ba3996a-97d7-436e-8632-054fa0503087">
+        <File Id="Content_xboxControllerLeftTrigger.xnb" Name="xboxControllerLeftTrigger.xnb" Source="$(var.ZombustersWindows_TargetDir)Content\xboxControllerLeftTrigger.xnb" />
+      </Component>
+      <Component Id="Content_xboxControllerRightShoulder.xnb" Guid="cbedf17e-4514-4b5c-a2c9-a5631025fd11">
+        <File Id="Content_xboxControllerRightShoulder.xnb" Name="xboxControllerRightShoulder.xnb" Source="$(var.ZombustersWindows_TargetDir)Content\xboxControllerRightShoulder.xnb" />
+      </Component>
+      <Component Id="Content_xboxControllerRightThumbstick.xnb" Guid="b24dec74-3d99-4144-8b43-d0675072d530">
+        <File Id="Content_xboxControllerRightThumbstick.xnb" Name="xboxControllerRightThumbstick.xnb" Source="$(var.ZombustersWindows_TargetDir)Content\xboxControllerRightThumbstick.xnb" />
+      </Component>
+      <Component Id="Content_xboxControllerRightTrigger.xnb" Guid="04cf9b5b-d018-4d92-ae36-e3c39ce645f3">
+        <File Id="Content_xboxControllerRightTrigger.xnb" Name="xboxControllerRightTrigger.xnb" Source="$(var.ZombustersWindows_TargetDir)Content\xboxControllerRightTrigger.xnb" />
+      </Component>
+      <Component Id="Content_xboxControllerStart.xnb" Guid="3c6c5099-a438-442f-b621-6b8da813ac76">
+        <File Id="Content_xboxControllerStart.xnb" Name="xboxControllerStart.xnb" Source="$(var.ZombustersWindows_TargetDir)Content\xboxControllerStart.xnb" />
+      </Component>
+      <Component Id="Content_XCurve1.xnb" Guid="eea72109-4d28-4dc1-ba3d-d8fbcccdf98d">
+        <File Id="Content_XCurve1.xnb" Name="XCurve1.xnb" Source="$(var.ZombustersWindows_TargetDir)Content\XCurve1.xnb" />
+      </Component>
+      <Component Id="Content_XCurve2.xnb" Guid="bf50fe1c-3250-4428-b911-51703b358359">
+        <File Id="Content_XCurve2.xnb" Name="XCurve2.xnb" Source="$(var.ZombustersWindows_TargetDir)Content\XCurve2.xnb" />
+      </Component>
+      <Component Id="Content_YCurve1.xnb" Guid="9bd02682-2ba2-43f9-a0b4-084e5c80c934">
+        <File Id="Content_YCurve1.xnb" Name="YCurve1.xnb" Source="$(var.ZombustersWindows_TargetDir)Content\YCurve1.xnb" />
+      </Component>
+      <Component Id="Content_YCurve2.xnb" Guid="8bd78d23-2f86-495a-9e2e-39c0851f617b">
+        <File Id="Content_YCurve2.xnb" Name="YCurve2.xnb" Source="$(var.ZombustersWindows_TargetDir)Content\YCurve2.xnb" />
+      </Component>
+    </ComponentGroup>
+  </Fragment>
+
+  <Fragment>
+    <ComponentGroup Id="ProgramFilesFolder_files" Directory="ProgramFilesFolder">
+      <Component Id="ZombustersWindows.exe" Guid="9b529a4d-d5f5-4629-8a75-784c129205af">
+        <File Id="ZombustersWindows.exe" Name="ZombustersWindows.exe" Source="$(var.ZombustersWindows_TargetDir)ZombustersWindows.exe" />
+      </Component>
+      <Component Id="ZombustersWindows.exe.config" Guid="3cd0f1e3-85ad-4262-a91f-1447090262b2">
+        <File Id="ZombustersWindows.exe.config" Name="ZombustersWindows.exe.config" Source="$(var.ZombustersWindows_TargetDir)ZombustersWindows.exe.config" />
+      </Component>
+      <Component Id="System.IO.dll" Guid="daaf2263-9ce5-4e75-b2d4-61a46407e807">
+        <File Id="System.IO.dll" Name="System.IO.dll" Source="$(var.ZombustersWindows_TargetDir)System.IO.dll" />
+      </Component>
+      <Component Id="System.Runtime.dll" Guid="2eabd6b7-da51-4c84-a951-6614eca9ac81">
+        <File Id="System.Runtime.dll" Name="System.Runtime.dll" Source="$(var.ZombustersWindows_TargetDir)System.Runtime.dll" />
+      </Component>
+      <Component Id="EntityFramework.dll" Guid="97a29e9d-b388-48cb-9eb6-6b97b8ba1ed9">
+        <File Id="EntityFramework.dll" Name="EntityFramework.dll" Source="$(var.ZombustersWindows_TargetDir)EntityFramework.dll" />
+      </Component>
+      <Component Id="EntityFramework.SqlServer.dll" Guid="bcbb8c91-600f-4aa0-8ccc-103a7c1ac395">
+        <File Id="EntityFramework.SqlServer.dll" Name="EntityFramework.SqlServer.dll" Source="$(var.ZombustersWindows_TargetDir)EntityFramework.SqlServer.dll" />
+      </Component>
+      <Component Id="Tao.Sdl.dll" Guid="77b5f13b-a094-4bd3-97de-029286612614">
+        <File Id="Tao.Sdl.dll" Name="Tao.Sdl.dll" Source="$(var.ZombustersWindows_TargetDir)Tao.Sdl.dll" />
+      </Component>
+      <Component Id="MonoGame.Framework.dll" Guid="be487c54-12c6-464c-9a91-16c5a2dcd094">
+        <File Id="MonoGame.Framework.dll" Name="MonoGame.Framework.dll" Source="$(var.ZombustersWindows_TargetDir)MonoGame.Framework.dll" />
+      </Component>
+      <Component Id="NVorbis.dll" Guid="47b85489-69fe-4d92-b1da-f8b7aacb7e4d">
+        <File Id="NVorbis.dll" Name="NVorbis.dll" Source="$(var.ZombustersWindows_TargetDir)NVorbis.dll" />
+      </Component>
+      <Component Id="OpenTK.dll" Guid="767d22a4-a092-40fe-bccd-16fb24cabc72">
+        <File Id="OpenTK.dll" Name="OpenTK.dll" Source="$(var.ZombustersWindows_TargetDir)OpenTK.dll" />
+      </Component>
+    </ComponentGroup>
+  </Fragment>
+
+  <Fragment>
+    <ComponentGroup Id="LevelXMLs_files" Directory="LevelXMLs">
+      <Component Id="LevelXMLs_Credits.txt" Guid="47d17721-182e-4166-8c8d-e08c7288eb4f">
+        <File Id="LevelXMLs_Credits.txt" Name="Credits.txt" Source="$(var.ZombustersWindows_TargetDir)LevelXMLs\Credits.txt" />
+      </Component>
+    </ComponentGroup>
+  </Fragment>
+
+  <Fragment>
+    <ComponentGroup Id="LevelXMLs_Level10_files" Directory="LevelXMLs_Level10">
+      <Component Id="LevelXMLs_Level10_Level10_enemies.xml" Guid="35f38c9c-60b0-4ad8-ab91-149f51876c8e">
+        <File Id="LevelXMLs_Level10_Level10_enemies.xml" Name="Level10_enemies.xml" Source="$(var.ZombustersWindows_TargetDir)LevelXMLs\Level10\Level10_enemies.xml" />
+      </Component>
+      <Component Id="LevelXMLs_Level10_Level10_furnitures.xml" Guid="a4a210d7-3454-4500-b99f-4a3814791f21">
+        <File Id="LevelXMLs_Level10_Level10_furnitures.xml" Name="Level10_furnitures.xml" Source="$(var.ZombustersWindows_TargetDir)LevelXMLs\Level10\Level10_furnitures.xml" />
+      </Component>
+      <Component Id="LevelXMLs_Level10_Level10_walls.xml" Guid="3ddc66ca-84e1-4446-a290-80818ebb9ded">
+        <File Id="LevelXMLs_Level10_Level10_walls.xml" Name="Level10_walls.xml" Source="$(var.ZombustersWindows_TargetDir)LevelXMLs\Level10\Level10_walls.xml" />
+      </Component>
+    </ComponentGroup>
+  </Fragment>
+
+  <Fragment>
+    <ComponentGroup Id="LevelXMLs_Level1_files" Directory="LevelXMLs_Level1">
+      <Component Id="LevelXMLs_Level1_Level1_enemies.xml" Guid="ab94ec44-9296-4afb-b495-1deb46eeeb04">
+        <File Id="LevelXMLs_Level1_Level1_enemies.xml" Name="Level1_enemies.xml" Source="$(var.ZombustersWindows_TargetDir)LevelXMLs\Level1\Level1_enemies.xml" />
+      </Component>
+      <Component Id="LevelXMLs_Level1_Level1_furnitures.xml" Guid="845d447c-c621-4ed0-b4c4-530f77cad4df">
+        <File Id="LevelXMLs_Level1_Level1_furnitures.xml" Name="Level1_furnitures.xml" Source="$(var.ZombustersWindows_TargetDir)LevelXMLs\Level1\Level1_furnitures.xml" />
+      </Component>
+      <Component Id="LevelXMLs_Level1_Level1_walls.xml" Guid="e5b5e84b-1d6c-414a-98cf-d3ddb88ba349">
+        <File Id="LevelXMLs_Level1_Level1_walls.xml" Name="Level1_walls.xml" Source="$(var.ZombustersWindows_TargetDir)LevelXMLs\Level1\Level1_walls.xml" />
+      </Component>
+    </ComponentGroup>
+  </Fragment>
+
+  <Fragment>
+    <ComponentGroup Id="LevelXMLs_Level2_files" Directory="LevelXMLs_Level2">
+      <Component Id="LevelXMLs_Level2_Level2_enemies.xml" Guid="9abb4994-f2b2-4837-af6c-809c7d8dfab0">
+        <File Id="LevelXMLs_Level2_Level2_enemies.xml" Name="Level2_enemies.xml" Source="$(var.ZombustersWindows_TargetDir)LevelXMLs\Level2\Level2_enemies.xml" />
+      </Component>
+      <Component Id="LevelXMLs_Level2_Level2_furnitures.xml" Guid="bf0e33b1-a30e-40a6-ad37-6fc7247b619c">
+        <File Id="LevelXMLs_Level2_Level2_furnitures.xml" Name="Level2_furnitures.xml" Source="$(var.ZombustersWindows_TargetDir)LevelXMLs\Level2\Level2_furnitures.xml" />
+      </Component>
+      <Component Id="LevelXMLs_Level2_Level2_walls.xml" Guid="5bcad695-525c-464a-b513-942af456db98">
+        <File Id="LevelXMLs_Level2_Level2_walls.xml" Name="Level2_walls.xml" Source="$(var.ZombustersWindows_TargetDir)LevelXMLs\Level2\Level2_walls.xml" />
+      </Component>
+    </ComponentGroup>
+  </Fragment>
+
+  <Fragment>
+    <ComponentGroup Id="LevelXMLs_Level3_files" Directory="LevelXMLs_Level3">
+      <Component Id="LevelXMLs_Level3_Level3WP_walls.xml" Guid="23c1e07f-8592-4f61-adae-2e78ab863787">
+        <File Id="LevelXMLs_Level3_Level3WP_walls.xml" Name="Level3WP_walls.xml" Source="$(var.ZombustersWindows_TargetDir)LevelXMLs\Level3\Level3WP_walls.xml" />
+      </Component>
+      <Component Id="LevelXMLs_Level3_Level3_enemies.xml" Guid="f14a1e1e-0e8f-4105-a5cd-b252f396ae9e">
+        <File Id="LevelXMLs_Level3_Level3_enemies.xml" Name="Level3_enemies.xml" Source="$(var.ZombustersWindows_TargetDir)LevelXMLs\Level3\Level3_enemies.xml" />
+      </Component>
+      <Component Id="LevelXMLs_Level3_Level3_furnitures.xml" Guid="b7d500c6-010e-475b-9135-59f602b5084e">
+        <File Id="LevelXMLs_Level3_Level3_furnitures.xml" Name="Level3_furnitures.xml" Source="$(var.ZombustersWindows_TargetDir)LevelXMLs\Level3\Level3_furnitures.xml" />
+      </Component>
+      <Component Id="LevelXMLs_Level3_Level3_walls.xml" Guid="3e9dd0fe-141b-49bb-b962-8040b87b9842">
+        <File Id="LevelXMLs_Level3_Level3_walls.xml" Name="Level3_walls.xml" Source="$(var.ZombustersWindows_TargetDir)LevelXMLs\Level3\Level3_walls.xml" />
+      </Component>
+    </ComponentGroup>
+  </Fragment>
+
+  <Fragment>
+    <ComponentGroup Id="LevelXMLs_Level4_files" Directory="LevelXMLs_Level4">
+      <Component Id="LevelXMLs_Level4_Level4_enemies.xml" Guid="08741255-7948-4818-af7c-d34c7ec2291e">
+        <File Id="LevelXMLs_Level4_Level4_enemies.xml" Name="Level4_enemies.xml" Source="$(var.ZombustersWindows_TargetDir)LevelXMLs\Level4\Level4_enemies.xml" />
+      </Component>
+      <Component Id="LevelXMLs_Level4_Level4_furnitures.xml" Guid="8712f387-ad37-44f8-a727-3bb7cf504f37">
+        <File Id="LevelXMLs_Level4_Level4_furnitures.xml" Name="Level4_furnitures.xml" Source="$(var.ZombustersWindows_TargetDir)LevelXMLs\Level4\Level4_furnitures.xml" />
+      </Component>
+      <Component Id="LevelXMLs_Level4_Level4_walls.xml" Guid="f8850e67-e277-449b-9c08-a26c92da0fcf">
+        <File Id="LevelXMLs_Level4_Level4_walls.xml" Name="Level4_walls.xml" Source="$(var.ZombustersWindows_TargetDir)LevelXMLs\Level4\Level4_walls.xml" />
+      </Component>
+    </ComponentGroup>
+  </Fragment>
+
+  <Fragment>
+    <ComponentGroup Id="LevelXMLs_Level5_files" Directory="LevelXMLs_Level5">
+      <Component Id="LevelXMLs_Level5_Level5WP_furnitures.xml" Guid="a7a5bd81-30ce-493c-8799-eef600e96a0c">
+        <File Id="LevelXMLs_Level5_Level5WP_furnitures.xml" Name="Level5WP_furnitures.xml" Source="$(var.ZombustersWindows_TargetDir)LevelXMLs\Level5\Level5WP_furnitures.xml" />
+      </Component>
+      <Component Id="LevelXMLs_Level5_Level5WP_walls.xml" Guid="52ae72fa-6514-4c7c-a2ad-515e11972878">
+        <File Id="LevelXMLs_Level5_Level5WP_walls.xml" Name="Level5WP_walls.xml" Source="$(var.ZombustersWindows_TargetDir)LevelXMLs\Level5\Level5WP_walls.xml" />
+      </Component>
+      <Component Id="LevelXMLs_Level5_Level5_enemies.xml" Guid="c3f465d9-c3bd-471b-a507-ec5eb66c04e1">
+        <File Id="LevelXMLs_Level5_Level5_enemies.xml" Name="Level5_enemies.xml" Source="$(var.ZombustersWindows_TargetDir)LevelXMLs\Level5\Level5_enemies.xml" />
+      </Component>
+      <Component Id="LevelXMLs_Level5_Level5_furnitures.xml" Guid="95141d4f-5699-41fa-afc8-eda0f6da1552">
+        <File Id="LevelXMLs_Level5_Level5_furnitures.xml" Name="Level5_furnitures.xml" Source="$(var.ZombustersWindows_TargetDir)LevelXMLs\Level5\Level5_furnitures.xml" />
+      </Component>
+      <Component Id="LevelXMLs_Level5_Level5_walls.xml" Guid="d9a47feb-88e3-43f5-8fd7-7c5d33dbc2e0">
+        <File Id="LevelXMLs_Level5_Level5_walls.xml" Name="Level5_walls.xml" Source="$(var.ZombustersWindows_TargetDir)LevelXMLs\Level5\Level5_walls.xml" />
+      </Component>
+    </ComponentGroup>
+  </Fragment>
+
+  <Fragment>
+    <ComponentGroup Id="LevelXMLs_Level6_files" Directory="LevelXMLs_Level6">
+      <Component Id="LevelXMLs_Level6_Level6_enemies.xml" Guid="079cea78-75ce-4ea1-a514-f1fd0a47f13b">
+        <File Id="LevelXMLs_Level6_Level6_enemies.xml" Name="Level6_enemies.xml" Source="$(var.ZombustersWindows_TargetDir)LevelXMLs\Level6\Level6_enemies.xml" />
+      </Component>
+      <Component Id="LevelXMLs_Level6_Level6_furnitures.xml" Guid="e8590e33-0351-41c8-bcda-e54980e90588">
+        <File Id="LevelXMLs_Level6_Level6_furnitures.xml" Name="Level6_furnitures.xml" Source="$(var.ZombustersWindows_TargetDir)LevelXMLs\Level6\Level6_furnitures.xml" />
+      </Component>
+      <Component Id="LevelXMLs_Level6_Level6_walls.xml" Guid="66b309cb-1a25-4d67-b601-43386fc35fca">
+        <File Id="LevelXMLs_Level6_Level6_walls.xml" Name="Level6_walls.xml" Source="$(var.ZombustersWindows_TargetDir)LevelXMLs\Level6\Level6_walls.xml" />
+      </Component>
+    </ComponentGroup>
+  </Fragment>
+
+  <Fragment>
+    <ComponentGroup Id="LevelXMLs_Level7_files" Directory="LevelXMLs_Level7">
+      <Component Id="LevelXMLs_Level7_Level7WP_walls.xml" Guid="1056b3a9-fe28-4b24-bf0c-cd56dd8cd581">
+        <File Id="LevelXMLs_Level7_Level7WP_walls.xml" Name="Level7WP_walls.xml" Source="$(var.ZombustersWindows_TargetDir)LevelXMLs\Level7\Level7WP_walls.xml" />
+      </Component>
+      <Component Id="LevelXMLs_Level7_Level7_enemies.xml" Guid="1ee19413-3b71-42bb-93b1-d011987dd738">
+        <File Id="LevelXMLs_Level7_Level7_enemies.xml" Name="Level7_enemies.xml" Source="$(var.ZombustersWindows_TargetDir)LevelXMLs\Level7\Level7_enemies.xml" />
+      </Component>
+      <Component Id="LevelXMLs_Level7_Level7_furnitures.xml" Guid="62cc48b5-66fd-443e-b00d-3639fce3881d">
+        <File Id="LevelXMLs_Level7_Level7_furnitures.xml" Name="Level7_furnitures.xml" Source="$(var.ZombustersWindows_TargetDir)LevelXMLs\Level7\Level7_furnitures.xml" />
+      </Component>
+      <Component Id="LevelXMLs_Level7_Level7_walls.xml" Guid="395b4310-7bc8-486c-b7d8-f8767f877474">
+        <File Id="LevelXMLs_Level7_Level7_walls.xml" Name="Level7_walls.xml" Source="$(var.ZombustersWindows_TargetDir)LevelXMLs\Level7\Level7_walls.xml" />
+      </Component>
+    </ComponentGroup>
+  </Fragment>
+
+  <Fragment>
+    <ComponentGroup Id="LevelXMLs_Level8_files" Directory="LevelXMLs_Level8">
+      <Component Id="LevelXMLs_Level8_Level8_enemies.xml" Guid="722b21eb-70c5-491b-8cb5-5fa59ed4e1fd">
+        <File Id="LevelXMLs_Level8_Level8_enemies.xml" Name="Level8_enemies.xml" Source="$(var.ZombustersWindows_TargetDir)LevelXMLs\Level8\Level8_enemies.xml" />
+      </Component>
+      <Component Id="LevelXMLs_Level8_Level8_furnitures.xml" Guid="17e96141-6f99-403b-a600-ed0db38c98ea">
+        <File Id="LevelXMLs_Level8_Level8_furnitures.xml" Name="Level8_furnitures.xml" Source="$(var.ZombustersWindows_TargetDir)LevelXMLs\Level8\Level8_furnitures.xml" />
+      </Component>
+      <Component Id="LevelXMLs_Level8_Level8_walls.xml" Guid="e73f5e35-e60e-4541-9729-8e4145721e64">
+        <File Id="LevelXMLs_Level8_Level8_walls.xml" Name="Level8_walls.xml" Source="$(var.ZombustersWindows_TargetDir)LevelXMLs\Level8\Level8_walls.xml" />
+      </Component>
+    </ComponentGroup>
+  </Fragment>
+
+  <Fragment>
+    <ComponentGroup Id="LevelXMLs_Level9_files" Directory="LevelXMLs_Level9">
+      <Component Id="LevelXMLs_Level9_Level9_enemies.xml" Guid="35c81f99-6abd-4dab-90bd-d3d9f3d836fe">
+        <File Id="LevelXMLs_Level9_Level9_enemies.xml" Name="Level9_enemies.xml" Source="$(var.ZombustersWindows_TargetDir)LevelXMLs\Level9\Level9_enemies.xml" />
+      </Component>
+      <Component Id="LevelXMLs_Level9_Level9_furnitures.xml" Guid="a922ca01-72c9-474d-bb34-a5515a6e92dc">
+        <File Id="LevelXMLs_Level9_Level9_furnitures.xml" Name="Level9_furnitures.xml" Source="$(var.ZombustersWindows_TargetDir)LevelXMLs\Level9\Level9_furnitures.xml" />
+      </Component>
+      <Component Id="LevelXMLs_Level9_Level9_walls.xml" Guid="64ce6f9c-690f-4487-aea3-645111be4b6e">
+        <File Id="LevelXMLs_Level9_Level9_walls.xml" Name="Level9_walls.xml" Source="$(var.ZombustersWindows_TargetDir)LevelXMLs\Level9\Level9_walls.xml" />
+      </Component>
+    </ComponentGroup>
+  </Fragment>
+
+  <Fragment>
+    <ComponentGroup Id="Content_Achievements_files" Directory="Content_Achievements">
+      <Component Id="Content_Achievements_achieve_1.xnb" Guid="513bfc5e-d61f-4a8f-986b-7b3180c73239">
+        <File Id="Content_Achievements_achieve_1.xnb" Name="achieve_1.xnb" Source="$(var.ZombustersWindows_TargetDir)Content\Achievements\achieve_1.xnb" />
+      </Component>
+      <Component Id="Content_Achievements_achieve_2.xnb" Guid="b8353713-34bb-4322-83bc-a00e003fa3b2">
+        <File Id="Content_Achievements_achieve_2.xnb" Name="achieve_2.xnb" Source="$(var.ZombustersWindows_TargetDir)Content\Achievements\achieve_2.xnb" />
+      </Component>
+      <Component Id="Content_Achievements_achieve_3.xnb" Guid="05fd0e05-edc8-4065-b07e-6780906d425a">
+        <File Id="Content_Achievements_achieve_3.xnb" Name="achieve_3.xnb" Source="$(var.ZombustersWindows_TargetDir)Content\Achievements\achieve_3.xnb" />
+      </Component>
+      <Component Id="Content_Achievements_achieve_4.xnb" Guid="beaadb2b-69eb-4f90-a90a-0dc774c079a9">
+        <File Id="Content_Achievements_achieve_4.xnb" Name="achieve_4.xnb" Source="$(var.ZombustersWindows_TargetDir)Content\Achievements\achieve_4.xnb" />
+      </Component>
+    </ComponentGroup>
+  </Fragment>
+
+  <Fragment>
+    <ComponentGroup Id="Content_fx_files" Directory="Content_fx">
+      <Component Id="Content_fx_BloomCombine.xnb" Guid="5295c0d7-ace1-4b64-989c-3f094a9cd6c9">
+        <File Id="Content_fx_BloomCombine.xnb" Name="BloomCombine.xnb" Source="$(var.ZombustersWindows_TargetDir)Content\fx\BloomCombine.xnb" />
+      </Component>
+      <Component Id="Content_fx_BloomExtract.xnb" Guid="c15196b6-215e-4cd0-89dd-1425dc6593fa">
+        <File Id="Content_fx_BloomExtract.xnb" Name="BloomExtract.xnb" Source="$(var.ZombustersWindows_TargetDir)Content\fx\BloomExtract.xnb" />
+      </Component>
+      <Component Id="Content_fx_GaussianBlur.xnb" Guid="f5eac172-2535-4f15-ba01-7eaf13890a46">
+        <File Id="Content_fx_GaussianBlur.xnb" Name="GaussianBlur.xnb" Source="$(var.ZombustersWindows_TargetDir)Content\fx\GaussianBlur.xnb" />
+      </Component>
+    </ComponentGroup>
+  </Fragment>
+
+  <Fragment>
+    <ComponentGroup Id="Content_InGame_files" Directory="Content_InGame">
+      <Component Id="Content_InGame_burningzombie.xnb" Guid="9cdc92e2-f3ea-47c8-bb44-b80a9979f44e">
+        <File Id="Content_InGame_burningzombie.xnb" Name="burningzombie.xnb" Source="$(var.ZombustersWindows_TargetDir)Content\InGame\burningzombie.xnb" />
+      </Component>
+      <Component Id="Content_InGame_character_shadow.xnb" Guid="45f2a1ef-a1fc-4b9e-9e94-709d1f4aca3e">
+        <File Id="Content_InGame_character_shadow.xnb" Name="character_shadow.xnb" Source="$(var.ZombustersWindows_TargetDir)Content\InGame\character_shadow.xnb" />
+      </Component>
+      <Component Id="Content_InGame_Explosion.xnb" Guid="781afc7b-02da-4ef9-8dc8-264f838e8a6c">
+        <File Id="Content_InGame_Explosion.xnb" Name="Explosion.xnb" Source="$(var.ZombustersWindows_TargetDir)Content\InGame\Explosion.xnb" />
+      </Component>
+      <Component Id="Content_InGame_extralife_powerup.xnb" Guid="f7d38bcd-1e71-4221-858c-1aad9210429a">
+        <File Id="Content_InGame_extralife_powerup.xnb" Name="extralife_powerup.xnb" Source="$(var.ZombustersWindows_TargetDir)Content\InGame\extralife_powerup.xnb" />
+      </Component>
+      <Component Id="Content_InGame_flamethrower.xnb" Guid="2353a5e8-0f86-4e3a-bdd2-f9d304e0722e">
+        <File Id="Content_InGame_flamethrower.xnb" Name="flamethrower.xnb" Source="$(var.ZombustersWindows_TargetDir)Content\InGame\flamethrower.xnb" />
+      </Component>
+      <Component Id="Content_InGame_flamethrower_ammo_powerup.xnb" Guid="700c723a-63f2-4d51-847a-d85f00c06f89">
+        <File Id="Content_InGame_flamethrower_ammo_powerup.xnb" Name="flamethrower_ammo_powerup.xnb" Source="$(var.ZombustersWindows_TargetDir)Content\InGame\flamethrower_ammo_powerup.xnb" />
+      </Component>
+      <Component Id="Content_InGame_FT_CollisionTexture.xnb" Guid="eb002eed-00b1-4818-89ac-3f4d2048fced">
+        <File Id="Content_InGame_FT_CollisionTexture.xnb" Name="FT_CollisionTexture.xnb" Source="$(var.ZombustersWindows_TargetDir)Content\InGame\FT_CollisionTexture.xnb" />
+      </Component>
+      <Component Id="Content_InGame_gameover.xnb" Guid="acf8c86b-4ba2-45ce-a135-8ddee8e97e36">
+        <File Id="Content_InGame_gameover.xnb" Name="gameover.xnb" Source="$(var.ZombustersWindows_TargetDir)Content\InGame\gameover.xnb" />
+      </Component>
+      <Component Id="Content_InGame_immune_ammo_powerup.xnb" Guid="9959b00a-c90c-409e-a3a3-d0a425f0f2ab">
+        <File Id="Content_InGame_immune_ammo_powerup.xnb" Name="immune_ammo_powerup.xnb" Source="$(var.ZombustersWindows_TargetDir)Content\InGame\immune_ammo_powerup.xnb" />
+      </Component>
+      <Component Id="Content_InGame_live_powerup.xnb" Guid="9e3bb508-77fd-4f57-acdc-db87e66b1072">
+        <File Id="Content_InGame_live_powerup.xnb" Name="live_powerup.xnb" Source="$(var.ZombustersWindows_TargetDir)Content\InGame\live_powerup.xnb" />
+      </Component>
+      <Component Id="Content_InGame_machinegun_ammo_powerup.xnb" Guid="3f3f3721-2283-4fc8-b36a-4242c0276866">
+        <File Id="Content_InGame_machinegun_ammo_powerup.xnb" Name="machinegun_ammo_powerup.xnb" Source="$(var.ZombustersWindows_TargetDir)Content\InGame\machinegun_ammo_powerup.xnb" />
+      </Component>
+      <Component Id="Content_InGame_nikkigriffin_iddle.xnb" Guid="a54e0248-bf12-4376-aeb1-f1540e1012a0">
+        <File Id="Content_InGame_nikkigriffin_iddle.xnb" Name="nikkigriffin_iddle.xnb" Source="$(var.ZombustersWindows_TargetDir)Content\InGame\nikkigriffin_iddle.xnb" />
+      </Component>
+      <Component Id="Content_InGame_Photon.xnb" Guid="cb509f1c-2e2d-4182-8026-998d384cb81a">
+        <File Id="Content_InGame_Photon.xnb" Name="Photon.xnb" Source="$(var.ZombustersWindows_TargetDir)Content\InGame\Photon.xnb" />
+      </Component>
+      <Component Id="Content_InGame_Playership.xnb" Guid="019c6dd6-f5fb-4d2f-95c7-3818c46018bb">
+        <File Id="Content_InGame_Playership.xnb" Name="Playership.xnb" Source="$(var.ZombustersWindows_TargetDir)Content\InGame\Playership.xnb" />
+      </Component>
+      <Component Id="Content_InGame_position_reference_temporal.xnb" Guid="4e6cd80f-2669-42ed-8d67-874d92189879">
+        <File Id="Content_InGame_position_reference_temporal.xnb" Name="position_reference_temporal.xnb" Source="$(var.ZombustersWindows_TargetDir)Content\InGame\position_reference_temporal.xnb" />
+      </Component>
+      <Component Id="Content_InGame_shotgun_ammo_powerup.xnb" Guid="9b21a057-b8b8-4962-b5f5-11db6e2df9dd">
+        <File Id="Content_InGame_shotgun_ammo_powerup.xnb" Name="shotgun_ammo_powerup.xnb" Source="$(var.ZombustersWindows_TargetDir)Content\InGame\shotgun_ammo_powerup.xnb" />
+      </Component>
+      <Component Id="Content_InGame_tank.xnb" Guid="c194703a-d442-46ce-91fe-6d2d6682108c">
+        <File Id="Content_InGame_tank.xnb" Name="tank.xnb" Source="$(var.ZombustersWindows_TargetDir)Content\InGame\tank.xnb" />
+      </Component>
+      <Component Id="Content_InGame_zombie1.xnb" Guid="032b8cfa-fa7a-4425-9316-3e92f8a81327">
+        <File Id="Content_InGame_zombie1.xnb" Name="zombie1.xnb" Source="$(var.ZombustersWindows_TargetDir)Content\InGame\zombie1.xnb" />
+      </Component>
+      <Component Id="Content_InGame_zombie2.xnb" Guid="10b307b9-7e42-494c-8f70-d9b1f774a0e9">
+        <File Id="Content_InGame_zombie2.xnb" Name="zombie2.xnb" Source="$(var.ZombustersWindows_TargetDir)Content\InGame\zombie2.xnb" />
+      </Component>
+      <Component Id="Content_InGame_zombie3.xnb" Guid="e0fcee54-5efd-4311-bf51-c242e936598f">
+        <File Id="Content_InGame_zombie3.xnb" Name="zombie3.xnb" Source="$(var.ZombustersWindows_TargetDir)Content\InGame\zombie3.xnb" />
+      </Component>
+      <Component Id="Content_InGame_zombie4.xnb" Guid="4691dd92-ebbb-4959-a450-00ea81aa3296">
+        <File Id="Content_InGame_zombie4.xnb" Name="zombie4.xnb" Source="$(var.ZombustersWindows_TargetDir)Content\InGame\zombie4.xnb" />
+      </Component>
+      <Component Id="Content_InGame_zombie5.xnb" Guid="fd19e99b-5059-4192-b022-d3bb6415bf24">
+        <File Id="Content_InGame_zombie5.xnb" Name="zombie5.xnb" Source="$(var.ZombustersWindows_TargetDir)Content\InGame\zombie5.xnb" />
+      </Component>
+      <Component Id="Content_InGame_zombiedeath1.xnb" Guid="bcd8ee43-23e9-4a62-a557-bec13f52b291">
+        <File Id="Content_InGame_zombiedeath1.xnb" Name="zombiedeath1.xnb" Source="$(var.ZombustersWindows_TargetDir)Content\InGame\zombiedeath1.xnb" />
+      </Component>
+      <Component Id="Content_InGame_zombiedeath2.xnb" Guid="577510d9-580d-444f-9018-0e5062d80fe6">
+        <File Id="Content_InGame_zombiedeath2.xnb" Name="zombiedeath2.xnb" Source="$(var.ZombustersWindows_TargetDir)Content\InGame\zombiedeath2.xnb" />
+      </Component>
+      <Component Id="Content_InGame_zombiedeath4.xnb" Guid="09462de0-4401-4f44-9a3b-590361ddc242">
+        <File Id="Content_InGame_zombiedeath4.xnb" Name="zombiedeath4.xnb" Source="$(var.ZombustersWindows_TargetDir)Content\InGame\zombiedeath4.xnb" />
+      </Component>
+      <Component Id="Content_InGame_zombiedeath3.xnb" Guid="b2932604-c95a-4979-bf0b-bb3b85c72f89">
+        <File Id="Content_InGame_zombiedeath3.xnb" Name="zombiedeath3.xnb" Source="$(var.ZombustersWindows_TargetDir)Content\InGame\zombiedeath3.xnb" />
+      </Component>
+      <Component Id="Content_InGame_zombiedeath5.xnb" Guid="c95d16b2-5b3c-409a-92fe-de08dceb95a6">
+        <File Id="Content_InGame_zombiedeath5.xnb" Name="zombiedeath5.xnb" Source="$(var.ZombustersWindows_TargetDir)Content\InGame\zombiedeath5.xnb" />
+      </Component>
+    </ComponentGroup>
+  </Fragment>
+
+  <Fragment>
+    <ComponentGroup Id="Content_InGame_Egon_files" Directory="Content_InGame_Egon">
+      <Component Id="Content_InGame_Egon_egon_died.xnb" Guid="f9676c60-381c-47ee-9a9d-3087a2a05ddc">
+        <File Id="Content_InGame_Egon_egon_died.xnb" Name="egon_died.xnb" Source="$(var.ZombustersWindows_TargetDir)Content\InGame\Egon\egon_died.xnb" />
+      </Component>
+      <Component Id="Content_InGame_Egon_egon_idle.xnb" Guid="d284fe35-ba0e-465a-9785-39f0bbc7f4b7">
+        <File Id="Content_InGame_Egon_egon_idle.xnb" Name="egon_idle.xnb" Source="$(var.ZombustersWindows_TargetDir)Content\InGame\Egon\egon_idle.xnb" />
+      </Component>
+      <Component Id="Content_InGame_Egon_egon_legs_idle.xnb" Guid="ffceba52-44be-4865-bd62-89ac8c558f0a">
+        <File Id="Content_InGame_Egon_egon_legs_idle.xnb" Name="egon_legs_idle.xnb" Source="$(var.ZombustersWindows_TargetDir)Content\InGame\Egon\egon_legs_idle.xnb" />
+      </Component>
+      <Component Id="Content_InGame_Egon_egon_pistol_E.xnb" Guid="3eb815d0-b779-4784-8b21-a824c348db8f">
+        <File Id="Content_InGame_Egon_egon_pistol_E.xnb" Name="egon_pistol_E.xnb" Source="$(var.ZombustersWindows_TargetDir)Content\InGame\Egon\egon_pistol_E.xnb" />
+      </Component>
+      <Component Id="Content_InGame_Egon_egon_pistol_N.xnb" Guid="3bb85a20-20b8-4f2c-ab83-a97e486edbcc">
+        <File Id="Content_InGame_Egon_egon_pistol_N.xnb" Name="egon_pistol_N.xnb" Source="$(var.ZombustersWindows_TargetDir)Content\InGame\Egon\egon_pistol_N.xnb" />
+      </Component>
+      <Component Id="Content_InGame_Egon_egon_pistol_NE.xnb" Guid="6f6eab18-ae0f-451b-83ae-25bb16de9520">
+        <File Id="Content_InGame_Egon_egon_pistol_NE.xnb" Name="egon_pistol_NE.xnb" Source="$(var.ZombustersWindows_TargetDir)Content\InGame\Egon\egon_pistol_NE.xnb" />
+      </Component>
+      <Component Id="Content_InGame_Egon_egon_pistol_S.xnb" Guid="3e72e1ae-12bf-4813-98bd-659f89617fbe">
+        <File Id="Content_InGame_Egon_egon_pistol_S.xnb" Name="egon_pistol_S.xnb" Source="$(var.ZombustersWindows_TargetDir)Content\InGame\Egon\egon_pistol_S.xnb" />
+      </Component>
+      <Component Id="Content_InGame_Egon_egon_pistol_SE.xnb" Guid="eceb9596-335b-46a0-9772-aa8185b988a8">
+        <File Id="Content_InGame_Egon_egon_pistol_SE.xnb" Name="egon_pistol_SE.xnb" Source="$(var.ZombustersWindows_TargetDir)Content\InGame\Egon\egon_pistol_SE.xnb" />
+      </Component>
+      <Component Id="Content_InGame_Egon_egon_run_E.xnb" Guid="ad2f61b3-ac6f-4f0e-93af-d25554f178bd">
+        <File Id="Content_InGame_Egon_egon_run_E.xnb" Name="egon_run_E.xnb" Source="$(var.ZombustersWindows_TargetDir)Content\InGame\Egon\egon_run_E.xnb" />
+      </Component>
+      <Component Id="Content_InGame_Egon_egon_shotgun_E.xnb" Guid="014c4fa7-a76f-4100-8aa1-2e3edb5e067b">
+        <File Id="Content_InGame_Egon_egon_shotgun_E.xnb" Name="egon_shotgun_E.xnb" Source="$(var.ZombustersWindows_TargetDir)Content\InGame\Egon\egon_shotgun_E.xnb" />
+      </Component>
+      <Component Id="Content_InGame_Egon_egon_shotgun_N.xnb" Guid="f5820ad7-e26d-4725-a4d3-125f3e912445">
+        <File Id="Content_InGame_Egon_egon_shotgun_N.xnb" Name="egon_shotgun_N.xnb" Source="$(var.ZombustersWindows_TargetDir)Content\InGame\Egon\egon_shotgun_N.xnb" />
+      </Component>
+      <Component Id="Content_InGame_Egon_egon_shotgun_NE.xnb" Guid="3292ee70-4919-4ee4-8298-c28a6934ca77">
+        <File Id="Content_InGame_Egon_egon_shotgun_NE.xnb" Name="egon_shotgun_NE.xnb" Source="$(var.ZombustersWindows_TargetDir)Content\InGame\Egon\egon_shotgun_NE.xnb" />
+      </Component>
+      <Component Id="Content_InGame_Egon_egon_shotgun_S.xnb" Guid="b3a4738e-dafd-4284-ba4b-1b409f769d27">
+        <File Id="Content_InGame_Egon_egon_shotgun_S.xnb" Name="egon_shotgun_S.xnb" Source="$(var.ZombustersWindows_TargetDir)Content\InGame\Egon\egon_shotgun_S.xnb" />
+      </Component>
+      <Component Id="Content_InGame_Egon_egon_shotgun_SE.xnb" Guid="d20397c6-cc5e-402a-9e0a-d6faefe1986e">
+        <File Id="Content_InGame_Egon_egon_shotgun_SE.xnb" Name="egon_shotgun_SE.xnb" Source="$(var.ZombustersWindows_TargetDir)Content\InGame\Egon\egon_shotgun_SE.xnb" />
+      </Component>
+    </ComponentGroup>
+  </Fragment>
+
+  <Fragment>
+    <ComponentGroup Id="Content_InGame_GUI_files" Directory="Content_InGame_GUI">
+      <Component Id="Content_InGame_GUI_aimcursor.xnb" Guid="90f8eb06-dfd4-4d1e-98a7-8cbd579eff59">
+        <File Id="Content_InGame_GUI_aimcursor.xnb" Name="aimcursor.xnb" Source="$(var.ZombustersWindows_TargetDir)Content\InGame\GUI\aimcursor.xnb" />
+      </Component>
+      <Component Id="Content_InGame_GUI_ArcadeFont14.xnb" Guid="64e3afa2-7a60-4699-94b7-c1d03c4f3fc7">
+        <File Id="Content_InGame_GUI_ArcadeFont14.xnb" Name="ArcadeFont14.xnb" Source="$(var.ZombustersWindows_TargetDir)Content\InGame\GUI\ArcadeFont14.xnb" />
+      </Component>
+      <Component Id="Content_InGame_GUI_ArcadeFont28.xnb" Guid="d4fcc842-792b-4d1e-965e-9b7f7122e0f3">
+        <File Id="Content_InGame_GUI_ArcadeFont28.xnb" Name="ArcadeFont28.xnb" Source="$(var.ZombustersWindows_TargetDir)Content\InGame\GUI\ArcadeFont28.xnb" />
+      </Component>
+      <Component Id="Content_InGame_GUI_CourierNew.xnb" Guid="720b18c2-f5f8-41bd-a131-4d99cce752c2">
+        <File Id="Content_InGame_GUI_CourierNew.xnb" Name="CourierNew.xnb" Source="$(var.ZombustersWindows_TargetDir)Content\InGame\GUI\CourierNew.xnb" />
+      </Component>
+      <Component Id="Content_InGame_GUI_Fixedv03.xnb" Guid="d6dc3448-7272-49b2-ad3e-2ca8b57ba2d9">
+        <File Id="Content_InGame_GUI_Fixedv03.xnb" Name="Fixedv03.xnb" Source="$(var.ZombustersWindows_TargetDir)Content\InGame\GUI\Fixedv03.xnb" />
+      </Component>
+      <Component Id="Content_InGame_GUI_flamethrowerammo.xnb" Guid="d307a3e4-7ca8-4031-99ab-8b16abb028a7">
+        <File Id="Content_InGame_GUI_flamethrowerammo.xnb" Name="flamethrowerammo.xnb" Source="$(var.ZombustersWindows_TargetDir)Content\InGame\GUI\flamethrowerammo.xnb" />
+      </Component>
+      <Component Id="Content_InGame_GUI_grenadeammo.xnb" Guid="154dbb36-2b9b-47eb-ab0d-399168ec9d54">
+        <File Id="Content_InGame_GUI_grenadeammo.xnb" Name="grenadeammo.xnb" Source="$(var.ZombustersWindows_TargetDir)Content\InGame\GUI\grenadeammo.xnb" />
+      </Component>
+      <Component Id="Content_InGame_GUI_heart.xnb" Guid="7303d612-0a61-4dab-9612-d0c3cb9cea51">
+        <File Id="Content_InGame_GUI_heart.xnb" Name="heart.xnb" Source="$(var.ZombustersWindows_TargetDir)Content\InGame\GUI\heart.xnb" />
+      </Component>
+      <Component Id="Content_InGame_GUI_jade_gui.xnb" Guid="c124958a-7b56-4d0d-9d13-6886e7d51947">
+        <File Id="Content_InGame_GUI_jade_gui.xnb" Name="jade_gui.xnb" Source="$(var.ZombustersWindows_TargetDir)Content\InGame\GUI\jade_gui.xnb" />
+      </Component>
+      <Component Id="Content_InGame_GUI_peter_gui.xnb" Guid="651a5dc0-118d-403b-a74f-fc8885c09995">
+        <File Id="Content_InGame_GUI_peter_gui.xnb" Name="peter_gui.xnb" Source="$(var.ZombustersWindows_TargetDir)Content\InGame\GUI\peter_gui.xnb" />
+      </Component>
+      <Component Id="Content_InGame_GUI_pistolammo.xnb" Guid="d1e75bfa-0834-4523-a780-7a8458e2febd">
+        <File Id="Content_InGame_GUI_pistolammo.xnb" Name="pistolammo.xnb" Source="$(var.ZombustersWindows_TargetDir)Content\InGame\GUI\pistolammo.xnb" />
+      </Component>
+      <Component Id="Content_InGame_GUI_ray_gui.xnb" Guid="a6c553e6-61d4-4de0-8948-7b10d4d4d455">
+        <File Id="Content_InGame_GUI_ray_gui.xnb" Name="ray_gui.xnb" Source="$(var.ZombustersWindows_TargetDir)Content\InGame\GUI\ray_gui.xnb" />
+      </Component>
+      <Component Id="Content_InGame_GUI_retrotrax_anim.xnb" Guid="eaa2b449-a44d-44bf-b54b-aa9f7927cc65">
+        <File Id="Content_InGame_GUI_retrotrax_anim.xnb" Name="retrotrax_anim.xnb" Source="$(var.ZombustersWindows_TargetDir)Content\InGame\GUI\retrotrax_anim.xnb" />
+      </Component>
+      <Component Id="Content_InGame_GUI_retrotrax_anim_bkg.xnb" Guid="673694ef-a027-4501-b5ee-149a35751039">
+        <File Id="Content_InGame_GUI_retrotrax_anim_bkg.xnb" Name="retrotrax_anim_bkg.xnb" Source="$(var.ZombustersWindows_TargetDir)Content\InGame\GUI\retrotrax_anim_bkg.xnb" />
+      </Component>
+      <Component Id="Content_InGame_GUI_richard_gui.xnb" Guid="a9df21f3-0c12-455f-9ba9-79fc813729d5">
+        <File Id="Content_InGame_GUI_richard_gui.xnb" Name="richard_gui.xnb" Source="$(var.ZombustersWindows_TargetDir)Content\InGame\GUI\richard_gui.xnb" />
+      </Component>
+      <Component Id="Content_InGame_GUI_shotgunammo.xnb" Guid="87ccd659-8f8d-4d22-a30c-d88461d7a1b1">
+        <File Id="Content_InGame_GUI_shotgunammo.xnb" Name="shotgunammo.xnb" Source="$(var.ZombustersWindows_TargetDir)Content\InGame\GUI\shotgunammo.xnb" />
+      </Component>
+    </ComponentGroup>
+  </Fragment>
+
+  <Fragment>
+    <ComponentGroup Id="Content_InGame_Jade_files" Directory="Content_InGame_Jade">
+      <Component Id="Content_InGame_Jade_girl_anim_idle.xnb" Guid="52672de5-7038-4bf1-bca4-04309bc39deb">
+        <File Id="Content_InGame_Jade_girl_anim_idle.xnb" Name="girl_anim_idle.xnb" Source="$(var.ZombustersWindows_TargetDir)Content\InGame\Jade\girl_anim_idle.xnb" />
+      </Component>
+      <Component Id="Content_InGame_Jade_girl_anim_run_E.xnb" Guid="9684118c-fba1-42f3-87fd-cbfbb18f3240">
+        <File Id="Content_InGame_Jade_girl_anim_run_E.xnb" Name="girl_anim_run_E.xnb" Source="$(var.ZombustersWindows_TargetDir)Content\InGame\Jade\girl_anim_run_E.xnb" />
+      </Component>
+      <Component Id="Content_InGame_Jade_girl_anim_shotgun.xnb" Guid="41443eba-812b-4e78-8f28-72bc73e86c92">
+        <File Id="Content_InGame_Jade_girl_anim_shotgun.xnb" Name="girl_anim_shotgun.xnb" Source="$(var.ZombustersWindows_TargetDir)Content\InGame\Jade\girl_anim_shotgun.xnb" />
+      </Component>
+      <Component Id="Content_InGame_Jade_girl_anim_shotgun_N.xnb" Guid="7f7e8b3f-3acd-4df7-b139-e61643310974">
+        <File Id="Content_InGame_Jade_girl_anim_shotgun_N.xnb" Name="girl_anim_shotgun_N.xnb" Source="$(var.ZombustersWindows_TargetDir)Content\InGame\Jade\girl_anim_shotgun_N.xnb" />
+      </Component>
+      <Component Id="Content_InGame_Jade_girl_anim_shotgun_NE.xnb" Guid="01b42e58-9753-47a5-a3ff-9996cbab0035">
+        <File Id="Content_InGame_Jade_girl_anim_shotgun_NE.xnb" Name="girl_anim_shotgun_NE.xnb" Source="$(var.ZombustersWindows_TargetDir)Content\InGame\Jade\girl_anim_shotgun_NE.xnb" />
+      </Component>
+      <Component Id="Content_InGame_Jade_girl_anim_shotgun_S.xnb" Guid="040cdb33-6398-4cc2-846c-9a6cb9740f8c">
+        <File Id="Content_InGame_Jade_girl_anim_shotgun_S.xnb" Name="girl_anim_shotgun_S.xnb" Source="$(var.ZombustersWindows_TargetDir)Content\InGame\Jade\girl_anim_shotgun_S.xnb" />
+      </Component>
+      <Component Id="Content_InGame_Jade_girl_anim_shotgun_SE.xnb" Guid="7352dfc6-67b0-45fa-84e0-b2a33c9d34c5">
+        <File Id="Content_InGame_Jade_girl_anim_shotgun_SE.xnb" Name="girl_anim_shotgun_SE.xnb" Source="$(var.ZombustersWindows_TargetDir)Content\InGame\Jade\girl_anim_shotgun_SE.xnb" />
+      </Component>
+      <Component Id="Content_InGame_Jade_girl_anim_shot_E.xnb" Guid="a3df4450-6235-4f0b-873c-11627562b4dc">
+        <File Id="Content_InGame_Jade_girl_anim_shot_E.xnb" Name="girl_anim_shot_E.xnb" Source="$(var.ZombustersWindows_TargetDir)Content\InGame\Jade\girl_anim_shot_E.xnb" />
+      </Component>
+      <Component Id="Content_InGame_Jade_girl_anim_shot_N.xnb" Guid="6cd35134-292e-4fe3-bbe0-0d89490a2025">
+        <File Id="Content_InGame_Jade_girl_anim_shot_N.xnb" Name="girl_anim_shot_N.xnb" Source="$(var.ZombustersWindows_TargetDir)Content\InGame\Jade\girl_anim_shot_N.xnb" />
+      </Component>
+      <Component Id="Content_InGame_Jade_girl_anim_shot_NE.xnb" Guid="96f7e923-a267-4763-9998-68318333581d">
+        <File Id="Content_InGame_Jade_girl_anim_shot_NE.xnb" Name="girl_anim_shot_NE.xnb" Source="$(var.ZombustersWindows_TargetDir)Content\InGame\Jade\girl_anim_shot_NE.xnb" />
+      </Component>
+      <Component Id="Content_InGame_Jade_girl_anim_shot_S.xnb" Guid="baab4e6a-d698-4068-954e-c68c6c107cbe">
+        <File Id="Content_InGame_Jade_girl_anim_shot_S.xnb" Name="girl_anim_shot_S.xnb" Source="$(var.ZombustersWindows_TargetDir)Content\InGame\Jade\girl_anim_shot_S.xnb" />
+      </Component>
+      <Component Id="Content_InGame_Jade_girl_anim_shot_SE.xnb" Guid="60bd0b50-11ad-4d2d-b1c1-8dfebb908a74">
+        <File Id="Content_InGame_Jade_girl_anim_shot_SE.xnb" Name="girl_anim_shot_SE.xnb" Source="$(var.ZombustersWindows_TargetDir)Content\InGame\Jade\girl_anim_shot_SE.xnb" />
+      </Component>
+      <Component Id="Content_InGame_Jade_girl_died.xnb" Guid="961b45f2-40d5-41ee-a02d-8037bf36672d">
+        <File Id="Content_InGame_Jade_girl_died.xnb" Name="girl_died.xnb" Source="$(var.ZombustersWindows_TargetDir)Content\InGame\Jade\girl_died.xnb" />
+      </Component>
+      <Component Id="Content_InGame_Jade_girl_legs_idle.xnb" Guid="76eac49c-5b02-4469-b3d0-e94215817a7c">
+        <File Id="Content_InGame_Jade_girl_legs_idle.xnb" Name="girl_legs_idle.xnb" Source="$(var.ZombustersWindows_TargetDir)Content\InGame\Jade\girl_legs_idle.xnb" />
+      </Component>
+    </ComponentGroup>
+  </Fragment>
+
+  <Fragment>
+    <ComponentGroup Id="Content_InGame_Peter_files" Directory="Content_InGame_Peter">
+      <Component Id="Content_InGame_Peter_peter_died.xnb" Guid="25cf5861-3cf4-4d2b-ac74-bea6c2cbe1d2">
+        <File Id="Content_InGame_Peter_peter_died.xnb" Name="peter_died.xnb" Source="$(var.ZombustersWindows_TargetDir)Content\InGame\Peter\peter_died.xnb" />
+      </Component>
+      <Component Id="Content_InGame_Peter_peter_legs_idle.xnb" Guid="eccde2eb-8eee-4cfd-a4dd-e60645a193f8">
+        <File Id="Content_InGame_Peter_peter_legs_idle.xnb" Name="peter_legs_idle.xnb" Source="$(var.ZombustersWindows_TargetDir)Content\InGame\Peter\peter_legs_idle.xnb" />
+      </Component>
+      <Component Id="Content_InGame_Peter_peter_idle.xnb" Guid="82111841-7cb5-4c47-8502-20f5c7c07464">
+        <File Id="Content_InGame_Peter_peter_idle.xnb" Name="peter_idle.xnb" Source="$(var.ZombustersWindows_TargetDir)Content\InGame\Peter\peter_idle.xnb" />
+      </Component>
+      <Component Id="Content_InGame_Peter_peter_pistol_E.xnb" Guid="b5baa276-e865-43d2-9e26-143e9c8ca5a8">
+        <File Id="Content_InGame_Peter_peter_pistol_E.xnb" Name="peter_pistol_E.xnb" Source="$(var.ZombustersWindows_TargetDir)Content\InGame\Peter\peter_pistol_E.xnb" />
+      </Component>
+      <Component Id="Content_InGame_Peter_peter_pistol_N.xnb" Guid="a069ae52-2d97-4cb0-b54e-40057e4947cb">
+        <File Id="Content_InGame_Peter_peter_pistol_N.xnb" Name="peter_pistol_N.xnb" Source="$(var.ZombustersWindows_TargetDir)Content\InGame\Peter\peter_pistol_N.xnb" />
+      </Component>
+      <Component Id="Content_InGame_Peter_peter_pistol_NE.xnb" Guid="38bcb5c9-acd4-4760-8e78-1537dee11bdc">
+        <File Id="Content_InGame_Peter_peter_pistol_NE.xnb" Name="peter_pistol_NE.xnb" Source="$(var.ZombustersWindows_TargetDir)Content\InGame\Peter\peter_pistol_NE.xnb" />
+      </Component>
+      <Component Id="Content_InGame_Peter_peter_pistol_S.xnb" Guid="cc641ebb-eae3-480b-bfce-d3661c5b7166">
+        <File Id="Content_InGame_Peter_peter_pistol_S.xnb" Name="peter_pistol_S.xnb" Source="$(var.ZombustersWindows_TargetDir)Content\InGame\Peter\peter_pistol_S.xnb" />
+      </Component>
+      <Component Id="Content_InGame_Peter_peter_pistol_SE.xnb" Guid="65276498-e1a6-4f63-a6ec-eb2b94705654">
+        <File Id="Content_InGame_Peter_peter_pistol_SE.xnb" Name="peter_pistol_SE.xnb" Source="$(var.ZombustersWindows_TargetDir)Content\InGame\Peter\peter_pistol_SE.xnb" />
+      </Component>
+      <Component Id="Content_InGame_Peter_peter_run_E.xnb" Guid="9d64ce32-41f0-4a10-9eec-9f6990f29a1d">
+        <File Id="Content_InGame_Peter_peter_run_E.xnb" Name="peter_run_E.xnb" Source="$(var.ZombustersWindows_TargetDir)Content\InGame\Peter\peter_run_E.xnb" />
+      </Component>
+      <Component Id="Content_InGame_Peter_peter_shotgun_E.xnb" Guid="87d9df65-2e70-4913-ad9a-0178958e4db5">
+        <File Id="Content_InGame_Peter_peter_shotgun_E.xnb" Name="peter_shotgun_E.xnb" Source="$(var.ZombustersWindows_TargetDir)Content\InGame\Peter\peter_shotgun_E.xnb" />
+      </Component>
+      <Component Id="Content_InGame_Peter_peter_shotgun_N.xnb" Guid="355fd467-b620-4fa0-af74-c087df59bc0e">
+        <File Id="Content_InGame_Peter_peter_shotgun_N.xnb" Name="peter_shotgun_N.xnb" Source="$(var.ZombustersWindows_TargetDir)Content\InGame\Peter\peter_shotgun_N.xnb" />
+      </Component>
+      <Component Id="Content_InGame_Peter_peter_shotgun_NE.xnb" Guid="21d9b766-7529-42c3-b960-2bf122e62954">
+        <File Id="Content_InGame_Peter_peter_shotgun_NE.xnb" Name="peter_shotgun_NE.xnb" Source="$(var.ZombustersWindows_TargetDir)Content\InGame\Peter\peter_shotgun_NE.xnb" />
+      </Component>
+      <Component Id="Content_InGame_Peter_peter_shotgun_S.xnb" Guid="a932c280-7912-49c2-90cc-5c9965a00f1b">
+        <File Id="Content_InGame_Peter_peter_shotgun_S.xnb" Name="peter_shotgun_S.xnb" Source="$(var.ZombustersWindows_TargetDir)Content\InGame\Peter\peter_shotgun_S.xnb" />
+      </Component>
+      <Component Id="Content_InGame_Peter_peter_shotgun_SE.xnb" Guid="b2211441-bf3a-4be3-be9b-f1b9dd00c10a">
+        <File Id="Content_InGame_Peter_peter_shotgun_SE.xnb" Name="peter_shotgun_SE.xnb" Source="$(var.ZombustersWindows_TargetDir)Content\InGame\Peter\peter_shotgun_SE.xnb" />
+      </Component>
+    </ComponentGroup>
+  </Fragment>
+
+  <Fragment>
+    <ComponentGroup Id="Content_InGame_Ray_files" Directory="Content_InGame_Ray">
+      <Component Id="Content_InGame_Ray_ray_died.xnb" Guid="5c6bb1ce-7e97-422b-a267-7f3e8c11c461">
+        <File Id="Content_InGame_Ray_ray_died.xnb" Name="ray_died.xnb" Source="$(var.ZombustersWindows_TargetDir)Content\InGame\Ray\ray_died.xnb" />
+      </Component>
+      <Component Id="Content_InGame_Ray_ray_idle.xnb" Guid="0267e53e-6508-42c8-b805-062fd4d3cc5b">
+        <File Id="Content_InGame_Ray_ray_idle.xnb" Name="ray_idle.xnb" Source="$(var.ZombustersWindows_TargetDir)Content\InGame\Ray\ray_idle.xnb" />
+      </Component>
+      <Component Id="Content_InGame_Ray_ray_legs_idle.xnb" Guid="e6adbeff-ceb7-4013-8bfd-06c53ed55da9">
+        <File Id="Content_InGame_Ray_ray_legs_idle.xnb" Name="ray_legs_idle.xnb" Source="$(var.ZombustersWindows_TargetDir)Content\InGame\Ray\ray_legs_idle.xnb" />
+      </Component>
+      <Component Id="Content_InGame_Ray_ray_pistol_E.xnb" Guid="32068896-0e16-4167-a5c4-55f9f22e23c3">
+        <File Id="Content_InGame_Ray_ray_pistol_E.xnb" Name="ray_pistol_E.xnb" Source="$(var.ZombustersWindows_TargetDir)Content\InGame\Ray\ray_pistol_E.xnb" />
+      </Component>
+      <Component Id="Content_InGame_Ray_ray_pistol_N.xnb" Guid="c134241e-980a-407a-8efe-4a3a70e25d86">
+        <File Id="Content_InGame_Ray_ray_pistol_N.xnb" Name="ray_pistol_N.xnb" Source="$(var.ZombustersWindows_TargetDir)Content\InGame\Ray\ray_pistol_N.xnb" />
+      </Component>
+      <Component Id="Content_InGame_Ray_ray_pistol_NE.xnb" Guid="72612fa7-c1a4-4982-a8e5-40fe87e79fad">
+        <File Id="Content_InGame_Ray_ray_pistol_NE.xnb" Name="ray_pistol_NE.xnb" Source="$(var.ZombustersWindows_TargetDir)Content\InGame\Ray\ray_pistol_NE.xnb" />
+      </Component>
+      <Component Id="Content_InGame_Ray_ray_pistol_S.xnb" Guid="e61cd75f-0491-48e6-9b46-be1fbc0b712a">
+        <File Id="Content_InGame_Ray_ray_pistol_S.xnb" Name="ray_pistol_S.xnb" Source="$(var.ZombustersWindows_TargetDir)Content\InGame\Ray\ray_pistol_S.xnb" />
+      </Component>
+      <Component Id="Content_InGame_Ray_ray_pistol_SE.xnb" Guid="1d9df002-d203-463e-9b61-60f980ea2dee">
+        <File Id="Content_InGame_Ray_ray_pistol_SE.xnb" Name="ray_pistol_SE.xnb" Source="$(var.ZombustersWindows_TargetDir)Content\InGame\Ray\ray_pistol_SE.xnb" />
+      </Component>
+      <Component Id="Content_InGame_Ray_ray_run_E.xnb" Guid="7ac92782-e38c-4323-8d82-db23c4e55daf">
+        <File Id="Content_InGame_Ray_ray_run_E.xnb" Name="ray_run_E.xnb" Source="$(var.ZombustersWindows_TargetDir)Content\InGame\Ray\ray_run_E.xnb" />
+      </Component>
+      <Component Id="Content_InGame_Ray_ray_shotgun_E.xnb" Guid="11c7f6d0-775a-4a0d-b81e-cbd51f4c42e6">
+        <File Id="Content_InGame_Ray_ray_shotgun_E.xnb" Name="ray_shotgun_E.xnb" Source="$(var.ZombustersWindows_TargetDir)Content\InGame\Ray\ray_shotgun_E.xnb" />
+      </Component>
+      <Component Id="Content_InGame_Ray_ray_shotgun_N.xnb" Guid="239ee9b6-f96e-4cbc-9620-020d7c7785b9">
+        <File Id="Content_InGame_Ray_ray_shotgun_N.xnb" Name="ray_shotgun_N.xnb" Source="$(var.ZombustersWindows_TargetDir)Content\InGame\Ray\ray_shotgun_N.xnb" />
+      </Component>
+      <Component Id="Content_InGame_Ray_ray_shotgun_NE.xnb" Guid="b0d1fdba-bd59-4c04-9188-0ef363462a3e">
+        <File Id="Content_InGame_Ray_ray_shotgun_NE.xnb" Name="ray_shotgun_NE.xnb" Source="$(var.ZombustersWindows_TargetDir)Content\InGame\Ray\ray_shotgun_NE.xnb" />
+      </Component>
+      <Component Id="Content_InGame_Ray_ray_shotgun_S.xnb" Guid="aba11394-f4f7-49d6-80b6-1ee74030c206">
+        <File Id="Content_InGame_Ray_ray_shotgun_S.xnb" Name="ray_shotgun_S.xnb" Source="$(var.ZombustersWindows_TargetDir)Content\InGame\Ray\ray_shotgun_S.xnb" />
+      </Component>
+      <Component Id="Content_InGame_Ray_ray_shotgun_SE.xnb" Guid="c60b69ab-196f-4154-aabf-71ca9a0a4994">
+        <File Id="Content_InGame_Ray_ray_shotgun_SE.xnb" Name="ray_shotgun_SE.xnb" Source="$(var.ZombustersWindows_TargetDir)Content\InGame\Ray\ray_shotgun_SE.xnb" />
+      </Component>
+    </ComponentGroup>
+  </Fragment>
+
+  <Fragment>
+    <ComponentGroup Id="Content_InGame_SelectPlayer_files" Directory="Content_InGame_SelectPlayer">
+      <Component Id="Content_InGame_SelectPlayer_arrowLeft.xnb" Guid="95b1cfa6-693d-486e-8542-c30ad622dce4">
+        <File Id="Content_InGame_SelectPlayer_arrowLeft.xnb" Name="arrowLeft.xnb" Source="$(var.ZombustersWindows_TargetDir)Content\InGame\SelectPlayer\arrowLeft.xnb" />
+      </Component>
+      <Component Id="Content_InGame_SelectPlayer_p1Avatar.xnb" Guid="a86211a7-1331-41b3-8f3f-ae5d0f51ce43">
+        <File Id="Content_InGame_SelectPlayer_p1Avatar.xnb" Name="p1Avatar.xnb" Source="$(var.ZombustersWindows_TargetDir)Content\InGame\SelectPlayer\p1Avatar.xnb" />
+      </Component>
+      <Component Id="Content_InGame_SelectPlayer_p1Avatar_pixel.xnb" Guid="df387f8c-194a-486d-a7b0-e0f9371df5a3">
+        <File Id="Content_InGame_SelectPlayer_p1Avatar_pixel.xnb" Name="p1Avatar_pixel.xnb" Source="$(var.ZombustersWindows_TargetDir)Content\InGame\SelectPlayer\p1Avatar_pixel.xnb" />
+      </Component>
+      <Component Id="Content_InGame_SelectPlayer_p2Avatar.xnb" Guid="33dc45e2-fde0-4bbe-9d91-2dbd5a628452">
+        <File Id="Content_InGame_SelectPlayer_p2Avatar.xnb" Name="p2Avatar.xnb" Source="$(var.ZombustersWindows_TargetDir)Content\InGame\SelectPlayer\p2Avatar.xnb" />
+      </Component>
+      <Component Id="Content_InGame_SelectPlayer_p2Avatar_pixel.xnb" Guid="e0364308-2149-426a-8ea6-b35b7e122947">
+        <File Id="Content_InGame_SelectPlayer_p2Avatar_pixel.xnb" Name="p2Avatar_pixel.xnb" Source="$(var.ZombustersWindows_TargetDir)Content\InGame\SelectPlayer\p2Avatar_pixel.xnb" />
+      </Component>
+      <Component Id="Content_InGame_SelectPlayer_p3Avatar.xnb" Guid="473a58d1-0d8e-4200-bc69-99115f4174c6">
+        <File Id="Content_InGame_SelectPlayer_p3Avatar.xnb" Name="p3Avatar.xnb" Source="$(var.ZombustersWindows_TargetDir)Content\InGame\SelectPlayer\p3Avatar.xnb" />
+      </Component>
+      <Component Id="Content_InGame_SelectPlayer_p3Avatar_pixel.xnb" Guid="efb951bc-8f29-4888-b16c-1330a99df152">
+        <File Id="Content_InGame_SelectPlayer_p3Avatar_pixel.xnb" Name="p3Avatar_pixel.xnb" Source="$(var.ZombustersWindows_TargetDir)Content\InGame\SelectPlayer\p3Avatar_pixel.xnb" />
+      </Component>
+      <Component Id="Content_InGame_SelectPlayer_p4Avatar.xnb" Guid="704ac4d8-034f-456b-9104-0571483b30dc">
+        <File Id="Content_InGame_SelectPlayer_p4Avatar.xnb" Name="p4Avatar.xnb" Source="$(var.ZombustersWindows_TargetDir)Content\InGame\SelectPlayer\p4Avatar.xnb" />
+      </Component>
+      <Component Id="Content_InGame_SelectPlayer_p4Avatar_pixel.xnb" Guid="41c7a74d-711c-4894-b9e4-214915785d5b">
+        <File Id="Content_InGame_SelectPlayer_p4Avatar_pixel.xnb" Name="p4Avatar_pixel.xnb" Source="$(var.ZombustersWindows_TargetDir)Content\InGame\SelectPlayer\p4Avatar_pixel.xnb" />
+      </Component>
+      <Component Id="Content_InGame_SelectPlayer_selpla_bkg.xnb" Guid="cd647a8c-4105-4948-975f-b8191ae5ea9d">
+        <File Id="Content_InGame_SelectPlayer_selpla_bkg.xnb" Name="selpla_bkg.xnb" Source="$(var.ZombustersWindows_TargetDir)Content\InGame\SelectPlayer\selpla_bkg.xnb" />
+      </Component>
+      <Component Id="Content_InGame_SelectPlayer_selpla_border.xnb" Guid="5d347a00-e169-4422-87ed-299682266f61">
+        <File Id="Content_InGame_SelectPlayer_selpla_border.xnb" Name="selpla_border.xnb" Source="$(var.ZombustersWindows_TargetDir)Content\InGame\SelectPlayer\selpla_border.xnb" />
+      </Component>
+      <Component Id="Content_InGame_SelectPlayer_selpla_gradient.xnb" Guid="42e3efa2-e810-4621-8c83-6212037c51be">
+        <File Id="Content_InGame_SelectPlayer_selpla_gradient.xnb" Name="selpla_gradient.xnb" Source="$(var.ZombustersWindows_TargetDir)Content\InGame\SelectPlayer\selpla_gradient.xnb" />
+      </Component>
+      <Component Id="Content_InGame_SelectPlayer_selpla_ready.xnb" Guid="b14e6009-ab8d-4a9b-890a-a30a0c092263">
+        <File Id="Content_InGame_SelectPlayer_selpla_ready.xnb" Name="selpla_ready.xnb" Source="$(var.ZombustersWindows_TargetDir)Content\InGame\SelectPlayer\selpla_ready.xnb" />
+      </Component>
+    </ComponentGroup>
+  </Fragment>
+
+  <Fragment>
+    <ComponentGroup Id="Content_Keyboard_files" Directory="Content_Keyboard">
+      <Component Id="Content_Keyboard_key_down.xnb" Guid="10b98ed6-1c21-477f-8352-9b1a62e3a779">
+        <File Id="Content_Keyboard_key_down.xnb" Name="key_down.xnb" Source="$(var.ZombustersWindows_TargetDir)Content\Keyboard\key_down.xnb" />
+      </Component>
+      <Component Id="Content_Keyboard_key_enter.xnb" Guid="c4695116-4d37-4a25-bade-fcc093a167e3">
+        <File Id="Content_Keyboard_key_enter.xnb" Name="key_enter.xnb" Source="$(var.ZombustersWindows_TargetDir)Content\Keyboard\key_enter.xnb" />
+      </Component>
+      <Component Id="Content_Keyboard_key_esc.xnb" Guid="fbc7b1db-8c28-46c0-8347-88081b614d0b">
+        <File Id="Content_Keyboard_key_esc.xnb" Name="key_esc.xnb" Source="$(var.ZombustersWindows_TargetDir)Content\Keyboard\key_esc.xnb" />
+      </Component>
+      <Component Id="Content_Keyboard_key_left.xnb" Guid="26b6b92c-c72f-49e6-b444-7ae0ffef8762">
+        <File Id="Content_Keyboard_key_left.xnb" Name="key_left.xnb" Source="$(var.ZombustersWindows_TargetDir)Content\Keyboard\key_left.xnb" />
+      </Component>
+      <Component Id="Content_Keyboard_key_right.xnb" Guid="3834581a-6fe9-4757-834f-9aba44325bee">
+        <File Id="Content_Keyboard_key_right.xnb" Name="key_right.xnb" Source="$(var.ZombustersWindows_TargetDir)Content\Keyboard\key_right.xnb" />
+      </Component>
+      <Component Id="Content_Keyboard_key_space.xnb" Guid="7e582d8f-e818-4517-9a0a-aae1e759a9a9">
+        <File Id="Content_Keyboard_key_space.xnb" Name="key_space.xnb" Source="$(var.ZombustersWindows_TargetDir)Content\Keyboard\key_space.xnb" />
+      </Component>
+      <Component Id="Content_Keyboard_key_up.xnb" Guid="d47ffe43-c4f4-40ef-9555-b6ec235c9c8a">
+        <File Id="Content_Keyboard_key_up.xnb" Name="key_up.xnb" Source="$(var.ZombustersWindows_TargetDir)Content\Keyboard\key_up.xnb" />
+      </Component>
+    </ComponentGroup>
+  </Fragment>
+
+  <Fragment>
+    <ComponentGroup Id="Content_Maps_Furniture_files" Directory="Content_Maps_Furniture">
+      <Component Id="Content_Maps_Furniture_Arbol.xnb" Guid="ad0adb7c-c405-4421-97f2-4a74efba5233">
+        <File Id="Content_Maps_Furniture_Arbol.xnb" Name="Arbol.xnb" Source="$(var.ZombustersWindows_TargetDir)Content\Maps\Furniture\Arbol.xnb" />
+      </Component>
+      <Component Id="Content_Maps_Furniture_Arbol_shadow.xnb" Guid="cfbff92a-35d2-475d-8757-d8ba15f7e640">
+        <File Id="Content_Maps_Furniture_Arbol_shadow.xnb" Name="Arbol_shadow.xnb" Source="$(var.ZombustersWindows_TargetDir)Content\Maps\Furniture\Arbol_shadow.xnb" />
+      </Component>
+      <Component Id="Content_Maps_Furniture_BancoSE.xnb" Guid="6febbcf1-1f67-4aa6-b019-8432d01ec014">
+        <File Id="Content_Maps_Furniture_BancoSE.xnb" Name="BancoSE.xnb" Source="$(var.ZombustersWindows_TargetDir)Content\Maps\Furniture\BancoSE.xnb" />
+      </Component>
+      <Component Id="Content_Maps_Furniture_BancoSE_shadow.xnb" Guid="ce90c96e-cac2-42f9-9c67-b755c9df91fb">
+        <File Id="Content_Maps_Furniture_BancoSE_shadow.xnb" Name="BancoSE_shadow.xnb" Source="$(var.ZombustersWindows_TargetDir)Content\Maps\Furniture\BancoSE_shadow.xnb" />
+      </Component>
+      <Component Id="Content_Maps_Furniture_BancoSW.xnb" Guid="3c8b5c0d-f256-4b55-8c18-b9a457ef6ddd">
+        <File Id="Content_Maps_Furniture_BancoSW.xnb" Name="BancoSW.xnb" Source="$(var.ZombustersWindows_TargetDir)Content\Maps\Furniture\BancoSW.xnb" />
+      </Component>
+      <Component Id="Content_Maps_Furniture_BancoSW_shadow.xnb" Guid="02d93c70-0658-46d9-83f0-fd1998534287">
+        <File Id="Content_Maps_Furniture_BancoSW_shadow.xnb" Name="BancoSW_shadow.xnb" Source="$(var.ZombustersWindows_TargetDir)Content\Maps\Furniture\BancoSW_shadow.xnb" />
+      </Component>
+      <Component Id="Content_Maps_Furniture_Basura.xnb" Guid="98148293-2e4a-4429-ad95-956b91965f92">
+        <File Id="Content_Maps_Furniture_Basura.xnb" Name="Basura.xnb" Source="$(var.ZombustersWindows_TargetDir)Content\Maps\Furniture\Basura.xnb" />
+      </Component>
+      <Component Id="Content_Maps_Furniture_Basura_shadow.xnb" Guid="97eb622b-fc24-48d9-93c1-487321140f66">
+        <File Id="Content_Maps_Furniture_Basura_shadow.xnb" Name="Basura_shadow.xnb" Source="$(var.ZombustersWindows_TargetDir)Content\Maps\Furniture\Basura_shadow.xnb" />
+      </Component>
+      <Component Id="Content_Maps_Furniture_CocheArdiendo.xnb" Guid="0f38332b-ed76-4eab-96de-9cb6217cec54">
+        <File Id="Content_Maps_Furniture_CocheArdiendo.xnb" Name="CocheArdiendo.xnb" Source="$(var.ZombustersWindows_TargetDir)Content\Maps\Furniture\CocheArdiendo.xnb" />
+      </Component>
+      <Component Id="Content_Maps_Furniture_FarolaNE.xnb" Guid="f81695b0-0e81-45f9-8f23-7fe20c400f89">
+        <File Id="Content_Maps_Furniture_FarolaNE.xnb" Name="FarolaNE.xnb" Source="$(var.ZombustersWindows_TargetDir)Content\Maps\Furniture\FarolaNE.xnb" />
+      </Component>
+      <Component Id="Content_Maps_Furniture_FarolaNE_shadow.xnb" Guid="9e3c6566-b45f-455d-a047-db1437d7347d">
+        <File Id="Content_Maps_Furniture_FarolaNE_shadow.xnb" Name="FarolaNE_shadow.xnb" Source="$(var.ZombustersWindows_TargetDir)Content\Maps\Furniture\FarolaNE_shadow.xnb" />
+      </Component>
+      <Component Id="Content_Maps_Furniture_FarolaNW.xnb" Guid="4cac7037-2c48-4655-ba5c-ed3f37cae9fa">
+        <File Id="Content_Maps_Furniture_FarolaNW.xnb" Name="FarolaNW.xnb" Source="$(var.ZombustersWindows_TargetDir)Content\Maps\Furniture\FarolaNW.xnb" />
+      </Component>
+      <Component Id="Content_Maps_Furniture_FarolaNW_shadow.xnb" Guid="635a932c-dff3-40d7-abc0-bce8040ae243">
+        <File Id="Content_Maps_Furniture_FarolaNW_shadow.xnb" Name="FarolaNW_shadow.xnb" Source="$(var.ZombustersWindows_TargetDir)Content\Maps\Furniture\FarolaNW_shadow.xnb" />
+      </Component>
+      <Component Id="Content_Maps_Furniture_FarolaSE.xnb" Guid="3f5e833c-f865-42cf-9e29-c7058388f16e">
+        <File Id="Content_Maps_Furniture_FarolaSE.xnb" Name="FarolaSE.xnb" Source="$(var.ZombustersWindows_TargetDir)Content\Maps\Furniture\FarolaSE.xnb" />
+      </Component>
+      <Component Id="Content_Maps_Furniture_FarolaSE_shadow.xnb" Guid="40e173da-08bd-43bc-a7f9-d9ceb4e5ce44">
+        <File Id="Content_Maps_Furniture_FarolaSE_shadow.xnb" Name="FarolaSE_shadow.xnb" Source="$(var.ZombustersWindows_TargetDir)Content\Maps\Furniture\FarolaSE_shadow.xnb" />
+      </Component>
+      <Component Id="Content_Maps_Furniture_FarolaSW.xnb" Guid="dae127e9-afff-4d31-be0f-a9e29a6806d2">
+        <File Id="Content_Maps_Furniture_FarolaSW.xnb" Name="FarolaSW.xnb" Source="$(var.ZombustersWindows_TargetDir)Content\Maps\Furniture\FarolaSW.xnb" />
+      </Component>
+      <Component Id="Content_Maps_Furniture_FarolaSW_shadow.xnb" Guid="4e3b7284-76cb-484b-9fd6-56eb7279d608">
+        <File Id="Content_Maps_Furniture_FarolaSW_shadow.xnb" Name="FarolaSW_shadow.xnb" Source="$(var.ZombustersWindows_TargetDir)Content\Maps\Furniture\FarolaSW_shadow.xnb" />
+      </Component>
+      <Component Id="Content_Maps_Furniture_Puente.xnb" Guid="52d379d2-7278-41e6-8cd4-6607b67d599b">
+        <File Id="Content_Maps_Furniture_Puente.xnb" Name="Puente.xnb" Source="$(var.ZombustersWindows_TargetDir)Content\Maps\Furniture\Puente.xnb" />
+      </Component>
+    </ComponentGroup>
+  </Fragment>
+
+  <Fragment>
+    <ComponentGroup Id="Content_Maps_files" Directory="Content_Maps">
+      <Component Id="Content_Maps_map1.xnb" Guid="b8f4756f-7a65-4cce-adb1-ad7ac910ddb6">
+        <File Id="Content_Maps_map1.xnb" Name="map1.xnb" Source="$(var.ZombustersWindows_TargetDir)Content\Maps\map1.xnb" />
+      </Component>
+      <Component Id="Content_Maps_map10.xnb" Guid="8e8e2082-8d4c-432e-9fba-2090a5d61ceb">
+        <File Id="Content_Maps_map10.xnb" Name="map10.xnb" Source="$(var.ZombustersWindows_TargetDir)Content\Maps\map10.xnb" />
+      </Component>
+      <Component Id="Content_Maps_map2.xnb" Guid="506310b5-82bc-4faa-97b2-63d0194869be">
+        <File Id="Content_Maps_map2.xnb" Name="map2.xnb" Source="$(var.ZombustersWindows_TargetDir)Content\Maps\map2.xnb" />
+      </Component>
+      <Component Id="Content_Maps_map3.xnb" Guid="4b720726-b146-444b-97bb-9a808265334d">
+        <File Id="Content_Maps_map3.xnb" Name="map3.xnb" Source="$(var.ZombustersWindows_TargetDir)Content\Maps\map3.xnb" />
+      </Component>
+      <Component Id="Content_Maps_map3WP.xnb" Guid="492f9ae2-5ade-45c8-b317-a9bf102db4d0">
+        <File Id="Content_Maps_map3WP.xnb" Name="map3WP.xnb" Source="$(var.ZombustersWindows_TargetDir)Content\Maps\map3WP.xnb" />
+      </Component>
+      <Component Id="Content_Maps_map5.xnb" Guid="cfa1306c-f9ad-4997-b20c-9b9cbbe4183c">
+        <File Id="Content_Maps_map5.xnb" Name="map5.xnb" Source="$(var.ZombustersWindows_TargetDir)Content\Maps\map5.xnb" />
+      </Component>
+      <Component Id="Content_Maps_map4.xnb" Guid="f4b7c587-94d0-498a-af93-a4bde4ffa421">
+        <File Id="Content_Maps_map4.xnb" Name="map4.xnb" Source="$(var.ZombustersWindows_TargetDir)Content\Maps\map4.xnb" />
+      </Component>
+      <Component Id="Content_Maps_map6.xnb" Guid="ac788c21-6f92-45c2-96c0-a09eda4bea43">
+        <File Id="Content_Maps_map6.xnb" Name="map6.xnb" Source="$(var.ZombustersWindows_TargetDir)Content\Maps\map6.xnb" />
+      </Component>
+      <Component Id="Content_Maps_map7.xnb" Guid="bfe9ead4-a33a-4831-a10b-86d19a4ef44a">
+        <File Id="Content_Maps_map7.xnb" Name="map7.xnb" Source="$(var.ZombustersWindows_TargetDir)Content\Maps\map7.xnb" />
+      </Component>
+      <Component Id="Content_Maps_map7WP.xnb" Guid="b5be4670-1764-414f-a00c-9dd5265facfe">
+        <File Id="Content_Maps_map7WP.xnb" Name="map7WP.xnb" Source="$(var.ZombustersWindows_TargetDir)Content\Maps\map7WP.xnb" />
+      </Component>
+      <Component Id="Content_Maps_map8.xnb" Guid="b58be9d8-1b9f-443f-913a-03a8c6857da4">
+        <File Id="Content_Maps_map8.xnb" Name="map8.xnb" Source="$(var.ZombustersWindows_TargetDir)Content\Maps\map8.xnb" />
+      </Component>
+      <Component Id="Content_Maps_map9.xnb" Guid="13cab76f-906f-42f3-9b8f-1e68d3a360cb">
+        <File Id="Content_Maps_map9.xnb" Name="map9.xnb" Source="$(var.ZombustersWindows_TargetDir)Content\Maps\map9.xnb" />
+      </Component>
+    </ComponentGroup>
+  </Fragment>
+
+  <Fragment>
+    <ComponentGroup Id="Content_Menu_files" Directory="Content_Menu">
+      <Component Id="Content_Menu_ArialMenuHeader.xnb" Guid="ec46fb64-1e40-4ec2-8a62-0f103f047b80">
+        <File Id="Content_Menu_ArialMenuHeader.xnb" Name="ArialMenuHeader.xnb" Source="$(var.ZombustersWindows_TargetDir)Content\Menu\ArialMenuHeader.xnb" />
+      </Component>
+      <Component Id="Content_Menu_ArialMenuInfo.xnb" Guid="47dbd84b-c162-4bba-892e-b71f13ad8936">
+        <File Id="Content_Menu_ArialMenuInfo.xnb" Name="ArialMenuInfo.xnb" Source="$(var.ZombustersWindows_TargetDir)Content\Menu\ArialMenuInfo.xnb" />
+      </Component>
+      <Component Id="Content_Menu_ArialMenuList.xnb" Guid="ab4fd6a4-4ba6-47bc-bf1e-c07bf7bdd51a">
+        <File Id="Content_Menu_ArialMenuList.xnb" Name="ArialMenuList.xnb" Source="$(var.ZombustersWindows_TargetDir)Content\Menu\ArialMenuList.xnb" />
+      </Component>
+      <Component Id="Content_Menu_ArialMusic.xnb" Guid="fb30240e-8f10-452e-8a44-4b335b2142be">
+        <File Id="Content_Menu_ArialMusic.xnb" Name="ArialMusic.xnb" Source="$(var.ZombustersWindows_TargetDir)Content\Menu\ArialMusic.xnb" />
+      </Component>
+      <Component Id="Content_Menu_ArialMusicItalic.xnb" Guid="d7a48f65-694d-4881-a195-03f81d8bbbd8">
+        <File Id="Content_Menu_ArialMusicItalic.xnb" Name="ArialMusicItalic.xnb" Source="$(var.ZombustersWindows_TargetDir)Content\Menu\ArialMusicItalic.xnb" />
+      </Component>
+      <Component Id="Content_Menu_background_title_scrolling0.xnb" Guid="b84dddb0-f2eb-4db3-8f86-4da74b354f24">
+        <File Id="Content_Menu_background_title_scrolling0.xnb" Name="background_title_scrolling0.xnb" Source="$(var.ZombustersWindows_TargetDir)Content\Menu\background_title_scrolling0.xnb" />
+      </Component>
+      <Component Id="Content_Menu_background_title_scrolling0WP.xnb" Guid="51389e6e-9539-4a3c-8c7c-b0c2021fb660">
+        <File Id="Content_Menu_background_title_scrolling0WP.xnb" Name="background_title_scrolling0WP.xnb" Source="$(var.ZombustersWindows_TargetDir)Content\Menu\background_title_scrolling0WP.xnb" />
+      </Component>
+      <Component Id="Content_Menu_background_title_scrolling1.xnb" Guid="ec0d9441-084c-4b1f-8ff5-bd5223b59908">
+        <File Id="Content_Menu_background_title_scrolling1.xnb" Name="background_title_scrolling1.xnb" Source="$(var.ZombustersWindows_TargetDir)Content\Menu\background_title_scrolling1.xnb" />
+      </Component>
+      <Component Id="Content_Menu_background_title_scrolling1WP.xnb" Guid="0fa86314-481f-4c69-8e53-e1ad078bd510">
+        <File Id="Content_Menu_background_title_scrolling1WP.xnb" Name="background_title_scrolling1WP.xnb" Source="$(var.ZombustersWindows_TargetDir)Content\Menu\background_title_scrolling1WP.xnb" />
+      </Component>
+      <Component Id="Content_Menu_background_title_scrolling2.xnb" Guid="fc220004-d0bd-4828-9c77-2c76587c1179">
+        <File Id="Content_Menu_background_title_scrolling2.xnb" Name="background_title_scrolling2.xnb" Source="$(var.ZombustersWindows_TargetDir)Content\Menu\background_title_scrolling2.xnb" />
+      </Component>
+      <Component Id="Content_Menu_background_title_scrolling2WP.xnb" Guid="8cdfc934-963f-4776-a46c-77a71dbc3c5e">
+        <File Id="Content_Menu_background_title_scrolling2WP.xnb" Name="background_title_scrolling2WP.xnb" Source="$(var.ZombustersWindows_TargetDir)Content\Menu\background_title_scrolling2WP.xnb" />
+      </Component>
+      <Component Id="Content_Menu_background_title_scrolling3.xnb" Guid="2305b76c-a24d-46a0-bee1-35409f1ac3bd">
+        <File Id="Content_Menu_background_title_scrolling3.xnb" Name="background_title_scrolling3.xnb" Source="$(var.ZombustersWindows_TargetDir)Content\Menu\background_title_scrolling3.xnb" />
+      </Component>
+      <Component Id="Content_Menu_background_title_scrolling3WP.xnb" Guid="2cd23cdc-5731-4ee4-bf05-25e775d5ad1b">
+        <File Id="Content_Menu_background_title_scrolling3WP.xnb" Name="background_title_scrolling3WP.xnb" Source="$(var.ZombustersWindows_TargetDir)Content\Menu\background_title_scrolling3WP.xnb" />
+      </Component>
+      <Component Id="Content_Menu_background_title_shadow.xnb" Guid="d7d260f6-b7ee-45be-9481-2c5adbbd0a74">
+        <File Id="Content_Menu_background_title_shadow.xnb" Name="background_title_shadow.xnb" Source="$(var.ZombustersWindows_TargetDir)Content\Menu\background_title_shadow.xnb" />
+      </Component>
+      <Component Id="Content_Menu_buynow.xnb" Guid="f639c205-8d21-421c-91e2-20b1ccc7e69c">
+        <File Id="Content_Menu_buynow.xnb" Name="buynow.xnb" Source="$(var.ZombustersWindows_TargetDir)Content\Menu\buynow.xnb" />
+      </Component>
+      <Component Id="Content_Menu_colorBlockBigBlue.xnb" Guid="680c0419-57ab-4d9b-b3a3-c3deac9d3d46">
+        <File Id="Content_Menu_colorBlockBigBlue.xnb" Name="colorBlockBigBlue.xnb" Source="$(var.ZombustersWindows_TargetDir)Content\Menu\colorBlockBigBlue.xnb" />
+      </Component>
+      <Component Id="Content_Menu_colorBlockBigGreen.xnb" Guid="f8c64e0b-4cf6-4b9f-a9cd-852d296cd34c">
+        <File Id="Content_Menu_colorBlockBigGreen.xnb" Name="colorBlockBigGreen.xnb" Source="$(var.ZombustersWindows_TargetDir)Content\Menu\colorBlockBigGreen.xnb" />
+      </Component>
+      <Component Id="Content_Menu_colorBlockBigRed.xnb" Guid="505ab1ff-8b23-4a04-b29a-5ebb6e69d8e2">
+        <File Id="Content_Menu_colorBlockBigRed.xnb" Name="colorBlockBigRed.xnb" Source="$(var.ZombustersWindows_TargetDir)Content\Menu\colorBlockBigRed.xnb" />
+      </Component>
+      <Component Id="Content_Menu_colorBlockBigYellow.xnb" Guid="4c087a96-dfa4-4c51-8fb6-879e8479210c">
+        <File Id="Content_Menu_colorBlockBigYellow.xnb" Name="colorBlockBigYellow.xnb" Source="$(var.ZombustersWindows_TargetDir)Content\Menu\colorBlockBigYellow.xnb" />
+      </Component>
+      <Component Id="Content_Menu_colorBlockBlue.xnb" Guid="b232c7a8-9200-42cb-b049-d6d75d7b0faa">
+        <File Id="Content_Menu_colorBlockBlue.xnb" Name="colorBlockBlue.xnb" Source="$(var.ZombustersWindows_TargetDir)Content\Menu\colorBlockBlue.xnb" />
+      </Component>
+      <Component Id="Content_Menu_colorBlockGreen.xnb" Guid="780b2f51-ed15-4949-8bb5-79f9153c43d5">
+        <File Id="Content_Menu_colorBlockGreen.xnb" Name="colorBlockGreen.xnb" Source="$(var.ZombustersWindows_TargetDir)Content\Menu\colorBlockGreen.xnb" />
+      </Component>
+      <Component Id="Content_Menu_colorBlockRed.xnb" Guid="6b3b965a-5961-4d46-b95a-1023a7a22dbe">
+        <File Id="Content_Menu_colorBlockRed.xnb" Name="colorBlockRed.xnb" Source="$(var.ZombustersWindows_TargetDir)Content\Menu\colorBlockRed.xnb" />
+      </Component>
+      <Component Id="Content_Menu_colorBlockYellow.xnb" Guid="4dfca233-90a1-4e43-a5ce-6807e548366e">
+        <File Id="Content_Menu_colorBlockYellow.xnb" Name="colorBlockYellow.xnb" Source="$(var.ZombustersWindows_TargetDir)Content\Menu\colorBlockYellow.xnb" />
+      </Component>
+      <Component Id="Content_Menu_connected_icon.xnb" Guid="666082be-f9d1-4cb6-9b8f-59c5fc642165">
+        <File Id="Content_Menu_connected_icon.xnb" Name="connected_icon.xnb" Source="$(var.ZombustersWindows_TargetDir)Content\Menu\connected_icon.xnb" />
+      </Component>
+      <Component Id="Content_Menu_controllerInd_menu_P1.xnb" Guid="9bac6c0e-ebaf-4892-8820-b7378dd63cc0">
+        <File Id="Content_Menu_controllerInd_menu_P1.xnb" Name="controllerInd_menu_P1.xnb" Source="$(var.ZombustersWindows_TargetDir)Content\Menu\controllerInd_menu_P1.xnb" />
+      </Component>
+      <Component Id="Content_Menu_controllerInd_menu_P2.xnb" Guid="6ad3aed7-2986-4c0a-81af-557c4aa9626b">
+        <File Id="Content_Menu_controllerInd_menu_P2.xnb" Name="controllerInd_menu_P2.xnb" Source="$(var.ZombustersWindows_TargetDir)Content\Menu\controllerInd_menu_P2.xnb" />
+      </Component>
+      <Component Id="Content_Menu_controllerInd_menu_P3.xnb" Guid="0bbf8248-06e8-416f-b30c-a58977072d5c">
+        <File Id="Content_Menu_controllerInd_menu_P3.xnb" Name="controllerInd_menu_P3.xnb" Source="$(var.ZombustersWindows_TargetDir)Content\Menu\controllerInd_menu_P3.xnb" />
+      </Component>
+      <Component Id="Content_Menu_controllerInd_menu_P4.xnb" Guid="c858241c-15e1-41ee-a9de-39cb98675e7c">
+        <File Id="Content_Menu_controllerInd_menu_P4.xnb" Name="controllerInd_menu_P4.xnb" Source="$(var.ZombustersWindows_TargetDir)Content\Menu\controllerInd_menu_P4.xnb" />
+      </Component>
+      <Component Id="Content_Menu_DigitBig.xnb" Guid="71cde3c0-3fec-4d39-a104-32f93fa45022">
+        <File Id="Content_Menu_DigitBig.xnb" Name="DigitBig.xnb" Source="$(var.ZombustersWindows_TargetDir)Content\Menu\DigitBig.xnb" />
+      </Component>
+      <Component Id="Content_Menu_DigitLow.xnb" Guid="6fb8eb1b-a22a-42a6-a285-41070e765c8e">
+        <File Id="Content_Menu_DigitLow.xnb" Name="DigitLow.xnb" Source="$(var.ZombustersWindows_TargetDir)Content\Menu\DigitLow.xnb" />
+      </Component>
+      <Component Id="Content_Menu_facebook_64x64.xnb" Guid="13188326-c72d-4ab1-8cc7-177967cd4a9b">
+        <File Id="Content_Menu_facebook_64x64.xnb" Name="facebook-64x64.xnb" Source="$(var.ZombustersWindows_TargetDir)Content\Menu\facebook-64x64.xnb" />
+      </Component>
+      <Component Id="Content_Menu_goBackButton.xnb" Guid="e8a75de7-e3e2-4b78-ace3-2eb434a8b345">
+        <File Id="Content_Menu_goBackButton.xnb" Name="goBackButton.xnb" Source="$(var.ZombustersWindows_TargetDir)Content\Menu\goBackButton.xnb" />
+      </Component>
+      <Component Id="Content_Menu_google_64x64.xnb" Guid="c86ac378-794c-4def-b81c-b05fb8b93c44">
+        <File Id="Content_Menu_google_64x64.xnb" Name="google-64x64.xnb" Source="$(var.ZombustersWindows_TargetDir)Content\Menu\google-64x64.xnb" />
+      </Component>
+      <Component Id="Content_Menu_grayBlock.xnb" Guid="b5eb23b4-98a4-47ce-9762-2ca88f69fef8">
+        <File Id="Content_Menu_grayBlock.xnb" Name="grayBlock.xnb" Source="$(var.ZombustersWindows_TargetDir)Content\Menu\grayBlock.xnb" />
+      </Component>
+      <Component Id="Content_Menu_grayBlockShort.xnb" Guid="1669dd89-d96d-4f93-9a0f-70f64a3dc7f7">
+        <File Id="Content_Menu_grayBlockShort.xnb" Name="grayBlockShort.xnb" Source="$(var.ZombustersWindows_TargetDir)Content\Menu\grayBlockShort.xnb" />
+      </Component>
+      <Component Id="Content_Menu_HTP_WP_header_image.xnb" Guid="1fb5b16a-a735-4a0b-a1cb-a204b1b7fe8c">
+        <File Id="Content_Menu_HTP_WP_header_image.xnb" Name="HTP_WP_header_image.xnb" Source="$(var.ZombustersWindows_TargetDir)Content\Menu\HTP_WP_header_image.xnb" />
+      </Component>
+      <Component Id="Content_Menu_linea_lobby_players_selected.xnb" Guid="ffb23e73-eb13-4cd6-8d5d-0bb3d0f0c2ce">
+        <File Id="Content_Menu_linea_lobby_players_selected.xnb" Name="linea_lobby_players_selected.xnb" Source="$(var.ZombustersWindows_TargetDir)Content\Menu\linea_lobby_players_selected.xnb" />
+      </Component>
+      <Component Id="Content_Menu_linea_menu.xnb" Guid="4ad029c9-1d13-456f-b8d1-d756e54e2bd0">
+        <File Id="Content_Menu_linea_menu.xnb" Name="linea_menu.xnb" Source="$(var.ZombustersWindows_TargetDir)Content\Menu\linea_menu.xnb" />
+      </Component>
+      <Component Id="Content_Menu_linea_texto_menu.xnb" Guid="ae2f21d2-a472-449f-8599-3e5eeac702a4">
+        <File Id="Content_Menu_linea_texto_menu.xnb" Name="linea_texto_menu.xnb" Source="$(var.ZombustersWindows_TargetDir)Content\Menu\linea_texto_menu.xnb" />
+      </Component>
+      <Component Id="Content_Menu_loadingSpiral.xnb" Guid="0aee0370-c185-4f07-8897-fc53246f94c0">
+        <File Id="Content_Menu_loadingSpiral.xnb" Name="loadingSpiral.xnb" Source="$(var.ZombustersWindows_TargetDir)Content\Menu\loadingSpiral.xnb" />
+      </Component>
+      <Component Id="Content_Menu_loading_bkg.xnb" Guid="79ea504a-265d-479e-8eea-32907027a12d">
+        <File Id="Content_Menu_loading_bkg.xnb" Name="loading_bkg.xnb" Source="$(var.ZombustersWindows_TargetDir)Content\Menu\loading_bkg.xnb" />
+      </Component>
+      <Component Id="Content_Menu_lobby_header_image.xnb" Guid="857b2122-550d-4445-a749-a5608f464000">
+        <File Id="Content_Menu_lobby_header_image.xnb" Name="lobby_header_image.xnb" Source="$(var.ZombustersWindows_TargetDir)Content\Menu\lobby_header_image.xnb" />
+      </Component>
+      <Component Id="Content_Menu_logo_menu.xnb" Guid="4e0f5782-124d-47d6-9d21-2c5d11fe7269">
+        <File Id="Content_Menu_logo_menu.xnb" Name="logo_menu.xnb" Source="$(var.ZombustersWindows_TargetDir)Content\Menu\logo_menu.xnb" />
+      </Component>
+      <Component Id="Content_Menu_logo_retrowax_menu.xnb" Guid="0e9a9ad4-8eec-40d8-81e2-c9eede6df485">
+        <File Id="Content_Menu_logo_retrowax_menu.xnb" Name="logo_retrowax_menu.xnb" Source="$(var.ZombustersWindows_TargetDir)Content\Menu\logo_retrowax_menu.xnb" />
+      </Component>
+      <Component Id="Content_Menu_menufont.xnb" Guid="6f9ec29e-3ab6-4c04-93ab-98235c417258">
+        <File Id="Content_Menu_menufont.xnb" Name="menufont.xnb" Source="$(var.ZombustersWindows_TargetDir)Content\Menu\menufont.xnb" />
+      </Component>
+      <Component Id="Content_Menu_menufont2.xnb" Guid="3de354d8-5a3b-433a-a958-cebd37b076c0">
+        <File Id="Content_Menu_menufont2.xnb" Name="menufont2.xnb" Source="$(var.ZombustersWindows_TargetDir)Content\Menu\menufont2.xnb" />
+      </Component>
+      <Component Id="Content_Menu_mygroup_bkg.xnb" Guid="933b96ec-16c8-4765-b99e-0b61da5cf92d">
+        <File Id="Content_Menu_mygroup_bkg.xnb" Name="mygroup_bkg.xnb" Source="$(var.ZombustersWindows_TargetDir)Content\Menu\mygroup_bkg.xnb" />
+      </Component>
+      <Component Id="Content_Menu_notLoggedInGamerPicture.xnb" Guid="397126e7-0a5d-4b24-bfec-d4570b9371a8">
+        <File Id="Content_Menu_notLoggedInGamerPicture.xnb" Name="notLoggedInGamerPicture.xnb" Source="$(var.ZombustersWindows_TargetDir)Content\Menu\notLoggedInGamerPicture.xnb" />
+      </Component>
+      <Component Id="Content_Menu_saveAnimation.xnb" Guid="a1646d6b-7330-4d36-abd7-faec5217e774">
+        <File Id="Content_Menu_saveAnimation.xnb" Name="saveAnimation.xnb" Source="$(var.ZombustersWindows_TargetDir)Content\Menu\saveAnimation.xnb" />
+      </Component>
+      <Component Id="Content_Menu_speechbubbleWP.xnb" Guid="437b2ac9-f8b3-492c-a7ec-0e265ffcc773">
+        <File Id="Content_Menu_speechbubbleWP.xnb" Name="speechbubbleWP.xnb" Source="$(var.ZombustersWindows_TargetDir)Content\Menu\speechbubbleWP.xnb" />
+      </Component>
+      <Component Id="Content_Menu_square_empty.xnb" Guid="df6fb04d-1ebc-4324-b2cf-aa8939b3c510">
+        <File Id="Content_Menu_square_empty.xnb" Name="square_empty.xnb" Source="$(var.ZombustersWindows_TargetDir)Content\Menu\square_empty.xnb" />
+      </Component>
+      <Component Id="Content_Menu_square_filled.xnb" Guid="9c546696-fb4e-4f07-9961-607474ba4a52">
+        <File Id="Content_Menu_square_filled.xnb" Name="square_filled.xnb" Source="$(var.ZombustersWindows_TargetDir)Content\Menu\square_filled.xnb" />
+      </Component>
+      <Component Id="Content_Menu_submit_button_mobile.xnb" Guid="e59baee3-8ddc-47e3-9a4d-c4a9c3315329">
+        <File Id="Content_Menu_submit_button_mobile.xnb" Name="submit_button_mobile.xnb" Source="$(var.ZombustersWindows_TargetDir)Content\Menu\submit_button_mobile.xnb" />
+      </Component>
+      <Component Id="Content_Menu_twitter_64x64.xnb" Guid="fbd11705-05dd-4fd3-b1d1-5aeb8d259bcf">
+        <File Id="Content_Menu_twitter_64x64.xnb" Name="twitter-64x64.xnb" Source="$(var.ZombustersWindows_TargetDir)Content\Menu\twitter-64x64.xnb" />
+      </Component>
+    </ComponentGroup>
+  </Fragment>
+
+  <Fragment>
+    <ComponentGroup Id="Content_SoundFX_files" Directory="Content_SoundFX">
+      <Component Id="Content_SoundFX_critedu.xnb" Guid="b054b338-da46-49df-9cbc-a6da7d344d18">
+        <File Id="Content_SoundFX_critedu.xnb" Name="critedu.xnb" Source="$(var.ZombustersWindows_TargetDir)Content\SoundFX\critedu.xnb" />
+      </Component>
+      <Component Id="Content_SoundFX_engine_2.xnb" Guid="924c483d-c363-4834-9bbb-9e58d0a423ef">
+        <File Id="Content_SoundFX_engine_2.xnb" Name="engine_2.xnb" Source="$(var.ZombustersWindows_TargetDir)Content\SoundFX\engine_2.xnb" />
+      </Component>
+      <Component Id="Content_SoundFX_explosion1.xnb" Guid="41ee414f-08c2-4576-af27-e31b489fe758">
+        <File Id="Content_SoundFX_explosion1.xnb" Name="explosion1.xnb" Source="$(var.ZombustersWindows_TargetDir)Content\SoundFX\explosion1.xnb" />
+      </Component>
+      <Component Id="Content_SoundFX_explosion3.xnb" Guid="fdde9cee-76aa-458d-bbf3-fca8d99902ab">
+        <File Id="Content_SoundFX_explosion3.xnb" Name="explosion3.xnb" Source="$(var.ZombustersWindows_TargetDir)Content\SoundFX\explosion3.xnb" />
+      </Component>
+      <Component Id="Content_SoundFX_flamethrower.xnb" Guid="440acc89-209c-4d80-9028-5210cf957bdf">
+        <File Id="Content_SoundFX_flamethrower.xnb" Name="flamethrower.xnb" Source="$(var.ZombustersWindows_TargetDir)Content\SoundFX\flamethrower.xnb" />
+      </Component>
+      <Component Id="Content_SoundFX_LogoSplashSound.xnb" Guid="feca2088-dc26-4009-ab21-8cc19d67cdb5">
+        <File Id="Content_SoundFX_LogoSplashSound.xnb" Name="LogoSplashSound.xnb" Source="$(var.ZombustersWindows_TargetDir)Content\SoundFX\LogoSplashSound.xnb" />
+      </Component>
+      <Component Id="Content_SoundFX_machinegun.xnb" Guid="b54c1864-42d5-4c18-bc96-e63dd6813704">
+        <File Id="Content_SoundFX_machinegun.xnb" Name="machinegun.xnb" Source="$(var.ZombustersWindows_TargetDir)Content\SoundFX\machinegun.xnb" />
+      </Component>
+      <Component Id="Content_SoundFX_pistol_shot.xnb" Guid="986450f4-9ff0-4cd0-9aff-56a440d61235">
+        <File Id="Content_SoundFX_pistol_shot.xnb" Name="pistol_shot.xnb" Source="$(var.ZombustersWindows_TargetDir)Content\SoundFX\pistol_shot.xnb" />
+      </Component>
+      <Component Id="Content_SoundFX_tx0_fire1.xnb" Guid="729c3b70-fd3f-4df3-b043-5f18b4a90ec4">
+        <File Id="Content_SoundFX_tx0_fire1.xnb" Name="tx0_fire1.xnb" Source="$(var.ZombustersWindows_TargetDir)Content\SoundFX\tx0_fire1.xnb" />
+      </Component>
+      <Component Id="Content_SoundFX_womanscream.xnb" Guid="7366d491-6bc6-472f-bf84-1be195191981">
+        <File Id="Content_SoundFX_womanscream.xnb" Name="womanscream.xnb" Source="$(var.ZombustersWindows_TargetDir)Content\SoundFX\womanscream.xnb" />
+      </Component>
+      <Component Id="Content_SoundFX_zombiedying.xnb" Guid="12016250-3279-4669-95f5-c6b644f17b8d">
+        <File Id="Content_SoundFX_zombiedying.xnb" Name="zombiedying.xnb" Source="$(var.ZombustersWindows_TargetDir)Content\SoundFX\zombiedying.xnb" />
+      </Component>
+    </ComponentGroup>
+  </Fragment>
+
+  <Fragment>
+    <ComponentGroup Id="Content_UI_files" Directory="Content_UI">
+      <Component Id="Content_UI_gameplay_gui_stats.xnb" Guid="597317ba-42ca-479e-a76a-5353bc1b3269">
+        <File Id="Content_UI_gameplay_gui_stats.xnb" Name="gameplay_gui_stats.xnb" Source="$(var.ZombustersWindows_TargetDir)Content\UI\gameplay_gui_stats.xnb" />
+      </Component>
+      <Component Id="Content_UI_gamerpicture_border.xnb" Guid="a58c5d9b-7e97-4e4c-bac1-7a750f8939d4">
+        <File Id="Content_UI_gamerpicture_border.xnb" Name="gamerpicture_border.xnb" Source="$(var.ZombustersWindows_TargetDir)Content\UI\gamerpicture_border.xnb" />
+      </Component>
+      <Component Id="Content_UI_gui_player_blue.xnb" Guid="f07b8507-d316-4048-a0d7-a9a8e2c573af">
+        <File Id="Content_UI_gui_player_blue.xnb" Name="gui_player_blue.xnb" Source="$(var.ZombustersWindows_TargetDir)Content\UI\gui_player_blue.xnb" />
+      </Component>
+      <Component Id="Content_UI_gui_player_green.xnb" Guid="8986170a-b2e5-4edd-b4fd-271f33a8a427">
+        <File Id="Content_UI_gui_player_green.xnb" Name="gui_player_green.xnb" Source="$(var.ZombustersWindows_TargetDir)Content\UI\gui_player_green.xnb" />
+      </Component>
+      <Component Id="Content_UI_gui_player_red.xnb" Guid="39e2240d-3c5e-4a3b-9753-abc013577777">
+        <File Id="Content_UI_gui_player_red.xnb" Name="gui_player_red.xnb" Source="$(var.ZombustersWindows_TargetDir)Content\UI\gui_player_red.xnb" />
+      </Component>
+      <Component Id="Content_UI_gui_player_yellow.xnb" Guid="1dbaed58-44ff-4614-8b7f-29d01947441e">
+        <File Id="Content_UI_gui_player_yellow.xnb" Name="gui_player_yellow.xnb" Source="$(var.ZombustersWindows_TargetDir)Content\UI\gui_player_yellow.xnb" />
+      </Component>
+      <Component Id="Content_UI_gui_stats_bkg_blue.xnb" Guid="cc88dee6-d994-4330-89bb-99bef278db60">
+        <File Id="Content_UI_gui_stats_bkg_blue.xnb" Name="gui_stats_bkg_blue.xnb" Source="$(var.ZombustersWindows_TargetDir)Content\UI\gui_stats_bkg_blue.xnb" />
+      </Component>
+      <Component Id="Content_UI_gui_stats_bkg_green.xnb" Guid="d2ebcf53-3e5a-4d78-b37b-9692163a2996">
+        <File Id="Content_UI_gui_stats_bkg_green.xnb" Name="gui_stats_bkg_green.xnb" Source="$(var.ZombustersWindows_TargetDir)Content\UI\gui_stats_bkg_green.xnb" />
+      </Component>
+      <Component Id="Content_UI_gui_stats_bkg_red.xnb" Guid="a2aae384-f4fe-43f5-b5bc-f713627b443d">
+        <File Id="Content_UI_gui_stats_bkg_red.xnb" Name="gui_stats_bkg_red.xnb" Source="$(var.ZombustersWindows_TargetDir)Content\UI\gui_stats_bkg_red.xnb" />
+      </Component>
+      <Component Id="Content_UI_gui_stats_bkg_yellow.xnb" Guid="ef1eb041-d6fd-46f5-9c47-6453b9a40405">
+        <File Id="Content_UI_gui_stats_bkg_yellow.xnb" Name="gui_stats_bkg_yellow.xnb" Source="$(var.ZombustersWindows_TargetDir)Content\UI\gui_stats_bkg_yellow.xnb" />
+      </Component>
+      <Component Id="Content_UI_left_thumbstick.xnb" Guid="d5e76ae2-9461-4e01-a753-4c680dc523f2">
+        <File Id="Content_UI_left_thumbstick.xnb" Name="left_thumbstick.xnb" Source="$(var.ZombustersWindows_TargetDir)Content\UI\left_thumbstick.xnb" />
+      </Component>
+      <Component Id="Content_UI_pause_iconWP.xnb" Guid="6aabd90b-31d8-4ac1-8989-8be683c63a4b">
+        <File Id="Content_UI_pause_iconWP.xnb" Name="pause_iconWP.xnb" Source="$(var.ZombustersWindows_TargetDir)Content\UI\pause_iconWP.xnb" />
+      </Component>
+      <Component Id="Content_UI_right_thumbstick.xnb" Guid="8d819384-3663-40f3-be76-5707d1ea01f1">
+        <File Id="Content_UI_right_thumbstick.xnb" Name="right_thumbstick.xnb" Source="$(var.ZombustersWindows_TargetDir)Content\UI\right_thumbstick.xnb" />
+      </Component>
+    </ComponentGroup>
+  </Fragment>
+
+  <Fragment>
+    <ComponentGroup Id="Content_Music_files" Directory="Content_Music">
+      <Component Id="Content_Music_BareWires_DancingOnADime.ogg" Guid="e9b667a4-b22c-49dd-8e5c-f6e41e40b0be">
+        <File Id="Content_Music_BareWires_DancingOnADime.ogg" Name="BareWires_DancingOnADime.ogg" Source="$(var.ZombustersWindows_TargetDir)Content\Music\BareWires_DancingOnADime.ogg" />
+      </Component>
+      <Component Id="Content_Music_BlackMath_HighDive.ogg" Guid="de6f803b-9de2-4785-a245-80dabb2099fb">
+        <File Id="Content_Music_BlackMath_HighDive.ogg" Name="BlackMath_HighDive.ogg" Source="$(var.ZombustersWindows_TargetDir)Content\Music\BlackMath_HighDive.ogg" />
+      </Component>
+      <Component Id="Content_Music_BlackMath_SuckCity.ogg" Guid="63d9da79-59b4-49d2-a97d-bdc4ea2d6257">
+        <File Id="Content_Music_BlackMath_SuckCity.ogg" Name="BlackMath_SuckCity.ogg" Source="$(var.ZombustersWindows_TargetDir)Content\Music\BlackMath_SuckCity.ogg" />
+      </Component>
+      <Component Id="Content_Music_BradSucks_BadAttraction.ogg" Guid="6ae46adc-9bc2-4094-8548-d992172597c4">
+        <File Id="Content_Music_BradSucks_BadAttraction.ogg" Name="BradSucks_BadAttraction.ogg" Source="$(var.ZombustersWindows_TargetDir)Content\Music\BradSucks_BadAttraction.ogg" />
+      </Component>
+      <Component Id="Content_Music_BradSucks_UnderstoodByYourDad.ogg" Guid="5f6125c8-4b20-46f3-b2ae-439dec87264f">
+        <File Id="Content_Music_BradSucks_UnderstoodByYourDad.ogg" Name="BradSucks_UnderstoodByYourDad.ogg" Source="$(var.ZombustersWindows_TargetDir)Content\Music\BradSucks_UnderstoodByYourDad.ogg" />
+      </Component>
+      <Component Id="Content_Music_Kraus_Wolfram.ogg" Guid="ee7195f3-9bf2-4f3a-8b99-1f5893513ade">
+        <File Id="Content_Music_Kraus_Wolfram.ogg" Name="Kraus_Wolfram.ogg" Source="$(var.ZombustersWindows_TargetDir)Content\Music\Kraus_Wolfram.ogg" />
+      </Component>
+      <Component Id="Content_Music_LondonToTokyo_HighGround.ogg" Guid="82b856a3-4d9b-483e-baa3-d54c41a5d97f">
+        <File Id="Content_Music_LondonToTokyo_HighGround.ogg" Name="LondonToTokyo_HighGround.ogg" Source="$(var.ZombustersWindows_TargetDir)Content\Music\LondonToTokyo_HighGround.ogg" />
+      </Component>
+      <Component Id="Content_Music_NuitNoire_OpeningThePortal.ogg" Guid="eb06d25e-dadd-4f91-8f44-36c8f1d5258e">
+        <File Id="Content_Music_NuitNoire_OpeningThePortal.ogg" Name="NuitNoire_OpeningThePortal.ogg" Source="$(var.ZombustersWindows_TargetDir)Content\Music\NuitNoire_OpeningThePortal.ogg" />
+      </Component>
+      <Component Id="Content_Music_TheBlackBug_IDontLikeYou.ogg" Guid="7ec34002-6fb1-4a93-a6a2-36e0cf2fd2ba">
+        <File Id="Content_Music_TheBlackBug_IDontLikeYou.ogg" Name="TheBlackBug_IDontLikeYou.ogg" Source="$(var.ZombustersWindows_TargetDir)Content\Music\TheBlackBug_IDontLikeYou.ogg" />
+      </Component>
+      <Component Id="Content_Music_TheItchyCreeps_ITHOTM.ogg" Guid="a1394124-9879-48e5-bf14-373e2124f56a">
+        <File Id="Content_Music_TheItchyCreeps_ITHOTM.ogg" Name="TheItchyCreeps_ITHOTM.ogg" Source="$(var.ZombustersWindows_TargetDir)Content\Music\TheItchyCreeps_ITHOTM.ogg" />
+      </Component>
+      <Component Id="Content_Music_ThisCo_AsYouKnow.ogg" Guid="d2459901-7ea8-4f81-9f54-68279760dcc6">
+        <File Id="Content_Music_ThisCo_AsYouKnow.ogg" Name="ThisCo_AsYouKnow.ogg" Source="$(var.ZombustersWindows_TargetDir)Content\Music\ThisCo_AsYouKnow.ogg" />
+      </Component>
+      <Component Id="Content_Music_ThisCo_TakeItAway.ogg" Guid="be16b80a-3bd3-4dd4-85f9-b77560b460b1">
+        <File Id="Content_Music_ThisCo_TakeItAway.ogg" Name="ThisCo_TakeItAway.ogg" Source="$(var.ZombustersWindows_TargetDir)Content\Music\ThisCo_TakeItAway.ogg" />
+      </Component>
+    </ComponentGroup>
+  </Fragment>
+</Wix>
