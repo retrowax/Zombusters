@@ -55,8 +55,8 @@ It's planned to have newer versions available any time soon.
 
 If you want to build this project, this is what you are going to need:
 
-* Visual Studio Community 2013 (Visual C#)
-* Monogame 3.0
+* Visual Studio Community 2017 (Visual C#)
+* Monogame 3.6
 
 
 A bit of history
@@ -72,12 +72,12 @@ The code released is not the original (that included all the code for other plat
 Roadmap
 -------
 
-Ok, it's been 5 years... as developers we evolve and a project with 5 years could be painful to manage, and more if there is no SOLID principles in it... this project is in that point.
+Ok, it's been 6 years... as developers we evolve and a project with 6 years could be painful to manage, and more if there is no SOLID principles in it... this project is in that point.
 
-To celebrate these 5 years we would like to make an special version that enhances it; and publish it sometime into Steam... so there is a lot of work to do:
+To celebrate these 6 years we would like to make an special version that enhances it; and publish it sometime into Steam... so there is a lot of work to do:
 
+* Automate builds and package generation. (CI) :heavy_check_mark:
 * Refactor and Clean code. Apply SOLID principles at least.
-* Automate builds and package generation. (CI)
 * Update to latest version of Monogame.
 * Improve controls.
 * Improve scenes, remove blocking spots.
@@ -88,6 +88,8 @@ To celebrate these 5 years we would like to make an special version that enhance
 * Add achievements.
 * Multiplayer.
 
+(:heavy_check_mark: all marked with this symbol are "done / completed")
+
 
 Who made this
 --------------
@@ -96,7 +98,7 @@ Who made this
 |---
 | [Ferran Pons](https://github.com/ferranpons)
 
-Hi! I'm Ferran Pons; a Senior Android Developer that works for Schibsted Spain developing the Vibbo application. With almost 12 years of experience as a programmer, my experience covers a lot of different kind of applications, from web app development to the desktop, mobile apps and videogames. I've participated in some blockbuster games such as Burnout Paradise, DeadSpace and the Skate franchise. Also I've tried to start up my own indie videogame studio, labeled "Retrowax Games" with which I've made this game that it's published for the Xbox360 and Windows Phone and PC Windows.
+Hi! I'm Ferran Pons; a Senior Android Developer that works for Schibsted Spain developing the Vibbo application. With almost 15 years of experience as a programmer, my experience covers a lot of different kind of applications, from web app development to the desktop, mobile apps and videogames. I've participated in some blockbuster games such as Burnout Paradise, DeadSpace and the Skate franchise. Also I've tried to start up my own indie videogame studio, labeled "Retrowax Games" with which I've made this game that it's published for the Xbox360 and Windows Phone and PC Windows.
 
 
 Bugs and Feedback
