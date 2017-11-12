@@ -1,19 +1,59 @@
+sudo: required
 language: csharp
 solution: ZombustersWindows.sln
+#services:
+#  - docker
+
 before_install:
+  - wget https://dl.itch.ovh/butler/linux-amd64/head/butler
   - wget http://www.monogame.net/releases/v3.6/monogame-sdk.run
   - find * -type f -exec chmod 777 {} \; # lazy just make all executable
+
+  #- docker pull suchja/wix WIX Not needed for now
+
 install:
+  # Install Monogame and dependencies
   # Extracted from http://community.monogame.net/t/running-monogame-sdk-run-on-linux-without-confirmation-travis-ci/9567
   - sudo apt-get install gtk-sharp3
   - sudo apt-get install libopenal-dev referenceassemblies-pcl ttf-mscorefonts-installer
-
   - echo y | sudo ./monogame-sdk.run
-
   - nuget restore
+
+  # Install Butler
+  - cp ./butler ~/bin
+  - export PATH="$PATH:~/bin"
+
+  # Install NUnit for Tests
   #- nuget install NUnit.Runners -Version 2.6.4 -OutputDirectory testrunner
+
+  # Intall Wine
+  #- ./travis/install_wine.sh
+  #- sudo apt-get install wine
 script:
   - find * -type f -exec chmod 777 {} \;
-  - msbuild /p:Configuration=Release
+  - msbuild /t:ZombustersWindows /p:Configuration=Release
+
+  # Tests
   #- mono ./testrunner/NUnit.Runners.2.6.4/tools/nunit-console.exe ./MonoGameSample.UnitTests/bin/Debug/MonoGameSample.UnitTests.dll
   #- (cd ZombustersWindows/Content && mono /opt/monogame-pipeline/MGCB.exe /rebuild /@:"Content.mgcb" /outputDir:"../bin/Release/Content")
+
+deploy:
+  - provider: script
+    script:
+      - zip -r zombusters_windows.zip /home/travis/build/retrowax/Zombusters/ZombustersWindows/bin/Windows/Release/
+      - ~/bin/butler -V
+      - ~/bin/butler login
+      - ~/bin/butler push zombusters_windows.zip retrowax/zombusters:windows
+    on:
+      tags: true
+    skip_cleanup: true
+
+  - provider: script
+    script:
+      - zip -r zombusters_windows.zip /home/travis/build/retrowax/Zombusters/ZombustersWindows/bin/Windows/Release/
+      - ~/bin/butler -V
+      - ~/bin/butler login
+      - ~/bin/butler push zombusters_windows.zip retrowax/zombusters:windows-beta
+    on:
+      branch: master
+    skip_cleanup: true
