@@ -4,7 +4,6 @@ solution: ZombustersWindows.sln
 services:
   - docker
 before_install:
-  - wget https://dl.itch.ovh/butler/linux-386/head/butler
   - wget http://www.monogame.net/releases/v3.6/monogame-sdk.run
   - find * -type f -exec chmod 777 {} \; # lazy just make all executable
   #- docker pull suchja/wix WIX Not needed for now
@@ -26,9 +25,12 @@ script:
   # path where build /home/travis/build/retrowax/Zombusters/ZombustersWindows/bin/Windows/Release/ZombustersWindows.exe
 
   - zip -r zombusters_windows.zip /home/travis/build/retrowax/Zombusters/ZombustersWindows/bin/Windows/Release/
-  - ./butler/butler -V
-  - ./butler/butler login
-  - ./butler/butler push zombusters_windows.zip retrowax/zombusters:windows-beta
+
+  # Deploy
+  - wget https://dl.itch.ovh/butler/linux-386/head/butler
+  - ./butler -V
+  - ./butler login
+  - ./butler push zombusters_windows.zip retrowax/zombusters:windows-beta
 
   #- mono ./testrunner/NUnit.Runners.2.6.4/tools/nunit-console.exe ./MonoGameSample.UnitTests/bin/Debug/MonoGameSample.UnitTests.dll
   #- (cd ZombustersWindows/Content && mono /opt/monogame-pipeline/MGCB.exe /rebuild /@:"Content.mgcb" /outputDir:"../bin/Release/Content")
