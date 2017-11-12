@@ -25,10 +25,10 @@ script:
   - msbuild /t:ZombustersWindows /p:Configuration=Release
   # path where build /home/travis/build/retrowax/Zombusters/ZombustersWindows/bin/Windows/Release/ZombustersWindows.exe
 
-  - zip -r zombusters_windows.zip ./retrowax/Zombusters/ZombustersWindows/bin/Windows/Release/
-  - butler -V
-  - butler login
-  - butler push zombusters_windows.zip retrowax/zombusters:windows-beta
+  - zip -r zombusters_windows.zip /home/travis/build/retrowax/Zombusters/ZombustersWindows/bin/Windows/Release/
+  - ./butler -V
+  - ./butler login
+  - ./butler push zombusters_windows.zip retrowax/zombusters:windows-beta
 
   #- mono ./testrunner/NUnit.Runners.2.6.4/tools/nunit-console.exe ./MonoGameSample.UnitTests/bin/Debug/MonoGameSample.UnitTests.dll
   #- (cd ZombustersWindows/Content && mono /opt/monogame-pipeline/MGCB.exe /rebuild /@:"Content.mgcb" /outputDir:"../bin/Release/Content")
