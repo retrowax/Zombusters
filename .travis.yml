@@ -33,6 +33,7 @@ script:
   - find * -type f -exec chmod 777 {} \;
   - msbuild /t:ZombustersWindows /p:Configuration=Release
 
+  - ./travis/beta.sh
   # Tests
   #- mono ./testrunner/NUnit.Runners.2.6.4/tools/nunit-console.exe ./MonoGameSample.UnitTests/bin/Debug/MonoGameSample.UnitTests.dll
   #- (cd ZombustersWindows/Content && mono /opt/monogame-pipeline/MGCB.exe /rebuild /@:"Content.mgcb" /outputDir:"../bin/Release/Content")
@@ -40,20 +41,14 @@ script:
 deploy:
   - provider: script
     script:
-      - zip -r zombusters_windows.zip /home/travis/build/retrowax/Zombusters/ZombustersWindows/bin/Windows/Release/
-      - ~/bin/butler -V
-      - ~/bin/butler login
-      - ~/bin/butler push zombusters_windows.zip retrowax/zombusters:windows
+      ./travis/release.sh
     on:
       tags: true
     skip_cleanup: true
 
   - provider: script
     script:
-      - zip -r zombusters_windows.zip /home/travis/build/retrowax/Zombusters/ZombustersWindows/bin/Windows/Release/
-      - ~/bin/butler -V
-      - ~/bin/butler login
-      - ~/bin/butler push zombusters_windows.zip retrowax/zombusters:windows-beta
+      ./travis/beta.sh
     on:
       branch: master
     skip_cleanup: true
