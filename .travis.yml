@@ -4,6 +4,7 @@ solution: ZombustersWindows.sln
 services:
   - docker
 before_install:
+  - wget https://dl.itch.ovh/butler/linux-amd64/head/butler
   - wget http://www.monogame.net/releases/v3.6/monogame-sdk.run
   - find * -type f -exec chmod 777 {} \; # lazy just make all executable
   #- docker pull suchja/wix WIX Not needed for now
@@ -16,6 +17,8 @@ install:
   - echo y | sudo ./monogame-sdk.run
 
   - nuget restore
+
+  - export PATH="$PATH:~/bin"
   #- nuget install NUnit.Runners -Version 2.6.4 -OutputDirectory testrunner
   #- ./travis/install_wine.sh
   #- sudo apt-get install wine
@@ -27,7 +30,6 @@ script:
   - zip -r zombusters_windows.zip /home/travis/build/retrowax/Zombusters/ZombustersWindows/bin/Windows/Release/
 
   # Deploy
-  - wget https://dl.itch.ovh/butler/linux-386/head/butler
   - sudo butler -V
   - sudo butler login
   - sudo butler push zombusters_windows.zip retrowax/zombusters:windows-beta
