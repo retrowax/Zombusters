@@ -40,20 +40,14 @@ script:
 deploy:
   - provider: script
     script:
-      - zip -r zombusters_windows.zip /home/travis/build/retrowax/Zombusters/ZombustersWindows/bin/Windows/Release/
-      - ~/bin/butler -V
-      - ~/bin/butler login
-      - ~/bin/butler push zombusters_windows.zip retrowax/zombusters:windows
+      ./travis/release.sh
     on:
       tags: true
     skip_cleanup: true
 
   - provider: script
     script:
-      - zip -r zombusters_windows.zip /home/travis/build/retrowax/Zombusters/ZombustersWindows/bin/Windows/Release/
-      - ~/bin/butler -V
-      - ~/bin/butler login
-      - ~/bin/butler push zombusters_windows.zip retrowax/zombusters:windows-beta
+      ./travis/beta.sh
     on:
       branch: master
     skip_cleanup: true
