@@ -28,9 +28,9 @@ script:
 
   # Deploy
   - wget https://dl.itch.ovh/butler/linux-386/head/butler
-  - sudo sh ./butler -V
-  - sudo sh ./butler login
-  - sudo sh ./butler push zombusters_windows.zip retrowax/zombusters:windows-beta
+  - sudo butler -V
+  - sudo butler login
+  - sudo butler push zombusters_windows.zip retrowax/zombusters:windows-beta
 
   #- mono ./testrunner/NUnit.Runners.2.6.4/tools/nunit-console.exe ./MonoGameSample.UnitTests/bin/Debug/MonoGameSample.UnitTests.dll
   #- (cd ZombustersWindows/Content && mono /opt/monogame-pipeline/MGCB.exe /rebuild /@:"Content.mgcb" /outputDir:"../bin/Release/Content")
