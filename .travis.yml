@@ -8,6 +8,7 @@ before_install:
   - wget http://www.monogame.net/releases/v3.6/monogame-sdk.run
   - find * -type f -exec chmod 777 {} \; # lazy just make all executable
   #- docker pull suchja/wix WIX Not needed for now
+  - cp ./butler ~/bin
 
 install:
   # Extracted from http://community.monogame.net/t/running-monogame-sdk-run-on-linux-without-confirmation-travis-ci/9567
