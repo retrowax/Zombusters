@@ -7,8 +7,9 @@ before_install:
   - wget https://dl.itch.ovh/butler/linux-amd64/head/butler
   - wget http://www.monogame.net/releases/v3.6/monogame-sdk.run
   - find * -type f -exec chmod 777 {} \; # lazy just make all executable
-  #- docker pull suchja/wix WIX Not needed for now
+
   - cp ./butler ~/bin
+  #- docker pull suchja/wix WIX Not needed for now
 
 install:
   # Extracted from http://community.monogame.net/t/running-monogame-sdk-run-on-linux-without-confirmation-travis-ci/9567
@@ -31,9 +32,9 @@ script:
   - zip -r zombusters_windows.zip /home/travis/build/retrowax/Zombusters/ZombustersWindows/bin/Windows/Release/
 
   # Deploy
-  - sudo butler -V
-  - sudo butler login
-  - sudo butler push zombusters_windows.zip retrowax/zombusters:windows-beta
+  - sudo ~/bin/butler -V
+  - ~/bin/butler login
+  - ~/bin/butler push zombusters_windows.zip retrowax/zombusters:windows-beta
 
   #- mono ./testrunner/NUnit.Runners.2.6.4/tools/nunit-console.exe ./MonoGameSample.UnitTests/bin/Debug/MonoGameSample.UnitTests.dll
   #- (cd ZombustersWindows/Content && mono /opt/monogame-pipeline/MGCB.exe /rebuild /@:"Content.mgcb" /outputDir:"../bin/Release/Content")
