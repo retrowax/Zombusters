@@ -675,4 +675,7 @@ vie ou de nouvelles armes.</value>
   <data name="RateThisAppTitle" xml:space="preserve">
     <value>Noter cette app</value>
   </data>
+  <data name="FullScreenMenuString" xml:space="preserve">
+    <value>Basculer en mode plein écran</value>
+  </data>
 </root>
