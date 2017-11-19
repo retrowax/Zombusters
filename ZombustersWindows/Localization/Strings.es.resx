@@ -760,4 +760,7 @@ conseguir vidas extras o nuevas armas.</value>
   <data name="RateThisAppTitle" xml:space="preserve">
     <value>Valora esta App</value>
   </data>
+  <data name="FullScreenMenuString" xml:space="preserve">
+    <value>Alternar el modo de pantalla completa</value>
+  </data>
 </root>

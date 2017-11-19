@@ -162,6 +162,7 @@ namespace ZombustersWindows
             //menu.AddText("Player Control Scheme");
             menu.AddText(Strings.SoundEffectVolumeString);
             menu.AddText(Strings.MusicVolumeString);
+            menu.AddText(Strings.FullScreenMenuString);
             menu.AddText(Strings.SaveAndExitString);
 
             menu.MenuOptionSelected += new EventHandler<MenuSelection>(menu_MenuOptionSelected);
@@ -215,7 +216,11 @@ namespace ZombustersWindows
 
         void menu_MenuOptionSelected(Object sender, MenuSelection selection)
         {
-            if (menu.Selection == 2)  // Save and Exit
+            if (menu.Selection == 2)
+            {
+                ((MyGame)this.ScreenManager.Game).graphics.ToggleFullScreen();
+            }
+            else if (menu.Selection == 3)  // Save and Exit
             {
                 ExitScreen();
                 if (GamePad.GetState(PlayerIndex.One).IsButtonDown(Buttons.A))

@@ -675,4 +675,7 @@ Raccogli le ricariche per ottenere vite extra o nuove Armi.</value>
   <data name="RateThisAppTitle" xml:space="preserve">
     <value>Vota questa applicazione</value>
   </data>
+  <data name="FullScreenMenuString" xml:space="preserve">
+    <value>Attiva la modalità a schermo intero</value>
+  </data>
 </root>

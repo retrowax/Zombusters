@@ -674,4 +674,7 @@ Sammle Powerups um Extraleben und neue Waffen zu erhalten.</value>
   <data name="RateThisAppTitle" xml:space="preserve">
     <value>Dieses App</value>
   </data>
+  <data name="FullScreenModeString" xml:space="preserve">
+    <value>Vollbildmodus umschalten</value>
+  </data>
 </root>

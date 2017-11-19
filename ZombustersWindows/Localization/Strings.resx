@@ -742,8 +742,8 @@ or a new Weapon.</value>
   <data name="WPTip" xml:space="preserve">
     <value>Tip:</value>
   </data>
-  <data name="FullScreenString" xml:space="preserve">
-    <value>Fullscreen</value>
+  <data name="FullScreenMenuString" xml:space="preserve">
+    <value>Toggle full screen mode</value>
   </data>
   <data name="PCExplanationString" xml:space="preserve">
     <value>Use A,S,D,W or Arrows to move your character.
