@@ -218,38 +218,38 @@ namespace ZombustersWindows
         {
             if (menu.Selection == 2)
             {
-                ((MyGame)this.ScreenManager.Game).graphics.ToggleFullScreen();
+                this.Game.graphics.ToggleFullScreen();
             }
             else if (menu.Selection == 3)  // Save and Exit
             {
                 ExitScreen();
                 if (GamePad.GetState(PlayerIndex.One).IsButtonDown(Buttons.A))
                 {
-                    Game.SetOptions(state, ((MyGame)this.ScreenManager.Game).Main);
+                    Game.SetOptions(state, this.Game.Main);
                 }
                 else if (GamePad.GetState(PlayerIndex.Two).IsButtonDown(Buttons.A))
                 {
-                    Game.SetOptions(state, ((MyGame)this.ScreenManager.Game).Player2);
+                    Game.SetOptions(state, this.Game.Player2);
                 }
                 else if (GamePad.GetState(PlayerIndex.Three).IsButtonDown(Buttons.A))
                 {
-                    Game.SetOptions(state, ((MyGame)this.ScreenManager.Game).Player3);
+                    Game.SetOptions(state, this.Game.Player3);
                 }
                 else if (GamePad.GetState(PlayerIndex.Four).IsButtonDown(Buttons.A))
                 {
-                    Game.SetOptions(state, ((MyGame)this.ScreenManager.Game).Player4);
+                    Game.SetOptions(state, this.Game.Player4);
                 }
-                Game.SetOptions(state, ((MyGame)this.ScreenManager.Game).Main);
+                Game.SetOptions(state, this.Game.Main);
             }
         }
         
         public override void LoadContent()
         {
             //Linea blanca separatoria
-            lineaMenu = this.ScreenManager.Game.Content.Load<Texture2D>(@"menu/linea_menu");
+            lineaMenu = this.Game.Content.Load<Texture2D>(@"menu/linea_menu");
 
             //Logo Menu
-            logoMenu = this.ScreenManager.Game.Content.Load<Texture2D>(@"menu/logo_menu");
+            logoMenu = this.Game.Content.Load<Texture2D>(@"menu/logo_menu");
 
             volumeSlider.LoadContent();
             musicSlider.LoadContent();
@@ -323,7 +323,7 @@ namespace ZombustersWindows
 
             // Let the menu handle input regarding selection change
             // and the A/B/Back buttons:
-            if (((MyGame)this.Game).Main.Options != InputMode.Touch)
+            if (this.Game.Main.Options != InputMode.Touch)
             {
                 menu.HandleInput(input);
             }
@@ -371,7 +371,7 @@ namespace ZombustersWindows
                         (gesture.Position.Y >= 614 && gesture.Position.Y <= 650))
                     {
                         ExitScreen();
-                        Game.SetOptions(state, ((MyGame)this.ScreenManager.Game).Main);
+                        Game.SetOptions(state, this.Game.Main);
                     }
 
                     // Exit without Saving
