@@ -8,6 +8,7 @@ using ZombustersWindows.Subsystem_Managers;
 using Microsoft.Xna.Framework.Input.Touch;
 using ZombustersWindows.MainScreens;
 using ZombustersWindows.Localization;
+using Bugsnag.Clients;
 //using Steamworks;
 
 namespace ZombustersWindows
@@ -105,6 +106,8 @@ namespace ZombustersWindows
         public bool isInMenu = false;
         SpriteFont MenuInfoFont;
 
+        public BaseClient BugSnagClient;
+
         public MyGame() {
             graphics = new GraphicsDeviceManager(this);
             graphics.PreferredBackBufferWidth = 1280;
@@ -146,6 +149,9 @@ namespace ZombustersWindows
             musicComponent = new MusicComponent(this);
             Components.Add(musicComponent);
             musicComponent.Enabled = true;
+
+            BugSnagClient = new BaseClient("1cad9818fb8d84290d776245cd1f948d");
+            BugSnagClient.StartAutoNotify();
         }
 
         protected override void Initialize() {

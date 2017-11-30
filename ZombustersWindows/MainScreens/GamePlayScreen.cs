@@ -218,7 +218,7 @@ namespace ZombustersWindows
             int i;
             Zombies = new List<ZombieState>();
             Tanks = new List<TankState>();
-            random = new Random();
+            this.random = new Random(16);
             float RandomX;
             float RandomY;
             int RandomSpawnZone;
@@ -351,10 +351,10 @@ namespace ZombustersWindows
 
             for (i = 0; i < Level.subLevelList[subLevelIndex].enemies.Zombies; i++)
             {
-                RandomSpawnZone = random.Next(0, howManySpawnZones - 1);
-                RandomX = random.Next(Convert.ToInt32(Level.ZombieSpawnZones[RandomSpawnZone].X), Convert.ToInt32(Level.ZombieSpawnZones[RandomSpawnZone].Y));
-                RandomY = random.Next(Convert.ToInt32(Level.ZombieSpawnZones[RandomSpawnZone].Z), Convert.ToInt32(Level.ZombieSpawnZones[RandomSpawnZone].W));
-                Zombies.Add(new ZombieState(game.Content.Load<Texture2D>(@"InGame/zombie1"), new Vector2(0, 0), new Vector2(RandomX, RandomY), 5.0f, zombielife, speed));
+                RandomSpawnZone = this.random.Next(0, howManySpawnZones - 1);
+                RandomX = this.random.Next(Convert.ToInt32(Level.ZombieSpawnZones[RandomSpawnZone].X), Convert.ToInt32(Level.ZombieSpawnZones[RandomSpawnZone].Y));
+                RandomY = this.random.Next(Convert.ToInt32(Level.ZombieSpawnZones[RandomSpawnZone].Z), Convert.ToInt32(Level.ZombieSpawnZones[RandomSpawnZone].W));
+                Zombies.Add(new ZombieState(game.Content.Load<Texture2D>(@"InGame/zombie" + this.random.Next(1, 6).ToString()), new Vector2(0, 0), new Vector2(RandomX, RandomY), 5.0f, zombielife, speed));
                 Zombies[i].behaviors.AddBehavior(new Pursuit(Arrive.Deceleration.fast, 50.0f));
                 Zombies[i].behaviors.AddBehavior(new ObstacleAvoidance(ref Level.gameWorld, 15.0f));
                 Zombies[i].playerChased = numplayersIngame[random.Next(numplayersIngame.Count)];
@@ -364,9 +364,9 @@ namespace ZombustersWindows
 
             for (i = 0; i < Level.subLevelList[subLevelIndex].enemies.Tanks; i++)
             {
-                RandomSpawnZone = random.Next(0, howManySpawnZones - 1);
-                RandomX = random.Next(Convert.ToInt32(Level.ZombieSpawnZones[RandomSpawnZone].X), Convert.ToInt32(Level.ZombieSpawnZones[RandomSpawnZone].Y));
-                RandomY = random.Next(Convert.ToInt32(Level.ZombieSpawnZones[RandomSpawnZone].Z), Convert.ToInt32(Level.ZombieSpawnZones[RandomSpawnZone].W));
+                RandomSpawnZone = this.random.Next(0, howManySpawnZones - 1);
+                RandomX = this.random.Next(Convert.ToInt32(Level.ZombieSpawnZones[RandomSpawnZone].X), Convert.ToInt32(Level.ZombieSpawnZones[RandomSpawnZone].Y));
+                RandomY = this.random.Next(Convert.ToInt32(Level.ZombieSpawnZones[RandomSpawnZone].Z), Convert.ToInt32(Level.ZombieSpawnZones[RandomSpawnZone].W));
                 Tanks.Add(new TankState(game.Content.Load<Texture2D>(@"InGame/tank"), new Vector2(0, 0), new Vector2(RandomX, RandomY), 5.0f));
                 Tanks[i].behaviors.AddBehavior(new Pursuit(Arrive.Deceleration.fast, 50.0f));
                 Tanks[i].behaviors.AddBehavior(new ObstacleAvoidance(ref Level.gameWorld, 15.0f));
@@ -1694,10 +1694,10 @@ namespace ZombustersWindows
         {
 
 
-            if (random.Next(1, 16) == 8)
+            if (this.random.Next(1, 16) == 8)
             {
                 //int r = random.Next(0, 8);
-                int r = random.Next(0, 3);
+                int r = this.random.Next(0, 3);
                 switch (r)
                 {
                     case 0: // Live
@@ -2372,6 +2372,7 @@ namespace ZombustersWindows
             float zombielife, speed;
             float lIndex = 0.8f;
             CFurnitureComparer furnitureComparer = new CFurnitureComparer();
+            this.random = new Random(16);
 
             if (!restartLevel)
             {
@@ -2555,28 +2556,28 @@ namespace ZombustersWindows
 
                 for (i = 0; i < Level.subLevelList[subLevelIndex].enemies.Zombies; i++)
                 {
-                    RandomSpawnZone = random.Next(0, howManySpawnZones - 1);
-                    RandomX = random.Next(Convert.ToInt32(Level.ZombieSpawnZones[RandomSpawnZone].X), Convert.ToInt32(Level.ZombieSpawnZones[RandomSpawnZone].Y));
-                    RandomY = random.Next(Convert.ToInt32(Level.ZombieSpawnZones[RandomSpawnZone].Z), Convert.ToInt32(Level.ZombieSpawnZones[RandomSpawnZone].W));
+                    RandomSpawnZone = this.random.Next(0, howManySpawnZones - 1);
+                    RandomX = this.random.Next(Convert.ToInt32(Level.ZombieSpawnZones[RandomSpawnZone].X), Convert.ToInt32(Level.ZombieSpawnZones[RandomSpawnZone].Y));
+                    RandomY = this.random.Next(Convert.ToInt32(Level.ZombieSpawnZones[RandomSpawnZone].Z), Convert.ToInt32(Level.ZombieSpawnZones[RandomSpawnZone].W));
                     float subspeed = subLevelIndex / 10;
-                    Zombies.Add(new ZombieState(game.Content.Load<Texture2D>(@"InGame/zombie1"), new Vector2(0, 0), new Vector2(RandomX, RandomY), 5.0f, zombielife, speed + subspeed));
+                    Zombies.Add(new ZombieState(game.Content.Load<Texture2D>(@"InGame/zombie" + this.random.Next(1, 6).ToString()), new Vector2(0, 0), new Vector2(RandomX, RandomY), 5.0f, zombielife, speed + subspeed));
                     Zombies[i].behaviors.AddBehavior(new Pursuit(Arrive.Deceleration.fast, 50.0f));
                     Zombies[i].behaviors.AddBehavior(new ObstacleAvoidance(ref Level.gameWorld, 15.0f));
 
-                    Zombies[i].playerChased = numplayersIngame[random.Next(numplayersIngame.Count)];
+                    Zombies[i].playerChased = numplayersIngame[this.random.Next(numplayersIngame.Count)];
                     ActiveZombies++;
                 }
 
                 for (i = 0; i < Level.subLevelList[subLevelIndex].enemies.Tanks; i++)
                 {
-                    RandomSpawnZone = random.Next(0, howManySpawnZones - 1);
-                    RandomX = random.Next(Convert.ToInt32(Level.ZombieSpawnZones[RandomSpawnZone].X), Convert.ToInt32(Level.ZombieSpawnZones[RandomSpawnZone].Y));
-                    RandomY = random.Next(Convert.ToInt32(Level.ZombieSpawnZones[RandomSpawnZone].Z), Convert.ToInt32(Level.ZombieSpawnZones[RandomSpawnZone].W));
+                    RandomSpawnZone = this.random.Next(0, howManySpawnZones - 1);
+                    RandomX = this.random.Next(Convert.ToInt32(Level.ZombieSpawnZones[RandomSpawnZone].X), Convert.ToInt32(Level.ZombieSpawnZones[RandomSpawnZone].Y));
+                    RandomY = this.random.Next(Convert.ToInt32(Level.ZombieSpawnZones[RandomSpawnZone].Z), Convert.ToInt32(Level.ZombieSpawnZones[RandomSpawnZone].W));
                     Tanks.Add(new TankState(game.Content.Load<Texture2D>(@"InGame/tank"), new Vector2(0, 0), new Vector2(RandomX, RandomY), 5.0f));
                     Tanks[i].behaviors.AddBehavior(new Pursuit(Arrive.Deceleration.fast, 50.0f));
                     Tanks[i].behaviors.AddBehavior(new ObstacleAvoidance(ref Level.gameWorld, 15.0f));
 
-                    Zombies[i].playerChased = numplayersIngame[random.Next(numplayersIngame.Count)];
+                    Zombies[i].playerChased = numplayersIngame[this.random.Next(numplayersIngame.Count)];
                     ActiveTanks++;
                 }
 
