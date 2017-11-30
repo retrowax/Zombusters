@@ -406,12 +406,12 @@ namespace ZombustersWindows
             player.Options = state.Player;
             player.optionsState = state;
             audio.SetOptions(state.FXLevel, state.MusicLevel);
-            player.saveOptions();
+            player.SaveOptions();
         }
 
         public void LoadOptions(Player player) {
-            player.loadOptions();
-            player.loadLeaderBoard();
+            player.LoadOptions();
+            player.LoadLeaderBoard();
         }
 
         #endregion

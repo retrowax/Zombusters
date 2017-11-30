@@ -1,18 +1,13 @@
 ﻿#region File Description
 //-----------------------------------------------------------------------------
-// Game1.cs
-//
-// Microsoft XNA Community Game Platform
-// Copyright (C) Microsoft Corporation. All rights reserved.
+// Player.cs
 //-----------------------------------------------------------------------------
 #endregion
 
 using System;
 using Microsoft.Xna.Framework;
-
 using Microsoft.Xna.Framework.Graphics;
 using System.IO;
-//using Microsoft.Xna.Framework.Storage;
 using System.Xml.Serialization;
 using System.IO.IsolatedStorage;
 
@@ -20,12 +15,14 @@ namespace ZombustersWindows
 {
     public class Player
     {
+        private static string OPTIONS_FILENAME = "options.xml";
+        private static string LEADERBOARD_FILENAME = "leaderboard.txt";
+        private static string SAVE_GAME_FILENAME = "savegame.sav";
+
         public bool IsPlaying;
         public PlayerIndex Controller;
         public bool IsRemote;
         public InputMode Options;
-        //public StorageDevice Device;
-        //public StorageContainer Container;
         public OptionsState optionsState;
         public AudioManager audioManager;
         public bool isReady;
@@ -34,9 +31,6 @@ namespace ZombustersWindows
         private MyGame game;
         public Texture2D gamerPicture;
         private string name;
-        string optionsFilename = "options.xml";
-        string leaderBoardFilename = "leaderboard.txt";
-        string saveGameFilename = "savegame.sav";
 
         public string Name
         {
@@ -89,13 +83,13 @@ namespace ZombustersWindows
         #endregion
 
 
-        public void saveGame(int currentLevelNumber)
+        public void SaveGame(int currentLevelNumber)
         {
             IsolatedStorageFile isolatedStorageFile = IsolatedStorageFile.GetUserStoreForDomain();
             try
             {
                 IsolatedStorageFileStream isolatedFileStream = null;
-                using (isolatedFileStream = isolatedStorageFile.OpenFile(saveGameFilename, FileMode.OpenOrCreate, FileAccess.ReadWrite))
+                using (isolatedFileStream = isolatedStorageFile.OpenFile(SAVE_GAME_FILENAME, FileMode.OpenOrCreate, FileAccess.ReadWrite))
                 {
                     SaveGameData data = new SaveGameData();
                     data.PlayerName = game.currentPlayers[0].Player.Name;
@@ -108,8 +102,9 @@ namespace ZombustersWindows
                 }
                 isolatedFileStream.FlushAsync();
             }
-            catch (Exception)
+            catch (Exception exception)
             {
+                game.BugSnagClient.Notify(exception);
             }
             finally
             {
@@ -120,13 +115,13 @@ namespace ZombustersWindows
             }
         }
 
-        public void loadSavedGame()
+        public void LoadSavedGame()
         {
             IsolatedStorageFile isolatedStorageFile = IsolatedStorageFile.GetUserStoreForDomain();
             try
             {
                 IsolatedStorageFileStream isolatedFileStream = null;
-                using (isolatedFileStream = isolatedStorageFile.OpenFile(saveGameFilename, FileMode.Open, FileAccess.Read))
+                using (isolatedFileStream = isolatedStorageFile.OpenFile(SAVE_GAME_FILENAME, FileMode.Open, FileAccess.Read))
                 {
                     XmlSerializer serializer = new XmlSerializer(typeof(SaveGameData));
                     SaveGameData data = (SaveGameData)serializer.Deserialize(isolatedFileStream);
@@ -134,8 +129,9 @@ namespace ZombustersWindows
                 }
                 isolatedFileStream.FlushAsync();
             }
-            catch (Exception)
+            catch (Exception exception)
             {
+                game.BugSnagClient.Notify(exception);
             }
             finally
             {
@@ -146,21 +142,24 @@ namespace ZombustersWindows
             }
         }
 
-        public void saveOptions()
+        public void SaveOptions()
         {
             IsolatedStorageFile isolatedStorageFile = IsolatedStorageFile.GetUserStoreForDomain();
             try
             {
                 IsolatedStorageFileStream isolatedFileStream = null;
-                using (isolatedFileStream = isolatedStorageFile.OpenFile(saveGameFilename, FileMode.OpenOrCreate, FileAccess.ReadWrite))
+                using (isolatedFileStream = isolatedStorageFile.OpenFile(OPTIONS_FILENAME, FileMode.OpenOrCreate, FileAccess.ReadWrite))
                 {
                     XmlSerializer serializer = new XmlSerializer(typeof(OptionsState));
                     serializer.Serialize(isolatedFileStream, optionsState);
                 }
                 isolatedFileStream.FlushAsync();
-            } catch (Exception)
+            }
+            catch (Exception exception)
             {
-            } finally
+                game.BugSnagClient.Notify(exception);
+            }
+            finally
             {
                 if (isolatedStorageFile != null)
                 {
@@ -169,12 +168,12 @@ namespace ZombustersWindows
             }
         }
 
-        public void loadOptions()
+        public void LoadOptions()
         {
             IsolatedStorageFile isolatedStorageFile = IsolatedStorageFile.GetUserStoreForDomain();
-            if (isolatedStorageFile.FileExists(optionsFilename))
+            if (isolatedStorageFile.FileExists(OPTIONS_FILENAME))
             {
-                loadOptionsFromStorage(isolatedStorageFile);
+                LoadOptionsFromStorage(isolatedStorageFile);
             } 
             else
             {
@@ -186,26 +185,26 @@ namespace ZombustersWindows
             audioManager.SetOptions(optionsState.FXLevel, optionsState.MusicLevel); 
         }
 
-        public void loadLeaderBoard()
+        public void LoadLeaderBoard()
         {
             IsolatedStorageFile isolatedStorageFile = IsolatedStorageFile.GetUserStoreForDomain();
-            if (isolatedStorageFile.FileExists(leaderBoardFilename))
+            if (isolatedStorageFile.FileExists(LEADERBOARD_FILENAME))
             {
-                loadLeaderBoardsFromStorage(isolatedStorageFile);
+                LoadLeaderBoardsFromStorage(isolatedStorageFile);
             }
             else
             {
-                loadDefaultLeaderBoard();
+                LoadDefaultLeaderBoard();
             }
         }
 
-        public void saveLeaderBoard(int score)
+        public void SaveLeaderBoard(int score)
         {
             IsolatedStorageFile isolatedStorageFile = IsolatedStorageFile.GetUserStoreForDomain();
             try
             {
                 IsolatedStorageFileStream isolatedFileStream = null;
-                using (isolatedFileStream = isolatedStorageFile.OpenFile(leaderBoardFilename, FileMode.OpenOrCreate, FileAccess.ReadWrite))
+                using (isolatedFileStream = isolatedStorageFile.OpenFile(LEADERBOARD_FILENAME, FileMode.OpenOrCreate, FileAccess.ReadWrite))
                 {
                     TopScoreEntry entry = new TopScoreEntry(name, score);
                     game.mScores.addEntry(0, entry);
@@ -217,8 +216,9 @@ namespace ZombustersWindows
                 }
                 isolatedFileStream.FlushAsync();
             }
-            catch (Exception)
+            catch (Exception exception)
             {
+                game.BugSnagClient.Notify(exception);
             }
             finally
             {
@@ -229,7 +229,7 @@ namespace ZombustersWindows
             }
         }
 
-        private void loadDefaultLeaderBoard()
+        private void LoadDefaultLeaderBoard()
         {
             // Create a List and a fake list
             if (game != null)
@@ -295,12 +295,12 @@ namespace ZombustersWindows
             }
         }
 
-        private void loadLeaderBoardsFromStorage(IsolatedStorageFile isolatedStorageFile)
+        private void LoadLeaderBoardsFromStorage(IsolatedStorageFile isolatedStorageFile)
         {
             try
             {
                 IsolatedStorageFileStream isolatedFileStream = null;
-                using (isolatedFileStream = isolatedStorageFile.OpenFile(leaderBoardFilename, FileMode.Open, FileAccess.Read))
+                using (isolatedFileStream = isolatedStorageFile.OpenFile(LEADERBOARD_FILENAME, FileMode.Open, FileAccess.Read))
                 {
                     BinaryReader reader = new BinaryReader(isolatedFileStream);
                     if (game != null)
@@ -310,8 +310,9 @@ namespace ZombustersWindows
                 }
                 isolatedFileStream.FlushAsync();
             }
-            catch (Exception)
+            catch (Exception exception)
             {
+                game.BugSnagClient.Notify(exception);
             }
             finally
             {
@@ -322,20 +323,21 @@ namespace ZombustersWindows
             }
         }
 
-        private void loadOptionsFromStorage(IsolatedStorageFile isolatedStorageFile)
+        private void LoadOptionsFromStorage(IsolatedStorageFile isolatedStorageFile)
         {
             try
             {
                 IsolatedStorageFileStream isolatedFileStream = null;
-                using (isolatedFileStream = isolatedStorageFile.OpenFile(optionsFilename, FileMode.Open, FileAccess.Read))
+                using (isolatedFileStream = isolatedStorageFile.OpenFile(OPTIONS_FILENAME, FileMode.Open, FileAccess.Read))
                 {
                     XmlSerializer serializer = new XmlSerializer(typeof(OptionsState));
                     optionsState = (OptionsState)serializer.Deserialize(isolatedFileStream);
                 }
                 isolatedFileStream.FlushAsync();
             }
-            catch (Exception)
+            catch (Exception exception)
             {
+                game.BugSnagClient.Notify(exception);
             }
             finally
             {

@@ -111,7 +111,7 @@ namespace ZombustersWindows
             canStartGame = false;
             IsMMandHost = false;
 
-            ((MyGame)this.ScreenManager.Game).currentPlayers[0].Player.loadSavedGame();
+            ((MyGame)this.ScreenManager.Game).currentPlayers[0].Player.LoadSavedGame();
 
             // Nos aseguramos que no se queda marcado el flag de selección de personaje
             foreach (Avatar player in ((MyGame)this.ScreenManager.Game).currentPlayers)
