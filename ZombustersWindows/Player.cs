@@ -177,12 +177,19 @@ namespace ZombustersWindows
             } 
             else
             {
-                optionsState = new OptionsState();
-                optionsState.FXLevel = 0.7f;
-                optionsState.MusicLevel = 0.6f;
-                optionsState.Player = InputMode.Keyboard;
+                optionsState = new OptionsState
+                {
+                    FXLevel = 0.7f,
+                    MusicLevel = 0.6f,
+                    Player = InputMode.Keyboard,
+                    FullScreenMode = false
+                };
             }
-            audioManager.SetOptions(optionsState.FXLevel, optionsState.MusicLevel); 
+            audioManager.SetOptions(optionsState.FXLevel, optionsState.MusicLevel);
+            if (optionsState.FullScreenMode && game.graphics.IsFullScreen == false)
+            {
+                game.graphics.ToggleFullScreen();
+            }
         }
 
         public void LoadLeaderBoard()

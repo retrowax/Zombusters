@@ -118,7 +118,8 @@ namespace ZombustersWindows
     {
         public InputMode Player;
         public float FXLevel;
-        public float MusicLevel;        
+        public float MusicLevel;
+        public bool FullScreenMode;
     }
 
     public delegate void OptionsSet(OptionsState state);
@@ -218,6 +219,12 @@ namespace ZombustersWindows
         {
             if (menu.Selection == 2)
             {
+                if (state.FullScreenMode) {
+                    state.FullScreenMode = false;
+                } else
+                {
+                    state.FullScreenMode = true;
+                }
                 this.Game.graphics.ToggleFullScreen();
             }
             else if (menu.Selection == 3)  // Save and Exit

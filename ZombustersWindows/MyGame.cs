@@ -109,10 +109,12 @@ namespace ZombustersWindows
         public BaseClient BugSnagClient;
 
         public MyGame() {
-            graphics = new GraphicsDeviceManager(this);
-            graphics.PreferredBackBufferWidth = 1280;
-            graphics.PreferredBackBufferHeight = 720;
-            graphics.IsFullScreen = false;
+            graphics = new GraphicsDeviceManager(this)
+            {
+                PreferredBackBufferWidth = 1280,
+                PreferredBackBufferHeight = 720,
+                IsFullScreen = false
+            };
             Content.RootDirectory = "Content";
             options = new OptionsState();
             screenManager = new ScreenManager(this);
