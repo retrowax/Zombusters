@@ -1472,7 +1472,7 @@ namespace ZombustersWindows
                                     // Add Score Entry to the LeaderBoard
                                     if (game.mScores != null)
                                     {
-                                        player.Player.saveLeaderBoard(player.score);
+                                        player.Player.SaveLeaderBoard(player.score);
                                     }
 
                                 }
@@ -2185,8 +2185,8 @@ namespace ZombustersWindows
                 {
                     if (game.mScores != null && game.currentPlayers[0].score > 250)
                     {
-                        game.currentPlayers[0].Player.saveLeaderBoard(game.currentPlayers[0].score);
-                        game.currentPlayers[0].Player.saveGame(Level.getLevelNumber(currentLevel));
+                        game.currentPlayers[0].Player.SaveLeaderBoard(game.currentPlayers[0].score);
+                        game.currentPlayers[0].Player.SaveGame(Level.getLevelNumber(currentLevel));
                     }
                 }
             }
@@ -2416,7 +2416,7 @@ namespace ZombustersWindows
                         {
                             if (player.Player.IsPlaying)
                             {
-                                player.Player.saveGame(Level.getLevelNumber(currentLevel));
+                                player.Player.SaveGame(Level.getLevelNumber(currentLevel));
                             }
                         }
                     }
