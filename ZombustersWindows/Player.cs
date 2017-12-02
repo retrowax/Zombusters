@@ -50,10 +50,11 @@ namespace ZombustersWindows
             public int Level;
         }
 
-        public Player(OptionsState options, AudioManager audio)
+        public Player(OptionsState options, AudioManager audio, MyGame game)
         {
             this.optionsState = options;
             this.audioManager = audio;
+            this.game = game;
         }
 
         public void InitLocal(PlayerIndex controller, string name, InputMode options, MyGame game)
