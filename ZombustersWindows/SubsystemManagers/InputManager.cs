@@ -278,34 +278,22 @@ namespace ZombustersWindows
                 }
             }
 
-            if (IsSupported(
-                GamePad.GetCapabilities(PlayerIndex.One).GamePadType) &&
-                (GamePad.GetState(PlayerIndex.One).Buttons.Start 
-                == ButtonState.Pressed))
+            if (GamePad.GetState(PlayerIndex.One).Buttons.Start == ButtonState.Pressed)
             {
                 playerOne = PlayerIndex.One;
                 return true;
             }
-            if (IsSupported(
-                GamePad.GetCapabilities(PlayerIndex.Two).GamePadType) &&
-                (GamePad.GetState(PlayerIndex.Two).Buttons.Start 
-                == ButtonState.Pressed))
+            if (GamePad.GetState(PlayerIndex.Two).Buttons.Start == ButtonState.Pressed)
             {
                 playerOne = PlayerIndex.Two;
                 return true;
             }
-            if (IsSupported(
-                GamePad.GetCapabilities(PlayerIndex.Three).GamePadType) &&
-                (GamePad.GetState(PlayerIndex.Three).Buttons.Start 
-                == ButtonState.Pressed))
+            if (GamePad.GetState(PlayerIndex.Three).Buttons.Start == ButtonState.Pressed)
             {
                 playerOne = PlayerIndex.Three;
                 return true;
             }
-            if (IsSupported(
-                GamePad.GetCapabilities(PlayerIndex.Four).GamePadType) &&
-                (GamePad.GetState(PlayerIndex.Four).Buttons.Start 
-                == ButtonState.Pressed))
+            if (GamePad.GetState(PlayerIndex.Four).Buttons.Start == ButtonState.Pressed)
             {
                 playerOne = PlayerIndex.Four;
                 return true;

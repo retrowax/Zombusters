@@ -550,7 +550,7 @@ namespace ZombustersWindows
                         switch(player)
                         {
                             case 0:
-                                ((MyGame)this.ScreenManager.Game).Main = new Player(((MyGame)this.ScreenManager.Game).options, ((MyGame)this.ScreenManager.Game).audio);
+                                ((MyGame)this.ScreenManager.Game).Main = new Player(((MyGame)this.ScreenManager.Game).options, ((MyGame)this.ScreenManager.Game).audio, ((MyGame)this.ScreenManager.Game));
                                 ((MyGame)this.ScreenManager.Game).currentPlayers[player] = new Avatar();
                                 ((MyGame)this.ScreenManager.Game).currentPlayers[player].Initialize(((MyGame)this.ScreenManager.Game).GraphicsDevice.Viewport);
                                 ((MyGame)this.ScreenManager.Game).InitializeMain((PlayerIndex)player);
@@ -560,7 +560,7 @@ namespace ZombustersWindows
 
                                 break;
                             case 1:
-                                ((MyGame)this.ScreenManager.Game).Player2 = new Player(((MyGame)this.ScreenManager.Game).options, ((MyGame)this.ScreenManager.Game).audio);
+                                ((MyGame)this.ScreenManager.Game).Player2 = new Player(((MyGame)this.ScreenManager.Game).options, ((MyGame)this.ScreenManager.Game).audio, ((MyGame)this.ScreenManager.Game));
                                 ((MyGame)this.ScreenManager.Game).currentPlayers[player] = new Avatar();
                                 ((MyGame)this.ScreenManager.Game).currentPlayers[player].Initialize(((MyGame)this.ScreenManager.Game).GraphicsDevice.Viewport);
                                 ((MyGame)this.ScreenManager.Game).InitializeMain((PlayerIndex)player);
@@ -568,7 +568,7 @@ namespace ZombustersWindows
                                 ((MyGame)this.ScreenManager.Game).currentPlayers[player].Player.isReady = false;
                                 break;
                             case 2:
-                                ((MyGame)this.ScreenManager.Game).Player3 = new Player(((MyGame)this.ScreenManager.Game).options, ((MyGame)this.ScreenManager.Game).audio);
+                                ((MyGame)this.ScreenManager.Game).Player3 = new Player(((MyGame)this.ScreenManager.Game).options, ((MyGame)this.ScreenManager.Game).audio, ((MyGame)this.ScreenManager.Game));
                                 ((MyGame)this.ScreenManager.Game).currentPlayers[player] = new Avatar();
                                 ((MyGame)this.ScreenManager.Game).currentPlayers[player].Initialize(((MyGame)this.ScreenManager.Game).GraphicsDevice.Viewport);
                                 ((MyGame)this.ScreenManager.Game).InitializeMain((PlayerIndex)player);
@@ -576,7 +576,7 @@ namespace ZombustersWindows
                                 ((MyGame)this.ScreenManager.Game).currentPlayers[player].Player.isReady = false;
                                 break;
                             case 3:
-                                ((MyGame)this.ScreenManager.Game).Player4 = new Player(((MyGame)this.ScreenManager.Game).options, ((MyGame)this.ScreenManager.Game).audio);
+                                ((MyGame)this.ScreenManager.Game).Player4 = new Player(((MyGame)this.ScreenManager.Game).options, ((MyGame)this.ScreenManager.Game).audio, ((MyGame)this.ScreenManager.Game));
                                 ((MyGame)this.ScreenManager.Game).currentPlayers[player] = new Avatar();
                                 ((MyGame)this.ScreenManager.Game).currentPlayers[player].Initialize(((MyGame)this.ScreenManager.Game).GraphicsDevice.Viewport);
                                 ((MyGame)this.ScreenManager.Game).InitializeMain((PlayerIndex)player);
@@ -584,7 +584,7 @@ namespace ZombustersWindows
                                 ((MyGame)this.ScreenManager.Game).currentPlayers[player].Player.isReady = false;
                                 break;
                             default:
-                                ((MyGame)this.ScreenManager.Game).Main = new Player(((MyGame)this.ScreenManager.Game).options, ((MyGame)this.ScreenManager.Game).audio);
+                                ((MyGame)this.ScreenManager.Game).Main = new Player(((MyGame)this.ScreenManager.Game).options, ((MyGame)this.ScreenManager.Game).audio, ((MyGame)this.ScreenManager.Game));
                                 ((MyGame)this.ScreenManager.Game).currentPlayers[player] = new Avatar();
                                 ((MyGame)this.ScreenManager.Game).currentPlayers[player].Initialize(((MyGame)this.ScreenManager.Game).GraphicsDevice.Viewport);
                                 ((MyGame)this.ScreenManager.Game).InitializeMain((PlayerIndex)player);

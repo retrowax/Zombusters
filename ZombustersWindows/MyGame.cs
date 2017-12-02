@@ -134,10 +134,10 @@ namespace ZombustersWindows
             bloom.Settings = BloomSettings.PresetSettings[6];
             bloom.Visible = true;
             */
-            Main = new Player(options, audio);
-            Player2 = new Player(options, audio);
-            Player3 = new Player(options, audio);
-            Player4 = new Player(options, audio);
+            Main = new Player(options, audio, this);
+            Player2 = new Player(options, audio, this);
+            Player3 = new Player(options, audio, this);
+            Player4 = new Player(options, audio, this);
             CurrentNetworkSetting = 0;
             NoisedMap = new List<Texture2D>(4);
             rand = new Random(4);
