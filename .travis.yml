@@ -8,10 +8,15 @@ before_install:
   - wget https://dl.itch.ovh/butler/linux-amd64/head/butler
   - wget http://www.monogame.net/releases/v3.6/monogame-sdk.run
   - find * -type f -exec chmod 777 {} \; # lazy just make all executable
+  - wget https://gist.githubusercontent.com/ferranpons/1815fc02ffb744e7e06ccdabf42363da/raw/2d637e37e91131e075a4897abb98e1f7c240d443/twitterUpdate.py
+  - source version.properties
+  - export MAJOR MINOR PATCH
 
   #- docker pull suchja/wix WIX Not needed for now
 
 install:
+  - sudo pip install tweepy
+
   # Install Monogame and dependencies
   # Extracted from http://community.monogame.net/t/running-monogame-sdk-run-on-linux-without-confirmation-travis-ci/9567
   - sudo apt-get install gtk-sharp3
@@ -51,3 +56,6 @@ deploy:
     on:
       branch: master
     skip_cleanup: true
+
+after_deploy:
+  - ./travis/tweetAfterDeploy.sh
