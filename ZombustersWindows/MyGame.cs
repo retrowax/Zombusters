@@ -82,7 +82,7 @@ namespace ZombustersWindows
 
         public AudioManager audio;
         public InputManager input;
-        //public BloomComponent bloom;
+        public BloomComponent bloom;
         //int bloomSettingsIndex = 0;
         public String[] NetworkSettings = { "XBOX LIVE", "SYSTEM LINK" };
         public int CurrentNetworkSetting;
@@ -128,12 +128,12 @@ namespace ZombustersWindows
             //Bloom Component
             //REVISAR!!!
             //graphics.MinimumPixelShaderProfile = ShaderProfile.PS_2_0;            
-            /*
+            
             bloom = new BloomComponent(this);
             Components.Add(bloom);
             bloom.Settings = BloomSettings.PresetSettings[6];
             bloom.Visible = true;
-            */
+            
             Main = new Player(options, audio, this);
             Player2 = new Player(options, audio, this);
             Player3 = new Player(options, audio, this);

@@ -85,3 +85,21 @@
 /processorParam:Quality=Best
 /build:Music/ThisCo_TakeItAway.ogg
 
+#begin fx/BloomCombine.fx
+/importer:EffectImporter
+/processor:EffectProcessor
+/processorParam:DebugMode=Auto
+/build:fx/BloomCombine.fx
+
+#begin fx/BloomExtract.fx
+/importer:EffectImporter
+/processor:EffectProcessor
+/processorParam:DebugMode=Auto
+/build:fx/BloomExtract.fx
+
+#begin fx/GaussianBlur.fx
+/importer:EffectImporter
+/processor:EffectProcessor
+/processorParam:DebugMode=Auto
+/build:fx/GaussianBlur.fx
+

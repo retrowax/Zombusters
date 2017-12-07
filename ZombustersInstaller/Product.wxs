@@ -464,7 +464,7 @@
 
   <Fragment>
     <ComponentGroup Id="Content_fx_files" Directory="Content_fx">
-      <Component Id="Content_fx_BloomCombine.xnb" Guid="5295c0d7-ace1-4b64-989c-3f094a9cd6c9">
+      <!-- <Component Id="Content_fx_BloomCombine.xnb" Guid="5295c0d7-ace1-4b64-989c-3f094a9cd6c9">
         <File Id="Content_fx_BloomCombine.xnb" Name="BloomCombine.xnb" Source="$(var.ZombustersWindows_TargetDir)Content\fx\BloomCombine.xnb" />
       </Component>
       <Component Id="Content_fx_BloomExtract.xnb" Guid="c15196b6-215e-4cd0-89dd-1425dc6593fa">
@@ -472,7 +472,7 @@
       </Component>
       <Component Id="Content_fx_GaussianBlur.xnb" Guid="f5eac172-2535-4f15-ba01-7eaf13890a46">
         <File Id="Content_fx_GaussianBlur.xnb" Name="GaussianBlur.xnb" Source="$(var.ZombustersWindows_TargetDir)Content\fx\GaussianBlur.xnb" />
-      </Component>
+      </Component> -->
     </ComponentGroup>
   </Fragment>
 
