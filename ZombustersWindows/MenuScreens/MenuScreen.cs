@@ -336,7 +336,7 @@ namespace ZombustersWindows
             Color color = new Color(value, value, value, value);
             for (int i = 0; i < MenuItems.Count; i++) {
                 if (Selection == i) {
-                    if (((MyGame)this.Game).Main.Options != InputMode.Touch) {
+                    if (((MyGame)this.Game).player1.Options != InputMode.Touch) {
                         batch.DrawString(Font, MenuItems[i], new Vector2(current.X + 5, current.Y + 1), SelectedColor);
                         batch.Draw(lineaTextoMenu, current, color);
                     } else {
@@ -345,7 +345,7 @@ namespace ZombustersWindows
                         }
                     }
                 } else {
-                    if (((MyGame)this.Game).Main.Options != InputMode.Touch) {
+                    if (((MyGame)this.Game).player1.Options != InputMode.Touch) {
                         batch.DrawString(Font, MenuItems[i], new Vector2(current.X + 5, current.Y + 1), UnselectedColor);
                     } else {
                         if (MenuItems[i] != Strings.SaveAndExitString) {
@@ -401,7 +401,7 @@ namespace ZombustersWindows
             int spaceBetweenButtons = 30;
             if (inLobby == true) {
                 if (isHost) {
-                    if (((MyGame)this.Game).Main.Options == InputMode.Keyboard) {
+                    if (((MyGame)this.Game).player1.Options == InputMode.Keyboard) {
                         spaceBetweenButtonAndText = Convert.ToInt32(kbEnter.Width * 0.7f) + 5;
                         batch.Draw(kbEnter, position, null, Color.White, 0, Vector2.Zero, 0.7f, SpriteEffects.None, 1.0f);
                     } else {
@@ -412,7 +412,7 @@ namespace ZombustersWindows
                     distanceBetweenButtonsText = Convert.ToInt32(Font.MeasureString(Strings.StartGameMenuString).X) + spaceBetweenButtonAndText + spaceBetweenButtons;
                 }
 
-                if (((MyGame)this.Game).Main.Options == InputMode.Keyboard) {
+                if (((MyGame)this.Game).player1.Options == InputMode.Keyboard) {
                     spaceBetweenButtonAndText = Convert.ToInt32(kbEsc.Width * 0.7f) + 5;
                     batch.Draw(kbEsc, new Vector2(position.X + distanceBetweenButtonsText, position.Y), null, Color.White, 0, Vector2.Zero, 0.7f, SpriteEffects.None, 1.0f);
                 } else {
@@ -434,8 +434,8 @@ namespace ZombustersWindows
                 batch.DrawString(Font, Strings.PartyMenuString, new Vector2(position.X + spaceBetweenButtonAndText + distanceBetweenButtonsText, position.Y), Color.White);
                 distanceBetweenButtonsText = distanceBetweenButtonsText + Convert.ToInt32(Font.MeasureString(Strings.PartyMenuString).X) + spaceBetweenButtonAndText + spaceBetweenButtons;
             } else {
-                if (((MyGame)this.Game).Main.Options != InputMode.Touch) {
-                    if (((MyGame)this.Game).Main.Options == InputMode.Keyboard) {
+                if (((MyGame)this.Game).player1.Options != InputMode.Touch) {
+                    if (((MyGame)this.Game).player1.Options == InputMode.Keyboard) {
                         spaceBetweenButtonAndText = Convert.ToInt32(kbEnter.Width * 0.7f) + 5;
                         batch.Draw(kbEnter, position, null, Color.White, 0, Vector2.Zero, 0.7f, SpriteEffects.None, 1.0f);
                     } else {
@@ -447,11 +447,11 @@ namespace ZombustersWindows
                 }
 
                 if (!inMainMenu) {
-                    if (((MyGame)this.Game).Main.Options != InputMode.Touch) {
-                        if (((MyGame)this.Game).Main.Options == InputMode.Keyboard) {
+                    if (((MyGame)this.Game).player1.Options != InputMode.Touch) {
+                        if (((MyGame)this.Game).player1.Options == InputMode.Keyboard) {
                             spaceBetweenButtonAndText = Convert.ToInt32(kbEsc.Width * 0.7f) + 5;
                             batch.Draw(kbEsc, new Vector2(position.X + distanceBetweenButtonsText, position.Y), null, Color.White, 0, Vector2.Zero, 0.7f, SpriteEffects.None, 1.0f);
-                        } else if (((MyGame)this.Game).Main.Options == InputMode.GamePad) {
+                        } else if (((MyGame)this.Game).player1.Options == InputMode.GamePad) {
                             spaceBetweenButtonAndText = Convert.ToInt32(btnB.Width * 0.33f) + 5;
                             batch.Draw(btnB, new Vector2(position.X + distanceBetweenButtonsText, position.Y), null, Color.White, 0, Vector2.Zero, 0.33f, SpriteEffects.None, 1.0f);
                         }
@@ -473,8 +473,8 @@ namespace ZombustersWindows
             int spaceBetweenButtonAndText = 0;
             int spaceBetweenButtons = 30;
 
-            if (((MyGame)this.Game).Main.Options != InputMode.Touch) {
-                if (((MyGame)this.Game).Main.Options == InputMode.Keyboard) {
+            if (((MyGame)this.Game).player1.Options != InputMode.Touch) {
+                if (((MyGame)this.Game).player1.Options == InputMode.Keyboard) {
                     spaceBetweenButtonAndText = Convert.ToInt32(kbSpace.Width * 0.7f) + 5;
                     batch.Draw(kbSpace, position, null, Color.White, 0, Vector2.Zero, 0.7f, SpriteEffects.None, 1.0f);
                 } else {
@@ -485,7 +485,7 @@ namespace ZombustersWindows
                 distanceBetweenButtonsText = Convert.ToInt32(Font.MeasureString(Strings.SwitchReadyMenuString).X) + spaceBetweenButtonAndText + spaceBetweenButtons;
 
                 if (canStartGame && isHost) {
-                    if (((MyGame)this.Game).Main.Options == InputMode.Keyboard) {
+                    if (((MyGame)this.Game).player1.Options == InputMode.Keyboard) {
                         spaceBetweenButtonAndText = Convert.ToInt32(kbEnter.Width * 0.7f) + 5;
                         batch.Draw(kbEnter, new Vector2(position.X + distanceBetweenButtonsText, position.Y), null, Color.White, 0, Vector2.Zero, 0.7f, SpriteEffects.None, 1.0f);
                     } else {
@@ -496,7 +496,7 @@ namespace ZombustersWindows
                     distanceBetweenButtonsText = distanceBetweenButtonsText + Convert.ToInt32(Font.MeasureString(Strings.StartGameMenuString).X) + spaceBetweenButtonAndText + spaceBetweenButtons;
                 }
 
-                if (((MyGame)this.Game).Main.Options == InputMode.Keyboard) {
+                if (((MyGame)this.Game).player1.Options == InputMode.Keyboard) {
                     spaceBetweenButtonAndText = Convert.ToInt32(kbEsc.Width * 0.7f) + 5;
                     batch.Draw(kbEsc, new Vector2(position.X + distanceBetweenButtonsText, position.Y), null, Color.White, 0, Vector2.Zero, 0.7f, SpriteEffects.None, 1.0f);
                 } else {
@@ -506,7 +506,7 @@ namespace ZombustersWindows
                 batch.DrawString(Font, Strings.LeaveMenuString, new Vector2(position.X + spaceBetweenButtonAndText + distanceBetweenButtonsText, position.Y + 4), Color.White);
                 distanceBetweenButtonsText = distanceBetweenButtonsText + Convert.ToInt32(Font.MeasureString(Strings.LeaveMenuString).X) + spaceBetweenButtonAndText + spaceBetweenButtons;
 
-                if (((MyGame)this.Game).Main.Options == InputMode.Keyboard) {
+                if (((MyGame)this.Game).player1.Options == InputMode.Keyboard) {
                     spaceBetweenButtonAndText = Convert.ToInt32(kbLeft.Width * 0.7f) + Convert.ToInt32(kbRight.Width * 0.7f) + 5;
                     batch.Draw(kbLeft, new Vector2(position.X + distanceBetweenButtonsText, position.Y), null, Color.White, 0, Vector2.Zero, 0.7f, SpriteEffects.None, 1.0f);
                     batch.Draw(kbRight, new Vector2(position.X + Convert.ToInt32(kbLeft.Width * 0.7f) + distanceBetweenButtonsText, position.Y), null, Color.White, 0, Vector2.Zero, 0.7f, SpriteEffects.None, 1.0f);
@@ -543,8 +543,8 @@ namespace ZombustersWindows
             int spaceBetweenButtonAndText = 0;
             int spaceBetweenButtons = 30;
 
-            if (((MyGame)this.Game).Main.Options != InputMode.Touch) {
-                if (((MyGame)this.Game).Main.Options == InputMode.Keyboard) {
+            if (((MyGame)this.Game).player1.Options != InputMode.Touch) {
+                if (((MyGame)this.Game).player1.Options == InputMode.Keyboard) {
                     spaceBetweenButtonAndText = Convert.ToInt32(kbEnter.Width * 0.7f) + 5;
                     batch.Draw(kbEnter, position, null, Color.White, 0, Vector2.Zero, 0.7f, SpriteEffects.None, 1.0f);
                 } else {
@@ -553,7 +553,7 @@ namespace ZombustersWindows
                 }
                 batch.DrawString(Font, Strings.SelectString, new Vector2(position.X + spaceBetweenButtonAndText, position.Y + 4), Color.White);
                 distanceBetweenButtonsText = Convert.ToInt32(Font.MeasureString(Strings.SelectString).X) + spaceBetweenButtonAndText + spaceBetweenButtons;
-                if (((MyGame)this.Game).Main.Options == InputMode.Keyboard) {
+                if (((MyGame)this.Game).player1.Options == InputMode.Keyboard) {
                     spaceBetweenButtonAndText = Convert.ToInt32(kbEsc.Width * 0.7f) + 5;
                     batch.Draw(kbEsc, new Vector2(position.X + distanceBetweenButtonsText, position.Y), null, Color.White, 0, Vector2.Zero, 0.7f, SpriteEffects.None, 1.0f);
                 } else {
@@ -562,7 +562,7 @@ namespace ZombustersWindows
                 }
                 batch.DrawString(Font, Strings.BackWithoutSavingString, new Vector2(position.X + spaceBetweenButtonAndText + distanceBetweenButtonsText, position.Y + 4), Color.White);
                 distanceBetweenButtonsText = distanceBetweenButtonsText + Convert.ToInt32(Font.MeasureString(Strings.BackWithoutSavingString).X) + spaceBetweenButtonAndText + spaceBetweenButtons;
-                if (((MyGame)this.Game).Main.Options == InputMode.Keyboard) {
+                if (((MyGame)this.Game).player1.Options == InputMode.Keyboard) {
                     spaceBetweenButtonAndText = Convert.ToInt32(kbLeft.Width * 0.7f) + Convert.ToInt32(kbRight.Width * 0.7f) + 5;
                     batch.Draw(kbLeft, new Vector2(position.X + distanceBetweenButtonsText, position.Y), null, Color.White, 0, Vector2.Zero, 0.7f, SpriteEffects.None, 1.0f);
                     batch.Draw(kbRight, new Vector2(position.X + Convert.ToInt32(kbLeft.Width * 0.7f) + distanceBetweenButtonsText, position.Y), null, Color.White, 0, Vector2.Zero, 0.7f, SpriteEffects.None, 1.0f);

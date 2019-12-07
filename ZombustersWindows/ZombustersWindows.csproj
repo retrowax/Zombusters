@@ -67,9 +67,10 @@
     <Compile Include="BloomPostProcess\BloomSettings.cs" />
     <Compile Include="ContentManager\LevelManager.cs" />
     <Compile Include="Enemies.cs" />
+    <Compile Include="GameStateManagement\GameState.cs" />
     <Compile Include="MainScreens\LoadInScreen.cs" />
+    <Compile Include="GameStateManagement\MessageType.cs" />
     <Compile Include="MyGame.cs" />
-    <Compile Include="GameStateManagement\Button.cs" />
     <Compile Include="GameStateManagement\GameScreen.cs" />
     <Compile Include="GameStateManagement\InputAction.cs" />
     <Compile Include="GameStateManagement\InputState.cs" />
@@ -95,6 +96,7 @@
     <Compile Include="MenuScreens\MatchmakingMenuScreen.cs" />
     <Compile Include="MenuScreens\MenuScreen.cs" />
     <Compile Include="MusicComponent\MusicComponent.cs" />
+    <Compile Include="GameStateManagement\NeutralInput.cs" />
     <Compile Include="OnlineDataSyncManager\IOnlineSyncTarget.cs" />
     <Compile Include="OnlineDataSyncManager\OnlineDataSyncManager.cs" />
     <Compile Include="OnlineDataSyncManager\TopScoreEntry.cs" />

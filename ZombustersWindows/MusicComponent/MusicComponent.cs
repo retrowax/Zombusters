@@ -98,7 +98,7 @@ namespace ZombustersWindows
             _songsList.Add("As You Know|THIS CO.|THIS CO.");
             _songsList.Add("Take It Away|THIS CO.|THIS CO.");
 
-            nextSong = ((MyGame)this.Game).rand.Next(0, _songsList.Count - 1);
+            nextSong = ((MyGame)this.Game).random.Next(0, _songsList.Count - 1);
             prevSong = nextSong;
             MediaPlayer.MediaStateChanged += new EventHandler<EventArgs>(MediaPlayer_MediaStateChanged);
 
@@ -280,7 +280,7 @@ namespace ZombustersWindows
         {
             do
             {
-                nextSong = ((MyGame)this.Game).rand.Next(0, _songsList.Count - 1);
+                nextSong = ((MyGame)this.Game).random.Next(0, _songsList.Count - 1);
             } while (nextSong == prevSong);
 
             PlaySong(_songsList[nextSong], false);
@@ -365,8 +365,8 @@ namespace ZombustersWindows
                 }
 
                 // If the user change the song...
-                if (((GamePad.GetState(((MyGame)this.Game).Main.Controller).Buttons.LeftShoulder == ButtonState.Pressed) || (GamePad.GetState(((MyGame)this.Game).Player2.Controller).Buttons.LeftShoulder == ButtonState.Pressed) ||
-                    (GamePad.GetState(((MyGame)this.Game).Player3.Controller).Buttons.LeftShoulder == ButtonState.Pressed) || (GamePad.GetState(((MyGame)this.Game).Player4.Controller).Buttons.LeftShoulder == ButtonState.Pressed))
+                if (((GamePad.GetState(((MyGame)this.Game).player1.Controller).Buttons.LeftShoulder == ButtonState.Pressed) || (GamePad.GetState(((MyGame)this.Game).player2.Controller).Buttons.LeftShoulder == ButtonState.Pressed) ||
+                    (GamePad.GetState(((MyGame)this.Game).player3.Controller).Buttons.LeftShoulder == ButtonState.Pressed) || (GamePad.GetState(((MyGame)this.Game).player4.Controller).Buttons.LeftShoulder == ButtonState.Pressed))
                     && buttonReleased == true)
                 {
                     if (ShowText == false)
@@ -377,8 +377,8 @@ namespace ZombustersWindows
                 }
 
                 //Don't change the song until release.
-                if ((GamePad.GetState(((MyGame)this.Game).Main.Controller).Buttons.LeftShoulder == ButtonState.Released) && (GamePad.GetState(((MyGame)this.Game).Player2.Controller).Buttons.LeftShoulder == ButtonState.Released) &&
-                    (GamePad.GetState(((MyGame)this.Game).Player3.Controller).Buttons.LeftShoulder == ButtonState.Released) && (GamePad.GetState(((MyGame)this.Game).Player4.Controller).Buttons.LeftShoulder == ButtonState.Released))
+                if ((GamePad.GetState(((MyGame)this.Game).player1.Controller).Buttons.LeftShoulder == ButtonState.Released) && (GamePad.GetState(((MyGame)this.Game).player2.Controller).Buttons.LeftShoulder == ButtonState.Released) &&
+                    (GamePad.GetState(((MyGame)this.Game).player3.Controller).Buttons.LeftShoulder == ButtonState.Released) && (GamePad.GetState(((MyGame)this.Game).player4.Controller).Buttons.LeftShoulder == ButtonState.Released))
                 {
                     buttonReleased = true;
                 }

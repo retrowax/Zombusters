@@ -67,7 +67,7 @@ namespace ZombustersWindows
             //batch.Begin(SpriteBlendMode.AlphaBlend);
             batch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend);
 
-            if (this.game.Main.Options == InputMode.Touch)
+            if (this.game.player1.Options == InputMode.Touch)
             {
                 batch.DrawString(MenuInfoFont, "-", new Vector2(SliderArea.Left + 20, SliderArea.Bottom - 25), Color.Yellow, 0.0f, Vector2.Zero, 1.5f, SpriteEffects.None, 1.0f);
             }
@@ -83,7 +83,7 @@ namespace ZombustersWindows
                 x= ((i - 1) * 2 * width);
 
                 Rectangle displayArea;
-                if (this.game.Main.Options != InputMode.Touch)
+                if (this.game.player1.Options != InputMode.Touch)
                 {
                     displayArea = new Rectangle(SliderArea.Left + x, SliderArea.Bottom, width, height);
                 }
@@ -98,7 +98,7 @@ namespace ZombustersWindows
                     batch.Draw(blank, displayArea, null, UnsetColor, 0, origin, SpriteEffects.None, 1.0f);
                 
             }
-            if (this.game.Main.Options == InputMode.Touch)
+            if (this.game.player1.Options == InputMode.Touch)
             {
                 batch.DrawString(MenuInfoFont, "+", new Vector2(SliderArea.Left + 70 + x, SliderArea.Bottom - 28), Color.Yellow, 0.0f, Vector2.Zero, 1.5f, SpriteEffects.None, 1.0f);
             }
@@ -232,21 +232,21 @@ namespace ZombustersWindows
                 ExitScreen();
                 if (GamePad.GetState(PlayerIndex.One).IsButtonDown(Buttons.A))
                 {
-                    Game.SetOptions(state, this.Game.Main);
+                    Game.SetOptions(state, this.Game.player1);
                 }
                 else if (GamePad.GetState(PlayerIndex.Two).IsButtonDown(Buttons.A))
                 {
-                    Game.SetOptions(state, this.Game.Player2);
+                    Game.SetOptions(state, this.Game.player2);
                 }
                 else if (GamePad.GetState(PlayerIndex.Three).IsButtonDown(Buttons.A))
                 {
-                    Game.SetOptions(state, this.Game.Player3);
+                    Game.SetOptions(state, this.Game.player3);
                 }
                 else if (GamePad.GetState(PlayerIndex.Four).IsButtonDown(Buttons.A))
                 {
-                    Game.SetOptions(state, this.Game.Player4);
+                    Game.SetOptions(state, this.Game.player4);
                 }
-                Game.SetOptions(state, this.Game.Main);
+                Game.SetOptions(state, this.Game.player1);
             }
         }
         
@@ -285,42 +285,42 @@ namespace ZombustersWindows
                 //    HandlePlayer(input, Game.Main.Controller);
                 //    break;
                 case 0:
-                    HandleFXAudio(input, Game.Main.Controller);
+                    HandleFXAudio(input, Game.player1.Controller);
                     if (GamePad.GetState(PlayerIndex.One).IsConnected)
                     {
-                        HandleFXAudio(input, Game.Main.Controller);
+                        HandleFXAudio(input, Game.player1.Controller);
                     }
                     if (GamePad.GetState(PlayerIndex.Two).IsConnected)
                     {
-                        HandleFXAudio(input, Game.Player2.Controller);
+                        HandleFXAudio(input, Game.player2.Controller);
                     }
                     if (GamePad.GetState(PlayerIndex.Three).IsConnected)
                     {
-                        HandleFXAudio(input, Game.Player3.Controller);
+                        HandleFXAudio(input, Game.player3.Controller);
                     }
                     if (GamePad.GetState(PlayerIndex.Four).IsConnected)
                     {
-                        HandleFXAudio(input, Game.Player4.Controller);
+                        HandleFXAudio(input, Game.player4.Controller);
                     }
                     volumeSlider.UnsetColor = menu.SelectedColor;
                     break;
                 case 1:
-                    HandleMusic(input, Game.Main.Controller);
+                    HandleMusic(input, Game.player1.Controller);
                     if (GamePad.GetState(PlayerIndex.One).IsConnected)
                     {
-                        HandleMusic(input, Game.Main.Controller);
+                        HandleMusic(input, Game.player1.Controller);
                     }
                     if (GamePad.GetState(PlayerIndex.Two).IsConnected)
                     {
-                        HandleMusic(input, Game.Player2.Controller);
+                        HandleMusic(input, Game.player2.Controller);
                     }
                     if (GamePad.GetState(PlayerIndex.Three).IsConnected)
                     {
-                        HandleMusic(input, Game.Player3.Controller);
+                        HandleMusic(input, Game.player3.Controller);
                     }
                     if (GamePad.GetState(PlayerIndex.Four).IsConnected)
                     {
-                        HandleMusic(input, Game.Player4.Controller);
+                        HandleMusic(input, Game.player4.Controller);
                     }
                     musicSlider.UnsetColor = menu.SelectedColor;
                     break;
@@ -330,7 +330,7 @@ namespace ZombustersWindows
 
             // Let the menu handle input regarding selection change
             // and the A/B/Back buttons:
-            if (this.Game.Main.Options != InputMode.Touch)
+            if (this.Game.player1.Options != InputMode.Touch)
             {
                 menu.HandleInput(input);
             }
@@ -378,7 +378,7 @@ namespace ZombustersWindows
                         (gesture.Position.Y >= 614 && gesture.Position.Y <= 650))
                     {
                         ExitScreen();
-                        Game.SetOptions(state, this.Game.Main);
+                        Game.SetOptions(state, this.Game.player1);
                     }
 
                     // Exit without Saving

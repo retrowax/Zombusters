@@ -226,9 +226,9 @@ namespace ZombustersWindows
             }
 #else
             // Leave Button
-            if (((MyGame)this.ScreenManager.Game).Main.Options != InputMode.Touch)
+            if (((MyGame)this.ScreenManager.Game).player1.Options != InputMode.Touch)
             {
-                if (((MyGame)this.ScreenManager.Game).Main.Options == InputMode.Keyboard)
+                if (((MyGame)this.ScreenManager.Game).player1.Options == InputMode.Keyboard)
                 {
                     spaceBetweenButtonAndText = Convert.ToInt32(kbEsc.Width * 0.7f) + 5;
                     this.ScreenManager.SpriteBatch.Draw(kbEsc, new Vector2(158 + distanceBetweenButtonsText, 613), null, Color.White, 0, Vector2.Zero, 0.7f, SpriteEffects.None, 1.0f);
@@ -252,7 +252,7 @@ namespace ZombustersWindows
                     new Vector2(position.X + submit_button.Width / 2 - MenuInfoFont.MeasureString(Strings.LeaveMenuString.ToUpper()).X / 2, position.Y + 7), Color.White, 0, Vector2.Zero, 1.0f, SpriteEffects.None, 1.0f);
             }
 
-            if (((MyGame)this.ScreenManager.Game).Main.Options == InputMode.GamePad)
+            if (((MyGame)this.ScreenManager.Game).player1.Options == InputMode.GamePad)
             {
                 // Draw Controller Scheme
                 DrawController(this.ScreenManager.SpriteBatch, uiBounds);
@@ -369,7 +369,7 @@ namespace ZombustersWindows
 
             //Texto de contexto del How to Play
             contextMenuPosition = new Vector2(pos.X, pos.Y - 30);
-            if (((MyGame)this.ScreenManager.Game).Main.Options == InputMode.Keyboard)
+            if (((MyGame)this.ScreenManager.Game).player1.Options == InputMode.Keyboard)
             {
                 lines = Regex.Split(Strings.PCExplanationString, "\r\n");
             }

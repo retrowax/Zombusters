@@ -550,46 +550,46 @@ namespace ZombustersWindows
                         switch(player)
                         {
                             case 0:
-                                ((MyGame)this.ScreenManager.Game).Main = new Player(((MyGame)this.ScreenManager.Game).options, ((MyGame)this.ScreenManager.Game).audio, ((MyGame)this.ScreenManager.Game));
+                                ((MyGame)this.ScreenManager.Game).player1 = new Player(((MyGame)this.ScreenManager.Game).options, ((MyGame)this.ScreenManager.Game).audio, ((MyGame)this.ScreenManager.Game));
                                 ((MyGame)this.ScreenManager.Game).currentPlayers[player] = new Avatar();
                                 ((MyGame)this.ScreenManager.Game).currentPlayers[player].Initialize(((MyGame)this.ScreenManager.Game).GraphicsDevice.Viewport);
                                 ((MyGame)this.ScreenManager.Game).InitializeMain((PlayerIndex)player);
-                                ((MyGame)this.ScreenManager.Game).currentPlayers[player].Player = ((MyGame)this.ScreenManager.Game).Main;
-                                ((MyGame)this.ScreenManager.Game).currentPlayers[player].Activate(((MyGame)this.ScreenManager.Game).Main);
+                                ((MyGame)this.ScreenManager.Game).currentPlayers[player].Player = ((MyGame)this.ScreenManager.Game).player1;
+                                ((MyGame)this.ScreenManager.Game).currentPlayers[player].Activate(((MyGame)this.ScreenManager.Game).player1);
                                 ((MyGame)this.ScreenManager.Game).currentPlayers[player].Player.isReady = false;
 
                                 break;
                             case 1:
-                                ((MyGame)this.ScreenManager.Game).Player2 = new Player(((MyGame)this.ScreenManager.Game).options, ((MyGame)this.ScreenManager.Game).audio, ((MyGame)this.ScreenManager.Game));
+                                ((MyGame)this.ScreenManager.Game).player2 = new Player(((MyGame)this.ScreenManager.Game).options, ((MyGame)this.ScreenManager.Game).audio, ((MyGame)this.ScreenManager.Game));
                                 ((MyGame)this.ScreenManager.Game).currentPlayers[player] = new Avatar();
                                 ((MyGame)this.ScreenManager.Game).currentPlayers[player].Initialize(((MyGame)this.ScreenManager.Game).GraphicsDevice.Viewport);
                                 ((MyGame)this.ScreenManager.Game).InitializeMain((PlayerIndex)player);
-                                ((MyGame)this.ScreenManager.Game).currentPlayers[player].Player = ((MyGame)this.ScreenManager.Game).Player2;
+                                ((MyGame)this.ScreenManager.Game).currentPlayers[player].Player = ((MyGame)this.ScreenManager.Game).player2;
                                 ((MyGame)this.ScreenManager.Game).currentPlayers[player].Player.isReady = false;
                                 break;
                             case 2:
-                                ((MyGame)this.ScreenManager.Game).Player3 = new Player(((MyGame)this.ScreenManager.Game).options, ((MyGame)this.ScreenManager.Game).audio, ((MyGame)this.ScreenManager.Game));
+                                ((MyGame)this.ScreenManager.Game).player3 = new Player(((MyGame)this.ScreenManager.Game).options, ((MyGame)this.ScreenManager.Game).audio, ((MyGame)this.ScreenManager.Game));
                                 ((MyGame)this.ScreenManager.Game).currentPlayers[player] = new Avatar();
                                 ((MyGame)this.ScreenManager.Game).currentPlayers[player].Initialize(((MyGame)this.ScreenManager.Game).GraphicsDevice.Viewport);
                                 ((MyGame)this.ScreenManager.Game).InitializeMain((PlayerIndex)player);
-                                ((MyGame)this.ScreenManager.Game).currentPlayers[player].Player = ((MyGame)this.ScreenManager.Game).Player3;
+                                ((MyGame)this.ScreenManager.Game).currentPlayers[player].Player = ((MyGame)this.ScreenManager.Game).player3;
                                 ((MyGame)this.ScreenManager.Game).currentPlayers[player].Player.isReady = false;
                                 break;
                             case 3:
-                                ((MyGame)this.ScreenManager.Game).Player4 = new Player(((MyGame)this.ScreenManager.Game).options, ((MyGame)this.ScreenManager.Game).audio, ((MyGame)this.ScreenManager.Game));
+                                ((MyGame)this.ScreenManager.Game).player4 = new Player(((MyGame)this.ScreenManager.Game).options, ((MyGame)this.ScreenManager.Game).audio, ((MyGame)this.ScreenManager.Game));
                                 ((MyGame)this.ScreenManager.Game).currentPlayers[player] = new Avatar();
                                 ((MyGame)this.ScreenManager.Game).currentPlayers[player].Initialize(((MyGame)this.ScreenManager.Game).GraphicsDevice.Viewport);
                                 ((MyGame)this.ScreenManager.Game).InitializeMain((PlayerIndex)player);
-                                ((MyGame)this.ScreenManager.Game).currentPlayers[player].Player = ((MyGame)this.ScreenManager.Game).Player4;
+                                ((MyGame)this.ScreenManager.Game).currentPlayers[player].Player = ((MyGame)this.ScreenManager.Game).player4;
                                 ((MyGame)this.ScreenManager.Game).currentPlayers[player].Player.isReady = false;
                                 break;
                             default:
-                                ((MyGame)this.ScreenManager.Game).Main = new Player(((MyGame)this.ScreenManager.Game).options, ((MyGame)this.ScreenManager.Game).audio, ((MyGame)this.ScreenManager.Game));
+                                ((MyGame)this.ScreenManager.Game).player1 = new Player(((MyGame)this.ScreenManager.Game).options, ((MyGame)this.ScreenManager.Game).audio, ((MyGame)this.ScreenManager.Game));
                                 ((MyGame)this.ScreenManager.Game).currentPlayers[player] = new Avatar();
                                 ((MyGame)this.ScreenManager.Game).currentPlayers[player].Initialize(((MyGame)this.ScreenManager.Game).GraphicsDevice.Viewport);
                                 ((MyGame)this.ScreenManager.Game).InitializeMain((PlayerIndex)player);
-                                ((MyGame)this.ScreenManager.Game).currentPlayers[player].Player = ((MyGame)this.ScreenManager.Game).Main;
-                                ((MyGame)this.ScreenManager.Game).currentPlayers[player].Activate(((MyGame)this.ScreenManager.Game).Main);
+                                ((MyGame)this.ScreenManager.Game).currentPlayers[player].Player = ((MyGame)this.ScreenManager.Game).player1;
+                                ((MyGame)this.ScreenManager.Game).currentPlayers[player].Activate(((MyGame)this.ScreenManager.Game).player1);
                                 ((MyGame)this.ScreenManager.Game).currentPlayers[player].Player.isReady = false;
                                 break;
                         }
@@ -952,7 +952,7 @@ namespace ZombustersWindows
 
             // LT
             batch.DrawString(DigitLowFont, "-", new Vector2(uiBounds.X + uiBounds.Width - 210, 80), Color.White);
-            if (((MyGame)this.ScreenManager.Game).Main.Options == InputMode.Keyboard)
+            if (((MyGame)this.ScreenManager.Game).player1.Options == InputMode.Keyboard)
             {   
                 batch.Draw(kbDown, new Vector2(uiBounds.X + uiBounds.Width - 217, 115), new Rectangle(0, 0, kbDown.Width, kbDown.Height), Color.White, 0.0f, Vector2.Zero, 0.7f, SpriteEffects.None, 0.0f);
             }
@@ -963,7 +963,7 @@ namespace ZombustersWindows
 
             // RT
             batch.DrawString(DigitLowFont, "+", new Vector2(uiBounds.X + uiBounds.Width - 5, 80), Color.White);
-            if (((MyGame)this.ScreenManager.Game).Main.Options == InputMode.Keyboard)
+            if (((MyGame)this.ScreenManager.Game).player1.Options == InputMode.Keyboard)
             {
                 batch.Draw(kbUp, new Vector2(uiBounds.X + uiBounds.Width - 10, 115), new Rectangle(0, 0, kbUp.Width, kbUp.Height), Color.White, 0.0f, Vector2.Zero, 0.7f, SpriteEffects.None, 0.0f);
             }
@@ -1033,7 +1033,7 @@ namespace ZombustersWindows
 
             //Texto de contexto del How to Play
             contextMenuPosition = new Vector2(position.X + 300, position.Y - 30);
-            if (((MyGame)this.ScreenManager.Game).Main.Options == InputMode.Keyboard)
+            if (((MyGame)this.ScreenManager.Game).player1.Options == InputMode.Keyboard)
             {
                 lines = Regex.Split(Strings.PCExplanationString, "\r\n");
             }

@@ -347,9 +347,9 @@ namespace ZombustersWindows
             // Show Gamer Card Button
             buttonsPossition = new Vector2(textPosition.X, textPosition.Y + 10);
 
-            if (((MyGame)this.ScreenManager.Game).Main.Options != InputMode.Touch)
+            if (((MyGame)this.ScreenManager.Game).player1.Options != InputMode.Touch)
             {
-                if (((MyGame)this.ScreenManager.Game).Main.Options == InputMode.Keyboard)
+                if (((MyGame)this.ScreenManager.Game).player1.Options == InputMode.Keyboard)
                 {
                     spaceBetweenButtonAndText = Convert.ToInt32(kbEnter.Width * 0.7f) + 5;
                     spriteBatch.Draw(kbEnter, buttonsPossition, null, Color.White, 0, Vector2.Zero, 0.7f, SpriteEffects.None, 1.0f);
@@ -366,7 +366,7 @@ namespace ZombustersWindows
                 if (includeButtons)
                 {
                     // Leave Button
-                    if (((MyGame)this.ScreenManager.Game).Main.Options == InputMode.Keyboard)
+                    if (((MyGame)this.ScreenManager.Game).player1.Options == InputMode.Keyboard)
                     {
                         spaceBetweenButtonAndText = Convert.ToInt32(kbEsc.Width * 0.7f) + 5;
                         spriteBatch.Draw(kbEsc, new Vector2(buttonsPossition.X + distanceBetweenButtonsText, buttonsPossition.Y), null, Color.White, 0, Vector2.Zero, 0.7f, SpriteEffects.None, 1.0f);

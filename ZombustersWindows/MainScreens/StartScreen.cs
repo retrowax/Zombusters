@@ -45,9 +45,9 @@ namespace ZombustersWindows
         public override void LoadContent() {
             title = this.ScreenManager.Game.Content.Load<Texture2D>("title");
             font = this.ScreenManager.Game.Content.Load<SpriteFont>(@"menu\ArialMenuInfo");
-            if (((MyGame)this.Game).Main.Options == InputMode.GamePad) {
+            if (((MyGame)this.Game).player1.Options == InputMode.GamePad) {
                 startOrigin = font.MeasureString(Strings.PressStartString) / 2;
-            } else if (((MyGame)this.Game).Main.Options == InputMode.Keyboard) {
+            } else if (((MyGame)this.Game).player1.Options == InputMode.Keyboard) {
                 startOrigin = font.MeasureString(Strings.PCPressAnyKeyString) / 2;
             }
             rightsOrigin = font.MeasureString(Strings.CopyRightString) / 2;
@@ -91,9 +91,9 @@ namespace ZombustersWindows
             float value = (float)Math.Cos(gameTime.TotalGameTime.TotalSeconds * interval);
             value = (value + 1) / 2;  // Shift the sine wave into positive 
             Color color = new Color(value, value, value, value);
-            if (((MyGame)this.Game).Main.Options == InputMode.GamePad) {
+            if (((MyGame)this.Game).player1.Options == InputMode.GamePad) {
                 batch.DrawString(font, Strings.PressStartString, startPos, color, 0, startOrigin, 1.0f, SpriteEffects.None, 0.1f);
-            } else if (((MyGame)this.Game).Main.Options == InputMode.Keyboard) {
+            } else if (((MyGame)this.Game).player1.Options == InputMode.Keyboard) {
                 batch.DrawString(font, Strings.PCPressAnyKeyString, startPos, color, 0, startOrigin, 1.0f, SpriteEffects.None, 0.1f);
             }
             batch.DrawString(font, Strings.CopyRightString, rightsPos, Color.White, 0, rightsOrigin, 1.0f, SpriteEffects.None, 0.1f);

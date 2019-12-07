@@ -105,7 +105,7 @@ namespace ZombustersWindows
             }
             catch (Exception exception)
             {
-                game.BugSnagClient.Notify(exception);
+                game.bugSnagClient.Notify(exception);
             }
             finally
             {
@@ -132,7 +132,7 @@ namespace ZombustersWindows
             }
             catch (Exception exception)
             {
-                game.BugSnagClient.Notify(exception);
+                game.bugSnagClient.Notify(exception);
             }
             finally
             {
@@ -158,7 +158,7 @@ namespace ZombustersWindows
             }
             catch (Exception exception)
             {
-                game.BugSnagClient.Notify(exception);
+                game.bugSnagClient.Notify(exception);
             }
             finally
             {
@@ -215,18 +215,18 @@ namespace ZombustersWindows
                 using (isolatedFileStream = isolatedStorageFile.OpenFile(LEADERBOARD_FILENAME, FileMode.OpenOrCreate, FileAccess.ReadWrite))
                 {
                     TopScoreEntry entry = new TopScoreEntry(name, score);
-                    game.mScores.addEntry(0, entry);
+                    game.topScoreListContainer.addEntry(0, entry);
 
                     using (BinaryWriter writer = new BinaryWriter(isolatedFileStream))
                     {
-                        game.mScores.save(writer);
+                        game.topScoreListContainer.save(writer);
                     }
                 }
                 isolatedFileStream.FlushAsync();
             }
             catch (Exception exception)
             {
-                game.BugSnagClient.Notify(exception);
+                game.bugSnagClient.Notify(exception);
             }
             finally
             {
@@ -242,7 +242,7 @@ namespace ZombustersWindows
             // Create a List and a fake list
             if (game != null)
             {
-                game.mScores = new TopScoreListContainer(1, 10);
+                game.topScoreListContainer = new TopScoreListContainer(1, 10);
                 string gtag;
                 int fakescore;
                 int i;
@@ -298,7 +298,7 @@ namespace ZombustersWindows
                     }
 
                     TopScoreEntry entry = new TopScoreEntry(gtag, fakescore);
-                    game.mScores.addEntry(0, entry);
+                    game.topScoreListContainer.addEntry(0, entry);
                 }
             }
         }
@@ -313,14 +313,14 @@ namespace ZombustersWindows
                     BinaryReader reader = new BinaryReader(isolatedFileStream);
                     if (game != null)
                     {
-                        game.mScores = new TopScoreListContainer(reader);
+                        game.topScoreListContainer = new TopScoreListContainer(reader);
                     }
                 }
                 isolatedFileStream.FlushAsync();
             }
             catch (Exception exception)
             {
-                game.BugSnagClient.Notify(exception);
+                game.bugSnagClient.Notify(exception);
             }
             finally
             {
@@ -345,7 +345,7 @@ namespace ZombustersWindows
             }
             catch (Exception exception)
             {
-                game.BugSnagClient.Notify(exception);
+                game.bugSnagClient.Notify(exception);
             }
             finally
             {

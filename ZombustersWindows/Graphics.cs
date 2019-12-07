@@ -275,7 +275,7 @@ namespace ZombustersWindows
                 }
 
                 // Perlin Noise effect draw
-                this.ScreenManager.SpriteBatch.Draw(((MyGame)this.ScreenManager.Game).NoisedMap[((MyGame)this.ScreenManager.Game).rand.Next(0, 3)], new Rectangle(0, 0, 1280, 720), new Color(255, 255, 255, 12));
+                this.ScreenManager.SpriteBatch.Draw(((MyGame)this.ScreenManager.Game).noisedMap[((MyGame)this.ScreenManager.Game).random.Next(0, 3)], new Rectangle(0, 0, 1280, 720), new Color(255, 255, 255, 12));
                 this.ScreenManager.SpriteBatch.End();
             }
             else
