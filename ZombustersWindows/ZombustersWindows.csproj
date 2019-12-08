@@ -62,12 +62,15 @@
     <ApplicationIcon>Game.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="Avatar.cs" />
+    <Compile Include="GameObjects\Avatar.cs" />
     <Compile Include="BloomPostProcess\BloomComponent.cs" />
     <Compile Include="BloomPostProcess\BloomSettings.cs" />
     <Compile Include="ContentManager\LevelManager.cs" />
-    <Compile Include="Enemies.cs" />
-    <Compile Include="ContentManager\Explosion.cs" />
+    <Compile Include="GameObjects\AvatarState.cs" />
+    <Compile Include="GameObjects\Enemies\Enemies.cs" />
+    <Compile Include="GameObjects\Explosion.cs" />
+    <Compile Include="GameObjects\Enemies\EnemyType.cs" />
+    <Compile Include="GameObjects\ShotgunShell.cs" />
     <Compile Include="GameStateManagement\GameState.cs" />
     <Compile Include="MainScreens\LoadInScreen.cs" />
     <Compile Include="GameStateManagement\MessageType.cs" />
@@ -105,7 +108,7 @@
     <Compile Include="OnlineDataSyncManager\TopScoreListContainer.cs" />
     <Compile Include="PerlinNoisePostProcess\CreateTexture.cs" />
     <Compile Include="PerlinNoisePostProcess\Noise.cs" />
-    <Compile Include="Player.cs" />
+    <Compile Include="GameObjects\Player.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="MainScreens\ScrollingBackground.cs" />
@@ -160,6 +163,8 @@
     <Compile Include="SupportScreens\ExitMessageBox.cs" />
     <Compile Include="SupportScreens\LoadingScreen.cs" />
     <Compile Include="SupportScreens\NetworkBusyScreen.cs" />
+    <Compile Include="GameObjects\Enemies\ZombieState.cs" />
+    <Compile Include="GameObjects\Enemies\TankState.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Bugsnag, Version=1.4.0.0, Culture=neutral, processorArchitecture=MSIL">
