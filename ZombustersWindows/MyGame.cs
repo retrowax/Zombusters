@@ -35,8 +35,8 @@ namespace ZombustersWindows
         //public StorageDeviceManager storageDeviceManager;
 
 #if DEBUG
-        //public FrameRateCounter FrameRateComponent;
-        //public DebugInfoComponent DebugComponent;
+        public FrameRateCounter FrameRateComponent;
+        public DebugInfoComponent DebugComponent;
 #endif
 
         //int bloomSettingsIndex = 0;
@@ -81,10 +81,10 @@ namespace ZombustersWindows
             player4 = new Player(options, audio, this);
             currentNetworkSetting = 0;
 #if DEBUG
-            /*FrameRateComponent = new FrameRateCounter(this);
+            FrameRateComponent = new FrameRateCounter(this);
             Components.Add(FrameRateComponent);
             DebugComponent = new DebugInfoComponent(this);
-            Components.Add(DebugComponent);*/
+            Components.Add(DebugComponent);
             //Guide.SimulateTrialMode = true;
 #endif
             musicComponent = new MusicComponent(this);
