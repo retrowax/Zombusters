@@ -38,7 +38,6 @@ namespace ZombustersWindows
         public int currentNetworkSetting;
         public int maxGamers = 4;
         public int maxLocalGamers = 4;
-        public Random random;
         
         //public StorageDeviceManager storageDeviceManager;
         public GameState currentGameState;
@@ -88,8 +87,6 @@ namespace ZombustersWindows
             player3 = new Player(options, audio, this);
             player4 = new Player(options, audio, this);
             currentNetworkSetting = 0;
-            
-            random = new Random(4);
 #if DEBUG
             /*FrameRateComponent = new FrameRateCounter(this);
             Components.Add(FrameRateComponent);

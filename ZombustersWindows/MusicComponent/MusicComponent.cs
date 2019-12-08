@@ -33,6 +33,7 @@ namespace ZombustersWindows
         private Animation retroTraxLogoAnimation;
         private Boolean buttonReleased = true;
         private Boolean changinSongManual = false;
+        private readonly Random random = new Random(12);
 
         private bool FadeOut = false;
         private float logoSizeValue = 0.0f;
@@ -98,7 +99,7 @@ namespace ZombustersWindows
             _songsList.Add("As You Know|THIS CO.|THIS CO.");
             _songsList.Add("Take It Away|THIS CO.|THIS CO.");
 
-            nextSong = ((MyGame)this.Game).random.Next(0, _songsList.Count - 1);
+            nextSong = random.Next(0, _songsList.Count - 1);
             prevSong = nextSong;
             MediaPlayer.MediaStateChanged += new EventHandler<EventArgs>(MediaPlayer_MediaStateChanged);
 
@@ -280,7 +281,7 @@ namespace ZombustersWindows
         {
             do
             {
-                nextSong = ((MyGame)this.Game).random.Next(0, _songsList.Count - 1);
+                nextSong = random.Next(0, _songsList.Count - 1);
             } while (nextSong == prevSong);
 
             PlaySong(_songsList[nextSong], false);
