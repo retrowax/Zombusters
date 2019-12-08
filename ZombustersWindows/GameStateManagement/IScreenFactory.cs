@@ -1,12 +1,3 @@
-#region File Description
-//-----------------------------------------------------------------------------
-// IScreenFactory.cs
-//
-// Microsoft XNA Community Game Platform
-// Copyright (C) Microsoft Corporation. All rights reserved.
-//-----------------------------------------------------------------------------
-#endregion
-
 using System;
 
 namespace GameStateManagement

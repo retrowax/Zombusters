@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0"?>
-<ArrayOfCWall>
+<ArrayOfWall>
   <!-- Superior Izquierda -->
-  <CWall>
+  <Wall>
     <From>
       <X>0</X>
       <Y>163</Y>
@@ -10,9 +10,9 @@
       <X>-250</X>
       <Y>163</Y>
     </To>
-  </CWall>
+  </Wall>
   
-  <CWall>
+  <Wall>
     <From>
       <X>0</X>
       <Y>163</Y>
@@ -21,9 +21,9 @@
       <X>177</X>
       <Y>251</Y>
     </To>
-  </CWall>
+  </Wall>
 
-  <CWall>
+  <Wall>
     <From>
       <X>177</X>
       <Y>251</Y>
@@ -32,9 +32,9 @@
       <X>680</X>
       <Y>0</Y>
     </To>
-  </CWall>
+  </Wall>
 
-  <CWall>
+  <Wall>
     <From>
       <X>680</X>
       <Y>0</Y>
@@ -43,11 +43,11 @@
       <X>680</X>
       <Y>-250</Y>
     </To>
-  </CWall>
+  </Wall>
   <!-- END Superior Izquierda -->
 
   <!-- Superior Derecha -->
-  <CWall>
+  <Wall>
     <From>
       <X>1215</X>
       <Y>0</Y>
@@ -56,9 +56,9 @@
       <X>1215</X>
       <Y>-250</Y>
     </To>
-  </CWall>
+  </Wall>
 
-  <CWall>
+  <Wall>
     <From>
       <X>1215</X>
       <Y>0</Y>
@@ -67,9 +67,9 @@
       <X>1215</X>
       <Y>11</Y>
     </To>
-  </CWall>
+  </Wall>
 
-  <CWall>
+  <Wall>
     <From>
       <X>1215</X>
       <Y>11</Y>
@@ -78,9 +78,9 @@
       <X>1280</X>
       <Y>42</Y>
     </To>
-  </CWall>
+  </Wall>
 
-  <CWall>
+  <Wall>
     <From>
       <X>1280</X>
       <Y>42</Y>
@@ -89,11 +89,11 @@
       <X>1500</X>
       <Y>42</Y>
     </To>
-  </CWall>
+  </Wall>
   <!-- END Superior Derecha -->
 
   <!-- Inferior Izquierda -->
-  <CWall>
+  <Wall>
     <From>
       <X>0</X>
       <Y>490</Y>
@@ -102,9 +102,9 @@
       <X>-250</X>
       <Y>490</Y>
     </To>
-  </CWall>
+  </Wall>
 
-  <CWall>
+  <Wall>
     <From>
       <X>0</X>
       <Y>490</Y>
@@ -113,9 +113,9 @@
       <X>460</X>
       <Y>720</Y>
     </To>
-  </CWall>
+  </Wall>
 
-  <CWall>
+  <Wall>
     <From>
       <X>460</X>
       <Y>720</Y>
@@ -124,7 +124,7 @@
       <X>460</X>
       <Y>900</Y>
     </To>
-  </CWall>
+  </Wall>
   <!-- END Inferior Izquierda -->
   
-</ArrayOfCWall>
+</ArrayOfWall>

@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0"?>
-<ArrayOfCFurniture>
+<ArrayOfFurniture>
   <!-- Farolas SouthEast -->
-  <CFurniture>
+  <Furniture>
     <Type>Farola</Type>
     <Orientation>SouthEast</Orientation>
     <Position>
@@ -13,9 +13,9 @@
       <Y>103</Y>
     </ObstaclePosition>
     <ObstacleRadius>5.0</ObstacleRadius>
-  </CFurniture>
+  </Furniture>
 
-  <CFurniture>
+  <Furniture>
     <Type>Farola</Type>
     <Orientation>SouthEast</Orientation>
     <Position>
@@ -27,9 +27,9 @@
       <Y>161</Y>
     </ObstaclePosition>
     <ObstacleRadius>5.0</ObstacleRadius>
-  </CFurniture>
+  </Furniture>
 
-  <CFurniture>
+  <Furniture>
     <Type>Farola</Type>
     <Orientation>SouthEast</Orientation>
     <Position>
@@ -41,9 +41,9 @@
       <Y>220</Y>
     </ObstaclePosition>
     <ObstacleRadius>5.0</ObstacleRadius>
-  </CFurniture>
+  </Furniture>
 
-  <CFurniture>
+  <Furniture>
     <Type>Farola</Type>
     <Orientation>SouthEast</Orientation>
     <Position>
@@ -55,12 +55,12 @@
       <Y>286</Y>
     </ObstaclePosition>
     <ObstacleRadius>5.0</ObstacleRadius>
-  </CFurniture>
+  </Furniture>
   <!-- END Farolas SouthEast-->
   
   
   <!-- Farolas SouthWest -->
-  <CFurniture>
+  <Furniture>
     <Type>Farola</Type>
     <Orientation>SouthWest</Orientation>
     <Position>
@@ -72,9 +72,9 @@
       <Y>103</Y>
     </ObstaclePosition>
     <ObstacleRadius>5.0</ObstacleRadius>
-  </CFurniture>
+  </Furniture>
 
-  <CFurniture>
+  <Furniture>
     <Type>Farola</Type>
     <Orientation>SouthWest</Orientation>
     <Position>
@@ -86,9 +86,9 @@
       <Y>154</Y>
     </ObstaclePosition>
     <ObstacleRadius>5.0</ObstacleRadius>
-  </CFurniture>
+  </Furniture>
 
-  <CFurniture>
+  <Furniture>
     <Type>Farola</Type>
     <Orientation>SouthWest</Orientation>
     <Position>
@@ -100,9 +100,9 @@
       <Y>220</Y>
     </ObstaclePosition>
     <ObstacleRadius>5.0</ObstacleRadius>
-  </CFurniture>
+  </Furniture>
 
-  <CFurniture>
+  <Furniture>
     <Type>Farola</Type>
     <Orientation>SouthWest</Orientation>
     <Position>
@@ -114,12 +114,12 @@
       <Y>286</Y>
     </ObstaclePosition>
     <ObstacleRadius>5.0</ObstacleRadius>
-  </CFurniture>
+  </Furniture>
   <!-- END Farolas SouthWest -->
   
   
   <!-- Basuras -->
-  <CFurniture>
+  <Furniture>
     <Type>Basura</Type>
     <Orientation>SouthEast</Orientation>
     <Position>
@@ -131,12 +131,12 @@
       <Y>165</Y>
     </ObstaclePosition>
     <ObstacleRadius>10.0</ObstacleRadius>
-  </CFurniture>
+  </Furniture>
   <!-- END Basuras -->
   
   
   <!-- Bancos SouthEast -->
-  <CFurniture>
+  <Furniture>
     <Type>Banco</Type>
     <Orientation>SouthEast</Orientation>
     <Position>
@@ -148,12 +148,12 @@
       <Y>136</Y>
     </ObstaclePosition>
     <ObstacleRadius>20.0</ObstacleRadius>
-  </CFurniture>
+  </Furniture>
   <!-- END Bancos SouthEast -->
   
   
   <!-- Bancos SouthWest -->
-  <CFurniture>
+  <Furniture>
     <Type>Banco</Type>
     <Orientation>SouthWest</Orientation>
     <Position>
@@ -165,11 +165,11 @@
       <Y>130</Y>
     </ObstaclePosition>
     <ObstacleRadius>20.0</ObstacleRadius>
-  </CFurniture>
+  </Furniture>
   <!-- END Bancos SouthWest -->
   
   <!-- Arboles -->
-  <CFurniture>
+  <Furniture>
     <Type>Arbol</Type>
     <Orientation>SouthEast</Orientation>
     <Position>
@@ -181,9 +181,9 @@
       <Y>233</Y>
     </ObstaclePosition>
     <ObstacleRadius>10.0</ObstacleRadius>
-  </CFurniture>
+  </Furniture>
 
-  <CFurniture>
+  <Furniture>
     <Type>Arbol</Type>
     <Orientation>SouthEast</Orientation>
     <Position>
@@ -195,9 +195,9 @@
       <Y>307</Y>
     </ObstaclePosition>
     <ObstacleRadius>10.0</ObstacleRadius>
-  </CFurniture>
+  </Furniture>
 
-  <CFurniture>
+  <Furniture>
     <Type>Arbol</Type>
     <Orientation>SouthEast</Orientation>
     <Position>
@@ -209,9 +209,9 @@
       <Y>383</Y>
     </ObstaclePosition>
     <ObstacleRadius>10.0</ObstacleRadius>
-  </CFurniture>
+  </Furniture>
 
-  <CFurniture>
+  <Furniture>
     <Type>Arbol</Type>
     <Orientation>SouthEast</Orientation>
     <Position>
@@ -223,9 +223,9 @@
       <Y>464</Y>
     </ObstaclePosition>
     <ObstacleRadius>10.0</ObstacleRadius>
-  </CFurniture>
+  </Furniture>
 
-  <CFurniture>
+  <Furniture>
     <Type>Arbol</Type>
     <Orientation>SouthEast</Orientation>
     <Position>
@@ -237,9 +237,9 @@
       <Y>314</Y>
     </ObstaclePosition>
     <ObstacleRadius>10.0</ObstacleRadius>
-  </CFurniture>
+  </Furniture>
 
-  <CFurniture>
+  <Furniture>
     <Type>Arbol</Type>
     <Orientation>SouthEast</Orientation>
     <Position>
@@ -251,9 +251,9 @@
       <Y>402</Y>
     </ObstaclePosition>
     <ObstacleRadius>10.0</ObstacleRadius>
-  </CFurniture>
+  </Furniture>
 
-  <CFurniture>
+  <Furniture>
     <Type>Arbol</Type>
     <Orientation>SouthEast</Orientation>
     <Position>
@@ -265,9 +265,9 @@
       <Y>494</Y>
     </ObstaclePosition>
     <ObstacleRadius>10.0</ObstacleRadius>
-  </CFurniture>
+  </Furniture>
 
-  <CFurniture>
+  <Furniture>
     <Type>Arbol</Type>
     <Orientation>SouthEast</Orientation>
     <Position>
@@ -279,9 +279,9 @@
       <Y>559</Y>
     </ObstaclePosition>
     <ObstacleRadius>10.0</ObstacleRadius>
-  </CFurniture>
+  </Furniture>
 
-  <CFurniture>
+  <Furniture>
     <Type>Arbol</Type>
     <Orientation>SouthEast</Orientation>
     <Position>
@@ -293,9 +293,9 @@
       <Y>706</Y>
     </ObstaclePosition>
     <ObstacleRadius>10.0</ObstacleRadius>
-  </CFurniture>
+  </Furniture>
 
-  <CFurniture>
+  <Furniture>
     <Type>Arbol</Type>
     <Orientation>SouthEast</Orientation>
     <Position>
@@ -307,9 +307,9 @@
       <Y>634</Y>
     </ObstaclePosition>
     <ObstacleRadius>10.0</ObstacleRadius>
-  </CFurniture>
+  </Furniture>
 
-  <CFurniture>
+  <Furniture>
     <Type>Arbol</Type>
     <Orientation>SouthEast</Orientation>
     <Position>
@@ -321,9 +321,9 @@
       <Y>535</Y>
     </ObstaclePosition>
     <ObstacleRadius>10.0</ObstacleRadius>
-  </CFurniture>
+  </Furniture>
 
-  <CFurniture>
+  <Furniture>
     <Type>Arbol</Type>
     <Orientation>SouthEast</Orientation>
     <Position>
@@ -335,7 +335,7 @@
       <Y>607</Y>
     </ObstaclePosition>
     <ObstacleRadius>10.0</ObstacleRadius>
-  </CFurniture>
+  </Furniture>
   <!-- END Arboles -->
   
-</ArrayOfCFurniture>
+</ArrayOfFurniture>

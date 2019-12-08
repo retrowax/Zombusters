@@ -171,7 +171,7 @@ namespace ZombustersWindows
             }
         }
 
-        public void BeginLocalGame(CLevel.Level level, List<int> PlayersActive) {
+        public void BeginLocalGame(LevelType level, List<int> PlayersActive) {
             byte i;
 
             Reset();
@@ -208,7 +208,7 @@ namespace ZombustersWindows
             bStateReady = true;
             this.audio.StopMenuMusic();
             currentGameState = GameState.InGame;
-            playScreen = new GamePlayScreen(this, level, CSubLevel.SubLevel.One);
+            playScreen = new GamePlayScreen(this, level, SubLevel.SubLevelType.One);
             screenManager.AddScreen(playScreen);
         }
 

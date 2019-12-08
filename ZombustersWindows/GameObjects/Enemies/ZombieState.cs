@@ -192,7 +192,7 @@ namespace ZombustersWindows
             this.status = ObjectStatus.Inactive;
         }
 
-        public bool IsInRange(SteeringEntity entity, CFurniture furniture)
+        public bool IsInRange(SteeringEntity entity, Furniture furniture)
         {
             float distance = Vector2.Distance(new Vector2(this.entity.Position.X - 10, this.entity.Position.Y - 30), furniture.ObstaclePosition);
             if (distance < Avatar.CrashRadius + 10.0f)
@@ -203,7 +203,7 @@ namespace ZombustersWindows
             return false;
         }
 
-        public float GetLayerIndex(SteeringEntity entity, List<CFurniture> furniturelist)
+        public float GetLayerIndex(SteeringEntity entity, List<Furniture> furniturelist)
         {
             float furnitureInferior, playerBasePosition, lindex;
             int n = 0;
@@ -231,7 +231,7 @@ namespace ZombustersWindows
             return lindex + 0.002f;
         }
 
-        public void Draw(SpriteBatch batch, float TotalGameSeconds, SpriteFont font, List<CFurniture> furniturelist, GameTime gameTime)
+        public void Draw(SpriteBatch batch, float TotalGameSeconds, SpriteFont font, List<Furniture> furniturelist, GameTime gameTime)
         {
             Color color = new Color();
             float layerIndex = GetLayerIndex(this.entity, furniturelist);

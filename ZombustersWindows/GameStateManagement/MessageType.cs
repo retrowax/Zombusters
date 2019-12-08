@@ -1,6 +1,4 @@
-﻿//using Steamworks;
-
-namespace ZombustersWindows
+﻿namespace ZombustersWindows
 {
     // Represents different types of network messages
     public enum MessageType {

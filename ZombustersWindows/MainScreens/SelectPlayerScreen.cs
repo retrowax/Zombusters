@@ -676,37 +676,37 @@ namespace ZombustersWindows
                         switch (levelSelected)
                         {
                             case 1:
-                                game.BeginLocalGame(CLevel.Level.One, ListPlayersAreGoingToPlay);
+                                game.BeginLocalGame(LevelType.One, ListPlayersAreGoingToPlay);
                                 break;
                             case 2:
-                                game.BeginLocalGame(CLevel.Level.Two, ListPlayersAreGoingToPlay);
+                                game.BeginLocalGame(LevelType.Two, ListPlayersAreGoingToPlay);
                                 break;
                             case 3:
-                                game.BeginLocalGame(CLevel.Level.Three, ListPlayersAreGoingToPlay);
+                                game.BeginLocalGame(LevelType.Three, ListPlayersAreGoingToPlay);
                                 break;
                             case 4:
-                                game.BeginLocalGame(CLevel.Level.Four, ListPlayersAreGoingToPlay);
+                                game.BeginLocalGame(LevelType.Four, ListPlayersAreGoingToPlay);
                                 break;
                             case 5:
-                                game.BeginLocalGame(CLevel.Level.Five, ListPlayersAreGoingToPlay);
+                                game.BeginLocalGame(LevelType.Five, ListPlayersAreGoingToPlay);
                                 break;
                             case 6:
-                                game.BeginLocalGame(CLevel.Level.Six, ListPlayersAreGoingToPlay);
+                                game.BeginLocalGame(LevelType.Six, ListPlayersAreGoingToPlay);
                                 break;
                             case 7:
-                                game.BeginLocalGame(CLevel.Level.Seven, ListPlayersAreGoingToPlay);
+                                game.BeginLocalGame(LevelType.Seven, ListPlayersAreGoingToPlay);
                                 break;
                             case 8:
-                                game.BeginLocalGame(CLevel.Level.Eight, ListPlayersAreGoingToPlay);
+                                game.BeginLocalGame(LevelType.Eight, ListPlayersAreGoingToPlay);
                                 break;
                             case 9:
-                                game.BeginLocalGame(CLevel.Level.Nine, ListPlayersAreGoingToPlay);
+                                game.BeginLocalGame(LevelType.Nine, ListPlayersAreGoingToPlay);
                                 break;
                             case 10:
-                                game.BeginLocalGame(CLevel.Level.Ten, ListPlayersAreGoingToPlay);
+                                game.BeginLocalGame(LevelType.Ten, ListPlayersAreGoingToPlay);
                                 break;
                             default:
-                                game.BeginLocalGame(CLevel.Level.One, ListPlayersAreGoingToPlay);
+                                game.BeginLocalGame(LevelType.One, ListPlayersAreGoingToPlay);
                                 break;
                         }
                     }

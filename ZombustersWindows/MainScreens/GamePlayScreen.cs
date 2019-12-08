@@ -30,9 +30,9 @@ namespace ZombustersWindows
         public Vector2 accumMove, accumFire;
         public Texture2D Map;
         public List<Player> PlayersInSession;
-        public CLevel Level;
-        private CLevel.Level currentLevel;
-        private CSubLevel.SubLevel currentSublevel;
+        public Level Level;
+        private LevelType currentLevel;
+        private SubLevel.SubLevelType currentSublevel;
 
         public Texture2D livePowerUp, extraLivePowerUp, shotgunAmmoPowerUp, machinegunAmmoPowerUp, flamethrowerAmmoPowerUp, immunePowerUp, heart, shotgunammoUI, pistolammoUI, grenadeammoUI, flamethrowerammoUI;
         Texture2D bullet;
@@ -74,10 +74,10 @@ namespace ZombustersWindows
 
         public List<TankState> Tanks;
         public List<ZombieState> Zombies;
-        public List<CPowerUp> PowerUpList;
+        public List<PowerUp> PowerUpList;
         public GameplayState GamePlayStatus = GameplayState.NotPlaying;
 
-        public GamePlayScreen(MyGame game, CLevel.Level startingLevel, CSubLevel.SubLevel startingSublevel)
+        public GamePlayScreen(MyGame game, LevelType startingLevel, SubLevel.SubLevelType startingSublevel)
             : base()
         {            
             this.game = game;
@@ -220,18 +220,18 @@ namespace ZombustersWindows
             float zombielife;
             float speed;
 
-            PowerUpList = new List<CPowerUp>();
+            PowerUpList = new List<PowerUp>();
 
             GamePlayStatus = GameplayState.StartLevel;
 
             uiBounds = GetTitleSafeArea();
             //game.bloom.Visible = false;
 
-            Level = new CLevel(game.player1, currentLevel);
+            Level = new Level(currentLevel);
 
             /*if (licenseInformation.IsTrial)
             {
-                Level = new CLevel(game.Main, CLevel.Level.One);
+                Level = new CLevel(game.Main, Level.One);
             }*/
 
             Level.Initialize(game);
@@ -247,34 +247,34 @@ namespace ZombustersWindows
 
             switch (currentSublevel)
             {
-                case CSubLevel.SubLevel.One:
+                case SubLevel.SubLevelType.One:
                     subLevelIndex = 0;
                     break;
-                case CSubLevel.SubLevel.Two:
+                case SubLevel.SubLevelType.Two:
                     subLevelIndex = 1;
                     break;
-                case CSubLevel.SubLevel.Three:
+                case SubLevel.SubLevelType.Three:
                     subLevelIndex = 2;
                     break;
-                case CSubLevel.SubLevel.Four:
+                case SubLevel.SubLevelType.Four:
                     subLevelIndex = 3;
                     break;
-                case CSubLevel.SubLevel.Five:
+                case SubLevel.SubLevelType.Five:
                     subLevelIndex = 4;
                     break;
-                case CSubLevel.SubLevel.Six:
+                case SubLevel.SubLevelType.Six:
                     subLevelIndex = 5;
                     break;
-                case CSubLevel.SubLevel.Seven:
+                case SubLevel.SubLevelType.Seven:
                     subLevelIndex = 6;
                     break;
-                case CSubLevel.SubLevel.Eight:
+                case SubLevel.SubLevelType.Eight:
                     subLevelIndex = 7;
                     break;
-                case CSubLevel.SubLevel.Nine:
+                case SubLevel.SubLevelType.Nine:
                     subLevelIndex = 8;
                     break;
-                case CSubLevel.SubLevel.Ten:
+                case SubLevel.SubLevelType.Ten:
                     subLevelIndex = 9;
                     break;
                 default: 
@@ -296,43 +296,43 @@ namespace ZombustersWindows
 
             switch (currentLevel)
             {
-                case CLevel.Level.One:
+                case LevelType.One:
                     zombielife = 0.5f;
                     speed = 0.0f;
                     break;
-                case CLevel.Level.Two:
+                case LevelType.Two:
                     zombielife = 1.0f;
                     speed = 0.2f;
                     break;
-                case CLevel.Level.Three:
+                case LevelType.Three:
                     zombielife = 1.5f;
                     speed = 0.3f;
                     break;
-                case CLevel.Level.Four:
+                case LevelType.Four:
                     zombielife = 2.0f;
                     speed = 0.4f;
                     break;
-                case CLevel.Level.Five:
+                case LevelType.Five:
                     zombielife = 2.5f;
                     speed = 0.5f;
                     break;
-                case CLevel.Level.Six:
+                case LevelType.Six:
                     zombielife = 3.0f;
                     speed = 0.6f;
                     break;
-                case CLevel.Level.Seven:
+                case LevelType.Seven:
                     zombielife = 3.5f;
                     speed = 0.7f;
                     break;
-                case CLevel.Level.Eight:
+                case LevelType.Eight:
                     zombielife = 4.0f;
                     speed = 0.8f;
                     break;
-                case CLevel.Level.Nine:
+                case LevelType.Nine:
                     zombielife = 4.5f;
                     speed = 0.9f;
                     break;
-                case CLevel.Level.Ten:
+                case LevelType.Ten:
                     zombielife = 5.0f;
                     speed = 1.0f;
                     break;
@@ -1068,14 +1068,14 @@ namespace ZombustersWindows
                 tank.LoadContent(game.Content);
             }
 
-            foreach (CFurniture furniture in Level.furnitureList)
+            foreach (Furniture furniture in Level.furnitureList)
             {
                 furniture.Load(game);
             }
 
             Level.furnitureList.Sort(furnitureComparer);
             // Apply layer index to sorted list
-            foreach (CFurniture furniture in Level.furnitureList)
+            foreach (Furniture furniture in Level.furnitureList)
             {
                 furniture.layerIndex = lIndex;
                 lIndex -= 0.004f;
@@ -1097,9 +1097,9 @@ namespace ZombustersWindows
             base.LoadContent();
         }
 
-        public class CFurnitureComparer : IComparer<CFurniture>
+        public class CFurnitureComparer : IComparer<Furniture>
         {
-            public int Compare(CFurniture x, CFurniture y)
+            public int Compare(Furniture x, Furniture y)
             {
                 if ((x.Position.Y + x.Texture.Height) == (y.Position.Y + y.Texture.Height)) return 0;
                 return ((x.Position.Y + x.Texture.Height) > (y.Position.Y + y.Texture.Height)) ? 1 : -1;
@@ -1417,7 +1417,7 @@ namespace ZombustersWindows
                     // Mostramos Cartel y esperamos unos segundos para mostrar el mensaje del siguiente nivel
                     /*if (licenseInformation.IsTrial)
                     {
-                        if (currentSublevel == CSubLevel.SubLevel.Ten && currentLevel == CLevel.Level.Three)
+                        if (currentSublevel == CSubLevel.SubLevel.Ten && currentLevel == Level.Three)
                         {
                             game.currentPlayers[0].lives = 1;
                             DestroyPlayer(0);
@@ -1453,7 +1453,7 @@ namespace ZombustersWindows
                     }
                      */
 
-                    if (currentLevel == CLevel.Level.FinalJuego)
+                    if (currentLevel == LevelType.FinalJuego)
                     {
                         timer += (float)gameTime.ElapsedGameTime.TotalSeconds;
                         if (timer >= 5.0f)
@@ -1481,14 +1481,14 @@ namespace ZombustersWindows
                     }
                 }
 
-                foreach (CPowerUp powerup in PowerUpList)
+                foreach (PowerUp powerup in PowerUpList)
                 {
                     powerup.Update(gameTime);
                 }
 
-                foreach (CFurniture furniture in Level.furnitureList)
+                foreach (Furniture furniture in Level.furnitureList)
                 {
-                    if (furniture.Type == CFurniture.FurnitureType.CocheArdiendo)
+                    if (furniture.Type == FurnitureType.CocheArdiendo)
                     {
                         furniture.Update(gameTime);
                     }
@@ -1696,7 +1696,7 @@ namespace ZombustersWindows
                     case 0: // Live
 
                         {
-                            PowerUpList.Add(new CPowerUp(livePowerUp, heart, zombie.entity.Position, CPowerUp.Type.live));
+                            PowerUpList.Add(new PowerUp(livePowerUp, heart, zombie.entity.Position, PowerUp.Type.live));
                         }
                         break;
 
@@ -1705,55 +1705,55 @@ namespace ZombustersWindows
                     case 1: // Machinegun Ammo
 
                         {
-                            PowerUpList.Add(new CPowerUp(machinegunAmmoPowerUp, pistolammoUI, zombie.entity.Position, CPowerUp.Type.machinegun_ammo));
+                            PowerUpList.Add(new PowerUp(machinegunAmmoPowerUp, pistolammoUI, zombie.entity.Position, PowerUp.Type.machinegun_ammo));
                         }
                         break;
 
                     case 2: // Flamethrower Ammo
 
                         {
-                            PowerUpList.Add(new CPowerUp(flamethrowerAmmoPowerUp, flamethrowerammoUI, zombie.entity.Position, CPowerUp.Type.flamethrower_ammo));
+                            PowerUpList.Add(new PowerUp(flamethrowerAmmoPowerUp, flamethrowerammoUI, zombie.entity.Position, PowerUp.Type.flamethrower_ammo));
                         }
                         break;
 
                     case 3: // ExtraLife
 
                         {
-                            PowerUpList.Add(new CPowerUp(extraLivePowerUp, extraLivePowerUp, zombie.entity.Position, CPowerUp.Type.extralife));
+                            PowerUpList.Add(new PowerUp(extraLivePowerUp, extraLivePowerUp, zombie.entity.Position, PowerUp.Type.extralife));
                         }
                         break;
 
                     case 4: // Shotgun Ammo
 
                         {
-                            PowerUpList.Add(new CPowerUp(shotgunAmmoPowerUp, shotgunammoUI, zombie.entity.Position, CPowerUp.Type.shotgun_ammo));
+                            PowerUpList.Add(new PowerUp(shotgunAmmoPowerUp, shotgunammoUI, zombie.entity.Position, PowerUp.Type.shotgun_ammo));
                         }
                         break;
 
                     case 5: // Grenade Ammo
 
                         {
-                            PowerUpList.Add(new CPowerUp(grenadeammoUI, grenadeammoUI, zombie.entity.Position, CPowerUp.Type.grenadelauncher_ammo));
+                            PowerUpList.Add(new PowerUp(grenadeammoUI, grenadeammoUI, zombie.entity.Position, PowerUp.Type.grenadelauncher_ammo));
                         }
                         break;
 
                     case 6: // Speed Buff
 
                         {
-                            PowerUpList.Add(new CPowerUp(livePowerUp, heart, zombie.entity.Position, CPowerUp.Type.speedbuff));
+                            PowerUpList.Add(new PowerUp(livePowerUp, heart, zombie.entity.Position, PowerUp.Type.speedbuff));
                         }
                         break;
 
                     case 7: // Immune Buff
 
                         {
-                            PowerUpList.Add(new CPowerUp(immunePowerUp, immunePowerUp, zombie.entity.Position, CPowerUp.Type.immunebuff));
+                            PowerUpList.Add(new PowerUp(immunePowerUp, immunePowerUp, zombie.entity.Position, PowerUp.Type.immunebuff));
                         }
                         break;
                     default:
 
                         {
-                            PowerUpList.Add(new CPowerUp(livePowerUp, heart, zombie.entity.Position, CPowerUp.Type.live));
+                            PowerUpList.Add(new PowerUp(livePowerUp, heart, zombie.entity.Position, PowerUp.Type.live));
                         }
                         break;
                 }
@@ -1891,7 +1891,7 @@ namespace ZombustersWindows
             //foreach (CPowerUp powerup in PowerUpList)
             for (int i = 0; i < PowerUpList.Count; i++)
             {
-                CPowerUp powerup = PowerUpList[i];
+                PowerUp powerup = PowerUpList[i];
                 if (powerup.status == ObjectStatus.Active)
                 {
                     if (DetectCrash(player, powerup.Position))
@@ -1899,14 +1899,14 @@ namespace ZombustersWindows
 
                         {
                             // ExtraLife
-                            if (powerup.PUType == CPowerUp.Type.extralife)
+                            if (powerup.PUType == PowerUp.Type.extralife)
                             {
                                 IncreaseLife(playerId);
                                 powerup.status = ObjectStatus.Dying;
                             }
 
                             // Live
-                            if (powerup.PUType == CPowerUp.Type.live)
+                            if (powerup.PUType == PowerUp.Type.live)
                             {
                                 if (player.lifecounter < 100)
                                 {
@@ -1922,7 +1922,7 @@ namespace ZombustersWindows
                             }
 
                             // Machine Gun Ammo
-                            if (powerup.PUType == CPowerUp.Type.machinegun_ammo)
+                            if (powerup.PUType == PowerUp.Type.machinegun_ammo)
                             {
                                 player.ammo[0] += powerup.Value;
                                 powerup.status = ObjectStatus.Dying;
@@ -1930,7 +1930,7 @@ namespace ZombustersWindows
                             }
 
                             // Shotgun Ammo
-                            if (powerup.PUType == CPowerUp.Type.shotgun_ammo)
+                            if (powerup.PUType == PowerUp.Type.shotgun_ammo)
                             {
                                 player.ammo[1] += powerup.Value;
                                 powerup.status = ObjectStatus.Dying;
@@ -1938,7 +1938,7 @@ namespace ZombustersWindows
                             }
 
                             // Grenade launcher Ammo
-                            if (powerup.PUType == CPowerUp.Type.grenadelauncher_ammo)
+                            if (powerup.PUType == PowerUp.Type.grenadelauncher_ammo)
                             {
                                 player.ammo[2] += powerup.Value;
                                 powerup.status = ObjectStatus.Dying;
@@ -1946,7 +1946,7 @@ namespace ZombustersWindows
                             }
 
                             // Flamethrower Ammo
-                            if (powerup.PUType == CPowerUp.Type.flamethrower_ammo)
+                            if (powerup.PUType == PowerUp.Type.flamethrower_ammo)
                             {
                                 player.ammo[3] += powerup.Value;
                                 powerup.status = ObjectStatus.Dying;
@@ -1954,7 +1954,7 @@ namespace ZombustersWindows
                             }
 
                             // Speedbuff
-                            if (powerup.PUType == CPowerUp.Type.speedbuff || powerup.PUType == CPowerUp.Type.immunebuff)
+                            if (powerup.PUType == PowerUp.Type.speedbuff || powerup.PUType == PowerUp.Type.immunebuff)
                             {
                                 //player. += powerup.Value;
                                 powerup.status = ObjectStatus.Dying;
@@ -2372,7 +2372,7 @@ namespace ZombustersWindows
                 if (subLevelIndex == 9)
                 {
                     currentLevel = Level.getNextLevel(currentLevel);
-                    if (currentLevel == CLevel.Level.FinalJuego)
+                    if (currentLevel == LevelType.FinalJuego)
                     {
                         {
                             GamePlayStatus = GameplayState.GameOver;
@@ -2380,19 +2380,19 @@ namespace ZombustersWindows
                     }
                     else
                     {
-                        Level = new CLevel(game.player1, currentLevel);
+                        Level = new Level(currentLevel);
                         Level.Initialize(game);
                         Map = game.Content.Load<Texture2D>(Level.mapTextureFileName);
                         subLevelIndex = 0;
 
-                        foreach (CFurniture furniture in Level.furnitureList)
+                        foreach (Furniture furniture in Level.furnitureList)
                         {
                             furniture.Load(game);
                         }
 
                         Level.furnitureList.Sort(furnitureComparer);
                         // Apply layer index to sorted list
-                        foreach (CFurniture furniture in Level.furnitureList)
+                        foreach (Furniture furniture in Level.furnitureList)
                         {
                             furniture.layerIndex = lIndex;
                             lIndex -= 0.004f;
@@ -2438,7 +2438,7 @@ namespace ZombustersWindows
             Tanks.Clear();
             //((Game1)this.ScreenManager.Game).audio.
 
-            if (currentLevel != CLevel.Level.FinalJuego)
+            if (currentLevel != LevelType.FinalJuego)
             {
 
                 for (i = 0; i < game.currentPlayers.Length; i++)
@@ -2453,37 +2453,37 @@ namespace ZombustersWindows
                 switch (subLevelIndex)
                 {
                     case 0:
-                        currentSublevel = CSubLevel.SubLevel.One;
+                        currentSublevel = SubLevel.SubLevelType.One;
                         break;
                     case 1:
-                        currentSublevel = CSubLevel.SubLevel.Two;
+                        currentSublevel = SubLevel.SubLevelType.Two;
                         break;
                     case 2:
-                        currentSublevel = CSubLevel.SubLevel.Three;
+                        currentSublevel = SubLevel.SubLevelType.Three;
                         break;
                     case 3:
-                        currentSublevel = CSubLevel.SubLevel.Four;
+                        currentSublevel = SubLevel.SubLevelType.Four;
                         break;
                     case 4:
-                        currentSublevel = CSubLevel.SubLevel.Five;
+                        currentSublevel = SubLevel.SubLevelType.Five;
                         break;
                     case 5:
-                        currentSublevel = CSubLevel.SubLevel.Six;
+                        currentSublevel = SubLevel.SubLevelType.Six;
                         break;
                     case 6:
-                        currentSublevel = CSubLevel.SubLevel.Seven;
+                        currentSublevel = SubLevel.SubLevelType.Seven;
                         break;
                     case 7:
-                        currentSublevel = CSubLevel.SubLevel.Eight;
+                        currentSublevel = SubLevel.SubLevelType.Eight;
                         break;
                     case 8:
-                        currentSublevel = CSubLevel.SubLevel.Nine;
+                        currentSublevel = SubLevel.SubLevelType.Nine;
                         break;
                     case 9:
-                        currentSublevel = CSubLevel.SubLevel.Ten;
+                        currentSublevel = SubLevel.SubLevelType.Ten;
                         break;
                     default:
-                        currentSublevel = CSubLevel.SubLevel.One;
+                        currentSublevel = SubLevel.SubLevelType.One;
                         break;
                 }
 
@@ -2501,43 +2501,43 @@ namespace ZombustersWindows
 
                 switch (currentLevel)
                 {
-                    case CLevel.Level.One:
+                    case LevelType.One:
                         zombielife = 1.0f;
                         speed = 0.0f;
                         break;
-                    case CLevel.Level.Two:
+                    case LevelType.Two:
                         zombielife = 1.5f;
                         speed = 0.2f;
                         break;
-                    case CLevel.Level.Three:
+                    case LevelType.Three:
                         zombielife = 2.0f;
                         speed = 0.3f;
                         break;
-                    case CLevel.Level.Four:
+                    case LevelType.Four:
                         zombielife = 2.5f;
                         speed = 0.4f;
                         break;
-                    case CLevel.Level.Five:
+                    case LevelType.Five:
                         zombielife = 3.0f;
                         speed = 0.5f;
                         break;
-                    case CLevel.Level.Six:
+                    case LevelType.Six:
                         zombielife = 3.5f;
                         speed = 0.6f;
                         break;
-                    case CLevel.Level.Seven:
+                    case LevelType.Seven:
                         zombielife = 4.0f;
                         speed = 0.7f;
                         break;
-                    case CLevel.Level.Eight:
+                    case LevelType.Eight:
                         zombielife = 4.5f;
                         speed = 0.8f;
                         break;
-                    case CLevel.Level.Nine:
+                    case LevelType.Nine:
                         zombielife = 5.0f;
                         speed = 0.9f;
                         break;
-                    case CLevel.Level.Ten:
+                    case LevelType.Ten:
                         zombielife = 5.5f;
                         speed = 1.0f;
                         break;
@@ -2600,7 +2600,7 @@ namespace ZombustersWindows
                 DrawMap(Map);
 
                 // Draw PowerUps
-                foreach (CPowerUp powerup in PowerUpList)
+                foreach (PowerUp powerup in PowerUpList)
                 {
                     powerup.Draw(this.ScreenManager.SpriteBatch, gameTime, MenuInfoFont);
                 }
@@ -2656,7 +2656,7 @@ namespace ZombustersWindows
                 }
 
                 // Draw Furniture
-                foreach (CFurniture furniture in Level.furnitureList)
+                foreach (Furniture furniture in Level.furnitureList)
                 {
                     furniture.Draw(this.ScreenManager.SpriteBatch, MenuInfoFont);
                 }
@@ -2665,13 +2665,11 @@ namespace ZombustersWindows
                 //----------------------------
                 // END BACK TO FRONT SORT MODE
 
-                foreach (CFurniture furniture in Level.furnitureList)
+                foreach (Furniture furniture in Level.furnitureList)
                 {
-                    if (furniture.Type == CFurniture.FurnitureType.CocheArdiendo)
+                    if (furniture.Type == FurnitureType.CocheArdiendo)
                     {
-#if XBOX
-                    furniture.particleRenderer.RenderEffect(furniture.SmokeEffect);
-#endif
+                        //furniture.particleRenderer.RenderEffect(furniture.SmokeEffect);
                     }
                 }
 
@@ -2791,43 +2789,43 @@ namespace ZombustersWindows
             // LEVEL
             switch (currentLevel)
             {
-                case CLevel.Level.One:
+                case LevelType.One:
                     levelshowstring = Strings.LevelSelectMenuString + " " + Strings.NumberOne;
                     break;
 
-                case CLevel.Level.Two:
+                case LevelType.Two:
                     levelshowstring = Strings.LevelSelectMenuString + " " + Strings.NumberTwo;
                     break;
 
-                case CLevel.Level.Three:
+                case LevelType.Three:
                     levelshowstring = Strings.LevelSelectMenuString + " " + Strings.NumberThree;
                     break;
 
-                case CLevel.Level.Four:
+                case LevelType.Four:
                     levelshowstring = Strings.LevelSelectMenuString + " " + Strings.NumberFour;
                     break;
 
-                case CLevel.Level.Five:
+                case LevelType.Five:
                     levelshowstring = Strings.LevelSelectMenuString + " " + Strings.NumberFive;
                     break;
 
-                case CLevel.Level.Six:
+                case LevelType.Six:
                     levelshowstring = Strings.LevelSelectMenuString + " " + Strings.NumberSix;
                     break;
 
-                case CLevel.Level.Seven:
+                case LevelType.Seven:
                     levelshowstring = Strings.LevelSelectMenuString + " " + Strings.NumberSeven;
                     break;
 
-                case CLevel.Level.Eight:
+                case LevelType.Eight:
                     levelshowstring = Strings.LevelSelectMenuString + " " + Strings.NumberEight;
                     break;
 
-                case CLevel.Level.Nine:
+                case LevelType.Nine:
                     levelshowstring = Strings.LevelSelectMenuString + " " + Strings.NumberNine;
                     break;
 
-                case CLevel.Level.Ten:
+                case LevelType.Ten:
                     levelshowstring = Strings.LevelSelectMenuString + " " + Strings.NumberTen;
                     break;
 
@@ -2843,43 +2841,43 @@ namespace ZombustersWindows
             // WAVE
             switch (currentSublevel)
             {
-                case CSubLevel.SubLevel.One:
+                case SubLevel.SubLevelType.One:
                     levelshowstring = Strings.WaveGameplayString + " " + Strings.NumberOne;
                     break;
 
-                case CSubLevel.SubLevel.Two:
+                case SubLevel.SubLevelType.Two:
                     levelshowstring = Strings.WaveGameplayString + " " + Strings.NumberTwo;
                     break;
 
-                case CSubLevel.SubLevel.Three:
+                case SubLevel.SubLevelType.Three:
                     levelshowstring = Strings.WaveGameplayString + " " + Strings.NumberThree;
                     break;
 
-                case CSubLevel.SubLevel.Four:
+                case SubLevel.SubLevelType.Four:
                     levelshowstring = Strings.WaveGameplayString + " " + Strings.NumberFour;
                     break;
 
-                case CSubLevel.SubLevel.Five:
+                case SubLevel.SubLevelType.Five:
                     levelshowstring = Strings.WaveGameplayString + " " + Strings.NumberFive;
                     break;
 
-                case CSubLevel.SubLevel.Six:
+                case SubLevel.SubLevelType.Six:
                     levelshowstring = Strings.WaveGameplayString + " " + Strings.NumberSix;
                     break;
 
-                case CSubLevel.SubLevel.Seven:
+                case SubLevel.SubLevelType.Seven:
                     levelshowstring = Strings.WaveGameplayString + " " + Strings.NumberSeven;
                     break;
 
-                case CSubLevel.SubLevel.Eight:
+                case SubLevel.SubLevelType.Eight:
                     levelshowstring = Strings.WaveGameplayString + " " + Strings.NumberEight;
                     break;
 
-                case CSubLevel.SubLevel.Nine:
+                case SubLevel.SubLevelType.Nine:
                     levelshowstring = Strings.WaveGameplayString + " " + Strings.NumberNine;
                     break;
 
-                case CSubLevel.SubLevel.Ten:
+                case SubLevel.SubLevelType.Ten:
                     levelshowstring = Strings.WaveGameplayString + " " + Strings.NumberTen;
                     break;
 
@@ -2921,7 +2919,7 @@ namespace ZombustersWindows
             }
 
             // SHOW END GAME
-            if (currentLevel == CLevel.Level.FinalJuego)
+            if (currentLevel == LevelType.FinalJuego)
             {
                 string levelshowstring;
                 this.ScreenManager.FadeBackBufferToBlack(64);
@@ -2949,7 +2947,7 @@ namespace ZombustersWindows
 
         }
 
-        public bool isInRange(Avatar state, CFurniture furniture)
+        public bool isInRange(Avatar state, Furniture furniture)
         {
             float distance = Vector2.Distance(state.position, furniture.ObstaclePosition);
             if (distance < Avatar.CrashRadius + 10.0f)
@@ -2960,7 +2958,7 @@ namespace ZombustersWindows
             return false;
         }
 
-        public float GetLayerIndex(Avatar state, List<CFurniture> furniturelist)
+        public float GetLayerIndex(Avatar state, List<Furniture> furniturelist)
         {
             float furnitureInferior, playerBasePosition, lindex;
             int n = 0;
@@ -2988,7 +2986,7 @@ namespace ZombustersWindows
             return lindex + 0.002f;
         }
 
-        private void DrawPlayer(Avatar state, double TotalGameSeconds, GameTime gameTime, List<CFurniture> furniturelist)
+        private void DrawPlayer(Avatar state, double TotalGameSeconds, GameTime gameTime, List<Furniture> furniturelist)
         {
             //PRUEBA!!
             //AvatarCircle circulo = new AvatarCircle(this.game.GraphicsDevice, new Vector2(state.position.X + CharacterAnimation.frameSize.X/2, state.position.Y + CharacterAnimation.frameSize.Y), 15.0f, state.color);
@@ -4441,43 +4439,43 @@ namespace ZombustersWindows
             string levelstring;
             switch (currentLevel)
             {
-                case CLevel.Level.One:
+                case LevelType.One:
                     levelstring = Strings.LevelSelectMenuString + " " + Strings.NumberOne;
                     break;
 
-                case CLevel.Level.Two:
+                case LevelType.Two:
                     levelstring = Strings.LevelSelectMenuString + " " + Strings.NumberTwo;
                     break;
 
-                case CLevel.Level.Three:
+                case LevelType.Three:
                     levelstring = Strings.LevelSelectMenuString + " " + Strings.NumberThree;
                     break;
 
-                case CLevel.Level.Four:
+                case LevelType.Four:
                     levelstring = Strings.LevelSelectMenuString + " " + Strings.NumberFour;
                     break;
 
-                case CLevel.Level.Five:
+                case LevelType.Five:
                     levelstring = Strings.LevelSelectMenuString + " " + Strings.NumberFive;
                     break;
 
-                case CLevel.Level.Six:
+                case LevelType.Six:
                     levelstring = Strings.LevelSelectMenuString + " " + Strings.NumberSix;
                     break;
 
-                case CLevel.Level.Seven:
+                case LevelType.Seven:
                     levelstring = Strings.LevelSelectMenuString + " " + Strings.NumberSeven;
                     break;
 
-                case CLevel.Level.Eight:
+                case LevelType.Eight:
                     levelstring = Strings.LevelSelectMenuString + " " + Strings.NumberEight;
                     break;
 
-                case CLevel.Level.Nine:
+                case LevelType.Nine:
                     levelstring = Strings.LevelSelectMenuString + " " + Strings.NumberNine;
                     break;
 
-                case CLevel.Level.Ten:
+                case LevelType.Ten:
                     levelstring = Strings.LevelSelectMenuString + " " + Strings.NumberTen;
                     break;
 
@@ -4493,43 +4491,43 @@ namespace ZombustersWindows
             string sublevelstring;
             switch (currentSublevel)
             {
-                case CSubLevel.SubLevel.One:
+                case SubLevel.SubLevelType.One:
                     sublevelstring = Strings.WaveGameplayString + " " + Strings.NumberOne;
                     break;
 
-                case CSubLevel.SubLevel.Two:
+                case SubLevel.SubLevelType.Two:
                     sublevelstring = Strings.WaveGameplayString + " " + Strings.NumberTwo;
                     break;
 
-                case CSubLevel.SubLevel.Three:
+                case SubLevel.SubLevelType.Three:
                     sublevelstring = Strings.WaveGameplayString + " " + Strings.NumberThree;
                     break;
 
-                case CSubLevel.SubLevel.Four:
+                case SubLevel.SubLevelType.Four:
                     sublevelstring = Strings.WaveGameplayString + " " + Strings.NumberFour;
                     break;
 
-                case CSubLevel.SubLevel.Five:
+                case SubLevel.SubLevelType.Five:
                     sublevelstring = Strings.WaveGameplayString + " " + Strings.NumberFive;
                     break;
 
-                case CSubLevel.SubLevel.Six:
+                case SubLevel.SubLevelType.Six:
                     sublevelstring = Strings.WaveGameplayString + " " + Strings.NumberSix;
                     break;
 
-                case CSubLevel.SubLevel.Seven:
+                case SubLevel.SubLevelType.Seven:
                     sublevelstring = Strings.WaveGameplayString + " " + Strings.NumberSeven;
                     break;
 
-                case CSubLevel.SubLevel.Eight:
+                case SubLevel.SubLevelType.Eight:
                     sublevelstring = Strings.WaveGameplayString + " " + Strings.NumberEight;
                     break;
 
-                case CSubLevel.SubLevel.Nine:
+                case SubLevel.SubLevelType.Nine:
                     sublevelstring = Strings.WaveGameplayString + " " + Strings.NumberNine;
                     break;
 
-                case CSubLevel.SubLevel.Ten:
+                case SubLevel.SubLevelType.Ten:
                     sublevelstring = Strings.WaveGameplayString + " " + Strings.NumberTen;
                     break;
 

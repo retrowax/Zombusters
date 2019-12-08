@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0"?>
-<ArrayOfCWall>
+<ArrayOfWall>
   <!-- Superior Izquierda -->
-  <CWall>
+  <Wall>
     <From>
       <X>0</X>
       <Y>300</Y>
@@ -10,9 +10,9 @@
       <X>-250</X>
       <Y>300</Y>
     </To>
-  </CWall>
+  </Wall>
 
-  <CWall>
+  <Wall>
     <From>
       <X>0</X>
       <Y>300</Y>
@@ -21,9 +21,9 @@
       <X>600</X>
       <Y>0</Y>
     </To>
-  </CWall>
+  </Wall>
 
-  <CWall>
+  <Wall>
     <From>
       <X>600</X>
       <Y>0</Y>
@@ -32,7 +32,7 @@
       <X>600</X>
       <Y>-250</Y>
     </To>
-  </CWall>
+  </Wall>
   <!-- END Superior Izquierda -->
   
-</ArrayOfCWall>
+</ArrayOfWall>

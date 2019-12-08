@@ -1,6 +1,4 @@
-﻿//using Steamworks;
-
-namespace GameStateManagement
+﻿namespace GameStateManagement
 {
     public enum GameState 
     { 

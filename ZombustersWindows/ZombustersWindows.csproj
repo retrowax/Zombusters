@@ -62,10 +62,19 @@
     <ApplicationIcon>Game.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="ContentManager\EnemiesCount.cs" />
+    <Compile Include="ContentManager\Furniture.cs" />
+    <Compile Include="ContentManager\Level.cs" />
+    <Compile Include="ContentManager\SubLevel.cs" />
+    <Compile Include="ContentManager\SubLevelType.cs" />
+    <Compile Include="ContentManager\Wall.cs" />
+    <Compile Include="ContentManager\FurnitureOrientation.cs" />
+    <Compile Include="ContentManager\FurnitureType.cs" />
+    <Compile Include="ContentManager\LevelType.cs" />
     <Compile Include="GameObjects\Avatar.cs" />
     <Compile Include="BloomPostProcess\BloomComponent.cs" />
     <Compile Include="BloomPostProcess\BloomSettings.cs" />
-    <Compile Include="ContentManager\LevelManager.cs" />
+    <Compile Include="ContentManager\PowerUp.cs" />
     <Compile Include="GameObjects\AvatarState.cs" />
     <Compile Include="GameObjects\Enemies\Enemies.cs" />
     <Compile Include="GameObjects\Explosion.cs" />
@@ -73,6 +82,7 @@
     <Compile Include="GameObjects\ShotgunShell.cs" />
     <Compile Include="GameStateManagement\GameState.cs" />
     <Compile Include="GameStateManagement\InputMode.cs" />
+    <Compile Include="GameStateManagement\ScreenState.cs" />
     <Compile Include="MainScreens\ErrorScreen.cs" />
     <Compile Include="MainScreens\LoadInScreen.cs" />
     <Compile Include="GameStateManagement\MessageType.cs" />
@@ -81,7 +91,6 @@
     <Compile Include="GameStateManagement\OptionsState.cs" />
     <Compile Include="MyGame.cs" />
     <Compile Include="GameStateManagement\GameScreen.cs" />
-    <Compile Include="GameStateManagement\InputAction.cs" />
     <Compile Include="GameStateManagement\InputState.cs" />
     <Compile Include="GameStateManagement\IScreenFactory.cs" />
     <Compile Include="GameStateManagement\PlayerIndexEventArgs.cs" />

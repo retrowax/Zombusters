@@ -1,13 +1,4 @@
-﻿#region File Description
-//-----------------------------------------------------------------------------
-// InputState.cs
-//
-// Microsoft XNA Community Game Platform
-// Copyright (C) Microsoft Corporation. All rights reserved.
-//-----------------------------------------------------------------------------
-#endregion
-
-#region Using Statements
+﻿#region Using Statements
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Input.Touch;
@@ -25,13 +16,13 @@ namespace GameStateManagement
     public class InputState
     {
 		# region private class data
-        private KeyboardState[] m_CurrentKeyboardStates;
-        private GamePadState[] m_CurrentGamePadStates;
-        private KeyboardState[] m_LastKeyboardStates;
-        private GamePadState[] m_LastGamePadStates;
-        private MouseState m_CurrentMouseStates;
-        private MouseState m_LastMouseStates;
-        private List<GestureSample> m_Gestures;
+        private readonly KeyboardState[] currentKeyboardStates;
+        private readonly GamePadState[] currentGamePadStates;
+        private readonly KeyboardState[] lastKeyboardStates;
+        private readonly GamePadState[] lastGamePadStates;
+        private MouseState currentMouseStates;
+        private MouseState lastMouseStates;
+        private List<GestureSample> gesturesList;
 		#endregion
 
         #region Fields
@@ -45,13 +36,13 @@ namespace GameStateManagement
         /// </summary>
         public InputState()
         {
-            m_CurrentKeyboardStates = new KeyboardState[MaxInputs];
-            m_CurrentGamePadStates = new GamePadState[MaxInputs];
-            m_LastKeyboardStates = new KeyboardState[MaxInputs];
-            m_LastGamePadStates = new GamePadState[MaxInputs];
-            m_CurrentMouseStates = new MouseState();
-            m_LastMouseStates = new MouseState();
-            m_Gestures = new List<GestureSample>();
+            currentKeyboardStates = new KeyboardState[MaxInputs];
+            currentGamePadStates = new GamePadState[MaxInputs];
+            lastKeyboardStates = new KeyboardState[MaxInputs];
+            lastGamePadStates = new GamePadState[MaxInputs];
+            currentMouseStates = new MouseState();
+            lastMouseStates = new MouseState();
+            gesturesList = new List<GestureSample>();
         }
         #endregion
 
@@ -135,37 +126,37 @@ namespace GameStateManagement
         #region Methods
         public KeyboardState[] GetCurrentKeyboardStates()
 		{
-			return m_CurrentKeyboardStates;
+			return currentKeyboardStates;
 		}
 
         public GamePadState[] GetCurrentGamePadStates()
 		{
-			return m_CurrentGamePadStates;
+			return currentGamePadStates;
 		}
 
         public KeyboardState[] GetLastKeyboardStates()
 		{
-			return m_LastKeyboardStates;
+			return lastKeyboardStates;
 		}
 
         public GamePadState[] GetLastGamePadStates()
 		{
-			return m_LastGamePadStates;
+			return lastGamePadStates;
 		}
 
         public MouseState GetCurrentMouseState()
         {
-            return m_CurrentMouseStates;
+            return currentMouseStates;
         }
 
         public MouseState GetLastMouseState()
         {
-            return m_LastMouseStates;
+            return lastMouseStates;
         }
 
         public List<GestureSample> GetGestures()
         {
-            return m_Gestures;
+            return gesturesList;
         }
 		
         /// <summary>
@@ -175,27 +166,26 @@ namespace GameStateManagement
         {
             for (int i = 0; i < MaxInputs; i++)
             {
-                m_LastKeyboardStates[i] = m_CurrentKeyboardStates[i];
-                m_LastGamePadStates[i] = m_CurrentGamePadStates[i];
+                lastKeyboardStates[i] = currentKeyboardStates[i];
+                lastGamePadStates[i] = currentGamePadStates[i];
 
-                m_CurrentKeyboardStates[i] = Keyboard.GetState((PlayerIndex)i);
-                m_CurrentGamePadStates[i] = GamePad.GetState((PlayerIndex)i);  
+                currentKeyboardStates[i] = Keyboard.GetState((PlayerIndex)i);
+                currentGamePadStates[i] = GamePad.GetState((PlayerIndex)i);  
             }
 
-            m_LastMouseStates = m_CurrentMouseStates;
-            m_CurrentMouseStates = Mouse.GetState();
+            lastMouseStates = currentMouseStates;
+            currentMouseStates = Mouse.GetState();
 
             // Get the raw touch state from the TouchPanel
             TouchState = TouchPanel.GetState();
 
             // Read in any detected gestures into our list for the screens to later process
-            m_Gestures.Clear();
+            gesturesList.Clear();
             if (TouchPanel.EnabledGestures != GestureType.None)
             {
-
                 while (TouchPanel.IsGestureAvailable)
                 {
-                    m_Gestures.Add(TouchPanel.ReadGesture());
+                    gesturesList.Add(TouchPanel.ReadGesture());
                 }
             }
         }
@@ -223,8 +213,8 @@ namespace GameStateManagement
         /// </summary>
         public bool IsNewKeyPress(Keys key, PlayerIndex playerIndex)
         {
-            return (m_CurrentKeyboardStates[(int)playerIndex].IsKeyDown(key) &&
-                    m_LastKeyboardStates[(int)playerIndex].IsKeyUp(key));
+            return (currentKeyboardStates[(int)playerIndex].IsKeyDown(key) &&
+                    lastKeyboardStates[(int)playerIndex].IsKeyUp(key));
         }
 
 
@@ -251,8 +241,8 @@ namespace GameStateManagement
         /// </summary>
         public bool IsNewButtonPress(Buttons button, PlayerIndex playerIndex)
         {            
-            return (m_CurrentGamePadStates[(int)playerIndex].IsButtonDown(button) &&
-                    m_LastGamePadStates[(int)playerIndex].IsButtonUp(button));
+            return (currentGamePadStates[(int)playerIndex].IsButtonDown(button) &&
+                    lastGamePadStates[(int)playerIndex].IsButtonUp(button));
         }
 
 

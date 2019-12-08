@@ -1,8 +1,8 @@
 ﻿<?xml version="1.0"?>
-<ArrayOfCWall>
+<ArrayOfWall>
 
   <!-- Inferior Derecha -->
-  <CWall>
+  <Wall>
     <From>
       <X>1280</X>
       <Y>514</Y>
@@ -11,9 +11,9 @@
       <X>1500</X>
       <Y>514</Y>
     </To>
-  </CWall>
+  </Wall>
 
-  <CWall>
+  <Wall>
     <From>
       <X>1280</X>
       <Y>514</Y>
@@ -22,9 +22,9 @@
       <X>866</X>
       <Y>720</Y>
     </To>
-  </CWall>
+  </Wall>
 
-  <CWall>
+  <Wall>
     <From>
       <X>866</X>
       <Y>720</Y>
@@ -33,7 +33,7 @@
       <X>866</X>
       <Y>900</Y>
     </To>
-  </CWall>
+  </Wall>
   <!-- END Inferior Derecha -->
   
-</ArrayOfCWall>
+</ArrayOfWall>
