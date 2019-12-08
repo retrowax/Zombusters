@@ -1,14 +1,7 @@
-#region File Description
-//-----------------------------------------------------------------------------
-// ExitMessageBox.cs
-//-----------------------------------------------------------------------------
-#endregion
-
 #region Using Statements
 using System;
 using System.Text.RegularExpressions;
 using Microsoft.Xna.Framework;
-
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input.Touch;
 using GameStateManagement;
@@ -109,13 +102,6 @@ namespace ZombustersWindows
             SaveTexture = ((MyGame)this.ScreenManager.Game).Content.Load<Texture2D>(@"menu/SaveAnimation");
 
             submit_button = this.ScreenManager.Game.Content.Load<Texture2D>(@"menu/submit_button_mobile");
-
-#if !WINDOWS_PHONE && !WINDOWS
-            if (!includeButtons)
-            {
-                ((Game1)this.ScreenManager.Game).storageDeviceManager.isStartScreen = true;
-            }
-#endif
         }
 
 
@@ -143,23 +129,20 @@ namespace ZombustersWindows
                             (gesture.Position.Y >= 523 && gesture.Position.Y <= 555))
                         {
                             // Raise the accepted event, then exit the message box.
-                            if (Accepted != null)
-                                Accepted(this, new PlayerIndexEventArgs(PlayerIndex.One));
+                            Accepted?.Invoke(this, new PlayerIndexEventArgs(PlayerIndex.One));
                         }
 
                         if ((gesture.Position.X >= 846 && gesture.Position.X <= 1130) &&
                             (gesture.Position.Y >= 523 && gesture.Position.Y <= 555))
                         {
                             // Raise the cancelled event, then exit the message box.
-                            if (Cancelled != null)
-                                Cancelled(this, new PlayerIndexEventArgs(PlayerIndex.One));
+                            Cancelled?.Invoke(this, new PlayerIndexEventArgs(PlayerIndex.One));
                         }
                     }
                     else
                     {
                         // Raise the accepted event, then exit the message box.
-                        if (Accepted != null)
-                            Accepted(this, new PlayerIndexEventArgs(PlayerIndex.One));
+                        Accepted?.Invoke(this, new PlayerIndexEventArgs(PlayerIndex.One));
                     }
 
                     
@@ -197,16 +180,14 @@ namespace ZombustersWindows
                 if (input.IsMenuSelect(playerIndex))
                 {
                     // Raise the accepted event, then exit the message box.
-                    if (Accepted != null)
-                        Accepted(this, new PlayerIndexEventArgs(playerIndex));
+                    Accepted?.Invoke(this, new PlayerIndexEventArgs(playerIndex));
 
                     ExitScreen();
                 }
                 else if (input.IsMenuCancel(playerIndex))
                 {
                     // Raise the cancelled event, then exit the message box.
-                    if (Cancelled != null)
-                        Cancelled(this, new PlayerIndexEventArgs(playerIndex));
+                    Cancelled?.Invoke(this, new PlayerIndexEventArgs(playerIndex));
 
                     ExitScreen();
                 }
@@ -219,14 +200,6 @@ namespace ZombustersWindows
 
         public override void Update(GameTime gameTime, bool otherScreenHasFocus, bool coveredByOtherScreen)
         {
-#if !WINDOWS_PHONE && !WINDOWS
-            // Save Animation Update
-            if (!includeButtons)
-            {
-                ((Game1)this.ScreenManager.Game).storageDeviceManager.Update(gameTime);
-            }
-#endif
-
             base.Update(gameTime, otherScreenHasFocus, coveredByOtherScreen);
         }
 
@@ -278,9 +251,6 @@ namespace ZombustersWindows
 
             spriteBatch.Begin();
 
-#if WINDOWS_PHONE
-            textPosition.X -= 100;
-            textPosition.Y -= 50;
 
             // Draw the message box text.
             spriteBatch.DrawString(font, title, textPosition, color);
@@ -298,46 +268,6 @@ namespace ZombustersWindows
                 spriteBatch.DrawString(font, line.Replace("	", ""), textPosition, color);
                 textPosition.Y += 20;
             }
-
-            // Linea blanca
-            textPosition.Y += 100;
-            spriteBatch.Draw(lineaMenu, textPosition, Color.White);
-
-            spriteBatch.DrawString(font, "OK", new Vector2(buttonsPossition.X + spaceBetweenButtonAndText + 2, buttonsPossition.Y + 6), Color.Black, 0, Vector2.Zero, scale - 0.5f, SpriteEffects.None, 1.0f);
-            spriteBatch.DrawString(font, "OK", new Vector2(buttonsPossition.X + spaceBetweenButtonAndText, buttonsPossition.Y + 4), Color.White, 0, Vector2.Zero, scale - 0.5f, SpriteEffects.None, 1.0f);
-            
-            distanceBetweenButtonsText = Convert.ToInt32(font.MeasureString("Ok").X) + spaceBetweenButtonAndText + spaceBetweenButtons + 100;
-
-            spriteBatch.DrawString(font, Strings.CancelString.ToUpper(), new Vector2(buttonsPossition.X + spaceBetweenButtonAndText + distanceBetweenButtonsText + 2, buttonsPossition.Y + 6), Color.Black, 0, Vector2.Zero, scale - 0.5f, SpriteEffects.None, 1.0f);
-            spriteBatch.DrawString(font, Strings.CancelString.ToUpper(), new Vector2(buttonsPossition.X + spaceBetweenButtonAndText + distanceBetweenButtonsText, buttonsPossition.Y + 4), Color.White, 0, Vector2.Zero, scale - 0.5f, SpriteEffects.None, 1.0f);
-            
-
-#else
-            // Draw the message box text.
-            spriteBatch.DrawString(font, title, textPosition, color);
-
-            // Linea blanca
-            textPosition.Y += 30;
-            spriteBatch.Draw(lineaMenu, textPosition, Color.White);
-
-            // Draw the message box text.
-            textPosition.Y += 15;
-            //spriteBatch.DrawString(font, Strings.ConfirmReturnMainMenuMMString, textPosition, color);
-            lines = Regex.Split(message, "\r\n");
-            foreach (string line in lines)
-            {
-                spriteBatch.DrawString(font, line.Replace("	", ""), textPosition, color);
-                textPosition.Y += 20;
-            }
-
-#if !WINDOWS
-            // Save Animation Texture
-            if (!includeButtons)
-            {
-                ((Game1)this.ScreenManager.Game).storageDeviceManager.Draw(spriteBatch, gameTime, new Vector2(textPosition.X, textPosition.Y + 20), true);
-                //spriteBatch.Draw(SaveTexture, new Vector2(textPosition.X, textPosition.Y + 20) , Color.White);
-            }
-#endif
 
             // Linea blanca
             textPosition.Y += 100;
@@ -398,7 +328,6 @@ namespace ZombustersWindows
                         new Vector2(buttonsPossition.X + 330 + submit_button.Width / 2 - font.MeasureString(Strings.CancelString.ToUpper()).X / 2, buttonsPossition.Y + 7), Color.White, 0, Vector2.Zero, 1.0f, SpriteEffects.None, 1.0f);
                 }
             }
-#endif
 
             spriteBatch.End();
         }

@@ -2,12 +2,10 @@
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;
-using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Media;
 
 namespace ZombustersWindows
 {
-
     public class AudioManager : DrawableGameComponent
     {
         private float FXVolume;
@@ -15,14 +13,8 @@ namespace ZombustersWindows
         public AudioManager(Game game)
             : base(game)
         {
-#if WINDOWS_PHONE
-            FXVolume = 1.0f;
-            MusicVolume = 0.9f;
-#else
             FXVolume = 0.7f;
             MusicVolume = 0.5f;
-#endif
-
             Sounds = new Queue<SoundEffectInstance>(100);
             random = new Random();
         }
@@ -38,67 +30,24 @@ namespace ZombustersWindows
         private SoundEffect MachineGun;
         private SoundEffectInstance MachineGunInstance;
 
-#if WINDOWS_PHONE || WINDOWS
         private SoundEffectInstance ShotInstance;
         private SoundEffectInstance ZombieDyingInstance;
         private SoundEffectInstance WomanScreamInstance;
         private SoundEffectInstance ManScreamInstance;
-        //private SoundEffectInstance SplashInstance;
-#endif
 
-        private Random random;
-#if !WINDOWS_PHONE && !WINDOWS
-        /AudioEngine audioEngine;
-        //WaveBank waveBank;
-        //SoundBank soundBank;
-        //AudioCategory audioCategory;
+        private readonly Random random;
 
-        //// Cue so we can hang on to the sound of the engine.
-        //Cue engineSound = null;
-#endif
-
-        //private Song Music;
-        //private SoundEffect MenuLoop;
-        //private SoundEffectInstance MenuLoopInstance;
-
-        //private SoundEffect Seeker; // Looped
-        //private SoundEffectInstance SeekerInstance;
-
-        private SoundEffect Splash; //Splash Logo Sound
+        private SoundEffect Splash;
 
         public override void Initialize()
         {
-#if !WINDOWS_PHONE
-            //audioEngine = new AudioEngine("Content\\default.xgs");
-            //waveBank = new WaveBank(audioEngine, "Content\\Wave Bank.xwb");
-            //soundBank = new SoundBank(audioEngine, "Content\\Sound Bank.xsb");
-#endif
-
             base.Initialize();
         }
 
         protected override void LoadContent()
         {
-            //Music = Game.Content.Load<Song>("Music/LondonToTokyo_HighGround");
-            //Music = Song.FromUri("LondonToTokyo_HighGround", new Uri("Content/Music/LondonToTokyo_HighGround.mp3", UriKind.Relative));
             MediaPlayer.Volume = MusicVolume;
             MediaPlayer.IsRepeating = true;
-
-            /* REVISARRR
-            MenuLoop = Game.Content.Load<SoundEffect>("Music/MenuLoop");
-            MenuLoopInstance = MenuLoop.CreateInstance();
-            MenuLoopInstance.IsLooped = true;
-             */
-
-            //Seeker = Game.Content.Load<SoundEffect>("SoundFX/engine_2");
-
-            // We call CreateInstance to get a permanent handle
-            // on the seeker sound, and set it's pitch, volume,
-            // and looping accordingly.
-            //SeekerInstance = Seeker.CreateInstance();
-            //SeekerInstance.Volume = FXVolume;
-            //SeekerInstance.Pitch = 0.75f;
-            //SeekerInstance.IsLooped = true;
 
             Shot = Game.Content.Load<SoundEffect>("SoundFX/pistol_shot");
 
@@ -111,22 +60,15 @@ namespace ZombustersWindows
             FlameThrower = Game.Content.Load<SoundEffect>("SoundFX/flamethrower");
             FlameThrowerInstance = FlameThrower.CreateInstance();
             FlameThrowerInstance.Volume = FXVolume;
-            //FlameThrowerInstance.Pitch = 1.4f;
             FlameThrowerInstance.IsLooped = false;
 
             MachineGun = Game.Content.Load<SoundEffect>("SoundFX/machinegun");
             MachineGunInstance = MachineGun.CreateInstance();
             MachineGunInstance.Volume = FXVolume;
-            //FlameThrowerInstance.Pitch = 1.4f;
             MachineGunInstance.IsLooped = false;
 
             Splash = Game.Content.Load<SoundEffect>("SoundFX/LogoSplashSound");
 
-#if !WINDOWS_PHONE
-            // Get the category.
-            //audioCategory = audioEngine.GetCategory("Global");
-            //audioCategory.SetVolume(this.FXVolume * 1.5f);
-#endif
             ShotInstance = Shot.CreateInstance();
             ShotInstance.Volume = FXVolume;
             ShotInstance.IsLooped = false;
@@ -143,11 +85,6 @@ namespace ZombustersWindows
             ManScreamInstance.Volume = FXVolume;
             ManScreamInstance.IsLooped = false;
 
-            //SplashInstance = Splash.CreateInstance();
-            //SplashInstance.Volume = FXVolume;
-            //SplashInstance.IsLooped = false;
-
-
             base.LoadContent();
         }
 
@@ -161,12 +98,6 @@ namespace ZombustersWindows
                 else
                     break;
             }
-
-#if !WINDOWS_PHONE
-            //FlameThrowerInstance.Volume = FXVolume;
-            //            audioCategory.SetVolume(this.FXVolume * 1.5f);
-            //            audioEngine.Update();
-#endif
 
             base.Update(gameTime);
         }
@@ -182,12 +113,9 @@ namespace ZombustersWindows
         }
         public void PlaySplashSound()
         {
-#if !WINDOWS_PHONE
             if (!bPaused)
                 AddSound(Splash, 1.0f, 0.0f);
-#else
-            SplashInstance.Play();
-#endif
+
         }
         public void PlayShot()
         {
@@ -244,8 +172,6 @@ namespace ZombustersWindows
                 if ((!bPaused) && (MachineGunInstance.State != SoundState.Playing))
                     MachineGunInstance.Play();
             }
-            //if ((!bPaused) && (MachineGunInstance.State != SoundState.Playing))
-            //MachineGunInstance.Play();
         }
         public void StopMachineGun()
         {
@@ -255,41 +181,21 @@ namespace ZombustersWindows
 
         public void PlayExplosion()
         {
-#if !WINDOWS_PHONE
             if (!bPaused)
                 AddSound(Explosion, this.FXVolume, 0);
-#endif
+
         }
-        //public void PlaySeeker()
-        //{
-        //    if ((!bPaused) && (SeekerInstance.State != SoundState.Playing))
-        //        SeekerInstance.Play();
-        //}
-        //public void StopSeeker()
-        //{
-        //    SeekerInstance.Stop();
-        //}
+
         public void PlayMusic()
         {
-            /* REVISARRR
-            if (Music != null)
-            {
-                MediaPlayer.Play(Music);
-            }
-             */
         }
+
         public void PlayMenuMusic()
         {
-            /* REVISARR
-            if (MenuLoop != null)
-            {
-                MenuLoopInstance.Play();
-            }
-             */
         }
+
         public void StopMenuMusic()
         {
-            //MenuLoopInstance.Stop();
         }
 
 
@@ -298,26 +204,24 @@ namespace ZombustersWindows
         public void PauseSounds()
         {
             bPaused = true;
-            //SeekerInstance.Pause();
             foreach (SoundEffectInstance item in Sounds)
             {
                 if (item.State == SoundState.Playing)
                     item.Pause();
             }
         }
+
         public void PauseAll()
         {
             PauseSounds();
             MediaPlayer.Pause();
         }
+
         public void ResumeAll()
         {
             if (bPaused)
             {
                 MediaPlayer.Resume();
-
-                //if (SeekerInstance.State == SoundState.Paused)
-                //    SeekerInstance.Resume();
 
                 foreach (SoundEffectInstance item in Sounds)
                 {
@@ -331,10 +235,7 @@ namespace ZombustersWindows
         {
             this.FXVolume = fxVolume;
             this.MusicVolume = musicVolume;
-            //if (SeekerInstance != null)
-            //{
-            //    SeekerInstance.Volume = this.FXVolume;
-            //}
+
             MediaPlayer.Volume = this.MusicVolume;
             foreach (SoundEffectInstance item in Sounds)
             {

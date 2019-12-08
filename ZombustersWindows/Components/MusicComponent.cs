@@ -30,7 +30,6 @@ namespace ZombustersWindows
         private Vector2 drawPosition;
         private Texture2D retroTraxLogoTexture;
         private Texture2D retroTraxBkgTexture;
-        private Animation retroTraxLogoAnimation;
         private Boolean buttonReleased = true;
         private Boolean changinSongManual = false;
         private readonly Random random = new Random(12);

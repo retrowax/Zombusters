@@ -175,7 +175,6 @@
     <Compile Include="SubsystemManagers\StorageDeviceManager.cs" />
     <Compile Include="SubsystemManagers\VirtualThumbsticks.cs" />
     <Compile Include="SupportScreens\ExitMessageBox.cs" />
-    <Compile Include="SupportScreens\LoadingScreen.cs" />
     <Compile Include="SupportScreens\NetworkBusyScreen.cs" />
     <Compile Include="GameObjects\Enemies\ZombieState.cs" />
     <Compile Include="GameObjects\Enemies\TankState.cs" />
