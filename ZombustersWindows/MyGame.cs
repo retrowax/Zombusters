@@ -29,7 +29,7 @@ namespace ZombustersWindows
         public GameState currentGameState;
         public TopScoreListContainer topScoreListContainer;
         public MusicComponent musicComponent;
-        public Texture2D livePowerUp, extraLivePowerUp, shotgunAmmoPowerUp, machinegunAmmoPowerUp, flamethrowerAmmoPowerUp, immunePowerUp, heart, shotgunammoUI, pistolammoUI, grenadeammoUI, flamethrowerammoUI, blackTexture;
+        public Texture2D blackTexture;
         public BaseClient bugSnagClient;
         public float totalGameSeconds;
 
@@ -42,8 +42,6 @@ namespace ZombustersWindows
 #endif
 
         //int bloomSettingsIndex = 0;
-        public Vector2 position = new Vector2(-200, 0);
-        public Vector2 position2 = new Vector2(-200, 0);
         public bool directionRight = true;
         public String[] networkSettings = { "XBOX LIVE", "SYSTEM LINK" };
         public int currentNetworkSetting;

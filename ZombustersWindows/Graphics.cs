@@ -107,8 +107,11 @@ namespace ZombustersWindows
         Texture2D background_title_scrolling1;
         Texture2D background_title_scrolling2;
         Texture2D background_title_scrolling3;
+
         private List<Texture2D> noisedMap = new List<Texture2D>(4);
         private Random random = new Random(4);
+        public Vector2 position = new Vector2(-200, 0);
+        public Vector2 position2 = new Vector2(-200, 0);
 
         public float BackgroundDriftRatePerSec = 64.0f;
         int maxPosition = 0;
@@ -229,56 +232,56 @@ namespace ZombustersWindows
                 if (((MyGame)this.ScreenManager.Game).directionRight == true)
                 {
                     // BKG 1
-                    if (((MyGame)this.ScreenManager.Game).position.X <= maxPosition)
+                    if (position.X <= maxPosition)
                     {
-                        ((MyGame)this.ScreenManager.Game).position.X += (velocity * 2) * gameTime.ElapsedGameTime.Milliseconds;
+                        position.X += (velocity * 2) * gameTime.ElapsedGameTime.Milliseconds;
                     }
                     else
                     {
                         ((MyGame)this.ScreenManager.Game).directionRight = false;
-                        ((MyGame)this.ScreenManager.Game).position.X -= (velocity * 2) * gameTime.ElapsedGameTime.Milliseconds;
+                        position.X -= (velocity * 2) * gameTime.ElapsedGameTime.Milliseconds;
                     }
 
                     // BKG 2
-                    if ((((MyGame)this.ScreenManager.Game).position2.X <= maxPosition))
+                    if (position2.X <= maxPosition)
                     {
-                        ((MyGame)this.ScreenManager.Game).position2.X += (velocity) * gameTime.ElapsedGameTime.Milliseconds;
+                        position2.X += (velocity) * gameTime.ElapsedGameTime.Milliseconds;
                     }
                     else
                     {
-                        ((MyGame)this.ScreenManager.Game).position2.X -= (velocity) * gameTime.ElapsedGameTime.Milliseconds;
+                        position2.X -= (velocity) * gameTime.ElapsedGameTime.Milliseconds;
                     }
                 }
                 else
                 {
                     // BKG 1
-                    if (((MyGame)this.ScreenManager.Game).position.X >= minPosition)
+                    if (position.X >= minPosition)
                     {
-                        ((MyGame)this.ScreenManager.Game).position.X -= (velocity * 2) * gameTime.ElapsedGameTime.Milliseconds;
+                        position.X -= (velocity * 2) * gameTime.ElapsedGameTime.Milliseconds;
                     }
                     else
                     {
                         ((MyGame)this.ScreenManager.Game).directionRight = true;
-                        ((MyGame)this.ScreenManager.Game).position.X += (velocity * 2) * gameTime.ElapsedGameTime.Milliseconds;
+                        position.X += (velocity * 2) * gameTime.ElapsedGameTime.Milliseconds;
                     }
 
                     // BKG 2
-                    if ((((MyGame)this.ScreenManager.Game).position2.X <= maxPosition))
+                    if (position2.X <= maxPosition)
                     {
-                        ((MyGame)this.ScreenManager.Game).position2.X -= (velocity) * gameTime.ElapsedGameTime.Milliseconds;
+                        position2.X -= (velocity) * gameTime.ElapsedGameTime.Milliseconds;
                     }
                     else
                     {
-                        ((MyGame)this.ScreenManager.Game).position2.X += (velocity) * gameTime.ElapsedGameTime.Milliseconds;
+                        position2.X += (velocity) * gameTime.ElapsedGameTime.Milliseconds;
                     }
                 }
 
                 float transitionOffset = (float)Math.Pow(TransitionPosition, 2);
                 this.ScreenManager.SpriteBatch.Begin(SpriteSortMode.Deferred, BlendState.NonPremultiplied);
                 this.ScreenManager.SpriteBatch.Draw(background_title, new Vector2(0, 0), Color.White);
-                this.ScreenManager.SpriteBatch.Draw(background_title_scrolling2, new Vector2(((MyGame)this.ScreenManager.Game).position2.X, ((MyGame)this.ScreenManager.Game).position2.Y), Color.White);
+                this.ScreenManager.SpriteBatch.Draw(background_title_scrolling2, new Vector2(position2.X, position2.Y), Color.White);
                 this.ScreenManager.SpriteBatch.Draw(background_title_scrolling3, new Vector2(0, 0), Color.White);
-                this.ScreenManager.SpriteBatch.Draw(background_title_scrolling1, new Vector2(((MyGame)this.ScreenManager.Game).position.X, ((MyGame)this.ScreenManager.Game).position.Y), Color.White);
+                this.ScreenManager.SpriteBatch.Draw(background_title_scrolling1, new Vector2(position.X, position.Y), Color.White);
 
                 if (((MyGame)this.ScreenManager.Game).isInMenu)
                 {

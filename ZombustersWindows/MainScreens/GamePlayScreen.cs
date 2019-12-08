@@ -4389,7 +4389,7 @@ namespace ZombustersWindows
                                     batch.DrawString(arcade14, cplayer.ammo[0].ToString("000"), new Vector2(Pos.X + heart.Width + 125, Pos.Y + 20), Color.White);
                                     break;
                                 case 1:
-                                    batch.Draw(game.shotgunammoUI, new Vector2(Pos.X + 123, Pos.Y + 22), Color.White);
+                                    batch.Draw(shotgunammoUI, new Vector2(Pos.X + 123, Pos.Y + 22), Color.White);
                                     batch.DrawString(arcade14, cplayer.ammo[1].ToString("000"), new Vector2(Pos.X + heart.Width + 125, Pos.Y + 20), Color.White);
                                     break;
                                 case 2:
