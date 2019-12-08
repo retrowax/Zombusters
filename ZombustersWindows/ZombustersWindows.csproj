@@ -62,6 +62,8 @@
     <ApplicationIcon>Game.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Components\DebugComponent.cs" />
+    <Compile Include="Components\FrameRateCounter.cs" />
     <Compile Include="ContentManager\EnemiesCount.cs" />
     <Compile Include="ContentManager\Furniture.cs" />
     <Compile Include="ContentManager\Level.cs" />
