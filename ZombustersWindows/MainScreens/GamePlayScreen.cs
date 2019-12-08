@@ -12,14 +12,6 @@ using ZombustersWindows.Localization;
 
 namespace ZombustersWindows
 {
-    public enum ObjectStatus
-    {
-        Inactive,
-        Active,
-        Dying,
-        Immune
-    }
-
     public class GamePlayScreen : BackgroundScreen
     {        
         MyGame game;

@@ -74,6 +74,7 @@
     <Compile Include="GameStateManagement\GameState.cs" />
     <Compile Include="MainScreens\LoadInScreen.cs" />
     <Compile Include="GameStateManagement\MessageType.cs" />
+    <Compile Include="GameObjects\ObjectStatus.cs" />
     <Compile Include="MyGame.cs" />
     <Compile Include="GameStateManagement\GameScreen.cs" />
     <Compile Include="GameStateManagement\InputAction.cs" />
