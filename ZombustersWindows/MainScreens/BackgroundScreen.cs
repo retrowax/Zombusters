@@ -9,6 +9,10 @@ namespace ZombustersWindows
 {
     public class BackgroundScreen : GameScreen
     {
+        const int MAX_POSITION = 0;
+        const int MIN_POSITION = -200;
+        const float VELOCITY = 0.0015f;
+
         ScrollingBackground stars;
         ScrollingBackground dust;
         Texture2D corner;
@@ -26,11 +30,6 @@ namespace ZombustersWindows
         public Vector2 position = new Vector2(-200, 0);
         public Vector2 position2 = new Vector2(-200, 0);
         public bool directionRight = true;
-
-        public float BackgroundDriftRatePerSec = 64.0f;
-        int maxPosition = 0;
-        int minPosition = -200;
-        float velocity = 0.0015f;
 
         public BackgroundScreen()
         {
@@ -57,15 +56,16 @@ namespace ZombustersWindows
             background_title_scrolling1 = this.ScreenManager.Game.Content.Load<Texture2D>(@"menu/background_title_scrolling1");
             background_title_scrolling2 = this.ScreenManager.Game.Content.Load<Texture2D>(@"menu/background_title_scrolling2");
             background_title_scrolling3 = this.ScreenManager.Game.Content.Load<Texture2D>(@"menu/background_title_scrolling3");
+
             for (int i = 0; i < 4; i++)
             {
                 noisedMap.Add(new Texture2D(this.ScreenManager.GraphicsDevice, 512, 512, false, SurfaceFormat.Color));
             }
-
             noisedMap[0].SetData<Color>(CreateTexture.FillNoise(noisedMap[0].Width, noisedMap[0].Height, 0.5f));
             noisedMap[1].SetData<Color>(CreateTexture.FillNoise(noisedMap[1].Width, noisedMap[1].Height, 0.4f));
             noisedMap[2].SetData<Color>(CreateTexture.FillNoise(noisedMap[2].Width, noisedMap[2].Height, 0.6f));
             noisedMap[3].SetData<Color>(CreateTexture.FillNoise(noisedMap[3].Width, noisedMap[3].Height, 0.7f));
+
             base.LoadContent();
         }
 
@@ -146,47 +146,47 @@ namespace ZombustersWindows
                 if (directionRight == true)
                 {
                     // BKG 1
-                    if (position.X <= maxPosition)
+                    if (position.X <= MAX_POSITION)
                     {
-                        position.X += (velocity * 2) * gameTime.ElapsedGameTime.Milliseconds;
+                        position.X += (VELOCITY * 2) * gameTime.ElapsedGameTime.Milliseconds;
                     }
                     else
                     {
                         directionRight = false;
-                        position.X -= (velocity * 2) * gameTime.ElapsedGameTime.Milliseconds;
+                        position.X -= (VELOCITY * 2) * gameTime.ElapsedGameTime.Milliseconds;
                     }
 
                     // BKG 2
-                    if (position2.X <= maxPosition)
+                    if (position2.X <= MAX_POSITION)
                     {
-                        position2.X += (velocity) * gameTime.ElapsedGameTime.Milliseconds;
+                        position2.X += (VELOCITY) * gameTime.ElapsedGameTime.Milliseconds;
                     }
                     else
                     {
-                        position2.X -= (velocity) * gameTime.ElapsedGameTime.Milliseconds;
+                        position2.X -= (VELOCITY) * gameTime.ElapsedGameTime.Milliseconds;
                     }
                 }
                 else
                 {
                     // BKG 1
-                    if (position.X >= minPosition)
+                    if (position.X >= MIN_POSITION)
                     {
-                        position.X -= (velocity * 2) * gameTime.ElapsedGameTime.Milliseconds;
+                        position.X -= (VELOCITY * 2) * gameTime.ElapsedGameTime.Milliseconds;
                     }
                     else
                     {
                         directionRight = true;
-                        position.X += (velocity * 2) * gameTime.ElapsedGameTime.Milliseconds;
+                        position.X += (VELOCITY * 2) * gameTime.ElapsedGameTime.Milliseconds;
                     }
 
                     // BKG 2
-                    if (position2.X <= maxPosition)
+                    if (position2.X <= MAX_POSITION)
                     {
-                        position2.X -= (velocity) * gameTime.ElapsedGameTime.Milliseconds;
+                        position2.X -= (VELOCITY) * gameTime.ElapsedGameTime.Milliseconds;
                     }
                     else
                     {
-                        position2.X += (velocity) * gameTime.ElapsedGameTime.Milliseconds;
+                        position2.X += (VELOCITY) * gameTime.ElapsedGameTime.Milliseconds;
                     }
                 }
 

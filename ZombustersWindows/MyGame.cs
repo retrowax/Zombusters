@@ -105,7 +105,7 @@ namespace ZombustersWindows
                 }
             }      
             base.Initialize();
-            screenManager.AddScreen(new LogoScreen(this));
+            screenManager.AddScreen(new LogoScreen());
             currentGameState = GameState.SignIn;
         }
 

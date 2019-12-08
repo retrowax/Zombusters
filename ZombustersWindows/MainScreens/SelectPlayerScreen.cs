@@ -13,6 +13,7 @@ namespace ZombustersWindows
 {
     public class SelectPlayerScreen : BackgroundScreen
     {
+        MyGame game;
         Rectangle uiBounds;
         Rectangle titleBounds;
         Vector2 selectPos;
@@ -30,21 +31,13 @@ namespace ZombustersWindows
         Texture2D kbUp;
         Texture2D kbDown;
 
-#if WINDOWS_PHONE
-        Texture2D submit_button;
-        Texture2D goBackButton;
-        int levelsUnlocked = 0;
-#endif
-
-        List<Texture2D> pAvatar, pAvatarPixelated, cardBkg;
-        List<String> pAvatarName;
+        List<Texture2D> avatarTexture, avatarPixelatedTexture, cardBkgTexture;
+        List<String> avatarNameList;
 
         NeutralInput playerOneInput;
         NeutralInput playerTwoInput;
         NeutralInput playerThreeInput;
         NeutralInput playerFourInput;
-
-        //int levelSelected;
 
         SpriteFont DigitBigFont, DigitLowFont;
         SpriteFont MenuHeaderFont;
@@ -52,9 +45,9 @@ namespace ZombustersWindows
         SpriteFont MenuListFont;
 
         private MenuComponent menu;
-        Boolean isMatchmaking;
-        Boolean canStartGame; //If all the players are ready we can start playing the game (and show the button START)
-        Boolean IsMMandHost;
+        readonly Boolean isMatchmaking;
+        Boolean canStartGame;
+        Boolean isMMandHost;
         public byte levelSelected;
 
         public SelectPlayerScreen(Boolean ismatchmaking)
@@ -64,6 +57,8 @@ namespace ZombustersWindows
 
         public override void Initialize()
         {
+            this.game = (MyGame)this.ScreenManager.Game;
+
             byte i;
             Viewport view = this.ScreenManager.GraphicsDevice.Viewport;
             int borderheight = (int)(view.Height * .05);
@@ -76,47 +71,44 @@ namespace ZombustersWindows
             //"Select" text position
             selectPos = new Vector2(uiBounds.X + 60, uiBounds.Bottom - 30);
 
-            DigitBigFont = this.ScreenManager.Game.Content.Load<SpriteFont>(@"menu\DigitBig");
-            DigitLowFont = this.ScreenManager.Game.Content.Load<SpriteFont>(@"menu\DigitLow");
-            MenuHeaderFont = this.ScreenManager.Game.Content.Load<SpriteFont>(@"menu\ArialMenuHeader");
-            MenuInfoFont = this.ScreenManager.Game.Content.Load<SpriteFont>(@"menu\ArialMenuInfo");
-            MenuListFont = this.ScreenManager.Game.Content.Load<SpriteFont>(@"menu\ArialMenuList");
-
+            DigitBigFont = game.Content.Load<SpriteFont>(@"menu\DigitBig");
+            DigitLowFont = game.Content.Load<SpriteFont>(@"menu\DigitLow");
+            MenuHeaderFont = game.Content.Load<SpriteFont>(@"menu\ArialMenuHeader");
+            MenuInfoFont = game.Content.Load<SpriteFont>(@"menu\ArialMenuInfo");
+            MenuListFont = game.Content.Load<SpriteFont>(@"menu\ArialMenuList");
 
             HTPHeaderImage = this.ScreenManager.Game.Content.Load<Texture2D>(@"menu/lobby_header_image");
 
-            menu = new MenuComponent(this.ScreenManager.Game, MenuListFont);
-
-            //Initialize Main Menu
+            menu = new MenuComponent(game, MenuListFont);
             menu.Initialize();
             menu.uiBounds = menu.Extents;
 
             //Offset de posicion del menu
             menu.uiBounds.Offset(uiBounds.X, 300);
 
-            pAvatar = new List<Texture2D>(4);
-            pAvatarPixelated = new List<Texture2D>(4);
-            cardBkg = new List<Texture2D>(4);
+            avatarTexture = new List<Texture2D>(4);
+            avatarPixelatedTexture = new List<Texture2D>(4);
+            cardBkgTexture = new List<Texture2D>(4);
             for (i = 0; i < 4; i++)
             {
-                ((MyGame)this.ScreenManager.Game).currentPlayers[i].character = 0;
+                game.currentPlayers[i].character = 0;
             }
-            pAvatarName = new List<string>(4);
-            pAvatarName.Add("Tracy");
-            pAvatarName.Add("Charles");
-            pAvatarName.Add("Ryan");
-            pAvatarName.Add("Peter");
+            avatarNameList = new List<string>(4);
+            avatarNameList.Add("Tracy");
+            avatarNameList.Add("Charles");
+            avatarNameList.Add("Ryan");
+            avatarNameList.Add("Peter");
 
             levelSelected = 1;
             canStartGame = false;
-            IsMMandHost = false;
+            isMMandHost = false;
 
-            ((MyGame)this.ScreenManager.Game).currentPlayers[0].Player.LoadSavedGame();
+            game.currentPlayers[0].Player.LoadSavedGame();
 
             // Nos aseguramos que no se queda marcado el flag de selección de personaje
-            foreach (Avatar player in ((MyGame)this.ScreenManager.Game).currentPlayers)
+            foreach (Avatar player in game.currentPlayers)
             {
-                if (((MyGame)this.ScreenManager.Game).currentPlayers[0].Equals(player))
+                if (game.currentPlayers[0].Equals(player))
                 {
                     player.isReady = false;
                     player.status = ObjectStatus.Active;
@@ -138,96 +130,96 @@ namespace ZombustersWindows
             byte i;
 
             // Key "Up"
-            kbUp = this.ScreenManager.Game.Content.Load<Texture2D>(@"Keyboard/key_up");
+            kbUp = game.Content.Load<Texture2D>(@"Keyboard/key_up");
 
             // Key "Down"
-            kbDown = this.ScreenManager.Game.Content.Load<Texture2D>(@"Keyboard/key_down");
+            kbDown = game.Content.Load<Texture2D>(@"Keyboard/key_down");
 
             //Button "A"
-            btnA = this.ScreenManager.Game.Content.Load<Texture2D>("xboxControllerButtonA");
+            btnA = game.Content.Load<Texture2D>("xboxControllerButtonA");
 
             //Button "B"
-            btnB = this.ScreenManager.Game.Content.Load<Texture2D>("xboxControllerButtonB");
+            btnB = game.Content.Load<Texture2D>("xboxControllerButtonB");
 
             //Button "Select"
-            btnStart = this.ScreenManager.Game.Content.Load<Texture2D>("xboxControllerStart");
+            btnStart = game.Content.Load<Texture2D>("xboxControllerStart");
 
             // Button Left Trigger
-            btnLT = this.ScreenManager.Game.Content.Load<Texture2D>("xboxControllerLeftTrigger");
+            btnLT = game.Content.Load<Texture2D>("xboxControllerLeftTrigger");
 
             // Button Right Trigger
-            btnRT = this.ScreenManager.Game.Content.Load<Texture2D>("xboxControllerRightTrigger");
+            btnRT = game.Content.Load<Texture2D>("xboxControllerRightTrigger");
 
             //Linea blanca separatoria
-            lineaMenu = this.ScreenManager.Game.Content.Load<Texture2D>(@"menu/linea_menu");
+            lineaMenu = game.Content.Load<Texture2D>(@"menu/linea_menu");
 
             //Logo Menu
-            logoMenu = this.ScreenManager.Game.Content.Load<Texture2D>(@"menu/logo_menu");
+            logoMenu = game.Content.Load<Texture2D>(@"menu/logo_menu");
 
             //Arrow
-            arrow = this.ScreenManager.Game.Content.Load<Texture2D>(@"InGame/SelectPlayer/arrowLeft");
+            arrow = game.Content.Load<Texture2D>(@"InGame/SelectPlayer/arrowLeft");
 
             //Fondo negro fade menu
-            myGroupBKG = this.ScreenManager.Game.Content.Load<Texture2D>(@"menu/mygroup_bkg");
+            myGroupBKG = game.Content.Load<Texture2D>(@"menu/mygroup_bkg");
 
             for (i=1; i <= 4; i++)
             {
-                pAvatar.Add(this.ScreenManager.Game.Content.Load<Texture2D>(@"InGame/SelectPlayer/p" + i.ToString() + "Avatar"));
-                pAvatarPixelated.Add(this.ScreenManager.Game.Content.Load<Texture2D>(@"InGame/SelectPlayer/p" + i.ToString() + "Avatar_pixel"));
+                avatarTexture.Add(game.Content.Load<Texture2D>(@"InGame/SelectPlayer/p" + i.ToString() + "Avatar"));
+                avatarPixelatedTexture.Add(game.Content.Load<Texture2D>(@"InGame/SelectPlayer/p" + i.ToString() + "Avatar_pixel"));
             }
 
-            cardBkg.Add(this.ScreenManager.Game.Content.Load<Texture2D>(@"InGame/SelectPlayer/selpla_bkg"));
-            cardBkg.Add(this.ScreenManager.Game.Content.Load<Texture2D>(@"InGame/SelectPlayer/selpla_border"));
-            cardBkg.Add(this.ScreenManager.Game.Content.Load<Texture2D>(@"InGame/SelectPlayer/selpla_gradient"));
-            cardBkg.Add(this.ScreenManager.Game.Content.Load<Texture2D>(@"InGame/SelectPlayer/selpla_ready"));
+            cardBkgTexture.Add(game.Content.Load<Texture2D>(@"InGame/SelectPlayer/selpla_bkg"));
+            cardBkgTexture.Add(game.Content.Load<Texture2D>(@"InGame/SelectPlayer/selpla_border"));
+            cardBkgTexture.Add(game.Content.Load<Texture2D>(@"InGame/SelectPlayer/selpla_gradient"));
+            cardBkgTexture.Add(game.Content.Load<Texture2D>(@"InGame/SelectPlayer/selpla_ready"));
 
             base.LoadContent();
         }
 
-        void toggleReady(int PlayerIndex)
+        void ToggleReady(int PlayerIndex)
         {
-            if (((MyGame)this.ScreenManager.Game).currentPlayers[PlayerIndex].isReady == true)
+            if (game.currentPlayers[PlayerIndex].isReady == true)
             {
-                ((MyGame)this.ScreenManager.Game).currentPlayers[PlayerIndex].isReady = false;
+                game.currentPlayers[PlayerIndex].isReady = false;
             }
             else
             {
-                ((MyGame)this.ScreenManager.Game).currentPlayers[PlayerIndex].isReady = true;
+                game.currentPlayers[PlayerIndex].isReady = true;
             }
 
-            for (int i = 0; i < ((MyGame)this.ScreenManager.Game).currentPlayers.Length; i++)
+            for (int i = 0; i < game.currentPlayers.Length; i++)
             {
                 if (i != PlayerIndex)
                 {
-                    if (((MyGame)this.ScreenManager.Game).currentPlayers[i].character == ((MyGame)this.ScreenManager.Game).currentPlayers[PlayerIndex].character && ((MyGame)this.ScreenManager.Game).currentPlayers[i].isReady == true)
+                    if (game.currentPlayers[i].character == game.currentPlayers[PlayerIndex].character && game.currentPlayers[i].isReady == true)
                     {
-                        ((MyGame)this.ScreenManager.Game).currentPlayers[PlayerIndex].isReady = false;
+                        game.currentPlayers[PlayerIndex].isReady = false;
                     }
                 }
             }
         }
 
-        void changeCharacterSelected(int PlayerIndex, Boolean directionToRight)
+        void ChangeCharacterSelected(int PlayerIndex, Boolean directionToRight)
         {
             if (directionToRight == true)
             {
-                if (((MyGame)this.ScreenManager.Game).currentPlayers[PlayerIndex].isReady == false)
+                if (game.currentPlayers[PlayerIndex].isReady == false)
                 {
-                    ((MyGame)this.ScreenManager.Game).currentPlayers[PlayerIndex].character += 1;
-                    if (((MyGame)this.ScreenManager.Game).currentPlayers[PlayerIndex].character > 3)
+                    game.currentPlayers[PlayerIndex].character += 1;
+                    if (game.currentPlayers[PlayerIndex].character > 3)
                     {
-                        ((MyGame)this.ScreenManager.Game).currentPlayers[PlayerIndex].character = 0;
+                        game.currentPlayers[PlayerIndex].character = 0;
                     }
                 }
             }
             else
             {
-                if (((MyGame)this.ScreenManager.Game).currentPlayers[PlayerIndex].isReady == false)
+                if (game.currentPlayers[PlayerIndex].isReady == false)
                 {
-                    ((MyGame)this.ScreenManager.Game).currentPlayers[PlayerIndex].character -= 1;
-                    if (((MyGame)this.ScreenManager.Game).currentPlayers[PlayerIndex].character < 0 || ((MyGame)this.ScreenManager.Game).currentPlayers[PlayerIndex].character > 3)
+                    game.currentPlayers[PlayerIndex].character -= 1;
+                    if (game.currentPlayers[PlayerIndex].character < 0 || game.currentPlayers[PlayerIndex].character > 3)
                     {
-                        ((MyGame)this.ScreenManager.Game).currentPlayers[PlayerIndex].character = 3;
+                        game.currentPlayers[PlayerIndex].character = 3;
                     }
                 }
             }
@@ -235,14 +227,14 @@ namespace ZombustersWindows
 
         public override void HandleInput(InputState input)
         {
-            if (((MyGame)this.ScreenManager.Game).currentPlayers[0].Player.Controller == PlayerIndex.One || GamePad.GetState(PlayerIndex.One).IsConnected)
-                playerOneInput = ProcessPlayer(((MyGame)this.ScreenManager.Game).currentPlayers[0], input);
-            if (((MyGame)this.ScreenManager.Game).currentPlayers[1].Player.Controller == PlayerIndex.Two || GamePad.GetState(PlayerIndex.Two).IsConnected)
-                playerTwoInput = ProcessPlayer(((MyGame)this.ScreenManager.Game).currentPlayers[1], input);
-            if (((MyGame)this.ScreenManager.Game).currentPlayers[2].Player.Controller == PlayerIndex.Three || GamePad.GetState(PlayerIndex.Three).IsConnected)
-                playerThreeInput = ProcessPlayer(((MyGame)this.ScreenManager.Game).currentPlayers[2], input);
-            if (((MyGame)this.ScreenManager.Game).currentPlayers[3].Player.Controller == PlayerIndex.Four || GamePad.GetState(PlayerIndex.Four).IsConnected)
-                playerFourInput = ProcessPlayer(((MyGame)this.ScreenManager.Game).currentPlayers[3], input);
+            if (game.currentPlayers[0].Player.Controller == PlayerIndex.One || GamePad.GetState(PlayerIndex.One).IsConnected)
+                playerOneInput = ProcessPlayer(game.currentPlayers[0], input);
+            if (game.currentPlayers[1].Player.Controller == PlayerIndex.Two || GamePad.GetState(PlayerIndex.Two).IsConnected)
+                playerTwoInput = ProcessPlayer(game.currentPlayers[1], input);
+            if (game.currentPlayers[2].Player.Controller == PlayerIndex.Three || GamePad.GetState(PlayerIndex.Three).IsConnected)
+                playerThreeInput = ProcessPlayer(game.currentPlayers[2], input);
+            if (game.currentPlayers[3].Player.Controller == PlayerIndex.Four || GamePad.GetState(PlayerIndex.Four).IsConnected)
+                playerFourInput = ProcessPlayer(game.currentPlayers[3], input);
 
             base.HandleInput(input);
         }
@@ -250,9 +242,10 @@ namespace ZombustersWindows
 
         private static NeutralInput ProcessPlayer(Avatar player, InputState input)
         {
-            NeutralInput state = new NeutralInput();
-            //state.Fire = false;
-            state.Fire = Vector2.Zero;
+            NeutralInput state = new NeutralInput
+            {
+                Fire = Vector2.Zero
+            };
             Vector2 stickLeft = Vector2.Zero;
             Vector2 stickRight = Vector2.Zero;
             GamePadState gpState = input.GetCurrentGamePadStates()[(int)player.Player.Controller];
@@ -449,7 +442,7 @@ namespace ZombustersWindows
         public override void Update(GameTime gameTime, bool otherScreenHasFocus, 
             bool coveredByOtherScreen)
         {
-            if (((MyGame)this.ScreenManager.Game).currentGameState != GameState.Paused)
+            if (game.currentGameState != GameState.Paused)
             {
                 {
                     UpdatePlayer(0, playerOneInput);
@@ -479,7 +472,7 @@ namespace ZombustersWindows
                      */
                 }
 
-                checkIfCanStartTheGame();
+                CheckIfCanStartTheGame();
             }
             base.Update(gameTime, otherScreenHasFocus, coveredByOtherScreen);
         }
@@ -495,12 +488,12 @@ namespace ZombustersWindows
         }
 
 
-        private void checkIfCanStartTheGame()
+        private void CheckIfCanStartTheGame()
         {
             int playersActive = 0;
             int numPlayersReady = 0;
 
-            foreach (Avatar player in ((MyGame)this.ScreenManager.Game).currentPlayers)
+            foreach (Avatar player in game.currentPlayers)
             {
                 if (player.status == ObjectStatus.Active)
                 {
@@ -540,57 +533,57 @@ namespace ZombustersWindows
             if ((input.ButtonStart && GamePad.GetState((PlayerIndex)player).Buttons.Start == ButtonState.Pressed) ||
                 input.ButtonStart && Keyboard.GetState().IsKeyDown(Keys.Enter))
             {
-                if (((MyGame)this.ScreenManager.Game).currentPlayers[player].IsPlaying == false)
+                if (game.currentPlayers[player].IsPlaying == false)
                 {
-                    ((MyGame)this.ScreenManager.Game).currentPlayers[player].status = ObjectStatus.Active;
+                    game.currentPlayers[player].status = ObjectStatus.Active;
                     canStartGame = false;
-                    //if (((Game1)this.ScreenManager.Game).currentPlayers[player].Player.SignedInGamer != null)
+                    //if (game.currentPlayers[player].Player.SignedInGamer != null)
 
                     {
-                        switch(player)
+                        switch (player)
                         {
                             case 0:
-                                ((MyGame)this.ScreenManager.Game).player1 = new Player(((MyGame)this.ScreenManager.Game).options, ((MyGame)this.ScreenManager.Game).audio, ((MyGame)this.ScreenManager.Game));
-                                ((MyGame)this.ScreenManager.Game).currentPlayers[player] = new Avatar();
-                                ((MyGame)this.ScreenManager.Game).currentPlayers[player].Initialize(((MyGame)this.ScreenManager.Game).GraphicsDevice.Viewport);
-                                ((MyGame)this.ScreenManager.Game).InitializeMain((PlayerIndex)player);
-                                ((MyGame)this.ScreenManager.Game).currentPlayers[player].Player = ((MyGame)this.ScreenManager.Game).player1;
-                                ((MyGame)this.ScreenManager.Game).currentPlayers[player].Activate(((MyGame)this.ScreenManager.Game).player1);
-                                ((MyGame)this.ScreenManager.Game).currentPlayers[player].Player.isReady = false;
+                                game.player1 = new Player(game.options, game.audio, game);
+                                game.currentPlayers[player] = new Avatar();
+                                game.currentPlayers[player].Initialize(game.GraphicsDevice.Viewport);
+                                game.InitializeMain((PlayerIndex)player);
+                                game.currentPlayers[player].Player = game.player1;
+                                game.currentPlayers[player].Activate(game.player1);
+                                game.currentPlayers[player].Player.isReady = false;
 
                                 break;
                             case 1:
-                                ((MyGame)this.ScreenManager.Game).player2 = new Player(((MyGame)this.ScreenManager.Game).options, ((MyGame)this.ScreenManager.Game).audio, ((MyGame)this.ScreenManager.Game));
-                                ((MyGame)this.ScreenManager.Game).currentPlayers[player] = new Avatar();
-                                ((MyGame)this.ScreenManager.Game).currentPlayers[player].Initialize(((MyGame)this.ScreenManager.Game).GraphicsDevice.Viewport);
-                                ((MyGame)this.ScreenManager.Game).InitializeMain((PlayerIndex)player);
-                                ((MyGame)this.ScreenManager.Game).currentPlayers[player].Player = ((MyGame)this.ScreenManager.Game).player2;
-                                ((MyGame)this.ScreenManager.Game).currentPlayers[player].Player.isReady = false;
+                                game.player2 = new Player(game.options, game.audio, game);
+                                game.currentPlayers[player] = new Avatar();
+                                game.currentPlayers[player].Initialize(game.GraphicsDevice.Viewport);
+                                game.InitializeMain((PlayerIndex)player);
+                                game.currentPlayers[player].Player = game.player2;
+                                game.currentPlayers[player].Player.isReady = false;
                                 break;
                             case 2:
-                                ((MyGame)this.ScreenManager.Game).player3 = new Player(((MyGame)this.ScreenManager.Game).options, ((MyGame)this.ScreenManager.Game).audio, ((MyGame)this.ScreenManager.Game));
-                                ((MyGame)this.ScreenManager.Game).currentPlayers[player] = new Avatar();
-                                ((MyGame)this.ScreenManager.Game).currentPlayers[player].Initialize(((MyGame)this.ScreenManager.Game).GraphicsDevice.Viewport);
-                                ((MyGame)this.ScreenManager.Game).InitializeMain((PlayerIndex)player);
-                                ((MyGame)this.ScreenManager.Game).currentPlayers[player].Player = ((MyGame)this.ScreenManager.Game).player3;
-                                ((MyGame)this.ScreenManager.Game).currentPlayers[player].Player.isReady = false;
+                                game.player3 = new Player(game.options, game.audio, game);
+                                game.currentPlayers[player] = new Avatar();
+                                game.currentPlayers[player].Initialize(game.GraphicsDevice.Viewport);
+                                game.InitializeMain((PlayerIndex)player);
+                                game.currentPlayers[player].Player = game.player3;
+                                game.currentPlayers[player].Player.isReady = false;
                                 break;
                             case 3:
-                                ((MyGame)this.ScreenManager.Game).player4 = new Player(((MyGame)this.ScreenManager.Game).options, ((MyGame)this.ScreenManager.Game).audio, ((MyGame)this.ScreenManager.Game));
-                                ((MyGame)this.ScreenManager.Game).currentPlayers[player] = new Avatar();
-                                ((MyGame)this.ScreenManager.Game).currentPlayers[player].Initialize(((MyGame)this.ScreenManager.Game).GraphicsDevice.Viewport);
-                                ((MyGame)this.ScreenManager.Game).InitializeMain((PlayerIndex)player);
-                                ((MyGame)this.ScreenManager.Game).currentPlayers[player].Player = ((MyGame)this.ScreenManager.Game).player4;
-                                ((MyGame)this.ScreenManager.Game).currentPlayers[player].Player.isReady = false;
+                                game.player4 = new Player(game.options, game.audio, game);
+                                game.currentPlayers[player] = new Avatar();
+                                game.currentPlayers[player].Initialize(game.GraphicsDevice.Viewport);
+                                game.InitializeMain((PlayerIndex)player);
+                                game.currentPlayers[player].Player = game.player4;
+                                game.currentPlayers[player].Player.isReady = false;
                                 break;
                             default:
-                                ((MyGame)this.ScreenManager.Game).player1 = new Player(((MyGame)this.ScreenManager.Game).options, ((MyGame)this.ScreenManager.Game).audio, ((MyGame)this.ScreenManager.Game));
-                                ((MyGame)this.ScreenManager.Game).currentPlayers[player] = new Avatar();
-                                ((MyGame)this.ScreenManager.Game).currentPlayers[player].Initialize(((MyGame)this.ScreenManager.Game).GraphicsDevice.Viewport);
-                                ((MyGame)this.ScreenManager.Game).InitializeMain((PlayerIndex)player);
-                                ((MyGame)this.ScreenManager.Game).currentPlayers[player].Player = ((MyGame)this.ScreenManager.Game).player1;
-                                ((MyGame)this.ScreenManager.Game).currentPlayers[player].Activate(((MyGame)this.ScreenManager.Game).player1);
-                                ((MyGame)this.ScreenManager.Game).currentPlayers[player].Player.isReady = false;
+                                game.player1 = new Player(game.options, game.audio, game);
+                                game.currentPlayers[player] = new Avatar();
+                                game.currentPlayers[player].Initialize(game.GraphicsDevice.Viewport);
+                                game.InitializeMain((PlayerIndex)player);
+                                game.currentPlayers[player].Player = game.player1;
+                                game.currentPlayers[player].Activate(game.player1);
+                                game.currentPlayers[player].Player.isReady = false;
                                 break;
                         }
                     }
@@ -599,7 +592,7 @@ namespace ZombustersWindows
 
             if (input.ButtonA)
             {
-                toggleReady(player);
+                ToggleReady(player);
             }
 
             if (input.ButtonB)
@@ -611,17 +604,17 @@ namespace ZombustersWindows
             if (input.DPadLeft)
             {
                 //Choose other character
-                changeCharacterSelected(player, false);
+                ChangeCharacterSelected(player, false);
                 input.DPadLeft = false;
             }
             if (input.DPadRight)
             {
                 //Choose other character
-                changeCharacterSelected(player, true);
+                ChangeCharacterSelected(player, true);
                 input.DPadRight = false;
             }
 
-            if (IsMMandHost == true || isMatchmaking == false)
+            if (isMMandHost == true || isMatchmaking == false)
             {
                 if (player == 0)
                 {
@@ -635,9 +628,9 @@ namespace ZombustersWindows
                             }
                             else
                             {
-                                if ((byte)((MyGame)this.ScreenManager.Game).currentPlayers[player].Player.levelsUnlocked != 0)
+                                if ((byte)game.currentPlayers[player].Player.levelsUnlocked != 0)
                                 {
-                                    levelSelected = (byte)((MyGame)this.ScreenManager.Game).currentPlayers[player].Player.levelsUnlocked;
+                                    levelSelected = (byte)game.currentPlayers[player].Player.levelsUnlocked;
                                 }
                                 else
                                 {
@@ -653,7 +646,7 @@ namespace ZombustersWindows
                         //if (!licenseInformation.IsTrial)
                         {
                             //if (levelSelected < 10)
-                            if (levelSelected < ((MyGame)this.ScreenManager.Game).currentPlayers[player].Player.levelsUnlocked)
+                            if (levelSelected < game.currentPlayers[player].Player.levelsUnlocked)
                             {
                                 levelSelected += 1;
                             }
@@ -672,9 +665,9 @@ namespace ZombustersWindows
                 {
                     {
                         List<int> ListPlayersAreGoingToPlay = new List<int>();
-                        for (int i = 0; i < ((MyGame)this.ScreenManager.Game).currentPlayers.Length; i++)
+                        for (int i = 0; i < game.currentPlayers.Length; i++)
                         {
-                            if (((MyGame)this.ScreenManager.Game).currentPlayers[i].status == ObjectStatus.Active)
+                            if (game.currentPlayers[i].status == ObjectStatus.Active)
                             {
                                 ListPlayersAreGoingToPlay.Add(i);
                             }
@@ -683,37 +676,37 @@ namespace ZombustersWindows
                         switch (levelSelected)
                         {
                             case 1:
-                                ((MyGame)this.ScreenManager.Game).BeginLocalGame(CLevel.Level.One, ListPlayersAreGoingToPlay);
+                                game.BeginLocalGame(CLevel.Level.One, ListPlayersAreGoingToPlay);
                                 break;
                             case 2:
-                                ((MyGame)this.ScreenManager.Game).BeginLocalGame(CLevel.Level.Two, ListPlayersAreGoingToPlay);
+                                game.BeginLocalGame(CLevel.Level.Two, ListPlayersAreGoingToPlay);
                                 break;
                             case 3:
-                                ((MyGame)this.ScreenManager.Game).BeginLocalGame(CLevel.Level.Three, ListPlayersAreGoingToPlay);
+                                game.BeginLocalGame(CLevel.Level.Three, ListPlayersAreGoingToPlay);
                                 break;
                             case 4:
-                                ((MyGame)this.ScreenManager.Game).BeginLocalGame(CLevel.Level.Four, ListPlayersAreGoingToPlay);
+                                game.BeginLocalGame(CLevel.Level.Four, ListPlayersAreGoingToPlay);
                                 break;
                             case 5:
-                                ((MyGame)this.ScreenManager.Game).BeginLocalGame(CLevel.Level.Five, ListPlayersAreGoingToPlay);
+                                game.BeginLocalGame(CLevel.Level.Five, ListPlayersAreGoingToPlay);
                                 break;
                             case 6:
-                                ((MyGame)this.ScreenManager.Game).BeginLocalGame(CLevel.Level.Six, ListPlayersAreGoingToPlay);
+                                game.BeginLocalGame(CLevel.Level.Six, ListPlayersAreGoingToPlay);
                                 break;
                             case 7:
-                                ((MyGame)this.ScreenManager.Game).BeginLocalGame(CLevel.Level.Seven, ListPlayersAreGoingToPlay);
+                                game.BeginLocalGame(CLevel.Level.Seven, ListPlayersAreGoingToPlay);
                                 break;
                             case 8:
-                                ((MyGame)this.ScreenManager.Game).BeginLocalGame(CLevel.Level.Eight, ListPlayersAreGoingToPlay);
+                                game.BeginLocalGame(CLevel.Level.Eight, ListPlayersAreGoingToPlay);
                                 break;
                             case 9:
-                                ((MyGame)this.ScreenManager.Game).BeginLocalGame(CLevel.Level.Nine, ListPlayersAreGoingToPlay);
+                                game.BeginLocalGame(CLevel.Level.Nine, ListPlayersAreGoingToPlay);
                                 break;
                             case 10:
-                                ((MyGame)this.ScreenManager.Game).BeginLocalGame(CLevel.Level.Ten, ListPlayersAreGoingToPlay);
+                                game.BeginLocalGame(CLevel.Level.Ten, ListPlayersAreGoingToPlay);
                                 break;
                             default:
-                                ((MyGame)this.ScreenManager.Game).BeginLocalGame(CLevel.Level.One, ListPlayersAreGoingToPlay);
+                                game.BeginLocalGame(CLevel.Level.One, ListPlayersAreGoingToPlay);
                                 break;
                         }
                     }
@@ -751,7 +744,7 @@ namespace ZombustersWindows
         {
             base.Draw(gameTime);
 
-            if (((MyGame)this.ScreenManager.Game).currentGameState != GameState.Paused)
+            if (game.currentGameState != GameState.Paused)
             {
 
                 //Draw Level Selection Menu
@@ -768,7 +761,7 @@ namespace ZombustersWindows
             else
             {
                 this.ScreenManager.SpriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend);
-                this.ScreenManager.SpriteBatch.Draw(((MyGame)this.ScreenManager.Game).blackTexture, new Vector2(0, 0), Color.White);
+                this.ScreenManager.SpriteBatch.Draw(game.blackTexture, new Vector2(0, 0), Color.White);
                 this.ScreenManager.SpriteBatch.DrawString(MenuInfoFont, "ZOMBUSTERS " + Strings.Paused.ToUpper(), new Vector2(5, 5), Color.White);
                 this.ScreenManager.SpriteBatch.End();
             }
@@ -782,17 +775,17 @@ namespace ZombustersWindows
             Vector2 contextMenuPosition = new Vector2(uiBounds.X + 22, pos.Y - 100);
             Vector2 MenuTitlePosition = new Vector2(contextMenuPosition.X - 3, contextMenuPosition.Y - 300);
             Vector2 CharacterPosition = new Vector2(MenuTitlePosition.X + 50, MenuTitlePosition.Y + 70);
-            Vector2 ConnectControlerStringPosition = new Vector2(CharacterPosition.X - 5 + cardBkg[1].Width, CharacterPosition.Y + cardBkg[1].Height / 2);
+            Vector2 ConnectControlerStringPosition = new Vector2(CharacterPosition.X - 5 + cardBkgTexture[1].Width, CharacterPosition.Y + cardBkgTexture[1].Height / 2);
 
             batch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend);
 
             //foreach (Avatar cplayer in ((Game1)this.ScreenManager.Game).currentPlayers)
-            for (i = 0; i < ((MyGame)this.ScreenManager.Game).currentPlayers.Length; i++)
+            for (i = 0; i < game.currentPlayers.Length; i++)
             {
                 if (i == 0)
 
                 {
-                    cplayer = ((MyGame)this.ScreenManager.Game).currentPlayers[i];
+                    cplayer = game.currentPlayers[i];
 
                     if (cplayer.Player != null)
                     {
@@ -800,37 +793,37 @@ namespace ZombustersWindows
                         {
 
                             // Background Images
-                            batch.Draw(cardBkg[0], CharacterPosition, Color.White);
-                            batch.Draw(cardBkg[1], CharacterPosition, Color.White);
+                            batch.Draw(cardBkgTexture[0], CharacterPosition, Color.White);
+                            batch.Draw(cardBkgTexture[1], CharacterPosition, Color.White);
 
                             // Avatar Drawed
-                            batch.Draw(pAvatar[cplayer.character], CharacterPosition, Color.White);
+                            batch.Draw(avatarTexture[cplayer.character], CharacterPosition, Color.White);
 
                             // Background Images
-                            batch.Draw(cardBkg[2], CharacterPosition, Color.White);
+                            batch.Draw(cardBkgTexture[2], CharacterPosition, Color.White);
 
                             // Ready
                             if (cplayer.isReady == true)
                             {
-                                batch.Draw(cardBkg[3], CharacterPosition, Color.White);
+                                batch.Draw(cardBkgTexture[3], CharacterPosition, Color.White);
                                 batch.DrawString(DigitLowFont, Strings.ReadySelPlayerString,
-                                    new Vector2(CharacterPosition.X + cardBkg[0].Width / 2 - Convert.ToInt32(MenuInfoFont.MeasureString(Strings.ReadySelPlayerString).X) / 2, CharacterPosition.Y + cardBkg[0].Height / 2 - Convert.ToInt32(MenuInfoFont.MeasureString(Strings.ReadySelPlayerString).Y)),
+                                    new Vector2(CharacterPosition.X + cardBkgTexture[0].Width / 2 - Convert.ToInt32(MenuInfoFont.MeasureString(Strings.ReadySelPlayerString).X) / 2, CharacterPosition.Y + cardBkgTexture[0].Height / 2 - Convert.ToInt32(MenuInfoFont.MeasureString(Strings.ReadySelPlayerString).Y)),
                                     Color.Black);
                             }
 
                             // Avatar Pixelated
-                            batch.Draw(pAvatarPixelated[cplayer.character], new Vector2(CharacterPosition.X + (pAvatar[cplayer.character].Width / 2) - pAvatarPixelated[cplayer.character].Width / 2,
-                                CharacterPosition.Y + (pAvatar[cplayer.character].Height - pAvatarPixelated[cplayer.character].Height)), null, Color.White, 0, Vector2.Zero, 1.0f, SpriteEffects.None, 1.0f);
+                            batch.Draw(avatarPixelatedTexture[cplayer.character], new Vector2(CharacterPosition.X + (avatarTexture[cplayer.character].Width / 2) - avatarPixelatedTexture[cplayer.character].Width / 2,
+                                CharacterPosition.Y + (avatarTexture[cplayer.character].Height - avatarPixelatedTexture[cplayer.character].Height)), null, Color.White, 0, Vector2.Zero, 1.0f, SpriteEffects.None, 1.0f);
 
                             // Gamertag
                             if (cplayer.Player.Name != null)
                             {
-                                batch.DrawString(MenuInfoFont, cplayer.Player.Name, new Vector2(CharacterPosition.X - Convert.ToInt32(MenuInfoFont.MeasureString(cplayer.Player.Name).Y), CharacterPosition.Y + 2 + cardBkg[1].Height),
+                                batch.DrawString(MenuInfoFont, cplayer.Player.Name, new Vector2(CharacterPosition.X - Convert.ToInt32(MenuInfoFont.MeasureString(cplayer.Player.Name).Y), CharacterPosition.Y + 2 + cardBkgTexture[1].Height),
                                         Color.White, 4.70f, Vector2.Zero, 1.0f, SpriteEffects.None, 1.0f);
                             }
 
                             // Character Name
-                            batch.DrawString(MenuInfoFont, pAvatarName[cplayer.character], new Vector2(CharacterPosition.X - 5 + cardBkg[1].Width - Convert.ToInt32(MenuInfoFont.MeasureString(pAvatarName[cplayer.character]).X), CharacterPosition.Y + 3),
+                            batch.DrawString(MenuInfoFont, avatarNameList[cplayer.character], new Vector2(CharacterPosition.X - 5 + cardBkgTexture[1].Width - Convert.ToInt32(MenuInfoFont.MeasureString(avatarNameList[cplayer.character]).X), CharacterPosition.Y + 3),
                                     Color.Black);
 
                             // Character NOT AVAILABLE
@@ -846,11 +839,11 @@ namespace ZombustersWindows
                             if (cplayer.isReady == false)
                             {
                                 // Arrow Left
-                                batch.Draw(arrow, new Vector2(CharacterPosition.X - arrow.Width, CharacterPosition.Y + cardBkg[1].Height / 2 - arrow.Height / 2),
+                                batch.Draw(arrow, new Vector2(CharacterPosition.X - arrow.Width, CharacterPosition.Y + cardBkgTexture[1].Height / 2 - arrow.Height / 2),
                                     null, Color.White, 0, Vector2.Zero, 0.7f, SpriteEffects.None, 1.0f);
 
                                 // Arrow Right
-                                batch.Draw(arrow, new Vector2(CharacterPosition.X + 8 + cardBkg[1].Width, CharacterPosition.Y + cardBkg[1].Height / 2 - arrow.Height / 2),
+                                batch.Draw(arrow, new Vector2(CharacterPosition.X + 8 + cardBkgTexture[1].Width, CharacterPosition.Y + cardBkgTexture[1].Height / 2 - arrow.Height / 2),
                                     null, Color.White, 0, Vector2.Zero, 0.7f, SpriteEffects.FlipHorizontally, 1.0f);
                             }
                         }
@@ -859,8 +852,8 @@ namespace ZombustersWindows
                             if (GamePad.GetState(cplayer.Player.Controller).IsConnected && cplayer.Player.Name != null)
                             {
                                 // Background Images
-                                batch.Draw(cardBkg[0], CharacterPosition, Color.White);
-                                batch.Draw(cardBkg[1], CharacterPosition, Color.White);
+                                batch.Draw(cardBkgTexture[0], CharacterPosition, Color.White);
+                                batch.Draw(cardBkgTexture[1], CharacterPosition, Color.White);
 
                                 //Texto de contexto de menu
                                 switch (i)
@@ -885,7 +878,7 @@ namespace ZombustersWindows
                                 foreach (string line in lines)
                                 {
                                     batch.DrawString(MenuInfoFont, line.Replace("	", ""),
-                                        new Vector2(ConnectControlerStringPosition.X - Convert.ToInt32(MenuInfoFont.MeasureString(line).X) / 2 - cardBkg[0].Width / 2, ConnectControlerStringPosition.Y - Convert.ToInt32(MenuInfoFont.MeasureString(line).Y) - 25),
+                                        new Vector2(ConnectControlerStringPosition.X - Convert.ToInt32(MenuInfoFont.MeasureString(line).X) / 2 - cardBkgTexture[0].Width / 2, ConnectControlerStringPosition.Y - Convert.ToInt32(MenuInfoFont.MeasureString(line).Y) - 25),
                                         Color.Black);
                                     ConnectControlerStringPosition.Y += 20;
                                 }
@@ -900,7 +893,7 @@ namespace ZombustersWindows
                                 foreach (string line in lines)
                                 {
                                     batch.DrawString(MenuInfoFont, line.Replace("	", ""),
-                                        new Vector2(ConnectControlerStringPosition.X - Convert.ToInt32(MenuInfoFont.MeasureString(line).X) / 2 - cardBkg[0].Width / 2, ConnectControlerStringPosition.Y - Convert.ToInt32(MenuInfoFont.MeasureString(line).Y) - 25),
+                                        new Vector2(ConnectControlerStringPosition.X - Convert.ToInt32(MenuInfoFont.MeasureString(line).X) / 2 - cardBkgTexture[0].Width / 2, ConnectControlerStringPosition.Y - Convert.ToInt32(MenuInfoFont.MeasureString(line).Y) - 25),
                                         Color.White);
                                     ConnectControlerStringPosition.Y += 20;
                                 }
@@ -918,7 +911,7 @@ namespace ZombustersWindows
                         foreach (string line in lines)
                         {
                             batch.DrawString(MenuInfoFont, line.Replace("	", ""),
-                                new Vector2(ConnectControlerStringPosition.X - Convert.ToInt32(MenuInfoFont.MeasureString(line).X) / 2 - cardBkg[0].Width / 2, ConnectControlerStringPosition.Y - Convert.ToInt32(MenuInfoFont.MeasureString(line).Y) - 25),
+                                new Vector2(ConnectControlerStringPosition.X - Convert.ToInt32(MenuInfoFont.MeasureString(line).X) / 2 - cardBkgTexture[0].Width / 2, ConnectControlerStringPosition.Y - Convert.ToInt32(MenuInfoFont.MeasureString(line).Y) - 25),
                                 Color.White);
                             ConnectControlerStringPosition.Y += 20;
                         }
@@ -930,7 +923,7 @@ namespace ZombustersWindows
 
                     CharacterPosition.X += 250;
                     ConnectControlerStringPosition.X += 250;
-                    ConnectControlerStringPosition.Y = CharacterPosition.Y + cardBkg[1].Height / 2;
+                    ConnectControlerStringPosition.Y = CharacterPosition.Y + cardBkgTexture[1].Height / 2;
                 }
             }
 
@@ -952,7 +945,7 @@ namespace ZombustersWindows
 
             // LT
             batch.DrawString(DigitLowFont, "-", new Vector2(uiBounds.X + uiBounds.Width - 210, 80), Color.White);
-            if (((MyGame)this.ScreenManager.Game).player1.Options == InputMode.Keyboard)
+            if (game.player1.Options == InputMode.Keyboard)
             {   
                 batch.Draw(kbDown, new Vector2(uiBounds.X + uiBounds.Width - 217, 115), new Rectangle(0, 0, kbDown.Width, kbDown.Height), Color.White, 0.0f, Vector2.Zero, 0.7f, SpriteEffects.None, 0.0f);
             }
@@ -963,7 +956,7 @@ namespace ZombustersWindows
 
             // RT
             batch.DrawString(DigitLowFont, "+", new Vector2(uiBounds.X + uiBounds.Width - 5, 80), Color.White);
-            if (((MyGame)this.ScreenManager.Game).player1.Options == InputMode.Keyboard)
+            if (game.player1.Options == InputMode.Keyboard)
             {
                 batch.Draw(kbUp, new Vector2(uiBounds.X + uiBounds.Width - 10, 115), new Rectangle(0, 0, kbUp.Width, kbUp.Height), Color.White, 0.0f, Vector2.Zero, 0.7f, SpriteEffects.None, 0.0f);
             }
@@ -1033,7 +1026,7 @@ namespace ZombustersWindows
 
             //Texto de contexto del How to Play
             contextMenuPosition = new Vector2(position.X + 300, position.Y - 30);
-            if (((MyGame)this.ScreenManager.Game).player1.Options == InputMode.Keyboard)
+            if (game.player1.Options == InputMode.Keyboard)
             {
                 lines = Regex.Split(Strings.PCExplanationString, "\r\n");
             }

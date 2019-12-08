@@ -72,9 +72,13 @@
     <Compile Include="GameObjects\Enemies\EnemyType.cs" />
     <Compile Include="GameObjects\ShotgunShell.cs" />
     <Compile Include="GameStateManagement\GameState.cs" />
+    <Compile Include="GameStateManagement\InputMode.cs" />
+    <Compile Include="MainScreens\ErrorScreen.cs" />
     <Compile Include="MainScreens\LoadInScreen.cs" />
     <Compile Include="GameStateManagement\MessageType.cs" />
     <Compile Include="GameObjects\ObjectStatus.cs" />
+    <Compile Include="Components\SliderComponent.cs" />
+    <Compile Include="GameStateManagement\OptionsState.cs" />
     <Compile Include="MyGame.cs" />
     <Compile Include="GameStateManagement\GameScreen.cs" />
     <Compile Include="GameStateManagement\InputAction.cs" />
@@ -100,7 +104,7 @@
     <Compile Include="MenuScreens\LobbyScreen.cs" />
     <Compile Include="MenuScreens\MatchmakingMenuScreen.cs" />
     <Compile Include="MenuScreens\MenuScreen.cs" />
-    <Compile Include="MusicComponent\MusicComponent.cs" />
+    <Compile Include="Components\MusicComponent.cs" />
     <Compile Include="GameStateManagement\NeutralInput.cs" />
     <Compile Include="OnlineDataSyncManager\IOnlineSyncTarget.cs" />
     <Compile Include="OnlineDataSyncManager\OnlineDataSyncManager.cs" />

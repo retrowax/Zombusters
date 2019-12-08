@@ -1,13 +1,4 @@
-﻿#region File Description
-//-----------------------------------------------------------------------------
-// Game1.cs
-//
-// Microsoft XNA Community Game Platform
-// Copyright (C) Microsoft Corporation. All rights reserved.
-//-----------------------------------------------------------------------------
-#endregion
-
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
 namespace ZombustersWindows
@@ -33,7 +24,7 @@ namespace ZombustersWindows
         public void Update(float deltaY)
         {
             screenpos.Y += deltaY;
-            screenpos.Y = screenpos.Y % mytexture.Height;
+            screenpos.Y %= mytexture.Height;
         }
         public void Draw(SpriteBatch batch, Color color)
         {
