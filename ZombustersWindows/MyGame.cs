@@ -39,7 +39,7 @@ namespace ZombustersWindows
         public int maxGamers = 4;
         public int maxLocalGamers = 4;
         public Random random;
-        public List<Texture2D> noisedMap;
+        
         //public StorageDeviceManager storageDeviceManager;
         public GameState currentGameState;
         
@@ -88,7 +88,7 @@ namespace ZombustersWindows
             player3 = new Player(options, audio, this);
             player4 = new Player(options, audio, this);
             currentNetworkSetting = 0;
-            noisedMap = new List<Texture2D>(4);
+            
             random = new Random(4);
 #if DEBUG
             /*FrameRateComponent = new FrameRateCounter(this);
@@ -121,14 +121,6 @@ namespace ZombustersWindows
         }
 
         protected override void LoadContent() {
-            for (int i = 0; i < 4; i++) {
-                noisedMap.Add(new Texture2D(GraphicsDevice, 512, 512, false, SurfaceFormat.Color));
-            }
-
-            noisedMap[0].SetData<Color>(CreateTexture.FillNoise(noisedMap[0].Width, noisedMap[0].Height, 0.5f));
-            noisedMap[1].SetData<Color>(CreateTexture.FillNoise(noisedMap[1].Width, noisedMap[1].Height, 0.4f));
-            noisedMap[2].SetData<Color>(CreateTexture.FillNoise(noisedMap[2].Width, noisedMap[2].Height, 0.6f));
-            noisedMap[3].SetData<Color>(CreateTexture.FillNoise(noisedMap[3].Width, noisedMap[3].Height, 0.7f));
             blackTexture = new Texture2D(GraphicsDevice, 1280, 720, false, SurfaceFormat.Color);
             Color[] colors = new Color[1280 * 720];
             for (int j = 0; j < colors.Length; j++) {

@@ -107,6 +107,8 @@ namespace ZombustersWindows
         Texture2D background_title_scrolling1;
         Texture2D background_title_scrolling2;
         Texture2D background_title_scrolling3;
+        private List<Texture2D> noisedMap = new List<Texture2D>(4);
+        private Random random = new Random(4);
 
         public float BackgroundDriftRatePerSec = 64.0f;
         int maxPosition = 0;
@@ -138,6 +140,15 @@ namespace ZombustersWindows
             background_title_scrolling1 = this.ScreenManager.Game.Content.Load<Texture2D>(@"menu/background_title_scrolling1");
             background_title_scrolling2 = this.ScreenManager.Game.Content.Load<Texture2D>(@"menu/background_title_scrolling2");
             background_title_scrolling3 = this.ScreenManager.Game.Content.Load<Texture2D>(@"menu/background_title_scrolling3");
+            for (int i = 0; i < 4; i++)
+            {
+                noisedMap.Add(new Texture2D(this.ScreenManager.GraphicsDevice, 512, 512, false, SurfaceFormat.Color));
+            }
+
+            noisedMap[0].SetData<Color>(CreateTexture.FillNoise(noisedMap[0].Width, noisedMap[0].Height, 0.5f));
+            noisedMap[1].SetData<Color>(CreateTexture.FillNoise(noisedMap[1].Width, noisedMap[1].Height, 0.4f));
+            noisedMap[2].SetData<Color>(CreateTexture.FillNoise(noisedMap[2].Width, noisedMap[2].Height, 0.6f));
+            noisedMap[3].SetData<Color>(CreateTexture.FillNoise(noisedMap[3].Width, noisedMap[3].Height, 0.7f));
             base.LoadContent();
         }
 
@@ -275,7 +286,7 @@ namespace ZombustersWindows
                 }
 
                 // Perlin Noise effect draw
-                this.ScreenManager.SpriteBatch.Draw(((MyGame)this.ScreenManager.Game).noisedMap[((MyGame)this.ScreenManager.Game).random.Next(0, 3)], new Rectangle(0, 0, 1280, 720), new Color(255, 255, 255, 12));
+                this.ScreenManager.SpriteBatch.Draw(noisedMap[random.Next(0, 3)], new Rectangle(0, 0, 1280, 720), new Color(255, 255, 255, 12));
                 this.ScreenManager.SpriteBatch.End();
             }
             else
