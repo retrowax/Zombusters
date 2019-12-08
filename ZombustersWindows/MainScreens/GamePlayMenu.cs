@@ -29,7 +29,7 @@ namespace ZombustersWindows.MainScreens
             menu.AddText(Strings.QuitToMainMenuInGameString);
             //if (licenseInformation.IsTrial)
             {
-                menu.AddText(Strings.UnlockFullGameMenuString);
+                //menu.AddText(Strings.UnlockFullGameMenuString);
             }
             menu.MenuOptionSelected += new EventHandler<MenuSelection>(SelectOption);
             menu.MenuCanceled += new EventHandler<MenuSelection>(CancelMenu);
