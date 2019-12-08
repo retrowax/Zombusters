@@ -45,9 +45,9 @@ It will let you sticked on your seat until the end. Its 2D graphics and isometri
 
 ### Download
 
-For now, if you want to play this game, you can download the **commercial version** released (v1.0.0) for PC Windows **for free** [here](https://github.com/retrowax/Zombusters/raw/master/releases/ZombustersInstaller-v1.0.0.msi).
+You can download it on **itch.io** here: [https://retrowax.itch.io/zombusters](https://retrowax.itch.io/zombusters)
 
-It's planned to have newer versions available any time soon.
+**NOTE:** If you want to play the original version that was published to the Windows Store you can download the **commercial version** released (v1.0.0) for PC Windows **for free** [here](https://github.com/retrowax/Zombusters/raw/master/releases/ZombustersInstaller-v1.0.0.msi).
 
 ### Requirements
 
