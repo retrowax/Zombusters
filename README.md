@@ -47,7 +47,7 @@ It will let you sticked on your seat until the end. Its 2D graphics and isometri
 
 You can download it on **itch.io** here: [https://retrowax.itch.io/zombusters](https://retrowax.itch.io/zombusters)
 
-**NOTE:** If you want to play the original version that was published to the Windows Store you can download the **commercial version** released (v1.0.0) for PC Windows **for free** [here](https://github.com/retrowax/Zombusters/raw/master/releases/ZombustersInstaller-v1.0.0.msi).
+**NOTE:** If you want to play the original version that was published to the Windows Store you can download the **commercial version** released (v1.0.0) for PC Windows **for free** [here](https://github.com/retrowax/Zombusters-Enhanced-Edition/raw/master/releases/ZombustersInstaller-v1.0.0.msi).
 
 ### Requirements
 
@@ -97,7 +97,7 @@ Hi! I'm Ferran Pons; a Senior Android Developer that works for Adevinta Spain de
 Bugs and Feedback
 -----------------
 
-For bugs, questions and discussions please use the [Github Issues](https://github.com/retrowax/Zombusters/issues).
+For bugs, questions and discussions please use the [Github Issues](https://github.com/retrowax/Zombusters-Enhanced-Edition/issues).
 
 
 Licensing
