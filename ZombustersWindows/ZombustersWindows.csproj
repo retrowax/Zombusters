@@ -89,6 +89,8 @@
     <Compile Include="GameObjects\ObjectStatus.cs" />
     <Compile Include="Components\SliderComponent.cs" />
     <Compile Include="GameStateManagement\OptionsState.cs" />
+    <Compile Include="Components\MenuComponent.cs" />
+    <Compile Include="MenuScreens\MenuSelection.cs" />
     <Compile Include="MyGame.cs" />
     <Compile Include="GameStateManagement\GameScreen.cs" />
     <Compile Include="GameStateManagement\InputState.cs" />
@@ -1200,6 +1202,7 @@
     <EmbeddedResource Include="Localization\Strings.es.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Strings.es.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Localization\Strings.fr.resx">
       <Generator>ResXFileCodeGenerator</Generator>
