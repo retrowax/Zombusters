@@ -9,104 +9,45 @@ using Microsoft.Xna.Framework.Input.Touch;
 using ZombustersWindows.MainScreens;
 using ZombustersWindows.Localization;
 using Bugsnag.Clients;
-//using Steamworks;
 
 namespace ZombustersWindows
 {
-    #region Global Variables
-
-    // Represents different states of the game
-    public enum GameState { SignIn, FindSession, CreateSession, Start, InGame, GameOver, InLobby, SelectPlayer, WaitingToBegin, Paused }
-
-    // Represents different types of network messages
-    public enum MessageType {
-        StartGame = 0,
-        EndGame = 1,
-        RestartGame = 2,
-        RejoinLobby = 3,
-        UpdatePlayerPos = 4,
-        SelectPlayer = 5,
-        ChangeLevel = 6,
-        ToggleReady = 7,
-        ChangeCharacter = 8,
-        SendPlayerSlot = 9,
-        ReadyToBegin = 10,
-        BeginToPlay = 11,
-        GameplayStatePlaying = 12,
-        GameplayStateStageCleared = 13,
-        GameplayStatePause = 14,
-        GameplayStateStartLevel = 15,
-        GameplayStateGameOver = 16,
-        GameplayPosition = 17,
-        GameplayAddBullet = 18,
-        GameplayPlayerCrashed = 19,
-        GameplayPlayerLifecounter = 20,
-        ZombieEnemyPosition = 21,
-        TankEnemyPosition = 22,
-        ZombieDestroyed = 23,
-        TankDestroyed = 24,
-        PowerUpAdded = 25,
-        PowerUpPicked = 26
-    }
-
-    public enum GameplayState {
-        Playing, StageCleared, Pause, StartLevel, GameOver, NotPlaying
-    }
-
-    #endregion
-
-    public struct NeutralInput {
-        public Vector2 StickLeftMovement, StickRightMovement;
-        public Vector2 Fire;
-        public bool DPadLeft, DPadRight, ButtonA, ButtonB, ButtonY, ButtonLT, ButtonRT, ButtonStart, ButtonRB;
-    }
-
     public class MyGame : Game {
         public GraphicsDeviceManager graphics;
-        SpriteBatch spriteBatch;
-        public Avatar[] currentPlayers;
-        public float TotalGameSeconds;
-        public Player Main;
-        public Player Player2;
-        public Player Player3;
-        public Player Player4;
         public ScreenManager screenManager;
         public GamePlayScreen playScreen;
-        public static float BackgroundDriftRatePerSec = 64.0f;
-        private bool bPaused = false;
-        private bool bStateReady = false;
+        public Avatar[] currentPlayers;
+        public Player player1;
+        public Player player2;
+        public Player player3;
+        public Player player4;
         public OptionsState options;
-        public OptionsState Options {
-            get { return options; }
-        }
-
         public AudioManager audio;
         public InputManager input;
-        //public BloomComponent bloom;
-        //int bloomSettingsIndex = 0;
-        public String[] NetworkSettings = { "XBOX LIVE", "SYSTEM LINK" };
-        public int CurrentNetworkSetting;
-        public int maxGamers = 4;
-        public int maxLocalGamers = 4;
-        public Random rand;
-        public List<Texture2D> NoisedMap;
-        //public StorageDeviceManager storageDeviceManager;
         public GameState currentGameState;
-        
-        public Vector2 position = new Vector2(-200, 0);
-        public Vector2 position2 = new Vector2(-200, 0);
-        public bool directionRight = true;
-        public TopScoreListContainer mScores;
+        public TopScoreListContainer topScoreListContainer;
+        public MusicComponent musicComponent;
+        public Texture2D blackTexture;
+        public BaseClient bugSnagClient;
+        public float totalGameSeconds;
+
+        //public BloomComponent bloom;
+        //public StorageDeviceManager storageDeviceManager;
+
 #if DEBUG
         //public FrameRateCounter FrameRateComponent;
         //public DebugInfoComponent DebugComponent;
 #endif
-        public MusicComponent musicComponent;
-        public Texture2D LivePowerUp, ExtraLivePowerUp, ShotgunAmmoPowerUp, MachinegunAmmoPowerUp, FlamethrowerAmmoPowerUp, ImmunePowerUp, heart, shotgunammoUI, pistolammoUI, grenadeammoUI, flamethrowerammoUI, blackTexture;
-        public bool isInMenu = false;
-        SpriteFont MenuInfoFont;
 
-        public BaseClient BugSnagClient;
+        //int bloomSettingsIndex = 0;
+        
+        public String[] networkSettings = { "XBOX LIVE", "SYSTEM LINK" };
+        public int currentNetworkSetting;
+        public int maxGamers = 4;
+        public int maxLocalGamers = 4;
+        public bool isInMenu = false;
+        private bool bPaused = false;
+        private bool bStateReady = false;
 
         public MyGame() {
             graphics = new GraphicsDeviceManager(this)
@@ -134,13 +75,11 @@ namespace ZombustersWindows
             bloom.Settings = BloomSettings.PresetSettings[6];
             bloom.Visible = true;
             */
-            Main = new Player(options, audio, this);
-            Player2 = new Player(options, audio, this);
-            Player3 = new Player(options, audio, this);
-            Player4 = new Player(options, audio, this);
-            CurrentNetworkSetting = 0;
-            NoisedMap = new List<Texture2D>(4);
-            rand = new Random(4);
+            player1 = new Player(options, audio, this);
+            player2 = new Player(options, audio, this);
+            player3 = new Player(options, audio, this);
+            player4 = new Player(options, audio, this);
+            currentNetworkSetting = 0;
 #if DEBUG
             /*FrameRateComponent = new FrameRateCounter(this);
             Components.Add(FrameRateComponent);
@@ -152,12 +91,11 @@ namespace ZombustersWindows
             Components.Add(musicComponent);
             musicComponent.Enabled = true;
 
-            BugSnagClient = new BaseClient("1cad9818fb8d84290d776245cd1f948d");
-            BugSnagClient.StartAutoNotify();
+            bugSnagClient = new BaseClient("1cad9818fb8d84290d776245cd1f948d");
+            bugSnagClient.StartAutoNotify();
         }
 
         protected override void Initialize() {
-            //SteamAPI.Init();
             currentPlayers = new Avatar[maxGamers];
             for (int i = 0; i < maxGamers; i++) {
                 currentPlayers[i] = new Avatar();
@@ -167,21 +105,11 @@ namespace ZombustersWindows
                 }
             }      
             base.Initialize();
-            screenManager.AddScreen(new LogoScreen(this));
+            screenManager.AddScreen(new LogoScreen());
             currentGameState = GameState.SignIn;
         }
 
         protected override void LoadContent() {
-            spriteBatch = new SpriteBatch(GraphicsDevice);
-            for (int i = 0; i < 4; i++) {
-                NoisedMap.Add(new Texture2D(GraphicsDevice, 512, 512, false, SurfaceFormat.Color));
-            }
-
-            NoisedMap[0].SetData<Color>(CreateTexture.FillNoise(NoisedMap[0].Width, NoisedMap[0].Height, 0.5f));
-            NoisedMap[1].SetData<Color>(CreateTexture.FillNoise(NoisedMap[1].Width, NoisedMap[1].Height, 0.4f));
-            NoisedMap[2].SetData<Color>(CreateTexture.FillNoise(NoisedMap[2].Width, NoisedMap[2].Height, 0.6f));
-            NoisedMap[3].SetData<Color>(CreateTexture.FillNoise(NoisedMap[3].Width, NoisedMap[3].Height, 0.7f));
-            MenuInfoFont = screenManager.Game.Content.Load<SpriteFont>(@"menu\ArialMenuInfo");
             blackTexture = new Texture2D(GraphicsDevice, 1280, 720, false, SurfaceFormat.Color);
             Color[] colors = new Color[1280 * 720];
             for (int j = 0; j < colors.Length; j++) {
@@ -191,14 +119,13 @@ namespace ZombustersWindows
         }
 
         protected override void Update(GameTime gameTime) {
-            //SteamAPI.RunCallbacks();
             if (currentGameState != GameState.Paused) {
                 if (!bPaused && bStateReady) {
-                    TotalGameSeconds += (float)gameTime.ElapsedGameTime.TotalSeconds;
+                    totalGameSeconds += (float)gameTime.ElapsedGameTime.TotalSeconds;
                     foreach (Avatar cplayer in currentPlayers) {
                         if (cplayer.Player != null) {
                             if (cplayer.Player.IsPlaying) {
-                                cplayer.Update(gameTime, TotalGameSeconds);
+                                cplayer.Update(gameTime, totalGameSeconds);
                             }
                         }
                     }
@@ -207,12 +134,12 @@ namespace ZombustersWindows
             }
         }
 
-        public void checkIfControllerChanged(InputState inputCheck) {
+        public void CheckIfControllerChanged(InputState inputCheck) {
             if (inputCheck.IsNewKeyPress(Keys.Enter) || inputCheck.IsNewKeyPress(Keys.Space) || inputCheck.IsNewKeyPress(Keys.Escape) || inputCheck.IsNewKeyPress(Keys.A) ||
                 inputCheck.IsNewKeyPress(Keys.S) || inputCheck.IsNewKeyPress(Keys.D) || inputCheck.IsNewKeyPress(Keys.W) || inputCheck.IsNewKeyPress(Keys.Up) ||
                 inputCheck.IsNewKeyPress(Keys.Down) || inputCheck.IsNewKeyPress(Keys.Left) || inputCheck.IsNewKeyPress(Keys.Right))
             {
-                Main.Options = InputMode.Keyboard;
+                player1.Options = InputMode.Keyboard;
             }
 
             if (inputCheck.IsNewButtonPress(Buttons.A) || inputCheck.IsNewButtonPress(Buttons.B) || inputCheck.IsNewButtonPress(Buttons.X) || inputCheck.IsNewButtonPress(Buttons.Y) ||
@@ -221,18 +148,16 @@ namespace ZombustersWindows
                 || inputCheck.IsNewButtonPress(Buttons.LeftThumbstickLeft) || inputCheck.IsNewButtonPress(Buttons.LeftThumbstickRight) || inputCheck.IsNewButtonPress(Buttons.LeftThumbstickDown)
                 || inputCheck.IsNewButtonPress(Buttons.LeftThumbstickUp))
             {
-                Main.Options = InputMode.GamePad;
+                player1.Options = InputMode.GamePad;
             }
 
-            // Read in our gestures
             foreach (GestureSample gesture in inputCheck.GetGestures()) {
-                // If we have a tap
                 if (gesture.GestureType == GestureType.Tap || gesture.GestureType == GestureType.DoubleTap || gesture.GestureType == GestureType.DragComplete ||
                     gesture.GestureType == GestureType.Flick || gesture.GestureType == GestureType.FreeDrag || gesture.GestureType == GestureType.Hold ||
                     gesture.GestureType == GestureType.HorizontalDrag || gesture.GestureType == GestureType.Pinch || gesture.GestureType == GestureType.PinchComplete ||
                     gesture.GestureType == GestureType.VerticalDrag)
                 {
-                    Main.Options = InputMode.Touch;
+                    player1.Options = InputMode.Touch;
                 }
             }
         }
@@ -240,35 +165,35 @@ namespace ZombustersWindows
         #region Start Games
 
         public void InitializeMain(PlayerIndex index) {
-            if (!Main.IsPlaying) {
-                Main.InitLocal(index, Strings.PlayerOneString, InputMode.Keyboard, this);
-                LoadOptions(Main);
+            if (!player1.IsPlaying) {
+                player1.InitLocal(index, Strings.PlayerOneString, InputMode.Keyboard, this);
+                LoadOptions(player1);
             }
         }
 
-        public void BeginLocalGame(CLevel.Level level, List<int> PlayersActive) {
+        public void BeginLocalGame(LevelType level, List<int> PlayersActive) {
             byte i;
 
             Reset();
             for (i = 0; i < currentPlayers.Length; i++) {
                 if (i == 0) {
-                    currentPlayers[i].Activate(Main);
+                    currentPlayers[i].Activate(player1);
                     currentPlayers[i].Player.Controller = PlayerIndex.One;
                     currentPlayers[i].color = Color.Blue;
                 } else if (i == 1) {
-                    currentPlayers[i].Player = Player2;
+                    currentPlayers[i].Player = player2;
                     currentPlayers[i].Player.Controller = PlayerIndex.Two;
-                    currentPlayers[i].Activate(Player2);
+                    currentPlayers[i].Activate(player2);
                     currentPlayers[i].color = Color.Red;
                 } else if (i == 2) {
-                    currentPlayers[i].Player = Player3;
+                    currentPlayers[i].Player = player3;
                     currentPlayers[i].Player.Controller = PlayerIndex.Three;
-                    currentPlayers[i].Activate(Player3);
+                    currentPlayers[i].Activate(player3);
                     currentPlayers[i].color = Color.Green;
                 } else {
-                    currentPlayers[i].Player = Player4;
+                    currentPlayers[i].Player = player4;
                     currentPlayers[i].Player.Controller = PlayerIndex.Four;
-                    currentPlayers[i].Activate(Player4);
+                    currentPlayers[i].Activate(player4);
                     currentPlayers[i].color = Color.Yellow;
                 }
                 currentPlayers[i].Player.IsRemote = true;
@@ -283,7 +208,7 @@ namespace ZombustersWindows
             bStateReady = true;
             this.audio.StopMenuMusic();
             currentGameState = GameState.InGame;
-            playScreen = new GamePlayScreen(this, level, CSubLevel.SubLevel.One);
+            playScreen = new GamePlayScreen(this, level, SubLevel.SubLevelType.One);
             screenManager.AddScreen(playScreen);
         }
 
@@ -291,7 +216,7 @@ namespace ZombustersWindows
             int i;
             Reset();
             for (i = 0; i < maxGamers; i++) {
-                currentPlayers[i].Player = Player4;
+                currentPlayers[i].Player = player4;
             }
             bStateReady = true;
             currentGameState = GameState.InLobby;
@@ -299,7 +224,7 @@ namespace ZombustersWindows
         }
 
         public void Reset() {
-            TotalGameSeconds = 0;
+            totalGameSeconds = 0;
             currentPlayers[0].Reset(Color.Blue);
             currentPlayers[1].Reset(Color.Red);
             currentPlayers[2].Reset(Color.Green);
@@ -307,28 +232,28 @@ namespace ZombustersWindows
         }
 
         public void Restart() {
-            if (Main.IsPlaying) {
+            if (player1.IsPlaying) {
                 currentPlayers[0].Restart();
-                currentPlayers[0].Activate(Main);
+                currentPlayers[0].Activate(player1);
                 currentPlayers[0].color = Color.Blue;
             }
-            if (Player2.IsPlaying) {
+            if (player2.IsPlaying) {
                 currentPlayers[1].Restart();
-                currentPlayers[1].Activate(Player2);
+                currentPlayers[1].Activate(player2);
                 currentPlayers[1].color = Color.Red;
             }
-            if (Player3.IsPlaying) {
+            if (player3.IsPlaying) {
                 currentPlayers[2].Restart();
-                currentPlayers[2].Activate(Player3);
+                currentPlayers[2].Activate(player3);
                 currentPlayers[2].color = Color.Green;
             }
-            if (Player4.IsPlaying) {
+            if (player4.IsPlaying) {
                 currentPlayers[3].Restart();
-                currentPlayers[3].Activate(Player4);
+                currentPlayers[3].Activate(player4);
                 currentPlayers[3].color = Color.Yellow;
             }
 
-            TotalGameSeconds = 0;
+            totalGameSeconds = 0;
             playScreen.bGameOver = false;
         }
 
@@ -386,19 +311,19 @@ namespace ZombustersWindows
             this.InitializeMain((PlayerIndex)player);
             switch (player) {
                 case 0:
-                    screenManager.AddScreen(new OptionsScreen(this, this.Main.optionsState));
+                    screenManager.AddScreen(new OptionsScreen(this, this.player1.optionsState));
                     break;
                 case 1:
-                    screenManager.AddScreen(new OptionsScreen(this, this.Player2.optionsState));
+                    screenManager.AddScreen(new OptionsScreen(this, this.player2.optionsState));
                     break;
                 case 2:
-                    screenManager.AddScreen(new OptionsScreen(this, this.Player3.optionsState));
+                    screenManager.AddScreen(new OptionsScreen(this, this.player3.optionsState));
                     break;
                 case 3:
-                    screenManager.AddScreen(new OptionsScreen(this, this.Player4.optionsState));
+                    screenManager.AddScreen(new OptionsScreen(this, this.player4.optionsState));
                     break;
                 default:
-                    screenManager.AddScreen(new OptionsScreen(this, this.Main.optionsState));
+                    screenManager.AddScreen(new OptionsScreen(this, this.player1.optionsState));
                     break;
             }
         }
@@ -428,7 +353,7 @@ namespace ZombustersWindows
                 bPaused = true;
                 audio.PauseSounds();
                 input.BeginPause();
-                Main.BeginPause();
+                player1.BeginPause();
             }
             return IsPaused;
         }
@@ -437,7 +362,7 @@ namespace ZombustersWindows
             if (bPaused) {
                 audio.ResumeAll();
                 input.EndPause();
-                Main.EndPause();
+                player1.EndPause();
                 bPaused = false;
             }
             return IsPaused;
@@ -446,12 +371,6 @@ namespace ZombustersWindows
 
         protected override void Draw(GameTime gameTime) {
             graphics.GraphicsDevice.Clear(Color.Black);
-            //if (currentGameState == GameState.Paused)
-            //{
-            //    screenManager.SpriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend);
-            //    screenManager.SpriteBatch.DrawString(MenuInfoFont, "ZOMBUSTERS " + Strings.Paused"), new Vector2(0, 0), Color.White, 4.70f, Vector2.Zero, 1.0f, SpriteEffects.None, 1.0f);
-            //    screenManager.SpriteBatch.End();
-            //}
             base.Draw(gameTime);
         }
     }

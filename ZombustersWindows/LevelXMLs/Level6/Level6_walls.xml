@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0"?>
-<ArrayOfCWall>
+<ArrayOfWall>
   <!-- Superior Izquierda -->
-  <CWall>
+  <Wall>
     <From>
       <X>332</X>
       <Y>0</Y>
@@ -10,9 +10,9 @@
       <X>332</X>
       <Y>-250</Y>
     </To>
-  </CWall>
+  </Wall>
 
-  <CWall>
+  <Wall>
     <From>
       <X>332</X>
       <Y>0</Y>
@@ -21,9 +21,9 @@
       <X>332</X>
       <Y>14</Y>
     </To>
-  </CWall>
+  </Wall>
 
-  <CWall>
+  <Wall>
     <From>
       <X>332</X>
       <Y>14</Y>
@@ -32,9 +32,9 @@
       <X>0</X>
       <Y>177</Y>
     </To>
-  </CWall>
+  </Wall>
 
-  <CWall>
+  <Wall>
     <From>
       <X>0</X>
       <Y>177</Y>
@@ -43,11 +43,11 @@
       <X>-250</X>
       <Y>177</Y>
     </To>
-  </CWall>
+  </Wall>
   <!-- END Superior Izquierda -->
 
   <!-- Superior Derecha -->
-  <CWall>
+  <Wall>
     <From>
       <X>964</X>
       <Y>0</Y>
@@ -56,9 +56,9 @@
       <X>964</X>
       <Y>-250</Y>
     </To>
-  </CWall>
+  </Wall>
 
-  <CWall>
+  <Wall>
     <From>
       <X>964</X>
       <Y>0</Y>
@@ -67,9 +67,9 @@
       <X>964</X>
       <Y>13</Y>
     </To>
-  </CWall>
+  </Wall>
 
-  <CWall>
+  <Wall>
     <From>
       <X>964</X>
       <Y>13</Y>
@@ -78,9 +78,9 @@
       <X>1280</X>
       <Y>169</Y>
     </To>
-  </CWall>
+  </Wall>
 
-  <CWall>
+  <Wall>
     <From>
       <X>1280</X>
       <Y>169</Y>
@@ -89,11 +89,11 @@
       <X>1500</X>
       <Y>169</Y>
     </To>
-  </CWall>
+  </Wall>
   <!-- END Superior Derecha -->
 
   <!-- Centro -->
-  <CWall>
+  <Wall>
     <From>
       <X>752</X>
       <Y>423</Y>
@@ -102,9 +102,9 @@
       <X>630</X>
       <Y>483</Y>
     </To>
-  </CWall>
+  </Wall>
 
-  <CWall>
+  <Wall>
     <From>
       <X>630</X>
       <Y>483</Y>
@@ -113,9 +113,9 @@
       <X>497</X>
       <Y>417</Y>
     </To>
-  </CWall>
+  </Wall>
 
-  <CWall>
+  <Wall>
     <From>
       <X>497</X>
       <Y>417</Y>
@@ -124,9 +124,9 @@
       <X>497</X>
       <Y>405</Y>
     </To>
-  </CWall>
+  </Wall>
 
-  <CWall>
+  <Wall>
     <From>
       <X>497</X>
       <Y>405</Y>
@@ -135,9 +135,9 @@
       <X>619</X>
       <Y>345</Y>
     </To>
-  </CWall>
+  </Wall>
 
-  <CWall>
+  <Wall>
     <From>
       <X>619</X>
       <Y>345</Y>
@@ -146,9 +146,9 @@
       <X>752</X>
       <Y>411</Y>
     </To>
-  </CWall>
+  </Wall>
 
-  <CWall>
+  <Wall>
     <From>
       <X>752</X>
       <Y>411</Y>
@@ -157,7 +157,7 @@
       <X>752</X>
       <Y>423</Y>
     </To>
-  </CWall>
+  </Wall>
   <!-- END Centro -->
   
-</ArrayOfCWall>
+</ArrayOfWall>

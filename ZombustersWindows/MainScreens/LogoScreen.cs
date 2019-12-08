@@ -1,20 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Audio;
-using Microsoft.Xna.Framework.Content;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
-//using Microsoft.Xna.Framework.Storage;
-using GameStateManagement;
-using System.IO;
-using System.Xml.Serialization;
 using Microsoft.Xna.Framework.Media;
 
 namespace ZombustersWindows
 {
     public class LogoScreen : BackgroundScreen {
-        MyGame Game;
+        MyGame game;
         float logoFadeValue = 1;         // Current Value of the Fade for the Logo
         float logoFadeSpeed = 200.0f; // Speed at which the Fade will happen
         Vector2 viewportCentre;
@@ -25,12 +16,12 @@ namespace ZombustersWindows
         bool isPlayedSound = false;
         float timer;
 
-        public LogoScreen(MyGame game) {
-            this.Game = game;
+        public LogoScreen() {
         }
 
         public override void Initialize() {
             base.Initialize();
+            this.game = (MyGame)this.ScreenManager.Game;
             this.isBackgroundOn = true;
             viewportCentre = new Vector2(this.ScreenManager.GraphicsDevice.Viewport.Width / 2, this.ScreenManager.GraphicsDevice.Viewport.Height / 2);
             logoRotationAngle = 0.0f;
@@ -46,7 +37,7 @@ namespace ZombustersWindows
             float timeDelta = (float)gameTime.ElapsedGameTime.TotalSeconds;
             if (!isPlayedSound) {
                 if (MediaPlayer.GameHasControl) {
-                    Game.audio.PlaySplashSound();
+                    game.audio.PlaySplashSound();
                     isPlayedSound = true;
                 }
             }
@@ -73,7 +64,7 @@ namespace ZombustersWindows
         }
 
         void FinishLogo() {
-            this.ScreenManager.AddScreen(new StartScreen(Game));
+            this.ScreenManager.AddScreen(new StartScreen());
             //Removes the Bloom Effect from the Menu
             //this.Game.bloom.Visible = !this.Game.bloom.Visible;
             ExitScreen();

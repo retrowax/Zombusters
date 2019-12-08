@@ -1,11 +1,4 @@
-//-----------------------------------------------------------------------------
-// VirtualThumbsticks.cs
-//
-// Microsoft Advanced Technology Group
-// Copyright (C) Microsoft Corporation. All rights reserved.
-//-----------------------------------------------------------------------------
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Input.Touch;
 
 

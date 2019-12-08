@@ -1,28 +1,19 @@
-using System;
 using System.Collections.Generic;
-using System.Text.RegularExpressions;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Audio;
-using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
-#if !WINDOWS_PHONE
-//using Microsoft.Xna.Framework.Storage;
-#endif
-using GameStateManagement;
 
 namespace ZombustersWindows.Subsystem_Managers
 {
     class ScrollingTextManager
     {
         //This will store the display are for the block of text
-        private Rectangle mDisplayArea;
+        private Rectangle displayArea;
 
         //This is the font that will be used to draw the text
-        private SpriteFont mFont;
+        private readonly SpriteFont font;
 
         //This is the lines of text that make up the text block
-        private List<TextLine> mTextLines;
+        private List<TextLine> textLines;
 
         //Indica si ya se han mostrado todas las lineas de los creditos
         public bool endOfLines;
@@ -30,8 +21,8 @@ namespace ZombustersWindows.Subsystem_Managers
         //Create a new TextBlock object
         public ScrollingTextManager(Rectangle theArea, SpriteFont theFont, string theText)
         {
-            mDisplayArea = theArea;
-            mFont = theFont;
+            displayArea = theArea;
+            font = theFont;
             endOfLines = false;
 
             CalculateTextDisplay(theText);
@@ -40,19 +31,19 @@ namespace ZombustersWindows.Subsystem_Managers
         //Calculate the line lengths and position the lines for scrolling
         private void CalculateTextDisplay(string theText)
         {
-            mTextLines = new List<TextLine>();
+            textLines = new List<TextLine>();
             
             string aTextLine = string.Empty;
             string aNewWord = string.Empty;
 
-            int aYPosition = mDisplayArea.Y + mDisplayArea.Height;
+            int aYPosition = displayArea.Y + displayArea.Height;
 
             foreach (char theChar in theText.ToCharArray())
             {
-                if (mFont.MeasureString(aTextLine + aNewWord + theChar).Length() > mDisplayArea.Width || theChar == '\n')
+                if (font.MeasureString(aTextLine + aNewWord + theChar).Length() > displayArea.Width || theChar == '\n')
                 {
-                    mTextLines.Add(new TextLine(new Vector2(mDisplayArea.X, aYPosition), aTextLine));
-                    aYPosition += mFont.LineSpacing;
+                    textLines.Add(new TextLine(new Vector2(displayArea.X, aYPosition), aTextLine));
+                    aYPosition += font.LineSpacing;
                     aTextLine = string.Empty;
                 }
 
@@ -64,7 +55,7 @@ namespace ZombustersWindows.Subsystem_Managers
                 }
             }
 
-            mTextLines.Add(new TextLine(new Vector2(mDisplayArea.X, aYPosition), aTextLine + aNewWord));           
+            textLines.Add(new TextLine(new Vector2(displayArea.X, aYPosition), aTextLine + aNewWord));           
         }
 
 
@@ -77,7 +68,7 @@ namespace ZombustersWindows.Subsystem_Managers
             {
                 mScrollDelay = 0.05f;
 
-                foreach (TextLine theTextLine in mTextLines)
+                foreach (TextLine theTextLine in textLines)
                 {
                     theTextLine.Position.Y -= 1;
                 }
@@ -89,16 +80,16 @@ namespace ZombustersWindows.Subsystem_Managers
         {
             int countLine = 0;
             //Cycle through all of the lines and if they are within the display area, draw them to the screen
-            foreach (TextLine theTextLine in mTextLines)
+            foreach (TextLine theTextLine in textLines)
             {
-                if (theTextLine.Position.Y + mFont.LineSpacing <= mDisplayArea.Y + mDisplayArea.Height)
+                if (theTextLine.Position.Y + font.LineSpacing <= displayArea.Y + displayArea.Height)
                 {
-                    if (theTextLine.Position.Y > mDisplayArea.Y) 
+                    if (theTextLine.Position.Y > displayArea.Y) 
                     {
-                        theBatch.DrawString(mFont, theTextLine.Text, new Vector2(mDisplayArea.Center.X - mFont.MeasureString(theTextLine.Text).X / 2, theTextLine.Position.Y), Color.White);
+                        theBatch.DrawString(font, theTextLine.Text, new Vector2(displayArea.Center.X - font.MeasureString(theTextLine.Text).X / 2, theTextLine.Position.Y), Color.White);
                     }
 
-                    if ((countLine == mTextLines.Count - 1) && theTextLine.Position.Y < mDisplayArea.Y)
+                    if ((countLine == textLines.Count - 1) && theTextLine.Position.Y < displayArea.Y)
                     {
                         endOfLines = true;
                     }

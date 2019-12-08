@@ -5,9 +5,6 @@ using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-#if !WINDOWS_PHONE
-//using Microsoft.Xna.Framework.Storage;
-#endif
 using GameStateManagement;
 using System.Xml;
 using System.IO;

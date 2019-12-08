@@ -1,17 +1,7 @@
 using System;
 using System.Collections.Generic;
-using System.Text;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
-#if !WINDOWS_PHONE
-//using Microsoft.Xna.Framework.Storage;
-#endif
-
-using System.Xml;
-using System.Xml.Serialization;
-using System.IO;
-using System.Diagnostics;
 
 namespace ZombustersWindows.Subsystem_Managers
 {

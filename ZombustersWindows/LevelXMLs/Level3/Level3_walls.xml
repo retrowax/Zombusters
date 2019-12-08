@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0"?>
-<ArrayOfCWall>
+<ArrayOfWall>
   <!-- Superior Izquierda -->
-  <CWall>
+  <Wall>
     <From>
       <X>360</X>
       <Y>-255</Y>
@@ -10,9 +10,9 @@
       <X>360</X>
       <Y>0</Y>
     </To>
-  </CWall>
+  </Wall>
 
-  <CWall>
+  <Wall>
     <From>
       <X>360</X>
       <Y>0</Y>
@@ -21,9 +21,9 @@
       <X>279</X>
       <Y>115</Y>
     </To>
-  </CWall>
+  </Wall>
 
-  <CWall>
+  <Wall>
     <From>
       <X>279</X>
       <Y>115</Y>
@@ -32,9 +32,9 @@
       <X>92</X>
       <Y>225</Y>
     </To>
-  </CWall>
+  </Wall>
 
-  <CWall>
+  <Wall>
     <From>
       <X>92</X>
       <Y>225</Y>
@@ -43,9 +43,9 @@
       <X>155</X>
       <Y>254</Y>
     </To>
-  </CWall>
+  </Wall>
 
-  <CWall>
+  <Wall>
     <From>
       <X>155</X>
       <Y>254</Y>
@@ -54,9 +54,9 @@
       <X>337</X>
       <Y>288</Y>
     </To>
-  </CWall>
+  </Wall>
 
-  <CWall>
+  <Wall>
     <From>
       <X>337</X>
       <Y>288</Y>
@@ -65,9 +65,9 @@
       <X>449</X>
       <Y>289</Y>
     </To>
-  </CWall>
+  </Wall>
 
-  <CWall>
+  <Wall>
     <From>
       <X>449</X>
       <Y>289</Y>
@@ -76,9 +76,9 @@
       <X>552</X>
       <Y>339</Y>
     </To>
-  </CWall>
+  </Wall>
 
-  <CWall>
+  <Wall>
     <From>
       <X>552</X>
       <Y>339</Y>
@@ -87,9 +87,9 @@
       <X>592</X>
       <Y>320</Y>
     </To>
-  </CWall>
+  </Wall>
 
-  <CWall>
+  <Wall>
     <From>
       <X>592</X>
       <Y>320</Y>
@@ -98,9 +98,9 @@
       <X>603</X>
       <Y>325</Y>
     </To>
-  </CWall>
+  </Wall>
 
-  <CWall>
+  <Wall>
     <From>
       <X>603</X>
       <Y>325</Y>
@@ -109,9 +109,9 @@
       <X>603</X>
       <Y>346</Y>
     </To>
-  </CWall>
+  </Wall>
 
-  <CWall>
+  <Wall>
     <From>
       <X>603</X>
       <Y>346</Y>
@@ -120,9 +120,9 @@
       <X>433</X>
       <Y>431</Y>
     </To>
-  </CWall>
+  </Wall>
 
-  <CWall>
+  <Wall>
     <From>
       <X>433</X>
       <Y>431</Y>
@@ -131,9 +131,9 @@
       <X>417</X>
       <Y>424</Y>
     </To>
-  </CWall>
+  </Wall>
 
-  <CWall>
+  <Wall>
     <From>
       <X>417</X>
       <Y>424</Y>
@@ -142,9 +142,9 @@
       <X>421</X>
       <Y>404</Y>
     </To>
-  </CWall>
+  </Wall>
 
-  <CWall>
+  <Wall>
     <From>
       <X>421</X>
       <Y>404</Y>
@@ -153,9 +153,9 @@
       <X>379</X>
       <Y>384</Y>
     </To>
-  </CWall>
+  </Wall>
 
-  <CWall>
+  <Wall>
     <From>
       <X>379</X>
       <Y>384</Y>
@@ -164,9 +164,9 @@
       <X>245</X>
       <Y>384</Y>
     </To>
-  </CWall>
+  </Wall>
 
-  <CWall>
+  <Wall>
     <From>
       <X>245</X>
       <Y>384</Y>
@@ -175,9 +175,9 @@
       <X>91</X>
       <Y>352</Y>
     </To>
-  </CWall>
+  </Wall>
 
-  <CWall>
+  <Wall>
     <From>
       <X>91</X>
       <Y>352</Y>
@@ -186,9 +186,9 @@
       <X>0</X>
       <Y>305</Y>
     </To>
-  </CWall>
+  </Wall>
 
-  <CWall>
+  <Wall>
     <From>
       <X>0</X>
       <Y>305</Y>
@@ -197,11 +197,11 @@
       <X>-250</X>
       <Y>305</Y>
     </To>
-  </CWall>
+  </Wall>
   <!-- END Superior Izquierda -->
 
   <!-- Inferior Derecha -->
-  <CWall>
+  <Wall>
     <From>
       <X>1280</X>
       <Y>575</Y>
@@ -210,9 +210,9 @@
       <X>1400</X>
       <Y>575</Y>
     </To>
-  </CWall>
+  </Wall>
 
-  <CWall>
+  <Wall>
     <From>
       <X>1280</X>
       <Y>575</Y>
@@ -221,9 +221,9 @@
       <X>1103</X>
       <Y>529</Y>
     </To>
-  </CWall>
+  </Wall>
 
-  <CWall>
+  <Wall>
     <From>
       <X>1103</X>
       <Y>529</Y>
@@ -232,9 +232,9 @@
       <X>803</X>
       <Y>529</Y>
     </To>
-  </CWall>
+  </Wall>
 
-  <CWall>
+  <Wall>
     <From>
       <X>803</X>
       <Y>529</Y>
@@ -243,9 +243,9 @@
       <X>760</X>
       <Y>508</Y>
     </To>
-  </CWall>
+  </Wall>
 
-  <CWall>
+  <Wall>
     <From>
       <X>760</X>
       <Y>508</Y>
@@ -254,9 +254,9 @@
       <X>739</X>
       <Y>462</Y>
     </To>
-  </CWall>
+  </Wall>
 
-  <CWall>
+  <Wall>
     <From>
       <X>739</X>
       <Y>462</Y>
@@ -265,9 +265,9 @@
       <X>684</X>
       <Y>407</Y>
     </To>
-  </CWall>
+  </Wall>
 
-  <CWall>
+  <Wall>
     <From>
       <X>684</X>
       <Y>407</Y>
@@ -276,9 +276,9 @@
       <X>684</X>
       <Y>368</Y>
     </To>
-  </CWall>
+  </Wall>
 
-  <CWall>
+  <Wall>
     <From>
       <X>684</X>
       <Y>368</Y>
@@ -287,9 +287,9 @@
       <X>674</X>
       <Y>360</Y>
     </To>
-  </CWall>
+  </Wall>
 
-  <CWall>
+  <Wall>
     <From>
       <X>674</X>
       <Y>360</Y>
@@ -298,9 +298,9 @@
       <X>504</X>
       <Y>445</Y>
     </To>
-  </CWall>
+  </Wall>
 
-  <CWall>
+  <Wall>
     <From>
       <X>504</X>
       <Y>445</Y>
@@ -309,9 +309,9 @@
       <X>504</X>
       <Y>467</Y>
     </To>
-  </CWall>
+  </Wall>
 
-  <CWall>
+  <Wall>
     <From>
       <X>504</X>
       <Y>467</Y>
@@ -320,9 +320,9 @@
       <X>513</X>
       <Y>470</Y>
     </To>
-  </CWall>
+  </Wall>
 
-  <CWall>
+  <Wall>
     <From>
       <X>513</X>
       <Y>470</Y>
@@ -331,9 +331,9 @@
       <X>553</X>
       <Y>470</Y>
     </To>
-  </CWall>
+  </Wall>
 
-  <CWall>
+  <Wall>
     <From>
       <X>553</X>
       <Y>470</Y>
@@ -342,9 +342,9 @@
       <X>609</X>
       <Y>528</Y>
     </To>
-  </CWall>
+  </Wall>
 
-  <CWall>
+  <Wall>
     <From>
       <X>609</X>
       <Y>528</Y>
@@ -353,9 +353,9 @@
       <X>631</X>
       <Y>574</Y>
     </To>
-  </CWall>
+  </Wall>
 
-  <CWall>
+  <Wall>
     <From>
       <X>631</X>
       <Y>574</Y>
@@ -364,9 +364,9 @@
       <X>711</X>
       <Y>614</Y>
     </To>
-  </CWall>
+  </Wall>
 
-  <CWall>
+  <Wall>
     <From>
       <X>711</X>
       <Y>614</Y>
@@ -375,9 +375,9 @@
       <X>1089</X>
       <Y>614</Y>
     </To>
-  </CWall>
+  </Wall>
 
-  <CWall>
+  <Wall>
     <From>
       <X>1089</X>
       <Y>614</Y>
@@ -386,9 +386,9 @@
       <X>1280</X>
       <Y>668</Y>
     </To>
-  </CWall>
+  </Wall>
 
-  <CWall>
+  <Wall>
     <From>
       <X>1280</X>
       <Y>668</Y>
@@ -397,7 +397,7 @@
       <X>1400</X>
       <Y>668</Y>
     </To>
-  </CWall>
+  </Wall>
   <!-- END Inferior Derecha -->
   
-</ArrayOfCWall>
+</ArrayOfWall>

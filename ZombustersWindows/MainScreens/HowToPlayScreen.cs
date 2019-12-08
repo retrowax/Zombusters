@@ -51,40 +51,21 @@ namespace ZombustersWindows
             // Deflate 10% to provide for title safe area on CRT TVs
             uiBounds = GetTitleSafeArea();
 
-#if WINDOWS_PHONE
-            titleBounds = new Rectangle(0, 0, 800, 480);
-
-            //"Select" text position
-            selectPos = new Vector2(uiBounds.X + 60, uiBounds.Bottom);
-#else
             titleBounds = new Rectangle(115, 65, 1000, 323);
 
             //"Select" text position
             selectPos = new Vector2(uiBounds.X + 60, uiBounds.Bottom - 30);
-#endif
 
             MenuHeaderFont = this.ScreenManager.Game.Content.Load<SpriteFont>(@"menu\ArialMenuHeader");
             MenuInfoFont = this.ScreenManager.Game.Content.Load<SpriteFont>(@"menu\ArialMenuInfo");
             MenuListFont = this.ScreenManager.Game.Content.Load<SpriteFont>(@"menu\ArialMenuList");
 
             menu = new MenuComponent(this.ScreenManager.Game, MenuListFont);
-
-            //Initialize Main Menu
             menu.Initialize();
-
             menu.uiBounds = menu.Extents;
-
-            //Offset de posicion del menu
             menu.uiBounds.Offset(uiBounds.X, 300);
-            menu.MenuCanceled += new EventHandler<MenuSelection>(menu_MenuCanceled);
-            //menu.MenuShowMarketplace += new EventHandler<MenuSelection>(menu_ShowMarketPlace);
-
-            //Posiciona el menu
+            menu.MenuCanceled += new EventHandler<MenuSelection>(MenuCanceled);
             menu.CenterInXLeftMenu(view);
-#if !WINDOWS_PHONE && !WINDOWS
-            this.PresenceMode = GamerPresenceMode.AtMenu;
-#endif
-
             base.Initialize();
 
             this.isBackgroundOn = true;
@@ -92,10 +73,9 @@ namespace ZombustersWindows
 
         public override void LoadContent()
         {
-#if WINDOWS
             //Key "Scape"
             kbEsc = this.ScreenManager.Game.Content.Load<Texture2D>(@"Keyboard/key_esc");
-#endif
+
             //Button "A"
             btnA = this.ScreenManager.Game.Content.Load<Texture2D>("xboxControllerButtonA");
 
@@ -141,23 +121,15 @@ namespace ZombustersWindows
             submit_button = this.ScreenManager.Game.Content.Load<Texture2D>(@"menu/submit_button_mobile");
 
             // HTP Header Image
-#if WINDOWS_PHONE
-            HTPHeaderImage = this.ScreenManager.Game.Content.Load<Texture2D>(@"menu/HTP_WP_header_image");
-#else
             HTPHeaderImage = this.ScreenManager.Game.Content.Load<Texture2D>(@"menu/lobby_header_image");
-#endif
 
             base.LoadContent();
         }
 
-        void menu_MenuCanceled(Object sender, MenuSelection selection)
+        void MenuCanceled(Object sender, MenuSelection selection)
         {
-            // If they hit B or Back, go back to Menu Screen
-            //ScreenManager.AddScreen(new ExtrasMenuScreen());
             ExitScreen();
         }
-
-       
 
         public override void HandleInput(InputState input)
         {
@@ -178,7 +150,6 @@ namespace ZombustersWindows
             }
 
             menu.HandleInput(input);
-
             base.HandleInput(input);
         }
 
@@ -187,11 +158,7 @@ namespace ZombustersWindows
             bool coveredByOtherScreen)
         {
             // Menu Update
-            if (!coveredByOtherScreen
-#if !WINDOWS
-                && !Guide.IsVisible
-#endif
-                )
+            if (!coveredByOtherScreen)
             {
                 menu.Update(gameTime);
             }
@@ -209,26 +176,10 @@ namespace ZombustersWindows
 
             this.ScreenManager.SpriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend);
 
-#if WINDOWS_PHONE
-            this.ScreenManager.SpriteBatch.End();
-
-            // Draw Retrowax Logo
-            menu.DrawLogoRetrowaxMenu(this.ScreenManager.SpriteBatch, new Vector2(uiBounds.Width, uiBounds.Height), MenuInfoFont);
-
-            menu.DrawBackButtonMenu(this.ScreenManager.SpriteBatch, new Vector2(uiBounds.Width + 55, uiBounds.Y - 30), MenuInfoFont);
-
-            // Draw Context Menu
-            DrawContextMenuWP(menu, selectPos, this.ScreenManager.SpriteBatch);
-
-            if (Guide.IsTrialMode)
-            {
-                menu.DrawBuyNow(gameTime);
-            }
-#else
             // Leave Button
-            if (((MyGame)this.ScreenManager.Game).Main.Options != InputMode.Touch)
+            if (((MyGame)this.ScreenManager.Game).player1.Options != InputMode.Touch)
             {
-                if (((MyGame)this.ScreenManager.Game).Main.Options == InputMode.Keyboard)
+                if (((MyGame)this.ScreenManager.Game).player1.Options == InputMode.Keyboard)
                 {
                     spaceBetweenButtonAndText = Convert.ToInt32(kbEsc.Width * 0.7f) + 5;
                     this.ScreenManager.SpriteBatch.Draw(kbEsc, new Vector2(158 + distanceBetweenButtonsText, 613), null, Color.White, 0, Vector2.Zero, 0.7f, SpriteEffects.None, 1.0f);
@@ -252,7 +203,7 @@ namespace ZombustersWindows
                     new Vector2(position.X + submit_button.Width / 2 - MenuInfoFont.MeasureString(Strings.LeaveMenuString.ToUpper()).X / 2, position.Y + 7), Color.White, 0, Vector2.Zero, 1.0f, SpriteEffects.None, 1.0f);
             }
 
-            if (((MyGame)this.ScreenManager.Game).Main.Options == InputMode.GamePad)
+            if (((MyGame)this.ScreenManager.Game).player1.Options == InputMode.GamePad)
             {
                 // Draw Controller Scheme
                 DrawController(this.ScreenManager.SpriteBatch, uiBounds);
@@ -268,7 +219,6 @@ namespace ZombustersWindows
 
             // Draw Context Menu
             DrawContextMenu(menu, selectPos, this.ScreenManager.SpriteBatch);
-#endif
         }
 
         private Vector2 DrawController(SpriteBatch batch, Rectangle UIbounds)
@@ -369,7 +319,7 @@ namespace ZombustersWindows
 
             //Texto de contexto del How to Play
             contextMenuPosition = new Vector2(pos.X, pos.Y - 30);
-            if (((MyGame)this.ScreenManager.Game).Main.Options == InputMode.Keyboard)
+            if (((MyGame)this.ScreenManager.Game).player1.Options == InputMode.Keyboard)
             {
                 lines = Regex.Split(Strings.PCExplanationString, "\r\n");
             }
@@ -388,86 +338,6 @@ namespace ZombustersWindows
             batch.Draw(lineaMenu, pos, Color.White);
 
             batch.End();
-        }
-
-#if WINDOWS_PHONE
-        private void DrawContextMenuWP(MenuComponent menu, Vector2 pos, SpriteBatch batch)
-        {
-            string[] lines;
-
-            Vector2 contextMenuPosition = new Vector2(uiBounds.X + 22, pos.Y - 100);
-            Vector2 MenuTitlePosition = new Vector2(contextMenuPosition.X - 3, contextMenuPosition.Y - 225);
-
-            batch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend);
-
-            //Logo Menu
-            batch.Draw(logoMenu, new Vector2(MenuTitlePosition.X - 55, MenuTitlePosition.Y - 5), Color.White);
-
-            //EXTRAS MENU STRING fade rotated
-            batch.DrawString(MenuHeaderFont, Strings.ExtrasMenuString, new Vector2(MenuTitlePosition.X - 10, MenuTitlePosition.Y + 70),
-                new Color(255, 255, 255, 40), 1.58f, Vector2.Zero, 0.8f, SpriteEffects.None, 1.0f);
-
-            //HOW TO PLAY STRING
-            batch.DrawString(MenuHeaderFont, Strings.HowToPlayInGameString.ToUpper(), MenuTitlePosition, Color.White);
-
-            // Lobby Header Image
-            batch.Draw(HTPHeaderImage, new Vector2(MenuTitlePosition.X, MenuTitlePosition.Y + 55), Color.White);
-
-            //Linea divisoria
-            pos.X -= 40;
-            pos.Y -= 115;
-            batch.Draw(lineaMenu, new Vector2(pos.X, pos.Y - 40), Color.White);
-
-            //Texto de contexto del How to Play
-            contextMenuPosition = new Vector2(pos.X, pos.Y - 30);
-            lines = Regex.Split(Strings.HTPExplanationString, "\r\n");
-            foreach (string line in lines)
-            {
-                batch.DrawString(MenuInfoFont, line.Replace("	", ""), contextMenuPosition, Color.White);
-                contextMenuPosition.Y += 20;
-            }
-
-            //Linea divisoria
-            pos.Y += 100;
-            batch.Draw(lineaMenu, pos, Color.White);
-
-            batch.End();
-        }
-#endif
-    }
-
-    public class ErrorScreen : GameScreen
-    {
-        public string error;
-        public ErrorScreen(string error)
-        {
-            this.error = error;
-            this.IsPopup = true;
-        }
-        SpriteBatch batch;
-        SpriteFont font;
-        Vector2 center;
-        public override void LoadContent()
-        {
-            batch = new SpriteBatch(this.ScreenManager.GraphicsDevice);
-            font = this.ScreenManager.Font;
-
-            Viewport view = this.ScreenManager.GraphicsDevice.Viewport;
-            center = new Vector2(view.Width / 2, view.Height / 2);
-
-            Vector2 fontwidth = font.MeasureString(error);
-            center.X -= fontwidth.X / 2;
-
-            base.LoadContent();
-        }
-
-        public override void Draw(GameTime gameTime)
-        {
-            this.ScreenManager.FadeBackBufferToBlack(255);
-            batch.Begin();
-            batch.DrawString(font, error, center, Color.White);
-            batch.End();
-            base.Draw(gameTime);
         }
     }
 }

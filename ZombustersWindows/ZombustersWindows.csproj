@@ -62,21 +62,40 @@
     <ApplicationIcon>Game.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="Avatar.cs" />
+    <Compile Include="ContentManager\EnemiesCount.cs" />
+    <Compile Include="ContentManager\Furniture.cs" />
+    <Compile Include="ContentManager\Level.cs" />
+    <Compile Include="ContentManager\SubLevel.cs" />
+    <Compile Include="ContentManager\SubLevelType.cs" />
+    <Compile Include="ContentManager\Wall.cs" />
+    <Compile Include="ContentManager\FurnitureOrientation.cs" />
+    <Compile Include="ContentManager\FurnitureType.cs" />
+    <Compile Include="ContentManager\LevelType.cs" />
+    <Compile Include="GameObjects\Avatar.cs" />
     <Compile Include="BloomPostProcess\BloomComponent.cs" />
     <Compile Include="BloomPostProcess\BloomSettings.cs" />
-    <Compile Include="ContentManager\LevelManager.cs" />
-    <Compile Include="Enemies.cs" />
+    <Compile Include="ContentManager\PowerUp.cs" />
+    <Compile Include="GameObjects\AvatarState.cs" />
+    <Compile Include="GameObjects\Enemies\Enemies.cs" />
+    <Compile Include="GameObjects\Explosion.cs" />
+    <Compile Include="GameObjects\Enemies\EnemyType.cs" />
+    <Compile Include="GameObjects\ShotgunShell.cs" />
+    <Compile Include="GameStateManagement\GameState.cs" />
+    <Compile Include="GameStateManagement\InputMode.cs" />
+    <Compile Include="GameStateManagement\ScreenState.cs" />
+    <Compile Include="MainScreens\ErrorScreen.cs" />
     <Compile Include="MainScreens\LoadInScreen.cs" />
+    <Compile Include="GameStateManagement\MessageType.cs" />
+    <Compile Include="GameObjects\ObjectStatus.cs" />
+    <Compile Include="Components\SliderComponent.cs" />
+    <Compile Include="GameStateManagement\OptionsState.cs" />
     <Compile Include="MyGame.cs" />
-    <Compile Include="GameStateManagement\Button.cs" />
     <Compile Include="GameStateManagement\GameScreen.cs" />
-    <Compile Include="GameStateManagement\InputAction.cs" />
     <Compile Include="GameStateManagement\InputState.cs" />
     <Compile Include="GameStateManagement\IScreenFactory.cs" />
     <Compile Include="GameStateManagement\PlayerIndexEventArgs.cs" />
     <Compile Include="GameStateManagement\ScreenManager.cs" />
-    <Compile Include="Graphics.cs" />
+    <Compile Include="MainScreens\BackgroundScreen.cs" />
     <Compile Include="MainScreens\GameOverMenu.cs" />
     <Compile Include="MainScreens\GamePlayMenu.cs" />
     <Compile Include="MainScreens\GamePlayScreen.cs" />
@@ -94,7 +113,8 @@
     <Compile Include="MenuScreens\LobbyScreen.cs" />
     <Compile Include="MenuScreens\MatchmakingMenuScreen.cs" />
     <Compile Include="MenuScreens\MenuScreen.cs" />
-    <Compile Include="MusicComponent\MusicComponent.cs" />
+    <Compile Include="Components\MusicComponent.cs" />
+    <Compile Include="GameStateManagement\NeutralInput.cs" />
     <Compile Include="OnlineDataSyncManager\IOnlineSyncTarget.cs" />
     <Compile Include="OnlineDataSyncManager\OnlineDataSyncManager.cs" />
     <Compile Include="OnlineDataSyncManager\TopScoreEntry.cs" />
@@ -102,9 +122,10 @@
     <Compile Include="OnlineDataSyncManager\TopScoreListContainer.cs" />
     <Compile Include="PerlinNoisePostProcess\CreateTexture.cs" />
     <Compile Include="PerlinNoisePostProcess\Noise.cs" />
-    <Compile Include="Player.cs" />
+    <Compile Include="GameObjects\Player.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="MainScreens\ScrollingBackground.cs" />
     <Compile Include="SteeringBehaviors\Arrive.cs" />
     <Compile Include="SteeringBehaviors\Circle.cs" />
     <Compile Include="SteeringBehaviors\GameWorld.cs" />
@@ -154,8 +175,9 @@
     <Compile Include="SubsystemManagers\StorageDeviceManager.cs" />
     <Compile Include="SubsystemManagers\VirtualThumbsticks.cs" />
     <Compile Include="SupportScreens\ExitMessageBox.cs" />
-    <Compile Include="SupportScreens\LoadingScreen.cs" />
     <Compile Include="SupportScreens\NetworkBusyScreen.cs" />
+    <Compile Include="GameObjects\Enemies\ZombieState.cs" />
+    <Compile Include="GameObjects\Enemies\TankState.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Bugsnag, Version=1.4.0.0, Culture=neutral, processorArchitecture=MSIL">

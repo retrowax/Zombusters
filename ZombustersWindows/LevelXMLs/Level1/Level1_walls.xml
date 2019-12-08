@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0"?>
-<ArrayOfCWall>
+<ArrayOfWall>
   <!-- Superior Izquierda -->
-  <CWall>
+  <Wall>
     <From>
       <X>-250</X>
       <Y>255</Y>
@@ -10,8 +10,8 @@
       <X>0</X>
       <Y>255</Y>
     </To>
-  </CWall>
-  <CWall>
+  </Wall>
+  <Wall>
     <From>
       <X>0</X>
       <Y>255</Y>
@@ -20,9 +20,9 @@
       <X>62</X>
       <Y>286</Y>
     </To>
-  </CWall>
+  </Wall>
 
-  <CWall>
+  <Wall>
     <From>
       <X>62</X>
       <Y>286</Y>
@@ -31,9 +31,9 @@
       <X>331</X>
       <Y>152</Y>
     </To>
-  </CWall>
+  </Wall>
 
-  <CWall>
+  <Wall>
     <From>
       <X>331</X>
       <Y>152</Y>
@@ -42,9 +42,9 @@
       <X>331</X>
       <Y>140</Y>
     </To>
-  </CWall>
+  </Wall>
 
-  <CWall>
+  <Wall>
     <From>
       <X>331</X>
       <Y>140</Y>
@@ -53,9 +53,9 @@
       <X>521</X>
       <Y>47</Y>
     </To>
-  </CWall>
+  </Wall>
 
-  <CWall>
+  <Wall>
     <From>
       <X>521</X>
       <Y>47</Y>
@@ -64,9 +64,9 @@
       <X>521</X>
       <Y>40</Y>
     </To>
-  </CWall>
+  </Wall>
 
-  <CWall>
+  <Wall>
     <From>
       <X>521</X>
       <Y>40</Y>
@@ -75,9 +75,9 @@
       <X>554</X>
       <Y>25</Y>
     </To>
-  </CWall>
+  </Wall>
 
-  <CWall>
+  <Wall>
     <From>
       <X>554</X>
       <Y>25</Y>
@@ -86,9 +86,9 @@
       <X>554</X>
       <Y>0</Y>
     </To>
-  </CWall>
+  </Wall>
 
-  <CWall>
+  <Wall>
     <From>
       <X>554</X>
       <Y>0</Y>
@@ -97,10 +97,10 @@
       <X>554</X>
       <Y>-250</Y>
     </To>
-  </CWall>
+  </Wall>
   <!-- END Superior Izquierda -->
 <!--  
-  <CWall>
+  <Wall>
     <From>
       <X>-250</X>
       <Y>527</Y>
@@ -109,9 +109,9 @@
       <X>0</X>
       <Y>527</Y>
     </To>
-  </CWall>
+  </Wall>
 
-  <CWall>
+  <Wall>
     <From>
       <X>0</X>
       <Y>527</Y>
@@ -120,9 +120,9 @@
       <X>383</X>
       <Y>720</Y>
     </To>
-  </CWall>
+  </Wall>
 
-  <CWall>
+  <Wall>
     <From>
       <X>383</X>
       <Y>720</Y>
@@ -131,6 +131,6 @@
       <X>383</X>
       <Y>970</Y>
     </To>
-  </CWall>
+  </Wall>
 -->
-</ArrayOfCWall>
+</ArrayOfWall>
