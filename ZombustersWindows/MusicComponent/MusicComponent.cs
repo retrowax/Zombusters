@@ -15,14 +15,14 @@ namespace ZombustersWindows
     public class MusicComponent : Microsoft.Xna.Framework.DrawableGameComponent
     {
         #region Private fields
-        private ContentManager _content;
-        private Dictionary<string, Song> _songs = new Dictionary<string, Song>();
-        private List<String> _songsList = new List<string>();
-        private Song _currentSong = null;
-        private Boolean _isMusicPaused = new Boolean();
+        private readonly ContentManager contentManager;
+        private readonly Dictionary<string, Song> songsDictionary = new Dictionary<string, Song>();
+        private readonly List<String> songsList = new List<string>();
+        private Song currentSong = null;
+        private Boolean isMusicPaused = new Boolean();
         private int nextSong = 0;
         private int prevSong = 0;
-        private Boolean _showSongInfo = new Boolean();
+        private Boolean isShowingInfo = new Boolean();
         private SpriteFont font;
         private SpriteFont fontItalic;
         private SpriteFont fontSmallItalic;
@@ -62,17 +62,17 @@ namespace ZombustersWindows
         /// <summary>
         /// Gets whether a song is playing or paused (i.e. not stopped).
         /// </summary>
-        public bool IsSongActive { get { return _currentSong != null && MediaPlayer.State != MediaState.Stopped; } }
+        public bool IsSongActive { get { return currentSong != null && MediaPlayer.State != MediaState.Stopped; } }
 
         /// <summary>
         /// Gets whether the current song is paused.
         /// </summary>
-        public bool IsSongPaused { get { return _currentSong != null && _isMusicPaused; } }
+        public bool IsSongPaused { get { return currentSong != null && isMusicPaused; } }
 
         public MusicComponent(Game game)
             : base(game)
         {
-            _content = ((MyGame)this.Game).Content;
+            contentManager = ((MyGame)this.Game).Content;
         }
 
         /// <summary>
@@ -81,25 +81,25 @@ namespace ZombustersWindows
         /// </summary>
         public override void Initialize()
         {
-            _isMusicPaused = false;
-            _showSongInfo = false;
+            isMusicPaused = false;
+            isShowingInfo = false;
             uiBounds = GetTitleSafeArea();
             drawPosition = new Vector2(uiBounds.X + 10,uiBounds.Bottom - 90);
 
-            _songsList.Add("Dancing on a Dime|Bare Wires|Live at WFMU on the Evan Funk Davies show");
-            _songsList.Add("High Dive|Black Math|Phantom Power");
-            _songsList.Add("Suck City|Black Math|Phantom Power");
-            _songsList.Add("Bad Attraction|Brad Sucks|I Don't Know What I'm Doing");
-            _songsList.Add("Understood by your Dad|Brad Sucks|Out of It");
-            _songsList.Add("Wolfram|Kraus|I Could Destroy You with a Single Thought");
-            _songsList.Add("High Ground|London To Tokyo|London To Tokyo");
-            _songsList.Add("Opening The Portal|Nuit Noire|split 7''");
-            _songsList.Add("I Don't Like You|The Black Bug|I Don't Like You 7''");
-            _songsList.Add("In The Hall Of The Mountain King|The Itchy Creeps|The Itchy Creeps");
-            _songsList.Add("As You Know|THIS CO.|THIS CO.");
-            _songsList.Add("Take It Away|THIS CO.|THIS CO.");
+            songsList.Add("Dancing on a Dime|Bare Wires|Live at WFMU on the Evan Funk Davies show");
+            songsList.Add("High Dive|Black Math|Phantom Power");
+            songsList.Add("Suck City|Black Math|Phantom Power");
+            songsList.Add("Bad Attraction|Brad Sucks|I Don't Know What I'm Doing");
+            songsList.Add("Understood by your Dad|Brad Sucks|Out of It");
+            songsList.Add("Wolfram|Kraus|I Could Destroy You with a Single Thought");
+            songsList.Add("High Ground|London To Tokyo|London To Tokyo");
+            songsList.Add("Opening The Portal|Nuit Noire|split 7''");
+            songsList.Add("I Don't Like You|The Black Bug|I Don't Like You 7''");
+            songsList.Add("In The Hall Of The Mountain King|The Itchy Creeps|The Itchy Creeps");
+            songsList.Add("As You Know|THIS CO.|THIS CO.");
+            songsList.Add("Take It Away|THIS CO.|THIS CO.");
 
-            nextSong = random.Next(0, _songsList.Count - 1);
+            nextSong = random.Next(0, songsList.Count - 1);
             prevSong = nextSong;
             MediaPlayer.MediaStateChanged += new EventHandler<EventArgs>(MediaPlayer_MediaStateChanged);
 
@@ -109,8 +109,8 @@ namespace ZombustersWindows
 
         protected override void LoadContent()
         {
-            retroTraxBkgTexture = _content.Load<Texture2D>(@"InGame/GUI/retrotrax_anim_bkg");
-            retroTraxLogoTexture = _content.Load<Texture2D>(@"InGame/GUI/retrotrax_anim");
+            retroTraxBkgTexture = contentManager.Load<Texture2D>(@"InGame/GUI/retrotrax_anim_bkg");
+            retroTraxLogoTexture = contentManager.Load<Texture2D>(@"InGame/GUI/retrotrax_anim");
 
             // Define a new Animation instance
             TimeSpan frameInterval = TimeSpan.FromSeconds(1.0f / 5);
@@ -132,9 +132,9 @@ namespace ZombustersWindows
 
 
             // Load Font and Textures
-            font = _content.Load<SpriteFont>(@"menu\ArialMenuInfo");
-            fontItalic = _content.Load<SpriteFont>(@"menu\ArialMusic");
-            fontSmallItalic = _content.Load<SpriteFont>(@"menu\ArialMusicItalic");
+            font = contentManager.Load<SpriteFont>(@"menu\ArialMenuInfo");
+            fontItalic = contentManager.Load<SpriteFont>(@"menu\ArialMusic");
+            fontSmallItalic = contentManager.Load<SpriteFont>(@"menu\ArialMusicItalic");
 
             base.LoadContent();
         }
@@ -150,7 +150,7 @@ namespace ZombustersWindows
                     nextSong = songNum;
                 }
 
-                PlaySong(_songsList[nextSong], false);
+                PlaySong(songsList[nextSong], false);
             }
         }
 
@@ -171,12 +171,12 @@ namespace ZombustersWindows
         /// <param name="songPath">Path to the song asset file</param>
         public void LoadSong(string songName, string songPath)
         {
-            if (_songs.ContainsKey(songName))
+            if (songsDictionary.ContainsKey(songName))
             {
                 throw new InvalidOperationException(string.Format("Song '{0}' has already been loaded", songName));
             }
 
-            _songs.Add(songName, _content.Load<Song>(songPath));
+            songsDictionary.Add(songName, contentManager.Load<Song>(songPath));
         }
 
         /// <summary>
@@ -206,25 +206,25 @@ namespace ZombustersWindows
 
             if (CurrentSong != songName)
             {
-                if (_currentSong != null)
+                if (currentSong != null)
                 {
                     MediaPlayer.Stop();             
                 }
 
-                if (!_songs.TryGetValue(songName, out _currentSong))
+                if (!songsDictionary.TryGetValue(songName, out currentSong))
                 {
                     throw new ArgumentException(string.Format("Song '{0}' not found", songName));
                 }
 
                 CurrentSong = songName;
 
-                _isMusicPaused = false;
+                isMusicPaused = false;
                 MediaPlayer.IsRepeating = loop;
 
-                if (_currentSong != null)
+                if (currentSong != null)
                 {
-                    MediaPlayer.Play(_currentSong);
-                    _showSongInfo = true;
+                    MediaPlayer.Play(currentSong);
+                    isShowingInfo = true;
                 }
                 else
                 {
@@ -244,10 +244,10 @@ namespace ZombustersWindows
         /// </summary>
         public void PauseSong()
         {
-            if (_currentSong != null && !_isMusicPaused)
+            if (currentSong != null && !isMusicPaused)
             {
                 if (Enabled) MediaPlayer.Pause();
-                _isMusicPaused = true;
+                isMusicPaused = true;
             }
         }
 
@@ -257,10 +257,10 @@ namespace ZombustersWindows
         /// </summary>
         public void ResumeSong()
         {
-            if (_currentSong != null && _isMusicPaused)
+            if (currentSong != null && isMusicPaused)
             {
                 if (Enabled) MediaPlayer.Resume();
-                _isMusicPaused = false;
+                isMusicPaused = false;
             }
         }
 
@@ -269,11 +269,11 @@ namespace ZombustersWindows
         /// </summary>
         public void StopSong()
         {
-            if (_currentSong != null && MediaPlayer.State != MediaState.Stopped)
+            if (currentSong != null && MediaPlayer.State != MediaState.Stopped)
             {
                 MediaPlayer.Stop();
-                _isMusicPaused = false;
-                _showSongInfo = false;
+                isMusicPaused = false;
+                isShowingInfo = false;
             }
         }
 
@@ -281,10 +281,10 @@ namespace ZombustersWindows
         {
             do
             {
-                nextSong = random.Next(0, _songsList.Count - 1);
+                nextSong = random.Next(0, songsList.Count - 1);
             } while (nextSong == prevSong);
 
-            PlaySong(_songsList[nextSong], false);
+            PlaySong(songsList[nextSong], false);
             prevSong = nextSong;
         }
 
@@ -292,13 +292,13 @@ namespace ZombustersWindows
         {
             nextSong += 1;
 
-            if (nextSong > _songsList.Count - 1)
+            if (nextSong > songsList.Count - 1)
             {
                 nextSong = 0;
             }
 
             changinSongManual = true;
-            PlaySong(_songsList[nextSong], false);
+            PlaySong(songsList[nextSong], false);
         }
 
         public void MediaPlayer_MediaStateChanged(object sender, EventArgs e)
@@ -345,7 +345,7 @@ namespace ZombustersWindows
             {
                 FadeOut = false;
                 this.logoSizeValue = 0.0f;
-                _showSongInfo = false;
+                isShowingInfo = false;
                 timer = 0;
             }
         }
@@ -358,11 +358,11 @@ namespace ZombustersWindows
         {
             if (MediaPlayer.GameHasControl)
             {
-                if (_currentSong != null && MediaPlayer.State == MediaState.Stopped)
+                if (currentSong != null && MediaPlayer.State == MediaState.Stopped)
                 {
-                    _currentSong = null;
+                    currentSong = null;
                     CurrentSong = null;
-                    _isMusicPaused = false;
+                    isMusicPaused = false;
                 }
 
                 // If the user change the song...
@@ -384,7 +384,7 @@ namespace ZombustersWindows
                     buttonReleased = true;
                 }
 
-                if (_showSongInfo)
+                if (isShowingInfo)
                 {
                     this.UpdateLogoAnimation(gameTime);
                 }
@@ -422,11 +422,11 @@ namespace ZombustersWindows
             SpriteBatch batch = ((MyGame)this.Game).screenManager.SpriteBatch;
             batch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend);
 
-            if (_showSongInfo)
+            if (isShowingInfo)
             {
                 Vector2 position = new Vector2(drawPosition.X - Convert.ToInt32(this.logoSizeValue), drawPosition.Y - Convert.ToInt32(this.logoSizeValue));
 
-                song = _songsList[nextSong].Split('|');
+                song = songsList[nextSong].Split('|');
 
                 //retroTraxLogoAnimation.DrawLogoTrax(batch, drawPosition, 1.0f, SpriteEffects.None);
 
