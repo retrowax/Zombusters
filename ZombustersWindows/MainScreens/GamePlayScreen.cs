@@ -42,6 +42,7 @@ namespace ZombustersWindows
         private CLevel.Level currentLevel;
         private CSubLevel.SubLevel currentSublevel;
 
+        public Texture2D livePowerUp, extraLivePowerUp, shotgunAmmoPowerUp, machinegunAmmoPowerUp, flamethrowerAmmoPowerUp, immunePowerUp, heart, shotgunammoUI, pistolammoUI, grenadeammoUI, flamethrowerammoUI;
         Texture2D bullet;
         Vector2 bulletorigin;
         Texture2D flamethrowerTexture, FT_CollisionTexture;
@@ -1037,19 +1038,19 @@ namespace ZombustersWindows
             UIPlayerYellow = game.Content.Load<Texture2D>(@"UI\gui_player_yellow");
 
             // PowerUps
-            game.livePowerUp = game.Content.Load<Texture2D>(@"InGame/live_powerup");
-            game.extraLivePowerUp = game.Content.Load<Texture2D>(@"InGame/extralife_powerup");
-            game.shotgunAmmoPowerUp = game.Content.Load<Texture2D>(@"InGame/shotgun_ammo_powerup");
-            game.machinegunAmmoPowerUp = game.Content.Load<Texture2D>(@"InGame/machinegun_ammo_powerup");
-            game.flamethrowerAmmoPowerUp = game.Content.Load<Texture2D>(@"InGame/flamethrower_ammo_powerup");
-            game.immunePowerUp = game.Content.Load<Texture2D>(@"InGame/immune_ammo_powerup");
+            livePowerUp = game.Content.Load<Texture2D>(@"InGame/live_powerup");
+            extraLivePowerUp = game.Content.Load<Texture2D>(@"InGame/extralife_powerup");
+            shotgunAmmoPowerUp = game.Content.Load<Texture2D>(@"InGame/shotgun_ammo_powerup");
+            machinegunAmmoPowerUp = game.Content.Load<Texture2D>(@"InGame/machinegun_ammo_powerup");
+            flamethrowerAmmoPowerUp = game.Content.Load<Texture2D>(@"InGame/flamethrower_ammo_powerup");
+            immunePowerUp = game.Content.Load<Texture2D>(@"InGame/immune_ammo_powerup");
 
             // GUI
-            game.heart = game.Content.Load<Texture2D>(@"InGame/GUI/heart");
-            game.shotgunammoUI = game.Content.Load<Texture2D>(@"InGame/GUI/shotgunammo");
-            game.pistolammoUI = game.Content.Load<Texture2D>(@"InGame/GUI/pistolammo");
-            game.grenadeammoUI = game.Content.Load<Texture2D>(@"InGame/GUI/grenadeammo");
-            game.flamethrowerammoUI = game.Content.Load<Texture2D>(@"InGame/GUI/flamethrowerammo");
+            heart = game.Content.Load<Texture2D>(@"InGame/GUI/heart");
+            shotgunammoUI = game.Content.Load<Texture2D>(@"InGame/GUI/shotgunammo");
+            pistolammoUI = game.Content.Load<Texture2D>(@"InGame/GUI/pistolammo");
+            grenadeammoUI = game.Content.Load<Texture2D>(@"InGame/GUI/grenadeammo");
+            flamethrowerammoUI = game.Content.Load<Texture2D>(@"InGame/GUI/flamethrowerammo");
             gamerPictureBorder = game.Content.Load<Texture2D>(@"UI/gamerpicture_border");
             jadeUI = game.Content.Load<Texture2D>(@"InGame/GUI/jade_gui");
             rayUI = game.Content.Load<Texture2D>(@"InGame/GUI/ray_gui");
@@ -1703,7 +1704,7 @@ namespace ZombustersWindows
                     case 0: // Live
 
                         {
-                            PowerUpList.Add(new CPowerUp(game.livePowerUp, game.heart, zombie.entity.Position, CPowerUp.Type.live));
+                            PowerUpList.Add(new CPowerUp(livePowerUp, heart, zombie.entity.Position, CPowerUp.Type.live));
                         }
                         break;
 
@@ -1712,55 +1713,55 @@ namespace ZombustersWindows
                     case 1: // Machinegun Ammo
 
                         {
-                            PowerUpList.Add(new CPowerUp(game.machinegunAmmoPowerUp, game.pistolammoUI, zombie.entity.Position, CPowerUp.Type.machinegun_ammo));
+                            PowerUpList.Add(new CPowerUp(machinegunAmmoPowerUp, pistolammoUI, zombie.entity.Position, CPowerUp.Type.machinegun_ammo));
                         }
                         break;
 
                     case 2: // Flamethrower Ammo
 
                         {
-                            PowerUpList.Add(new CPowerUp(game.flamethrowerAmmoPowerUp, game.flamethrowerammoUI, zombie.entity.Position, CPowerUp.Type.flamethrower_ammo));
+                            PowerUpList.Add(new CPowerUp(flamethrowerAmmoPowerUp, flamethrowerammoUI, zombie.entity.Position, CPowerUp.Type.flamethrower_ammo));
                         }
                         break;
 
                     case 3: // ExtraLife
 
                         {
-                            PowerUpList.Add(new CPowerUp(game.extraLivePowerUp, game.extraLivePowerUp, zombie.entity.Position, CPowerUp.Type.extralife));
+                            PowerUpList.Add(new CPowerUp(extraLivePowerUp, extraLivePowerUp, zombie.entity.Position, CPowerUp.Type.extralife));
                         }
                         break;
 
                     case 4: // Shotgun Ammo
 
                         {
-                            PowerUpList.Add(new CPowerUp(game.shotgunAmmoPowerUp, game.shotgunammoUI, zombie.entity.Position, CPowerUp.Type.shotgun_ammo));
+                            PowerUpList.Add(new CPowerUp(shotgunAmmoPowerUp, shotgunammoUI, zombie.entity.Position, CPowerUp.Type.shotgun_ammo));
                         }
                         break;
 
                     case 5: // Grenade Ammo
 
                         {
-                            PowerUpList.Add(new CPowerUp(game.grenadeammoUI, game.grenadeammoUI, zombie.entity.Position, CPowerUp.Type.grenadelauncher_ammo));
+                            PowerUpList.Add(new CPowerUp(grenadeammoUI, grenadeammoUI, zombie.entity.Position, CPowerUp.Type.grenadelauncher_ammo));
                         }
                         break;
 
                     case 6: // Speed Buff
 
                         {
-                            PowerUpList.Add(new CPowerUp(game.livePowerUp, game.heart, zombie.entity.Position, CPowerUp.Type.speedbuff));
+                            PowerUpList.Add(new CPowerUp(livePowerUp, heart, zombie.entity.Position, CPowerUp.Type.speedbuff));
                         }
                         break;
 
                     case 7: // Immune Buff
 
                         {
-                            PowerUpList.Add(new CPowerUp(game.immunePowerUp, game.immunePowerUp, zombie.entity.Position, CPowerUp.Type.immunebuff));
+                            PowerUpList.Add(new CPowerUp(immunePowerUp, immunePowerUp, zombie.entity.Position, CPowerUp.Type.immunebuff));
                         }
                         break;
                     default:
 
                         {
-                            PowerUpList.Add(new CPowerUp(game.livePowerUp, game.heart, zombie.entity.Position, CPowerUp.Type.live));
+                            PowerUpList.Add(new CPowerUp(livePowerUp, heart, zombie.entity.Position, CPowerUp.Type.live));
                         }
                         break;
                 }
@@ -4377,31 +4378,31 @@ namespace ZombustersWindows
                             batch.DrawString(arcade28, cplayer.lives.ToString(), new Vector2(Pos.X + 60, Pos.Y), Color.White);
 
                             // Draw Player Life Counter
-                            batch.Draw(game.heart, new Vector2(Pos.X + 120, Pos.Y + 3), Color.White);
-                            batch.DrawString(arcade14, cplayer.lifecounter.ToString("000"), new Vector2(Pos.X + game.heart.Width + 125, Pos.Y), Color.White);
+                            batch.Draw(heart, new Vector2(Pos.X + 120, Pos.Y + 3), Color.White);
+                            batch.DrawString(arcade14, cplayer.lifecounter.ToString("000"), new Vector2(Pos.X + heart.Width + 125, Pos.Y), Color.White);
 
                             // Draw Player Ammo counter
                             switch (cplayer.currentgun)
                             {
                                 case 0:
-                                    batch.Draw(game.pistolammoUI, new Vector2(Pos.X + 124, Pos.Y + 23), Color.White);
-                                    batch.DrawString(arcade14, cplayer.ammo[0].ToString("000"), new Vector2(Pos.X + game.heart.Width + 125, Pos.Y + 20), Color.White);
+                                    batch.Draw(pistolammoUI, new Vector2(Pos.X + 124, Pos.Y + 23), Color.White);
+                                    batch.DrawString(arcade14, cplayer.ammo[0].ToString("000"), new Vector2(Pos.X + heart.Width + 125, Pos.Y + 20), Color.White);
                                     break;
                                 case 1:
                                     batch.Draw(game.shotgunammoUI, new Vector2(Pos.X + 123, Pos.Y + 22), Color.White);
-                                    batch.DrawString(arcade14, cplayer.ammo[1].ToString("000"), new Vector2(Pos.X + game.heart.Width + 125, Pos.Y + 20), Color.White);
+                                    batch.DrawString(arcade14, cplayer.ammo[1].ToString("000"), new Vector2(Pos.X + heart.Width + 125, Pos.Y + 20), Color.White);
                                     break;
                                 case 2:
-                                    batch.Draw(game.grenadeammoUI, new Vector2(Pos.X + 122, Pos.Y + 21), Color.White);
-                                    batch.DrawString(arcade14, cplayer.ammo[2].ToString("000"), new Vector2(Pos.X + game.heart.Width + 125, Pos.Y + 20), Color.White);
+                                    batch.Draw(grenadeammoUI, new Vector2(Pos.X + 122, Pos.Y + 21), Color.White);
+                                    batch.DrawString(arcade14, cplayer.ammo[2].ToString("000"), new Vector2(Pos.X + heart.Width + 125, Pos.Y + 20), Color.White);
                                     break;
                                 case 3:
-                                    batch.Draw(game.flamethrowerammoUI, new Vector2(Pos.X + 124, Pos.Y + 23), Color.White);
-                                    batch.DrawString(arcade14, cplayer.ammo[3].ToString("000"), new Vector2(Pos.X + game.heart.Width + 125, Pos.Y + 20), Color.White);
+                                    batch.Draw(flamethrowerammoUI, new Vector2(Pos.X + 124, Pos.Y + 23), Color.White);
+                                    batch.DrawString(arcade14, cplayer.ammo[3].ToString("000"), new Vector2(Pos.X + heart.Width + 125, Pos.Y + 20), Color.White);
                                     break;
                                 default:
-                                    batch.Draw(game.pistolammoUI, new Vector2(Pos.X + 124, Pos.Y + 23), Color.White);
-                                    batch.DrawString(arcade14, cplayer.ammo[0].ToString("000"), new Vector2(Pos.X + game.heart.Width + 125, Pos.Y + 20), Color.White);
+                                    batch.Draw(pistolammoUI, new Vector2(Pos.X + 124, Pos.Y + 23), Color.White);
+                                    batch.DrawString(arcade14, cplayer.ammo[0].ToString("000"), new Vector2(Pos.X + heart.Width + 125, Pos.Y + 20), Color.White);
                                     break;
                             }
 
