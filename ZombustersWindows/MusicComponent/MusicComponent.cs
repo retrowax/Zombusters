@@ -41,8 +41,6 @@ namespace ZombustersWindows
         private float timer;
         private bool ShowText = false;
 
-
-        //Song cancion;
         #endregion
 
         /// <summary>
@@ -112,11 +110,6 @@ namespace ZombustersWindows
             retroTraxBkgTexture = contentManager.Load<Texture2D>(@"InGame/GUI/retrotrax_anim_bkg");
             retroTraxLogoTexture = contentManager.Load<Texture2D>(@"InGame/GUI/retrotrax_anim");
 
-            // Define a new Animation instance
-            TimeSpan frameInterval = TimeSpan.FromSeconds(1.0f / 5);
-            retroTraxLogoAnimation = new Animation(retroTraxLogoTexture, new Point(110, retroTraxLogoTexture.Height), new Point(8,1), frameInterval);
-
-            // Load all songs
             LoadSong("Dancing on a Dime", @"Music/BareWires_DancingOnADime");
             LoadSong("High Dive", @"Music/BlackMath_HighDive");
             LoadSong("Suck City", @"Music/BlackMath_SuckCity");
@@ -130,8 +123,6 @@ namespace ZombustersWindows
             LoadSong("As You Know", @"Music/ThisCo_AsYouKnow");
             LoadSong("Take It Away", @"Music/ThisCo_TakeItAway");
 
-
-            // Load Font and Textures
             font = contentManager.Load<SpriteFont>(@"menu\ArialMenuInfo");
             fontItalic = contentManager.Load<SpriteFont>(@"menu\ArialMusic");
             fontSmallItalic = contentManager.Load<SpriteFont>(@"menu\ArialMusicItalic");
@@ -395,19 +386,11 @@ namespace ZombustersWindows
 
         public Rectangle GetTitleSafeArea()
         {
-            PresentationParameters pp =
-                ((MyGame)this.Game).GraphicsDevice.PresentationParameters;
-            Rectangle retval =
-                new Rectangle(0, 0, pp.BackBufferWidth, pp.BackBufferHeight);
-            //#if XBOX          
+            PresentationParameters pp = ((MyGame)this.Game).GraphicsDevice.PresentationParameters;
+            Rectangle retval = new Rectangle(0, 0, pp.BackBufferWidth, pp.BackBufferHeight);        
             int offsetx = (pp.BackBufferWidth + 9) / 10;
             int offsety = (pp.BackBufferHeight + 9) / 10;
-            //#else
-            //            int offsetx = 10;
-            //            int offsety = 10;
-            //#endif
-            retval.Inflate(-offsetx, -offsety);  // Deflate the rectangle
-            //retval.Offset(offsetx, offsety);  // Recenter the rectangle
+            retval.Inflate(-offsetx, -offsety);
             return retval;
         }
 
@@ -428,15 +411,11 @@ namespace ZombustersWindows
 
                 song = songsList[nextSong].Split('|');
 
-                //retroTraxLogoAnimation.DrawLogoTrax(batch, drawPosition, 1.0f, SpriteEffects.None);
-
                 if (ShowText)
                 {
-                    // Draw Retrowax Trax Background
                     batch.Draw(retroTraxBkgTexture, new Vector2(drawPosition.X + 50, drawPosition.Y + 2), new Color(255, 255, 255, MathHelper.Clamp(200, 0, 255)));
                 }
 
-                // Draw Retrowax Trax Logo
                 batch.Draw(retroTraxLogoTexture, position,
                         new Rectangle(0, 0, retroTraxLogoTexture.Width, retroTraxLogoTexture.Height), Color.White, 0.0f, Vector2.Zero, this.logoSizeValue, SpriteEffects.None, 1.0f);
 
