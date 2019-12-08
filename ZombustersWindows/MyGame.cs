@@ -96,7 +96,6 @@ namespace ZombustersWindows
         }
 
         protected override void Initialize() {
-            //SteamAPI.Init();
             currentPlayers = new Avatar[maxGamers];
             for (int i = 0; i < maxGamers; i++) {
                 currentPlayers[i] = new Avatar();
