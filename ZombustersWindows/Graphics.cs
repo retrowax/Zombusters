@@ -108,10 +108,11 @@ namespace ZombustersWindows
         Texture2D background_title_scrolling2;
         Texture2D background_title_scrolling3;
 
-        private List<Texture2D> noisedMap = new List<Texture2D>(4);
-        private Random random = new Random(4);
+        private readonly List<Texture2D> noisedMap = new List<Texture2D>(4);
+        private readonly Random random = new Random(4);
         public Vector2 position = new Vector2(-200, 0);
         public Vector2 position2 = new Vector2(-200, 0);
+        public bool directionRight = true;
 
         public float BackgroundDriftRatePerSec = 64.0f;
         int maxPosition = 0;
@@ -157,7 +158,7 @@ namespace ZombustersWindows
 
         public override void HandleInput(InputState input)
         {
-            ((MyGame)ScreenManager.Game).checkIfControllerChanged(input);
+            ((MyGame)ScreenManager.Game).CheckIfControllerChanged(input);
             base.HandleInput(input);
         }
 
@@ -229,7 +230,7 @@ namespace ZombustersWindows
                 float time = (float)gameTime.TotalGameTime.TotalMilliseconds / 100.0f;
 
                 //Scrolling Effect
-                if (((MyGame)this.ScreenManager.Game).directionRight == true)
+                if (directionRight == true)
                 {
                     // BKG 1
                     if (position.X <= maxPosition)
@@ -238,7 +239,7 @@ namespace ZombustersWindows
                     }
                     else
                     {
-                        ((MyGame)this.ScreenManager.Game).directionRight = false;
+                        directionRight = false;
                         position.X -= (velocity * 2) * gameTime.ElapsedGameTime.Milliseconds;
                     }
 
@@ -261,7 +262,7 @@ namespace ZombustersWindows
                     }
                     else
                     {
-                        ((MyGame)this.ScreenManager.Game).directionRight = true;
+                        directionRight = true;
                         position.X += (velocity * 2) * gameTime.ElapsedGameTime.Milliseconds;
                     }
 

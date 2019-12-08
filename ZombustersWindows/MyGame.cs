@@ -13,8 +13,6 @@ using Bugsnag.Clients;
 namespace ZombustersWindows
 {
     public class MyGame : Game {
-        public static float BACKGROUND_DRIFT_RATE_PER_SEC = 64.0f;
-
         public GraphicsDeviceManager graphics;
         public ScreenManager screenManager;
         public GamePlayScreen playScreen;
@@ -42,7 +40,7 @@ namespace ZombustersWindows
 #endif
 
         //int bloomSettingsIndex = 0;
-        public bool directionRight = true;
+        
         public String[] networkSettings = { "XBOX LIVE", "SYSTEM LINK" };
         public int currentNetworkSetting;
         public int maxGamers = 4;
@@ -137,7 +135,7 @@ namespace ZombustersWindows
             }
         }
 
-        public void checkIfControllerChanged(InputState inputCheck) {
+        public void CheckIfControllerChanged(InputState inputCheck) {
             if (inputCheck.IsNewKeyPress(Keys.Enter) || inputCheck.IsNewKeyPress(Keys.Space) || inputCheck.IsNewKeyPress(Keys.Escape) || inputCheck.IsNewKeyPress(Keys.A) ||
                 inputCheck.IsNewKeyPress(Keys.S) || inputCheck.IsNewKeyPress(Keys.D) || inputCheck.IsNewKeyPress(Keys.W) || inputCheck.IsNewKeyPress(Keys.Up) ||
                 inputCheck.IsNewKeyPress(Keys.Down) || inputCheck.IsNewKeyPress(Keys.Left) || inputCheck.IsNewKeyPress(Keys.Right))
