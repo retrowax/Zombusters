@@ -13,48 +13,45 @@ using Bugsnag.Clients;
 namespace ZombustersWindows
 {
     public class MyGame : Game {
+        public static float BACKGROUND_DRIFT_RATE_PER_SEC = 64.0f;
+
         public GraphicsDeviceManager graphics;
+        public ScreenManager screenManager;
+        public GamePlayScreen playScreen;
         public Avatar[] currentPlayers;
-        public float totalGameSeconds;
         public Player player1;
         public Player player2;
         public Player player3;
         public Player player4;
-        public ScreenManager screenManager;
-        public GamePlayScreen playScreen;
-        public static float backgroundDriftRatePerSec = 64.0f;
-        private bool bPaused = false;
-        private bool bStateReady = false;
         public OptionsState options;
-        public OptionsState Options {
-            get { return options; }
-        }
-
         public AudioManager audio;
         public InputManager input;
-        //public BloomComponent bloom;
-        //int bloomSettingsIndex = 0;
-        public String[] networkSettings = { "XBOX LIVE", "SYSTEM LINK" };
-        public int currentNetworkSetting;
-        public int maxGamers = 4;
-        public int maxLocalGamers = 4;
-        
-        //public StorageDeviceManager storageDeviceManager;
         public GameState currentGameState;
-        
-        public Vector2 position = new Vector2(-200, 0);
-        public Vector2 position2 = new Vector2(-200, 0);
-        public bool directionRight = true;
         public TopScoreListContainer topScoreListContainer;
+        public MusicComponent musicComponent;
+        public Texture2D livePowerUp, extraLivePowerUp, shotgunAmmoPowerUp, machinegunAmmoPowerUp, flamethrowerAmmoPowerUp, immunePowerUp, heart, shotgunammoUI, pistolammoUI, grenadeammoUI, flamethrowerammoUI, blackTexture;
+        public BaseClient bugSnagClient;
+        public float totalGameSeconds;
+
+        //public BloomComponent bloom;
+        //public StorageDeviceManager storageDeviceManager;
+
 #if DEBUG
         //public FrameRateCounter FrameRateComponent;
         //public DebugInfoComponent DebugComponent;
 #endif
-        public MusicComponent musicComponent;
-        public Texture2D livePowerUp, extraLivePowerUp, shotgunAmmoPowerUp, machinegunAmmoPowerUp, flamethrowerAmmoPowerUp, immunePowerUp, heart, shotgunammoUI, pistolammoUI, grenadeammoUI, flamethrowerammoUI, blackTexture;
-        public bool isInMenu = false;
 
-        public BaseClient bugSnagClient;
+        //int bloomSettingsIndex = 0;
+        public Vector2 position = new Vector2(-200, 0);
+        public Vector2 position2 = new Vector2(-200, 0);
+        public bool directionRight = true;
+        public String[] networkSettings = { "XBOX LIVE", "SYSTEM LINK" };
+        public int currentNetworkSetting;
+        public int maxGamers = 4;
+        public int maxLocalGamers = 4;
+        public bool isInMenu = false;
+        private bool bPaused = false;
+        private bool bStateReady = false;
 
         public MyGame() {
             graphics = new GraphicsDeviceManager(this)
