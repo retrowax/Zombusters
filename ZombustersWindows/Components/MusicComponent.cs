@@ -109,18 +109,18 @@ namespace ZombustersWindows
             retroTraxBkgTexture = contentManager.Load<Texture2D>(@"InGame/GUI/retrotrax_anim_bkg");
             retroTraxLogoTexture = contentManager.Load<Texture2D>(@"InGame/GUI/retrotrax_anim");
 
-            LoadSong("Dancing on a Dime", @"Music/BareWires_DancingOnADime");
-            LoadSong("High Dive", @"Music/BlackMath_HighDive");
-            LoadSong("Suck City", @"Music/BlackMath_SuckCity");
-            LoadSong("Bad Attraction", @"Music/BradSucks_BadAttraction");
-            LoadSong("Understood by your Dad", @"Music/BradSucks_UnderstoodByYourDad");
-            LoadSong("Wolfram", @"Music/Kraus_Wolfram");
-            LoadSong("High Ground", @"Music/LondonToTokyo_HighGround");
-            LoadSong("Opening The Portal", @"Music/NuitNoire_OpeningThePortal");
-            LoadSong("I Don't Like You", @"Music/TheBlackBug_IDontLikeYou");
-            LoadSong("In The Hall Of The Mountain King", @"Music/TheItchyCreeps_ITHOTM");
-            LoadSong("As You Know", @"Music/ThisCo_AsYouKnow");
-            LoadSong("Take It Away", @"Music/ThisCo_TakeItAway");
+            LoadSong("Dancing on a Dime", @"Music\BareWires_DancingOnADime");
+            LoadSong("High Dive", @"Music\BlackMath_HighDive");
+            LoadSong("Suck City", @"Music\BlackMath_SuckCity");
+            LoadSong("Bad Attraction", @"Music\BradSucks_BadAttraction");
+            LoadSong("Understood by your Dad", @"Music\BradSucks_UnderstoodByYourDad");
+            LoadSong("Wolfram", @"Music\Kraus_Wolfram");
+            LoadSong("High Ground", @"Music\LondonToTokyo_HighGround");
+            LoadSong("Opening The Portal", @"Music\NuitNoire_OpeningThePortal");
+            LoadSong("I Don't Like You", @"Music\TheBlackBug_IDontLikeYou");
+            LoadSong("In The Hall Of The Mountain King", @"Music\TheItchyCreeps_ITHOTM");
+            LoadSong("As You Know", @"Music\ThisCo_AsYouKnow");
+            LoadSong("Take It Away", @"Music\ThisCo_TakeItAway");
 
             font = contentManager.Load<SpriteFont>(@"menu\ArialMenuInfo");
             fontItalic = contentManager.Load<SpriteFont>(@"menu\ArialMusic");
@@ -166,7 +166,8 @@ namespace ZombustersWindows
                 throw new InvalidOperationException(string.Format("Song '{0}' has already been loaded", songName));
             }
 
-            songsDictionary.Add(songName, contentManager.Load<Song>(songPath));
+            //songsDictionary.Add(songName, contentManager.Load<Song>(songPath));
+            //songsDictionary.Add(songName, Song.FromUri(songName, new Uri(songPath, UriKind.RelativeOrAbsolute)));
         }
 
         /// <summary>
@@ -192,6 +193,7 @@ namespace ZombustersWindows
         /// <param name="loop">True if song should loop, false otherwise</param>
         public void PlaySong(string song, bool loop)
         {
+            /*
             string songName = song.Split('|')[0];
 
             if (CurrentSong != songName)
@@ -226,6 +228,7 @@ namespace ZombustersWindows
                     MediaPlayer.Pause();
                 }
             }
+            */
         }
 
         /// <summary>

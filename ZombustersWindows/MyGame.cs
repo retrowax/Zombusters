@@ -31,15 +31,13 @@ namespace ZombustersWindows
         public BaseClient bugSnagClient;
         public float totalGameSeconds;
 
-        //public BloomComponent bloom;
+        public BloomComponent bloom;
         //public StorageDeviceManager storageDeviceManager;
 
 #if DEBUG
         public FrameRateCounter FrameRateComponent;
         public DebugInfoComponent DebugComponent;
 #endif
-
-        //int bloomSettingsIndex = 0;
         
         public String[] networkSettings = { "XBOX LIVE", "SYSTEM LINK" };
         public int currentNetworkSetting;
@@ -66,15 +64,14 @@ namespace ZombustersWindows
             audio.SetOptions(0.7f, 0.5f);
             input = new InputManager(this);
             Components.Add(input);
-            //Bloom Component
-            //REVISAR!!!
-            //graphics.MinimumPixelShaderProfile = ShaderProfile.PS_2_0;            
-            /*
-            bloom = new BloomComponent(this);
+
+            bloom = new BloomComponent(this)
+            {
+                Settings = BloomSettings.PresetSettings[6]
+            };
+            bloom.Visible = false;
             Components.Add(bloom);
-            bloom.Settings = BloomSettings.PresetSettings[6];
-            bloom.Visible = true;
-            */
+           
             player1 = new Player(options, audio, this);
             player2 = new Player(options, audio, this);
             player3 = new Player(options, audio, this);
@@ -299,7 +296,7 @@ namespace ZombustersWindows
 
         public void QuitGame() {
             playScreen = null;
-            //bloom.Visible = true;
+            bloom.Visible = true;
             Reset();
             bPaused = EndPause();
             //GamePlayStatus = GameplayState.StartLevel;
