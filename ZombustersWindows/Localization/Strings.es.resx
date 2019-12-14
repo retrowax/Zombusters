@@ -763,4 +763,7 @@ conseguir vidas extras o nuevas armas.</value>
   <data name="FullScreenMenuString" xml:space="preserve">
     <value>Alternar el modo de pantalla completa</value>
   </data>
+  <data name="ChangeLanguageOption" xml:space="preserve">
+    <value>Idioma</value>
+  </data>
 </root>

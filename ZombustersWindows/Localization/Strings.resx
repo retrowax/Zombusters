@@ -770,4 +770,7 @@ or a new Weapon.</value>
   <data name="RateThisAppTitle" xml:space="preserve">
     <value>Rate this App</value>
   </data>
+  <data name="ChangeLanguageOption" xml:space="preserve">
+    <value>Change Language</value>
+  </data>
 </root>

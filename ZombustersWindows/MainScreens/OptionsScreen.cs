@@ -6,6 +6,9 @@ using Microsoft.Xna.Framework.Input;
 using GameStateManagement;
 using Microsoft.Xna.Framework.Input.Touch;
 using ZombustersWindows.Localization;
+using System.Threading;
+using System.Globalization;
+using System.Collections.Generic;
 
 namespace ZombustersWindows
 {
@@ -27,6 +30,14 @@ namespace ZombustersWindows
         OptionsState state;
         Rectangle uiBounds;
         InputMode displayMode;
+        readonly Dictionary<string, string> languages = new Dictionary<string, string>
+        {
+            {"English", "en-US"},
+            {"French",  "fr-FR"},
+            {"Italian", "it-IT"},
+            {"German", "gr-GR"},
+            {"Spanish", "es-ES"}
+        };
 
         public OptionsScreen(MyGame game, OptionsState state)
         {
@@ -48,6 +59,7 @@ namespace ZombustersWindows
             //menu.AddText("Player Control Scheme");
             menu.AddText(Strings.SoundEffectVolumeString);
             menu.AddText(Strings.MusicVolumeString);
+            menu.AddText(Strings.ChangeLanguageOption);
             menu.AddText(Strings.FullScreenMenuString);
             menu.AddText(Strings.SaveAndExitString);
 
@@ -102,7 +114,12 @@ namespace ZombustersWindows
 
         void MenuOptionSelected(Object sender, MenuSelection selection)
         {
-            if (menu.Selection == 2)
+            if (menu.Selection == 2) 
+            {
+                Thread.CurrentThread.CurrentUICulture = CultureInfo.GetCultureInfo("fr-FR");
+                state.locale = "fr-FR";
+            }
+            else if (menu.Selection == 3)
             {
                 if (state.FullScreenMode) {
                     state.FullScreenMode = false;
@@ -112,7 +129,7 @@ namespace ZombustersWindows
                 }
                 this.game.graphics.ToggleFullScreen();
             }
-            else if (menu.Selection == 3)  // Save and Exit
+            else if (menu.Selection == 4)  // Save and Exit
             {
                 ExitScreen();
                 if (GamePad.GetState(PlayerIndex.One).IsButtonDown(Buttons.A))

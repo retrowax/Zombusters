@@ -6,5 +6,6 @@
         public float FXLevel;
         public float MusicLevel;
         public bool FullScreenMode;
+        public string locale;
     }
 }
