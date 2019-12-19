@@ -18,6 +18,7 @@ namespace ZombustersWindows
         MenuComponent menu;
         SliderComponent volumeSlider;
         SliderComponent musicSlider;
+        LanguageComponent languageComponent;
         Vector2 playerStringLoc;
         Vector2 selectPos;
 
@@ -30,14 +31,7 @@ namespace ZombustersWindows
         OptionsState state;
         Rectangle uiBounds;
         InputMode displayMode;
-        readonly Dictionary<string, string> languages = new Dictionary<string, string>
-        {
-            {"English", "en-US"},
-            {"French",  "fr-FR"},
-            {"Italian", "it-IT"},
-            {"German", "gr-GR"},
-            {"Spanish", "es-ES"}
-        };
+       
 
         public OptionsScreen(MyGame game, OptionsState state)
         {
@@ -100,6 +94,10 @@ namespace ZombustersWindows
             musicSlider.SetColor = Color.Cyan;
             musicSlider.UnsetColor = Color.DodgerBlue;
 
+            languageComponent = new LanguageComponent(game, ScreenManager.SpriteBatch);
+            languageComponent.Initialize();
+            languageComponent.languageArea = new Rectangle(menu.uiBounds.Right + 20, tempExtent.Top + 4, 120, tempExtent.Height - 10);
+
             tempExtent = menu.GetExtent(0);
             playerStringLoc = new Vector2(menu.uiBounds.Right + 20, tempExtent.Top);
             //this.PresenceMode = GamerPresenceMode.ConfiguringSettings;
@@ -116,8 +114,7 @@ namespace ZombustersWindows
         {
             if (menu.Selection == 2) 
             {
-                Thread.CurrentThread.CurrentUICulture = CultureInfo.GetCultureInfo("fr-FR");
-                state.locale = "fr-FR";
+                state.locale = languageComponent.SwitchLanguage();
             }
             else if (menu.Selection == 3)
             {
@@ -162,6 +159,7 @@ namespace ZombustersWindows
 
             volumeSlider.LoadContent();
             musicSlider.LoadContent();
+            languageComponent.LoadContent();
             base.LoadContent();
         }
 
@@ -378,6 +376,7 @@ namespace ZombustersWindows
             menu.Draw(gameTime);
             volumeSlider.Draw(gameTime);
             musicSlider.Draw(gameTime);
+            languageComponent.Draw(gameTime);
             menu.DrawLogoRetrowaxMenu(this.ScreenManager.SpriteBatch, new Vector2(uiBounds.Width, uiBounds.Height), MenuInfoFont);
             DrawContextMenu(menu, selectPos, this.ScreenManager.SpriteBatch);
         }
