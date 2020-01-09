@@ -10,18 +10,18 @@ namespace ZombustersWindows
     public class LanguageComponent : DrawableGameComponent
     {
         SpriteBatch batch;
-        Texture2D blank;
         private readonly MyGame game;
         SpriteFont MenuInfoFont;
         public Rectangle languageArea = new Rectangle(0, 0, 80, 28);
         private Vector2 offset = new Vector2(-3, 11);
+        private int currentLanguage = 0;
 
         readonly List<string> languages = new List<string>
         {
             "en-US",
             "fr-FR",
             "it-IT",
-            "gr-GR",
+            "de-DE",
             "es-ES"
         };
 
@@ -35,11 +35,12 @@ namespace ZombustersWindows
         public override void Initialize()
         {
             base.Initialize();
+
+            currentLanguage = languages.IndexOf(Thread.CurrentThread.CurrentUICulture.Name);
         }
 
         public new void LoadContent()
         {
-            blank = game.Content.Load<Texture2D>("whitepixel");
             MenuInfoFont = game.Content.Load<SpriteFont>(@"menu\ArialMenuInfo");
             if (batch == null)
                 batch = new SpriteBatch(game.GraphicsDevice);
@@ -48,8 +49,14 @@ namespace ZombustersWindows
 
         public string SwitchLanguage()
         {
-            Thread.CurrentThread.CurrentUICulture = CultureInfo.GetCultureInfo(languages[3]);
-            return languages[3];
+            currentLanguage++;
+            if (currentLanguage >= languages.Count)
+            {
+                currentLanguage = 0;
+            }
+            string locale = languages[currentLanguage];
+            Thread.CurrentThread.CurrentUICulture = CultureInfo.GetCultureInfo(locale);
+            return locale;
         }
 
         public override void Draw(GameTime gameTime)
