@@ -597,7 +597,7 @@ namespace ZombustersWindows.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to How to Play.
+        ///   Looks up a localized string similar to HOW TO PLAY.
         /// </summary>
         internal static string HowToPlayInGameString {
             get {
@@ -718,7 +718,7 @@ namespace ZombustersWindows.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Leaderboards.
+        ///   Looks up a localized string similar to LEADERBOARDS.
         /// </summary>
         internal static string LeaderboardMenuString {
             get {
@@ -1293,7 +1293,7 @@ namespace ZombustersWindows.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Quit Game.
+        ///   Looks up a localized string similar to QUIT GAME.
         /// </summary>
         internal static string QuitGame {
             get {
@@ -1671,7 +1671,7 @@ namespace ZombustersWindows.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Play.
+        ///   Looks up a localized string similar to PLAY.
         /// </summary>
         internal static string WPPlayNewGame {
             get {

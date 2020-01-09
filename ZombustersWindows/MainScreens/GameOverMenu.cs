@@ -21,9 +21,9 @@ namespace ZombustersWindows.MainScreens
         public override void Initialize()
         {
             menu = new MenuComponent(this.ScreenManager.Game, this.ScreenManager.Font, this.ScreenManager.SpriteBatch);
-            menu.AddText(Strings.GPRestartCurrentWaveString); //Restart from current Wave
-            menu.AddText(Strings.GPRestartFromBeginningString); //Restart from beginning
-            menu.AddText(Strings.GPReturnToMainMenuString); //Return to main menu
+            menu.AddText("GPRestartCurrentWaveString"); //Restart from current Wave
+            menu.AddText("GPRestartFromBeginningString"); //Restart from beginning
+            menu.AddText("GPReturnToMainMenuString"); //Return to main menu
             menu.MenuOptionSelected += new EventHandler<MenuSelection>(SelectOption);
             menu.MenuCanceled += new EventHandler<MenuSelection>(CancelMenu);
             //menu.MenuConfigSelected += new EventHandler<MenuSelection>(menu_MenuConfigSelected);

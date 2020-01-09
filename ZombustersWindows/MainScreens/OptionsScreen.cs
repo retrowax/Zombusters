@@ -51,11 +51,11 @@ namespace ZombustersWindows
             menu = new MenuComponent(game, MenuListFont);
             menu.Initialize();
             //menu.AddText("Player Control Scheme");
-            menu.AddText(Strings.SoundEffectVolumeString);
-            menu.AddText(Strings.MusicVolumeString);
-            menu.AddText(Strings.ChangeLanguageOption);
-            menu.AddText(Strings.FullScreenMenuString);
-            menu.AddText(Strings.SaveAndExitString);
+            menu.AddText("SoundEffectVolumeString");
+            menu.AddText("MusicVolumeString");
+            menu.AddText("ChangeLanguageOption");
+            menu.AddText("FullScreenMenuString");
+            menu.AddText("SaveAndExitString");
 
             menu.MenuOptionSelected += new EventHandler<MenuSelection>(MenuOptionSelected);
             menu.MenuCanceled += new EventHandler<MenuSelection>(MenuCancelled);
@@ -407,7 +407,12 @@ namespace ZombustersWindows
             pos.Y += 115;
 
             //Texto de contexto de menu
-            lines = Regex.Split(menu.HelpText[menu.Selection], "\r\n");
+            lines = Array.Empty<string>();
+            if (menu.HelpText[menu.Selection] != "")
+            {
+                lines = Regex.Split(Strings.ResourceManager.GetString(menu.HelpText[menu.Selection]), "\r\n");
+            }
+            
             foreach (string line in lines)
             {
                 batch.DrawString(MenuInfoFont, line.Replace("	", ""), contextMenuPosition, Color.White);

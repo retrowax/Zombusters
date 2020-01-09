@@ -74,9 +74,9 @@ namespace ZombustersWindows
             menu.Initialize();
 
             //Adding Options text for the Menu
-            menu.AddText(Strings.HowToPlayInGameString.ToUpper(), Strings.HTPMenuSupportString);  // How To Play
-            menu.AddText(Strings.LeaderboardMenuString.ToUpper(), Strings.LeaderboardMMString);    // Leaderboard
-            menu.AddText(Strings.CreditsMenuString, Strings.CreditsMMString);            // Credits
+            menu.AddText("HowToPlayInGameString", "HTPMenuSupportString");  // How To Play
+            menu.AddText("LeaderboardMenuString", "LeaderboardMMString");    // Leaderboard
+            menu.AddText("CreditsMenuString", "CreditsMMString");            // Credits
 
             menu.uiBounds = menu.Extents;
 
@@ -298,7 +298,7 @@ namespace ZombustersWindows
             pos.Y += 115;
 
             //Texto de contexto de menu
-            lines = Regex.Split(menu.HelpText[menu.Selection], "\r\n");
+            lines = Regex.Split(Strings.ResourceManager.GetString(menu.HelpText[menu.Selection]), "\r\n");
             foreach (string line in lines)
             {
                 batch.DrawString(MenuInfoFont, line.Replace("	", ""), contextMenuPosition, Color.White);
