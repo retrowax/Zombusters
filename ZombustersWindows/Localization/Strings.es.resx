@@ -282,7 +282,7 @@ para sobrevivir a una oleada tras otra de la horda Zombie.</value>
     <comment>Start Screen "Press START button" String</comment>
   </data>
   <data name="QuitGame" xml:space="preserve">
-    <value>Quitar Juego</value>
+    <value>QUITAR JUEGO</value>
   </data>
   <data name="ResumeGame" xml:space="preserve">
     <value>Reanudar Juego</value>
@@ -547,7 +547,7 @@ automático esté presente.</value>
     <value>CONFIGURACIÓN</value>
   </data>
   <data name="HowToPlayInGameString" xml:space="preserve">
-    <value>Cómo Jugar</value>
+    <value>CÓMO JUGAR</value>
     <comment>In-game Menu</comment>
   </data>
   <data name="PlayerFourString" xml:space="preserve">
@@ -589,7 +589,7 @@ automático esté presente.</value>
     <comment>WAVE String</comment>
   </data>
   <data name="LeaderboardMenuString" xml:space="preserve">
-    <value>Marcadores</value>
+    <value>MARCADORES</value>
     <comment>Marcadores</comment>
   </data>
   <data name="LeaderboardMMString" xml:space="preserve">
@@ -718,7 +718,7 @@ conseguir vidas extras o nuevas armas.</value>
     <value>Por favor vuelva a conectar el mando</value>
   </data>
   <data name="WPPlayNewGame" xml:space="preserve">
-    <value>Jugar</value>
+    <value>JUGAR</value>
   </data>
   <data name="WPPlayNewGameMMString" xml:space="preserve">
     <value>Empezar una nueva partida.</value>
@@ -762,5 +762,8 @@ conseguir vidas extras o nuevas armas.</value>
   </data>
   <data name="FullScreenMenuString" xml:space="preserve">
     <value>Alternar el modo de pantalla completa</value>
+  </data>
+  <data name="ChangeLanguageOption" xml:space="preserve">
+    <value>Idioma</value>
   </data>
 </root>

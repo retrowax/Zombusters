@@ -282,7 +282,7 @@ to survive wave after wave of the Zombie horde.</value>
     <comment>Start Screen "Press START button" String</comment>
   </data>
   <data name="QuitGame" xml:space="preserve">
-    <value>Quit Game</value>
+    <value>QUIT GAME</value>
   </data>
   <data name="ResumeGame" xml:space="preserve">
     <value>Resume Game</value>
@@ -545,7 +545,7 @@ off the power when the autosave indication is present.</value>
     <value>SETTINGS</value>
   </data>
   <data name="HowToPlayInGameString" xml:space="preserve">
-    <value>How to Play</value>
+    <value>HOW TO PLAY</value>
     <comment>In-game Menu</comment>
   </data>
   <data name="PlayerFourString" xml:space="preserve">
@@ -587,7 +587,7 @@ off the power when the autosave indication is present.</value>
     <comment>WAVE String</comment>
   </data>
   <data name="LeaderboardMenuString" xml:space="preserve">
-    <value>Leaderboards</value>
+    <value>LEADERBOARDS</value>
     <comment>Marcadores</comment>
   </data>
   <data name="LeaderboardMMString" xml:space="preserve">
@@ -728,7 +728,7 @@ or a new Weapon.</value>
     <comment>Visit Retrowax Menu String WINDOWS PHONE</comment>
   </data>
   <data name="WPPlayNewGame" xml:space="preserve">
-    <value>Play</value>
+    <value>PLAY</value>
   </data>
   <data name="WPPlayNewGameMMString" xml:space="preserve">
     <value>Start a new game.</value>
@@ -769,5 +769,8 @@ or a new Weapon.</value>
   </data>
   <data name="RateThisAppTitle" xml:space="preserve">
     <value>Rate this App</value>
+  </data>
+  <data name="ChangeLanguageOption" xml:space="preserve">
+    <value>Change Language</value>
   </data>
 </root>

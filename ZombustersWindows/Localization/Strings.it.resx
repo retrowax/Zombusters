@@ -296,7 +296,7 @@ sospesa e ogni progresso non salvato andrà perduto.</value>
     <value>(host)</value>
   </data>
   <data name="HowToPlayInGameString" xml:space="preserve">
-    <value>Come Giocare</value>
+    <value>COME GIOCARE</value>
   </data>
   <data name="HTPAimShootString" xml:space="preserve">
     <value>MIRA E SPARA</value>
@@ -338,7 +338,7 @@ Raccogli le ricariche per ottenere vite extra o nuove Armi.</value>
     <value>Entra nella Sessione</value>
   </data>
   <data name="LeaderboardMenuString" xml:space="preserve">
-    <value>Classifiche</value>
+    <value>CLASSIFICHE</value>
   </data>
   <data name="LeaderboardMMString" xml:space="preserve">
     <value>Controlla il punteggio dei tuoi amici online o in locale.</value>
@@ -493,7 +493,7 @@ SystemLink o Xbox Live.</value>
 altro giocatore.</value>
   </data>
   <data name="QuitGame" xml:space="preserve">
-    <value>Esci dal gioco</value>
+    <value>ESCI DAL GIOCO</value>
   </data>
   <data name="QuitToMainMenuInGameString" xml:space="preserve">
     <value>Esci e vai al Menu Principale</value>
@@ -634,7 +634,7 @@ altro giocatore.</value>
     <value>PUNTEGGIO</value>
   </data>
   <data name="WPPlayNewGame" xml:space="preserve">
-    <value>Giocare</value>
+    <value>GIOCARE</value>
   </data>
   <data name="WPPlayNewGameMMString" xml:space="preserve">
     <value>Inizia una nuova partita.</value>

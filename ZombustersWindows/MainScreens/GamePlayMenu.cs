@@ -22,11 +22,11 @@ namespace ZombustersWindows.MainScreens
         public override void Initialize()
         {
             menu = new MenuComponent(this.ScreenManager.Game, this.ScreenManager.Font, this.ScreenManager.SpriteBatch);
-            menu.AddText(Strings.ResumeGame);
-            menu.AddText(Strings.HowToPlayInGameString);
-            menu.AddText(Strings.ConfigurationString);
-            menu.AddText(Strings.RestartLevelInGameString);
-            menu.AddText(Strings.QuitToMainMenuInGameString);
+            menu.AddText("ResumeGame");
+            menu.AddText("HowToPlayInGameString");
+            menu.AddText("ConfigurationString");
+            menu.AddText("RestartLevelInGameString");
+            menu.AddText("QuitToMainMenuInGameString");
             //if (licenseInformation.IsTrial)
             {
                 //menu.AddText(Strings.UnlockFullGameMenuString);

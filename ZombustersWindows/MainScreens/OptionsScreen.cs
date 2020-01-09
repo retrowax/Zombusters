@@ -6,6 +6,9 @@ using Microsoft.Xna.Framework.Input;
 using GameStateManagement;
 using Microsoft.Xna.Framework.Input.Touch;
 using ZombustersWindows.Localization;
+using System.Threading;
+using System.Globalization;
+using System.Collections.Generic;
 
 namespace ZombustersWindows
 {
@@ -15,6 +18,7 @@ namespace ZombustersWindows
         MenuComponent menu;
         SliderComponent volumeSlider;
         SliderComponent musicSlider;
+        LanguageComponent languageComponent;
         Vector2 playerStringLoc;
         Vector2 selectPos;
 
@@ -27,6 +31,7 @@ namespace ZombustersWindows
         OptionsState state;
         Rectangle uiBounds;
         InputMode displayMode;
+       
 
         public OptionsScreen(MyGame game, OptionsState state)
         {
@@ -46,10 +51,11 @@ namespace ZombustersWindows
             menu = new MenuComponent(game, MenuListFont);
             menu.Initialize();
             //menu.AddText("Player Control Scheme");
-            menu.AddText(Strings.SoundEffectVolumeString);
-            menu.AddText(Strings.MusicVolumeString);
-            menu.AddText(Strings.FullScreenMenuString);
-            menu.AddText(Strings.SaveAndExitString);
+            menu.AddText("SoundEffectVolumeString");
+            menu.AddText("MusicVolumeString");
+            menu.AddText("ChangeLanguageOption");
+            menu.AddText("FullScreenMenuString");
+            menu.AddText("SaveAndExitString");
 
             menu.MenuOptionSelected += new EventHandler<MenuSelection>(MenuOptionSelected);
             menu.MenuCanceled += new EventHandler<MenuSelection>(MenuCancelled);
@@ -88,6 +94,10 @@ namespace ZombustersWindows
             musicSlider.SetColor = Color.Cyan;
             musicSlider.UnsetColor = Color.DodgerBlue;
 
+            languageComponent = new LanguageComponent(game, ScreenManager.SpriteBatch);
+            languageComponent.Initialize();
+            languageComponent.languageArea = new Rectangle(menu.uiBounds.Right + 20, tempExtent.Top + 4, 120, tempExtent.Height - 10);
+
             tempExtent = menu.GetExtent(0);
             playerStringLoc = new Vector2(menu.uiBounds.Right + 20, tempExtent.Top);
             //this.PresenceMode = GamerPresenceMode.ConfiguringSettings;
@@ -102,7 +112,11 @@ namespace ZombustersWindows
 
         void MenuOptionSelected(Object sender, MenuSelection selection)
         {
-            if (menu.Selection == 2)
+            if (menu.Selection == 2) 
+            {
+                state.locale = languageComponent.SwitchLanguage();
+            }
+            else if (menu.Selection == 3)
             {
                 if (state.FullScreenMode) {
                     state.FullScreenMode = false;
@@ -112,7 +126,7 @@ namespace ZombustersWindows
                 }
                 this.game.graphics.ToggleFullScreen();
             }
-            else if (menu.Selection == 3)  // Save and Exit
+            else if (menu.Selection == 4)  // Save and Exit
             {
                 ExitScreen();
                 if (GamePad.GetState(PlayerIndex.One).IsButtonDown(Buttons.A))
@@ -145,6 +159,7 @@ namespace ZombustersWindows
 
             volumeSlider.LoadContent();
             musicSlider.LoadContent();
+            languageComponent.LoadContent();
             base.LoadContent();
         }
 
@@ -361,6 +376,7 @@ namespace ZombustersWindows
             menu.Draw(gameTime);
             volumeSlider.Draw(gameTime);
             musicSlider.Draw(gameTime);
+            languageComponent.Draw(gameTime);
             menu.DrawLogoRetrowaxMenu(this.ScreenManager.SpriteBatch, new Vector2(uiBounds.Width, uiBounds.Height), MenuInfoFont);
             DrawContextMenu(menu, selectPos, this.ScreenManager.SpriteBatch);
         }
@@ -391,7 +407,12 @@ namespace ZombustersWindows
             pos.Y += 115;
 
             //Texto de contexto de menu
-            lines = Regex.Split(menu.HelpText[menu.Selection], "\r\n");
+            lines = Array.Empty<string>();
+            if (menu.HelpText[menu.Selection] != "")
+            {
+                lines = Regex.Split(Strings.ResourceManager.GetString(menu.HelpText[menu.Selection]), "\r\n");
+            }
+            
             foreach (string line in lines)
             {
                 batch.DrawString(MenuInfoFont, line.Replace("	", ""), contextMenuPosition, Color.White);

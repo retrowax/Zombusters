@@ -40,15 +40,15 @@ namespace ZombustersWindows
             menu = new MenuComponent(game, MenuListFont);
             //bloom = new BloomComponent(game);
             menu.Initialize();
-            menu.AddText(Strings.WPPlayNewGame.ToUpper(), Strings.WPPlayNewGameMMString);
-            menu.AddText(Strings.ExtrasMenuString, Strings.ExtrasMMString);
-            menu.AddText(Strings.SettingsMenuString, Strings.ConfigurationString);
+            menu.AddText("WPPlayNewGame", "WPPlayNewGameMMString");
+            menu.AddText("ExtrasMenuString", "ExtrasMMString");
+            menu.AddText("SettingsMenuString", "ConfigurationString");
             //menu.AddText(Strings.ReviewMenuString, Strings.ReviewMMString);
             /*if (licenseInformation.IsTrial)
             {
                 menu.AddText(Strings.UnlockFullGameMenuString").ToUpper(), Strings.UnlockFullGameMenuString"));
             }*/
-            menu.AddText(Strings.QuitGame.ToUpper(), Strings.QuitGame + ".");
+            menu.AddText("QuitGame", "QuitGame");
 
             menu.uiBounds = menu.Extents;
             menu.uiBounds.Offset(uiBounds.X, 300);
@@ -173,7 +173,7 @@ namespace ZombustersWindows
                 batch.Draw(lineaMenu, pos, Color.White);
                 pos.Y += 115;
             }
-            lines = Regex.Split(menu.HelpText[menu.Selection], "\r\n");
+            lines = Regex.Split(Strings.ResourceManager.GetString(menu.HelpText[menu.Selection]), "\r\n");
             foreach (string line in lines) {
                 batch.DrawString(MenuInfoFont, line.Replace("	", ""), contextMenuPosition, Color.White);
                 contextMenuPosition.Y += 20;

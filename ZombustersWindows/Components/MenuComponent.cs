@@ -323,19 +323,19 @@ namespace ZombustersWindows
             for (int i = 0; i < MenuItems.Count; i++) {
                 if (Selection == i) {
                     if (((MyGame)this.Game).player1.Options != InputMode.Touch) {
-                        batch.DrawString(Font, MenuItems[i], new Vector2(current.X + 5, current.Y + 1), SelectedColor);
+                        batch.DrawString(Font, Strings.ResourceManager.GetString(MenuItems[i]), new Vector2(current.X + 5, current.Y + 1), SelectedColor);
                         batch.Draw(lineaTextoMenu, current, color);
                     } else {
-                        if (MenuItems[i] != Strings.SaveAndExitString) {
-                            batch.DrawString(Font, MenuItems[i], new Vector2(current.X + 5, current.Y + 1), SelectedColor);
+                        if (Strings.ResourceManager.GetString(MenuItems[i]) != Strings.SaveAndExitString) {
+                            batch.DrawString(Font, Strings.ResourceManager.GetString(MenuItems[i]), new Vector2(current.X + 5, current.Y + 1), SelectedColor);
                         }
                     }
                 } else {
                     if (((MyGame)this.Game).player1.Options != InputMode.Touch) {
-                        batch.DrawString(Font, MenuItems[i], new Vector2(current.X + 5, current.Y + 1), UnselectedColor);
+                        batch.DrawString(Font, Strings.ResourceManager.GetString(MenuItems[i]), new Vector2(current.X + 5, current.Y + 1), UnselectedColor);
                     } else {
-                        if (MenuItems[i] != Strings.SaveAndExitString) {
-                            batch.DrawString(Font, MenuItems[i], new Vector2(current.X + 5, current.Y + 1), UnselectedColor);
+                        if (Strings.ResourceManager.GetString(MenuItems[i]) != Strings.SaveAndExitString) {
+                            batch.DrawString(Font, Strings.ResourceManager.GetString(MenuItems[i]), new Vector2(current.X + 5, current.Y + 1), UnselectedColor);
                         }
                     }
                 }
