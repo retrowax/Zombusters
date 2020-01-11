@@ -5,6 +5,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input.Touch;
 using GameStateManagement;
 using ZombustersWindows.Localization;
+using ZombustersWindows.Subsystem_Managers;
 
 namespace ZombustersWindows
 {
@@ -143,7 +144,7 @@ namespace ZombustersWindows
                 //menu.DrawDreamBuildPlayDisclaimer(this.ScreenManager.SpriteBatch, fontItalic, fontSmallItalic);
                 DrawContextMenu(menu, selectPos, this.ScreenManager.SpriteBatch);
             } else {
-                this.ScreenManager.SpriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend);
+                this.ScreenManager.SpriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend, null, null, null, null, Resolution.getTransformationMatrix());
                 this.ScreenManager.SpriteBatch.Draw(game.blackTexture, new Vector2(0, 0), Color.White);
                 this.ScreenManager.SpriteBatch.DrawString(MenuInfoFont, "ZOMBUSTERS " + Strings.Paused.ToUpper(), new Vector2(5, 5), Color.White);
                 this.ScreenManager.SpriteBatch.End();
@@ -154,7 +155,7 @@ namespace ZombustersWindows
             string[] lines;
             Vector2 contextMenuPosition = new Vector2(uiBounds.X + 22, pos.Y - 100);
             Vector2 MenuTitlePosition = new Vector2(contextMenuPosition.X - 3, contextMenuPosition.Y - 300);
-            batch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend);
+            batch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend, null, null, null, null, Resolution.getTransformationMatrix());
             batch.Draw(logoMenu, new Vector2(MenuTitlePosition.X - 55, MenuTitlePosition.Y - 5), Color.White);
             batch.DrawString(MenuHeaderFont, Strings.MainMenuString, MenuTitlePosition, Color.White);
             pos.X -= 40;

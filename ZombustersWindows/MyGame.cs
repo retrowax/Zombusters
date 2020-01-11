@@ -52,11 +52,12 @@ namespace ZombustersWindows
         public MyGame() {
             graphics = new GraphicsDeviceManager(this)
             {
-                PreferredBackBufferWidth = 1280,
-                PreferredBackBufferHeight = 720,
                 IsFullScreen = false
             };
+            Resolution.Init(ref graphics);
             Content.RootDirectory = "Content";
+            Resolution.SetVirtualResolution(1280, 720);
+            Resolution.SetResolution(1680, 1050, false);
             options = new OptionsState();
             screenManager = new ScreenManager(this);
             Components.Add(screenManager);

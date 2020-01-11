@@ -48,7 +48,7 @@ namespace ZombustersWindows
         //static int CurrentPlaylistSetting = 0;
 
 
-        #endregion
+#endregion
 
 #region Game Settings
 
@@ -56,7 +56,7 @@ namespace ZombustersWindows
         public int PrivateSlotsSettings = 0;
         public int MaxPlayersSettings = 0;
 
-        #endregion
+#endregion
 
         public LobbyScreen(Boolean create)
         {
@@ -349,7 +349,7 @@ namespace ZombustersWindows
              */
         }
 
-        #endregion
+#endregion
 
         public override void LoadContent()
         {
@@ -485,7 +485,7 @@ namespace ZombustersWindows
             Vector2 contextMenuPosition = new Vector2(uiBounds.X + 22, pos.Y - 100);
             Vector2 MenuTitlePosition = new Vector2(contextMenuPosition.X - 3, contextMenuPosition.Y - 300);
 
-            batch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend);
+            batch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend, null, null, null, null, Resolution.getTransformationMatrix());
 
             // Lobby Header Image
             batch.Draw(lobbyHeaderImage, new Vector2(MenuTitlePosition.X, MenuTitlePosition.Y + 75), Color.White);
@@ -532,7 +532,7 @@ namespace ZombustersWindows
             batch.End();
         }
 
-        #endregion
+#endregion
 
     }
 

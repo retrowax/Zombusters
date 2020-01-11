@@ -2608,7 +2608,7 @@ namespace ZombustersWindows
 
                 // BACK TO FRONT SORT MODE
                 //------------------------
-                this.ScreenManager.SpriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend);
+                this.ScreenManager.SpriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend, null, null, null, null, Resolution.getTransformationMatrix());
 
                 // Draw each player
                 foreach (Avatar cplayer in game.currentPlayers)
@@ -2686,7 +2686,7 @@ namespace ZombustersWindows
                 }
 
                 // Perlin Noise effect draw
-                this.ScreenManager.SpriteBatch.Begin(SpriteSortMode.Deferred, BlendState.NonPremultiplied);
+                this.ScreenManager.SpriteBatch.Begin(SpriteSortMode.Deferred, BlendState.NonPremultiplied, null, null, null, null, Resolution.getTransformationMatrix());
 #if DEBUG
             Level.gameWorld.Draw(this.ScreenManager.SpriteBatch, gameTime, this.ScreenManager.SpriteBatch);
 #endif
@@ -2717,7 +2717,7 @@ namespace ZombustersWindows
                 }
 
                 // Draw the Storage Device Icon
-                this.ScreenManager.SpriteBatch.Begin(SpriteSortMode.FrontToBack, BlendState.AlphaBlend);
+                this.ScreenManager.SpriteBatch.Begin(SpriteSortMode.FrontToBack, BlendState.AlphaBlend, null, null, null, null, Resolution.getTransformationMatrix());
 
 
                 if (game.player1.Options == InputMode.Keyboard)
@@ -2730,7 +2730,7 @@ namespace ZombustersWindows
             }
             else
             {
-                this.ScreenManager.SpriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend);
+                this.ScreenManager.SpriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend, null, null, null, null, Resolution.getTransformationMatrix());
                 this.ScreenManager.SpriteBatch.Draw(game.blackTexture, new Vector2(0, 0), Color.White);
                 this.ScreenManager.SpriteBatch.DrawString(MenuInfoFont, "ZOMBUSTERS " + Strings.Paused.ToUpper(), new Vector2(5, 5), Color.White);
                 this.ScreenManager.SpriteBatch.End();
@@ -2753,7 +2753,7 @@ namespace ZombustersWindows
         private void DrawStageCleared()
         {
             this.ScreenManager.FadeBackBufferToBlack(64);
-            this.ScreenManager.SpriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend);
+            this.ScreenManager.SpriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend, null, null, null, null, Resolution.getTransformationMatrix());
             Vector2 UICenter = new Vector2(uiBounds.X + uiBounds.Width / 2,
                 uiBounds.Y + uiBounds.Height / 2);
 
@@ -2779,7 +2779,7 @@ namespace ZombustersWindows
             int timeLeftWaitingPlayers;
             int fixedTimeLeft = 5;
             this.ScreenManager.FadeBackBufferToBlack(64);
-            this.ScreenManager.SpriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend);
+            this.ScreenManager.SpriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend, null, null, null, null, Resolution.getTransformationMatrix());
             Vector2 UICenter = new Vector2(uiBounds.X + uiBounds.Width / 2,
                 uiBounds.Y + uiBounds.Height / 2);
 
@@ -2909,7 +2909,7 @@ namespace ZombustersWindows
             if (bGameOver)
             {
                 this.ScreenManager.FadeBackBufferToBlack(64);
-                this.ScreenManager.SpriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend);
+                this.ScreenManager.SpriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend, null, null, null, null, Resolution.getTransformationMatrix());
                 Vector2 UICenter = new Vector2(uiBounds.X + uiBounds.Width / 2, 
                     uiBounds.Y + uiBounds.Height / 2);
                 this.ScreenManager.SpriteBatch.Draw(gameover, UICenter, 
@@ -2923,7 +2923,7 @@ namespace ZombustersWindows
             {
                 string levelshowstring;
                 this.ScreenManager.FadeBackBufferToBlack(64);
-                this.ScreenManager.SpriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend);
+                this.ScreenManager.SpriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend, null, null, null, null, Resolution.getTransformationMatrix());
 
                 Vector2 UICenter = new Vector2(uiBounds.X + uiBounds.Width / 2,
                 uiBounds.Y + uiBounds.Height / 2);
@@ -2994,9 +2994,9 @@ namespace ZombustersWindows
             // Initialize our own SpriteBatch.  We want default Alpha blending, and the render
             // states set by SpriteBatch to be reset when End() is called.
             //SpriteBatch batch = this.ScreenManager.SpriteBatch;
-            //this.ScreenManager.SpriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend);
+            //this.ScreenManager.SpriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, null, null, null, null, Resolution.getTransformationMatrix());
             //batch.Begin(SpriteBlendMode.AlphaBlend, SpriteSortMode.Deferred, 
-                //SaveStateMode.SaveState);
+            //SaveStateMode.SaveState);
 
             float layerIndex = GetLayerIndex(state, furniturelist);
             Vector2 offsetPosition = new Vector2(-20, -55);
@@ -4312,7 +4312,7 @@ namespace ZombustersWindows
         {
             Vector2 Pos = new Vector2(uiBounds.X+ 10, uiBounds.Y+20);
             SpriteBatch batch = this.ScreenManager.SpriteBatch;
-            batch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend);
+            batch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, null, null, null, null, Resolution.getTransformationMatrix());
 
             foreach (Avatar cplayer in game.currentPlayers)
             {

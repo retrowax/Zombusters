@@ -6,6 +6,7 @@ using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Input.Touch;
 using GameStateManagement;
 using ZombustersWindows.Localization;
+using ZombustersWindows.Subsystem_Managers;
 
 namespace ZombustersWindows
 {
@@ -315,7 +316,7 @@ namespace ZombustersWindows
             Vector2 current = GetTopLeft();
             Viewport oldv = Game.GraphicsDevice.Viewport;  // cache the current viewport
             Game.GraphicsDevice.Viewport = CreateViewport();  // set viewport to our UIBounds
-            batch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend);
+            batch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend, null, null, null, null, Resolution.getTransformationMatrix());
             float interval = 3.0f;
             float value = (float)Math.Cos(gameTime.TotalGameTime.TotalSeconds * interval);
             value = (value + 1) / 2;
@@ -349,7 +350,7 @@ namespace ZombustersWindows
         public void DrawBuyNow(GameTime gameTime) {
             /*if (licenseInformation.IsTrial)
             {
-                batch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend);
+                batch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, null, null, null, null, Resolution.getTransformationMatrix());
 
                 // Arrow Left
                 batch.Draw(buyNow, new Vector2(-25, -25), null, Color.White, 0, Vector2.Zero, 1.0f, SpriteEffects.None, 1.0f);
@@ -360,7 +361,7 @@ namespace ZombustersWindows
 
         public void DrawDreamBuildPlayDisclaimer(SpriteBatch batch, SpriteFont fontBig, SpriteFont fontSmall)
         {
-            batch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend);
+            batch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend, null, null, null, null, Resolution.getTransformationMatrix());
             string build = "'Dream Build Play' Build v1.0";
             string disclaimer = "This demo does not represent the final features or quality of the software.";
             batch.DrawString(fontBig, build,
@@ -371,7 +372,7 @@ namespace ZombustersWindows
         }
 
         public void DrawLogoRetrowaxMenu(SpriteBatch batch, Vector2 position, SpriteFont MenuFont) {
-            batch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend);
+            batch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend, null, null, null, null, Resolution.getTransformationMatrix());
             batch.Draw(logoRetrowaxMenu, position, Color.White);
             /*if (licenseInformation.IsTrial) 
             { 
@@ -574,7 +575,7 @@ namespace ZombustersWindows
 
         public void DrawSocialLogosMenu(SpriteBatch batch, Vector2 position, SpriteFont MenuFont) {
             Vector2 iconPos = new Vector2(position.X + 25, position.Y + 10);
-            batch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend);
+            batch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend, null, null, null, null, Resolution.getTransformationMatrix());
             batch.Draw(facebookLogo, iconPos, Color.White);
             batch.Draw(twitterLogo, new Vector2(iconPos.X + facebookLogo.Width + 15, iconPos.Y), Color.White);
             //batch.Draw(googleLogo, new Vector2(iconPos.X + facebookLogo.Width + twitterLogo.Width + 30, iconPos.Y), Color.White);
@@ -583,7 +584,7 @@ namespace ZombustersWindows
 
         public void DrawBackButtonMenu(SpriteBatch batch, Vector2 position, SpriteFont MenuFont) {
             Vector2 iconPos = new Vector2(position.X + 25, position.Y + 10);
-            batch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend);
+            batch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend, null, null, null, null, Resolution.getTransformationMatrix());
             batch.Draw(goBackButton, iconPos, Color.White);
             batch.DrawString(MenuFont, Strings.BackString.ToUpper(), new Vector2(iconPos.X - 10 - MenuFont.MeasureString(Strings.BackString.ToUpper()).X, iconPos.Y + 15), Color.White);
             batch.End();

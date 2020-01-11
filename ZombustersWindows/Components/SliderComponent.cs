@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 
 using Microsoft.Xna.Framework.Graphics;
+using ZombustersWindows.Subsystem_Managers;
 
 namespace ZombustersWindows
 {
@@ -56,7 +57,7 @@ namespace ZombustersWindows
 
         public override void Draw(GameTime gameTime)
         {            
-            batch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend);
+            batch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, null, null, null, null, Resolution.getTransformationMatrix());
 
             if (this.game.player1.Options == InputMode.Touch)
             {

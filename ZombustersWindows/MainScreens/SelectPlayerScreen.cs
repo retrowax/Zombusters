@@ -760,7 +760,7 @@ namespace ZombustersWindows
             }
             else
             {
-                this.ScreenManager.SpriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend);
+                this.ScreenManager.SpriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend, null, null, null, null, Resolution.getTransformationMatrix());
                 this.ScreenManager.SpriteBatch.Draw(game.blackTexture, new Vector2(0, 0), Color.White);
                 this.ScreenManager.SpriteBatch.DrawString(MenuInfoFont, "ZOMBUSTERS " + Strings.Paused.ToUpper(), new Vector2(5, 5), Color.White);
                 this.ScreenManager.SpriteBatch.End();
@@ -777,7 +777,7 @@ namespace ZombustersWindows
             Vector2 CharacterPosition = new Vector2(MenuTitlePosition.X + 50, MenuTitlePosition.Y + 70);
             Vector2 ConnectControlerStringPosition = new Vector2(CharacterPosition.X - 5 + cardBkgTexture[1].Width, CharacterPosition.Y + cardBkgTexture[1].Height / 2);
 
-            batch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend);
+            batch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, null, null, null, null, Resolution.getTransformationMatrix());
 
             //foreach (Avatar cplayer in ((Game1)this.ScreenManager.Game).currentPlayers)
             for (i = 0; i < game.currentPlayers.Length; i++)
@@ -932,7 +932,7 @@ namespace ZombustersWindows
 
         private void DrawLevelSelectionMenu(SpriteBatch batch)
         {
-            batch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend);
+            batch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, null, null, null, null, Resolution.getTransformationMatrix());
 
             // Background
             batch.Draw(myGroupBKG, new Vector2(uiBounds.X + uiBounds.Width - 260, 50), Color.White);
@@ -974,7 +974,7 @@ namespace ZombustersWindows
             Vector2 contextMenuPosition = new Vector2(uiBounds.X + 22, pos.Y - 100);
             Vector2 MenuTitlePosition = new Vector2(contextMenuPosition.X - 3, contextMenuPosition.Y - 300);
 
-            batch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend);
+            batch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, null, null, null, null, Resolution.getTransformationMatrix());
 
             //Logo Menu
             batch.Draw(logoMenu, new Vector2(MenuTitlePosition.X - 55, MenuTitlePosition.Y - 5), Color.White);
@@ -1014,7 +1014,7 @@ namespace ZombustersWindows
 
             string[] lines;
 
-            batch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend);
+            batch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, null, null, null, null, Resolution.getTransformationMatrix());
 
             // Lobby Header Image
             batch.Draw(HTPHeaderImage, new Vector2(MenuTitlePosition.X, MenuTitlePosition.Y + 75), Color.White);

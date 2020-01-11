@@ -5,6 +5,7 @@ using Microsoft.Xna.Framework.Graphics;
 using GameStateManagement;
 using Microsoft.Xna.Framework.Input.Touch;
 using ZombustersWindows.Localization;
+using ZombustersWindows.Subsystem_Managers;
 
 namespace ZombustersWindows
 {
@@ -174,7 +175,7 @@ namespace ZombustersWindows
 
             base.Draw(gameTime);
 
-            this.ScreenManager.SpriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend);
+            this.ScreenManager.SpriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, null, null, null, null, Resolution.getTransformationMatrix());
 
             // Leave Button
             if (((MyGame)this.ScreenManager.Game).player1.Options != InputMode.Touch)
@@ -297,7 +298,7 @@ namespace ZombustersWindows
             Vector2 contextMenuPosition = new Vector2(uiBounds.X + 22, pos.Y - 100);
             Vector2 MenuTitlePosition = new Vector2(contextMenuPosition.X - 3, contextMenuPosition.Y - 300);
 
-            batch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend);
+            batch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend, null, null, null, null, Resolution.getTransformationMatrix());
 
             //Logo Menu
             batch.Draw(logoMenu, new Vector2(MenuTitlePosition.X - 55, MenuTitlePosition.Y - 5), Color.White);

@@ -116,7 +116,7 @@ namespace ZombustersWindows
             int spaceBetweenButtonAndText = 0;
             int spaceBetweenButtons = 30;
             base.Draw(gameTime);
-            this.ScreenManager.SpriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend);
+            this.ScreenManager.SpriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, null, null, null, null, Resolution.getTransformationMatrix());
             this.ScreenManager.SpriteBatch.Draw(Title, titleBounds, Color.White);
             mText.Draw(this.ScreenManager.SpriteBatch);
             if (canLeaveScreen)

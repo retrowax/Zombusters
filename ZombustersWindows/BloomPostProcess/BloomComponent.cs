@@ -2,6 +2,7 @@
 using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using ZombustersWindows.Subsystem_Managers;
 #endregion
 
 namespace ZombustersWindows
@@ -216,7 +217,7 @@ namespace ZombustersWindows
                 effect = null;
             }
 
-            spriteBatch.Begin(0, BlendState.Opaque, null, null, null, effect);
+            spriteBatch.Begin(0, BlendState.Opaque, null, null, null, effect, Resolution.getTransformationMatrix());
             spriteBatch.Draw(texture, new Rectangle(0, 0, width, height), Color.White);
             spriteBatch.End();
         }

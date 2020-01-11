@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework.Graphics;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Threading;
+using ZombustersWindows.Subsystem_Managers;
 
 namespace ZombustersWindows
 {
@@ -61,7 +62,7 @@ namespace ZombustersWindows
 
         public override void Draw(GameTime gameTime)
         {            
-            batch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend);
+            batch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, null, null, null, null, Resolution.getTransformationMatrix());
 
             var currentCulture = Thread.CurrentThread.CurrentUICulture;
             batch.DrawString(MenuInfoFont, currentCulture.DisplayName, new Vector2(languageArea.Left + offset.X, languageArea.Bottom + offset.Y), Color.White, 0.0f, Vector2.Zero, 1.0f, SpriteEffects.None, 1.0f);

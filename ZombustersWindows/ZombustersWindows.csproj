@@ -169,6 +169,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Strings.it.resx</DependentUpon>
     </Compile>
+    <Compile Include="SubsystemManagers\ResolutionManager.cs" />
     <Compile Include="SubsystemManagers\AchievementsManager.cs" />
     <Compile Include="SubsystemManagers\AnimationManager.cs" />
     <Compile Include="SubsystemManagers\AudioManager.cs" />
