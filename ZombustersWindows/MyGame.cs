@@ -9,10 +9,14 @@ using Microsoft.Xna.Framework.Input.Touch;
 using ZombustersWindows.MainScreens;
 using ZombustersWindows.Localization;
 using Bugsnag.Clients;
+using GameAnalyticsSDK.Net;
 
 namespace ZombustersWindows
 {
     public class MyGame : Game {
+        private const string ANALYTICS_GAME_KEY = "2a9782ff7b0d7b1326cc50178f587678";
+        private const string ANALYTICS_SEC_KEY = "8924590c2447e4a6e5335aea11e16f5ff8150d04";
+
         public GraphicsDeviceManager graphics;
         public ScreenManager screenManager;
         public GamePlayScreen playScreen;
@@ -96,6 +100,8 @@ namespace ZombustersWindows
         }
 
         protected override void Initialize() {
+            InitializeMetrics();
+
             currentPlayers = new Avatar[maxGamers];
             for (int i = 0; i < maxGamers; i++) {
                 currentPlayers[i] = new Avatar();
@@ -372,6 +378,17 @@ namespace ZombustersWindows
         protected override void Draw(GameTime gameTime) {
             graphics.GraphicsDevice.Clear(Color.Black);
             base.Draw(gameTime);
+        }
+
+        private void InitializeMetrics()
+        {
+#if DEBUG
+            GameAnalytics.SetEnabledInfoLog(true);
+            GameAnalytics.SetEnabledVerboseLog(true);
+#endif
+            GameAnalytics.ConfigureBuild("windows 1.1.0");
+            GameAnalytics.Initialize(ANALYTICS_GAME_KEY, ANALYTICS_SEC_KEY);
+            GameAnalytics.AddDesignEvent("GameStart", 1);
         }
     }
 }
