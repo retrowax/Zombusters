@@ -33,9 +33,9 @@ namespace ZombustersWindows
     {
         public TopScoreList[] scoreList;
 
-        private bool mChanged;
-        private int mTransferCurrentListIndex;
-        private int mTransferCurrentEntryIndex;
+        private bool isChanged;
+        private int transferCurrentListIndex;
+        private int transferCurrentEntryIndex;
 
         public const byte MARKER_ENTRY = 0;					// bit pattern 00000000
         private const byte MARKER_CONTAINER_END = 0x55;		// bit pattern 01010101
@@ -190,7 +190,7 @@ namespace ZombustersWindows
 
         public void startSynchronization()
         {
-            mChanged = false;
+            isChanged = false;
             // Lock to sync the change with a possible background saving
             lock (SYNC)
             {
@@ -220,8 +220,8 @@ namespace ZombustersWindows
 
         public void prepareForSending()
         {
-            mTransferCurrentListIndex = 0;
-            mTransferCurrentEntryIndex = 0;
+            transferCurrentListIndex = 0;
+            transferCurrentEntryIndex = 0;
         }
 
 #if !WINDOWS_PHONE && !WINDOWS
