@@ -33,6 +33,7 @@ namespace ZombustersWindows
         public MusicComponent musicComponent;
         public Texture2D blackTexture;
         public BaseClient bugSnagClient;
+        public StorageDataSource storageDataSource;
         public float totalGameSeconds;
 
         //public BloomComponent bloom;
@@ -79,6 +80,11 @@ namespace ZombustersWindows
             bloom.Settings = BloomSettings.PresetSettings[6];
             bloom.Visible = true;
             */
+            bugSnagClient = new BaseClient("1cad9818fb8d84290d776245cd1f948d");
+            bugSnagClient.StartAutoNotify();
+
+            storageDataSource = new StorageDataSource(ref bugSnagClient);
+
             player1 = new Player(options, audio, this);
             player2 = new Player(options, audio, this);
             player3 = new Player(options, audio, this);
@@ -95,8 +101,7 @@ namespace ZombustersWindows
             Components.Add(musicComponent);
             musicComponent.Enabled = true;
 
-            bugSnagClient = new BaseClient("1cad9818fb8d84290d776245cd1f948d");
-            bugSnagClient.StartAutoNotify();
+            
         }
 
         protected override void Initialize() {
