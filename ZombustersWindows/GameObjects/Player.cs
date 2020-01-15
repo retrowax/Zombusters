@@ -123,22 +123,18 @@ namespace ZombustersWindows
         public void LoadLeaderBoard()
         {
             LoadDefaultLeaderBoard();
-            BinaryReader binaryReader = game.storageDataSource.GetBinaryReader(LEADERBOARD_FILENAME);
-            if (binaryReader != null)
+            TopScoreListContainer topScoreListContainer = game.storageDataSource.LoadScoreList(LEADERBOARD_FILENAME);
+            if (topScoreListContainer != null)
             {
-                game.topScoreListContainer = new TopScoreListContainer(binaryReader);
+                game.topScoreListContainer = topScoreListContainer;
             }
         }
 
         public void SaveLeaderBoard(int score)
         {
-            BinaryWriter binaryWriter = game.storageDataSource.GetBinaryWriter(LEADERBOARD_FILENAME);
-            if (binaryWriter != null)
-            {
-                TopScoreEntry entry = new TopScoreEntry(name, score);
-                game.topScoreListContainer.addEntry(0, entry);
-                game.topScoreListContainer.save(binaryWriter);
-            }
+            TopScoreEntry entry = new TopScoreEntry(name, score);
+            game.topScoreListContainer.addEntry(0, entry);
+            game.storageDataSource.SaveScoreListToFile(LEADERBOARD_FILENAME, game.topScoreListContainer.scoreList);
         }
 
         private void LoadDefaultLeaderBoard()

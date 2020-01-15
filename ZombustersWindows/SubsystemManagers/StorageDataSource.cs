@@ -83,9 +83,9 @@ namespace ZombustersWindows.Subsystem_Managers
             }
         }
 
-        public BinaryReader GetBinaryReader(string filename)
+        public TopScoreListContainer LoadScoreList(string filename)
         {
-            BinaryReader binaryReader = null;
+            TopScoreListContainer topScoreListContainer = null;
 
             IsolatedStorageFile isolatedStorageFile = IsolatedStorageFile.GetUserStoreForDomain();
             try
@@ -93,7 +93,8 @@ namespace ZombustersWindows.Subsystem_Managers
                 IsolatedStorageFileStream isolatedFileStream = null;
                 using (isolatedFileStream = isolatedStorageFile.OpenFile(filename, FileMode.OpenOrCreate, FileAccess.Read))
                 {
-                    binaryReader = new BinaryReader(isolatedFileStream);
+                    BinaryReader binaryReader = new BinaryReader(isolatedFileStream);
+                    topScoreListContainer = new TopScoreListContainer(binaryReader);
                 }
                 isolatedFileStream.FlushAsync();
             }
@@ -108,10 +109,10 @@ namespace ZombustersWindows.Subsystem_Managers
                     isolatedStorageFile.Dispose();
                 }
             }
-            return binaryReader;
+            return topScoreListContainer;
         }
 
-        public BinaryWriter GetBinaryWriter(string filename)
+        public void SaveScoreListToFile(string filename, TopScoreList[] scoreList)
         {
             BinaryWriter binaryWriter = null;
 
@@ -122,6 +123,9 @@ namespace ZombustersWindows.Subsystem_Managers
                 using (isolatedFileStream = isolatedStorageFile.OpenFile(filename, FileMode.OpenOrCreate, FileAccess.ReadWrite))
                 {
                     binaryWriter = new BinaryWriter(isolatedFileStream);
+                    binaryWriter.Write(scoreList.Length);
+                    foreach (TopScoreList list in scoreList)
+                        list.write(binaryWriter);
                 }
                 isolatedFileStream.FlushAsync();
             }
@@ -136,7 +140,6 @@ namespace ZombustersWindows.Subsystem_Managers
                     isolatedStorageFile.Dispose();
                 }
             }
-            return binaryWriter;
         }
 
         Object CreateObjectBy(Type clazz)
