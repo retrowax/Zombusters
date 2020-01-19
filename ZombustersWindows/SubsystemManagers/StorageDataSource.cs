@@ -1,17 +1,6 @@
 using System;
-using System.Collections.Generic;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Audio;
-using Microsoft.Xna.Framework.Content;
-using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
-using GameStateManagement;
-using System.Xml;
 using System.IO;
-using System.Diagnostics;
 using System.Xml.Serialization;
-using System.Globalization;
-using ZombustersWindows;
 using System.IO.IsolatedStorage;
 using Bugsnag.Clients;
 
