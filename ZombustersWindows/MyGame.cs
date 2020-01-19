@@ -13,6 +13,9 @@ using Bugsnag.Clients;
 namespace ZombustersWindows
 {
     public class MyGame : Game {
+        public int VIRTUAL_RESOLUTION_WIDTH = 1280;
+        public int VIRTUAL_RESOLUTION_HEIGHT = 720;
+
         public GraphicsDeviceManager graphics;
         public ScreenManager screenManager;
         public GamePlayScreen playScreen;
@@ -56,8 +59,10 @@ namespace ZombustersWindows
             };
             Resolution.Init(ref graphics);
             Content.RootDirectory = "Content";
-            Resolution.SetVirtualResolution(1280, 720);
-            Resolution.SetResolution(1680, 1050, false);
+
+            Resolution.SetVirtualResolution(VIRTUAL_RESOLUTION_WIDTH, VIRTUAL_RESOLUTION_HEIGHT);
+            Resolution.SetResolution(VIRTUAL_RESOLUTION_WIDTH, VIRTUAL_RESOLUTION_HEIGHT, graphics.IsFullScreen);
+
             options = new OptionsState();
             screenManager = new ScreenManager(this);
             Components.Add(screenManager);

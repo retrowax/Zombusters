@@ -119,11 +119,18 @@ namespace ZombustersWindows
             }
             else if (menu.Selection == 3)
             {
+                Resolution.SetVirtualResolution(game.VIRTUAL_RESOLUTION_WIDTH, game.VIRTUAL_RESOLUTION_HEIGHT);
                 if (state.FullScreenMode) {
+                    Resolution.SetResolution(game.VIRTUAL_RESOLUTION_WIDTH, game.VIRTUAL_RESOLUTION_HEIGHT, false);
                     state.FullScreenMode = false;
+                    game.graphics.IsFullScreen = true;
                 } else
                 {
+                    int screenWidth = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width;
+                    int screenHeight = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height;
+                    Resolution.SetResolution(screenWidth, screenHeight, true);
                     state.FullScreenMode = true;
+                    game.graphics.IsFullScreen = false;
                 }
                 this.game.graphics.ToggleFullScreen();
             }
