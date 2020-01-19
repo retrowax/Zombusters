@@ -20,7 +20,8 @@
     <SccProvider>SAK</SccProvider>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <TargetFrameworkProfile />
-    <NuGetPackageImportStamp>672a3668</NuGetPackageImportStamp>
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
     <IsWebBootstrapper>false</IsWebBootstrapper>
     <PublishUrl>publish\</PublishUrl>
     <Install>true</Install>
@@ -189,10 +190,19 @@
     <Reference Include="Bugsnag, Version=1.4.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Bugsnag.1.4.0.0\lib\Net45\Bugsnag.dll</HintPath>
     </Reference>
+    <Reference Include="GameAnalytics.Mono, Version=1.0.7296.1820, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\GameAnalytics.Mono.SDK.3.0.6\lib\net45\GameAnalytics.Mono.dll</HintPath>
+    </Reference>
     <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.6.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
+    <Reference Include="NLog, Version=4.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
+      <HintPath>..\packages\NLog.4.3.8\lib\net45\NLog.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Data.SQLite, Version=1.0.102.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139, processorArchitecture=MSIL">
+      <HintPath>..\packages\GameAnalytics.Mono.SDK.3.0.6\lib\net45\System.Data.SQLite.dll</HintPath>
+    </Reference>
     <Reference Include="System.IO, Version=2.6.8.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Bcl.1.1.8\lib\net40\System.IO.dll</HintPath>
       <Private>True</Private>
@@ -1249,6 +1259,7 @@
       <ErrorText>This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
     </PropertyGroup>
     <Error Condition="!Exists('..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets'))" />
+    <Error Condition="!Exists('..\packages\GameAnalytics.Mono.SDK.3.0.6\build\net45\GameAnalytics.Mono.SDK.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\GameAnalytics.Mono.SDK.3.0.6\build\net45\GameAnalytics.Mono.SDK.targets'))" />
   </Target>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
        Other similar extension points exist, see Microsoft.Common.targets.
@@ -1258,4 +1269,5 @@
   </Target>
   -->
   <Import Project="..\packages\MonoGame.Content.Builder.3.6.0.1\build\MonoGame.Content.Builder.targets" Condition="Exists('..\packages\MonoGame.Content.Builder.3.6.0.1\build\MonoGame.Content.Builder.targets')" />
+  <Import Project="..\packages\GameAnalytics.Mono.SDK.3.0.6\build\net45\GameAnalytics.Mono.SDK.targets" Condition="Exists('..\packages\GameAnalytics.Mono.SDK.3.0.6\build\net45\GameAnalytics.Mono.SDK.targets')" />
 </Project>
