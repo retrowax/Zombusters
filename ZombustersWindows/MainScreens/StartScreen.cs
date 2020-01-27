@@ -72,6 +72,7 @@ namespace ZombustersWindows
         void ConfirmExitMessageBoxAccepted(object sender, PlayerIndexEventArgs e) {
             game.InitializeMain(playerOne);
             this.ScreenManager.AddScreen(new MenuScreen());
+            ExitScreen();
         }
 
         public override void Draw(GameTime gameTime) {
