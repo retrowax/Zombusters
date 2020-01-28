@@ -199,11 +199,10 @@ namespace ZombustersWindows
         /// </summary>
         public void QuitToMenu()
         {
-            ExitScreen();
-            bPaused = false;
-            game.QuitGame();
-            GamePlayStatus = GameplayState.StartLevel;
-            GamePlayStatus = GameplayState.NotPlaying;
+            GameScreen[] screenList = ScreenManager.GetScreens();
+            screenList[screenList.Length - 1].ExitScreen();
+            screenList[screenList.Length - 2].ExitScreen();
+            screenList[screenList.Length - 3].ExitScreen();
         }
 
         public override void Initialize()

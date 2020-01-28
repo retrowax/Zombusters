@@ -201,11 +201,16 @@ namespace ZombustersWindows
                     currentPlayers[i].Player.Controller = PlayerIndex.Three;
                     currentPlayers[i].Activate(player3);
                     currentPlayers[i].color = Color.Green;
-                } else {
+                } else if (i == 3){
                     currentPlayers[i].Player = player4;
                     currentPlayers[i].Player.Controller = PlayerIndex.Four;
                     currentPlayers[i].Activate(player4);
                     currentPlayers[i].color = Color.Yellow;
+                } else
+                {
+                    currentPlayers[i].Activate(player1);
+                    currentPlayers[i].Player.Controller = PlayerIndex.One;
+                    currentPlayers[i].color = Color.Blue;
                 }
                 currentPlayers[i].Player.IsRemote = true;
                 if (PlayersActive.Contains(i)) {
@@ -224,11 +229,7 @@ namespace ZombustersWindows
         }
 
         public void BeginSelectPlayerScreen(Boolean isMatchmaking) {
-            int i;
             Reset();
-            for (i = 0; i < maxGamers; i++) {
-                currentPlayers[i].Player = player4;
-            }
             bStateReady = true;
             currentGameState = GameState.InLobby;
             screenManager.AddScreen(new SelectPlayerScreen(isMatchmaking));
@@ -240,6 +241,10 @@ namespace ZombustersWindows
             currentPlayers[1].Reset(Color.Red);
             currentPlayers[2].Reset(Color.Green);
             currentPlayers[3].Reset(Color.Yellow);
+            currentPlayers[0].Player = player1;
+            currentPlayers[1].Player = player2;
+            currentPlayers[2].Player = player3;
+            currentPlayers[3].Player = player4;
         }
 
         public void Restart() {
@@ -310,11 +315,8 @@ namespace ZombustersWindows
 
         public void QuitGame() {
             playScreen = null;
-            //bloom.Visible = true;
             Reset();
             bPaused = EndPause();
-            //GamePlayStatus = GameplayState.StartLevel;
-            screenManager.AddScreen(new MenuScreen());
         }
 
         #region Setting Options

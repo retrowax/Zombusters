@@ -227,13 +227,13 @@ namespace ZombustersWindows
 
         public override void HandleInput(InputState input)
         {
-            if (game.currentPlayers[0].Player.Controller == PlayerIndex.One || GamePad.GetState(PlayerIndex.One).IsConnected)
+            if (game.currentPlayers[0].Player.Controller == PlayerIndex.One && GamePad.GetState(PlayerIndex.One).IsConnected)
                 playerOneInput = ProcessPlayer(game.currentPlayers[0], input);
-            if (game.currentPlayers[1].Player.Controller == PlayerIndex.Two || GamePad.GetState(PlayerIndex.Two).IsConnected)
+            if (game.currentPlayers[1].Player.Controller == PlayerIndex.Two && GamePad.GetState(PlayerIndex.Two).IsConnected)
                 playerTwoInput = ProcessPlayer(game.currentPlayers[1], input);
-            if (game.currentPlayers[2].Player.Controller == PlayerIndex.Three || GamePad.GetState(PlayerIndex.Three).IsConnected)
+            if (game.currentPlayers[2].Player.Controller == PlayerIndex.Three && GamePad.GetState(PlayerIndex.Three).IsConnected)
                 playerThreeInput = ProcessPlayer(game.currentPlayers[2], input);
-            if (game.currentPlayers[3].Player.Controller == PlayerIndex.Four || GamePad.GetState(PlayerIndex.Four).IsConnected)
+            if (game.currentPlayers[3].Player.Controller == PlayerIndex.Four && GamePad.GetState(PlayerIndex.Four).IsConnected)
                 playerFourInput = ProcessPlayer(game.currentPlayers[3], input);
 
             base.HandleInput(input);
@@ -721,8 +721,7 @@ namespace ZombustersWindows
         /// </summary>
         void ConfirmExitMessageBoxAccepted(object sender, PlayerIndexEventArgs e)
         {
-            //REVISARRR debe volver donde toque!
-            ScreenManager.AddScreen(new MenuScreen());
+            ExitScreen();
         }
 
         // Leave match

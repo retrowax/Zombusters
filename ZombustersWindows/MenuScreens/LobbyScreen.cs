@@ -179,7 +179,7 @@ namespace ZombustersWindows
         {
             ((Game1)this.ScreenManager.Game).networkSessionManager.CloseSession();
             // If they hit B or Back, go back to Menu Screen
-            ScreenManager.AddScreen(new MatchmakingMenuScreen());
+            ExitScreen();
         }
 
         // Setup Menu
