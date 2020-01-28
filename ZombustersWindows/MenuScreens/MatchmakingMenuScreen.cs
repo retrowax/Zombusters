@@ -98,7 +98,7 @@ namespace ZombustersWindows
         void menu_MenuCanceled(Object sender, MenuSelection selection)
         {
             // If they hit B or Back, go back to Menu Screen
-            ScreenManager.AddScreen(new MenuScreen());
+            ExitScreen();
         }
 
 

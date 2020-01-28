@@ -64,9 +64,7 @@ namespace ZombustersWindows
         }
 
         void OnMenuCanceled(Object sender, MenuSelection selection) {
-            // If they hit B or Back, go back to Start Screen
-            //ExitScreen();
-            //ScreenManager.AddScreen(new StartScreen((Game1)ScreenManager.Game));
+
         }
 
         void OnMenuConfigSelected(Object sender, MenuSelection selection) {

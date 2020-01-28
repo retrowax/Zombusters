@@ -86,8 +86,7 @@ namespace ZombustersWindows
 
         void menu_MenuCanceled(Object sender, MenuSelection selection)
         {
-            // If they hit B or Back, go back to Menu Screen
-            ScreenManager.AddScreen(new ExtrasMenuScreen());
+            ExitScreen();
         }
         
         public override void LoadContent()
@@ -128,7 +127,7 @@ namespace ZombustersWindows
                         (gesture.Position.Y >= 614 && gesture.Position.Y <= 650))
                     {
                         // If they hit B or Back, go back to Menu Screen
-                        ScreenManager.AddScreen(new ExtrasMenuScreen());
+                        ExitScreen();
                     }
                 }
             }
