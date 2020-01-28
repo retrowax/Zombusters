@@ -203,7 +203,6 @@ namespace ZombustersWindows
             screenList[screenList.Length - 1].ExitScreen();
             screenList[screenList.Length - 2].ExitScreen();
             screenList[screenList.Length - 3].ExitScreen();
-            //game.QuitGame();
         }
 
         public override void Initialize()
