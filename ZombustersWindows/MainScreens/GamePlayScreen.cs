@@ -9,6 +9,7 @@ using ZombustersWindows.Subsystem_Managers;
 using Microsoft.Xna.Framework.Input.Touch;
 using ZombustersWindows.MainScreens;
 using ZombustersWindows.Localization;
+using System.Xml.Linq;
 
 namespace ZombustersWindows
 {
@@ -224,7 +225,6 @@ namespace ZombustersWindows
             GamePlayStatus = GameplayState.StartLevel;
 
             uiBounds = GetTitleSafeArea();
-            //game.bloom.Visible = false;
 
             Level = new Level(currentLevel);
 
@@ -350,7 +350,6 @@ namespace ZombustersWindows
                 Zombies[i].behaviors.AddBehavior(new Pursuit(Arrive.Deceleration.fast, 50.0f));
                 Zombies[i].behaviors.AddBehavior(new ObstacleAvoidance(ref Level.gameWorld, 15.0f));
                 Zombies[i].playerChased = numplayersIngame[random.Next(numplayersIngame.Count)];
-                //Level.gameWorld.Zombies.Add(((Game1)this.ScreenManager.Game).Zombies[i]);
                 ActiveZombies++;
             }
 
@@ -389,620 +388,68 @@ namespace ZombustersWindows
 #if DEBUG
             PositionReference = game.Content.Load<Texture2D>(@"InGame/position_reference_temporal");
 #endif
-            //MainChar Animation
-            //var definition = doc.Root.Element("JadeIdleTrunkDef");
-            //character = game.Content.Load<Texture2D>(@"InGame/Playership");
-            //character = game.Content.Load<Texture2D>(@"InGame/nikkigriffin_iddle");
-            //characterorigin = new Vector2(character.Width / 2, character.Height / 2);
 
-            // ------ JADE ------  //
-            DiedTexture = new List<Texture2D>();
-            DiedTexture.Add(game.Content.Load<Texture2D>(@"InGame/Jade/girl_died"));
+            DiedTexture = new List<Texture2D>
+            {
+                game.Content.Load<Texture2D>(@"InGame/Jade/girl_died"),
+                game.Content.Load<Texture2D>(@"InGame/Egon/egon_died"),
+                game.Content.Load<Texture2D>(@"InGame/Ray/ray_died"),
+                game.Content.Load<Texture2D>(@"InGame/Peter/peter_died")
+            };
 
-            // Idle Trunk Animation
-            var definition = doc.Root.Element("JadeIdleTrunkDef");
-            IdleLegsTexture = new List<Texture2D>();
-            IdleLegsTexture.Add(game.Content.Load<Texture2D>(@"InGame/Jade/girl_legs_idle"));
-            IdleTrunkTexture = new List<Texture2D>();
-            IdleTrunkTexture.Add(game.Content.Load<Texture2D>(@"InGame/Jade/girl_anim_idle"));
-            IdleTrunkOrigin = new List<Vector2>();
-            IdleTrunkOrigin.Add(new Vector2(IdleTrunkTexture[0].Width / 2, IdleTrunkTexture[0].Height / 2));
-            Point frameSize = new Point();
-            frameSize.X = int.Parse(definition.Attribute("FrameWidth").Value, NumberStyles.Integer);
-            frameSize.Y = int.Parse(definition.Attribute("FrameHeight").Value, NumberStyles.Integer);
-            Point sheetSize = new Point();
-            sheetSize.X = int.Parse(definition.Attribute("SheetColumns").Value, NumberStyles.Integer);
-            sheetSize.Y = int.Parse(definition.Attribute("SheetRows").Value, NumberStyles.Integer);
-            TimeSpan frameInterval = TimeSpan.FromSeconds(1.0f / int.Parse(definition.Attribute("Speed").Value, NumberStyles.Integer));
-            IdleTrunkAnimation = new List<Animation>();
-            IdleTrunkAnimation.Add(new Animation(IdleTrunkTexture[0], frameSize, sheetSize, frameInterval)); // Define a new Animation instance
+            JadeIdleTrunkAnimationInit(doc);
+            JadeRunEastAnimationInit(doc);
+            JadePistolShotEastAnimationInit(doc);
+            JadePistolShotNorthEastAnimationInit(doc);
+            JadePistolShotSouthEastAnimationInit(doc);
+            JadePistolShotSouthAnimationInit(doc);
+            JadePistolShotNorthAnimationInit(doc);
+            JadeShotgunShotEastAnimationInit(doc);
+            JadeShotgunShotNorthEastAnimationInit(doc);
+            JadeShotgunShotSouthEastAnimationInit(doc);
+            JadeShotgunShotSouthAnimationInit(doc);
+            JadeShotgunShotNorthAnimationInit(doc);
 
-            // Run Animation (East)
-            definition = doc.Root.Element("JadeRunEDef");
-            RunEastTexture = new List<Texture2D>();
-            RunEastTexture.Add(game.Content.Load<Texture2D>(@"InGame/Jade/girl_anim_run_E"));
-            RunEastOrigin = new List<Vector2>();
-            RunEastOrigin.Add(new Vector2(RunEastTexture[0].Width / 2, RunEastTexture[0].Height / 2));
-            frameSize.X = int.Parse(definition.Attribute("FrameWidth").Value, NumberStyles.Integer);
-            frameSize.Y = int.Parse(definition.Attribute("FrameHeight").Value, NumberStyles.Integer);
-            sheetSize.X = int.Parse(definition.Attribute("SheetColumns").Value, NumberStyles.Integer);
-            sheetSize.Y = int.Parse(definition.Attribute("SheetRows").Value, NumberStyles.Integer);
-            frameInterval = TimeSpan.FromSeconds(1.0f / int.Parse(definition.Attribute("Speed").Value, NumberStyles.Integer));
-            RunEastAnimation = new List<Animation>();
-            RunEastAnimation.Add(new Animation(RunEastTexture[0], frameSize, sheetSize, frameInterval)); // Define a new Animation instance
+            EgonIdleTrunkAnimationInit(doc);
+            EgonRunEastAnimationInit(doc);
+            EgonPistolShotEastAnimationInit(doc);
+            EgonPistolShotNorthEastAnimationInit(doc);
+            EgonPistolShotSouthEastAnimationInit(doc);
+            EgonPistolShotSouthAnimationInit(doc);
+            EgonPistolShotNorthAnimationInit(doc);
+            EgonShotgunShotEastAnimationInit(doc);
+            EgonShotgunShotNorthEastAnimationInit(doc);
+            EgonShotgunShotSouthEastAnimationInit(doc);
+            EgonShotgunShotSouthAnimationInit(doc);
+            EgonShotgunShotNorthAnimationInit(doc);
 
-            // Pistol Shot Animation (East)
-            definition = doc.Root.Element("JadePistolShotDef");
-            PistolShotEastTexture = new List<Texture2D>();
-            PistolShotEastTexture.Add(game.Content.Load<Texture2D>(@"InGame/Jade/girl_anim_shot_E"));
-            PistolShotEastOrigin = new List<Vector2>();
-            PistolShotEastOrigin.Add(new Vector2(PistolShotEastTexture[0].Width / 2, PistolShotEastTexture[0].Height / 2));
-            frameSize.X = int.Parse(definition.Attribute("FrameWidth").Value, NumberStyles.Integer);
-            frameSize.Y = int.Parse(definition.Attribute("FrameHeight").Value, NumberStyles.Integer);
-            sheetSize.X = int.Parse(definition.Attribute("SheetColumns").Value, NumberStyles.Integer);
-            sheetSize.Y = int.Parse(definition.Attribute("SheetRows").Value, NumberStyles.Integer);
-            frameInterval = TimeSpan.FromSeconds(1.0f / int.Parse(definition.Attribute("Speed").Value, NumberStyles.Integer));
-            PistolShotEastAnimation = new List<Animation>();
-            PistolShotEastAnimation.Add(new Animation(PistolShotEastTexture[0], frameSize, sheetSize, frameInterval)); // Define a new Animation instance
+            RayIdleTrunkAnimationInit(doc);
+            RayRunEastAnimationInit(doc);
+            RayPistolShotEastAnimationInit(doc);
+            RayPistolShotNorthEastAnimationInit(doc);
+            RayPistolShotSouthEastAnimationInit(doc);
+            RayPistolShotSouthAnimationInit(doc);
+            RayPistolShotNorthAnimationInit(doc);
+            RayShotgunShotEastAnimationInit(doc);
+            RayShotgunShotNorthEastAnimationInit(doc);
+            RayShotgunShotSouthEastAnimationInit(doc);
+            RayShotgunShotSouthAnimationInit(doc);
+            RayShotgunShotNorthAnimationInit(doc);
 
-            // Pistol Shot Animation (North East)
-            definition = doc.Root.Element("JadePistolShotNEDef");
-            PistolShotNETexture = new List<Texture2D>();
-            PistolShotNETexture.Add(game.Content.Load<Texture2D>(@"InGame/Jade/girl_anim_shot_NE"));
-            PistolShotNEOrigin = new List<Vector2>();
-            PistolShotNEOrigin.Add(new Vector2(PistolShotNETexture[0].Width / 2, PistolShotNETexture[0].Height / 2));
-            frameSize.X = int.Parse(definition.Attribute("FrameWidth").Value, NumberStyles.Integer);
-            frameSize.Y = int.Parse(definition.Attribute("FrameHeight").Value, NumberStyles.Integer);
-            sheetSize.X = int.Parse(definition.Attribute("SheetColumns").Value, NumberStyles.Integer);
-            sheetSize.Y = int.Parse(definition.Attribute("SheetRows").Value, NumberStyles.Integer);
-            frameInterval = TimeSpan.FromSeconds(1.0f / int.Parse(definition.Attribute("Speed").Value, NumberStyles.Integer));
-            PistolShotNEAnimation = new List<Animation>();
-            PistolShotNEAnimation.Add(new Animation(PistolShotNETexture[0], frameSize, sheetSize, frameInterval)); // Define a new Animation instance
-
-            // Pistol Shot Animation (South East)
-            definition = doc.Root.Element("JadePistolShotSEDef");
-            PistolShotSETexture = new List<Texture2D>();
-            PistolShotSETexture.Add(game.Content.Load<Texture2D>(@"InGame/Jade/girl_anim_shot_SE"));
-            PistolShotSEOrigin = new List<Vector2>();
-            PistolShotSEOrigin.Add(new Vector2(PistolShotSETexture[0].Width / 2, PistolShotSETexture[0].Height / 2));
-            frameSize.X = int.Parse(definition.Attribute("FrameWidth").Value, NumberStyles.Integer);
-            frameSize.Y = int.Parse(definition.Attribute("FrameHeight").Value, NumberStyles.Integer);
-            sheetSize.X = int.Parse(definition.Attribute("SheetColumns").Value, NumberStyles.Integer);
-            sheetSize.Y = int.Parse(definition.Attribute("SheetRows").Value, NumberStyles.Integer);
-            frameInterval = TimeSpan.FromSeconds(1.0f / int.Parse(definition.Attribute("Speed").Value, NumberStyles.Integer));
-            PistolShotSEAnimation = new List<Animation>();
-            PistolShotSEAnimation.Add(new Animation(PistolShotSETexture[0], frameSize, sheetSize, frameInterval)); // Define a new Animation instance
-
-            // Pistol Shot Animation (South)
-            definition = doc.Root.Element("JadePistolShotSouthDef");
-            PistolShotSouthTexture = new List<Texture2D>();
-            PistolShotSouthTexture.Add(game.Content.Load<Texture2D>(@"InGame/Jade/girl_anim_shot_S"));
-            PistolShotSouthOrigin = new List<Vector2>();
-            PistolShotSouthOrigin.Add(new Vector2(PistolShotSouthTexture[0].Width / 2, PistolShotSouthTexture[0].Height / 2));
-            frameSize.X = int.Parse(definition.Attribute("FrameWidth").Value, NumberStyles.Integer);
-            frameSize.Y = int.Parse(definition.Attribute("FrameHeight").Value, NumberStyles.Integer);
-            sheetSize.X = int.Parse(definition.Attribute("SheetColumns").Value, NumberStyles.Integer);
-            sheetSize.Y = int.Parse(definition.Attribute("SheetRows").Value, NumberStyles.Integer);
-            frameInterval = TimeSpan.FromSeconds(1.0f / int.Parse(definition.Attribute("Speed").Value, NumberStyles.Integer));
-            PistolShotSouthAnimation = new List<Animation>();
-            PistolShotSouthAnimation.Add(new Animation(PistolShotSouthTexture[0], frameSize, sheetSize, frameInterval)); // Define a new Animation instance
-
-            // Pistol Shot Animation (North)
-            definition = doc.Root.Element("JadePistolShotNorthDef");
-            PistolShotNorthTexture = new List<Texture2D>();
-            PistolShotNorthTexture.Add(game.Content.Load<Texture2D>(@"InGame/Jade/girl_anim_shot_N"));
-            PistolShotNorthOrigin = new List<Vector2>();
-            PistolShotNorthOrigin.Add(new Vector2(PistolShotNorthTexture[0].Width / 2, PistolShotNorthTexture[0].Height / 2));
-            frameSize.X = int.Parse(definition.Attribute("FrameWidth").Value, NumberStyles.Integer);
-            frameSize.Y = int.Parse(definition.Attribute("FrameHeight").Value, NumberStyles.Integer);
-            sheetSize.X = int.Parse(definition.Attribute("SheetColumns").Value, NumberStyles.Integer);
-            sheetSize.Y = int.Parse(definition.Attribute("SheetRows").Value, NumberStyles.Integer);
-            frameInterval = TimeSpan.FromSeconds(1.0f / int.Parse(definition.Attribute("Speed").Value, NumberStyles.Integer));
-            PistolShotNorthAnimation = new List<Animation>();
-            PistolShotNorthAnimation.Add(new Animation(PistolShotNorthTexture[0], frameSize, sheetSize, frameInterval)); // Define a new Animation instance
-
-            // ShotGun Shot Animation (East)
-            definition = doc.Root.Element("JadeShotgunShotDef");
-            ShotgunEastTexture = new List<Texture2D>();
-            ShotgunEastTexture.Add(game.Content.Load<Texture2D>(@"InGame/Jade/girl_anim_shotgun"));
-            ShotgunShotEastOrigin = new List<Vector2>();
-            ShotgunShotEastOrigin.Add(new Vector2(ShotgunEastTexture[0].Width / 2, PistolShotEastTexture[0].Height / 2));
-            frameSize.X = int.Parse(definition.Attribute("FrameWidth").Value, NumberStyles.Integer);
-            frameSize.Y = int.Parse(definition.Attribute("FrameHeight").Value, NumberStyles.Integer);
-            sheetSize.X = int.Parse(definition.Attribute("SheetColumns").Value, NumberStyles.Integer);
-            sheetSize.Y = int.Parse(definition.Attribute("SheetRows").Value, NumberStyles.Integer);
-            frameInterval = TimeSpan.FromSeconds(1.0f / int.Parse(definition.Attribute("Speed").Value, NumberStyles.Integer));
-            ShotgunShotEastAnimation = new List<Animation>();
-            ShotgunShotEastAnimation.Add(new Animation(ShotgunEastTexture[0], frameSize, sheetSize, frameInterval)); // Define a new Animation instance
-
-            // ShotGun Shot Animation (North East)
-            definition = doc.Root.Element("JadeShotgunShotNEDef");
-            ShotgunNETexture = new List<Texture2D>();
-            ShotgunNETexture.Add(game.Content.Load<Texture2D>(@"InGame/Jade/girl_anim_shotgun_NE"));
-            ShotgunNEOrigin = new List<Vector2>();
-            ShotgunNEOrigin.Add(new Vector2(ShotgunNETexture[0].Width / 2, ShotgunNETexture[0].Height / 2));
-            frameSize.X = int.Parse(definition.Attribute("FrameWidth").Value, NumberStyles.Integer);
-            frameSize.Y = int.Parse(definition.Attribute("FrameHeight").Value, NumberStyles.Integer);
-            sheetSize.X = int.Parse(definition.Attribute("SheetColumns").Value, NumberStyles.Integer);
-            sheetSize.Y = int.Parse(definition.Attribute("SheetRows").Value, NumberStyles.Integer);
-            frameInterval = TimeSpan.FromSeconds(1.0f / int.Parse(definition.Attribute("Speed").Value, NumberStyles.Integer));
-            ShotgunNEAnimation = new List<Animation>();
-            ShotgunNEAnimation.Add(new Animation(ShotgunNETexture[0], frameSize, sheetSize, frameInterval)); // Define a new Animation instance
-
-            // ShotGun Shot Animation (South East)
-            definition = doc.Root.Element("JadeShotgunShotSEDef");
-            ShotgunSETexture = new List<Texture2D>();
-            ShotgunSETexture.Add(game.Content.Load<Texture2D>(@"InGame/Jade/girl_anim_shotgun_SE"));
-            ShotgunSEOrigin = new List<Vector2>();
-            ShotgunSEOrigin.Add(new Vector2(ShotgunSETexture[0].Width / 2, ShotgunSETexture[0].Height / 2));
-            frameSize.X = int.Parse(definition.Attribute("FrameWidth").Value, NumberStyles.Integer);
-            frameSize.Y = int.Parse(definition.Attribute("FrameHeight").Value, NumberStyles.Integer);
-            sheetSize.X = int.Parse(definition.Attribute("SheetColumns").Value, NumberStyles.Integer);
-            sheetSize.Y = int.Parse(definition.Attribute("SheetRows").Value, NumberStyles.Integer);
-            frameInterval = TimeSpan.FromSeconds(1.0f / int.Parse(definition.Attribute("Speed").Value, NumberStyles.Integer));
-            ShotgunSEAnimation = new List<Animation>();
-            ShotgunSEAnimation.Add(new Animation(ShotgunSETexture[0], frameSize, sheetSize, frameInterval)); // Define a new Animation instance
-
-            // ShotGun Shot Animation (North)
-            definition = doc.Root.Element("JadeShotgunShotNorthDef");
-            ShotgunNorthTexture = new List<Texture2D>();
-            ShotgunNorthTexture.Add(game.Content.Load<Texture2D>(@"InGame/Jade/girl_anim_shotgun_N"));
-            ShotgunNorthOrigin = new List<Vector2>();
-            ShotgunNorthOrigin.Add(new Vector2(ShotgunNorthTexture[0].Width / 2, ShotgunNorthTexture[0].Height / 2));
-            frameSize.X = int.Parse(definition.Attribute("FrameWidth").Value, NumberStyles.Integer);
-            frameSize.Y = int.Parse(definition.Attribute("FrameHeight").Value, NumberStyles.Integer);
-            sheetSize.X = int.Parse(definition.Attribute("SheetColumns").Value, NumberStyles.Integer);
-            sheetSize.Y = int.Parse(definition.Attribute("SheetRows").Value, NumberStyles.Integer);
-            frameInterval = TimeSpan.FromSeconds(1.0f / int.Parse(definition.Attribute("Speed").Value, NumberStyles.Integer));
-            ShotgunNorthAnimation = new List<Animation>();
-            ShotgunNorthAnimation.Add(new Animation(ShotgunNorthTexture[0], frameSize, sheetSize, frameInterval)); // Define a new Animation instance
-
-            // ShotGun Shot Animation (South)
-            definition = doc.Root.Element("JadeShotgunShotSouthDef");
-            ShotgunSouthTexture = new List<Texture2D>();
-            ShotgunSouthTexture.Add(game.Content.Load<Texture2D>(@"InGame/Jade/girl_anim_shotgun_S"));
-            ShotgunSouthOrigin = new List<Vector2>();
-            ShotgunSouthOrigin.Add(new Vector2(ShotgunSouthTexture[0].Width / 2, ShotgunSouthTexture[0].Height / 2));
-            frameSize.X = int.Parse(definition.Attribute("FrameWidth").Value, NumberStyles.Integer);
-            frameSize.Y = int.Parse(definition.Attribute("FrameHeight").Value, NumberStyles.Integer);
-            sheetSize.X = int.Parse(definition.Attribute("SheetColumns").Value, NumberStyles.Integer);
-            sheetSize.Y = int.Parse(definition.Attribute("SheetRows").Value, NumberStyles.Integer);
-            frameInterval = TimeSpan.FromSeconds(1.0f / int.Parse(definition.Attribute("Speed").Value, NumberStyles.Integer));
-            ShotgunSouthAnimation = new List<Animation>();
-            ShotgunSouthAnimation.Add(new Animation(ShotgunSouthTexture[0], frameSize, sheetSize, frameInterval)); // Define a new Animation instance
-            // ------ JADE ------  //
-
-
-            // ------ EGON ------  //
-            DiedTexture.Add(game.Content.Load<Texture2D>(@"InGame/Egon/egon_died"));
-
-            // Idle Trunk Animation
-            definition = doc.Root.Element("EgonIdleTrunkDef");
-            IdleLegsTexture.Add(game.Content.Load<Texture2D>(@"InGame/Egon/egon_legs_idle"));
-            IdleTrunkTexture.Add(game.Content.Load<Texture2D>(@"InGame/Egon/egon_idle"));
-            IdleTrunkOrigin.Add(new Vector2(IdleTrunkTexture[1].Width / 2, IdleTrunkTexture[1].Height / 2));
-            frameSize.X = int.Parse(definition.Attribute("FrameWidth").Value, NumberStyles.Integer);
-            frameSize.Y = int.Parse(definition.Attribute("FrameHeight").Value, NumberStyles.Integer);
-            sheetSize.X = int.Parse(definition.Attribute("SheetColumns").Value, NumberStyles.Integer);
-            sheetSize.Y = int.Parse(definition.Attribute("SheetRows").Value, NumberStyles.Integer);
-            frameInterval = TimeSpan.FromSeconds(1.0f / int.Parse(definition.Attribute("Speed").Value, NumberStyles.Integer));
-            IdleTrunkAnimation.Add(new Animation(IdleTrunkTexture[1], frameSize, sheetSize, frameInterval)); // Define a new Animation instance
-
-            // Run Animation (East)
-            definition = doc.Root.Element("EgonRunEDef");
-            RunEastTexture.Add(game.Content.Load<Texture2D>(@"InGame/Egon/egon_run_E"));
-            RunEastOrigin.Add(new Vector2(RunEastTexture[1].Width / 2, RunEastTexture[1].Height / 2));
-            frameSize.X = int.Parse(definition.Attribute("FrameWidth").Value, NumberStyles.Integer);
-            frameSize.Y = int.Parse(definition.Attribute("FrameHeight").Value, NumberStyles.Integer);
-            sheetSize.X = int.Parse(definition.Attribute("SheetColumns").Value, NumberStyles.Integer);
-            sheetSize.Y = int.Parse(definition.Attribute("SheetRows").Value, NumberStyles.Integer);
-            frameInterval = TimeSpan.FromSeconds(1.0f / int.Parse(definition.Attribute("Speed").Value, NumberStyles.Integer));
-            RunEastAnimation.Add(new Animation(RunEastTexture[1], frameSize, sheetSize, frameInterval)); // Define a new Animation instance
-
-            // Pistol Shot Animation (East)
-            definition = doc.Root.Element("EgonPistolEDef");
-            PistolShotEastTexture.Add(game.Content.Load<Texture2D>(@"InGame/Egon/egon_pistol_E"));
-            PistolShotEastOrigin.Add(new Vector2(PistolShotEastTexture[1].Width / 2, PistolShotEastTexture[1].Height / 2));
-            frameSize.X = int.Parse(definition.Attribute("FrameWidth").Value, NumberStyles.Integer);
-            frameSize.Y = int.Parse(definition.Attribute("FrameHeight").Value, NumberStyles.Integer);
-            sheetSize.X = int.Parse(definition.Attribute("SheetColumns").Value, NumberStyles.Integer);
-            sheetSize.Y = int.Parse(definition.Attribute("SheetRows").Value, NumberStyles.Integer);
-            frameInterval = TimeSpan.FromSeconds(1.0f / int.Parse(definition.Attribute("Speed").Value, NumberStyles.Integer));
-            PistolShotEastAnimation.Add(new Animation(PistolShotEastTexture[1], frameSize, sheetSize, frameInterval)); // Define a new Animation instance
-
-            // Pistol Shot Animation (North East)
-            definition = doc.Root.Element("EgonPistolNEDef");
-            PistolShotNETexture.Add(game.Content.Load<Texture2D>(@"InGame/Egon/egon_pistol_NE"));
-            PistolShotNEOrigin.Add(new Vector2(PistolShotNETexture[1].Width / 2, PistolShotNETexture[1].Height / 2));
-            frameSize.X = int.Parse(definition.Attribute("FrameWidth").Value, NumberStyles.Integer);
-            frameSize.Y = int.Parse(definition.Attribute("FrameHeight").Value, NumberStyles.Integer);
-            sheetSize.X = int.Parse(definition.Attribute("SheetColumns").Value, NumberStyles.Integer);
-            sheetSize.Y = int.Parse(definition.Attribute("SheetRows").Value, NumberStyles.Integer);
-            frameInterval = TimeSpan.FromSeconds(1.0f / int.Parse(definition.Attribute("Speed").Value, NumberStyles.Integer));
-            PistolShotNEAnimation.Add(new Animation(PistolShotNETexture[1], frameSize, sheetSize, frameInterval)); // Define a new Animation instance
-
-            // Pistol Shot Animation (South East)
-            definition = doc.Root.Element("EgonPistolSEDef");
-            PistolShotSETexture.Add(game.Content.Load<Texture2D>(@"InGame/Egon/egon_pistol_SE"));
-            PistolShotSEOrigin.Add(new Vector2(PistolShotSETexture[1].Width / 2, PistolShotSETexture[1].Height / 2));
-            frameSize.X = int.Parse(definition.Attribute("FrameWidth").Value, NumberStyles.Integer);
-            frameSize.Y = int.Parse(definition.Attribute("FrameHeight").Value, NumberStyles.Integer);
-            sheetSize.X = int.Parse(definition.Attribute("SheetColumns").Value, NumberStyles.Integer);
-            sheetSize.Y = int.Parse(definition.Attribute("SheetRows").Value, NumberStyles.Integer);
-            frameInterval = TimeSpan.FromSeconds(1.0f / int.Parse(definition.Attribute("Speed").Value, NumberStyles.Integer));
-            PistolShotSEAnimation.Add(new Animation(PistolShotSETexture[1], frameSize, sheetSize, frameInterval)); // Define a new Animation instance
-
-            // Pistol Shot Animation (South)
-            definition = doc.Root.Element("EgonPistolSouthDef");
-            PistolShotSouthTexture.Add(game.Content.Load<Texture2D>(@"InGame/Egon/egon_pistol_S"));
-            PistolShotSouthOrigin.Add(new Vector2(PistolShotSouthTexture[1].Width / 2, PistolShotSouthTexture[1].Height / 2));
-            frameSize.X = int.Parse(definition.Attribute("FrameWidth").Value, NumberStyles.Integer);
-            frameSize.Y = int.Parse(definition.Attribute("FrameHeight").Value, NumberStyles.Integer);
-            sheetSize.X = int.Parse(definition.Attribute("SheetColumns").Value, NumberStyles.Integer);
-            sheetSize.Y = int.Parse(definition.Attribute("SheetRows").Value, NumberStyles.Integer);
-            frameInterval = TimeSpan.FromSeconds(1.0f / int.Parse(definition.Attribute("Speed").Value, NumberStyles.Integer));
-            PistolShotSouthAnimation.Add(new Animation(PistolShotSouthTexture[1], frameSize, sheetSize, frameInterval)); // Define a new Animation instance
-
-            // Pistol Shot Animation (North)
-            definition = doc.Root.Element("EgonPistolNorthDef");
-            PistolShotNorthTexture.Add(game.Content.Load<Texture2D>(@"InGame/Egon/egon_pistol_N"));
-            PistolShotNorthOrigin.Add(new Vector2(PistolShotNorthTexture[1].Width / 2, PistolShotNorthTexture[1].Height / 2));
-            frameSize.X = int.Parse(definition.Attribute("FrameWidth").Value, NumberStyles.Integer);
-            frameSize.Y = int.Parse(definition.Attribute("FrameHeight").Value, NumberStyles.Integer);
-            sheetSize.X = int.Parse(definition.Attribute("SheetColumns").Value, NumberStyles.Integer);
-            sheetSize.Y = int.Parse(definition.Attribute("SheetRows").Value, NumberStyles.Integer);
-            frameInterval = TimeSpan.FromSeconds(1.0f / int.Parse(definition.Attribute("Speed").Value, NumberStyles.Integer));
-            PistolShotNorthAnimation.Add(new Animation(PistolShotNorthTexture[1], frameSize, sheetSize, frameInterval)); // Define a new Animation instance
-
-            // ShotGun Shot Animation (East)
-            definition = doc.Root.Element("EgonShotgunEDef");
-            ShotgunEastTexture.Add(game.Content.Load<Texture2D>(@"InGame/Egon/egon_shotgun_E"));
-            ShotgunShotEastOrigin.Add(new Vector2(ShotgunEastTexture[1].Width / 2, PistolShotEastTexture[1].Height / 2));
-            frameSize.X = int.Parse(definition.Attribute("FrameWidth").Value, NumberStyles.Integer);
-            frameSize.Y = int.Parse(definition.Attribute("FrameHeight").Value, NumberStyles.Integer);
-            sheetSize.X = int.Parse(definition.Attribute("SheetColumns").Value, NumberStyles.Integer);
-            sheetSize.Y = int.Parse(definition.Attribute("SheetRows").Value, NumberStyles.Integer);
-            frameInterval = TimeSpan.FromSeconds(1.0f / int.Parse(definition.Attribute("Speed").Value, NumberStyles.Integer));
-            ShotgunShotEastAnimation.Add(new Animation(ShotgunEastTexture[1], frameSize, sheetSize, frameInterval)); // Define a new Animation instance
-
-            // ShotGun Shot Animation (North East)
-            definition = doc.Root.Element("EgonShotgunNEDef");
-            ShotgunNETexture.Add(game.Content.Load<Texture2D>(@"InGame/Egon/egon_shotgun_NE"));
-            ShotgunNEOrigin.Add(new Vector2(ShotgunNETexture[1].Width / 2, ShotgunNETexture[1].Height / 2));
-            frameSize.X = int.Parse(definition.Attribute("FrameWidth").Value, NumberStyles.Integer);
-            frameSize.Y = int.Parse(definition.Attribute("FrameHeight").Value, NumberStyles.Integer);
-            sheetSize.X = int.Parse(definition.Attribute("SheetColumns").Value, NumberStyles.Integer);
-            sheetSize.Y = int.Parse(definition.Attribute("SheetRows").Value, NumberStyles.Integer);
-            frameInterval = TimeSpan.FromSeconds(1.0f / int.Parse(definition.Attribute("Speed").Value, NumberStyles.Integer));
-            ShotgunNEAnimation.Add(new Animation(ShotgunNETexture[1], frameSize, sheetSize, frameInterval)); // Define a new Animation instance
-
-            // ShotGun Shot Animation (South East)
-            definition = doc.Root.Element("EgonShotgunSEDef");
-            ShotgunSETexture.Add(game.Content.Load<Texture2D>(@"InGame/Egon/egon_shotgun_SE"));
-            ShotgunSEOrigin.Add(new Vector2(ShotgunSETexture[1].Width / 2, ShotgunSETexture[1].Height / 2));
-            frameSize.X = int.Parse(definition.Attribute("FrameWidth").Value, NumberStyles.Integer);
-            frameSize.Y = int.Parse(definition.Attribute("FrameHeight").Value, NumberStyles.Integer);
-            sheetSize.X = int.Parse(definition.Attribute("SheetColumns").Value, NumberStyles.Integer);
-            sheetSize.Y = int.Parse(definition.Attribute("SheetRows").Value, NumberStyles.Integer);
-            frameInterval = TimeSpan.FromSeconds(1.0f / int.Parse(definition.Attribute("Speed").Value, NumberStyles.Integer));
-            ShotgunSEAnimation.Add(new Animation(ShotgunSETexture[1], frameSize, sheetSize, frameInterval)); // Define a new Animation instance
-
-            // ShotGun Shot Animation (North)
-            definition = doc.Root.Element("EgonShotgunNorthDef");
-            ShotgunNorthTexture.Add(game.Content.Load<Texture2D>(@"InGame/Egon/egon_shotgun_N"));
-            ShotgunNorthOrigin.Add(new Vector2(ShotgunNorthTexture[1].Width / 2, ShotgunNorthTexture[1].Height / 2));
-            frameSize.X = int.Parse(definition.Attribute("FrameWidth").Value, NumberStyles.Integer);
-            frameSize.Y = int.Parse(definition.Attribute("FrameHeight").Value, NumberStyles.Integer);
-            sheetSize.X = int.Parse(definition.Attribute("SheetColumns").Value, NumberStyles.Integer);
-            sheetSize.Y = int.Parse(definition.Attribute("SheetRows").Value, NumberStyles.Integer);
-            frameInterval = TimeSpan.FromSeconds(1.0f / int.Parse(definition.Attribute("Speed").Value, NumberStyles.Integer));
-            ShotgunNorthAnimation.Add(new Animation(ShotgunNorthTexture[1], frameSize, sheetSize, frameInterval)); // Define a new Animation instance
-
-            // ShotGun Shot Animation (South)
-            definition = doc.Root.Element("EgonShotgunSouthDef");
-            ShotgunSouthTexture.Add(game.Content.Load<Texture2D>(@"InGame/Egon/egon_shotgun_S"));
-            ShotgunSouthOrigin.Add(new Vector2(ShotgunSouthTexture[1].Width / 2, ShotgunSouthTexture[1].Height / 2));
-            frameSize.X = int.Parse(definition.Attribute("FrameWidth").Value, NumberStyles.Integer);
-            frameSize.Y = int.Parse(definition.Attribute("FrameHeight").Value, NumberStyles.Integer);
-            sheetSize.X = int.Parse(definition.Attribute("SheetColumns").Value, NumberStyles.Integer);
-            sheetSize.Y = int.Parse(definition.Attribute("SheetRows").Value, NumberStyles.Integer);
-            frameInterval = TimeSpan.FromSeconds(1.0f / int.Parse(definition.Attribute("Speed").Value, NumberStyles.Integer));
-            ShotgunSouthAnimation.Add(new Animation(ShotgunSouthTexture[1], frameSize, sheetSize, frameInterval)); // Define a new Animation instance
-            // ------ EGON ------  //
-
-
-
-            // ------ RAY ------  //
-            DiedTexture.Add(game.Content.Load<Texture2D>(@"InGame/Ray/ray_died"));
-
-            // Idle Trunk Animation
-            definition = doc.Root.Element("RayIdleTrunkDef");
-            IdleLegsTexture.Add(game.Content.Load<Texture2D>(@"InGame/Ray/ray_legs_idle"));
-            IdleTrunkTexture.Add(game.Content.Load<Texture2D>(@"InGame/Ray/ray_idle"));
-            IdleTrunkOrigin.Add(new Vector2(IdleTrunkTexture[2].Width / 2, IdleTrunkTexture[2].Height / 2));
-            frameSize.X = int.Parse(definition.Attribute("FrameWidth").Value, NumberStyles.Integer);
-            frameSize.Y = int.Parse(definition.Attribute("FrameHeight").Value, NumberStyles.Integer);
-            sheetSize.X = int.Parse(definition.Attribute("SheetColumns").Value, NumberStyles.Integer);
-            sheetSize.Y = int.Parse(definition.Attribute("SheetRows").Value, NumberStyles.Integer);
-            frameInterval = TimeSpan.FromSeconds(1.0f / int.Parse(definition.Attribute("Speed").Value, NumberStyles.Integer));
-            IdleTrunkAnimation.Add(new Animation(IdleTrunkTexture[2], frameSize, sheetSize, frameInterval)); // Define a new Animation instance
-
-            // Run Animation (East)
-            definition = doc.Root.Element("RayRunEDef");
-            RunEastTexture.Add(game.Content.Load<Texture2D>(@"InGame/Ray/ray_run_E"));
-            RunEastOrigin.Add(new Vector2(RunEastTexture[2].Width / 2, RunEastTexture[2].Height / 2));
-            frameSize.X = int.Parse(definition.Attribute("FrameWidth").Value, NumberStyles.Integer);
-            frameSize.Y = int.Parse(definition.Attribute("FrameHeight").Value, NumberStyles.Integer);
-            sheetSize.X = int.Parse(definition.Attribute("SheetColumns").Value, NumberStyles.Integer);
-            sheetSize.Y = int.Parse(definition.Attribute("SheetRows").Value, NumberStyles.Integer);
-            frameInterval = TimeSpan.FromSeconds(1.0f / int.Parse(definition.Attribute("Speed").Value, NumberStyles.Integer));
-            RunEastAnimation.Add(new Animation(RunEastTexture[2], frameSize, sheetSize, frameInterval)); // Define a new Animation instance
-
-            // Pistol Shot Animation (East)
-            definition = doc.Root.Element("RayPistolEDef");
-            PistolShotEastTexture.Add(game.Content.Load<Texture2D>(@"InGame/Ray/ray_pistol_E"));
-            PistolShotEastOrigin.Add(new Vector2(PistolShotEastTexture[2].Width / 2, PistolShotEastTexture[2].Height / 2));
-            frameSize.X = int.Parse(definition.Attribute("FrameWidth").Value, NumberStyles.Integer);
-            frameSize.Y = int.Parse(definition.Attribute("FrameHeight").Value, NumberStyles.Integer);
-            sheetSize.X = int.Parse(definition.Attribute("SheetColumns").Value, NumberStyles.Integer);
-            sheetSize.Y = int.Parse(definition.Attribute("SheetRows").Value, NumberStyles.Integer);
-            frameInterval = TimeSpan.FromSeconds(1.0f / int.Parse(definition.Attribute("Speed").Value, NumberStyles.Integer));
-            PistolShotEastAnimation.Add(new Animation(PistolShotEastTexture[2], frameSize, sheetSize, frameInterval)); // Define a new Animation instance
-
-            // Pistol Shot Animation (North East)
-            definition = doc.Root.Element("RayPistolNEDef");
-            PistolShotNETexture.Add(game.Content.Load<Texture2D>(@"InGame/Ray/ray_pistol_NE"));
-            PistolShotNEOrigin.Add(new Vector2(PistolShotNETexture[2].Width / 2, PistolShotNETexture[2].Height / 2));
-            frameSize.X = int.Parse(definition.Attribute("FrameWidth").Value, NumberStyles.Integer);
-            frameSize.Y = int.Parse(definition.Attribute("FrameHeight").Value, NumberStyles.Integer);
-            sheetSize.X = int.Parse(definition.Attribute("SheetColumns").Value, NumberStyles.Integer);
-            sheetSize.Y = int.Parse(definition.Attribute("SheetRows").Value, NumberStyles.Integer);
-            frameInterval = TimeSpan.FromSeconds(1.0f / int.Parse(definition.Attribute("Speed").Value, NumberStyles.Integer));
-            PistolShotNEAnimation.Add(new Animation(PistolShotNETexture[2], frameSize, sheetSize, frameInterval)); // Define a new Animation instance
-
-            // Pistol Shot Animation (South East)
-            definition = doc.Root.Element("RayPistolSEDef");
-            PistolShotSETexture.Add(game.Content.Load<Texture2D>(@"InGame/Ray/ray_pistol_SE"));
-            PistolShotSEOrigin.Add(new Vector2(PistolShotSETexture[2].Width / 2, PistolShotSETexture[2].Height / 2));
-            frameSize.X = int.Parse(definition.Attribute("FrameWidth").Value, NumberStyles.Integer);
-            frameSize.Y = int.Parse(definition.Attribute("FrameHeight").Value, NumberStyles.Integer);
-            sheetSize.X = int.Parse(definition.Attribute("SheetColumns").Value, NumberStyles.Integer);
-            sheetSize.Y = int.Parse(definition.Attribute("SheetRows").Value, NumberStyles.Integer);
-            frameInterval = TimeSpan.FromSeconds(1.0f / int.Parse(definition.Attribute("Speed").Value, NumberStyles.Integer));
-            PistolShotSEAnimation.Add(new Animation(PistolShotSETexture[2], frameSize, sheetSize, frameInterval)); // Define a new Animation instance
-
-            // Pistol Shot Animation (South)
-            definition = doc.Root.Element("RayPistolSouthDef");
-            PistolShotSouthTexture.Add(game.Content.Load<Texture2D>(@"InGame/Ray/ray_pistol_S"));
-            PistolShotSouthOrigin.Add(new Vector2(PistolShotSouthTexture[2].Width / 2, PistolShotSouthTexture[2].Height / 2));
-            frameSize.X = int.Parse(definition.Attribute("FrameWidth").Value, NumberStyles.Integer);
-            frameSize.Y = int.Parse(definition.Attribute("FrameHeight").Value, NumberStyles.Integer);
-            sheetSize.X = int.Parse(definition.Attribute("SheetColumns").Value, NumberStyles.Integer);
-            sheetSize.Y = int.Parse(definition.Attribute("SheetRows").Value, NumberStyles.Integer);
-            frameInterval = TimeSpan.FromSeconds(1.0f / int.Parse(definition.Attribute("Speed").Value, NumberStyles.Integer));
-            PistolShotSouthAnimation.Add(new Animation(PistolShotSouthTexture[2], frameSize, sheetSize, frameInterval)); // Define a new Animation instance
-
-            // Pistol Shot Animation (North)
-            definition = doc.Root.Element("RayPistolNorthDef");
-            PistolShotNorthTexture.Add(game.Content.Load<Texture2D>(@"InGame/Ray/ray_pistol_N"));
-            PistolShotNorthOrigin.Add(new Vector2(PistolShotNorthTexture[2].Width / 2, PistolShotNorthTexture[2].Height / 2));
-            frameSize.X = int.Parse(definition.Attribute("FrameWidth").Value, NumberStyles.Integer);
-            frameSize.Y = int.Parse(definition.Attribute("FrameHeight").Value, NumberStyles.Integer);
-            sheetSize.X = int.Parse(definition.Attribute("SheetColumns").Value, NumberStyles.Integer);
-            sheetSize.Y = int.Parse(definition.Attribute("SheetRows").Value, NumberStyles.Integer);
-            frameInterval = TimeSpan.FromSeconds(1.0f / int.Parse(definition.Attribute("Speed").Value, NumberStyles.Integer));
-            PistolShotNorthAnimation.Add(new Animation(PistolShotNorthTexture[2], frameSize, sheetSize, frameInterval)); // Define a new Animation instance
-
-            // ShotGun Shot Animation (East)
-            definition = doc.Root.Element("RayShotgunEDef");
-            ShotgunEastTexture.Add(game.Content.Load<Texture2D>(@"InGame/Ray/ray_shotgun_E"));
-            ShotgunShotEastOrigin.Add(new Vector2(ShotgunEastTexture[2].Width / 2, PistolShotEastTexture[2].Height / 2));
-            frameSize.X = int.Parse(definition.Attribute("FrameWidth").Value, NumberStyles.Integer);
-            frameSize.Y = int.Parse(definition.Attribute("FrameHeight").Value, NumberStyles.Integer);
-            sheetSize.X = int.Parse(definition.Attribute("SheetColumns").Value, NumberStyles.Integer);
-            sheetSize.Y = int.Parse(definition.Attribute("SheetRows").Value, NumberStyles.Integer);
-            frameInterval = TimeSpan.FromSeconds(1.0f / int.Parse(definition.Attribute("Speed").Value, NumberStyles.Integer));
-            ShotgunShotEastAnimation.Add(new Animation(ShotgunEastTexture[2], frameSize, sheetSize, frameInterval)); // Define a new Animation instance
-
-            // ShotGun Shot Animation (North East)
-            definition = doc.Root.Element("RayShotgunNEDef");
-            ShotgunNETexture.Add(game.Content.Load<Texture2D>(@"InGame/Ray/ray_shotgun_NE"));
-            ShotgunNEOrigin.Add(new Vector2(ShotgunNETexture[2].Width / 2, ShotgunNETexture[2].Height / 2));
-            frameSize.X = int.Parse(definition.Attribute("FrameWidth").Value, NumberStyles.Integer);
-            frameSize.Y = int.Parse(definition.Attribute("FrameHeight").Value, NumberStyles.Integer);
-            sheetSize.X = int.Parse(definition.Attribute("SheetColumns").Value, NumberStyles.Integer);
-            sheetSize.Y = int.Parse(definition.Attribute("SheetRows").Value, NumberStyles.Integer);
-            frameInterval = TimeSpan.FromSeconds(1.0f / int.Parse(definition.Attribute("Speed").Value, NumberStyles.Integer));
-            ShotgunNEAnimation.Add(new Animation(ShotgunNETexture[2], frameSize, sheetSize, frameInterval)); // Define a new Animation instance
-
-            // ShotGun Shot Animation (South East)
-            definition = doc.Root.Element("RayShotgunSEDef");
-            ShotgunSETexture.Add(game.Content.Load<Texture2D>(@"InGame/Ray/ray_shotgun_SE"));
-            ShotgunSEOrigin.Add(new Vector2(ShotgunSETexture[2].Width / 2, ShotgunSETexture[2].Height / 2));
-            frameSize.X = int.Parse(definition.Attribute("FrameWidth").Value, NumberStyles.Integer);
-            frameSize.Y = int.Parse(definition.Attribute("FrameHeight").Value, NumberStyles.Integer);
-            sheetSize.X = int.Parse(definition.Attribute("SheetColumns").Value, NumberStyles.Integer);
-            sheetSize.Y = int.Parse(definition.Attribute("SheetRows").Value, NumberStyles.Integer);
-            frameInterval = TimeSpan.FromSeconds(1.0f / int.Parse(definition.Attribute("Speed").Value, NumberStyles.Integer));
-            ShotgunSEAnimation.Add(new Animation(ShotgunSETexture[2], frameSize, sheetSize, frameInterval)); // Define a new Animation instance
-
-            // ShotGun Shot Animation (North)
-            definition = doc.Root.Element("RayShotgunNorthDef");
-            ShotgunNorthTexture.Add(game.Content.Load<Texture2D>(@"InGame/Ray/ray_shotgun_N"));
-            ShotgunNorthOrigin.Add(new Vector2(ShotgunNorthTexture[2].Width / 2, ShotgunNorthTexture[2].Height / 2));
-            frameSize.X = int.Parse(definition.Attribute("FrameWidth").Value, NumberStyles.Integer);
-            frameSize.Y = int.Parse(definition.Attribute("FrameHeight").Value, NumberStyles.Integer);
-            sheetSize.X = int.Parse(definition.Attribute("SheetColumns").Value, NumberStyles.Integer);
-            sheetSize.Y = int.Parse(definition.Attribute("SheetRows").Value, NumberStyles.Integer);
-            frameInterval = TimeSpan.FromSeconds(1.0f / int.Parse(definition.Attribute("Speed").Value, NumberStyles.Integer));
-            ShotgunNorthAnimation.Add(new Animation(ShotgunNorthTexture[2], frameSize, sheetSize, frameInterval)); // Define a new Animation instance
-
-            // ShotGun Shot Animation (South)
-            definition = doc.Root.Element("RayShotgunSouthDef");
-            ShotgunSouthTexture.Add(game.Content.Load<Texture2D>(@"InGame/Ray/ray_shotgun_S"));
-            ShotgunSouthOrigin.Add(new Vector2(ShotgunSouthTexture[2].Width / 2, ShotgunSouthTexture[2].Height / 2));
-            frameSize.X = int.Parse(definition.Attribute("FrameWidth").Value, NumberStyles.Integer);
-            frameSize.Y = int.Parse(definition.Attribute("FrameHeight").Value, NumberStyles.Integer);
-            sheetSize.X = int.Parse(definition.Attribute("SheetColumns").Value, NumberStyles.Integer);
-            sheetSize.Y = int.Parse(definition.Attribute("SheetRows").Value, NumberStyles.Integer);
-            frameInterval = TimeSpan.FromSeconds(1.0f / int.Parse(definition.Attribute("Speed").Value, NumberStyles.Integer));
-            ShotgunSouthAnimation.Add(new Animation(ShotgunSouthTexture[2], frameSize, sheetSize, frameInterval)); // Define a new Animation instance
-            // ------ RAY ------  //
-
-
-
-            // ------ PETER ------  //
-            DiedTexture.Add(game.Content.Load<Texture2D>(@"InGame/Peter/peter_died"));
-
-            // Idle Trunk Animation
-            definition = doc.Root.Element("PeterIdleTrunkDef");
-            IdleLegsTexture.Add(game.Content.Load<Texture2D>(@"InGame/Peter/peter_legs_idle"));
-            IdleTrunkTexture.Add(game.Content.Load<Texture2D>(@"InGame/Peter/peter_idle"));
-            IdleTrunkOrigin.Add(new Vector2(IdleTrunkTexture[3].Width / 2, IdleTrunkTexture[3].Height / 2));
-            frameSize.X = int.Parse(definition.Attribute("FrameWidth").Value, NumberStyles.Integer);
-            frameSize.Y = int.Parse(definition.Attribute("FrameHeight").Value, NumberStyles.Integer);
-            sheetSize.X = int.Parse(definition.Attribute("SheetColumns").Value, NumberStyles.Integer);
-            sheetSize.Y = int.Parse(definition.Attribute("SheetRows").Value, NumberStyles.Integer);
-            frameInterval = TimeSpan.FromSeconds(1.0f / int.Parse(definition.Attribute("Speed").Value, NumberStyles.Integer));
-            IdleTrunkAnimation.Add(new Animation(IdleTrunkTexture[3], frameSize, sheetSize, frameInterval)); // Define a new Animation instance
-
-            // Run Animation (East)
-            definition = doc.Root.Element("PeterRunEDef");
-            RunEastTexture.Add(game.Content.Load<Texture2D>(@"InGame/Peter/peter_run_E"));
-            RunEastOrigin.Add(new Vector2(RunEastTexture[3].Width / 2, RunEastTexture[3].Height / 2));
-            frameSize.X = int.Parse(definition.Attribute("FrameWidth").Value, NumberStyles.Integer);
-            frameSize.Y = int.Parse(definition.Attribute("FrameHeight").Value, NumberStyles.Integer);
-            sheetSize.X = int.Parse(definition.Attribute("SheetColumns").Value, NumberStyles.Integer);
-            sheetSize.Y = int.Parse(definition.Attribute("SheetRows").Value, NumberStyles.Integer);
-            frameInterval = TimeSpan.FromSeconds(1.0f / int.Parse(definition.Attribute("Speed").Value, NumberStyles.Integer));
-            RunEastAnimation.Add(new Animation(RunEastTexture[3], frameSize, sheetSize, frameInterval)); // Define a new Animation instance
-
-            // Pistol Shot Animation (East)
-            definition = doc.Root.Element("PeterPistolEDef");
-            PistolShotEastTexture.Add(game.Content.Load<Texture2D>(@"InGame/Peter/peter_pistol_E"));
-            PistolShotEastOrigin.Add(new Vector2(PistolShotEastTexture[3].Width / 2, PistolShotEastTexture[3].Height / 2));
-            frameSize.X = int.Parse(definition.Attribute("FrameWidth").Value, NumberStyles.Integer);
-            frameSize.Y = int.Parse(definition.Attribute("FrameHeight").Value, NumberStyles.Integer);
-            sheetSize.X = int.Parse(definition.Attribute("SheetColumns").Value, NumberStyles.Integer);
-            sheetSize.Y = int.Parse(definition.Attribute("SheetRows").Value, NumberStyles.Integer);
-            frameInterval = TimeSpan.FromSeconds(1.0f / int.Parse(definition.Attribute("Speed").Value, NumberStyles.Integer));
-            PistolShotEastAnimation.Add(new Animation(PistolShotEastTexture[3], frameSize, sheetSize, frameInterval)); // Define a new Animation instance
-
-            // Pistol Shot Animation (North East)
-            definition = doc.Root.Element("PeterPistolNEDef");
-            PistolShotNETexture.Add(game.Content.Load<Texture2D>(@"InGame/Peter/peter_pistol_NE"));
-            PistolShotNEOrigin.Add(new Vector2(PistolShotNETexture[3].Width / 2, PistolShotNETexture[3].Height / 2));
-            frameSize.X = int.Parse(definition.Attribute("FrameWidth").Value, NumberStyles.Integer);
-            frameSize.Y = int.Parse(definition.Attribute("FrameHeight").Value, NumberStyles.Integer);
-            sheetSize.X = int.Parse(definition.Attribute("SheetColumns").Value, NumberStyles.Integer);
-            sheetSize.Y = int.Parse(definition.Attribute("SheetRows").Value, NumberStyles.Integer);
-            frameInterval = TimeSpan.FromSeconds(1.0f / int.Parse(definition.Attribute("Speed").Value, NumberStyles.Integer));
-            PistolShotNEAnimation.Add(new Animation(PistolShotNETexture[3], frameSize, sheetSize, frameInterval)); // Define a new Animation instance
-
-            // Pistol Shot Animation (South East)
-            definition = doc.Root.Element("PeterPistolSEDef");
-            PistolShotSETexture.Add(game.Content.Load<Texture2D>(@"InGame/Peter/peter_pistol_SE"));
-            PistolShotSEOrigin.Add(new Vector2(PistolShotSETexture[3].Width / 2, PistolShotSETexture[3].Height / 2));
-            frameSize.X = int.Parse(definition.Attribute("FrameWidth").Value, NumberStyles.Integer);
-            frameSize.Y = int.Parse(definition.Attribute("FrameHeight").Value, NumberStyles.Integer);
-            sheetSize.X = int.Parse(definition.Attribute("SheetColumns").Value, NumberStyles.Integer);
-            sheetSize.Y = int.Parse(definition.Attribute("SheetRows").Value, NumberStyles.Integer);
-            frameInterval = TimeSpan.FromSeconds(1.0f / int.Parse(definition.Attribute("Speed").Value, NumberStyles.Integer));
-            PistolShotSEAnimation.Add(new Animation(PistolShotSETexture[3], frameSize, sheetSize, frameInterval)); // Define a new Animation instance
-
-            // Pistol Shot Animation (South)
-            definition = doc.Root.Element("PeterPistolSouthDef");
-            PistolShotSouthTexture.Add(game.Content.Load<Texture2D>(@"InGame/Peter/peter_pistol_S"));
-            PistolShotSouthOrigin.Add(new Vector2(PistolShotSouthTexture[3].Width / 2, PistolShotSouthTexture[3].Height / 2));
-            frameSize.X = int.Parse(definition.Attribute("FrameWidth").Value, NumberStyles.Integer);
-            frameSize.Y = int.Parse(definition.Attribute("FrameHeight").Value, NumberStyles.Integer);
-            sheetSize.X = int.Parse(definition.Attribute("SheetColumns").Value, NumberStyles.Integer);
-            sheetSize.Y = int.Parse(definition.Attribute("SheetRows").Value, NumberStyles.Integer);
-            frameInterval = TimeSpan.FromSeconds(1.0f / int.Parse(definition.Attribute("Speed").Value, NumberStyles.Integer));
-            PistolShotSouthAnimation.Add(new Animation(PistolShotSouthTexture[3], frameSize, sheetSize, frameInterval)); // Define a new Animation instance
-
-            // Pistol Shot Animation (North)
-            definition = doc.Root.Element("PeterPistolNorthDef");
-            PistolShotNorthTexture.Add(game.Content.Load<Texture2D>(@"InGame/Peter/peter_pistol_N"));
-            PistolShotNorthOrigin.Add(new Vector2(PistolShotNorthTexture[3].Width / 2, PistolShotNorthTexture[3].Height / 2));
-            frameSize.X = int.Parse(definition.Attribute("FrameWidth").Value, NumberStyles.Integer);
-            frameSize.Y = int.Parse(definition.Attribute("FrameHeight").Value, NumberStyles.Integer);
-            sheetSize.X = int.Parse(definition.Attribute("SheetColumns").Value, NumberStyles.Integer);
-            sheetSize.Y = int.Parse(definition.Attribute("SheetRows").Value, NumberStyles.Integer);
-            frameInterval = TimeSpan.FromSeconds(1.0f / int.Parse(definition.Attribute("Speed").Value, NumberStyles.Integer));
-            PistolShotNorthAnimation.Add(new Animation(PistolShotNorthTexture[3], frameSize, sheetSize, frameInterval)); // Define a new Animation instance
-
-            // ShotGun Shot Animation (East)
-            definition = doc.Root.Element("PeterShotgunEDef");
-            ShotgunEastTexture.Add(game.Content.Load<Texture2D>(@"InGame/Peter/peter_shotgun_E"));
-            ShotgunShotEastOrigin.Add(new Vector2(ShotgunEastTexture[3].Width / 2, PistolShotEastTexture[3].Height / 2));
-            frameSize.X = int.Parse(definition.Attribute("FrameWidth").Value, NumberStyles.Integer);
-            frameSize.Y = int.Parse(definition.Attribute("FrameHeight").Value, NumberStyles.Integer);
-            sheetSize.X = int.Parse(definition.Attribute("SheetColumns").Value, NumberStyles.Integer);
-            sheetSize.Y = int.Parse(definition.Attribute("SheetRows").Value, NumberStyles.Integer);
-            frameInterval = TimeSpan.FromSeconds(1.0f / int.Parse(definition.Attribute("Speed").Value, NumberStyles.Integer));
-            ShotgunShotEastAnimation.Add(new Animation(ShotgunEastTexture[3], frameSize, sheetSize, frameInterval)); // Define a new Animation instance
-
-            // ShotGun Shot Animation (North East)
-            definition = doc.Root.Element("PeterShotgunNEDef");
-            ShotgunNETexture.Add(game.Content.Load<Texture2D>(@"InGame/Peter/peter_shotgun_NE"));
-            ShotgunNEOrigin.Add(new Vector2(ShotgunNETexture[3].Width / 2, ShotgunNETexture[3].Height / 2));
-            frameSize.X = int.Parse(definition.Attribute("FrameWidth").Value, NumberStyles.Integer);
-            frameSize.Y = int.Parse(definition.Attribute("FrameHeight").Value, NumberStyles.Integer);
-            sheetSize.X = int.Parse(definition.Attribute("SheetColumns").Value, NumberStyles.Integer);
-            sheetSize.Y = int.Parse(definition.Attribute("SheetRows").Value, NumberStyles.Integer);
-            frameInterval = TimeSpan.FromSeconds(1.0f / int.Parse(definition.Attribute("Speed").Value, NumberStyles.Integer));
-            ShotgunNEAnimation.Add(new Animation(ShotgunNETexture[3], frameSize, sheetSize, frameInterval)); // Define a new Animation instance
-
-            // ShotGun Shot Animation (South East)
-            definition = doc.Root.Element("PeterShotgunSEDef");
-            ShotgunSETexture.Add(game.Content.Load<Texture2D>(@"InGame/Peter/peter_shotgun_SE"));
-            ShotgunSEOrigin.Add(new Vector2(ShotgunSETexture[3].Width / 2, ShotgunSETexture[3].Height / 2));
-            frameSize.X = int.Parse(definition.Attribute("FrameWidth").Value, NumberStyles.Integer);
-            frameSize.Y = int.Parse(definition.Attribute("FrameHeight").Value, NumberStyles.Integer);
-            sheetSize.X = int.Parse(definition.Attribute("SheetColumns").Value, NumberStyles.Integer);
-            sheetSize.Y = int.Parse(definition.Attribute("SheetRows").Value, NumberStyles.Integer);
-            frameInterval = TimeSpan.FromSeconds(1.0f / int.Parse(definition.Attribute("Speed").Value, NumberStyles.Integer));
-            ShotgunSEAnimation.Add(new Animation(ShotgunSETexture[3], frameSize, sheetSize, frameInterval)); // Define a new Animation instance
-
-            // ShotGun Shot Animation (North)
-            definition = doc.Root.Element("PeterShotgunNorthDef");
-            ShotgunNorthTexture.Add(game.Content.Load<Texture2D>(@"InGame/Peter/peter_shotgun_N"));
-            ShotgunNorthOrigin.Add(new Vector2(ShotgunNorthTexture[3].Width / 2, ShotgunNorthTexture[3].Height / 2));
-            frameSize.X = int.Parse(definition.Attribute("FrameWidth").Value, NumberStyles.Integer);
-            frameSize.Y = int.Parse(definition.Attribute("FrameHeight").Value, NumberStyles.Integer);
-            sheetSize.X = int.Parse(definition.Attribute("SheetColumns").Value, NumberStyles.Integer);
-            sheetSize.Y = int.Parse(definition.Attribute("SheetRows").Value, NumberStyles.Integer);
-            frameInterval = TimeSpan.FromSeconds(1.0f / int.Parse(definition.Attribute("Speed").Value, NumberStyles.Integer));
-            ShotgunNorthAnimation.Add(new Animation(ShotgunNorthTexture[3], frameSize, sheetSize, frameInterval)); // Define a new Animation instance
-
-            // ShotGun Shot Animation (South)
-            definition = doc.Root.Element("PeterShotgunSouthDef");
-            ShotgunSouthTexture.Add(game.Content.Load<Texture2D>(@"InGame/Peter/peter_shotgun_S"));
-            ShotgunSouthOrigin.Add(new Vector2(ShotgunSouthTexture[3].Width / 2, ShotgunSouthTexture[3].Height / 2));
-            frameSize.X = int.Parse(definition.Attribute("FrameWidth").Value, NumberStyles.Integer);
-            frameSize.Y = int.Parse(definition.Attribute("FrameHeight").Value, NumberStyles.Integer);
-            sheetSize.X = int.Parse(definition.Attribute("SheetColumns").Value, NumberStyles.Integer);
-            sheetSize.Y = int.Parse(definition.Attribute("SheetRows").Value, NumberStyles.Integer);
-            frameInterval = TimeSpan.FromSeconds(1.0f / int.Parse(definition.Attribute("Speed").Value, NumberStyles.Integer));
-            ShotgunSouthAnimation.Add(new Animation(ShotgunSouthTexture[3], frameSize, sheetSize, frameInterval)); // Define a new Animation instance
-            // ------ PETER ------  //
-
-//End Main Char Animation
+            PeterIdleTrunkAnimationInit(doc);
+            PeterRunEastAnimationInit(doc);
+            PeterPistolShotEastAnimationInit(doc);
+            PeterPistolShotNorthEastAnimationInit(doc);
+            PeterPistolShotSouthEastAnimationInit(doc);
+            PeterPistolShotSouthAnimationInit(doc);
+            PeterPistolShotNorthAnimationInit(doc);
+            PeterShotgunShotEastAnimationInit(doc);
+            PeterShotgunShotNorthEastAnimationInit(doc);
+            PeterShotgunShotSouthEastAnimationInit(doc);
+            PeterShotgunShotSouthAnimationInit(doc);
+            PeterShotgunShotNorthAnimationInit(doc);
 
             CharacterShadow = game.Content.Load<Texture2D>(@"InGame/character_shadow");
-
-            // FlameThrower Animation Definition
-            definition = doc.Root.Element("FlameThrowerDef");
-            flamethrowerTexture = game.Content.Load<Texture2D>(@"InGame/flamethrower");
-            FT_CollisionTexture = game.Content.Load<Texture2D>(@"InGame/FT_CollisionTexture");
-            frameSize.X = int.Parse(definition.Attribute("FrameWidth").Value, NumberStyles.Integer);
-            frameSize.Y = int.Parse(definition.Attribute("FrameHeight").Value, NumberStyles.Integer);
-            sheetSize.X = int.Parse(definition.Attribute("SheetColumns").Value, NumberStyles.Integer);
-            sheetSize.Y = int.Parse(definition.Attribute("SheetRows").Value, NumberStyles.Integer);
-            frameInterval = TimeSpan.FromSeconds(1.0f / int.Parse(definition.Attribute("Speed").Value, NumberStyles.Integer));
-            flamethrowerAnimation = new Animation(flamethrowerTexture, frameSize, sheetSize, frameInterval);
-            // END Flamethrower Animation
 
             gameover = game.Content.Load<Texture2D>(@"InGame/gameover");
             gameoverOrigin = new Vector2(gameover.Width / 2, gameover.Height / 2);
@@ -1053,10 +500,6 @@ namespace ZombustersWindows
             left_thumbstick = game.Content.Load<Texture2D>(@"UI/left_thumbstick");
             right_thumbstick = game.Content.Load<Texture2D>(@"UI/right_thumbstick");
 
-            // Efecto Particulas
-            //SmokeEffect.LoadContent(game.Content);
-            //particleRenderer.LoadContent(game.Content);
-
             foreach (ZombieState zombie in Zombies)
             {
                 zombie.LoadContent(game.Content);
@@ -1079,16 +522,6 @@ namespace ZombustersWindows
                 furniture.layerIndex = lIndex;
                 lIndex -= 0.004f;
             }
-
-            /*
-            foreach (Avatar cplayer in game.currentPlayers)
-            {
-                if (cplayer.IsPlaying)
-                {
-                    cplayer.LoadFlameThrower(game);
-                }
-            }
-            */
 
             // Mouse Cursor
             cursorTexture = game.Content.Load<Texture2D>(@"InGame/GUI/aimcursor");
@@ -4978,6 +4411,834 @@ namespace ZombustersWindows
             }
 
             game.input.PlayShot(player);
+        }
+
+        private void JadeIdleTrunkAnimationInit(XDocument doc)
+        {
+            TimeSpan frameInterval;
+            Point sheetSize = new Point();
+            Point frameSize = new Point();
+            var definition = doc.Root.Element("JadeIdleTrunkDef");
+            IdleLegsTexture = new List<Texture2D>();
+            IdleLegsTexture.Add(game.Content.Load<Texture2D>(@"InGame/Jade/girl_legs_idle"));
+            IdleTrunkTexture = new List<Texture2D>();
+            IdleTrunkTexture.Add(game.Content.Load<Texture2D>(@"InGame/Jade/girl_anim_idle"));
+            IdleTrunkOrigin = new List<Vector2>();
+            IdleTrunkOrigin.Add(new Vector2(IdleTrunkTexture[0].Width / 2, IdleTrunkTexture[0].Height / 2));
+            frameSize.X = int.Parse(definition.Attribute("FrameWidth").Value, NumberStyles.Integer);
+            frameSize.Y = int.Parse(definition.Attribute("FrameHeight").Value, NumberStyles.Integer);
+            sheetSize.X = int.Parse(definition.Attribute("SheetColumns").Value, NumberStyles.Integer);
+            sheetSize.Y = int.Parse(definition.Attribute("SheetRows").Value, NumberStyles.Integer);
+            frameInterval = TimeSpan.FromSeconds(1.0f / int.Parse(definition.Attribute("Speed").Value, NumberStyles.Integer));
+            IdleTrunkAnimation = new List<Animation>();
+            IdleTrunkAnimation.Add(new Animation(IdleTrunkTexture[0], frameSize, sheetSize, frameInterval)); // Define a new Animation instance
+        }
+
+        private void JadeRunEastAnimationInit(XDocument doc)
+        {
+            TimeSpan frameInterval;
+            Point sheetSize = new Point();
+            Point frameSize = new Point();
+            var definition = doc.Root.Element("JadeRunEDef");
+            RunEastTexture = new List<Texture2D>();
+            RunEastTexture.Add(game.Content.Load<Texture2D>(@"InGame/Jade/girl_anim_run_E"));
+            RunEastOrigin = new List<Vector2>();
+            RunEastOrigin.Add(new Vector2(RunEastTexture[0].Width / 2, RunEastTexture[0].Height / 2));
+            frameSize.X = int.Parse(definition.Attribute("FrameWidth").Value, NumberStyles.Integer);
+            frameSize.Y = int.Parse(definition.Attribute("FrameHeight").Value, NumberStyles.Integer);
+            sheetSize.X = int.Parse(definition.Attribute("SheetColumns").Value, NumberStyles.Integer);
+            sheetSize.Y = int.Parse(definition.Attribute("SheetRows").Value, NumberStyles.Integer);
+            frameInterval = TimeSpan.FromSeconds(1.0f / int.Parse(definition.Attribute("Speed").Value, NumberStyles.Integer));
+            RunEastAnimation = new List<Animation>();
+            RunEastAnimation.Add(new Animation(RunEastTexture[0], frameSize, sheetSize, frameInterval));
+        }
+
+        private void JadePistolShotEastAnimationInit(XDocument doc)
+        {
+            TimeSpan frameInterval;
+            Point sheetSize = new Point();
+            Point frameSize = new Point();
+            var definition = doc.Root.Element("JadePistolShotDef");
+            PistolShotEastTexture = new List<Texture2D>();
+            PistolShotEastTexture.Add(game.Content.Load<Texture2D>(@"InGame/Jade/girl_anim_shot_E"));
+            PistolShotEastOrigin = new List<Vector2>();
+            PistolShotEastOrigin.Add(new Vector2(PistolShotEastTexture[0].Width / 2, PistolShotEastTexture[0].Height / 2));
+            frameSize.X = int.Parse(definition.Attribute("FrameWidth").Value, NumberStyles.Integer);
+            frameSize.Y = int.Parse(definition.Attribute("FrameHeight").Value, NumberStyles.Integer);
+            sheetSize.X = int.Parse(definition.Attribute("SheetColumns").Value, NumberStyles.Integer);
+            sheetSize.Y = int.Parse(definition.Attribute("SheetRows").Value, NumberStyles.Integer);
+            frameInterval = TimeSpan.FromSeconds(1.0f / int.Parse(definition.Attribute("Speed").Value, NumberStyles.Integer));
+            PistolShotEastAnimation = new List<Animation>();
+            PistolShotEastAnimation.Add(new Animation(PistolShotEastTexture[0], frameSize, sheetSize, frameInterval));
+        }
+
+        private void JadePistolShotNorthEastAnimationInit(XDocument doc)
+        {
+            TimeSpan frameInterval;
+            Point sheetSize = new Point();
+            Point frameSize = new Point();
+            var definition = doc.Root.Element("JadePistolShotNEDef");
+            PistolShotNETexture = new List<Texture2D>();
+            PistolShotNETexture.Add(game.Content.Load<Texture2D>(@"InGame/Jade/girl_anim_shot_NE"));
+            PistolShotNEOrigin = new List<Vector2>();
+            PistolShotNEOrigin.Add(new Vector2(PistolShotNETexture[0].Width / 2, PistolShotNETexture[0].Height / 2));
+            frameSize.X = int.Parse(definition.Attribute("FrameWidth").Value, NumberStyles.Integer);
+            frameSize.Y = int.Parse(definition.Attribute("FrameHeight").Value, NumberStyles.Integer);
+            sheetSize.X = int.Parse(definition.Attribute("SheetColumns").Value, NumberStyles.Integer);
+            sheetSize.Y = int.Parse(definition.Attribute("SheetRows").Value, NumberStyles.Integer);
+            frameInterval = TimeSpan.FromSeconds(1.0f / int.Parse(definition.Attribute("Speed").Value, NumberStyles.Integer));
+            PistolShotNEAnimation = new List<Animation>();
+            PistolShotNEAnimation.Add(new Animation(PistolShotNETexture[0], frameSize, sheetSize, frameInterval));
+        }
+
+        private void JadePistolShotSouthEastAnimationInit(XDocument doc)
+        {
+            TimeSpan frameInterval;
+            Point sheetSize = new Point();
+            Point frameSize = new Point();
+            var definition = doc.Root.Element("JadePistolShotSEDef");
+            PistolShotSETexture = new List<Texture2D>();
+            PistolShotSETexture.Add(game.Content.Load<Texture2D>(@"InGame/Jade/girl_anim_shot_SE"));
+            PistolShotSEOrigin = new List<Vector2>();
+            PistolShotSEOrigin.Add(new Vector2(PistolShotSETexture[0].Width / 2, PistolShotSETexture[0].Height / 2));
+            frameSize.X = int.Parse(definition.Attribute("FrameWidth").Value, NumberStyles.Integer);
+            frameSize.Y = int.Parse(definition.Attribute("FrameHeight").Value, NumberStyles.Integer);
+            sheetSize.X = int.Parse(definition.Attribute("SheetColumns").Value, NumberStyles.Integer);
+            sheetSize.Y = int.Parse(definition.Attribute("SheetRows").Value, NumberStyles.Integer);
+            frameInterval = TimeSpan.FromSeconds(1.0f / int.Parse(definition.Attribute("Speed").Value, NumberStyles.Integer));
+            PistolShotSEAnimation = new List<Animation>();
+            PistolShotSEAnimation.Add(new Animation(PistolShotSETexture[0], frameSize, sheetSize, frameInterval));
+        }
+
+        private void JadePistolShotSouthAnimationInit(XDocument doc)
+        {
+            TimeSpan frameInterval;
+            Point sheetSize = new Point();
+            Point frameSize = new Point();
+            var definition = doc.Root.Element("JadePistolShotSouthDef");
+            PistolShotSouthTexture = new List<Texture2D>();
+            PistolShotSouthTexture.Add(game.Content.Load<Texture2D>(@"InGame/Jade/girl_anim_shot_S"));
+            PistolShotSouthOrigin = new List<Vector2>();
+            PistolShotSouthOrigin.Add(new Vector2(PistolShotSouthTexture[0].Width / 2, PistolShotSouthTexture[0].Height / 2));
+            frameSize.X = int.Parse(definition.Attribute("FrameWidth").Value, NumberStyles.Integer);
+            frameSize.Y = int.Parse(definition.Attribute("FrameHeight").Value, NumberStyles.Integer);
+            sheetSize.X = int.Parse(definition.Attribute("SheetColumns").Value, NumberStyles.Integer);
+            sheetSize.Y = int.Parse(definition.Attribute("SheetRows").Value, NumberStyles.Integer);
+            frameInterval = TimeSpan.FromSeconds(1.0f / int.Parse(definition.Attribute("Speed").Value, NumberStyles.Integer));
+            PistolShotSouthAnimation = new List<Animation>();
+            PistolShotSouthAnimation.Add(new Animation(PistolShotSouthTexture[0], frameSize, sheetSize, frameInterval));
+        }
+
+        private void JadePistolShotNorthAnimationInit(XDocument doc)
+        {
+            TimeSpan frameInterval;
+            Point sheetSize = new Point();
+            Point frameSize = new Point();
+            var definition = doc.Root.Element("JadePistolShotNorthDef");
+            PistolShotNorthTexture = new List<Texture2D>();
+            PistolShotNorthTexture.Add(game.Content.Load<Texture2D>(@"InGame/Jade/girl_anim_shot_N"));
+            PistolShotNorthOrigin = new List<Vector2>();
+            PistolShotNorthOrigin.Add(new Vector2(PistolShotNorthTexture[0].Width / 2, PistolShotNorthTexture[0].Height / 2));
+            frameSize.X = int.Parse(definition.Attribute("FrameWidth").Value, NumberStyles.Integer);
+            frameSize.Y = int.Parse(definition.Attribute("FrameHeight").Value, NumberStyles.Integer);
+            sheetSize.X = int.Parse(definition.Attribute("SheetColumns").Value, NumberStyles.Integer);
+            sheetSize.Y = int.Parse(definition.Attribute("SheetRows").Value, NumberStyles.Integer);
+            frameInterval = TimeSpan.FromSeconds(1.0f / int.Parse(definition.Attribute("Speed").Value, NumberStyles.Integer));
+            PistolShotNorthAnimation = new List<Animation>();
+            PistolShotNorthAnimation.Add(new Animation(PistolShotNorthTexture[0], frameSize, sheetSize, frameInterval));
+        }
+
+        private void JadeShotgunShotEastAnimationInit(XDocument doc)
+        {
+            TimeSpan frameInterval;
+            Point sheetSize = new Point();
+            Point frameSize = new Point();
+            var definition = doc.Root.Element("JadeShotgunShotDef");
+            ShotgunEastTexture = new List<Texture2D>();
+            ShotgunEastTexture.Add(game.Content.Load<Texture2D>(@"InGame/Jade/girl_anim_shotgun"));
+            ShotgunShotEastOrigin = new List<Vector2>();
+            ShotgunShotEastOrigin.Add(new Vector2(ShotgunEastTexture[0].Width / 2, PistolShotEastTexture[0].Height / 2));
+            frameSize.X = int.Parse(definition.Attribute("FrameWidth").Value, NumberStyles.Integer);
+            frameSize.Y = int.Parse(definition.Attribute("FrameHeight").Value, NumberStyles.Integer);
+            sheetSize.X = int.Parse(definition.Attribute("SheetColumns").Value, NumberStyles.Integer);
+            sheetSize.Y = int.Parse(definition.Attribute("SheetRows").Value, NumberStyles.Integer);
+            frameInterval = TimeSpan.FromSeconds(1.0f / int.Parse(definition.Attribute("Speed").Value, NumberStyles.Integer));
+            ShotgunShotEastAnimation = new List<Animation>();
+            ShotgunShotEastAnimation.Add(new Animation(ShotgunEastTexture[0], frameSize, sheetSize, frameInterval));
+        }
+
+        private void JadeShotgunShotNorthEastAnimationInit(XDocument doc)
+        {
+            TimeSpan frameInterval;
+            Point sheetSize = new Point();
+            Point frameSize = new Point();
+            var definition = doc.Root.Element("JadeShotgunShotNEDef");
+            ShotgunNETexture = new List<Texture2D>();
+            ShotgunNETexture.Add(game.Content.Load<Texture2D>(@"InGame/Jade/girl_anim_shotgun_NE"));
+            ShotgunNEOrigin = new List<Vector2>();
+            ShotgunNEOrigin.Add(new Vector2(ShotgunNETexture[0].Width / 2, ShotgunNETexture[0].Height / 2));
+            frameSize.X = int.Parse(definition.Attribute("FrameWidth").Value, NumberStyles.Integer);
+            frameSize.Y = int.Parse(definition.Attribute("FrameHeight").Value, NumberStyles.Integer);
+            sheetSize.X = int.Parse(definition.Attribute("SheetColumns").Value, NumberStyles.Integer);
+            sheetSize.Y = int.Parse(definition.Attribute("SheetRows").Value, NumberStyles.Integer);
+            frameInterval = TimeSpan.FromSeconds(1.0f / int.Parse(definition.Attribute("Speed").Value, NumberStyles.Integer));
+            ShotgunNEAnimation = new List<Animation>();
+            ShotgunNEAnimation.Add(new Animation(ShotgunNETexture[0], frameSize, sheetSize, frameInterval));
+        }
+
+        private void JadeShotgunShotSouthEastAnimationInit(XDocument doc)
+        {
+            TimeSpan frameInterval;
+            Point sheetSize = new Point();
+            Point frameSize = new Point();
+            var definition = doc.Root.Element("JadeShotgunShotSEDef");
+            ShotgunSETexture = new List<Texture2D>();
+            ShotgunSETexture.Add(game.Content.Load<Texture2D>(@"InGame/Jade/girl_anim_shotgun_SE"));
+            ShotgunSEOrigin = new List<Vector2>();
+            ShotgunSEOrigin.Add(new Vector2(ShotgunSETexture[0].Width / 2, ShotgunSETexture[0].Height / 2));
+            frameSize.X = int.Parse(definition.Attribute("FrameWidth").Value, NumberStyles.Integer);
+            frameSize.Y = int.Parse(definition.Attribute("FrameHeight").Value, NumberStyles.Integer);
+            sheetSize.X = int.Parse(definition.Attribute("SheetColumns").Value, NumberStyles.Integer);
+            sheetSize.Y = int.Parse(definition.Attribute("SheetRows").Value, NumberStyles.Integer);
+            frameInterval = TimeSpan.FromSeconds(1.0f / int.Parse(definition.Attribute("Speed").Value, NumberStyles.Integer));
+            ShotgunSEAnimation = new List<Animation>();
+            ShotgunSEAnimation.Add(new Animation(ShotgunSETexture[0], frameSize, sheetSize, frameInterval));
+        }
+
+        private void JadeShotgunShotSouthAnimationInit(XDocument doc)
+        {
+            TimeSpan frameInterval;
+            Point sheetSize = new Point();
+            Point frameSize = new Point();
+            var definition = doc.Root.Element("JadeShotgunShotSouthDef");
+            ShotgunSouthTexture = new List<Texture2D>();
+            ShotgunSouthTexture.Add(game.Content.Load<Texture2D>(@"InGame/Jade/girl_anim_shotgun_S"));
+            ShotgunSouthOrigin = new List<Vector2>();
+            ShotgunSouthOrigin.Add(new Vector2(ShotgunSouthTexture[0].Width / 2, ShotgunSouthTexture[0].Height / 2));
+            frameSize.X = int.Parse(definition.Attribute("FrameWidth").Value, NumberStyles.Integer);
+            frameSize.Y = int.Parse(definition.Attribute("FrameHeight").Value, NumberStyles.Integer);
+            sheetSize.X = int.Parse(definition.Attribute("SheetColumns").Value, NumberStyles.Integer);
+            sheetSize.Y = int.Parse(definition.Attribute("SheetRows").Value, NumberStyles.Integer);
+            frameInterval = TimeSpan.FromSeconds(1.0f / int.Parse(definition.Attribute("Speed").Value, NumberStyles.Integer));
+            ShotgunSouthAnimation = new List<Animation>();
+            ShotgunSouthAnimation.Add(new Animation(ShotgunSouthTexture[0], frameSize, sheetSize, frameInterval));
+        }
+
+        private void JadeShotgunShotNorthAnimationInit(XDocument doc)
+        {
+            TimeSpan frameInterval;
+            Point sheetSize = new Point();
+            Point frameSize = new Point();
+            var definition = doc.Root.Element("JadeShotgunShotNorthDef");
+            ShotgunNorthTexture = new List<Texture2D>();
+            ShotgunNorthTexture.Add(game.Content.Load<Texture2D>(@"InGame/Jade/girl_anim_shotgun_N"));
+            ShotgunNorthOrigin = new List<Vector2>();
+            ShotgunNorthOrigin.Add(new Vector2(ShotgunNorthTexture[0].Width / 2, ShotgunNorthTexture[0].Height / 2));
+            frameSize.X = int.Parse(definition.Attribute("FrameWidth").Value, NumberStyles.Integer);
+            frameSize.Y = int.Parse(definition.Attribute("FrameHeight").Value, NumberStyles.Integer);
+            sheetSize.X = int.Parse(definition.Attribute("SheetColumns").Value, NumberStyles.Integer);
+            sheetSize.Y = int.Parse(definition.Attribute("SheetRows").Value, NumberStyles.Integer);
+            frameInterval = TimeSpan.FromSeconds(1.0f / int.Parse(definition.Attribute("Speed").Value, NumberStyles.Integer));
+            ShotgunNorthAnimation = new List<Animation>();
+            ShotgunNorthAnimation.Add(new Animation(ShotgunNorthTexture[0], frameSize, sheetSize, frameInterval));
+        }
+
+        private void EgonIdleTrunkAnimationInit(XDocument doc)
+        {
+            TimeSpan frameInterval;
+            Point sheetSize = new Point();
+            Point frameSize = new Point();
+            var definition = doc.Root.Element("EgonIdleTrunkDef");
+            IdleLegsTexture.Add(game.Content.Load<Texture2D>(@"InGame/Egon/egon_legs_idle"));
+            IdleTrunkTexture.Add(game.Content.Load<Texture2D>(@"InGame/Egon/egon_idle"));
+            IdleTrunkOrigin.Add(new Vector2(IdleTrunkTexture[1].Width / 2, IdleTrunkTexture[1].Height / 2));
+            frameSize.X = int.Parse(definition.Attribute("FrameWidth").Value, NumberStyles.Integer);
+            frameSize.Y = int.Parse(definition.Attribute("FrameHeight").Value, NumberStyles.Integer);
+            sheetSize.X = int.Parse(definition.Attribute("SheetColumns").Value, NumberStyles.Integer);
+            sheetSize.Y = int.Parse(definition.Attribute("SheetRows").Value, NumberStyles.Integer);
+            frameInterval = TimeSpan.FromSeconds(1.0f / int.Parse(definition.Attribute("Speed").Value, NumberStyles.Integer));
+            IdleTrunkAnimation.Add(new Animation(IdleTrunkTexture[1], frameSize, sheetSize, frameInterval));
+
+        }
+        private void EgonRunEastAnimationInit(XDocument doc)
+        {
+            TimeSpan frameInterval;
+            Point sheetSize = new Point();
+            Point frameSize = new Point();
+            var definition = doc.Root.Element("EgonRunEDef");
+            RunEastTexture.Add(game.Content.Load<Texture2D>(@"InGame/Egon/egon_run_E"));
+            RunEastOrigin.Add(new Vector2(RunEastTexture[1].Width / 2, RunEastTexture[1].Height / 2));
+            frameSize.X = int.Parse(definition.Attribute("FrameWidth").Value, NumberStyles.Integer);
+            frameSize.Y = int.Parse(definition.Attribute("FrameHeight").Value, NumberStyles.Integer);
+            sheetSize.X = int.Parse(definition.Attribute("SheetColumns").Value, NumberStyles.Integer);
+            sheetSize.Y = int.Parse(definition.Attribute("SheetRows").Value, NumberStyles.Integer);
+            frameInterval = TimeSpan.FromSeconds(1.0f / int.Parse(definition.Attribute("Speed").Value, NumberStyles.Integer));
+            RunEastAnimation.Add(new Animation(RunEastTexture[1], frameSize, sheetSize, frameInterval));
+
+        }
+        private void EgonPistolShotEastAnimationInit(XDocument doc)
+        {
+            TimeSpan frameInterval;
+            Point sheetSize = new Point();
+            Point frameSize = new Point();
+            var definition = doc.Root.Element("EgonPistolEDef");
+            PistolShotEastTexture.Add(game.Content.Load<Texture2D>(@"InGame/Egon/egon_pistol_E"));
+            PistolShotEastOrigin.Add(new Vector2(PistolShotEastTexture[1].Width / 2, PistolShotEastTexture[1].Height / 2));
+            frameSize.X = int.Parse(definition.Attribute("FrameWidth").Value, NumberStyles.Integer);
+            frameSize.Y = int.Parse(definition.Attribute("FrameHeight").Value, NumberStyles.Integer);
+            sheetSize.X = int.Parse(definition.Attribute("SheetColumns").Value, NumberStyles.Integer);
+            sheetSize.Y = int.Parse(definition.Attribute("SheetRows").Value, NumberStyles.Integer);
+            frameInterval = TimeSpan.FromSeconds(1.0f / int.Parse(definition.Attribute("Speed").Value, NumberStyles.Integer));
+            PistolShotEastAnimation.Add(new Animation(PistolShotEastTexture[1], frameSize, sheetSize, frameInterval));
+
+        }
+        private void EgonPistolShotNorthEastAnimationInit(XDocument doc)
+        {
+            TimeSpan frameInterval;
+            Point sheetSize = new Point();
+            Point frameSize = new Point();
+            var definition = doc.Root.Element("EgonPistolNEDef");
+            PistolShotNETexture.Add(game.Content.Load<Texture2D>(@"InGame/Egon/egon_pistol_NE"));
+            PistolShotNEOrigin.Add(new Vector2(PistolShotNETexture[1].Width / 2, PistolShotNETexture[1].Height / 2));
+            frameSize.X = int.Parse(definition.Attribute("FrameWidth").Value, NumberStyles.Integer);
+            frameSize.Y = int.Parse(definition.Attribute("FrameHeight").Value, NumberStyles.Integer);
+            sheetSize.X = int.Parse(definition.Attribute("SheetColumns").Value, NumberStyles.Integer);
+            sheetSize.Y = int.Parse(definition.Attribute("SheetRows").Value, NumberStyles.Integer);
+            frameInterval = TimeSpan.FromSeconds(1.0f / int.Parse(definition.Attribute("Speed").Value, NumberStyles.Integer));
+            PistolShotNEAnimation.Add(new Animation(PistolShotNETexture[1], frameSize, sheetSize, frameInterval));
+
+        }
+        private void EgonPistolShotSouthEastAnimationInit(XDocument doc)
+        {
+            TimeSpan frameInterval;
+            Point sheetSize = new Point();
+            Point frameSize = new Point();
+            var definition = doc.Root.Element("EgonPistolSEDef");
+            PistolShotSETexture.Add(game.Content.Load<Texture2D>(@"InGame/Egon/egon_pistol_SE"));
+            PistolShotSEOrigin.Add(new Vector2(PistolShotSETexture[1].Width / 2, PistolShotSETexture[1].Height / 2));
+            frameSize.X = int.Parse(definition.Attribute("FrameWidth").Value, NumberStyles.Integer);
+            frameSize.Y = int.Parse(definition.Attribute("FrameHeight").Value, NumberStyles.Integer);
+            sheetSize.X = int.Parse(definition.Attribute("SheetColumns").Value, NumberStyles.Integer);
+            sheetSize.Y = int.Parse(definition.Attribute("SheetRows").Value, NumberStyles.Integer);
+            frameInterval = TimeSpan.FromSeconds(1.0f / int.Parse(definition.Attribute("Speed").Value, NumberStyles.Integer));
+            PistolShotSEAnimation.Add(new Animation(PistolShotSETexture[1], frameSize, sheetSize, frameInterval));
+
+        }
+        private void EgonPistolShotSouthAnimationInit(XDocument doc)
+        {
+            TimeSpan frameInterval;
+            Point sheetSize = new Point();
+            Point frameSize = new Point();
+            var definition = doc.Root.Element("EgonPistolSouthDef");
+            PistolShotSouthTexture.Add(game.Content.Load<Texture2D>(@"InGame/Egon/egon_pistol_S"));
+            PistolShotSouthOrigin.Add(new Vector2(PistolShotSouthTexture[1].Width / 2, PistolShotSouthTexture[1].Height / 2));
+            frameSize.X = int.Parse(definition.Attribute("FrameWidth").Value, NumberStyles.Integer);
+            frameSize.Y = int.Parse(definition.Attribute("FrameHeight").Value, NumberStyles.Integer);
+            sheetSize.X = int.Parse(definition.Attribute("SheetColumns").Value, NumberStyles.Integer);
+            sheetSize.Y = int.Parse(definition.Attribute("SheetRows").Value, NumberStyles.Integer);
+            frameInterval = TimeSpan.FromSeconds(1.0f / int.Parse(definition.Attribute("Speed").Value, NumberStyles.Integer));
+            PistolShotSouthAnimation.Add(new Animation(PistolShotSouthTexture[1], frameSize, sheetSize, frameInterval));
+
+        }
+        private void EgonPistolShotNorthAnimationInit(XDocument doc)
+        {
+            TimeSpan frameInterval;
+            Point sheetSize = new Point();
+            Point frameSize = new Point();
+            var definition = doc.Root.Element("EgonPistolNorthDef");
+            PistolShotNorthTexture.Add(game.Content.Load<Texture2D>(@"InGame/Egon/egon_pistol_N"));
+            PistolShotNorthOrigin.Add(new Vector2(PistolShotNorthTexture[1].Width / 2, PistolShotNorthTexture[1].Height / 2));
+            frameSize.X = int.Parse(definition.Attribute("FrameWidth").Value, NumberStyles.Integer);
+            frameSize.Y = int.Parse(definition.Attribute("FrameHeight").Value, NumberStyles.Integer);
+            sheetSize.X = int.Parse(definition.Attribute("SheetColumns").Value, NumberStyles.Integer);
+            sheetSize.Y = int.Parse(definition.Attribute("SheetRows").Value, NumberStyles.Integer);
+            frameInterval = TimeSpan.FromSeconds(1.0f / int.Parse(definition.Attribute("Speed").Value, NumberStyles.Integer));
+            PistolShotNorthAnimation.Add(new Animation(PistolShotNorthTexture[1], frameSize, sheetSize, frameInterval));
+
+        }
+        private void EgonShotgunShotEastAnimationInit(XDocument doc)
+        {
+            TimeSpan frameInterval;
+            Point sheetSize = new Point();
+            Point frameSize = new Point();
+            var definition = doc.Root.Element("EgonShotgunEDef");
+            ShotgunEastTexture.Add(game.Content.Load<Texture2D>(@"InGame/Egon/egon_shotgun_E"));
+            ShotgunShotEastOrigin.Add(new Vector2(ShotgunEastTexture[1].Width / 2, PistolShotEastTexture[1].Height / 2));
+            frameSize.X = int.Parse(definition.Attribute("FrameWidth").Value, NumberStyles.Integer);
+            frameSize.Y = int.Parse(definition.Attribute("FrameHeight").Value, NumberStyles.Integer);
+            sheetSize.X = int.Parse(definition.Attribute("SheetColumns").Value, NumberStyles.Integer);
+            sheetSize.Y = int.Parse(definition.Attribute("SheetRows").Value, NumberStyles.Integer);
+            frameInterval = TimeSpan.FromSeconds(1.0f / int.Parse(definition.Attribute("Speed").Value, NumberStyles.Integer));
+            ShotgunShotEastAnimation.Add(new Animation(ShotgunEastTexture[1], frameSize, sheetSize, frameInterval));
+
+        }
+        private void EgonShotgunShotNorthEastAnimationInit(XDocument doc)
+        {
+            TimeSpan frameInterval;
+            Point sheetSize = new Point();
+            Point frameSize = new Point();
+            var definition = doc.Root.Element("EgonShotgunNEDef");
+            ShotgunNETexture.Add(game.Content.Load<Texture2D>(@"InGame/Egon/egon_shotgun_NE"));
+            ShotgunNEOrigin.Add(new Vector2(ShotgunNETexture[1].Width / 2, ShotgunNETexture[1].Height / 2));
+            frameSize.X = int.Parse(definition.Attribute("FrameWidth").Value, NumberStyles.Integer);
+            frameSize.Y = int.Parse(definition.Attribute("FrameHeight").Value, NumberStyles.Integer);
+            sheetSize.X = int.Parse(definition.Attribute("SheetColumns").Value, NumberStyles.Integer);
+            sheetSize.Y = int.Parse(definition.Attribute("SheetRows").Value, NumberStyles.Integer);
+            frameInterval = TimeSpan.FromSeconds(1.0f / int.Parse(definition.Attribute("Speed").Value, NumberStyles.Integer));
+            ShotgunNEAnimation.Add(new Animation(ShotgunNETexture[1], frameSize, sheetSize, frameInterval));
+
+        }
+        private void EgonShotgunShotSouthEastAnimationInit(XDocument doc)
+        {
+            TimeSpan frameInterval;
+            Point sheetSize = new Point();
+            Point frameSize = new Point();
+            var definition = doc.Root.Element("EgonShotgunSEDef");
+            ShotgunSETexture.Add(game.Content.Load<Texture2D>(@"InGame/Egon/egon_shotgun_SE"));
+            ShotgunSEOrigin.Add(new Vector2(ShotgunSETexture[1].Width / 2, ShotgunSETexture[1].Height / 2));
+            frameSize.X = int.Parse(definition.Attribute("FrameWidth").Value, NumberStyles.Integer);
+            frameSize.Y = int.Parse(definition.Attribute("FrameHeight").Value, NumberStyles.Integer);
+            sheetSize.X = int.Parse(definition.Attribute("SheetColumns").Value, NumberStyles.Integer);
+            sheetSize.Y = int.Parse(definition.Attribute("SheetRows").Value, NumberStyles.Integer);
+            frameInterval = TimeSpan.FromSeconds(1.0f / int.Parse(definition.Attribute("Speed").Value, NumberStyles.Integer));
+            ShotgunSEAnimation.Add(new Animation(ShotgunSETexture[1], frameSize, sheetSize, frameInterval));
+
+        }
+        private void EgonShotgunShotSouthAnimationInit(XDocument doc)
+        {
+            TimeSpan frameInterval;
+            Point sheetSize = new Point();
+            Point frameSize = new Point();
+            var definition = doc.Root.Element("EgonShotgunSouthDef");
+            ShotgunSouthTexture.Add(game.Content.Load<Texture2D>(@"InGame/Egon/egon_shotgun_S"));
+            ShotgunSouthOrigin.Add(new Vector2(ShotgunSouthTexture[1].Width / 2, ShotgunSouthTexture[1].Height / 2));
+            frameSize.X = int.Parse(definition.Attribute("FrameWidth").Value, NumberStyles.Integer);
+            frameSize.Y = int.Parse(definition.Attribute("FrameHeight").Value, NumberStyles.Integer);
+            sheetSize.X = int.Parse(definition.Attribute("SheetColumns").Value, NumberStyles.Integer);
+            sheetSize.Y = int.Parse(definition.Attribute("SheetRows").Value, NumberStyles.Integer);
+            frameInterval = TimeSpan.FromSeconds(1.0f / int.Parse(definition.Attribute("Speed").Value, NumberStyles.Integer));
+            ShotgunSouthAnimation.Add(new Animation(ShotgunSouthTexture[1], frameSize, sheetSize, frameInterval));
+
+        }
+        private void EgonShotgunShotNorthAnimationInit(XDocument doc)
+        {
+            TimeSpan frameInterval;
+            Point sheetSize = new Point();
+            Point frameSize = new Point();
+            var definition = doc.Root.Element("EgonShotgunNorthDef");
+            ShotgunNorthTexture.Add(game.Content.Load<Texture2D>(@"InGame/Egon/egon_shotgun_N"));
+            ShotgunNorthOrigin.Add(new Vector2(ShotgunNorthTexture[1].Width / 2, ShotgunNorthTexture[1].Height / 2));
+            frameSize.X = int.Parse(definition.Attribute("FrameWidth").Value, NumberStyles.Integer);
+            frameSize.Y = int.Parse(definition.Attribute("FrameHeight").Value, NumberStyles.Integer);
+            sheetSize.X = int.Parse(definition.Attribute("SheetColumns").Value, NumberStyles.Integer);
+            sheetSize.Y = int.Parse(definition.Attribute("SheetRows").Value, NumberStyles.Integer);
+            frameInterval = TimeSpan.FromSeconds(1.0f / int.Parse(definition.Attribute("Speed").Value, NumberStyles.Integer));
+            ShotgunNorthAnimation.Add(new Animation(ShotgunNorthTexture[1], frameSize, sheetSize, frameInterval));
+
+        }
+
+        private void RayIdleTrunkAnimationInit(XDocument doc)
+        {
+            TimeSpan frameInterval;
+            Point sheetSize = new Point();
+            Point frameSize = new Point();
+            var definition = doc.Root.Element("RayIdleTrunkDef");
+            IdleLegsTexture.Add(game.Content.Load<Texture2D>(@"InGame/Ray/ray_legs_idle"));
+            IdleTrunkTexture.Add(game.Content.Load<Texture2D>(@"InGame/Ray/ray_idle"));
+            IdleTrunkOrigin.Add(new Vector2(IdleTrunkTexture[2].Width / 2, IdleTrunkTexture[2].Height / 2));
+            frameSize.X = int.Parse(definition.Attribute("FrameWidth").Value, NumberStyles.Integer);
+            frameSize.Y = int.Parse(definition.Attribute("FrameHeight").Value, NumberStyles.Integer);
+            sheetSize.X = int.Parse(definition.Attribute("SheetColumns").Value, NumberStyles.Integer);
+            sheetSize.Y = int.Parse(definition.Attribute("SheetRows").Value, NumberStyles.Integer);
+            frameInterval = TimeSpan.FromSeconds(1.0f / int.Parse(definition.Attribute("Speed").Value, NumberStyles.Integer));
+            IdleTrunkAnimation.Add(new Animation(IdleTrunkTexture[2], frameSize, sheetSize, frameInterval));
+
+        }
+        private void RayRunEastAnimationInit(XDocument doc)
+        {
+            TimeSpan frameInterval;
+            Point sheetSize = new Point();
+            Point frameSize = new Point();
+            var definition = doc.Root.Element("RayRunEDef");
+            RunEastTexture.Add(game.Content.Load<Texture2D>(@"InGame/Ray/ray_run_E"));
+            RunEastOrigin.Add(new Vector2(RunEastTexture[2].Width / 2, RunEastTexture[2].Height / 2));
+            frameSize.X = int.Parse(definition.Attribute("FrameWidth").Value, NumberStyles.Integer);
+            frameSize.Y = int.Parse(definition.Attribute("FrameHeight").Value, NumberStyles.Integer);
+            sheetSize.X = int.Parse(definition.Attribute("SheetColumns").Value, NumberStyles.Integer);
+            sheetSize.Y = int.Parse(definition.Attribute("SheetRows").Value, NumberStyles.Integer);
+            frameInterval = TimeSpan.FromSeconds(1.0f / int.Parse(definition.Attribute("Speed").Value, NumberStyles.Integer));
+            RunEastAnimation.Add(new Animation(RunEastTexture[2], frameSize, sheetSize, frameInterval));
+
+        }
+        private void RayPistolShotEastAnimationInit(XDocument doc)
+        {
+            TimeSpan frameInterval;
+            Point sheetSize = new Point();
+            Point frameSize = new Point();
+            var definition = doc.Root.Element("RayPistolEDef");
+            PistolShotEastTexture.Add(game.Content.Load<Texture2D>(@"InGame/Ray/ray_pistol_E"));
+            PistolShotEastOrigin.Add(new Vector2(PistolShotEastTexture[2].Width / 2, PistolShotEastTexture[2].Height / 2));
+            frameSize.X = int.Parse(definition.Attribute("FrameWidth").Value, NumberStyles.Integer);
+            frameSize.Y = int.Parse(definition.Attribute("FrameHeight").Value, NumberStyles.Integer);
+            sheetSize.X = int.Parse(definition.Attribute("SheetColumns").Value, NumberStyles.Integer);
+            sheetSize.Y = int.Parse(definition.Attribute("SheetRows").Value, NumberStyles.Integer);
+            frameInterval = TimeSpan.FromSeconds(1.0f / int.Parse(definition.Attribute("Speed").Value, NumberStyles.Integer));
+            PistolShotEastAnimation.Add(new Animation(PistolShotEastTexture[2], frameSize, sheetSize, frameInterval));
+
+        }
+        private void RayPistolShotNorthEastAnimationInit(XDocument doc)
+        {
+            TimeSpan frameInterval;
+            Point sheetSize = new Point();
+            Point frameSize = new Point();
+            var definition = doc.Root.Element("RayPistolNEDef");
+            PistolShotNETexture.Add(game.Content.Load<Texture2D>(@"InGame/Ray/ray_pistol_NE"));
+            PistolShotNEOrigin.Add(new Vector2(PistolShotNETexture[2].Width / 2, PistolShotNETexture[2].Height / 2));
+            frameSize.X = int.Parse(definition.Attribute("FrameWidth").Value, NumberStyles.Integer);
+            frameSize.Y = int.Parse(definition.Attribute("FrameHeight").Value, NumberStyles.Integer);
+            sheetSize.X = int.Parse(definition.Attribute("SheetColumns").Value, NumberStyles.Integer);
+            sheetSize.Y = int.Parse(definition.Attribute("SheetRows").Value, NumberStyles.Integer);
+            frameInterval = TimeSpan.FromSeconds(1.0f / int.Parse(definition.Attribute("Speed").Value, NumberStyles.Integer));
+            PistolShotNEAnimation.Add(new Animation(PistolShotNETexture[2], frameSize, sheetSize, frameInterval));
+
+        }
+        private void RayPistolShotSouthEastAnimationInit(XDocument doc)
+        {
+            TimeSpan frameInterval;
+            Point sheetSize = new Point();
+            Point frameSize = new Point();
+            var definition = doc.Root.Element("RayPistolSEDef");
+            PistolShotSETexture.Add(game.Content.Load<Texture2D>(@"InGame/Ray/ray_pistol_SE"));
+            PistolShotSEOrigin.Add(new Vector2(PistolShotSETexture[2].Width / 2, PistolShotSETexture[2].Height / 2));
+            frameSize.X = int.Parse(definition.Attribute("FrameWidth").Value, NumberStyles.Integer);
+            frameSize.Y = int.Parse(definition.Attribute("FrameHeight").Value, NumberStyles.Integer);
+            sheetSize.X = int.Parse(definition.Attribute("SheetColumns").Value, NumberStyles.Integer);
+            sheetSize.Y = int.Parse(definition.Attribute("SheetRows").Value, NumberStyles.Integer);
+            frameInterval = TimeSpan.FromSeconds(1.0f / int.Parse(definition.Attribute("Speed").Value, NumberStyles.Integer));
+            PistolShotSEAnimation.Add(new Animation(PistolShotSETexture[2], frameSize, sheetSize, frameInterval));
+
+        }
+        private void RayPistolShotSouthAnimationInit(XDocument doc)
+        {
+            TimeSpan frameInterval;
+            Point sheetSize = new Point();
+            Point frameSize = new Point();
+            var definition = doc.Root.Element("RayPistolSouthDef");
+            PistolShotSouthTexture.Add(game.Content.Load<Texture2D>(@"InGame/Ray/ray_pistol_S"));
+            PistolShotSouthOrigin.Add(new Vector2(PistolShotSouthTexture[2].Width / 2, PistolShotSouthTexture[2].Height / 2));
+            frameSize.X = int.Parse(definition.Attribute("FrameWidth").Value, NumberStyles.Integer);
+            frameSize.Y = int.Parse(definition.Attribute("FrameHeight").Value, NumberStyles.Integer);
+            sheetSize.X = int.Parse(definition.Attribute("SheetColumns").Value, NumberStyles.Integer);
+            sheetSize.Y = int.Parse(definition.Attribute("SheetRows").Value, NumberStyles.Integer);
+            frameInterval = TimeSpan.FromSeconds(1.0f / int.Parse(definition.Attribute("Speed").Value, NumberStyles.Integer));
+            PistolShotSouthAnimation.Add(new Animation(PistolShotSouthTexture[2], frameSize, sheetSize, frameInterval));
+
+        }
+        private void RayPistolShotNorthAnimationInit(XDocument doc)
+        {
+            TimeSpan frameInterval;
+            Point sheetSize = new Point();
+            Point frameSize = new Point();
+            var definition = doc.Root.Element("RayPistolNorthDef");
+            PistolShotNorthTexture.Add(game.Content.Load<Texture2D>(@"InGame/Ray/ray_pistol_N"));
+            PistolShotNorthOrigin.Add(new Vector2(PistolShotNorthTexture[2].Width / 2, PistolShotNorthTexture[2].Height / 2));
+            frameSize.X = int.Parse(definition.Attribute("FrameWidth").Value, NumberStyles.Integer);
+            frameSize.Y = int.Parse(definition.Attribute("FrameHeight").Value, NumberStyles.Integer);
+            sheetSize.X = int.Parse(definition.Attribute("SheetColumns").Value, NumberStyles.Integer);
+            sheetSize.Y = int.Parse(definition.Attribute("SheetRows").Value, NumberStyles.Integer);
+            frameInterval = TimeSpan.FromSeconds(1.0f / int.Parse(definition.Attribute("Speed").Value, NumberStyles.Integer));
+            PistolShotNorthAnimation.Add(new Animation(PistolShotNorthTexture[2], frameSize, sheetSize, frameInterval));
+
+        }
+        private void RayShotgunShotEastAnimationInit(XDocument doc)
+        {
+            TimeSpan frameInterval;
+            Point sheetSize = new Point();
+            Point frameSize = new Point();
+            var definition = doc.Root.Element("RayShotgunEDef");
+            ShotgunEastTexture.Add(game.Content.Load<Texture2D>(@"InGame/Ray/ray_shotgun_E"));
+            ShotgunShotEastOrigin.Add(new Vector2(ShotgunEastTexture[2].Width / 2, PistolShotEastTexture[2].Height / 2));
+            frameSize.X = int.Parse(definition.Attribute("FrameWidth").Value, NumberStyles.Integer);
+            frameSize.Y = int.Parse(definition.Attribute("FrameHeight").Value, NumberStyles.Integer);
+            sheetSize.X = int.Parse(definition.Attribute("SheetColumns").Value, NumberStyles.Integer);
+            sheetSize.Y = int.Parse(definition.Attribute("SheetRows").Value, NumberStyles.Integer);
+            frameInterval = TimeSpan.FromSeconds(1.0f / int.Parse(definition.Attribute("Speed").Value, NumberStyles.Integer));
+            ShotgunShotEastAnimation.Add(new Animation(ShotgunEastTexture[2], frameSize, sheetSize, frameInterval));
+
+        }
+        private void RayShotgunShotNorthEastAnimationInit(XDocument doc)
+        {
+            TimeSpan frameInterval;
+            Point sheetSize = new Point();
+            Point frameSize = new Point();
+            var definition = doc.Root.Element("RayShotgunNEDef");
+            ShotgunNETexture.Add(game.Content.Load<Texture2D>(@"InGame/Ray/ray_shotgun_NE"));
+            ShotgunNEOrigin.Add(new Vector2(ShotgunNETexture[2].Width / 2, ShotgunNETexture[2].Height / 2));
+            frameSize.X = int.Parse(definition.Attribute("FrameWidth").Value, NumberStyles.Integer);
+            frameSize.Y = int.Parse(definition.Attribute("FrameHeight").Value, NumberStyles.Integer);
+            sheetSize.X = int.Parse(definition.Attribute("SheetColumns").Value, NumberStyles.Integer);
+            sheetSize.Y = int.Parse(definition.Attribute("SheetRows").Value, NumberStyles.Integer);
+            frameInterval = TimeSpan.FromSeconds(1.0f / int.Parse(definition.Attribute("Speed").Value, NumberStyles.Integer));
+            ShotgunNEAnimation.Add(new Animation(ShotgunNETexture[2], frameSize, sheetSize, frameInterval));
+
+        }
+        private void RayShotgunShotSouthEastAnimationInit(XDocument doc)
+        {
+            TimeSpan frameInterval;
+            Point sheetSize = new Point();
+            Point frameSize = new Point();
+            var definition = doc.Root.Element("RayShotgunSEDef");
+            ShotgunSETexture.Add(game.Content.Load<Texture2D>(@"InGame/Ray/ray_shotgun_SE"));
+            ShotgunSEOrigin.Add(new Vector2(ShotgunSETexture[2].Width / 2, ShotgunSETexture[2].Height / 2));
+            frameSize.X = int.Parse(definition.Attribute("FrameWidth").Value, NumberStyles.Integer);
+            frameSize.Y = int.Parse(definition.Attribute("FrameHeight").Value, NumberStyles.Integer);
+            sheetSize.X = int.Parse(definition.Attribute("SheetColumns").Value, NumberStyles.Integer);
+            sheetSize.Y = int.Parse(definition.Attribute("SheetRows").Value, NumberStyles.Integer);
+            frameInterval = TimeSpan.FromSeconds(1.0f / int.Parse(definition.Attribute("Speed").Value, NumberStyles.Integer));
+            ShotgunSEAnimation.Add(new Animation(ShotgunSETexture[2], frameSize, sheetSize, frameInterval));
+
+        }
+        private void RayShotgunShotSouthAnimationInit(XDocument doc)
+        {
+            TimeSpan frameInterval;
+            Point sheetSize = new Point();
+            Point frameSize = new Point();
+            var definition = doc.Root.Element("RayShotgunSouthDef");
+            ShotgunSouthTexture.Add(game.Content.Load<Texture2D>(@"InGame/Ray/ray_shotgun_S"));
+            ShotgunSouthOrigin.Add(new Vector2(ShotgunSouthTexture[2].Width / 2, ShotgunSouthTexture[2].Height / 2));
+            frameSize.X = int.Parse(definition.Attribute("FrameWidth").Value, NumberStyles.Integer);
+            frameSize.Y = int.Parse(definition.Attribute("FrameHeight").Value, NumberStyles.Integer);
+            sheetSize.X = int.Parse(definition.Attribute("SheetColumns").Value, NumberStyles.Integer);
+            sheetSize.Y = int.Parse(definition.Attribute("SheetRows").Value, NumberStyles.Integer);
+            frameInterval = TimeSpan.FromSeconds(1.0f / int.Parse(definition.Attribute("Speed").Value, NumberStyles.Integer));
+            ShotgunSouthAnimation.Add(new Animation(ShotgunSouthTexture[2], frameSize, sheetSize, frameInterval));
+        }
+        private void RayShotgunShotNorthAnimationInit(XDocument doc)
+        {
+            TimeSpan frameInterval;
+            Point sheetSize = new Point();
+            Point frameSize = new Point();
+            var definition = doc.Root.Element("RayShotgunNorthDef");
+            ShotgunNorthTexture.Add(game.Content.Load<Texture2D>(@"InGame/Ray/ray_shotgun_N"));
+            ShotgunNorthOrigin.Add(new Vector2(ShotgunNorthTexture[2].Width / 2, ShotgunNorthTexture[2].Height / 2));
+            frameSize.X = int.Parse(definition.Attribute("FrameWidth").Value, NumberStyles.Integer);
+            frameSize.Y = int.Parse(definition.Attribute("FrameHeight").Value, NumberStyles.Integer);
+            sheetSize.X = int.Parse(definition.Attribute("SheetColumns").Value, NumberStyles.Integer);
+            sheetSize.Y = int.Parse(definition.Attribute("SheetRows").Value, NumberStyles.Integer);
+            frameInterval = TimeSpan.FromSeconds(1.0f / int.Parse(definition.Attribute("Speed").Value, NumberStyles.Integer));
+            ShotgunNorthAnimation.Add(new Animation(ShotgunNorthTexture[2], frameSize, sheetSize, frameInterval)); // Define a new Animation instance
+
+        }
+
+        private void PeterIdleTrunkAnimationInit(XDocument doc)
+        {
+            TimeSpan frameInterval;
+            Point sheetSize = new Point();
+            Point frameSize = new Point();
+            var definition = doc.Root.Element("PeterIdleTrunkDef");
+            IdleLegsTexture.Add(game.Content.Load<Texture2D>(@"InGame/Peter/peter_legs_idle"));
+            IdleTrunkTexture.Add(game.Content.Load<Texture2D>(@"InGame/Peter/peter_idle"));
+            IdleTrunkOrigin.Add(new Vector2(IdleTrunkTexture[3].Width / 2, IdleTrunkTexture[3].Height / 2));
+            frameSize.X = int.Parse(definition.Attribute("FrameWidth").Value, NumberStyles.Integer);
+            frameSize.Y = int.Parse(definition.Attribute("FrameHeight").Value, NumberStyles.Integer);
+            sheetSize.X = int.Parse(definition.Attribute("SheetColumns").Value, NumberStyles.Integer);
+            sheetSize.Y = int.Parse(definition.Attribute("SheetRows").Value, NumberStyles.Integer);
+            frameInterval = TimeSpan.FromSeconds(1.0f / int.Parse(definition.Attribute("Speed").Value, NumberStyles.Integer));
+            IdleTrunkAnimation.Add(new Animation(IdleTrunkTexture[3], frameSize, sheetSize, frameInterval)); // Define a new Animation instance
+
+        }
+        private void PeterRunEastAnimationInit(XDocument doc)
+        {
+            TimeSpan frameInterval;
+            Point sheetSize = new Point();
+            Point frameSize = new Point();
+            var definition = doc.Root.Element("PeterRunEDef");
+            RunEastTexture.Add(game.Content.Load<Texture2D>(@"InGame/Peter/peter_run_E"));
+            RunEastOrigin.Add(new Vector2(RunEastTexture[3].Width / 2, RunEastTexture[3].Height / 2));
+            frameSize.X = int.Parse(definition.Attribute("FrameWidth").Value, NumberStyles.Integer);
+            frameSize.Y = int.Parse(definition.Attribute("FrameHeight").Value, NumberStyles.Integer);
+            sheetSize.X = int.Parse(definition.Attribute("SheetColumns").Value, NumberStyles.Integer);
+            sheetSize.Y = int.Parse(definition.Attribute("SheetRows").Value, NumberStyles.Integer);
+            frameInterval = TimeSpan.FromSeconds(1.0f / int.Parse(definition.Attribute("Speed").Value, NumberStyles.Integer));
+            RunEastAnimation.Add(new Animation(RunEastTexture[3], frameSize, sheetSize, frameInterval)); // Define a new Animation instance
+
+        }
+        private void PeterPistolShotEastAnimationInit(XDocument doc)
+        {
+            TimeSpan frameInterval;
+            Point sheetSize = new Point();
+            Point frameSize = new Point();
+            var definition = doc.Root.Element("PeterPistolEDef");
+            PistolShotEastTexture.Add(game.Content.Load<Texture2D>(@"InGame/Peter/peter_pistol_E"));
+            PistolShotEastOrigin.Add(new Vector2(PistolShotEastTexture[3].Width / 2, PistolShotEastTexture[3].Height / 2));
+            frameSize.X = int.Parse(definition.Attribute("FrameWidth").Value, NumberStyles.Integer);
+            frameSize.Y = int.Parse(definition.Attribute("FrameHeight").Value, NumberStyles.Integer);
+            sheetSize.X = int.Parse(definition.Attribute("SheetColumns").Value, NumberStyles.Integer);
+            sheetSize.Y = int.Parse(definition.Attribute("SheetRows").Value, NumberStyles.Integer);
+            frameInterval = TimeSpan.FromSeconds(1.0f / int.Parse(definition.Attribute("Speed").Value, NumberStyles.Integer));
+            PistolShotEastAnimation.Add(new Animation(PistolShotEastTexture[3], frameSize, sheetSize, frameInterval)); // Define a new Animation instance
+
+        }
+        private void PeterPistolShotNorthEastAnimationInit(XDocument doc)
+        {
+            TimeSpan frameInterval;
+            Point sheetSize = new Point();
+            Point frameSize = new Point();
+            var definition = doc.Root.Element("PeterPistolNEDef");
+            PistolShotNETexture.Add(game.Content.Load<Texture2D>(@"InGame/Peter/peter_pistol_NE"));
+            PistolShotNEOrigin.Add(new Vector2(PistolShotNETexture[3].Width / 2, PistolShotNETexture[3].Height / 2));
+            frameSize.X = int.Parse(definition.Attribute("FrameWidth").Value, NumberStyles.Integer);
+            frameSize.Y = int.Parse(definition.Attribute("FrameHeight").Value, NumberStyles.Integer);
+            sheetSize.X = int.Parse(definition.Attribute("SheetColumns").Value, NumberStyles.Integer);
+            sheetSize.Y = int.Parse(definition.Attribute("SheetRows").Value, NumberStyles.Integer);
+            frameInterval = TimeSpan.FromSeconds(1.0f / int.Parse(definition.Attribute("Speed").Value, NumberStyles.Integer));
+            PistolShotNEAnimation.Add(new Animation(PistolShotNETexture[3], frameSize, sheetSize, frameInterval)); // Define a new Animation instance
+
+        }
+        private void PeterPistolShotSouthEastAnimationInit(XDocument doc)
+        {
+            TimeSpan frameInterval;
+            Point sheetSize = new Point();
+            Point frameSize = new Point();
+            var definition = doc.Root.Element("PeterPistolSEDef");
+            PistolShotSETexture.Add(game.Content.Load<Texture2D>(@"InGame/Peter/peter_pistol_SE"));
+            PistolShotSEOrigin.Add(new Vector2(PistolShotSETexture[3].Width / 2, PistolShotSETexture[3].Height / 2));
+            frameSize.X = int.Parse(definition.Attribute("FrameWidth").Value, NumberStyles.Integer);
+            frameSize.Y = int.Parse(definition.Attribute("FrameHeight").Value, NumberStyles.Integer);
+            sheetSize.X = int.Parse(definition.Attribute("SheetColumns").Value, NumberStyles.Integer);
+            sheetSize.Y = int.Parse(definition.Attribute("SheetRows").Value, NumberStyles.Integer);
+            frameInterval = TimeSpan.FromSeconds(1.0f / int.Parse(definition.Attribute("Speed").Value, NumberStyles.Integer));
+            PistolShotSEAnimation.Add(new Animation(PistolShotSETexture[3], frameSize, sheetSize, frameInterval)); // Define a new Animation instance
+
+        }
+        private void PeterPistolShotSouthAnimationInit(XDocument doc)
+        {
+            TimeSpan frameInterval;
+            Point sheetSize = new Point();
+            Point frameSize = new Point();
+            var definition = doc.Root.Element("PeterPistolSouthDef");
+            PistolShotSouthTexture.Add(game.Content.Load<Texture2D>(@"InGame/Peter/peter_pistol_S"));
+            PistolShotSouthOrigin.Add(new Vector2(PistolShotSouthTexture[3].Width / 2, PistolShotSouthTexture[3].Height / 2));
+            frameSize.X = int.Parse(definition.Attribute("FrameWidth").Value, NumberStyles.Integer);
+            frameSize.Y = int.Parse(definition.Attribute("FrameHeight").Value, NumberStyles.Integer);
+            sheetSize.X = int.Parse(definition.Attribute("SheetColumns").Value, NumberStyles.Integer);
+            sheetSize.Y = int.Parse(definition.Attribute("SheetRows").Value, NumberStyles.Integer);
+            frameInterval = TimeSpan.FromSeconds(1.0f / int.Parse(definition.Attribute("Speed").Value, NumberStyles.Integer));
+            PistolShotSouthAnimation.Add(new Animation(PistolShotSouthTexture[3], frameSize, sheetSize, frameInterval)); // Define a new Animation instance
+
+        }
+        private void PeterPistolShotNorthAnimationInit(XDocument doc)
+        {
+            TimeSpan frameInterval;
+            Point sheetSize = new Point();
+            Point frameSize = new Point();
+            var definition = doc.Root.Element("PeterPistolNorthDef");
+            PistolShotNorthTexture.Add(game.Content.Load<Texture2D>(@"InGame/Peter/peter_pistol_N"));
+            PistolShotNorthOrigin.Add(new Vector2(PistolShotNorthTexture[3].Width / 2, PistolShotNorthTexture[3].Height / 2));
+            frameSize.X = int.Parse(definition.Attribute("FrameWidth").Value, NumberStyles.Integer);
+            frameSize.Y = int.Parse(definition.Attribute("FrameHeight").Value, NumberStyles.Integer);
+            sheetSize.X = int.Parse(definition.Attribute("SheetColumns").Value, NumberStyles.Integer);
+            sheetSize.Y = int.Parse(definition.Attribute("SheetRows").Value, NumberStyles.Integer);
+            frameInterval = TimeSpan.FromSeconds(1.0f / int.Parse(definition.Attribute("Speed").Value, NumberStyles.Integer));
+            PistolShotNorthAnimation.Add(new Animation(PistolShotNorthTexture[3], frameSize, sheetSize, frameInterval)); // Define a new Animation instance
+
+        }
+        private void PeterShotgunShotEastAnimationInit(XDocument doc)
+        {
+            TimeSpan frameInterval;
+            Point sheetSize = new Point();
+            Point frameSize = new Point();
+            var definition = doc.Root.Element("PeterShotgunEDef");
+            ShotgunEastTexture.Add(game.Content.Load<Texture2D>(@"InGame/Peter/peter_shotgun_E"));
+            ShotgunShotEastOrigin.Add(new Vector2(ShotgunEastTexture[3].Width / 2, PistolShotEastTexture[3].Height / 2));
+            frameSize.X = int.Parse(definition.Attribute("FrameWidth").Value, NumberStyles.Integer);
+            frameSize.Y = int.Parse(definition.Attribute("FrameHeight").Value, NumberStyles.Integer);
+            sheetSize.X = int.Parse(definition.Attribute("SheetColumns").Value, NumberStyles.Integer);
+            sheetSize.Y = int.Parse(definition.Attribute("SheetRows").Value, NumberStyles.Integer);
+            frameInterval = TimeSpan.FromSeconds(1.0f / int.Parse(definition.Attribute("Speed").Value, NumberStyles.Integer));
+            ShotgunShotEastAnimation.Add(new Animation(ShotgunEastTexture[3], frameSize, sheetSize, frameInterval)); // Define a new Animation instance
+
+        }
+        private void PeterShotgunShotNorthEastAnimationInit(XDocument doc)
+        {
+            TimeSpan frameInterval;
+            Point sheetSize = new Point();
+            Point frameSize = new Point();
+            var definition = doc.Root.Element("PeterShotgunNEDef");
+            ShotgunNETexture.Add(game.Content.Load<Texture2D>(@"InGame/Peter/peter_shotgun_NE"));
+            ShotgunNEOrigin.Add(new Vector2(ShotgunNETexture[3].Width / 2, ShotgunNETexture[3].Height / 2));
+            frameSize.X = int.Parse(definition.Attribute("FrameWidth").Value, NumberStyles.Integer);
+            frameSize.Y = int.Parse(definition.Attribute("FrameHeight").Value, NumberStyles.Integer);
+            sheetSize.X = int.Parse(definition.Attribute("SheetColumns").Value, NumberStyles.Integer);
+            sheetSize.Y = int.Parse(definition.Attribute("SheetRows").Value, NumberStyles.Integer);
+            frameInterval = TimeSpan.FromSeconds(1.0f / int.Parse(definition.Attribute("Speed").Value, NumberStyles.Integer));
+            ShotgunNEAnimation.Add(new Animation(ShotgunNETexture[3], frameSize, sheetSize, frameInterval)); // Define a new Animation instance
+
+        }
+        private void PeterShotgunShotSouthEastAnimationInit(XDocument doc)
+        {
+            TimeSpan frameInterval;
+            Point sheetSize = new Point();
+            Point frameSize = new Point();
+            var definition = doc.Root.Element("PeterShotgunSEDef");
+            ShotgunSETexture.Add(game.Content.Load<Texture2D>(@"InGame/Peter/peter_shotgun_SE"));
+            ShotgunSEOrigin.Add(new Vector2(ShotgunSETexture[3].Width / 2, ShotgunSETexture[3].Height / 2));
+            frameSize.X = int.Parse(definition.Attribute("FrameWidth").Value, NumberStyles.Integer);
+            frameSize.Y = int.Parse(definition.Attribute("FrameHeight").Value, NumberStyles.Integer);
+            sheetSize.X = int.Parse(definition.Attribute("SheetColumns").Value, NumberStyles.Integer);
+            sheetSize.Y = int.Parse(definition.Attribute("SheetRows").Value, NumberStyles.Integer);
+            frameInterval = TimeSpan.FromSeconds(1.0f / int.Parse(definition.Attribute("Speed").Value, NumberStyles.Integer));
+            ShotgunSEAnimation.Add(new Animation(ShotgunSETexture[3], frameSize, sheetSize, frameInterval)); // Define a new Animation instance
+
+        }
+        private void PeterShotgunShotSouthAnimationInit(XDocument doc)
+        {
+            TimeSpan frameInterval;
+            Point sheetSize = new Point();
+            Point frameSize = new Point();
+            var definition = doc.Root.Element("PeterShotgunSouthDef");
+            ShotgunSouthTexture.Add(game.Content.Load<Texture2D>(@"InGame/Peter/peter_shotgun_S"));
+            ShotgunSouthOrigin.Add(new Vector2(ShotgunSouthTexture[3].Width / 2, ShotgunSouthTexture[3].Height / 2));
+            frameSize.X = int.Parse(definition.Attribute("FrameWidth").Value, NumberStyles.Integer);
+            frameSize.Y = int.Parse(definition.Attribute("FrameHeight").Value, NumberStyles.Integer);
+            sheetSize.X = int.Parse(definition.Attribute("SheetColumns").Value, NumberStyles.Integer);
+            sheetSize.Y = int.Parse(definition.Attribute("SheetRows").Value, NumberStyles.Integer);
+            frameInterval = TimeSpan.FromSeconds(1.0f / int.Parse(definition.Attribute("Speed").Value, NumberStyles.Integer));
+            ShotgunSouthAnimation.Add(new Animation(ShotgunSouthTexture[3], frameSize, sheetSize, frameInterval)); // Define a new Animation instance
+
+        }
+        private void PeterShotgunShotNorthAnimationInit(XDocument doc)
+        {
+            TimeSpan frameInterval;
+            Point sheetSize = new Point();
+            Point frameSize = new Point();
+            var definition = doc.Root.Element("PeterShotgunNorthDef");
+            ShotgunNorthTexture.Add(game.Content.Load<Texture2D>(@"InGame/Peter/peter_shotgun_N"));
+            ShotgunNorthOrigin.Add(new Vector2(ShotgunNorthTexture[3].Width / 2, ShotgunNorthTexture[3].Height / 2));
+            frameSize.X = int.Parse(definition.Attribute("FrameWidth").Value, NumberStyles.Integer);
+            frameSize.Y = int.Parse(definition.Attribute("FrameHeight").Value, NumberStyles.Integer);
+            sheetSize.X = int.Parse(definition.Attribute("SheetColumns").Value, NumberStyles.Integer);
+            sheetSize.Y = int.Parse(definition.Attribute("SheetRows").Value, NumberStyles.Integer);
+            frameInterval = TimeSpan.FromSeconds(1.0f / int.Parse(definition.Attribute("Speed").Value, NumberStyles.Integer));
+            ShotgunNorthAnimation.Add(new Animation(ShotgunNorthTexture[3], frameSize, sheetSize, frameInterval)); // Define a new Animation instance
+
+        }
+
+        private void FlamethrowerAnimationInit(XDocument doc)
+        {
+            TimeSpan frameInterval;
+            Point sheetSize = new Point();
+            Point frameSize = new Point();
+            var definition = doc.Root.Element("FlameThrowerDef");
+            flamethrowerTexture = game.Content.Load<Texture2D>(@"InGame/flamethrower");
+            FT_CollisionTexture = game.Content.Load<Texture2D>(@"InGame/FT_CollisionTexture");
+            frameSize.X = int.Parse(definition.Attribute("FrameWidth").Value, NumberStyles.Integer);
+            frameSize.Y = int.Parse(definition.Attribute("FrameHeight").Value, NumberStyles.Integer);
+            sheetSize.X = int.Parse(definition.Attribute("SheetColumns").Value, NumberStyles.Integer);
+            sheetSize.Y = int.Parse(definition.Attribute("SheetRows").Value, NumberStyles.Integer);
+            frameInterval = TimeSpan.FromSeconds(1.0f / int.Parse(definition.Attribute("Speed").Value, NumberStyles.Integer));
+            flamethrowerAnimation = new Animation(flamethrowerTexture, frameSize, sheetSize, frameInterval);
+
         }
     }
 }
