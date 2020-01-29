@@ -14,7 +14,7 @@ using System.Xml.Linq;
 namespace ZombustersWindows
 {
     public class GamePlayScreen : BackgroundScreen
-    {        
+    {
         MyGame game;
         Rectangle uiBounds;
         NeutralInput playerOneInput;
@@ -38,7 +38,7 @@ namespace ZombustersWindows
         public Texture2D livePowerUp, extraLivePowerUp, shotgunAmmoPowerUp, machinegunAmmoPowerUp, flamethrowerAmmoPowerUp, immunePowerUp, heart, shotgunammoUI, pistolammoUI, grenadeammoUI, flamethrowerammoUI;
         Texture2D bullet;
         Vector2 bulletorigin;
-        Texture2D flamethrowerTexture, FT_CollisionTexture;
+        Texture2D flamethrowerTexture;
         Animation flamethrowerAnimation;
         List<Texture2D> IdleTrunkTexture, IdleLegsTexture, DiedTexture; // Idle Combo
         List<Texture2D> RunEastTexture; //, RunNETexture, RunSETexture, RunNorthTexture, RunSouthTexture; // Run Textures
@@ -69,9 +69,6 @@ namespace ZombustersWindows
         public Random random;
         private float timer, timerplayer;
         private int subLevelIndex;
-        //PRUEBA!!
-        //ParticleEffect SmokeEffect;
-        //Renderer particleRenderer;
 
         public List<TankState> Tanks;
         public List<ZombieState> Zombies;
@@ -88,13 +85,10 @@ namespace ZombustersWindows
             //this.currentSublevel = CSubLevel.SubLevel.Ten;
 #endif
             menu = new GamePlayMenu();
-            menu.MenuOptionSelected += new EventHandler<MenuSelection>(menu_MenuOptionSelected);
-            menu.MenuCanceled += new EventHandler<MenuSelection>(menu_MenuCanceled);
+            menu.MenuOptionSelected += new EventHandler<MenuSelection>(GameplayMenuOptionSelected);
+            menu.MenuCanceled += new EventHandler<MenuSelection>(GameplayMenuCanceled);
             gomenu = new GameOverMenu();
-            gomenu.GameOverMenuOptionSelected += new EventHandler<MenuSelection>(menu_GameOverMenuOptionSelected);
-            //gomenu.MenuCanceled += new EventHandler<MenuSelection>(menu_MenuCanceled);
-            //musicComponent = new MusicComponent(game);
-            //game.Components.Add(musicComponent);
+            gomenu.GameOverMenuOptionSelected += new EventHandler<MenuSelection>(GameOverMenuOptionSelected);
         }
 
         private int activeSeekers;
@@ -118,7 +112,7 @@ namespace ZombustersWindows
             set { activeTanks = value; }
         }
 
-        void menu_MenuCanceled(Object sender, MenuSelection selection)
+        void GameplayMenuCanceled(Object sender, MenuSelection selection)
         {
             // Do nothing, game will resume on its own
         }
@@ -128,7 +122,7 @@ namespace ZombustersWindows
             QuitToMenu();
         }
 
-        void menu_MenuOptionSelected(Object sender, MenuSelection selection)
+        void GameplayMenuOptionSelected(Object sender, MenuSelection selection)
         {
             switch (selection.Selection)
             {
@@ -155,19 +149,12 @@ namespace ZombustersWindows
                     confirmExitMessageBox.Accepted += ConfirmExitMessageBoxAccepted;
                     ScreenManager.AddScreen(confirmExitMessageBox);
                     break;
-
-                case 5: // Show MarketPlace if Trial Mode On
-                    /*if (licenseInformation.IsTrial)
-                    {
-                        await Windows.System.Launcher.LaunchUriAsync(new Uri("ms-windows-store:PDP?PFN=44468RetrowaxGames.Zombusters_rhyy9bbdeb2be"));
-                    }*/
-                    break;
                 default:
                     break;
             }           
         }
 
-        void menu_GameOverMenuOptionSelected(Object sender, MenuSelection selection)
+        void GameOverMenuOptionSelected(Object sender, MenuSelection selection)
         {
             switch (selection.Selection)
             {
@@ -195,9 +182,6 @@ namespace ZombustersWindows
             }
         }
 
-        /// <summary>
-        /// Called by this screen to quit back to menu
-        /// </summary>
         public void QuitToMenu()
         {
             GameScreen[] screenList = ScreenManager.GetScreens();
@@ -208,171 +192,17 @@ namespace ZombustersWindows
 
         public override void Initialize()
         {
-            int i;
             Zombies = new List<ZombieState>();
             Tanks = new List<TankState>();
             this.random = new Random(16);
-            float RandomX;
-            float RandomY;
-            int RandomSpawnZone;
-            int howManySpawnZones = 4;
-            List<int> numplayersIngame = new List<int>();
-            float zombielife;
-            float speed;
 
             PowerUpList = new List<PowerUp>();
-
             GamePlayStatus = GameplayState.StartLevel;
-
             uiBounds = GetTitleSafeArea();
-
             Level = new Level(currentLevel);
-
-            /*if (licenseInformation.IsTrial)
-            {
-                Level = new CLevel(game.Main, Level.One);
-            }*/
-
             Level.Initialize(game);
 
-            for (i=0; i<game.currentPlayers.Length; i++)
-            {
-                game.currentPlayers[i].behaviors.AddBehavior(new ObstacleAvoidance(ref Level.gameWorld, 15.0f));
-                if (game.currentPlayers[i].status == ObjectStatus.Active)
-                {
-                    numplayersIngame.Add(i);
-                }
-            }
-
-            switch (currentSublevel)
-            {
-                case SubLevel.SubLevelType.One:
-                    subLevelIndex = 0;
-                    break;
-                case SubLevel.SubLevelType.Two:
-                    subLevelIndex = 1;
-                    break;
-                case SubLevel.SubLevelType.Three:
-                    subLevelIndex = 2;
-                    break;
-                case SubLevel.SubLevelType.Four:
-                    subLevelIndex = 3;
-                    break;
-                case SubLevel.SubLevelType.Five:
-                    subLevelIndex = 4;
-                    break;
-                case SubLevel.SubLevelType.Six:
-                    subLevelIndex = 5;
-                    break;
-                case SubLevel.SubLevelType.Seven:
-                    subLevelIndex = 6;
-                    break;
-                case SubLevel.SubLevelType.Eight:
-                    subLevelIndex = 7;
-                    break;
-                case SubLevel.SubLevelType.Nine:
-                    subLevelIndex = 8;
-                    break;
-                case SubLevel.SubLevelType.Ten:
-                    subLevelIndex = 9;
-                    break;
-                default: 
-                    subLevelIndex = 0;
-                    break;
-            }
-
-            ActiveZombies = 0;
-            ActiveTanks = 0;
-            
-            //Get How many spawn zones are
-            for (i = 0; i < Level.ZombieSpawnZones.Count-1; i++)
-            {
-                if (Level.ZombieSpawnZones[i].X == 0 && Level.ZombieSpawnZones[i].Y == 0 && Level.ZombieSpawnZones[i].Z == 0 && Level.ZombieSpawnZones[i].W == 0)
-                {
-                    howManySpawnZones--;
-                }
-            }
-
-            switch (currentLevel)
-            {
-                case LevelType.One:
-                    zombielife = 0.5f;
-                    speed = 0.0f;
-                    break;
-                case LevelType.Two:
-                    zombielife = 1.0f;
-                    speed = 0.2f;
-                    break;
-                case LevelType.Three:
-                    zombielife = 1.5f;
-                    speed = 0.3f;
-                    break;
-                case LevelType.Four:
-                    zombielife = 2.0f;
-                    speed = 0.4f;
-                    break;
-                case LevelType.Five:
-                    zombielife = 2.5f;
-                    speed = 0.5f;
-                    break;
-                case LevelType.Six:
-                    zombielife = 3.0f;
-                    speed = 0.6f;
-                    break;
-                case LevelType.Seven:
-                    zombielife = 3.5f;
-                    speed = 0.7f;
-                    break;
-                case LevelType.Eight:
-                    zombielife = 4.0f;
-                    speed = 0.8f;
-                    break;
-                case LevelType.Nine:
-                    zombielife = 4.5f;
-                    speed = 0.9f;
-                    break;
-                case LevelType.Ten:
-                    zombielife = 5.0f;
-                    speed = 1.0f;
-                    break;
-                default:
-                    zombielife = 1.0f;
-                    speed = 0.0f;
-                    break;
-            }
-
-            for (i = 0; i < Level.subLevelList[subLevelIndex].enemies.Zombies; i++)
-            {
-                RandomSpawnZone = this.random.Next(0, howManySpawnZones - 1);
-                RandomX = this.random.Next(Convert.ToInt32(Level.ZombieSpawnZones[RandomSpawnZone].X), Convert.ToInt32(Level.ZombieSpawnZones[RandomSpawnZone].Y));
-                RandomY = this.random.Next(Convert.ToInt32(Level.ZombieSpawnZones[RandomSpawnZone].Z), Convert.ToInt32(Level.ZombieSpawnZones[RandomSpawnZone].W));
-                Zombies.Add(new ZombieState(game.Content.Load<Texture2D>(@"InGame/zombie" + this.random.Next(1, 6).ToString()), new Vector2(0, 0), new Vector2(RandomX, RandomY), 5.0f, zombielife, speed));
-                Zombies[i].behaviors.AddBehavior(new Pursuit(Arrive.Deceleration.fast, 50.0f));
-                Zombies[i].behaviors.AddBehavior(new ObstacleAvoidance(ref Level.gameWorld, 15.0f));
-                Zombies[i].playerChased = numplayersIngame[random.Next(numplayersIngame.Count)];
-                ActiveZombies++;
-            }
-
-            for (i = 0; i < Level.subLevelList[subLevelIndex].enemies.Tanks; i++)
-            {
-                RandomSpawnZone = this.random.Next(0, howManySpawnZones - 1);
-                RandomX = this.random.Next(Convert.ToInt32(Level.ZombieSpawnZones[RandomSpawnZone].X), Convert.ToInt32(Level.ZombieSpawnZones[RandomSpawnZone].Y));
-                RandomY = this.random.Next(Convert.ToInt32(Level.ZombieSpawnZones[RandomSpawnZone].Z), Convert.ToInt32(Level.ZombieSpawnZones[RandomSpawnZone].W));
-                Tanks.Add(new TankState(game.Content.Load<Texture2D>(@"InGame/tank"), new Vector2(0, 0), new Vector2(RandomX, RandomY), 5.0f));
-                Tanks[i].behaviors.AddBehavior(new Pursuit(Arrive.Deceleration.fast, 50.0f));
-                Tanks[i].behaviors.AddBehavior(new ObstacleAvoidance(ref Level.gameWorld, 15.0f));
-
-                Zombies[i].playerChased = numplayersIngame[random.Next(numplayersIngame.Count)];
-
-                ActiveTanks++;
-            }
-
-            for (i=0; i<game.currentPlayers.Length-1; i++)
-            {
-                game.currentPlayers[i].position = Level.PlayerSpawnPosition[i];
-                game.currentPlayers[i].entity.Position = Level.PlayerSpawnPosition[i];
-            }
-
+            StartNewLevel(true, true);
             base.Initialize();
         }
 
@@ -388,59 +218,59 @@ namespace ZombustersWindows
                 game.Content.Load<Texture2D>(@"InGame/Peter/peter_died")
             };
 
-            JadeIdleTrunkAnimationInit(animationDefinitionDocument);
-            JadeRunEastAnimationInit(animationDefinitionDocument);
-            JadePistolShotEastAnimationInit(animationDefinitionDocument);
-            JadePistolShotNorthEastAnimationInit(animationDefinitionDocument);
-            JadePistolShotSouthEastAnimationInit(animationDefinitionDocument);
-            JadePistolShotSouthAnimationInit(animationDefinitionDocument);
-            JadePistolShotNorthAnimationInit(animationDefinitionDocument);
-            JadeShotgunShotEastAnimationInit(animationDefinitionDocument);
-            JadeShotgunShotNorthEastAnimationInit(animationDefinitionDocument);
-            JadeShotgunShotSouthEastAnimationInit(animationDefinitionDocument);
-            JadeShotgunShotSouthAnimationInit(animationDefinitionDocument);
-            JadeShotgunShotNorthAnimationInit(animationDefinitionDocument);
+            JadeIdleTrunkAnimationLoad(animationDefinitionDocument);
+            JadeRunEastAnimationLoad(animationDefinitionDocument);
+            JadePistolShotEastAnimationLoad(animationDefinitionDocument);
+            JadePistolShotNorthEastAnimationLoad(animationDefinitionDocument);
+            JadePistolShotSouthEastAnimationLoad(animationDefinitionDocument);
+            JadePistolShotSouthAnimationLoad(animationDefinitionDocument);
+            JadePistolShotNorthAnimationLoad(animationDefinitionDocument);
+            JadeShotgunShotEastAnimationLoad(animationDefinitionDocument);
+            JadeShotgunShotNorthEastAnimationLoad(animationDefinitionDocument);
+            JadeShotgunShotSouthEastAnimationLoad(animationDefinitionDocument);
+            JadeShotgunShotSouthAnimationLoad(animationDefinitionDocument);
+            JadeShotgunShotNorthAnimationLoad(animationDefinitionDocument);
 
-            EgonIdleTrunkAnimationInit(animationDefinitionDocument);
-            EgonRunEastAnimationInit(animationDefinitionDocument);
-            EgonPistolShotEastAnimationInit(animationDefinitionDocument);
-            EgonPistolShotNorthEastAnimationInit(animationDefinitionDocument);
-            EgonPistolShotSouthEastAnimationInit(animationDefinitionDocument);
-            EgonPistolShotSouthAnimationInit(animationDefinitionDocument);
-            EgonPistolShotNorthAnimationInit(animationDefinitionDocument);
-            EgonShotgunShotEastAnimationInit(animationDefinitionDocument);
-            EgonShotgunShotNorthEastAnimationInit(animationDefinitionDocument);
-            EgonShotgunShotSouthEastAnimationInit(animationDefinitionDocument);
-            EgonShotgunShotSouthAnimationInit(animationDefinitionDocument);
-            EgonShotgunShotNorthAnimationInit(animationDefinitionDocument);
+            EgonIdleTrunkAnimationLoad(animationDefinitionDocument);
+            EgonRunEastAnimationLoad(animationDefinitionDocument);
+            EgonPistolShotEastAnimationLoad(animationDefinitionDocument);
+            EgonPistolShotNorthEastAnimationLoad(animationDefinitionDocument);
+            EgonPistolShotSouthEastAnimationLoad(animationDefinitionDocument);
+            EgonPistolShotSouthAnimationLoad(animationDefinitionDocument);
+            EgonPistolShotNorthAnimationLoad(animationDefinitionDocument);
+            EgonShotgunShotEastAnimationLoad(animationDefinitionDocument);
+            EgonShotgunShotNorthEastAnimationLoad(animationDefinitionDocument);
+            EgonShotgunShotSouthEastAnimationLoad(animationDefinitionDocument);
+            EgonShotgunShotSouthAnimationLoad(animationDefinitionDocument);
+            EgonShotgunShotNorthAnimationLoad(animationDefinitionDocument);
 
-            RayIdleTrunkAnimationInit(animationDefinitionDocument);
-            RayRunEastAnimationInit(animationDefinitionDocument);
-            RayPistolShotEastAnimationInit(animationDefinitionDocument);
-            RayPistolShotNorthEastAnimationInit(animationDefinitionDocument);
-            RayPistolShotSouthEastAnimationInit(animationDefinitionDocument);
-            RayPistolShotSouthAnimationInit(animationDefinitionDocument);
-            RayPistolShotNorthAnimationInit(animationDefinitionDocument);
-            RayShotgunShotEastAnimationInit(animationDefinitionDocument);
-            RayShotgunShotNorthEastAnimationInit(animationDefinitionDocument);
-            RayShotgunShotSouthEastAnimationInit(animationDefinitionDocument);
-            RayShotgunShotSouthAnimationInit(animationDefinitionDocument);
-            RayShotgunShotNorthAnimationInit(animationDefinitionDocument);
+            RayIdleTrunkAnimationLoad(animationDefinitionDocument);
+            RayRunEastAnimationLoad(animationDefinitionDocument);
+            RayPistolShotEastAnimationLoad(animationDefinitionDocument);
+            RayPistolShotNorthEastAnimationLoad(animationDefinitionDocument);
+            RayPistolShotSouthEastAnimationLoad(animationDefinitionDocument);
+            RayPistolShotSouthAnimationLoad(animationDefinitionDocument);
+            RayPistolShotNorthAnimationLoad(animationDefinitionDocument);
+            RayShotgunShotEastAnimationLoad(animationDefinitionDocument);
+            RayShotgunShotNorthEastAnimationLoad(animationDefinitionDocument);
+            RayShotgunShotSouthEastAnimationLoad(animationDefinitionDocument);
+            RayShotgunShotSouthAnimationLoad(animationDefinitionDocument);
+            RayShotgunShotNorthAnimationLoad(animationDefinitionDocument);
 
-            PeterIdleTrunkAnimationInit(animationDefinitionDocument);
-            PeterRunEastAnimationInit(animationDefinitionDocument);
-            PeterPistolShotEastAnimationInit(animationDefinitionDocument);
-            PeterPistolShotNorthEastAnimationInit(animationDefinitionDocument);
-            PeterPistolShotSouthEastAnimationInit(animationDefinitionDocument);
-            PeterPistolShotSouthAnimationInit(animationDefinitionDocument);
-            PeterPistolShotNorthAnimationInit(animationDefinitionDocument);
-            PeterShotgunShotEastAnimationInit(animationDefinitionDocument);
-            PeterShotgunShotNorthEastAnimationInit(animationDefinitionDocument);
-            PeterShotgunShotSouthEastAnimationInit(animationDefinitionDocument);
-            PeterShotgunShotSouthAnimationInit(animationDefinitionDocument);
-            PeterShotgunShotNorthAnimationInit(animationDefinitionDocument);
+            PeterIdleTrunkAnimationLoad(animationDefinitionDocument);
+            PeterRunEastAnimationLoad(animationDefinitionDocument);
+            PeterPistolShotEastAnimationLoad(animationDefinitionDocument);
+            PeterPistolShotNorthEastAnimationLoad(animationDefinitionDocument);
+            PeterPistolShotSouthEastAnimationLoad(animationDefinitionDocument);
+            PeterPistolShotSouthAnimationLoad(animationDefinitionDocument);
+            PeterPistolShotNorthAnimationLoad(animationDefinitionDocument);
+            PeterShotgunShotEastAnimationLoad(animationDefinitionDocument);
+            PeterShotgunShotNorthEastAnimationLoad(animationDefinitionDocument);
+            PeterShotgunShotSouthEastAnimationLoad(animationDefinitionDocument);
+            PeterShotgunShotSouthAnimationLoad(animationDefinitionDocument);
+            PeterShotgunShotNorthAnimationLoad(animationDefinitionDocument);
 
-            FlamethrowerAnimationInit(animationDefinitionDocument);
+            FlamethrowerAnimationLoad(animationDefinitionDocument);
 
             FontsLoad();
             UIStatsLoad();
@@ -491,9 +321,10 @@ namespace ZombustersWindows
         
         private NeutralInput ProcessPlayer(Player player, InputState input)
         {
-            NeutralInput state = new NeutralInput();
-            //state.Fire = false;
-            state.Fire = Vector2.Zero;
+            NeutralInput state = new NeutralInput
+            {
+                Fire = Vector2.Zero
+            };
             Vector2 stickLeft = Vector2.Zero;
             Vector2 stickRight = Vector2.Zero;
             GamePadState gpState = input.GetCurrentGamePadStates()[(int)player.Controller];
@@ -598,11 +429,10 @@ namespace ZombustersWindows
         public override void Update(GameTime gameTime, bool otherScreenHasFocus, 
             bool coveredByOtherScreen)
         {
-            byte i = 0, j;
-
+            byte i, j;
             cursorPos = new Vector2(mouseState.X, mouseState.Y);
             input.Update();
-
+            
             // If the user activates the menu...
             for (i = 0; i < game.currentPlayers.Length; i++)
             {
@@ -691,16 +521,12 @@ namespace ZombustersWindows
                 {
                     if (!game.IsPaused)
                     {
-                        updatePlayerPlaying(gameTime);
+                        UpdatePlayerPlaying(gameTime);
                     }
 
-                    // Progress the Character animation
-                    updatePlayersAnimations(gameTime);
-
-                    // FlameThrower Animation
+                    UpdatePlayersAnimations(gameTime);
                     flamethrowerAnimation.Update(gameTime);
 
-                    //foreach (ZombieState zombie in Zombies)
                     for (i = 0; i < Zombies.Count; i++)
                     {
                         ZombieState zombie = Zombies[i];
@@ -709,7 +535,6 @@ namespace ZombustersWindows
                         }
                     }
 
-                    //foreach (TankState tank in Tanks)
                     for (i = 0; i < Tanks.Count; i++)
                     {
                         TankState tank = Tanks[i];
@@ -724,7 +549,6 @@ namespace ZombustersWindows
                         }
                     }
 
-                    // Cambio de nivel
                     if (CheckIfStageCleared() == true)
                     {
                          GamePlayStatus = GameplayState.StageCleared;
@@ -732,8 +556,8 @@ namespace ZombustersWindows
                 }
                 else if (GamePlayStatus == GameplayState.StageCleared)
                 {
-                    updatePlayerPlaying(gameTime);
-                    updatePlayersAnimations(gameTime);
+                    UpdatePlayerPlaying(gameTime);
+                    UpdatePlayersAnimations(gameTime);
 
                     for (i = 0; i < game.currentPlayers.Length; i++)
                     {
@@ -759,23 +583,12 @@ namespace ZombustersWindows
                         }
                     }
 
-
-                    // Mostramos Cartel y esperamos unos segundos para mostrar el mensaje del siguiente nivel
-                    /*if (licenseInformation.IsTrial)
-                    {
-                        if (currentSublevel == CSubLevel.SubLevel.Ten && currentLevel == Level.Three)
-                        {
-                            game.currentPlayers[0].lives = 1;
-                            DestroyPlayer(0);
-                        }
-                    }*/
-
-                    changeGamplayStatusAfterSomeTimeTo(gameTime, GameplayState.StartLevel);
+                    ChangeGamplayStatusAfterSomeTimeTo(gameTime, GameplayState.StartLevel);
                 }
                 else if (GamePlayStatus == GameplayState.StartLevel)
                 {
-                    updatePlayerPlaying(gameTime);
-                    updatePlayersAnimations(gameTime);
+                    UpdatePlayerPlaying(gameTime);
+                    UpdatePlayersAnimations(gameTime);
 
                     for (i = 0; i < game.currentPlayers.Length; i++)
                     {
@@ -785,20 +598,10 @@ namespace ZombustersWindows
                         }
                     }
 
-                    changeGamplayStatusAfterSomeTimeTo(gameTime, GameplayState.Playing);
+                    ChangeGamplayStatusAfterSomeTimeTo(gameTime, GameplayState.Playing);
                 }
                 else if (GamePlayStatus == GameplayState.GameOver)
                 {
-                    /*
-                    // Mostramos Cartel y esperamos unos segundos para empezar la paritda de nuevo.
-                    timer += (float)gameTime.ElapsedGameTime.TotalSeconds;
-                    if (timer >= 5.0f)
-                    {
-                        GamePlayStatus = GameplayState.Playing;
-                        timer = 0;
-                    }
-                     */
-
                     if (currentLevel == LevelType.FinalJuego)
                     {
                         timer += (float)gameTime.ElapsedGameTime.TotalSeconds;
@@ -808,7 +611,6 @@ namespace ZombustersWindows
                             {
                                 if (player.Player.IsPlaying)
                                 {
-                                    // Add Score Entry to the LeaderBoard
                                     if (game.topScoreListContainer != null)
                                     {
                                         player.Player.SaveLeaderBoard(player.score);
@@ -820,10 +622,6 @@ namespace ZombustersWindows
                             QuitToMenu();
                             ScreenManager.AddScreen(new CreditsScreen(false));
                         }
-                    }
-                    else
-                    {
-                        //NUSE
                     }
                 }
 
@@ -842,10 +640,9 @@ namespace ZombustersWindows
             }
 
             base.Update(gameTime, otherScreenHasFocus, coveredByOtherScreen);
-
         }
 
-        private void changeGamplayStatusAfterSomeTimeTo(GameTime gameTime, GameplayState gameplayState)
+        private void ChangeGamplayStatusAfterSomeTimeTo(GameTime gameTime, GameplayState gameplayState)
         {
             timer += (float)gameTime.ElapsedGameTime.TotalSeconds;
             if (timer >= 3.0f)
@@ -859,7 +656,7 @@ namespace ZombustersWindows
             }
         }
 
-        private void updatePlayersAnimations(GameTime gameTime)
+        private void UpdatePlayersAnimations(GameTime gameTime)
         {
             for (byte i = 0; i < IdleTrunkAnimation.Count; i++)
             {
@@ -878,7 +675,7 @@ namespace ZombustersWindows
             }
         }
 
-        private void updatePlayerPlaying(GameTime gameTime)
+        private void UpdatePlayerPlaying(GameTime gameTime)
         {
             for (byte i = 0; i < game.currentPlayers.Length - 1; i++)
             {
@@ -918,40 +715,35 @@ namespace ZombustersWindows
             float elapsedGameSeconds, NeutralInput input)
         {
             if (input.StickLeftMovement.X > 0)
-                accumMove.X += Move(input.StickLeftMovement.X, elapsedGameSeconds);
+                accumMove.X += GameplayHelper.Move(input.StickLeftMovement.X, elapsedGameSeconds);
             if (input.StickLeftMovement.X < 0)
-                accumMove.X -= Move(-input.StickLeftMovement.X, elapsedGameSeconds);
+                accumMove.X -= GameplayHelper.Move(-input.StickLeftMovement.X, elapsedGameSeconds);
             if (input.StickLeftMovement.Y > 0)
-                accumMove.Y -= Move(input.StickLeftMovement.Y, elapsedGameSeconds);
+                accumMove.Y -= GameplayHelper.Move(input.StickLeftMovement.Y, elapsedGameSeconds);
             if (input.StickLeftMovement.Y < 0)
-                accumMove.Y += Move(-input.StickLeftMovement.Y, elapsedGameSeconds);
+                accumMove.Y += GameplayHelper.Move(-input.StickLeftMovement.Y, elapsedGameSeconds);
 
             if (input.StickRightMovement.X > 0)
-                accumFire.X += Move(input.StickRightMovement.X, elapsedGameSeconds);
+                accumFire.X += GameplayHelper.Move(input.StickRightMovement.X, elapsedGameSeconds);
             if (input.StickRightMovement.X < 0)
-                accumFire.X -= Move(-input.StickRightMovement.X, elapsedGameSeconds);
+                accumFire.X -= GameplayHelper.Move(-input.StickRightMovement.X, elapsedGameSeconds);
             if (input.StickRightMovement.Y > 0)
-                accumFire.Y -= Move(input.StickRightMovement.Y, elapsedGameSeconds);
+                accumFire.Y -= GameplayHelper.Move(input.StickRightMovement.Y, elapsedGameSeconds);
             if (input.StickRightMovement.Y < 0)
-                accumFire.Y += Move(-input.StickRightMovement.Y, elapsedGameSeconds);
+                accumFire.Y += GameplayHelper.Move(-input.StickRightMovement.Y, elapsedGameSeconds);
 
             if (Keyboard.GetState().IsKeyDown(Keys.Right) || Keyboard.GetState().IsKeyDown(Keys.D))
-                accumMove.X += Move(1, elapsedGameSeconds);
+                accumMove.X += GameplayHelper.Move(1, elapsedGameSeconds);
             if (Keyboard.GetState().IsKeyDown(Keys.Left) || Keyboard.GetState().IsKeyDown(Keys.A))
-                accumMove.X -= Move(1, elapsedGameSeconds);
+                accumMove.X -= GameplayHelper.Move(1, elapsedGameSeconds);
             if (Keyboard.GetState().IsKeyDown(Keys.Down) || Keyboard.GetState().IsKeyDown(Keys.S))
-                accumMove.Y += Move(1, elapsedGameSeconds);
+                accumMove.Y += GameplayHelper.Move(1, elapsedGameSeconds);
             if (Keyboard.GetState().IsKeyDown(Keys.Up) || Keyboard.GetState().IsKeyDown(Keys.W))
-                accumMove.Y -= Move(1, elapsedGameSeconds);
+                accumMove.Y -= GameplayHelper.Move(1, elapsedGameSeconds);
 
             game.currentPlayers[player].accumFire = accumFire;
 
             TryMove(player);
-
-            //if (input.Fire == true)
-            //{
-            //    TryFire((byte)player, totalGameSeconds);
-            //}
 
             if (input.ButtonY == true)
             {
@@ -963,14 +755,6 @@ namespace ZombustersWindows
                 {
                     game.currentPlayers[player].currentgun = 0;
                 }
-
-                /*
-                game.currentPlayers[player].currentgun += 1;
-                if (game.currentPlayers[player].currentgun > 3)
-                {
-                    game.currentPlayers[player].currentgun = 0;
-                }
-                 */
             }
 
             if (input.ButtonRB == true)
@@ -994,26 +778,6 @@ namespace ZombustersWindows
             accumFire = Vector2.Zero;
         }
 
-//GAMEPLAYHOST CODE
-        private static float AngleFromAxis(Vector2 axis, Vector2 vector)
-        {
-            float retval = AbsoluteAngle(vector) - AbsoluteAngle(axis);
-            if (retval > MathHelper.Pi)
-                return retval - MathHelper.TwoPi;
-            if (retval < -MathHelper.Pi)
-                return retval + MathHelper.TwoPi;
-
-            return retval;
-        }
-        private static float AbsoluteAngle(Vector2 a)
-        {
-            return (float)Math.Atan2(a.Y, a.X);
-        }
-        private static Vector2 VectorFromAngle(float a)
-        {
-            return new Vector2((float)Math.Sin(a), (float)-Math.Cos(a));
-        }
-
         private bool PowerUpIsInRange(ZombieState zombie)
         {
             Rectangle ScreenBounds;
@@ -1028,96 +792,152 @@ namespace ZombustersWindows
             }
         }
 
-
         private void SpawnPowerUp(ZombieState zombie)
         {
-
-
             if (this.random.Next(1, 16) == 8)
             {
-                //int r = random.Next(0, 8);
                 int r = this.random.Next(0, 3);
                 switch (r)
                 {
                     case 0: // Live
-
-                        {
-                            PowerUpList.Add(new PowerUp(livePowerUp, heart, zombie.entity.Position, PowerUp.Type.live));
-                        }
+                        PowerUpList.Add(new PowerUp(livePowerUp, heart, zombie.entity.Position, PowerUp.Type.live));
                         break;
 
-
-
                     case 1: // Machinegun Ammo
-
-                        {
-                            PowerUpList.Add(new PowerUp(machinegunAmmoPowerUp, pistolammoUI, zombie.entity.Position, PowerUp.Type.machinegun_ammo));
-                        }
+                        PowerUpList.Add(new PowerUp(machinegunAmmoPowerUp, pistolammoUI, zombie.entity.Position, PowerUp.Type.machinegun_ammo));
                         break;
 
                     case 2: // Flamethrower Ammo
-
-                        {
-                            PowerUpList.Add(new PowerUp(flamethrowerAmmoPowerUp, flamethrowerammoUI, zombie.entity.Position, PowerUp.Type.flamethrower_ammo));
-                        }
+                        PowerUpList.Add(new PowerUp(flamethrowerAmmoPowerUp, flamethrowerammoUI, zombie.entity.Position, PowerUp.Type.flamethrower_ammo));
                         break;
 
                     case 3: // ExtraLife
-
-                        {
-                            PowerUpList.Add(new PowerUp(extraLivePowerUp, extraLivePowerUp, zombie.entity.Position, PowerUp.Type.extralife));
-                        }
+                        PowerUpList.Add(new PowerUp(extraLivePowerUp, extraLivePowerUp, zombie.entity.Position, PowerUp.Type.extralife));
                         break;
 
                     case 4: // Shotgun Ammo
-
-                        {
-                            PowerUpList.Add(new PowerUp(shotgunAmmoPowerUp, shotgunammoUI, zombie.entity.Position, PowerUp.Type.shotgun_ammo));
-                        }
+                        PowerUpList.Add(new PowerUp(shotgunAmmoPowerUp, shotgunammoUI, zombie.entity.Position, PowerUp.Type.shotgun_ammo));
                         break;
 
                     case 5: // Grenade Ammo
-
-                        {
-                            PowerUpList.Add(new PowerUp(grenadeammoUI, grenadeammoUI, zombie.entity.Position, PowerUp.Type.grenadelauncher_ammo));
-                        }
+                        PowerUpList.Add(new PowerUp(grenadeammoUI, grenadeammoUI, zombie.entity.Position, PowerUp.Type.grenadelauncher_ammo));
                         break;
 
                     case 6: // Speed Buff
-
-                        {
-                            PowerUpList.Add(new PowerUp(livePowerUp, heart, zombie.entity.Position, PowerUp.Type.speedbuff));
-                        }
+                        PowerUpList.Add(new PowerUp(livePowerUp, heart, zombie.entity.Position, PowerUp.Type.speedbuff));
                         break;
 
                     case 7: // Immune Buff
-
-                        {
-                            PowerUpList.Add(new PowerUp(immunePowerUp, immunePowerUp, zombie.entity.Position, PowerUp.Type.immunebuff));
-                        }
+                        PowerUpList.Add(new PowerUp(immunePowerUp, immunePowerUp, zombie.entity.Position, PowerUp.Type.immunebuff));
                         break;
-                    default:
 
-                        {
-                            PowerUpList.Add(new PowerUp(livePowerUp, heart, zombie.entity.Position, PowerUp.Type.live));
-                        }
+                    default:
+                        PowerUpList.Add(new PowerUp(livePowerUp, heart, zombie.entity.Position, PowerUp.Type.live));
                         break;
                 }
             }
         }
 
-
-
-
         public void HandleCollisions(Avatar player, byte playerId, float totalGameSeconds)
         {
-
-            // Skip a lot of processing if the player isn't playing
             if (player.status == ObjectStatus.Inactive)
                 return;
 
-            //Zombies
-            //foreach (ZombieState zombie in Zombies)
+            HandleZombieCollisions(player, playerId, totalGameSeconds);
+            HandleTankCollisions(player, playerId, totalGameSeconds);
+            HandlePowerUpCollisions(player, playerId);
+        }
+
+        private void HandlePowerUpCollisions(Avatar player, byte playerId)
+        {
+            for (int i = 0; i < PowerUpList.Count; i++)
+            {
+                PowerUp powerup = PowerUpList[i];
+                if (powerup.status == ObjectStatus.Active)
+                {
+                    if (GameplayHelper.DetectCrash(player, powerup.Position))
+                    {
+                        if (powerup.PUType == PowerUp.Type.extralife)
+                        {
+                            IncreaseLife(playerId);
+                            powerup.status = ObjectStatus.Dying;
+                        }
+
+                        if (powerup.PUType == PowerUp.Type.live)
+                        {
+                            if (player.lifecounter < 100)
+                            {
+                                player.lifecounter += powerup.Value;
+
+                                if (player.lifecounter > 100)
+                                {
+                                    player.lifecounter = 100;
+                                }
+                            }
+
+                            powerup.status = ObjectStatus.Dying;
+                        }
+
+                        if (powerup.PUType == PowerUp.Type.machinegun_ammo)
+                        {
+                            player.ammo[0] += powerup.Value;
+                            powerup.status = ObjectStatus.Dying;
+
+                        }
+
+                        if (powerup.PUType == PowerUp.Type.shotgun_ammo)
+                        {
+                            player.ammo[1] += powerup.Value;
+                            powerup.status = ObjectStatus.Dying;
+
+                        }
+
+                        if (powerup.PUType == PowerUp.Type.grenadelauncher_ammo)
+                        {
+                            player.ammo[2] += powerup.Value;
+                            powerup.status = ObjectStatus.Dying;
+
+                        }
+
+                        if (powerup.PUType == PowerUp.Type.flamethrower_ammo)
+                        {
+                            player.ammo[3] += powerup.Value;
+                            powerup.status = ObjectStatus.Dying;
+
+                        }
+
+                        if (powerup.PUType == PowerUp.Type.speedbuff || powerup.PUType == PowerUp.Type.immunebuff)
+                        {
+                            //player. += powerup.Value;
+                            powerup.status = ObjectStatus.Dying;
+                        }
+                    }
+                }
+            }
+        }
+
+        private void HandleTankCollisions(Avatar player, byte playerId, float totalGameSeconds)
+        {
+            for (int i = 0; i < Tanks.Count; i++)
+            {
+                TankState tank = Tanks[i];
+                if (tank.status == ObjectStatus.Active)
+                {
+                    for (int l = 0; l < player.bullets.Count; l++)
+                    {
+                        if (GameplayHelper.DetectCollision(player.currentgun, player.bullets[l],
+                            tank.entity.Position, totalGameSeconds))
+                        {
+                            TankDestroyed(tank, (byte)playerId);
+                            player.bullets.RemoveAt(l);
+                        }
+                    }
+                }
+            }
+        }
+
+        private void HandleZombieCollisions(Avatar player, byte playerId, float totalGameSeconds)
+        {
             for (int i = 0; i < Zombies.Count; i++)
             {
                 ZombieState zombie = Zombies[i];
@@ -1149,26 +969,22 @@ namespace ZombustersWindows
                     {
                         for (int l = 0; l < player.bullets.Count; l++)
                         {
-                            // Did player kill seeker?
-                            if (DetectCollision(player.currentgun, player.bullets[l],
+                            if (GameplayHelper.DetectCollision(player.currentgun, player.bullets[l],
                                 zombie.entity.Position, totalGameSeconds))
                             {
-
+                                if (zombie.lifecounter > 1.0f)
                                 {
-                                    if (zombie.lifecounter > 1.0f)
+                                    zombie.lifecounter -= 1.0f;
+                                    zombie.isLoosingLife = true;
+                                    player.bullets.RemoveAt(l);
+                                }
+                                else
+                                {
+                                    ZombieDestroyed(zombie, (byte)playerId, (byte)player.currentgun);
+                                    player.bullets.RemoveAt(l);
+                                    if (PowerUpIsInRange(zombie))
                                     {
-                                        zombie.lifecounter -= 1.0f;
-                                        zombie.isLoosingLife = true;
-                                        player.bullets.RemoveAt(l);
-                                    }
-                                    else
-                                    {
-                                        ZombieDestroyed(zombie, (byte)playerId, (byte)player.currentgun);
-                                        player.bullets.RemoveAt(l);
-                                        if (PowerUpIsInRange(zombie))
-                                        {
-                                            SpawnPowerUp(zombie);
-                                        }
+                                        SpawnPowerUp(zombie);
                                     }
                                 }
                             }
@@ -1176,293 +992,23 @@ namespace ZombustersWindows
                     }
                 }
 
-                // Did the player crash into the seeker?
-                if (DetectCrash(player, zombie.entity.Position))
+                if (GameplayHelper.DetectCrash(player, zombie.entity.Position))
                 {
-                    // The seeker is live, crash the player
                     if (zombie.status == ObjectStatus.Active)
                     {
-
+                        if (player.lifecounter <= 0)
                         {
-                            if (player.lifecounter <= 0)
-                            {
-                                //game.ZombieCrashed(zombie);
-                                DestroyPlayer((byte)playerId);
-                                player.lifecounter = 100;
-                            }
-                            else
-                            {
-                                player.isLoosingLife = true;
-                                player.lifecounter -= 1;
-                            }
+                            DestroyPlayer((byte)playerId);
+                            player.lifecounter = 100;
                         }
-                    }
-
-                    // The seeker is a popup, reward the player
-                    //else if (zombie.status == ObjectStatus.Dying)
-                    //{
-                    //REVISARRR!!
-                    //game.IncreaseLife(playerId);
-                    //game.ZombieCrashed(zombie);
-
-                    //PowerUpList.Add(new CPowerUp(LivePowerUp, zombie.entity.Position));
-                    //}
-                }
-            }
-
-            //Tanks
-            //foreach (TankState tank in Tanks)
-            for (int i = 0; i < Tanks.Count; i++)
-            {
-                TankState tank = Tanks[i];
-                if (tank.status == ObjectStatus.Active)
-                {
-                    for (int l = 0; l < player.bullets.Count; l++)
-                    {
-                        // Did player kill seeker?
-                        if (DetectCollision(player.currentgun, player.bullets[l],
-                            tank.entity.Position, totalGameSeconds))
+                        else
                         {
-
-                            {
-                                TankDestroyed(tank, (byte)playerId);
-                                player.bullets.RemoveAt(l);
-                            }
+                            player.isLoosingLife = true;
+                            player.lifecounter -= 1;
                         }
                     }
                 }
             }
-
-            // PowerUps
-            //foreach (CPowerUp powerup in PowerUpList)
-            for (int i = 0; i < PowerUpList.Count; i++)
-            {
-                PowerUp powerup = PowerUpList[i];
-                if (powerup.status == ObjectStatus.Active)
-                {
-                    if (DetectCrash(player, powerup.Position))
-                    {
-
-                        {
-                            // ExtraLife
-                            if (powerup.PUType == PowerUp.Type.extralife)
-                            {
-                                IncreaseLife(playerId);
-                                powerup.status = ObjectStatus.Dying;
-                            }
-
-                            // Live
-                            if (powerup.PUType == PowerUp.Type.live)
-                            {
-                                if (player.lifecounter < 100)
-                                {
-                                    player.lifecounter += powerup.Value;
-
-                                    if (player.lifecounter > 100)
-                                    {
-                                        player.lifecounter = 100;
-                                    }
-                                }
-
-                                powerup.status = ObjectStatus.Dying;
-                            }
-
-                            // Machine Gun Ammo
-                            if (powerup.PUType == PowerUp.Type.machinegun_ammo)
-                            {
-                                player.ammo[0] += powerup.Value;
-                                powerup.status = ObjectStatus.Dying;
-
-                            }
-
-                            // Shotgun Ammo
-                            if (powerup.PUType == PowerUp.Type.shotgun_ammo)
-                            {
-                                player.ammo[1] += powerup.Value;
-                                powerup.status = ObjectStatus.Dying;
-
-                            }
-
-                            // Grenade launcher Ammo
-                            if (powerup.PUType == PowerUp.Type.grenadelauncher_ammo)
-                            {
-                                player.ammo[2] += powerup.Value;
-                                powerup.status = ObjectStatus.Dying;
-
-                            }
-
-                            // Flamethrower Ammo
-                            if (powerup.PUType == PowerUp.Type.flamethrower_ammo)
-                            {
-                                player.ammo[3] += powerup.Value;
-                                powerup.status = ObjectStatus.Dying;
-
-                            }
-
-                            // Speedbuff
-                            if (powerup.PUType == PowerUp.Type.speedbuff || powerup.PUType == PowerUp.Type.immunebuff)
-                            {
-                                //player. += powerup.Value;
-                                powerup.status = ObjectStatus.Dying;
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
-        /// <summary>
-        /// Call this method to determine if a bullet hit an enemy
-        /// </summary>
-        /// <param name="bullet"></param>
-        /// <param name="enemy"></param>
-        /// <param name="gameTime"></param>
-        /// <returns></returns>
-        public static bool DetectCollision(int currentgun, Vector4 bullet, Vector2 enemy,
-            double totalGameSeconds)
-        {
-
-            Vector2 pos = FindBulletPosition(bullet, totalGameSeconds);
-            if (Vector2.Distance(pos, enemy) < 30)
-                return true;
-
-            return false;
-        }
-        /// <summary>
-        /// Call this method to determine if the enemy crashed into the player
-        /// </summary>
-        /// <param name="enemy"></param>
-        /// <param name="gameTime"></param>
-        /// <returns></returns>
-        public static bool DetectCrash(Avatar player, Vector2 enemy)
-            //EnemyInfo enemyType)
-        {
-            if (player.status == ObjectStatus.Active)
-            {
-                float distance = Vector2.Distance(player.position, enemy);
-                return (distance < Avatar.CrashRadius + 20.0f);// + enemyType.CrashRadius);
-            }
-            return false;
-        }
-
-        public static Vector2 FindShotgunBulletPosition(Vector3 bullet, float angle, int pelletcount, double totalGameSeconds)
-        {
-            Vector2 pos = Vector2.Zero;
-            float overAngle = 0;
-            float pelletsSpreadRadians = MathHelper.ToRadians(2.5f);
-
-            switch (pelletcount)
-            {
-                case 0:
-                    overAngle = 0;
-                    break;
-                case 1:
-                    overAngle += 0.25f;
-                    break;
-                case 2:
-                    overAngle -= 0.25f;
-                    break;
-                default:
-                    overAngle = 0;
-                    break;
-            }
-
-            if (angle > -0.3925f && angle < 0.3925f) //NORTH
-            {
-                pos.X = bullet.X;
-                pos.Y = bullet.Y - (bulletspeed * ((float)totalGameSeconds - bullet.Z));
-            }
-            else if (angle > 0.3925f && angle < 1.1775f) //NORTH-EAST
-            {
-                pos.X = bullet.X + (float)Math.Sin(angle) + overAngle + (bulletspeed * ((float)totalGameSeconds - bullet.Z));
-                pos.Y = bullet.Y - (float)Math.Cos(angle) + overAngle - (bulletspeed * ((float)totalGameSeconds - bullet.Z));
-            }
-            else if (angle > 1.1775f && angle < 1.9625f) //EAST
-            {
-                pos.X = bullet.X + (bulletspeed * ((float)totalGameSeconds - bullet.Z));
-                pos.Y = bullet.Y;
-            }
-            else if (angle > 1.19625f && angle < 2.7275f) //SOUTH-EAST
-            {
-                pos.X = bullet.X + (float)Math.Sin(angle) + overAngle + (bulletspeed * ((float)totalGameSeconds - bullet.Z));
-                pos.Y = bullet.Y + (float)Math.Cos(angle) + overAngle + (bulletspeed * ((float)totalGameSeconds - bullet.Z));
-            }
-            else if (angle > 2.7275f || angle < -2.7275f) //SOUTH
-            {
-                pos.X = bullet.X;
-                pos.Y = bullet.Y + (bulletspeed * ((float)totalGameSeconds - bullet.Z));
-            }
-            else if (angle < -1.9625f && angle > -2.7275f) //SOUTH-WEST
-            {
-                pos.X = bullet.X - (float)Math.Sin(angle) + overAngle - (bulletspeed * ((float)totalGameSeconds - bullet.Z));
-                pos.Y = bullet.Y + (float)Math.Cos(angle) + overAngle + (bulletspeed * ((float)totalGameSeconds - bullet.Z));
-            }
-            else if (angle < -1.1775f && angle > -1.9625f) //WEST
-            {
-                pos.X = bullet.X - (bulletspeed * ((float)totalGameSeconds - bullet.Z));
-                pos.Y = bullet.Y;
-            }
-
-            else if (angle < -0.3925f && angle > -1.1775f) //NORTH-WEST
-            {
-                pos.X = bullet.X - (float)Math.Sin(angle) + overAngle - (bulletspeed * ((float)totalGameSeconds - bullet.Z));
-                pos.Y = bullet.Y - (float)Math.Cos(angle) + overAngle - (bulletspeed * ((float)totalGameSeconds - bullet.Z));
-            }
-
-            return pos;
-        }
-
-
-        public static float bulletspeed = 400;
-        public static Vector2 FindBulletPosition(Vector4 bullet, double totalGameSeconds)
-        {
-            Vector2 pos = Vector2.Zero;
-
-            //pos.X = bullet.X;
-            //pos.Y = bullet.Y - (bulletspeed * ((float)totalGameSeconds - bullet.Z));
-
-            if (bullet.W > -0.3925f && bullet.W < 0.3925f) //NORTH
-            {
-                pos.X = bullet.X;
-                pos.Y = bullet.Y - (bulletspeed * ((float)totalGameSeconds - bullet.Z));
-            }
-            else if (bullet.W > 0.3925f && bullet.W < 1.1775f) //NORTH-EAST
-            {
-                pos.X = bullet.X + (float)Math.Sin(bullet.W) + (bulletspeed * ((float)totalGameSeconds - bullet.Z));
-                pos.Y = bullet.Y - (float)Math.Cos(bullet.W) - (bulletspeed * ((float)totalGameSeconds - bullet.Z));
-            }
-            else if (bullet.W > 1.1775f && bullet.W < 1.9625f) //EAST
-            {
-                pos.X = bullet.X + (bulletspeed * ((float)totalGameSeconds - bullet.Z));
-                pos.Y = bullet.Y;
-            }
-            else if (bullet.W > 1.19625f && bullet.W < 2.7275f) //SOUTH-EAST
-            {
-                pos.X = bullet.X + (float)Math.Sin(bullet.W) + (bulletspeed * ((float)totalGameSeconds - bullet.Z));
-                pos.Y = bullet.Y + (float)Math.Cos(bullet.W) + (bulletspeed * ((float)totalGameSeconds - bullet.Z));
-            }
-            else if (bullet.W > 2.7275f || bullet.W < -2.7275f) //SOUTH
-            {
-                pos.X = bullet.X;
-                pos.Y = bullet.Y + (bulletspeed * ((float)totalGameSeconds - bullet.Z));
-            }
-            else if (bullet.W < -1.9625f && bullet.W > -2.7275f) //SOUTH-WEST
-            {
-                pos.X = bullet.X - (float)Math.Sin(bullet.W) - (bulletspeed * ((float)totalGameSeconds - bullet.Z));
-                pos.Y = bullet.Y + (float)Math.Cos(bullet.W) + (bulletspeed * ((float)totalGameSeconds - bullet.Z));
-            }
-            else if (bullet.W < -1.1775f && bullet.W > -1.9625f) //WEST
-            {
-                pos.X = bullet.X - (bulletspeed * ((float)totalGameSeconds - bullet.Z));
-                pos.Y = bullet.Y;
-            }
-            else if (bullet.W < -0.3925f && bullet.W > -1.1775f) //NORTH-WEST
-            {
-                pos.X = bullet.X - (float)Math.Sin(bullet.W) - (bulletspeed * ((float)totalGameSeconds - bullet.Z));
-                pos.Y = bullet.Y - (float)Math.Cos(bullet.W) - (bulletspeed * ((float)totalGameSeconds - bullet.Z));
-            }
-
-            return pos;
         }
 
         private void DestroyPlayer(byte Player)
@@ -1505,7 +1051,6 @@ namespace ZombustersWindows
             else
                 PlayerDestroyed(Player);
 
-            // Check if Game Over for All
             for (i = 0; i < game.currentPlayers.Length - 1; i++)
             {
                 if (game.currentPlayers[i].lives > 0 && (game.currentPlayers[i].status != ObjectStatus.Inactive))
@@ -1516,7 +1061,6 @@ namespace ZombustersWindows
 
             if (livesleft == 0)
             {
-
                 GamePlayStatus = GameplayState.GameOver;
                 this.ScreenManager.AddScreen(gomenu);
 
@@ -1529,45 +1073,7 @@ namespace ZombustersWindows
                     }
                 }
             }
-        }
-//END GAMEPLAYHOST CODE
-
-        public float DistanceLineSegmentToPoint(Vector2 A, Vector2 B, Vector2 p)
-        {
-
-            //get the normalized line segment vector
-            Vector2 v = B - A;
-            v.Normalize();
-
-            //determine the point on the line segment nearest to the point p
-            float distanceAlongLine = Vector2.Dot(p, v) - Vector2.Dot(A, v);
-            Vector2 nearestPoint;
-            if (distanceAlongLine < 0)
-            {
-                //closest point is A
-                nearestPoint = A;
-            }
-            else if (distanceAlongLine > Vector2.Distance(A, B))
-            {
-                //closest point is B
-                nearestPoint = B;
-            }
-            else
-            {
-                //closest point is between A and B... A + d  * ( ||B-A|| )
-                nearestPoint = A + distanceAlongLine * v;
-            }
-
-            //Calculate the distance between the two points
-            float actualDistance = Vector2.Distance(nearestPoint, p);
-            return actualDistance;
-
-        }
-
-        private static float Move(float input, float ElapsedGameSeconds)
-        {
-            return input * ElapsedGameSeconds * Avatar.PixelsPerSecond;
-        }             
+        }       
 
         private void TryMove(int Player)
         {
@@ -1576,32 +1082,7 @@ namespace ZombustersWindows
 
             if (accumMove.Length() > .5)
             {                
-                // Find out how far we are allowed to move
                 Vector2 move = game.currentPlayers[Player].VerifyMove(accumMove);
-/*
-                if (game.currentPlayers[Player].ObjectAvoidCalc != Vector2.Zero)
-                {
-                    if (game.currentPlayers[Player].ObjectAvoidCalc.X < 0)
-                    {
-                        move.X += move.X * 1.1f;
-                    }
-                    else
-                    {
-                        move.X -= move.X * 1.1f;
-                    }
-
-                    if (game.currentPlayers[Player].ObjectAvoidCalc.Y < 0)
-                    {
-                        move.Y += move.Y * 1.1f;
-                    }
-                    else
-                    {
-                        move.Y -= move.Y * 1.1f;
-                    }
-                }
-*/
-
-                // Send our movement event to Game1
                 Vector2 pos = game.currentPlayers[Player].position + move;
 
                 for (int i = 0; i < Level.gameWorld.Obstacles.Count; i++)
@@ -1624,7 +1105,6 @@ namespace ZombustersWindows
                         rangeDistance = 45.0f;
                     }
 
-
                     if (Vector2.Distance(pos, Level.gameWorld.Obstacles[i].Center) < rangeDistance)
                     {
                         collision = true;
@@ -1633,7 +1113,7 @@ namespace ZombustersWindows
 
                 for (int i = 0; i < Level.gameWorld.Walls.Count; i++)
                 {
-                    float actualDistance = DistanceLineSegmentToPoint(Level.gameWorld.Walls[i].From, Level.gameWorld.Walls[i].To, pos);
+                    float actualDistance = GameplayHelper.DistanceLineSegmentToPoint(Level.gameWorld.Walls[i].From, Level.gameWorld.Walls[i].To, pos);
                     if (actualDistance <= 5.0f)
                     {
                         collision = true;
@@ -1645,7 +1125,6 @@ namespace ZombustersWindows
                     PlayerMove((byte)Player, pos);
                 }
                 
-                // Zero out accumulated input
                 accumMove = Vector2.Zero;
             }
         }
@@ -1662,8 +1141,6 @@ namespace ZombustersWindows
                 game.currentPlayers[Player].currentgun = 0;
             }
 
-            // if the time between the last shot and the current time 
-            // is less than 1/ROF, don't fire
             if (game.currentPlayers[Player].currentgun == 0 && game.currentPlayers[Player].ammo[0] > 0)
             {
                 RateOfFire = 10;
@@ -1779,10 +1256,8 @@ namespace ZombustersWindows
                 }
             }
 
-            //((Game1)this.ScreenManager.Game).PowerUpList.Clear();
             Zombies.Clear();
             Tanks.Clear();
-            //((Game1)this.ScreenManager.Game).audio.
 
             if (currentLevel != LevelType.FinalJuego)
             {
@@ -1932,7 +1407,6 @@ namespace ZombustersWindows
             }
         }
 
-
         public override void Draw(GameTime gameTime)
         {
             base.Draw(gameTime);
@@ -1942,21 +1416,15 @@ namespace ZombustersWindows
                 Color c = new Color(new Vector4(0, 0, 0, 0));
                 this.ScreenManager.GraphicsDevice.Clear(c);
 
-                // Draw Map Layer
                 DrawMap(Map);
 
-                // Draw PowerUps
                 foreach (PowerUp powerup in PowerUpList)
                 {
                     powerup.Draw(this.ScreenManager.SpriteBatch, gameTime, MenuInfoFont);
                 }
 
-
-                // BACK TO FRONT SORT MODE
-                //------------------------
                 this.ScreenManager.SpriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend);
 
-                // Draw each player
                 foreach (Avatar cplayer in game.currentPlayers)
                 {
                     if (cplayer.IsPlaying)
@@ -1965,9 +1433,6 @@ namespace ZombustersWindows
                         DrawPlayer(cplayer, game.totalGameSeconds, gameTime, Level.furnitureList);
                     }
                 }
-
-                // Draw the enemies
-                //DrawEnemies(game.TotalGameSeconds);
 
                 if (GamePlayStatus == GameplayState.StartLevel || GamePlayStatus == GameplayState.Playing || GamePlayStatus == GameplayState.Pause)
                 {
@@ -2001,15 +1466,12 @@ namespace ZombustersWindows
                     }
                 }
 
-                // Draw Furniture
                 foreach (Furniture furniture in Level.furnitureList)
                 {
                     furniture.Draw(this.ScreenManager.SpriteBatch, MenuInfoFont);
                 }
 
                 this.ScreenManager.SpriteBatch.End();
-                //----------------------------
-                // END BACK TO FRONT SORT MODE
 
                 foreach (Furniture furniture in Level.furnitureList)
                 {
@@ -2019,15 +1481,12 @@ namespace ZombustersWindows
                     }
                 }
 
-                // Draw each player's bullets
                 foreach (Avatar cplayer in game.currentPlayers)
                 {
                     if (cplayer.IsPlaying)
                     {
                         DrawShotgunShots(cplayer.shotgunbullets, game.totalGameSeconds);
                         DrawBullets(cplayer.bullets, game.totalGameSeconds);
-                        //DrawFlameThrower(cplayer, game.TotalGameSeconds);
-                        //cplayer.DrawFlameThrower();
                     }
                 }
 
@@ -2040,11 +1499,7 @@ namespace ZombustersWindows
                 this.ScreenManager.SpriteBatch.End();
                 // end Perlin Noise effect
 
-
-                //#if XBOX
-                // Draw the score
                 DrawUI(gameTime);
-                //#endif
 
                 if (GamePlayStatus == GameplayState.StageCleared)
                 {
@@ -2056,7 +1511,6 @@ namespace ZombustersWindows
                     DrawStartLevel();
                 }
 
-                // If the game is over, draw a special graphic
                 if (GamePlayStatus == GameplayState.GameOver)
                 {
                     DrawGameOver();
@@ -2064,7 +1518,6 @@ namespace ZombustersWindows
 
                 // Draw the Storage Device Icon
                 this.ScreenManager.SpriteBatch.Begin(SpriteSortMode.FrontToBack, BlendState.AlphaBlend);
-
 
                 if (game.player1.Options == InputMode.Keyboard)
                 {
@@ -3606,7 +3059,7 @@ namespace ZombustersWindows
             {
                 for (int j = 0; j < shotgunbullets[i].Pellet.Count; j++)
                 {
-                    pos = FindShotgunBulletPosition(shotgunbullets[i].Pellet[j], shotgunbullets[i].Angle, j, TotalGameSeconds);
+                    pos = GameplayHelper.FindShotgunBulletPosition(shotgunbullets[i].Pellet[j], shotgunbullets[i].Angle, j, TotalGameSeconds);
 
                     if (pos.X < -10 || pos.X > 1290 || pos.Y < -10 || pos.Y > 730)
                     {
@@ -3637,7 +3090,7 @@ namespace ZombustersWindows
             Vector2 pos;
             for (int i = 0; i < bullets.Count; i++)
             {
-                pos = FindBulletPosition(bullets[i], TotalGameSeconds);
+                pos = GameplayHelper.FindBulletPosition(bullets[i], TotalGameSeconds);
 
                 if (pos.X < -10 || pos.X > 1290 || pos.Y < -10 || pos.Y > 730)
                 {
@@ -4327,7 +3780,7 @@ namespace ZombustersWindows
             game.input.PlayShot(player);
         }
 
-        private void JadeIdleTrunkAnimationInit(XDocument doc)
+        private void JadeIdleTrunkAnimationLoad(XDocument doc)
         {
             TimeSpan frameInterval;
             Point sheetSize = new Point();
@@ -4348,7 +3801,7 @@ namespace ZombustersWindows
             IdleTrunkAnimation.Add(new Animation(IdleTrunkTexture[0], frameSize, sheetSize, frameInterval)); // Define a new Animation instance
         }
 
-        private void JadeRunEastAnimationInit(XDocument doc)
+        private void JadeRunEastAnimationLoad(XDocument doc)
         {
             TimeSpan frameInterval;
             Point sheetSize = new Point();
@@ -4367,7 +3820,7 @@ namespace ZombustersWindows
             RunEastAnimation.Add(new Animation(RunEastTexture[0], frameSize, sheetSize, frameInterval));
         }
 
-        private void JadePistolShotEastAnimationInit(XDocument doc)
+        private void JadePistolShotEastAnimationLoad(XDocument doc)
         {
             TimeSpan frameInterval;
             Point sheetSize = new Point();
@@ -4386,7 +3839,7 @@ namespace ZombustersWindows
             PistolShotEastAnimation.Add(new Animation(PistolShotEastTexture[0], frameSize, sheetSize, frameInterval));
         }
 
-        private void JadePistolShotNorthEastAnimationInit(XDocument doc)
+        private void JadePistolShotNorthEastAnimationLoad(XDocument doc)
         {
             TimeSpan frameInterval;
             Point sheetSize = new Point();
@@ -4405,7 +3858,7 @@ namespace ZombustersWindows
             PistolShotNEAnimation.Add(new Animation(PistolShotNETexture[0], frameSize, sheetSize, frameInterval));
         }
 
-        private void JadePistolShotSouthEastAnimationInit(XDocument doc)
+        private void JadePistolShotSouthEastAnimationLoad(XDocument doc)
         {
             TimeSpan frameInterval;
             Point sheetSize = new Point();
@@ -4424,7 +3877,7 @@ namespace ZombustersWindows
             PistolShotSEAnimation.Add(new Animation(PistolShotSETexture[0], frameSize, sheetSize, frameInterval));
         }
 
-        private void JadePistolShotSouthAnimationInit(XDocument doc)
+        private void JadePistolShotSouthAnimationLoad(XDocument doc)
         {
             TimeSpan frameInterval;
             Point sheetSize = new Point();
@@ -4443,7 +3896,7 @@ namespace ZombustersWindows
             PistolShotSouthAnimation.Add(new Animation(PistolShotSouthTexture[0], frameSize, sheetSize, frameInterval));
         }
 
-        private void JadePistolShotNorthAnimationInit(XDocument doc)
+        private void JadePistolShotNorthAnimationLoad(XDocument doc)
         {
             TimeSpan frameInterval;
             Point sheetSize = new Point();
@@ -4462,7 +3915,7 @@ namespace ZombustersWindows
             PistolShotNorthAnimation.Add(new Animation(PistolShotNorthTexture[0], frameSize, sheetSize, frameInterval));
         }
 
-        private void JadeShotgunShotEastAnimationInit(XDocument doc)
+        private void JadeShotgunShotEastAnimationLoad(XDocument doc)
         {
             TimeSpan frameInterval;
             Point sheetSize = new Point();
@@ -4481,7 +3934,7 @@ namespace ZombustersWindows
             ShotgunShotEastAnimation.Add(new Animation(ShotgunEastTexture[0], frameSize, sheetSize, frameInterval));
         }
 
-        private void JadeShotgunShotNorthEastAnimationInit(XDocument doc)
+        private void JadeShotgunShotNorthEastAnimationLoad(XDocument doc)
         {
             TimeSpan frameInterval;
             Point sheetSize = new Point();
@@ -4500,7 +3953,7 @@ namespace ZombustersWindows
             ShotgunNEAnimation.Add(new Animation(ShotgunNETexture[0], frameSize, sheetSize, frameInterval));
         }
 
-        private void JadeShotgunShotSouthEastAnimationInit(XDocument doc)
+        private void JadeShotgunShotSouthEastAnimationLoad(XDocument doc)
         {
             TimeSpan frameInterval;
             Point sheetSize = new Point();
@@ -4519,7 +3972,7 @@ namespace ZombustersWindows
             ShotgunSEAnimation.Add(new Animation(ShotgunSETexture[0], frameSize, sheetSize, frameInterval));
         }
 
-        private void JadeShotgunShotSouthAnimationInit(XDocument doc)
+        private void JadeShotgunShotSouthAnimationLoad(XDocument doc)
         {
             TimeSpan frameInterval;
             Point sheetSize = new Point();
@@ -4538,7 +3991,7 @@ namespace ZombustersWindows
             ShotgunSouthAnimation.Add(new Animation(ShotgunSouthTexture[0], frameSize, sheetSize, frameInterval));
         }
 
-        private void JadeShotgunShotNorthAnimationInit(XDocument doc)
+        private void JadeShotgunShotNorthAnimationLoad(XDocument doc)
         {
             TimeSpan frameInterval;
             Point sheetSize = new Point();
@@ -4557,7 +4010,7 @@ namespace ZombustersWindows
             ShotgunNorthAnimation.Add(new Animation(ShotgunNorthTexture[0], frameSize, sheetSize, frameInterval));
         }
 
-        private void EgonIdleTrunkAnimationInit(XDocument doc)
+        private void EgonIdleTrunkAnimationLoad(XDocument doc)
         {
             TimeSpan frameInterval;
             Point sheetSize = new Point();
@@ -4574,7 +4027,7 @@ namespace ZombustersWindows
             IdleTrunkAnimation.Add(new Animation(IdleTrunkTexture[1], frameSize, sheetSize, frameInterval));
 
         }
-        private void EgonRunEastAnimationInit(XDocument doc)
+        private void EgonRunEastAnimationLoad(XDocument doc)
         {
             TimeSpan frameInterval;
             Point sheetSize = new Point();
@@ -4590,7 +4043,7 @@ namespace ZombustersWindows
             RunEastAnimation.Add(new Animation(RunEastTexture[1], frameSize, sheetSize, frameInterval));
 
         }
-        private void EgonPistolShotEastAnimationInit(XDocument doc)
+        private void EgonPistolShotEastAnimationLoad(XDocument doc)
         {
             TimeSpan frameInterval;
             Point sheetSize = new Point();
@@ -4606,7 +4059,7 @@ namespace ZombustersWindows
             PistolShotEastAnimation.Add(new Animation(PistolShotEastTexture[1], frameSize, sheetSize, frameInterval));
 
         }
-        private void EgonPistolShotNorthEastAnimationInit(XDocument doc)
+        private void EgonPistolShotNorthEastAnimationLoad(XDocument doc)
         {
             TimeSpan frameInterval;
             Point sheetSize = new Point();
@@ -4622,7 +4075,7 @@ namespace ZombustersWindows
             PistolShotNEAnimation.Add(new Animation(PistolShotNETexture[1], frameSize, sheetSize, frameInterval));
 
         }
-        private void EgonPistolShotSouthEastAnimationInit(XDocument doc)
+        private void EgonPistolShotSouthEastAnimationLoad(XDocument doc)
         {
             TimeSpan frameInterval;
             Point sheetSize = new Point();
@@ -4638,7 +4091,7 @@ namespace ZombustersWindows
             PistolShotSEAnimation.Add(new Animation(PistolShotSETexture[1], frameSize, sheetSize, frameInterval));
 
         }
-        private void EgonPistolShotSouthAnimationInit(XDocument doc)
+        private void EgonPistolShotSouthAnimationLoad(XDocument doc)
         {
             TimeSpan frameInterval;
             Point sheetSize = new Point();
@@ -4654,7 +4107,7 @@ namespace ZombustersWindows
             PistolShotSouthAnimation.Add(new Animation(PistolShotSouthTexture[1], frameSize, sheetSize, frameInterval));
 
         }
-        private void EgonPistolShotNorthAnimationInit(XDocument doc)
+        private void EgonPistolShotNorthAnimationLoad(XDocument doc)
         {
             TimeSpan frameInterval;
             Point sheetSize = new Point();
@@ -4670,7 +4123,7 @@ namespace ZombustersWindows
             PistolShotNorthAnimation.Add(new Animation(PistolShotNorthTexture[1], frameSize, sheetSize, frameInterval));
 
         }
-        private void EgonShotgunShotEastAnimationInit(XDocument doc)
+        private void EgonShotgunShotEastAnimationLoad(XDocument doc)
         {
             TimeSpan frameInterval;
             Point sheetSize = new Point();
@@ -4686,7 +4139,7 @@ namespace ZombustersWindows
             ShotgunShotEastAnimation.Add(new Animation(ShotgunEastTexture[1], frameSize, sheetSize, frameInterval));
 
         }
-        private void EgonShotgunShotNorthEastAnimationInit(XDocument doc)
+        private void EgonShotgunShotNorthEastAnimationLoad(XDocument doc)
         {
             TimeSpan frameInterval;
             Point sheetSize = new Point();
@@ -4702,7 +4155,7 @@ namespace ZombustersWindows
             ShotgunNEAnimation.Add(new Animation(ShotgunNETexture[1], frameSize, sheetSize, frameInterval));
 
         }
-        private void EgonShotgunShotSouthEastAnimationInit(XDocument doc)
+        private void EgonShotgunShotSouthEastAnimationLoad(XDocument doc)
         {
             TimeSpan frameInterval;
             Point sheetSize = new Point();
@@ -4718,7 +4171,7 @@ namespace ZombustersWindows
             ShotgunSEAnimation.Add(new Animation(ShotgunSETexture[1], frameSize, sheetSize, frameInterval));
 
         }
-        private void EgonShotgunShotSouthAnimationInit(XDocument doc)
+        private void EgonShotgunShotSouthAnimationLoad(XDocument doc)
         {
             TimeSpan frameInterval;
             Point sheetSize = new Point();
@@ -4734,7 +4187,7 @@ namespace ZombustersWindows
             ShotgunSouthAnimation.Add(new Animation(ShotgunSouthTexture[1], frameSize, sheetSize, frameInterval));
 
         }
-        private void EgonShotgunShotNorthAnimationInit(XDocument doc)
+        private void EgonShotgunShotNorthAnimationLoad(XDocument doc)
         {
             TimeSpan frameInterval;
             Point sheetSize = new Point();
@@ -4751,7 +4204,7 @@ namespace ZombustersWindows
 
         }
 
-        private void RayIdleTrunkAnimationInit(XDocument doc)
+        private void RayIdleTrunkAnimationLoad(XDocument doc)
         {
             TimeSpan frameInterval;
             Point sheetSize = new Point();
@@ -4768,7 +4221,7 @@ namespace ZombustersWindows
             IdleTrunkAnimation.Add(new Animation(IdleTrunkTexture[2], frameSize, sheetSize, frameInterval));
 
         }
-        private void RayRunEastAnimationInit(XDocument doc)
+        private void RayRunEastAnimationLoad(XDocument doc)
         {
             TimeSpan frameInterval;
             Point sheetSize = new Point();
@@ -4784,7 +4237,7 @@ namespace ZombustersWindows
             RunEastAnimation.Add(new Animation(RunEastTexture[2], frameSize, sheetSize, frameInterval));
 
         }
-        private void RayPistolShotEastAnimationInit(XDocument doc)
+        private void RayPistolShotEastAnimationLoad(XDocument doc)
         {
             TimeSpan frameInterval;
             Point sheetSize = new Point();
@@ -4800,7 +4253,7 @@ namespace ZombustersWindows
             PistolShotEastAnimation.Add(new Animation(PistolShotEastTexture[2], frameSize, sheetSize, frameInterval));
 
         }
-        private void RayPistolShotNorthEastAnimationInit(XDocument doc)
+        private void RayPistolShotNorthEastAnimationLoad(XDocument doc)
         {
             TimeSpan frameInterval;
             Point sheetSize = new Point();
@@ -4816,7 +4269,7 @@ namespace ZombustersWindows
             PistolShotNEAnimation.Add(new Animation(PistolShotNETexture[2], frameSize, sheetSize, frameInterval));
 
         }
-        private void RayPistolShotSouthEastAnimationInit(XDocument doc)
+        private void RayPistolShotSouthEastAnimationLoad(XDocument doc)
         {
             TimeSpan frameInterval;
             Point sheetSize = new Point();
@@ -4832,7 +4285,7 @@ namespace ZombustersWindows
             PistolShotSEAnimation.Add(new Animation(PistolShotSETexture[2], frameSize, sheetSize, frameInterval));
 
         }
-        private void RayPistolShotSouthAnimationInit(XDocument doc)
+        private void RayPistolShotSouthAnimationLoad(XDocument doc)
         {
             TimeSpan frameInterval;
             Point sheetSize = new Point();
@@ -4848,7 +4301,7 @@ namespace ZombustersWindows
             PistolShotSouthAnimation.Add(new Animation(PistolShotSouthTexture[2], frameSize, sheetSize, frameInterval));
 
         }
-        private void RayPistolShotNorthAnimationInit(XDocument doc)
+        private void RayPistolShotNorthAnimationLoad(XDocument doc)
         {
             TimeSpan frameInterval;
             Point sheetSize = new Point();
@@ -4864,7 +4317,7 @@ namespace ZombustersWindows
             PistolShotNorthAnimation.Add(new Animation(PistolShotNorthTexture[2], frameSize, sheetSize, frameInterval));
 
         }
-        private void RayShotgunShotEastAnimationInit(XDocument doc)
+        private void RayShotgunShotEastAnimationLoad(XDocument doc)
         {
             TimeSpan frameInterval;
             Point sheetSize = new Point();
@@ -4880,7 +4333,7 @@ namespace ZombustersWindows
             ShotgunShotEastAnimation.Add(new Animation(ShotgunEastTexture[2], frameSize, sheetSize, frameInterval));
 
         }
-        private void RayShotgunShotNorthEastAnimationInit(XDocument doc)
+        private void RayShotgunShotNorthEastAnimationLoad(XDocument doc)
         {
             TimeSpan frameInterval;
             Point sheetSize = new Point();
@@ -4896,7 +4349,7 @@ namespace ZombustersWindows
             ShotgunNEAnimation.Add(new Animation(ShotgunNETexture[2], frameSize, sheetSize, frameInterval));
 
         }
-        private void RayShotgunShotSouthEastAnimationInit(XDocument doc)
+        private void RayShotgunShotSouthEastAnimationLoad(XDocument doc)
         {
             TimeSpan frameInterval;
             Point sheetSize = new Point();
@@ -4912,7 +4365,7 @@ namespace ZombustersWindows
             ShotgunSEAnimation.Add(new Animation(ShotgunSETexture[2], frameSize, sheetSize, frameInterval));
 
         }
-        private void RayShotgunShotSouthAnimationInit(XDocument doc)
+        private void RayShotgunShotSouthAnimationLoad(XDocument doc)
         {
             TimeSpan frameInterval;
             Point sheetSize = new Point();
@@ -4927,7 +4380,7 @@ namespace ZombustersWindows
             frameInterval = TimeSpan.FromSeconds(1.0f / int.Parse(definition.Attribute("Speed").Value, NumberStyles.Integer));
             ShotgunSouthAnimation.Add(new Animation(ShotgunSouthTexture[2], frameSize, sheetSize, frameInterval));
         }
-        private void RayShotgunShotNorthAnimationInit(XDocument doc)
+        private void RayShotgunShotNorthAnimationLoad(XDocument doc)
         {
             TimeSpan frameInterval;
             Point sheetSize = new Point();
@@ -4944,7 +4397,7 @@ namespace ZombustersWindows
 
         }
 
-        private void PeterIdleTrunkAnimationInit(XDocument doc)
+        private void PeterIdleTrunkAnimationLoad(XDocument doc)
         {
             TimeSpan frameInterval;
             Point sheetSize = new Point();
@@ -4961,7 +4414,7 @@ namespace ZombustersWindows
             IdleTrunkAnimation.Add(new Animation(IdleTrunkTexture[3], frameSize, sheetSize, frameInterval)); // Define a new Animation instance
 
         }
-        private void PeterRunEastAnimationInit(XDocument doc)
+        private void PeterRunEastAnimationLoad(XDocument doc)
         {
             TimeSpan frameInterval;
             Point sheetSize = new Point();
@@ -4977,7 +4430,7 @@ namespace ZombustersWindows
             RunEastAnimation.Add(new Animation(RunEastTexture[3], frameSize, sheetSize, frameInterval)); // Define a new Animation instance
 
         }
-        private void PeterPistolShotEastAnimationInit(XDocument doc)
+        private void PeterPistolShotEastAnimationLoad(XDocument doc)
         {
             TimeSpan frameInterval;
             Point sheetSize = new Point();
@@ -4993,7 +4446,7 @@ namespace ZombustersWindows
             PistolShotEastAnimation.Add(new Animation(PistolShotEastTexture[3], frameSize, sheetSize, frameInterval)); // Define a new Animation instance
 
         }
-        private void PeterPistolShotNorthEastAnimationInit(XDocument doc)
+        private void PeterPistolShotNorthEastAnimationLoad(XDocument doc)
         {
             TimeSpan frameInterval;
             Point sheetSize = new Point();
@@ -5009,7 +4462,7 @@ namespace ZombustersWindows
             PistolShotNEAnimation.Add(new Animation(PistolShotNETexture[3], frameSize, sheetSize, frameInterval)); // Define a new Animation instance
 
         }
-        private void PeterPistolShotSouthEastAnimationInit(XDocument doc)
+        private void PeterPistolShotSouthEastAnimationLoad(XDocument doc)
         {
             TimeSpan frameInterval;
             Point sheetSize = new Point();
@@ -5025,7 +4478,7 @@ namespace ZombustersWindows
             PistolShotSEAnimation.Add(new Animation(PistolShotSETexture[3], frameSize, sheetSize, frameInterval)); // Define a new Animation instance
 
         }
-        private void PeterPistolShotSouthAnimationInit(XDocument doc)
+        private void PeterPistolShotSouthAnimationLoad(XDocument doc)
         {
             TimeSpan frameInterval;
             Point sheetSize = new Point();
@@ -5041,7 +4494,7 @@ namespace ZombustersWindows
             PistolShotSouthAnimation.Add(new Animation(PistolShotSouthTexture[3], frameSize, sheetSize, frameInterval)); // Define a new Animation instance
 
         }
-        private void PeterPistolShotNorthAnimationInit(XDocument doc)
+        private void PeterPistolShotNorthAnimationLoad(XDocument doc)
         {
             TimeSpan frameInterval;
             Point sheetSize = new Point();
@@ -5057,7 +4510,7 @@ namespace ZombustersWindows
             PistolShotNorthAnimation.Add(new Animation(PistolShotNorthTexture[3], frameSize, sheetSize, frameInterval)); // Define a new Animation instance
 
         }
-        private void PeterShotgunShotEastAnimationInit(XDocument doc)
+        private void PeterShotgunShotEastAnimationLoad(XDocument doc)
         {
             TimeSpan frameInterval;
             Point sheetSize = new Point();
@@ -5073,7 +4526,7 @@ namespace ZombustersWindows
             ShotgunShotEastAnimation.Add(new Animation(ShotgunEastTexture[3], frameSize, sheetSize, frameInterval)); // Define a new Animation instance
 
         }
-        private void PeterShotgunShotNorthEastAnimationInit(XDocument doc)
+        private void PeterShotgunShotNorthEastAnimationLoad(XDocument doc)
         {
             TimeSpan frameInterval;
             Point sheetSize = new Point();
@@ -5089,7 +4542,7 @@ namespace ZombustersWindows
             ShotgunNEAnimation.Add(new Animation(ShotgunNETexture[3], frameSize, sheetSize, frameInterval)); // Define a new Animation instance
 
         }
-        private void PeterShotgunShotSouthEastAnimationInit(XDocument doc)
+        private void PeterShotgunShotSouthEastAnimationLoad(XDocument doc)
         {
             TimeSpan frameInterval;
             Point sheetSize = new Point();
@@ -5105,7 +4558,7 @@ namespace ZombustersWindows
             ShotgunSEAnimation.Add(new Animation(ShotgunSETexture[3], frameSize, sheetSize, frameInterval)); // Define a new Animation instance
 
         }
-        private void PeterShotgunShotSouthAnimationInit(XDocument doc)
+        private void PeterShotgunShotSouthAnimationLoad(XDocument doc)
         {
             TimeSpan frameInterval;
             Point sheetSize = new Point();
@@ -5121,7 +4574,7 @@ namespace ZombustersWindows
             ShotgunSouthAnimation.Add(new Animation(ShotgunSouthTexture[3], frameSize, sheetSize, frameInterval)); // Define a new Animation instance
 
         }
-        private void PeterShotgunShotNorthAnimationInit(XDocument doc)
+        private void PeterShotgunShotNorthAnimationLoad(XDocument doc)
         {
             TimeSpan frameInterval;
             Point sheetSize = new Point();
@@ -5138,14 +4591,13 @@ namespace ZombustersWindows
 
         }
 
-        private void FlamethrowerAnimationInit(XDocument doc)
+        private void FlamethrowerAnimationLoad(XDocument doc)
         {
             TimeSpan frameInterval;
             Point sheetSize = new Point();
             Point frameSize = new Point();
             var definition = doc.Root.Element("FlameThrowerDef");
             flamethrowerTexture = game.Content.Load<Texture2D>(@"InGame/flamethrower");
-            FT_CollisionTexture = game.Content.Load<Texture2D>(@"InGame/FT_CollisionTexture");
             frameSize.X = int.Parse(definition.Attribute("FrameWidth").Value, NumberStyles.Integer);
             frameSize.Y = int.Parse(definition.Attribute("FrameHeight").Value, NumberStyles.Integer);
             sheetSize.X = int.Parse(definition.Attribute("SheetColumns").Value, NumberStyles.Integer);

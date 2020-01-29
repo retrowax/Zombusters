@@ -180,6 +180,7 @@
     <Compile Include="SubsystemManagers\RotatedRectangle.cs" />
     <Compile Include="SubsystemManagers\ScrollingTextManager.cs" />
     <Compile Include="SubsystemManagers\StorageDataSource.cs" />
+    <Compile Include="SubsystemManagers\GameplayHelper.cs" />
     <Compile Include="SubsystemManagers\VirtualThumbsticks.cs" />
     <Compile Include="SupportScreens\ExitMessageBox.cs" />
     <Compile Include="SupportScreens\NetworkBusyScreen.cs" />
