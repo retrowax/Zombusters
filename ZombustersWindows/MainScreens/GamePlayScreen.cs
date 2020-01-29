@@ -59,7 +59,7 @@ namespace ZombustersWindows
         private Vector2 cursorPos;
         Texture2D gameover;
         Vector2 gameoverOrigin;
-        Texture2D UIStats, jadeUI, rayUI, peterUI, richardUI, lineaBlanca;
+        Texture2D UIStats, jadeUI, rayUI, peterUI, richardUI, whiteLine;
         Texture2D UIStatsBlue, UIStatsRed, UIStatsGreen, UIStatsYellow, UIPlayerBlue, UIPlayerRed, UIPlayerGreen, UIPlayerYellow;
         SpriteFont arcade14, arcade28, courier, fixedfont;
         SpriteFont MenuHeaderFont, MenuInfoFont, MenuListFont;
@@ -349,51 +349,50 @@ namespace ZombustersWindows
             {
                 if (input.IsNewKeyPress(Keys.Left))
                 {
-                    stickLeft = stickLeft + new Vector2(-1, 0);
+                    stickLeft += new Vector2(-1, 0);
                 }
                 if (input.IsNewKeyPress(Keys.Right))
                 {
-                    stickLeft = stickLeft + new Vector2(1, 0);
+                    stickLeft += new Vector2(1, 0);
                 }
                 if (input.IsNewKeyPress(Keys.Up))
                 {
-                    stickLeft = stickLeft + new Vector2(0, 1);
+                    stickLeft += new Vector2(0, 1);
                 }
                 if (input.IsNewKeyPress(Keys.Down))
                 {
-                    stickLeft = stickLeft + new Vector2(0, -1);
+                    stickLeft += new Vector2(0, -1);
                 }
 
                 if (input.GetCurrentMouseState().LeftButton == ButtonState.Pressed)
                 {
-                    
                     MouseState mouseState = input.GetCurrentMouseState();
-                    // Derecha
+                    // Right
                     if (mouseState.X > game.currentPlayers[0].position.X && (mouseState.X - game.currentPlayers[0].position.X >=100))
                     {
-                        stickRight = stickRight + new Vector2(1, 0);
-                        state.Fire = state.Fire + new Vector2(1, 0);
+                        stickRight += new Vector2(1, 0);
+                        state.Fire += new Vector2(1, 0);
                     }
 
-                    // Abajo
+                    // Down
                     if (mouseState.Y < game.currentPlayers[0].position.Y && (game.currentPlayers[0].position.Y - mouseState.Y >= 100))
                     {
-                        stickRight = stickRight + new Vector2(0, 1);
-                        state.Fire = state.Fire + new Vector2(0, 1);
+                        stickRight += new Vector2(0, 1);
+                        state.Fire += new Vector2(0, 1);
                     }
 
-                    // Izquierda
+                    // Left
                     if (mouseState.X < game.currentPlayers[0].position.X && (game.currentPlayers[0].position.X - mouseState.X >= 100))
                     {
-                        stickRight = stickRight + new Vector2(-1, 0);
-                        state.Fire = state.Fire + new Vector2(-1, 0);
+                        stickRight += new Vector2(-1, 0);
+                        state.Fire += new Vector2(-1, 0);
                     }
 
-                    // Arriba
+                    // Top
                     if (mouseState.Y >= game.currentPlayers[0].position.Y && (mouseState.Y - game.currentPlayers[0].position.Y >= 100))
                     {
-                        stickRight = stickRight + new Vector2(0, -1);
-                        state.Fire = state.Fire + new Vector2(0, -1);
+                        stickRight += new Vector2(0, -1);
+                        state.Fire += new Vector2(0, -1);
                     }
                 }
             }
@@ -456,28 +455,24 @@ namespace ZombustersWindows
                         if (game.currentPlayers[i].lives > 0)
                         {
                             game.currentPlayers[i].status = ObjectStatus.Active;
-                            //if (((Game1)this.ScreenManager.Game).currentPlayers[i].Player.SignedInGamer == null)
+                            switch (game.currentPlayers[i].Player.Controller)
                             {
-                                switch (game.currentPlayers[i].Player.Controller)
-                                {
-                                    case PlayerIndex.One:
-                                        game.currentPlayers[i].Player.Name = Strings.PlayerOneString;
-                                        break;
-                                    case PlayerIndex.Two:
-                                        game.currentPlayers[i].Player.Name = Strings.PlayerTwoString;
-                                        break;
-                                    case PlayerIndex.Three:
-                                        game.currentPlayers[i].Player.Name = Strings.PlayerThreeString;
-                                        break;
-                                    case PlayerIndex.Four:
-                                        game.currentPlayers[i].Player.Name = Strings.PlayerFourString;
-                                        break;
-                                    default:
-                                        game.currentPlayers[i].Player.Name = Strings.PlayerOneString;
-                                        break;
-                                }
+                                case PlayerIndex.One:
+                                    game.currentPlayers[i].Player.Name = Strings.PlayerOneString;
+                                    break;
+                                case PlayerIndex.Two:
+                                    game.currentPlayers[i].Player.Name = Strings.PlayerTwoString;
+                                    break;
+                                case PlayerIndex.Three:
+                                    game.currentPlayers[i].Player.Name = Strings.PlayerThreeString;
+                                    break;
+                                case PlayerIndex.Four:
+                                    game.currentPlayers[i].Player.Name = Strings.PlayerFourString;
+                                    break;
+                                default:
+                                    game.currentPlayers[i].Player.Name = Strings.PlayerOneString;
+                                    break;
                             }
-
 
                             for (j = 0; j < game.currentPlayers.Length; j++)
                             {
@@ -1227,7 +1222,6 @@ namespace ZombustersWindows
                             game.currentPlayers[i].entity.Position = Level.PlayerSpawnPosition[i];
                         }
 
-                        // Save Game
                         foreach (Avatar player in game.currentPlayers)
                         {
                             if (player.Player.IsPlaying)
@@ -1311,7 +1305,6 @@ namespace ZombustersWindows
                 ActiveZombies = 0;
                 ActiveTanks = 0;
 
-                //Get How many spawn zones are
                 for (i = 0; i < Level.ZombieSpawnZones.Count - 1; i++)
                 {
                     if (Level.ZombieSpawnZones[i].X == 0 && Level.ZombieSpawnZones[i].Y == 0 && Level.ZombieSpawnZones[i].Z == 0 && Level.ZombieSpawnZones[i].W == 0)
@@ -1548,30 +1541,20 @@ namespace ZombustersWindows
             batch.End();
         }
 
-        // Draw Text when all enemies are dead
         private void DrawStageCleared()
         {
             this.ScreenManager.FadeBackBufferToBlack(64);
             this.ScreenManager.SpriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend);
-            Vector2 UICenter = new Vector2(uiBounds.X + uiBounds.Width / 2,
-                uiBounds.Y + uiBounds.Height / 2);
-
-            // Linea Blanca
-            this.ScreenManager.SpriteBatch.Draw(lineaBlanca, new Vector2(UICenter.X - lineaBlanca.Width / 2, UICenter.Y - 10), Color.White);
-
-            // CLEARED String
+            
+            Vector2 UICenter = new Vector2(uiBounds.X + uiBounds.Width / 2, uiBounds.Y + uiBounds.Height / 2);
+            this.ScreenManager.SpriteBatch.Draw(whiteLine, new Vector2(UICenter.X - whiteLine.Width / 2, UICenter.Y - 10), Color.White);
             this.ScreenManager.SpriteBatch.DrawString(MenuHeaderFont, Strings.ClearedGameplayString.ToUpper(), new Vector2(UICenter.X - Convert.ToInt32(MenuHeaderFont.MeasureString(Strings.ClearedGameplayString.ToUpper()).X)/2, UICenter.Y), Color.White);
-
-            // Prepare for next Wave String
             this.ScreenManager.SpriteBatch.DrawString(MenuListFont, Strings.PrepareNextWaveGameplayString.ToUpper(), new Vector2(UICenter.X - Convert.ToInt32(MenuListFont.MeasureString(Strings.PrepareNextWaveGameplayString.ToUpper()).X) / 2, UICenter.Y + 50), Color.White);
-
-            // Linea Blanca
-            this.ScreenManager.SpriteBatch.Draw(lineaBlanca, new Vector2(UICenter.X - lineaBlanca.Width / 2, UICenter.Y + 90), Color.White);
+            this.ScreenManager.SpriteBatch.Draw(whiteLine, new Vector2(UICenter.X - whiteLine.Width / 2, UICenter.Y + 90), Color.White);
 
             this.ScreenManager.SpriteBatch.End();
         }
 
-        // Draw the next wave number
         private void DrawStartLevel()
         {
             string levelshowstring;
@@ -1579,13 +1562,10 @@ namespace ZombustersWindows
             int fixedTimeLeft = 5;
             this.ScreenManager.FadeBackBufferToBlack(64);
             this.ScreenManager.SpriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend);
-            Vector2 UICenter = new Vector2(uiBounds.X + uiBounds.Width / 2,
-                uiBounds.Y + uiBounds.Height / 2);
+            
+            Vector2 UICenter = new Vector2(uiBounds.X + uiBounds.Width / 2, uiBounds.Y + uiBounds.Height / 2);
+            this.ScreenManager.SpriteBatch.Draw(whiteLine, new Vector2(UICenter.X - whiteLine.Width /2, UICenter.Y - 10), Color.White);
 
-            // Linea Blanca
-            this.ScreenManager.SpriteBatch.Draw(lineaBlanca, new Vector2(UICenter.X - lineaBlanca.Width /2, UICenter.Y - 10), Color.White);
-
-            // LEVEL
             switch (currentLevel)
             {
                 case LevelType.One:
@@ -1634,10 +1614,8 @@ namespace ZombustersWindows
 
             }
 
-            //levelshowstring = Strings.LevelSelectMenuString + " " + currentLevel.ToString();
             this.ScreenManager.SpriteBatch.DrawString(MenuHeaderFont, levelshowstring.ToUpper(), new Vector2(UICenter.X - Convert.ToInt32(MenuHeaderFont.MeasureString(levelshowstring.ToUpper()).X) / 2, UICenter.Y), Color.White);
 
-            // WAVE
             switch (currentSublevel)
             {
                 case SubLevel.SubLevelType.One:
@@ -1686,16 +1664,12 @@ namespace ZombustersWindows
 
             }
 
-            //levelshowstring = Strings.WaveGameplayString + " " + currentSublevel.ToString();
             this.ScreenManager.SpriteBatch.DrawString(MenuListFont, levelshowstring.ToUpper(), new Vector2(UICenter.X - Convert.ToInt32(MenuListFont.MeasureString(levelshowstring.ToUpper()).X) / 2, UICenter.Y + 50), Color.White);
+            this.ScreenManager.SpriteBatch.Draw(whiteLine, new Vector2(UICenter.X - whiteLine.Width / 2, UICenter.Y + 90), Color.White);
 
-            // Linea Blanca
-            this.ScreenManager.SpriteBatch.Draw(lineaBlanca, new Vector2(UICenter.X - lineaBlanca.Width / 2, UICenter.Y + 90), Color.White);
-
-            // Draw Waiting for Begin Text on Multiplayer
             if (game.currentGameState == GameState.WaitingToBegin)
             {
-                timeLeftWaitingPlayers = fixedTimeLeft; //- (int)timerWaitingToBegin;
+                timeLeftWaitingPlayers = fixedTimeLeft;
                 this.ScreenManager.SpriteBatch.DrawString(MenuInfoFont, Strings.WaitingForPlayersMenuString.ToUpper(), new Vector2(uiBounds.Left, uiBounds.Height), Color.White);
                 this.ScreenManager.SpriteBatch.DrawString(MenuInfoFont, timeLeftWaitingPlayers.ToString(), new Vector2(uiBounds.Left + MenuInfoFont.MeasureString(Strings.WaitingForPlayersMenuString.ToUpper()).X + 5, uiBounds.Height), Color.White);
             }
@@ -1709,44 +1683,35 @@ namespace ZombustersWindows
             {
                 this.ScreenManager.FadeBackBufferToBlack(64);
                 this.ScreenManager.SpriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend);
-                Vector2 UICenter = new Vector2(uiBounds.X + uiBounds.Width / 2, 
-                    uiBounds.Y + uiBounds.Height / 2);
-                this.ScreenManager.SpriteBatch.Draw(gameover, UICenter, 
-                    null, Color.Red, 0, gameoverOrigin, 1.0f, SpriteEffects.None, 
-                    1.0f);
+
+                Vector2 UICenter = new Vector2(uiBounds.X + uiBounds.Width / 2, uiBounds.Y + uiBounds.Height / 2);
+                this.ScreenManager.SpriteBatch.Draw(gameover, UICenter, null, Color.Red, 0, gameoverOrigin, 1.0f, SpriteEffects.None, 1.0f);
+
                 this.ScreenManager.SpriteBatch.End();
             }
 
-            // SHOW END GAME
             if (currentLevel == LevelType.FinalJuego)
             {
                 string levelshowstring;
                 this.ScreenManager.FadeBackBufferToBlack(64);
                 this.ScreenManager.SpriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend);
 
-                Vector2 UICenter = new Vector2(uiBounds.X + uiBounds.Width / 2,
-                uiBounds.Y + uiBounds.Height / 2);
+                Vector2 UICenter = new Vector2(uiBounds.X + uiBounds.Width / 2, uiBounds.Y + uiBounds.Height / 2);
+                this.ScreenManager.SpriteBatch.Draw(whiteLine, new Vector2(UICenter.X - whiteLine.Width / 2, UICenter.Y - 10), Color.White);
 
-                // Linea Blanca
-                this.ScreenManager.SpriteBatch.Draw(lineaBlanca, new Vector2(UICenter.X - lineaBlanca.Width / 2, UICenter.Y - 10), Color.White);
-
-                // CONGRATULATIONS
                 levelshowstring = Strings.CongratssEndGameString;
                 this.ScreenManager.SpriteBatch.DrawString(MenuHeaderFont, levelshowstring.ToUpper(), new Vector2(UICenter.X - Convert.ToInt32(MenuHeaderFont.MeasureString(levelshowstring.ToUpper()).X) / 2, UICenter.Y), Color.White);
 
-                // YOU SAVE THE CITY
                 levelshowstring = Strings.YouSavedCityEndGameString;
                 this.ScreenManager.SpriteBatch.DrawString(MenuListFont, levelshowstring.ToUpper(), new Vector2(UICenter.X - Convert.ToInt32(MenuListFont.MeasureString(levelshowstring.ToUpper()).X) / 2, UICenter.Y + 50), Color.White);
 
-                // Linea Blanca
-                this.ScreenManager.SpriteBatch.Draw(lineaBlanca, new Vector2(UICenter.X - lineaBlanca.Width / 2, UICenter.Y + 90), Color.White);
+                this.ScreenManager.SpriteBatch.Draw(whiteLine, new Vector2(UICenter.X - whiteLine.Width / 2, UICenter.Y + 90), Color.White);
 
                 this.ScreenManager.SpriteBatch.End();
             }
-
         }
 
-        public bool isInRange(Avatar state, Furniture furniture)
+        public bool IsInRange(Avatar state, Furniture furniture)
         {
             float distance = Vector2.Distance(state.position, furniture.ObstaclePosition);
             if (distance < Avatar.CrashRadius + 10.0f)
@@ -1765,7 +1730,6 @@ namespace ZombustersWindows
             playerBasePosition = state.position.Y;
             furnitureInferior = 0.0f;
             lindex = 0.0f;
-
 
             while (playerBasePosition > furnitureInferior)
             {
@@ -1787,16 +1751,6 @@ namespace ZombustersWindows
 
         private void DrawPlayer(Avatar state, double TotalGameSeconds, GameTime gameTime, List<Furniture> furniturelist)
         {
-            //PRUEBA!!
-            //AvatarCircle circulo = new AvatarCircle(this.game.GraphicsDevice, new Vector2(state.position.X + CharacterAnimation.frameSize.X/2, state.position.Y + CharacterAnimation.frameSize.Y), 15.0f, state.color);
-
-            // Initialize our own SpriteBatch.  We want default Alpha blending, and the render
-            // states set by SpriteBatch to be reset when End() is called.
-            //SpriteBatch batch = this.ScreenManager.SpriteBatch;
-            //this.ScreenManager.SpriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend);
-            //batch.Begin(SpriteBlendMode.AlphaBlend, SpriteSortMode.Deferred, 
-                //SaveStateMode.SaveState);
-
             float layerIndex = GetLayerIndex(state, furniturelist);
             Vector2 offsetPosition = new Vector2(-20, -55);
 
@@ -1809,25 +1763,21 @@ namespace ZombustersWindows
                     {
                         if (player.IsPlaying)
                         {
-                            // Draw Player Name and Highlight for Blue
                             if (state.color == Color.Blue)
                             {
                                 this.ScreenManager.SpriteBatch.Draw(UIPlayerBlue, new Vector2(state.position.X + IdleTrunkAnimation[0].frameSize.X / 2 - UIPlayerBlue.Width / 2 + offsetPosition.X, state.position.Y - 20 + offsetPosition.Y), Color.White);
                             }
 
-                            // Draw Player Name and Highlight for Red
                             if (state.color == Color.Red)
                             {
                                 this.ScreenManager.SpriteBatch.Draw(UIPlayerRed, new Vector2(state.position.X + IdleTrunkAnimation[0].frameSize.X / 2 - UIPlayerRed.Width / 2 + offsetPosition.X, state.position.Y - 20 + offsetPosition.Y), Color.White);
                             }
 
-                            // Draw Player Name and Highlight for Green
                             if (state.color == Color.Green)
                             {
                                 this.ScreenManager.SpriteBatch.Draw(UIPlayerGreen, new Vector2(state.position.X + IdleTrunkAnimation[0].frameSize.X / 2 - UIPlayerGreen.Width / 2 + offsetPosition.X, state.position.Y - 20 + offsetPosition.Y), Color.White);
                             }
 
-                            // Draw Player Name and Highlight for Yellow
                             if (state.color == Color.Yellow)
                             {
                                 this.ScreenManager.SpriteBatch.Draw(UIPlayerYellow, new Vector2(state.position.X + IdleTrunkAnimation[0].frameSize.X / 2 - UIPlayerYellow.Width / 2 + offsetPosition.X, state.position.Y - 20 + offsetPosition.Y), Color.White);
@@ -1844,7 +1794,7 @@ namespace ZombustersWindows
             switch (state.status)
             {
                 case ObjectStatus.Inactive:  
-                    break; // Draw nothing
+                    break;
                 case ObjectStatus.Active:
                     Color color;
                     if (state.isLoosingLife == true)
@@ -1856,7 +1806,6 @@ namespace ZombustersWindows
                         color = Color.White;
                     }
 
-                    // Draws our avatar at the current position with no tinting
                     if (state.accumFire.Length() > .5)
                     {
                         if (state.shotAngle > -0.3925f && state.shotAngle < 0.3925f) //NORTH
@@ -2915,111 +2864,6 @@ namespace ZombustersWindows
                             new Rectangle(0, 0, IdleLegsTexture[state.character].Width, IdleLegsTexture[state.character].Height), Color.White, 0.0f, Vector2.Zero, SpriteEffects.None, layerIndex + 0.001f);
                         }
 
-/*
-                        if (state.accumMove.Length() > .5)
-                        {
-                            if (state.character == 0)
-                            {
-                                if (state.accumMove.X > 0)
-                                {
-                                    if (state.currentgun == 0 && state.ammo[0] == 0)
-                                    {
-                                        IdleTrunkAnimation[state.character].Draw(this.ScreenManager.SpriteBatch, new Vector2(state.position.X + offsetPosition.X, state.position.Y + offsetPosition.Y), SpriteEffects.None, layerIndex, 0f, Color.White);
-                                    }
-                                    else
-                                    {
-                                        this.ScreenManager.SpriteBatch.Draw(ShotgunEastTexture[state.character], new Rectangle(Convert.ToInt32(state.position.X + 7 + offsetPosition.X), Convert.ToInt32(state.position.Y + offsetPosition.Y + 4), 71, ShotgunEastTexture[state.character].Height),
-                                            new Rectangle(0, 0, 71, ShotgunEastTexture[state.character].Height), Color.White, 0.0f, Vector2.Zero, SpriteEffects.None, layerIndex);
-                                    }
-
-                                    RunEastAnimation[state.character].Draw(this.ScreenManager.SpriteBatch,
-                                        new Vector2(state.position.X - 7 + offsetPosition.X, state.position.Y - 26), SpriteEffects.None, layerIndex + 0.001f, 0f, Color.White);
-                                }
-                                else
-                                {
-                                    if (state.currentgun == 0 && state.ammo[0] == 0)
-                                    {
-                                        IdleTrunkAnimation[state.character].Draw(this.ScreenManager.SpriteBatch, new Vector2(state.position.X + offsetPosition.X + 16, state.position.Y + offsetPosition.Y), SpriteEffects.FlipHorizontally, layerIndex, 0f, Color.White);
-                                    }
-                                    else
-                                    {
-                                        this.ScreenManager.SpriteBatch.Draw(ShotgunEastTexture[state.character], new Rectangle(Convert.ToInt32(state.position.X - 6 + offsetPosition.X - 35), Convert.ToInt32(state.position.Y + offsetPosition.Y + 4), 71, ShotgunEastTexture[state.character].Height),
-                                                new Rectangle(0, 0, 71, ShotgunEastTexture[state.character].Height), Color.White, 0.0f, Vector2.Zero, SpriteEffects.FlipHorizontally, layerIndex);
-                                    }
-
-                                    RunEastAnimation[state.character].Draw(this.ScreenManager.SpriteBatch,
-                                        new Vector2(state.position.X + 18 + offsetPosition.X, state.position.Y - 26), SpriteEffects.FlipHorizontally, layerIndex + 0.001f, 0f, Color.White);
-                                }
-                            }
-                            else
-                            {
-                                if (state.accumMove.X > 0)
-                                {
-                                    if (state.currentgun == 0 && state.ammo[0] == 0)
-                                    {
-                                        IdleTrunkAnimation[state.character].Draw(this.ScreenManager.SpriteBatch, new Vector2(state.position.X + offsetPosition.X + 10, state.position.Y + offsetPosition.Y + 1), SpriteEffects.None, layerIndex, 0f, Color.White);
-                                    }
-                                    else
-                                    {
-                                        this.ScreenManager.SpriteBatch.Draw(ShotgunEastTexture[state.character], new Rectangle(Convert.ToInt32(state.position.X + 10 + offsetPosition.X), Convert.ToInt32(state.position.Y + offsetPosition.Y + 1), 69, ShotgunEastTexture[state.character].Height),
-                                            new Rectangle(0, 0, 69, ShotgunEastTexture[state.character].Height), Color.White, 0.0f, Vector2.Zero, SpriteEffects.None, layerIndex);
-                                    }
-
-                                    RunEastAnimation[state.character].Draw(this.ScreenManager.SpriteBatch,
-                                        new Vector2(state.position.X - 4 + offsetPosition.X, state.position.Y - 24), SpriteEffects.None, layerIndex + 0.001f, 0f, Color.White);
-                                }
-                                else
-                                {
-                                    if (state.currentgun == 0 && state.ammo[0] == 0)
-                                    {
-                                        IdleTrunkAnimation[state.character].Draw(this.ScreenManager.SpriteBatch, new Vector2(state.position.X + offsetPosition.X + 19, state.position.Y + offsetPosition.Y + 1), SpriteEffects.FlipHorizontally, layerIndex, 0f, Color.White);
-                                    }
-                                    else
-                                    {
-                                        this.ScreenManager.SpriteBatch.Draw(ShotgunEastTexture[state.character], new Rectangle(Convert.ToInt32(state.position.X - 4 + offsetPosition.X - 34), Convert.ToInt32(state.position.Y + offsetPosition.Y + 2), 69, ShotgunEastTexture[state.character].Height),
-                                            new Rectangle(0, 0, 69, ShotgunEastTexture[state.character].Height), Color.White, 0.0f, Vector2.Zero, SpriteEffects.FlipHorizontally, layerIndex);
-                                    }
-
-                                    RunEastAnimation[state.character].Draw(this.ScreenManager.SpriteBatch,
-                                        new Vector2(state.position.X + 20 + offsetPosition.X, state.position.Y - 24), SpriteEffects.FlipHorizontally, layerIndex + 0.001f, 0f, Color.White);
-                                }
-                            }
-                        }
-                        else
-                        {
-                            if (state.character == 0)
-                            {
-                                if (state.currentgun == 0 && state.ammo[0] == 0)
-                                {
-                                    IdleTrunkAnimation[state.character].Draw(this.ScreenManager.SpriteBatch, new Vector2(state.position.X + offsetPosition.X, state.position.Y + offsetPosition.Y), SpriteEffects.None, layerIndex, 0f, Color.White);
-                                }
-                                else
-                                {
-                                    this.ScreenManager.SpriteBatch.Draw(ShotgunEastTexture[state.character], new Rectangle(Convert.ToInt32(state.position.X + 7 + offsetPosition.X), Convert.ToInt32(state.position.Y + offsetPosition.Y + 4), 71, ShotgunEastTexture[state.character].Height),
-                                        new Rectangle(0, 0, 71, ShotgunEastTexture[state.character].Height), Color.White, 0.0f, Vector2.Zero, SpriteEffects.None, layerIndex);
-                                }
-                            }
-                            else
-                            {
-                                if (state.currentgun == 0 && state.ammo[0] == 0)
-                                {
-                                    IdleTrunkAnimation[state.character].Draw(this.ScreenManager.SpriteBatch, new Vector2(state.position.X + offsetPosition.X + 10, state.position.Y + offsetPosition.Y + 1), SpriteEffects.None, layerIndex, 0f, Color.White);
-                                }
-                                else
-                                {
-                                    this.ScreenManager.SpriteBatch.Draw(ShotgunEastTexture[state.character], new Rectangle(Convert.ToInt32(state.position.X + 10 + offsetPosition.X), Convert.ToInt32(state.position.Y + offsetPosition.Y + 1), 69, ShotgunEastTexture[state.character].Height),
-                                        new Rectangle(0, 0, 69, ShotgunEastTexture[state.character].Height), Color.White, 0.0f, Vector2.Zero, SpriteEffects.None, layerIndex);
-                                }
-                            }
-
-                            this.ScreenManager.SpriteBatch.Draw(IdleLegsTexture[state.character], new Rectangle(Convert.ToInt32(state.position.X + 7 + offsetPosition.X), Convert.ToInt32(state.position.Y + offsetPosition.Y + 3), IdleLegsTexture[state.character].Width, IdleLegsTexture[state.character].Height),
-                            new Rectangle(0, 0, IdleLegsTexture[state.character].Width, IdleLegsTexture[state.character].Height), Color.White, 0.0f, Vector2.Zero, SpriteEffects.None, layerIndex + 0.001f);
-                        }
- */
-
-                        //IdleTrunkAnimation[state.character].Draw(this.ScreenManager.SpriteBatch, state.position, SpriteEffects.None, layerIndex, 0f);
-                        //this.ScreenManager.SpriteBatch.Draw(IdleLegsTexture[state.character], new Vector2(state.position.X + 7, state.position.Y + 3), Color.White);
-                        //batch.Draw(character, state.position, null, Color.Silver, 0, characterorigin, 1.0f, SpriteEffects.None, 0.5f);
                     }
 
                     // Draw the SHADOW OF THE CHARACTER
@@ -3029,18 +2873,13 @@ namespace ZombustersWindows
                 default:
                     break;
             }
-
-            //batch.End();
         }
-
 
         private void DrawFlameThrower(Avatar player, double TotalGameSeconds, float layerIndex)
         {
             if (player.currentgun == 3 && player.ammo[3] > 0)
             {
                 flamethrowerAnimation.Draw(this.ScreenManager.SpriteBatch, player.FlameThrowerPosition, SpriteEffects.None, layerIndex, player.FlameThrowerAngle, Color.White);
-
-
 #if DEBUG
                 //Rectangle aPositionAdjusted = new Rectangle(player.FlameThrowerRectangle.X, player.FlameThrowerRectangle.Y, player.FlameThrowerRectangle.Width, player.FlameThrowerRectangle.Height);
                 //this.ScreenManager.SpriteBatch.Draw(FT_CollisionTexture, aPositionAdjusted, new Rectangle(0, 0, 88, 43), Color.BlueViolet, player.FlameThrowerRectangle.Rotation, Vector2.Zero, SpriteEffects.None, 0.1f);
@@ -3048,7 +2887,6 @@ namespace ZombustersWindows
             }
             //this.ScreenManager.SpriteBatch.End();
         }
-
 
         private void DrawShotgunShots(List<ShotgunShell> shotgunbullets, double TotalGameSeconds)
         {
@@ -3063,13 +2901,10 @@ namespace ZombustersWindows
 
                     if (pos.X < -10 || pos.X > 1290 || pos.Y < -10 || pos.Y > 730)
                     {
-                        // Since we are iterating each bullet anyway, now is a good time
-                        // to remove bullets that go offscreen.
                         shotgunbullets[i].Pellet.RemoveAt(j);
                     }
                     else
                     {
-
                         batch.Draw(bullet, pos, null, Color.White, shotgunbullets[i].Angle, bulletorigin, 1.0f, SpriteEffects.None, 0.6f);
                     }
                 }
@@ -3094,8 +2929,6 @@ namespace ZombustersWindows
 
                 if (pos.X < -10 || pos.X > 1290 || pos.Y < -10 || pos.Y > 730)
                 {
-                    // Since we are iterating each bullet anyway, now is a good time
-                    // to remove bullets that go offscreen.
                     bullets.RemoveAt(i);
                 }
                 else
@@ -3121,10 +2954,8 @@ namespace ZombustersWindows
                     {
                         if (cplayer.lives != 0)
                         {
-                            // Draw UI Player Background
                             batch.Draw(UIStats, new Vector2(Pos.X, Pos.Y - 20), Color.White);
 
-                            // Draw UI Player Color Background
                             if (cplayer.color == Color.Blue)
                             {
                                 batch.Draw(UIStatsBlue, new Vector2(Pos.X, Pos.Y - 20), Color.White);
@@ -3145,7 +2976,6 @@ namespace ZombustersWindows
                                 batch.Draw(UIStatsYellow, new Vector2(Pos.X, Pos.Y - 20), Color.White);
                             }
 
-                            // Draw Character Avatar
                             switch (cplayer.character)
                             {
                                 case 0:
@@ -3162,7 +2992,6 @@ namespace ZombustersWindows
                                     break;
                             }
 
-                            // Draw Player Lives
                             batch.DrawString(arcade14, "x", new Vector2(Pos.X + 40, Pos.Y + 17), Color.White);
                             batch.DrawString(arcade28, cplayer.lives.ToString(), new Vector2(Pos.X + 60, Pos.Y), Color.White);
 
@@ -3170,7 +2999,6 @@ namespace ZombustersWindows
                             batch.Draw(heart, new Vector2(Pos.X + 120, Pos.Y + 3), Color.White);
                             batch.DrawString(arcade14, cplayer.lifecounter.ToString("000"), new Vector2(Pos.X + heart.Width + 125, Pos.Y), Color.White);
 
-                            // Draw Player Ammo counter
                             switch (cplayer.currentgun)
                             {
                                 case 0:
@@ -3195,37 +3023,11 @@ namespace ZombustersWindows
                                     break;
                             }
 
-
-                            // Draw Player Score
-                            //batch.DrawString(fixedfont, "SCORE", new Vector2(Pos.X, Pos.Y + 48), Color.White);
                             batch.DrawString(arcade14, "SC" + cplayer.score.ToString("0000000"), new Vector2(Pos.X + 13, Pos.Y + 48), Color.White);
-
-                            /*
-                            // Draw Player Gamer Picture
-                            if (cplayer.Player.SignedInGamer != null)
-                            {
-                                if (cplayer.Player.SignedInGamer.IsSignedInToLive)
-                                {
-                                    //batch.Draw(cplayer.Player.gamerPicture, new Vector2(Pos.X + 43, Pos.Y + 24), Color.White);
-                                    batch.Draw(cplayer.Player.gamerPicture, new Rectangle(Convert.ToInt32(Pos.X + 10), Convert.ToInt32(Pos.Y - 15), 40, 40),
-                                        new Rectangle(0, 0, cplayer.Player.gamerPicture.Width, cplayer.Player.gamerPicture.Height), Color.White,
-                                        0.0f, Vector2.Zero, SpriteEffects.None, 0.1f);
-                                }
-                            }
-                            
-
-                            // Gamer Picture Border
-                            batch.Draw(gamerPictureBorder, new Rectangle(Convert.ToInt32(Pos.X + 8), Convert.ToInt32(Pos.Y - 17),
-                                gamerPictureBorder.Width, gamerPictureBorder.Height), Color.White);
-                            */
-
-                            
-
                             Pos.X += UIStats.Width + 50;
                         }
                         else
                         {
-                            // Game Over String
                             batch.DrawString(MenuInfoFont, Strings.GameOverString, new Vector2(Pos.X, Pos.Y), Color.White);
                             Pos.X += (int)(MenuInfoFont.MeasureString(Strings.GameOverString).X) + 100;
                         }
@@ -3233,8 +3035,6 @@ namespace ZombustersWindows
                 }
             }
 
-            // Draw Level / Sublevel Context
-            // LEVEL
             string levelstring;
             switch (currentLevel)
             {
@@ -3286,7 +3086,6 @@ namespace ZombustersWindows
 
             batch.DrawString(MenuInfoFont, levelstring.ToUpper(), new Vector2(uiBounds.Width - MenuInfoFont.MeasureString(levelstring).X / 2, uiBounds.Height - 20), Color.White);
 
-            // WAVE
             string sublevelstring;
             switch (currentSublevel)
             {
@@ -3338,10 +3137,8 @@ namespace ZombustersWindows
 
             batch.DrawString(MenuInfoFont, sublevelstring.ToUpper(), new Vector2(uiBounds.Width - MenuInfoFont.MeasureString(sublevelstring).X / 2, uiBounds.Height), Color.White);
 
-
             if (game.player1.Options == InputMode.Touch)
             {
-                // Pause Icon
                 batch.Draw(pause_icon, new Vector2(uiBounds.Width + 70, uiBounds.Y - 30), Color.White);
 
                 // if the user is touching the screen and the thumbsticks have positions,
@@ -3452,11 +3249,6 @@ namespace ZombustersWindows
             game.currentPlayers[player].score += amount;
         }
 
-        public void SpawnNextWave(Enemies enemies, float totalGameSeconds)
-        {
-            //enemies.SpawnNextWave(totalGameSeconds);
-        }
-
         public void PlayerMove(byte player, Vector2 pos)
         {
             game.currentPlayers[player].position = pos;
@@ -3465,10 +3257,6 @@ namespace ZombustersWindows
 
         public void PlayerFire(byte player, float totalGameSeconds, float angle, Vector2 direction)
         {
-            float angle2, angle3;
-            angle2 = angle - 0.15f;
-            angle3 = angle + 0.15f;
-
             //NORTH
             if (angle > -0.3925f && angle < 0.3925f)
             {
@@ -4655,7 +4443,7 @@ namespace ZombustersWindows
             rayUI = game.Content.Load<Texture2D>(@"InGame/GUI/ray_gui");
             peterUI = game.Content.Load<Texture2D>(@"InGame/GUI/peter_gui");
             richardUI = game.Content.Load<Texture2D>(@"InGame/GUI/richard_gui");
-            lineaBlanca = game.Content.Load<Texture2D>(@"menu/linea_menu");
+            whiteLine = game.Content.Load<Texture2D>(@"menu/linea_menu");
 
             pause_icon = game.Content.Load<Texture2D>(@"UI/pause_iconWP");
             left_thumbstick = game.Content.Load<Texture2D>(@"UI/left_thumbstick");
