@@ -372,22 +372,13 @@ namespace ZombustersWindows
                 game.currentPlayers[i].position = Level.PlayerSpawnPosition[i];
                 game.currentPlayers[i].entity.Position = Level.PlayerSpawnPosition[i];
             }
-            //Efecto Particulas
-            //SmokeEffect.Initialise();
+
             base.Initialize();
         }
 
         public override void LoadContent()
         {
-            float lIndex = 0.8f;
-            CFurnitureComparer furnitureComparer = new CFurnitureComparer();
-            System.Xml.Linq.XDocument doc = System.Xml.Linq.XDocument.Load("Content/AnimationDef.xml");
-            Map = game.Content.Load<Texture2D>(Level.mapTextureFileName);
-            bullet = game.Content.Load<Texture2D>(@"InGame/Photon");
-            bulletorigin = new Vector2(bullet.Width / 2, bullet.Height / 2);
-#if DEBUG
-            PositionReference = game.Content.Load<Texture2D>(@"InGame/position_reference_temporal");
-#endif
+            XDocument animationDefinitionDocument = XDocument.Load("Content/AnimationDef.xml");
 
             DiedTexture = new List<Texture2D>
             {
@@ -397,134 +388,66 @@ namespace ZombustersWindows
                 game.Content.Load<Texture2D>(@"InGame/Peter/peter_died")
             };
 
-            JadeIdleTrunkAnimationInit(doc);
-            JadeRunEastAnimationInit(doc);
-            JadePistolShotEastAnimationInit(doc);
-            JadePistolShotNorthEastAnimationInit(doc);
-            JadePistolShotSouthEastAnimationInit(doc);
-            JadePistolShotSouthAnimationInit(doc);
-            JadePistolShotNorthAnimationInit(doc);
-            JadeShotgunShotEastAnimationInit(doc);
-            JadeShotgunShotNorthEastAnimationInit(doc);
-            JadeShotgunShotSouthEastAnimationInit(doc);
-            JadeShotgunShotSouthAnimationInit(doc);
-            JadeShotgunShotNorthAnimationInit(doc);
+            JadeIdleTrunkAnimationInit(animationDefinitionDocument);
+            JadeRunEastAnimationInit(animationDefinitionDocument);
+            JadePistolShotEastAnimationInit(animationDefinitionDocument);
+            JadePistolShotNorthEastAnimationInit(animationDefinitionDocument);
+            JadePistolShotSouthEastAnimationInit(animationDefinitionDocument);
+            JadePistolShotSouthAnimationInit(animationDefinitionDocument);
+            JadePistolShotNorthAnimationInit(animationDefinitionDocument);
+            JadeShotgunShotEastAnimationInit(animationDefinitionDocument);
+            JadeShotgunShotNorthEastAnimationInit(animationDefinitionDocument);
+            JadeShotgunShotSouthEastAnimationInit(animationDefinitionDocument);
+            JadeShotgunShotSouthAnimationInit(animationDefinitionDocument);
+            JadeShotgunShotNorthAnimationInit(animationDefinitionDocument);
 
-            EgonIdleTrunkAnimationInit(doc);
-            EgonRunEastAnimationInit(doc);
-            EgonPistolShotEastAnimationInit(doc);
-            EgonPistolShotNorthEastAnimationInit(doc);
-            EgonPistolShotSouthEastAnimationInit(doc);
-            EgonPistolShotSouthAnimationInit(doc);
-            EgonPistolShotNorthAnimationInit(doc);
-            EgonShotgunShotEastAnimationInit(doc);
-            EgonShotgunShotNorthEastAnimationInit(doc);
-            EgonShotgunShotSouthEastAnimationInit(doc);
-            EgonShotgunShotSouthAnimationInit(doc);
-            EgonShotgunShotNorthAnimationInit(doc);
+            EgonIdleTrunkAnimationInit(animationDefinitionDocument);
+            EgonRunEastAnimationInit(animationDefinitionDocument);
+            EgonPistolShotEastAnimationInit(animationDefinitionDocument);
+            EgonPistolShotNorthEastAnimationInit(animationDefinitionDocument);
+            EgonPistolShotSouthEastAnimationInit(animationDefinitionDocument);
+            EgonPistolShotSouthAnimationInit(animationDefinitionDocument);
+            EgonPistolShotNorthAnimationInit(animationDefinitionDocument);
+            EgonShotgunShotEastAnimationInit(animationDefinitionDocument);
+            EgonShotgunShotNorthEastAnimationInit(animationDefinitionDocument);
+            EgonShotgunShotSouthEastAnimationInit(animationDefinitionDocument);
+            EgonShotgunShotSouthAnimationInit(animationDefinitionDocument);
+            EgonShotgunShotNorthAnimationInit(animationDefinitionDocument);
 
-            RayIdleTrunkAnimationInit(doc);
-            RayRunEastAnimationInit(doc);
-            RayPistolShotEastAnimationInit(doc);
-            RayPistolShotNorthEastAnimationInit(doc);
-            RayPistolShotSouthEastAnimationInit(doc);
-            RayPistolShotSouthAnimationInit(doc);
-            RayPistolShotNorthAnimationInit(doc);
-            RayShotgunShotEastAnimationInit(doc);
-            RayShotgunShotNorthEastAnimationInit(doc);
-            RayShotgunShotSouthEastAnimationInit(doc);
-            RayShotgunShotSouthAnimationInit(doc);
-            RayShotgunShotNorthAnimationInit(doc);
+            RayIdleTrunkAnimationInit(animationDefinitionDocument);
+            RayRunEastAnimationInit(animationDefinitionDocument);
+            RayPistolShotEastAnimationInit(animationDefinitionDocument);
+            RayPistolShotNorthEastAnimationInit(animationDefinitionDocument);
+            RayPistolShotSouthEastAnimationInit(animationDefinitionDocument);
+            RayPistolShotSouthAnimationInit(animationDefinitionDocument);
+            RayPistolShotNorthAnimationInit(animationDefinitionDocument);
+            RayShotgunShotEastAnimationInit(animationDefinitionDocument);
+            RayShotgunShotNorthEastAnimationInit(animationDefinitionDocument);
+            RayShotgunShotSouthEastAnimationInit(animationDefinitionDocument);
+            RayShotgunShotSouthAnimationInit(animationDefinitionDocument);
+            RayShotgunShotNorthAnimationInit(animationDefinitionDocument);
 
-            PeterIdleTrunkAnimationInit(doc);
-            PeterRunEastAnimationInit(doc);
-            PeterPistolShotEastAnimationInit(doc);
-            PeterPistolShotNorthEastAnimationInit(doc);
-            PeterPistolShotSouthEastAnimationInit(doc);
-            PeterPistolShotSouthAnimationInit(doc);
-            PeterPistolShotNorthAnimationInit(doc);
-            PeterShotgunShotEastAnimationInit(doc);
-            PeterShotgunShotNorthEastAnimationInit(doc);
-            PeterShotgunShotSouthEastAnimationInit(doc);
-            PeterShotgunShotSouthAnimationInit(doc);
-            PeterShotgunShotNorthAnimationInit(doc);
+            PeterIdleTrunkAnimationInit(animationDefinitionDocument);
+            PeterRunEastAnimationInit(animationDefinitionDocument);
+            PeterPistolShotEastAnimationInit(animationDefinitionDocument);
+            PeterPistolShotNorthEastAnimationInit(animationDefinitionDocument);
+            PeterPistolShotSouthEastAnimationInit(animationDefinitionDocument);
+            PeterPistolShotSouthAnimationInit(animationDefinitionDocument);
+            PeterPistolShotNorthAnimationInit(animationDefinitionDocument);
+            PeterShotgunShotEastAnimationInit(animationDefinitionDocument);
+            PeterShotgunShotNorthEastAnimationInit(animationDefinitionDocument);
+            PeterShotgunShotSouthEastAnimationInit(animationDefinitionDocument);
+            PeterShotgunShotSouthAnimationInit(animationDefinitionDocument);
+            PeterShotgunShotNorthAnimationInit(animationDefinitionDocument);
 
-            CharacterShadow = game.Content.Load<Texture2D>(@"InGame/character_shadow");
+            FlamethrowerAnimationInit(animationDefinitionDocument);
 
-            gameover = game.Content.Load<Texture2D>(@"InGame/gameover");
-            gameoverOrigin = new Vector2(gameover.Width / 2, gameover.Height / 2);
-
-            arcade14 = game.Content.Load<SpriteFont>(@"InGame/GUI/ArcadeFont14");
-            arcade28 = game.Content.Load<SpriteFont>(@"InGame/GUI/ArcadeFont28");
-            courier = game.Content.Load<SpriteFont>(@"InGame/GUI/CourierNew");
-            fixedfont = game.Content.Load<SpriteFont>(@"InGame/GUI/Fixedv03");
-            MenuHeaderFont = this.ScreenManager.Game.Content.Load<SpriteFont>(@"menu\ArialMenuHeader");
-            MenuInfoFont = this.ScreenManager.Game.Content.Load<SpriteFont>(@"menu\ArialMenuInfo");
-            MenuListFont = this.ScreenManager.Game.Content.Load<SpriteFont>(@"menu\ArialMenuList");
-
-            Explosion.Texture = game.Content.Load<Texture2D>(@"InGame/Explosion");
-
-            // GUI Stats
-            UIStats = game.Content.Load<Texture2D>(@"UI\gameplay_gui_stats");
-            UIStatsBlue = game.Content.Load<Texture2D>(@"UI\gui_stats_bkg_blue");
-            UIStatsRed = game.Content.Load<Texture2D>(@"UI\gui_stats_bkg_red");
-            UIStatsGreen = game.Content.Load<Texture2D>(@"UI\gui_stats_bkg_green");
-            UIStatsYellow = game.Content.Load<Texture2D>(@"UI\gui_stats_bkg_yellow");
-            UIPlayerBlue = game.Content.Load<Texture2D>(@"UI\gui_player_blue");
-            UIPlayerRed = game.Content.Load<Texture2D>(@"UI\gui_player_red");
-            UIPlayerGreen = game.Content.Load<Texture2D>(@"UI\gui_player_green");
-            UIPlayerYellow = game.Content.Load<Texture2D>(@"UI\gui_player_yellow");
-
-            // PowerUps
-            livePowerUp = game.Content.Load<Texture2D>(@"InGame/live_powerup");
-            extraLivePowerUp = game.Content.Load<Texture2D>(@"InGame/extralife_powerup");
-            shotgunAmmoPowerUp = game.Content.Load<Texture2D>(@"InGame/shotgun_ammo_powerup");
-            machinegunAmmoPowerUp = game.Content.Load<Texture2D>(@"InGame/machinegun_ammo_powerup");
-            flamethrowerAmmoPowerUp = game.Content.Load<Texture2D>(@"InGame/flamethrower_ammo_powerup");
-            immunePowerUp = game.Content.Load<Texture2D>(@"InGame/immune_ammo_powerup");
-
-            // GUI
-            heart = game.Content.Load<Texture2D>(@"InGame/GUI/heart");
-            shotgunammoUI = game.Content.Load<Texture2D>(@"InGame/GUI/shotgunammo");
-            pistolammoUI = game.Content.Load<Texture2D>(@"InGame/GUI/pistolammo");
-            grenadeammoUI = game.Content.Load<Texture2D>(@"InGame/GUI/grenadeammo");
-            flamethrowerammoUI = game.Content.Load<Texture2D>(@"InGame/GUI/flamethrowerammo");
-            gamerPictureBorder = game.Content.Load<Texture2D>(@"UI/gamerpicture_border");
-            jadeUI = game.Content.Load<Texture2D>(@"InGame/GUI/jade_gui");
-            rayUI = game.Content.Load<Texture2D>(@"InGame/GUI/ray_gui");
-            peterUI = game.Content.Load<Texture2D>(@"InGame/GUI/peter_gui");
-            richardUI = game.Content.Load<Texture2D>(@"InGame/GUI/richard_gui");
-            lineaBlanca = game.Content.Load<Texture2D>(@"menu/linea_menu");
-
-            pause_icon = game.Content.Load<Texture2D>(@"UI/pause_iconWP");
-            left_thumbstick = game.Content.Load<Texture2D>(@"UI/left_thumbstick");
-            right_thumbstick = game.Content.Load<Texture2D>(@"UI/right_thumbstick");
-
-            foreach (ZombieState zombie in Zombies)
-            {
-                zombie.LoadContent(game.Content);
-            }
-
-            foreach (TankState tank in Tanks)
-            {
-                tank.LoadContent(game.Content);
-            }
-
-            foreach (Furniture furniture in Level.furnitureList)
-            {
-                furniture.Load(game);
-            }
-
-            Level.furnitureList.Sort(furnitureComparer);
-            // Apply layer index to sorted list
-            foreach (Furniture furniture in Level.furnitureList)
-            {
-                furniture.layerIndex = lIndex;
-                lIndex -= 0.004f;
-            }
-
-            // Mouse Cursor
-            cursorTexture = game.Content.Load<Texture2D>(@"InGame/GUI/aimcursor");
+            FontsLoad();
+            UIStatsLoad();
+            PowerUpsLoad();
+            UIComponentsLoad();
+            EnemiesLoad();
+            FurnitureLoad();
 
             base.LoadContent();
         }
@@ -5239,6 +5162,103 @@ namespace ZombustersWindows
             frameInterval = TimeSpan.FromSeconds(1.0f / int.Parse(definition.Attribute("Speed").Value, NumberStyles.Integer));
             flamethrowerAnimation = new Animation(flamethrowerTexture, frameSize, sheetSize, frameInterval);
 
+        }
+
+        private void UIStatsLoad()
+        {
+            UIStats = game.Content.Load<Texture2D>(@"UI\gameplay_gui_stats");
+            UIStatsBlue = game.Content.Load<Texture2D>(@"UI\gui_stats_bkg_blue");
+            UIStatsRed = game.Content.Load<Texture2D>(@"UI\gui_stats_bkg_red");
+            UIStatsGreen = game.Content.Load<Texture2D>(@"UI\gui_stats_bkg_green");
+            UIStatsYellow = game.Content.Load<Texture2D>(@"UI\gui_stats_bkg_yellow");
+            UIPlayerBlue = game.Content.Load<Texture2D>(@"UI\gui_player_blue");
+            UIPlayerRed = game.Content.Load<Texture2D>(@"UI\gui_player_red");
+            UIPlayerGreen = game.Content.Load<Texture2D>(@"UI\gui_player_green");
+            UIPlayerYellow = game.Content.Load<Texture2D>(@"UI\gui_player_yellow");
+        }
+
+        private void PowerUpsLoad()
+        {
+            livePowerUp = game.Content.Load<Texture2D>(@"InGame/live_powerup");
+            extraLivePowerUp = game.Content.Load<Texture2D>(@"InGame/extralife_powerup");
+            shotgunAmmoPowerUp = game.Content.Load<Texture2D>(@"InGame/shotgun_ammo_powerup");
+            machinegunAmmoPowerUp = game.Content.Load<Texture2D>(@"InGame/machinegun_ammo_powerup");
+            flamethrowerAmmoPowerUp = game.Content.Load<Texture2D>(@"InGame/flamethrower_ammo_powerup");
+            immunePowerUp = game.Content.Load<Texture2D>(@"InGame/immune_ammo_powerup");
+        }
+
+        private void UIComponentsLoad()
+        {
+            Map = game.Content.Load<Texture2D>(Level.mapTextureFileName);
+            bullet = game.Content.Load<Texture2D>(@"InGame/Photon");
+            bulletorigin = new Vector2(bullet.Width / 2, bullet.Height / 2);
+#if DEBUG
+            PositionReference = game.Content.Load<Texture2D>(@"InGame/position_reference_temporal");
+#endif
+
+            CharacterShadow = game.Content.Load<Texture2D>(@"InGame/character_shadow");
+            Explosion.Texture = game.Content.Load<Texture2D>(@"InGame/Explosion");
+            gameover = game.Content.Load<Texture2D>(@"InGame/gameover");
+            gameoverOrigin = new Vector2(gameover.Width / 2, gameover.Height / 2);
+            cursorTexture = game.Content.Load<Texture2D>(@"InGame/GUI/aimcursor");
+
+            heart = game.Content.Load<Texture2D>(@"InGame/GUI/heart");
+            shotgunammoUI = game.Content.Load<Texture2D>(@"InGame/GUI/shotgunammo");
+            pistolammoUI = game.Content.Load<Texture2D>(@"InGame/GUI/pistolammo");
+            grenadeammoUI = game.Content.Load<Texture2D>(@"InGame/GUI/grenadeammo");
+            flamethrowerammoUI = game.Content.Load<Texture2D>(@"InGame/GUI/flamethrowerammo");
+            gamerPictureBorder = game.Content.Load<Texture2D>(@"UI/gamerpicture_border");
+            jadeUI = game.Content.Load<Texture2D>(@"InGame/GUI/jade_gui");
+            rayUI = game.Content.Load<Texture2D>(@"InGame/GUI/ray_gui");
+            peterUI = game.Content.Load<Texture2D>(@"InGame/GUI/peter_gui");
+            richardUI = game.Content.Load<Texture2D>(@"InGame/GUI/richard_gui");
+            lineaBlanca = game.Content.Load<Texture2D>(@"menu/linea_menu");
+
+            pause_icon = game.Content.Load<Texture2D>(@"UI/pause_iconWP");
+            left_thumbstick = game.Content.Load<Texture2D>(@"UI/left_thumbstick");
+            right_thumbstick = game.Content.Load<Texture2D>(@"UI/right_thumbstick");
+        }
+
+        private void FontsLoad()
+        {
+            arcade14 = game.Content.Load<SpriteFont>(@"InGame/GUI/ArcadeFont14");
+            arcade28 = game.Content.Load<SpriteFont>(@"InGame/GUI/ArcadeFont28");
+            courier = game.Content.Load<SpriteFont>(@"InGame/GUI/CourierNew");
+            fixedfont = game.Content.Load<SpriteFont>(@"InGame/GUI/Fixedv03");
+            MenuHeaderFont = this.ScreenManager.Game.Content.Load<SpriteFont>(@"menu\ArialMenuHeader");
+            MenuInfoFont = this.ScreenManager.Game.Content.Load<SpriteFont>(@"menu\ArialMenuInfo");
+            MenuListFont = this.ScreenManager.Game.Content.Load<SpriteFont>(@"menu\ArialMenuList");
+        }
+
+        private void EnemiesLoad()
+        {
+            foreach (ZombieState zombie in Zombies)
+            {
+                zombie.LoadContent(game.Content);
+            }
+
+            foreach (TankState tank in Tanks)
+            {
+                tank.LoadContent(game.Content);
+            }
+        }
+
+        private void FurnitureLoad()
+        {
+            float lIndex = 0.8f;
+            CFurnitureComparer furnitureComparer = new CFurnitureComparer();
+            foreach (Furniture furniture in Level.furnitureList)
+            {
+                furniture.Load(game);
+            }
+
+            Level.furnitureList.Sort(furnitureComparer);
+            // Apply layer index to sorted list
+            foreach (Furniture furniture in Level.furnitureList)
+            {
+                furniture.layerIndex = lIndex;
+                lIndex -= 0.004f;
+            }
         }
     }
 }
