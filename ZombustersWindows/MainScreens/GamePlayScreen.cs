@@ -45,16 +45,16 @@ namespace ZombustersWindows
         Vector2 bulletorigin;
         Texture2D flamethrowerTexture;
         Animation flamethrowerAnimation;
-        List<Texture2D> IdleTrunkTexture, IdleLegsTexture, DiedTexture; // Idle Combo
-        List<Texture2D> RunEastTexture; //, RunNETexture, RunSETexture, RunNorthTexture, RunSouthTexture; // Run Textures
-        List<Texture2D> PistolShotEastTexture, PistolShotNETexture, PistolShotSETexture, PistolShotNorthTexture, PistolShotSouthTexture; // Pistol Shot Textures
+        List<Texture2D> IdleTrunkTexture, IdleLegsTexture, DiedTexture;
+        List<Texture2D> RunEastTexture;
+        List<Texture2D> PistolShotEastTexture, PistolShotNETexture, PistolShotSETexture, PistolShotNorthTexture, PistolShotSouthTexture;
         List<Texture2D> ShotgunEastTexture, ShotgunNETexture, ShotgunSETexture, ShotgunNorthTexture, ShotgunSouthTexture;
-        List<Vector2> IdleTrunkOrigin, RunEastOrigin; //, RunNEOrigin, RunSEOrigin, RunNorthOrigin, RunSouthOrigin; // Animation Origin
+        List<Vector2> IdleTrunkOrigin, RunEastOrigin;
         List<Vector2> PistolShotEastOrigin, PistolShotNEOrigin, PistolShotSEOrigin, PistolShotNorthOrigin, PistolShotSouthOrigin;
         List<Vector2> ShotgunShotEastOrigin, ShotgunNEOrigin, ShotgunSEOrigin, ShotgunNorthOrigin, ShotgunSouthOrigin;
-        List<Animation> IdleTrunkAnimation; // Animacion de posicion estatica (tronco)
-        List<Animation> RunEastAnimation; // RunNEAnimation, RunSEAnimation, RunNorthAnimation, RunSouthAnimation; // Animacion de Piernas (correr)
-        List<Animation> PistolShotEastAnimation, PistolShotNEAnimation, PistolShotSEAnimation, PistolShotNorthAnimation, PistolShotSouthAnimation; // Animacion de Disparo con pistola (tronco)
+        List<Animation> IdleTrunkAnimation;
+        List<Animation> RunEastAnimation;
+        List<Animation> PistolShotEastAnimation, PistolShotNEAnimation, PistolShotSEAnimation, PistolShotNorthAnimation, PistolShotSouthAnimation;
         List<Animation> ShotgunShotEastAnimation, ShotgunNEAnimation, ShotgunSEAnimation, ShotgunNorthAnimation, ShotgunSouthAnimation;
 #if DEBUG
         Texture2D PositionReference;
@@ -66,7 +66,7 @@ namespace ZombustersWindows
         Vector2 gameoverOrigin;
         Texture2D UIStats, jadeUI, rayUI, peterUI, richardUI, whiteLine;
         Texture2D UIStatsBlue, UIStatsRed, UIStatsGreen, UIStatsYellow, UIPlayerBlue, UIPlayerRed, UIPlayerGreen, UIPlayerYellow;
-        SpriteFont arcade14, arcade28, courier, fixedfont;
+        SpriteFont arcade14, arcade28;
         SpriteFont MenuHeaderFont, MenuInfoFont, MenuListFont;
         Texture2D pause_icon;
         Texture2D left_thumbstick;
@@ -4458,8 +4458,6 @@ namespace ZombustersWindows
         {
             arcade14 = game.Content.Load<SpriteFont>(@"InGame/GUI/ArcadeFont14");
             arcade28 = game.Content.Load<SpriteFont>(@"InGame/GUI/ArcadeFont28");
-            courier = game.Content.Load<SpriteFont>(@"InGame/GUI/CourierNew");
-            fixedfont = game.Content.Load<SpriteFont>(@"InGame/GUI/Fixedv03");
             MenuHeaderFont = this.ScreenManager.Game.Content.Load<SpriteFont>(@"menu\ArialMenuHeader");
             MenuInfoFont = this.ScreenManager.Game.Content.Load<SpriteFont>(@"menu\ArialMenuInfo");
             MenuListFont = this.ScreenManager.Game.Content.Load<SpriteFont>(@"menu\ArialMenuList");
