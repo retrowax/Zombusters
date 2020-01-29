@@ -452,15 +452,6 @@ namespace ZombustersWindows
             base.LoadContent();
         }
 
-        public class CFurnitureComparer : IComparer<Furniture>
-        {
-            public int Compare(Furniture x, Furniture y)
-            {
-                if ((x.Position.Y + x.Texture.Height) == (y.Position.Y + y.Texture.Height)) return 0;
-                return ((x.Position.Y + x.Texture.Height) > (y.Position.Y + y.Texture.Height)) ? 1 : -1;
-            }
-        } 
-
         #region Input Processing
         public override void HandleInput(InputState input)
         {
@@ -1719,7 +1710,7 @@ namespace ZombustersWindows
             List<int> numplayersIngame = new List<int>();
             float zombielife, speed;
             float lIndex = 0.8f;
-            CFurnitureComparer furnitureComparer = new CFurnitureComparer();
+            FurnitureComparer furnitureComparer = new FurnitureComparer();
             this.random = new Random(16);
 
             if (!restartLevel)
@@ -5246,7 +5237,7 @@ namespace ZombustersWindows
         private void FurnitureLoad()
         {
             float lIndex = 0.8f;
-            CFurnitureComparer furnitureComparer = new CFurnitureComparer();
+            FurnitureComparer furnitureComparer = new FurnitureComparer();
             foreach (Furniture furniture in Level.furnitureList)
             {
                 furniture.Load(game);
