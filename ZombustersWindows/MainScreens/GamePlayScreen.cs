@@ -15,17 +15,22 @@ namespace ZombustersWindows
 {
     public class GamePlayScreen : BackgroundScreen
     {
-        MyGame game;
+        private const string FRAME_WIDTH = "FrameWidth";
+        private const string FRAME_HEIGHT = "FrameHeight";
+        private const string SHEET_COLUMNS = "SheetColumns";
+        private const string SHEET_ROWS = "SheetRows";
+        private const string SPEED = "Speed";
+
+        readonly MyGame game;
         Rectangle uiBounds;
         NeutralInput playerOneInput;
         NeutralInput playerTwoInput;
         NeutralInput playerThreeInput;
         NeutralInput playerFourInput;
         MouseState mouseState;
-        InputState input = new InputState();
-        Texture2D gamerPictureBorder;
-        private GamePlayMenu menu = null;
-        private GameOverMenu gomenu = null;
+        readonly InputState input = new InputState();
+        private readonly GamePlayMenu menu = null;
+        private readonly GameOverMenu gomenu = null;
         private bool bPaused = false;
         public bool bGameOver = false;
         public Vector2 accumMove, accumFire;
@@ -3580,11 +3585,11 @@ namespace ZombustersWindows
             IdleTrunkTexture.Add(game.Content.Load<Texture2D>(@"InGame/Jade/girl_anim_idle"));
             IdleTrunkOrigin = new List<Vector2>();
             IdleTrunkOrigin.Add(new Vector2(IdleTrunkTexture[0].Width / 2, IdleTrunkTexture[0].Height / 2));
-            frameSize.X = int.Parse(definition.Attribute("FrameWidth").Value, NumberStyles.Integer);
-            frameSize.Y = int.Parse(definition.Attribute("FrameHeight").Value, NumberStyles.Integer);
-            sheetSize.X = int.Parse(definition.Attribute("SheetColumns").Value, NumberStyles.Integer);
-            sheetSize.Y = int.Parse(definition.Attribute("SheetRows").Value, NumberStyles.Integer);
-            frameInterval = TimeSpan.FromSeconds(1.0f / int.Parse(definition.Attribute("Speed").Value, NumberStyles.Integer));
+            frameSize.X = int.Parse(definition.Attribute(FRAME_WIDTH).Value, NumberStyles.Integer);
+            frameSize.Y = int.Parse(definition.Attribute(FRAME_HEIGHT).Value, NumberStyles.Integer);
+            sheetSize.X = int.Parse(definition.Attribute(SHEET_COLUMNS).Value, NumberStyles.Integer);
+            sheetSize.Y = int.Parse(definition.Attribute(SHEET_ROWS).Value, NumberStyles.Integer);
+            frameInterval = TimeSpan.FromSeconds(1.0f / int.Parse(definition.Attribute(SPEED).Value, NumberStyles.Integer));
             IdleTrunkAnimation = new List<Animation>();
             IdleTrunkAnimation.Add(new Animation(IdleTrunkTexture[0], frameSize, sheetSize, frameInterval)); // Define a new Animation instance
         }
@@ -3599,11 +3604,11 @@ namespace ZombustersWindows
             RunEastTexture.Add(game.Content.Load<Texture2D>(@"InGame/Jade/girl_anim_run_E"));
             RunEastOrigin = new List<Vector2>();
             RunEastOrigin.Add(new Vector2(RunEastTexture[0].Width / 2, RunEastTexture[0].Height / 2));
-            frameSize.X = int.Parse(definition.Attribute("FrameWidth").Value, NumberStyles.Integer);
-            frameSize.Y = int.Parse(definition.Attribute("FrameHeight").Value, NumberStyles.Integer);
-            sheetSize.X = int.Parse(definition.Attribute("SheetColumns").Value, NumberStyles.Integer);
-            sheetSize.Y = int.Parse(definition.Attribute("SheetRows").Value, NumberStyles.Integer);
-            frameInterval = TimeSpan.FromSeconds(1.0f / int.Parse(definition.Attribute("Speed").Value, NumberStyles.Integer));
+            frameSize.X = int.Parse(definition.Attribute(FRAME_WIDTH).Value, NumberStyles.Integer);
+            frameSize.Y = int.Parse(definition.Attribute(FRAME_HEIGHT).Value, NumberStyles.Integer);
+            sheetSize.X = int.Parse(definition.Attribute(SHEET_COLUMNS).Value, NumberStyles.Integer);
+            sheetSize.Y = int.Parse(definition.Attribute(SHEET_ROWS).Value, NumberStyles.Integer);
+            frameInterval = TimeSpan.FromSeconds(1.0f / int.Parse(definition.Attribute(SPEED).Value, NumberStyles.Integer));
             RunEastAnimation = new List<Animation>();
             RunEastAnimation.Add(new Animation(RunEastTexture[0], frameSize, sheetSize, frameInterval));
         }
@@ -3618,11 +3623,11 @@ namespace ZombustersWindows
             PistolShotEastTexture.Add(game.Content.Load<Texture2D>(@"InGame/Jade/girl_anim_shot_E"));
             PistolShotEastOrigin = new List<Vector2>();
             PistolShotEastOrigin.Add(new Vector2(PistolShotEastTexture[0].Width / 2, PistolShotEastTexture[0].Height / 2));
-            frameSize.X = int.Parse(definition.Attribute("FrameWidth").Value, NumberStyles.Integer);
-            frameSize.Y = int.Parse(definition.Attribute("FrameHeight").Value, NumberStyles.Integer);
-            sheetSize.X = int.Parse(definition.Attribute("SheetColumns").Value, NumberStyles.Integer);
-            sheetSize.Y = int.Parse(definition.Attribute("SheetRows").Value, NumberStyles.Integer);
-            frameInterval = TimeSpan.FromSeconds(1.0f / int.Parse(definition.Attribute("Speed").Value, NumberStyles.Integer));
+            frameSize.X = int.Parse(definition.Attribute(FRAME_WIDTH).Value, NumberStyles.Integer);
+            frameSize.Y = int.Parse(definition.Attribute(FRAME_HEIGHT).Value, NumberStyles.Integer);
+            sheetSize.X = int.Parse(definition.Attribute(SHEET_COLUMNS).Value, NumberStyles.Integer);
+            sheetSize.Y = int.Parse(definition.Attribute(SHEET_ROWS).Value, NumberStyles.Integer);
+            frameInterval = TimeSpan.FromSeconds(1.0f / int.Parse(definition.Attribute(SPEED).Value, NumberStyles.Integer));
             PistolShotEastAnimation = new List<Animation>();
             PistolShotEastAnimation.Add(new Animation(PistolShotEastTexture[0], frameSize, sheetSize, frameInterval));
         }
@@ -3637,11 +3642,11 @@ namespace ZombustersWindows
             PistolShotNETexture.Add(game.Content.Load<Texture2D>(@"InGame/Jade/girl_anim_shot_NE"));
             PistolShotNEOrigin = new List<Vector2>();
             PistolShotNEOrigin.Add(new Vector2(PistolShotNETexture[0].Width / 2, PistolShotNETexture[0].Height / 2));
-            frameSize.X = int.Parse(definition.Attribute("FrameWidth").Value, NumberStyles.Integer);
-            frameSize.Y = int.Parse(definition.Attribute("FrameHeight").Value, NumberStyles.Integer);
-            sheetSize.X = int.Parse(definition.Attribute("SheetColumns").Value, NumberStyles.Integer);
-            sheetSize.Y = int.Parse(definition.Attribute("SheetRows").Value, NumberStyles.Integer);
-            frameInterval = TimeSpan.FromSeconds(1.0f / int.Parse(definition.Attribute("Speed").Value, NumberStyles.Integer));
+            frameSize.X = int.Parse(definition.Attribute(FRAME_WIDTH).Value, NumberStyles.Integer);
+            frameSize.Y = int.Parse(definition.Attribute(FRAME_HEIGHT).Value, NumberStyles.Integer);
+            sheetSize.X = int.Parse(definition.Attribute(SHEET_COLUMNS).Value, NumberStyles.Integer);
+            sheetSize.Y = int.Parse(definition.Attribute(SHEET_ROWS).Value, NumberStyles.Integer);
+            frameInterval = TimeSpan.FromSeconds(1.0f / int.Parse(definition.Attribute(SPEED).Value, NumberStyles.Integer));
             PistolShotNEAnimation = new List<Animation>();
             PistolShotNEAnimation.Add(new Animation(PistolShotNETexture[0], frameSize, sheetSize, frameInterval));
         }
@@ -3656,11 +3661,11 @@ namespace ZombustersWindows
             PistolShotSETexture.Add(game.Content.Load<Texture2D>(@"InGame/Jade/girl_anim_shot_SE"));
             PistolShotSEOrigin = new List<Vector2>();
             PistolShotSEOrigin.Add(new Vector2(PistolShotSETexture[0].Width / 2, PistolShotSETexture[0].Height / 2));
-            frameSize.X = int.Parse(definition.Attribute("FrameWidth").Value, NumberStyles.Integer);
-            frameSize.Y = int.Parse(definition.Attribute("FrameHeight").Value, NumberStyles.Integer);
-            sheetSize.X = int.Parse(definition.Attribute("SheetColumns").Value, NumberStyles.Integer);
-            sheetSize.Y = int.Parse(definition.Attribute("SheetRows").Value, NumberStyles.Integer);
-            frameInterval = TimeSpan.FromSeconds(1.0f / int.Parse(definition.Attribute("Speed").Value, NumberStyles.Integer));
+            frameSize.X = int.Parse(definition.Attribute(FRAME_WIDTH).Value, NumberStyles.Integer);
+            frameSize.Y = int.Parse(definition.Attribute(FRAME_HEIGHT).Value, NumberStyles.Integer);
+            sheetSize.X = int.Parse(definition.Attribute(SHEET_COLUMNS).Value, NumberStyles.Integer);
+            sheetSize.Y = int.Parse(definition.Attribute(SHEET_ROWS).Value, NumberStyles.Integer);
+            frameInterval = TimeSpan.FromSeconds(1.0f / int.Parse(definition.Attribute(SPEED).Value, NumberStyles.Integer));
             PistolShotSEAnimation = new List<Animation>();
             PistolShotSEAnimation.Add(new Animation(PistolShotSETexture[0], frameSize, sheetSize, frameInterval));
         }
@@ -3675,11 +3680,11 @@ namespace ZombustersWindows
             PistolShotSouthTexture.Add(game.Content.Load<Texture2D>(@"InGame/Jade/girl_anim_shot_S"));
             PistolShotSouthOrigin = new List<Vector2>();
             PistolShotSouthOrigin.Add(new Vector2(PistolShotSouthTexture[0].Width / 2, PistolShotSouthTexture[0].Height / 2));
-            frameSize.X = int.Parse(definition.Attribute("FrameWidth").Value, NumberStyles.Integer);
-            frameSize.Y = int.Parse(definition.Attribute("FrameHeight").Value, NumberStyles.Integer);
-            sheetSize.X = int.Parse(definition.Attribute("SheetColumns").Value, NumberStyles.Integer);
-            sheetSize.Y = int.Parse(definition.Attribute("SheetRows").Value, NumberStyles.Integer);
-            frameInterval = TimeSpan.FromSeconds(1.0f / int.Parse(definition.Attribute("Speed").Value, NumberStyles.Integer));
+            frameSize.X = int.Parse(definition.Attribute(FRAME_WIDTH).Value, NumberStyles.Integer);
+            frameSize.Y = int.Parse(definition.Attribute(FRAME_HEIGHT).Value, NumberStyles.Integer);
+            sheetSize.X = int.Parse(definition.Attribute(SHEET_COLUMNS).Value, NumberStyles.Integer);
+            sheetSize.Y = int.Parse(definition.Attribute(SHEET_ROWS).Value, NumberStyles.Integer);
+            frameInterval = TimeSpan.FromSeconds(1.0f / int.Parse(definition.Attribute(SPEED).Value, NumberStyles.Integer));
             PistolShotSouthAnimation = new List<Animation>();
             PistolShotSouthAnimation.Add(new Animation(PistolShotSouthTexture[0], frameSize, sheetSize, frameInterval));
         }
@@ -3694,11 +3699,11 @@ namespace ZombustersWindows
             PistolShotNorthTexture.Add(game.Content.Load<Texture2D>(@"InGame/Jade/girl_anim_shot_N"));
             PistolShotNorthOrigin = new List<Vector2>();
             PistolShotNorthOrigin.Add(new Vector2(PistolShotNorthTexture[0].Width / 2, PistolShotNorthTexture[0].Height / 2));
-            frameSize.X = int.Parse(definition.Attribute("FrameWidth").Value, NumberStyles.Integer);
-            frameSize.Y = int.Parse(definition.Attribute("FrameHeight").Value, NumberStyles.Integer);
-            sheetSize.X = int.Parse(definition.Attribute("SheetColumns").Value, NumberStyles.Integer);
-            sheetSize.Y = int.Parse(definition.Attribute("SheetRows").Value, NumberStyles.Integer);
-            frameInterval = TimeSpan.FromSeconds(1.0f / int.Parse(definition.Attribute("Speed").Value, NumberStyles.Integer));
+            frameSize.X = int.Parse(definition.Attribute(FRAME_WIDTH).Value, NumberStyles.Integer);
+            frameSize.Y = int.Parse(definition.Attribute(FRAME_HEIGHT).Value, NumberStyles.Integer);
+            sheetSize.X = int.Parse(definition.Attribute(SHEET_COLUMNS).Value, NumberStyles.Integer);
+            sheetSize.Y = int.Parse(definition.Attribute(SHEET_ROWS).Value, NumberStyles.Integer);
+            frameInterval = TimeSpan.FromSeconds(1.0f / int.Parse(definition.Attribute(SPEED).Value, NumberStyles.Integer));
             PistolShotNorthAnimation = new List<Animation>();
             PistolShotNorthAnimation.Add(new Animation(PistolShotNorthTexture[0], frameSize, sheetSize, frameInterval));
         }
@@ -3713,11 +3718,11 @@ namespace ZombustersWindows
             ShotgunEastTexture.Add(game.Content.Load<Texture2D>(@"InGame/Jade/girl_anim_shotgun"));
             ShotgunShotEastOrigin = new List<Vector2>();
             ShotgunShotEastOrigin.Add(new Vector2(ShotgunEastTexture[0].Width / 2, PistolShotEastTexture[0].Height / 2));
-            frameSize.X = int.Parse(definition.Attribute("FrameWidth").Value, NumberStyles.Integer);
-            frameSize.Y = int.Parse(definition.Attribute("FrameHeight").Value, NumberStyles.Integer);
-            sheetSize.X = int.Parse(definition.Attribute("SheetColumns").Value, NumberStyles.Integer);
-            sheetSize.Y = int.Parse(definition.Attribute("SheetRows").Value, NumberStyles.Integer);
-            frameInterval = TimeSpan.FromSeconds(1.0f / int.Parse(definition.Attribute("Speed").Value, NumberStyles.Integer));
+            frameSize.X = int.Parse(definition.Attribute(FRAME_WIDTH).Value, NumberStyles.Integer);
+            frameSize.Y = int.Parse(definition.Attribute(FRAME_HEIGHT).Value, NumberStyles.Integer);
+            sheetSize.X = int.Parse(definition.Attribute(SHEET_COLUMNS).Value, NumberStyles.Integer);
+            sheetSize.Y = int.Parse(definition.Attribute(SHEET_ROWS).Value, NumberStyles.Integer);
+            frameInterval = TimeSpan.FromSeconds(1.0f / int.Parse(definition.Attribute(SPEED).Value, NumberStyles.Integer));
             ShotgunShotEastAnimation = new List<Animation>();
             ShotgunShotEastAnimation.Add(new Animation(ShotgunEastTexture[0], frameSize, sheetSize, frameInterval));
         }
@@ -3732,11 +3737,11 @@ namespace ZombustersWindows
             ShotgunNETexture.Add(game.Content.Load<Texture2D>(@"InGame/Jade/girl_anim_shotgun_NE"));
             ShotgunNEOrigin = new List<Vector2>();
             ShotgunNEOrigin.Add(new Vector2(ShotgunNETexture[0].Width / 2, ShotgunNETexture[0].Height / 2));
-            frameSize.X = int.Parse(definition.Attribute("FrameWidth").Value, NumberStyles.Integer);
-            frameSize.Y = int.Parse(definition.Attribute("FrameHeight").Value, NumberStyles.Integer);
-            sheetSize.X = int.Parse(definition.Attribute("SheetColumns").Value, NumberStyles.Integer);
-            sheetSize.Y = int.Parse(definition.Attribute("SheetRows").Value, NumberStyles.Integer);
-            frameInterval = TimeSpan.FromSeconds(1.0f / int.Parse(definition.Attribute("Speed").Value, NumberStyles.Integer));
+            frameSize.X = int.Parse(definition.Attribute(FRAME_WIDTH).Value, NumberStyles.Integer);
+            frameSize.Y = int.Parse(definition.Attribute(FRAME_HEIGHT).Value, NumberStyles.Integer);
+            sheetSize.X = int.Parse(definition.Attribute(SHEET_COLUMNS).Value, NumberStyles.Integer);
+            sheetSize.Y = int.Parse(definition.Attribute(SHEET_ROWS).Value, NumberStyles.Integer);
+            frameInterval = TimeSpan.FromSeconds(1.0f / int.Parse(definition.Attribute(SPEED).Value, NumberStyles.Integer));
             ShotgunNEAnimation = new List<Animation>();
             ShotgunNEAnimation.Add(new Animation(ShotgunNETexture[0], frameSize, sheetSize, frameInterval));
         }
@@ -3751,11 +3756,11 @@ namespace ZombustersWindows
             ShotgunSETexture.Add(game.Content.Load<Texture2D>(@"InGame/Jade/girl_anim_shotgun_SE"));
             ShotgunSEOrigin = new List<Vector2>();
             ShotgunSEOrigin.Add(new Vector2(ShotgunSETexture[0].Width / 2, ShotgunSETexture[0].Height / 2));
-            frameSize.X = int.Parse(definition.Attribute("FrameWidth").Value, NumberStyles.Integer);
-            frameSize.Y = int.Parse(definition.Attribute("FrameHeight").Value, NumberStyles.Integer);
-            sheetSize.X = int.Parse(definition.Attribute("SheetColumns").Value, NumberStyles.Integer);
-            sheetSize.Y = int.Parse(definition.Attribute("SheetRows").Value, NumberStyles.Integer);
-            frameInterval = TimeSpan.FromSeconds(1.0f / int.Parse(definition.Attribute("Speed").Value, NumberStyles.Integer));
+            frameSize.X = int.Parse(definition.Attribute(FRAME_WIDTH).Value, NumberStyles.Integer);
+            frameSize.Y = int.Parse(definition.Attribute(FRAME_HEIGHT).Value, NumberStyles.Integer);
+            sheetSize.X = int.Parse(definition.Attribute(SHEET_COLUMNS).Value, NumberStyles.Integer);
+            sheetSize.Y = int.Parse(definition.Attribute(SHEET_ROWS).Value, NumberStyles.Integer);
+            frameInterval = TimeSpan.FromSeconds(1.0f / int.Parse(definition.Attribute(SPEED).Value, NumberStyles.Integer));
             ShotgunSEAnimation = new List<Animation>();
             ShotgunSEAnimation.Add(new Animation(ShotgunSETexture[0], frameSize, sheetSize, frameInterval));
         }
@@ -3770,11 +3775,11 @@ namespace ZombustersWindows
             ShotgunSouthTexture.Add(game.Content.Load<Texture2D>(@"InGame/Jade/girl_anim_shotgun_S"));
             ShotgunSouthOrigin = new List<Vector2>();
             ShotgunSouthOrigin.Add(new Vector2(ShotgunSouthTexture[0].Width / 2, ShotgunSouthTexture[0].Height / 2));
-            frameSize.X = int.Parse(definition.Attribute("FrameWidth").Value, NumberStyles.Integer);
-            frameSize.Y = int.Parse(definition.Attribute("FrameHeight").Value, NumberStyles.Integer);
-            sheetSize.X = int.Parse(definition.Attribute("SheetColumns").Value, NumberStyles.Integer);
-            sheetSize.Y = int.Parse(definition.Attribute("SheetRows").Value, NumberStyles.Integer);
-            frameInterval = TimeSpan.FromSeconds(1.0f / int.Parse(definition.Attribute("Speed").Value, NumberStyles.Integer));
+            frameSize.X = int.Parse(definition.Attribute(FRAME_WIDTH).Value, NumberStyles.Integer);
+            frameSize.Y = int.Parse(definition.Attribute(FRAME_HEIGHT).Value, NumberStyles.Integer);
+            sheetSize.X = int.Parse(definition.Attribute(SHEET_COLUMNS).Value, NumberStyles.Integer);
+            sheetSize.Y = int.Parse(definition.Attribute(SHEET_ROWS).Value, NumberStyles.Integer);
+            frameInterval = TimeSpan.FromSeconds(1.0f / int.Parse(definition.Attribute(SPEED).Value, NumberStyles.Integer));
             ShotgunSouthAnimation = new List<Animation>();
             ShotgunSouthAnimation.Add(new Animation(ShotgunSouthTexture[0], frameSize, sheetSize, frameInterval));
         }
@@ -3789,11 +3794,11 @@ namespace ZombustersWindows
             ShotgunNorthTexture.Add(game.Content.Load<Texture2D>(@"InGame/Jade/girl_anim_shotgun_N"));
             ShotgunNorthOrigin = new List<Vector2>();
             ShotgunNorthOrigin.Add(new Vector2(ShotgunNorthTexture[0].Width / 2, ShotgunNorthTexture[0].Height / 2));
-            frameSize.X = int.Parse(definition.Attribute("FrameWidth").Value, NumberStyles.Integer);
-            frameSize.Y = int.Parse(definition.Attribute("FrameHeight").Value, NumberStyles.Integer);
-            sheetSize.X = int.Parse(definition.Attribute("SheetColumns").Value, NumberStyles.Integer);
-            sheetSize.Y = int.Parse(definition.Attribute("SheetRows").Value, NumberStyles.Integer);
-            frameInterval = TimeSpan.FromSeconds(1.0f / int.Parse(definition.Attribute("Speed").Value, NumberStyles.Integer));
+            frameSize.X = int.Parse(definition.Attribute(FRAME_WIDTH).Value, NumberStyles.Integer);
+            frameSize.Y = int.Parse(definition.Attribute(FRAME_HEIGHT).Value, NumberStyles.Integer);
+            sheetSize.X = int.Parse(definition.Attribute(SHEET_COLUMNS).Value, NumberStyles.Integer);
+            sheetSize.Y = int.Parse(definition.Attribute(SHEET_ROWS).Value, NumberStyles.Integer);
+            frameInterval = TimeSpan.FromSeconds(1.0f / int.Parse(definition.Attribute(SPEED).Value, NumberStyles.Integer));
             ShotgunNorthAnimation = new List<Animation>();
             ShotgunNorthAnimation.Add(new Animation(ShotgunNorthTexture[0], frameSize, sheetSize, frameInterval));
         }
@@ -3807,11 +3812,11 @@ namespace ZombustersWindows
             IdleLegsTexture.Add(game.Content.Load<Texture2D>(@"InGame/Egon/egon_legs_idle"));
             IdleTrunkTexture.Add(game.Content.Load<Texture2D>(@"InGame/Egon/egon_idle"));
             IdleTrunkOrigin.Add(new Vector2(IdleTrunkTexture[1].Width / 2, IdleTrunkTexture[1].Height / 2));
-            frameSize.X = int.Parse(definition.Attribute("FrameWidth").Value, NumberStyles.Integer);
-            frameSize.Y = int.Parse(definition.Attribute("FrameHeight").Value, NumberStyles.Integer);
-            sheetSize.X = int.Parse(definition.Attribute("SheetColumns").Value, NumberStyles.Integer);
-            sheetSize.Y = int.Parse(definition.Attribute("SheetRows").Value, NumberStyles.Integer);
-            frameInterval = TimeSpan.FromSeconds(1.0f / int.Parse(definition.Attribute("Speed").Value, NumberStyles.Integer));
+            frameSize.X = int.Parse(definition.Attribute(FRAME_WIDTH).Value, NumberStyles.Integer);
+            frameSize.Y = int.Parse(definition.Attribute(FRAME_HEIGHT).Value, NumberStyles.Integer);
+            sheetSize.X = int.Parse(definition.Attribute(SHEET_COLUMNS).Value, NumberStyles.Integer);
+            sheetSize.Y = int.Parse(definition.Attribute(SHEET_ROWS).Value, NumberStyles.Integer);
+            frameInterval = TimeSpan.FromSeconds(1.0f / int.Parse(definition.Attribute(SPEED).Value, NumberStyles.Integer));
             IdleTrunkAnimation.Add(new Animation(IdleTrunkTexture[1], frameSize, sheetSize, frameInterval));
 
         }
@@ -3823,11 +3828,11 @@ namespace ZombustersWindows
             var definition = doc.Root.Element("EgonRunEDef");
             RunEastTexture.Add(game.Content.Load<Texture2D>(@"InGame/Egon/egon_run_E"));
             RunEastOrigin.Add(new Vector2(RunEastTexture[1].Width / 2, RunEastTexture[1].Height / 2));
-            frameSize.X = int.Parse(definition.Attribute("FrameWidth").Value, NumberStyles.Integer);
-            frameSize.Y = int.Parse(definition.Attribute("FrameHeight").Value, NumberStyles.Integer);
-            sheetSize.X = int.Parse(definition.Attribute("SheetColumns").Value, NumberStyles.Integer);
-            sheetSize.Y = int.Parse(definition.Attribute("SheetRows").Value, NumberStyles.Integer);
-            frameInterval = TimeSpan.FromSeconds(1.0f / int.Parse(definition.Attribute("Speed").Value, NumberStyles.Integer));
+            frameSize.X = int.Parse(definition.Attribute(FRAME_WIDTH).Value, NumberStyles.Integer);
+            frameSize.Y = int.Parse(definition.Attribute(FRAME_HEIGHT).Value, NumberStyles.Integer);
+            sheetSize.X = int.Parse(definition.Attribute(SHEET_COLUMNS).Value, NumberStyles.Integer);
+            sheetSize.Y = int.Parse(definition.Attribute(SHEET_ROWS).Value, NumberStyles.Integer);
+            frameInterval = TimeSpan.FromSeconds(1.0f / int.Parse(definition.Attribute(SPEED).Value, NumberStyles.Integer));
             RunEastAnimation.Add(new Animation(RunEastTexture[1], frameSize, sheetSize, frameInterval));
 
         }
@@ -3839,11 +3844,11 @@ namespace ZombustersWindows
             var definition = doc.Root.Element("EgonPistolEDef");
             PistolShotEastTexture.Add(game.Content.Load<Texture2D>(@"InGame/Egon/egon_pistol_E"));
             PistolShotEastOrigin.Add(new Vector2(PistolShotEastTexture[1].Width / 2, PistolShotEastTexture[1].Height / 2));
-            frameSize.X = int.Parse(definition.Attribute("FrameWidth").Value, NumberStyles.Integer);
-            frameSize.Y = int.Parse(definition.Attribute("FrameHeight").Value, NumberStyles.Integer);
-            sheetSize.X = int.Parse(definition.Attribute("SheetColumns").Value, NumberStyles.Integer);
-            sheetSize.Y = int.Parse(definition.Attribute("SheetRows").Value, NumberStyles.Integer);
-            frameInterval = TimeSpan.FromSeconds(1.0f / int.Parse(definition.Attribute("Speed").Value, NumberStyles.Integer));
+            frameSize.X = int.Parse(definition.Attribute(FRAME_WIDTH).Value, NumberStyles.Integer);
+            frameSize.Y = int.Parse(definition.Attribute(FRAME_HEIGHT).Value, NumberStyles.Integer);
+            sheetSize.X = int.Parse(definition.Attribute(SHEET_COLUMNS).Value, NumberStyles.Integer);
+            sheetSize.Y = int.Parse(definition.Attribute(SHEET_ROWS).Value, NumberStyles.Integer);
+            frameInterval = TimeSpan.FromSeconds(1.0f / int.Parse(definition.Attribute(SPEED).Value, NumberStyles.Integer));
             PistolShotEastAnimation.Add(new Animation(PistolShotEastTexture[1], frameSize, sheetSize, frameInterval));
 
         }
@@ -3855,11 +3860,11 @@ namespace ZombustersWindows
             var definition = doc.Root.Element("EgonPistolNEDef");
             PistolShotNETexture.Add(game.Content.Load<Texture2D>(@"InGame/Egon/egon_pistol_NE"));
             PistolShotNEOrigin.Add(new Vector2(PistolShotNETexture[1].Width / 2, PistolShotNETexture[1].Height / 2));
-            frameSize.X = int.Parse(definition.Attribute("FrameWidth").Value, NumberStyles.Integer);
-            frameSize.Y = int.Parse(definition.Attribute("FrameHeight").Value, NumberStyles.Integer);
-            sheetSize.X = int.Parse(definition.Attribute("SheetColumns").Value, NumberStyles.Integer);
-            sheetSize.Y = int.Parse(definition.Attribute("SheetRows").Value, NumberStyles.Integer);
-            frameInterval = TimeSpan.FromSeconds(1.0f / int.Parse(definition.Attribute("Speed").Value, NumberStyles.Integer));
+            frameSize.X = int.Parse(definition.Attribute(FRAME_WIDTH).Value, NumberStyles.Integer);
+            frameSize.Y = int.Parse(definition.Attribute(FRAME_HEIGHT).Value, NumberStyles.Integer);
+            sheetSize.X = int.Parse(definition.Attribute(SHEET_COLUMNS).Value, NumberStyles.Integer);
+            sheetSize.Y = int.Parse(definition.Attribute(SHEET_ROWS).Value, NumberStyles.Integer);
+            frameInterval = TimeSpan.FromSeconds(1.0f / int.Parse(definition.Attribute(SPEED).Value, NumberStyles.Integer));
             PistolShotNEAnimation.Add(new Animation(PistolShotNETexture[1], frameSize, sheetSize, frameInterval));
 
         }
@@ -3871,11 +3876,11 @@ namespace ZombustersWindows
             var definition = doc.Root.Element("EgonPistolSEDef");
             PistolShotSETexture.Add(game.Content.Load<Texture2D>(@"InGame/Egon/egon_pistol_SE"));
             PistolShotSEOrigin.Add(new Vector2(PistolShotSETexture[1].Width / 2, PistolShotSETexture[1].Height / 2));
-            frameSize.X = int.Parse(definition.Attribute("FrameWidth").Value, NumberStyles.Integer);
-            frameSize.Y = int.Parse(definition.Attribute("FrameHeight").Value, NumberStyles.Integer);
-            sheetSize.X = int.Parse(definition.Attribute("SheetColumns").Value, NumberStyles.Integer);
-            sheetSize.Y = int.Parse(definition.Attribute("SheetRows").Value, NumberStyles.Integer);
-            frameInterval = TimeSpan.FromSeconds(1.0f / int.Parse(definition.Attribute("Speed").Value, NumberStyles.Integer));
+            frameSize.X = int.Parse(definition.Attribute(FRAME_WIDTH).Value, NumberStyles.Integer);
+            frameSize.Y = int.Parse(definition.Attribute(FRAME_HEIGHT).Value, NumberStyles.Integer);
+            sheetSize.X = int.Parse(definition.Attribute(SHEET_COLUMNS).Value, NumberStyles.Integer);
+            sheetSize.Y = int.Parse(definition.Attribute(SHEET_ROWS).Value, NumberStyles.Integer);
+            frameInterval = TimeSpan.FromSeconds(1.0f / int.Parse(definition.Attribute(SPEED).Value, NumberStyles.Integer));
             PistolShotSEAnimation.Add(new Animation(PistolShotSETexture[1], frameSize, sheetSize, frameInterval));
 
         }
@@ -3887,11 +3892,11 @@ namespace ZombustersWindows
             var definition = doc.Root.Element("EgonPistolSouthDef");
             PistolShotSouthTexture.Add(game.Content.Load<Texture2D>(@"InGame/Egon/egon_pistol_S"));
             PistolShotSouthOrigin.Add(new Vector2(PistolShotSouthTexture[1].Width / 2, PistolShotSouthTexture[1].Height / 2));
-            frameSize.X = int.Parse(definition.Attribute("FrameWidth").Value, NumberStyles.Integer);
-            frameSize.Y = int.Parse(definition.Attribute("FrameHeight").Value, NumberStyles.Integer);
-            sheetSize.X = int.Parse(definition.Attribute("SheetColumns").Value, NumberStyles.Integer);
-            sheetSize.Y = int.Parse(definition.Attribute("SheetRows").Value, NumberStyles.Integer);
-            frameInterval = TimeSpan.FromSeconds(1.0f / int.Parse(definition.Attribute("Speed").Value, NumberStyles.Integer));
+            frameSize.X = int.Parse(definition.Attribute(FRAME_WIDTH).Value, NumberStyles.Integer);
+            frameSize.Y = int.Parse(definition.Attribute(FRAME_HEIGHT).Value, NumberStyles.Integer);
+            sheetSize.X = int.Parse(definition.Attribute(SHEET_COLUMNS).Value, NumberStyles.Integer);
+            sheetSize.Y = int.Parse(definition.Attribute(SHEET_ROWS).Value, NumberStyles.Integer);
+            frameInterval = TimeSpan.FromSeconds(1.0f / int.Parse(definition.Attribute(SPEED).Value, NumberStyles.Integer));
             PistolShotSouthAnimation.Add(new Animation(PistolShotSouthTexture[1], frameSize, sheetSize, frameInterval));
 
         }
@@ -3903,11 +3908,11 @@ namespace ZombustersWindows
             var definition = doc.Root.Element("EgonPistolNorthDef");
             PistolShotNorthTexture.Add(game.Content.Load<Texture2D>(@"InGame/Egon/egon_pistol_N"));
             PistolShotNorthOrigin.Add(new Vector2(PistolShotNorthTexture[1].Width / 2, PistolShotNorthTexture[1].Height / 2));
-            frameSize.X = int.Parse(definition.Attribute("FrameWidth").Value, NumberStyles.Integer);
-            frameSize.Y = int.Parse(definition.Attribute("FrameHeight").Value, NumberStyles.Integer);
-            sheetSize.X = int.Parse(definition.Attribute("SheetColumns").Value, NumberStyles.Integer);
-            sheetSize.Y = int.Parse(definition.Attribute("SheetRows").Value, NumberStyles.Integer);
-            frameInterval = TimeSpan.FromSeconds(1.0f / int.Parse(definition.Attribute("Speed").Value, NumberStyles.Integer));
+            frameSize.X = int.Parse(definition.Attribute(FRAME_WIDTH).Value, NumberStyles.Integer);
+            frameSize.Y = int.Parse(definition.Attribute(FRAME_HEIGHT).Value, NumberStyles.Integer);
+            sheetSize.X = int.Parse(definition.Attribute(SHEET_COLUMNS).Value, NumberStyles.Integer);
+            sheetSize.Y = int.Parse(definition.Attribute(SHEET_ROWS).Value, NumberStyles.Integer);
+            frameInterval = TimeSpan.FromSeconds(1.0f / int.Parse(definition.Attribute(SPEED).Value, NumberStyles.Integer));
             PistolShotNorthAnimation.Add(new Animation(PistolShotNorthTexture[1], frameSize, sheetSize, frameInterval));
 
         }
@@ -3919,11 +3924,11 @@ namespace ZombustersWindows
             var definition = doc.Root.Element("EgonShotgunEDef");
             ShotgunEastTexture.Add(game.Content.Load<Texture2D>(@"InGame/Egon/egon_shotgun_E"));
             ShotgunShotEastOrigin.Add(new Vector2(ShotgunEastTexture[1].Width / 2, PistolShotEastTexture[1].Height / 2));
-            frameSize.X = int.Parse(definition.Attribute("FrameWidth").Value, NumberStyles.Integer);
-            frameSize.Y = int.Parse(definition.Attribute("FrameHeight").Value, NumberStyles.Integer);
-            sheetSize.X = int.Parse(definition.Attribute("SheetColumns").Value, NumberStyles.Integer);
-            sheetSize.Y = int.Parse(definition.Attribute("SheetRows").Value, NumberStyles.Integer);
-            frameInterval = TimeSpan.FromSeconds(1.0f / int.Parse(definition.Attribute("Speed").Value, NumberStyles.Integer));
+            frameSize.X = int.Parse(definition.Attribute(FRAME_WIDTH).Value, NumberStyles.Integer);
+            frameSize.Y = int.Parse(definition.Attribute(FRAME_HEIGHT).Value, NumberStyles.Integer);
+            sheetSize.X = int.Parse(definition.Attribute(SHEET_COLUMNS).Value, NumberStyles.Integer);
+            sheetSize.Y = int.Parse(definition.Attribute(SHEET_ROWS).Value, NumberStyles.Integer);
+            frameInterval = TimeSpan.FromSeconds(1.0f / int.Parse(definition.Attribute(SPEED).Value, NumberStyles.Integer));
             ShotgunShotEastAnimation.Add(new Animation(ShotgunEastTexture[1], frameSize, sheetSize, frameInterval));
 
         }
@@ -3935,11 +3940,11 @@ namespace ZombustersWindows
             var definition = doc.Root.Element("EgonShotgunNEDef");
             ShotgunNETexture.Add(game.Content.Load<Texture2D>(@"InGame/Egon/egon_shotgun_NE"));
             ShotgunNEOrigin.Add(new Vector2(ShotgunNETexture[1].Width / 2, ShotgunNETexture[1].Height / 2));
-            frameSize.X = int.Parse(definition.Attribute("FrameWidth").Value, NumberStyles.Integer);
-            frameSize.Y = int.Parse(definition.Attribute("FrameHeight").Value, NumberStyles.Integer);
-            sheetSize.X = int.Parse(definition.Attribute("SheetColumns").Value, NumberStyles.Integer);
-            sheetSize.Y = int.Parse(definition.Attribute("SheetRows").Value, NumberStyles.Integer);
-            frameInterval = TimeSpan.FromSeconds(1.0f / int.Parse(definition.Attribute("Speed").Value, NumberStyles.Integer));
+            frameSize.X = int.Parse(definition.Attribute(FRAME_WIDTH).Value, NumberStyles.Integer);
+            frameSize.Y = int.Parse(definition.Attribute(FRAME_HEIGHT).Value, NumberStyles.Integer);
+            sheetSize.X = int.Parse(definition.Attribute(SHEET_COLUMNS).Value, NumberStyles.Integer);
+            sheetSize.Y = int.Parse(definition.Attribute(SHEET_ROWS).Value, NumberStyles.Integer);
+            frameInterval = TimeSpan.FromSeconds(1.0f / int.Parse(definition.Attribute(SPEED).Value, NumberStyles.Integer));
             ShotgunNEAnimation.Add(new Animation(ShotgunNETexture[1], frameSize, sheetSize, frameInterval));
 
         }
@@ -3951,11 +3956,11 @@ namespace ZombustersWindows
             var definition = doc.Root.Element("EgonShotgunSEDef");
             ShotgunSETexture.Add(game.Content.Load<Texture2D>(@"InGame/Egon/egon_shotgun_SE"));
             ShotgunSEOrigin.Add(new Vector2(ShotgunSETexture[1].Width / 2, ShotgunSETexture[1].Height / 2));
-            frameSize.X = int.Parse(definition.Attribute("FrameWidth").Value, NumberStyles.Integer);
-            frameSize.Y = int.Parse(definition.Attribute("FrameHeight").Value, NumberStyles.Integer);
-            sheetSize.X = int.Parse(definition.Attribute("SheetColumns").Value, NumberStyles.Integer);
-            sheetSize.Y = int.Parse(definition.Attribute("SheetRows").Value, NumberStyles.Integer);
-            frameInterval = TimeSpan.FromSeconds(1.0f / int.Parse(definition.Attribute("Speed").Value, NumberStyles.Integer));
+            frameSize.X = int.Parse(definition.Attribute(FRAME_WIDTH).Value, NumberStyles.Integer);
+            frameSize.Y = int.Parse(definition.Attribute(FRAME_HEIGHT).Value, NumberStyles.Integer);
+            sheetSize.X = int.Parse(definition.Attribute(SHEET_COLUMNS).Value, NumberStyles.Integer);
+            sheetSize.Y = int.Parse(definition.Attribute(SHEET_ROWS).Value, NumberStyles.Integer);
+            frameInterval = TimeSpan.FromSeconds(1.0f / int.Parse(definition.Attribute(SPEED).Value, NumberStyles.Integer));
             ShotgunSEAnimation.Add(new Animation(ShotgunSETexture[1], frameSize, sheetSize, frameInterval));
 
         }
@@ -3967,11 +3972,11 @@ namespace ZombustersWindows
             var definition = doc.Root.Element("EgonShotgunSouthDef");
             ShotgunSouthTexture.Add(game.Content.Load<Texture2D>(@"InGame/Egon/egon_shotgun_S"));
             ShotgunSouthOrigin.Add(new Vector2(ShotgunSouthTexture[1].Width / 2, ShotgunSouthTexture[1].Height / 2));
-            frameSize.X = int.Parse(definition.Attribute("FrameWidth").Value, NumberStyles.Integer);
-            frameSize.Y = int.Parse(definition.Attribute("FrameHeight").Value, NumberStyles.Integer);
-            sheetSize.X = int.Parse(definition.Attribute("SheetColumns").Value, NumberStyles.Integer);
-            sheetSize.Y = int.Parse(definition.Attribute("SheetRows").Value, NumberStyles.Integer);
-            frameInterval = TimeSpan.FromSeconds(1.0f / int.Parse(definition.Attribute("Speed").Value, NumberStyles.Integer));
+            frameSize.X = int.Parse(definition.Attribute(FRAME_WIDTH).Value, NumberStyles.Integer);
+            frameSize.Y = int.Parse(definition.Attribute(FRAME_HEIGHT).Value, NumberStyles.Integer);
+            sheetSize.X = int.Parse(definition.Attribute(SHEET_COLUMNS).Value, NumberStyles.Integer);
+            sheetSize.Y = int.Parse(definition.Attribute(SHEET_ROWS).Value, NumberStyles.Integer);
+            frameInterval = TimeSpan.FromSeconds(1.0f / int.Parse(definition.Attribute(SPEED).Value, NumberStyles.Integer));
             ShotgunSouthAnimation.Add(new Animation(ShotgunSouthTexture[1], frameSize, sheetSize, frameInterval));
 
         }
@@ -3983,11 +3988,11 @@ namespace ZombustersWindows
             var definition = doc.Root.Element("EgonShotgunNorthDef");
             ShotgunNorthTexture.Add(game.Content.Load<Texture2D>(@"InGame/Egon/egon_shotgun_N"));
             ShotgunNorthOrigin.Add(new Vector2(ShotgunNorthTexture[1].Width / 2, ShotgunNorthTexture[1].Height / 2));
-            frameSize.X = int.Parse(definition.Attribute("FrameWidth").Value, NumberStyles.Integer);
-            frameSize.Y = int.Parse(definition.Attribute("FrameHeight").Value, NumberStyles.Integer);
-            sheetSize.X = int.Parse(definition.Attribute("SheetColumns").Value, NumberStyles.Integer);
-            sheetSize.Y = int.Parse(definition.Attribute("SheetRows").Value, NumberStyles.Integer);
-            frameInterval = TimeSpan.FromSeconds(1.0f / int.Parse(definition.Attribute("Speed").Value, NumberStyles.Integer));
+            frameSize.X = int.Parse(definition.Attribute(FRAME_WIDTH).Value, NumberStyles.Integer);
+            frameSize.Y = int.Parse(definition.Attribute(FRAME_HEIGHT).Value, NumberStyles.Integer);
+            sheetSize.X = int.Parse(definition.Attribute(SHEET_COLUMNS).Value, NumberStyles.Integer);
+            sheetSize.Y = int.Parse(definition.Attribute(SHEET_ROWS).Value, NumberStyles.Integer);
+            frameInterval = TimeSpan.FromSeconds(1.0f / int.Parse(definition.Attribute(SPEED).Value, NumberStyles.Integer));
             ShotgunNorthAnimation.Add(new Animation(ShotgunNorthTexture[1], frameSize, sheetSize, frameInterval));
 
         }
@@ -4001,11 +4006,11 @@ namespace ZombustersWindows
             IdleLegsTexture.Add(game.Content.Load<Texture2D>(@"InGame/Ray/ray_legs_idle"));
             IdleTrunkTexture.Add(game.Content.Load<Texture2D>(@"InGame/Ray/ray_idle"));
             IdleTrunkOrigin.Add(new Vector2(IdleTrunkTexture[2].Width / 2, IdleTrunkTexture[2].Height / 2));
-            frameSize.X = int.Parse(definition.Attribute("FrameWidth").Value, NumberStyles.Integer);
-            frameSize.Y = int.Parse(definition.Attribute("FrameHeight").Value, NumberStyles.Integer);
-            sheetSize.X = int.Parse(definition.Attribute("SheetColumns").Value, NumberStyles.Integer);
-            sheetSize.Y = int.Parse(definition.Attribute("SheetRows").Value, NumberStyles.Integer);
-            frameInterval = TimeSpan.FromSeconds(1.0f / int.Parse(definition.Attribute("Speed").Value, NumberStyles.Integer));
+            frameSize.X = int.Parse(definition.Attribute(FRAME_WIDTH).Value, NumberStyles.Integer);
+            frameSize.Y = int.Parse(definition.Attribute(FRAME_HEIGHT).Value, NumberStyles.Integer);
+            sheetSize.X = int.Parse(definition.Attribute(SHEET_COLUMNS).Value, NumberStyles.Integer);
+            sheetSize.Y = int.Parse(definition.Attribute(SHEET_ROWS).Value, NumberStyles.Integer);
+            frameInterval = TimeSpan.FromSeconds(1.0f / int.Parse(definition.Attribute(SPEED).Value, NumberStyles.Integer));
             IdleTrunkAnimation.Add(new Animation(IdleTrunkTexture[2], frameSize, sheetSize, frameInterval));
 
         }
@@ -4017,11 +4022,11 @@ namespace ZombustersWindows
             var definition = doc.Root.Element("RayRunEDef");
             RunEastTexture.Add(game.Content.Load<Texture2D>(@"InGame/Ray/ray_run_E"));
             RunEastOrigin.Add(new Vector2(RunEastTexture[2].Width / 2, RunEastTexture[2].Height / 2));
-            frameSize.X = int.Parse(definition.Attribute("FrameWidth").Value, NumberStyles.Integer);
-            frameSize.Y = int.Parse(definition.Attribute("FrameHeight").Value, NumberStyles.Integer);
-            sheetSize.X = int.Parse(definition.Attribute("SheetColumns").Value, NumberStyles.Integer);
-            sheetSize.Y = int.Parse(definition.Attribute("SheetRows").Value, NumberStyles.Integer);
-            frameInterval = TimeSpan.FromSeconds(1.0f / int.Parse(definition.Attribute("Speed").Value, NumberStyles.Integer));
+            frameSize.X = int.Parse(definition.Attribute(FRAME_WIDTH).Value, NumberStyles.Integer);
+            frameSize.Y = int.Parse(definition.Attribute(FRAME_HEIGHT).Value, NumberStyles.Integer);
+            sheetSize.X = int.Parse(definition.Attribute(SHEET_COLUMNS).Value, NumberStyles.Integer);
+            sheetSize.Y = int.Parse(definition.Attribute(SHEET_ROWS).Value, NumberStyles.Integer);
+            frameInterval = TimeSpan.FromSeconds(1.0f / int.Parse(definition.Attribute(SPEED).Value, NumberStyles.Integer));
             RunEastAnimation.Add(new Animation(RunEastTexture[2], frameSize, sheetSize, frameInterval));
 
         }
@@ -4033,11 +4038,11 @@ namespace ZombustersWindows
             var definition = doc.Root.Element("RayPistolEDef");
             PistolShotEastTexture.Add(game.Content.Load<Texture2D>(@"InGame/Ray/ray_pistol_E"));
             PistolShotEastOrigin.Add(new Vector2(PistolShotEastTexture[2].Width / 2, PistolShotEastTexture[2].Height / 2));
-            frameSize.X = int.Parse(definition.Attribute("FrameWidth").Value, NumberStyles.Integer);
-            frameSize.Y = int.Parse(definition.Attribute("FrameHeight").Value, NumberStyles.Integer);
-            sheetSize.X = int.Parse(definition.Attribute("SheetColumns").Value, NumberStyles.Integer);
-            sheetSize.Y = int.Parse(definition.Attribute("SheetRows").Value, NumberStyles.Integer);
-            frameInterval = TimeSpan.FromSeconds(1.0f / int.Parse(definition.Attribute("Speed").Value, NumberStyles.Integer));
+            frameSize.X = int.Parse(definition.Attribute(FRAME_WIDTH).Value, NumberStyles.Integer);
+            frameSize.Y = int.Parse(definition.Attribute(FRAME_HEIGHT).Value, NumberStyles.Integer);
+            sheetSize.X = int.Parse(definition.Attribute(SHEET_COLUMNS).Value, NumberStyles.Integer);
+            sheetSize.Y = int.Parse(definition.Attribute(SHEET_ROWS).Value, NumberStyles.Integer);
+            frameInterval = TimeSpan.FromSeconds(1.0f / int.Parse(definition.Attribute(SPEED).Value, NumberStyles.Integer));
             PistolShotEastAnimation.Add(new Animation(PistolShotEastTexture[2], frameSize, sheetSize, frameInterval));
 
         }
@@ -4049,11 +4054,11 @@ namespace ZombustersWindows
             var definition = doc.Root.Element("RayPistolNEDef");
             PistolShotNETexture.Add(game.Content.Load<Texture2D>(@"InGame/Ray/ray_pistol_NE"));
             PistolShotNEOrigin.Add(new Vector2(PistolShotNETexture[2].Width / 2, PistolShotNETexture[2].Height / 2));
-            frameSize.X = int.Parse(definition.Attribute("FrameWidth").Value, NumberStyles.Integer);
-            frameSize.Y = int.Parse(definition.Attribute("FrameHeight").Value, NumberStyles.Integer);
-            sheetSize.X = int.Parse(definition.Attribute("SheetColumns").Value, NumberStyles.Integer);
-            sheetSize.Y = int.Parse(definition.Attribute("SheetRows").Value, NumberStyles.Integer);
-            frameInterval = TimeSpan.FromSeconds(1.0f / int.Parse(definition.Attribute("Speed").Value, NumberStyles.Integer));
+            frameSize.X = int.Parse(definition.Attribute(FRAME_WIDTH).Value, NumberStyles.Integer);
+            frameSize.Y = int.Parse(definition.Attribute(FRAME_HEIGHT).Value, NumberStyles.Integer);
+            sheetSize.X = int.Parse(definition.Attribute(SHEET_COLUMNS).Value, NumberStyles.Integer);
+            sheetSize.Y = int.Parse(definition.Attribute(SHEET_ROWS).Value, NumberStyles.Integer);
+            frameInterval = TimeSpan.FromSeconds(1.0f / int.Parse(definition.Attribute(SPEED).Value, NumberStyles.Integer));
             PistolShotNEAnimation.Add(new Animation(PistolShotNETexture[2], frameSize, sheetSize, frameInterval));
 
         }
@@ -4065,11 +4070,11 @@ namespace ZombustersWindows
             var definition = doc.Root.Element("RayPistolSEDef");
             PistolShotSETexture.Add(game.Content.Load<Texture2D>(@"InGame/Ray/ray_pistol_SE"));
             PistolShotSEOrigin.Add(new Vector2(PistolShotSETexture[2].Width / 2, PistolShotSETexture[2].Height / 2));
-            frameSize.X = int.Parse(definition.Attribute("FrameWidth").Value, NumberStyles.Integer);
-            frameSize.Y = int.Parse(definition.Attribute("FrameHeight").Value, NumberStyles.Integer);
-            sheetSize.X = int.Parse(definition.Attribute("SheetColumns").Value, NumberStyles.Integer);
-            sheetSize.Y = int.Parse(definition.Attribute("SheetRows").Value, NumberStyles.Integer);
-            frameInterval = TimeSpan.FromSeconds(1.0f / int.Parse(definition.Attribute("Speed").Value, NumberStyles.Integer));
+            frameSize.X = int.Parse(definition.Attribute(FRAME_WIDTH).Value, NumberStyles.Integer);
+            frameSize.Y = int.Parse(definition.Attribute(FRAME_HEIGHT).Value, NumberStyles.Integer);
+            sheetSize.X = int.Parse(definition.Attribute(SHEET_COLUMNS).Value, NumberStyles.Integer);
+            sheetSize.Y = int.Parse(definition.Attribute(SHEET_ROWS).Value, NumberStyles.Integer);
+            frameInterval = TimeSpan.FromSeconds(1.0f / int.Parse(definition.Attribute(SPEED).Value, NumberStyles.Integer));
             PistolShotSEAnimation.Add(new Animation(PistolShotSETexture[2], frameSize, sheetSize, frameInterval));
 
         }
@@ -4081,11 +4086,11 @@ namespace ZombustersWindows
             var definition = doc.Root.Element("RayPistolSouthDef");
             PistolShotSouthTexture.Add(game.Content.Load<Texture2D>(@"InGame/Ray/ray_pistol_S"));
             PistolShotSouthOrigin.Add(new Vector2(PistolShotSouthTexture[2].Width / 2, PistolShotSouthTexture[2].Height / 2));
-            frameSize.X = int.Parse(definition.Attribute("FrameWidth").Value, NumberStyles.Integer);
-            frameSize.Y = int.Parse(definition.Attribute("FrameHeight").Value, NumberStyles.Integer);
-            sheetSize.X = int.Parse(definition.Attribute("SheetColumns").Value, NumberStyles.Integer);
-            sheetSize.Y = int.Parse(definition.Attribute("SheetRows").Value, NumberStyles.Integer);
-            frameInterval = TimeSpan.FromSeconds(1.0f / int.Parse(definition.Attribute("Speed").Value, NumberStyles.Integer));
+            frameSize.X = int.Parse(definition.Attribute(FRAME_WIDTH).Value, NumberStyles.Integer);
+            frameSize.Y = int.Parse(definition.Attribute(FRAME_HEIGHT).Value, NumberStyles.Integer);
+            sheetSize.X = int.Parse(definition.Attribute(SHEET_COLUMNS).Value, NumberStyles.Integer);
+            sheetSize.Y = int.Parse(definition.Attribute(SHEET_ROWS).Value, NumberStyles.Integer);
+            frameInterval = TimeSpan.FromSeconds(1.0f / int.Parse(definition.Attribute(SPEED).Value, NumberStyles.Integer));
             PistolShotSouthAnimation.Add(new Animation(PistolShotSouthTexture[2], frameSize, sheetSize, frameInterval));
 
         }
@@ -4097,11 +4102,11 @@ namespace ZombustersWindows
             var definition = doc.Root.Element("RayPistolNorthDef");
             PistolShotNorthTexture.Add(game.Content.Load<Texture2D>(@"InGame/Ray/ray_pistol_N"));
             PistolShotNorthOrigin.Add(new Vector2(PistolShotNorthTexture[2].Width / 2, PistolShotNorthTexture[2].Height / 2));
-            frameSize.X = int.Parse(definition.Attribute("FrameWidth").Value, NumberStyles.Integer);
-            frameSize.Y = int.Parse(definition.Attribute("FrameHeight").Value, NumberStyles.Integer);
-            sheetSize.X = int.Parse(definition.Attribute("SheetColumns").Value, NumberStyles.Integer);
-            sheetSize.Y = int.Parse(definition.Attribute("SheetRows").Value, NumberStyles.Integer);
-            frameInterval = TimeSpan.FromSeconds(1.0f / int.Parse(definition.Attribute("Speed").Value, NumberStyles.Integer));
+            frameSize.X = int.Parse(definition.Attribute(FRAME_WIDTH).Value, NumberStyles.Integer);
+            frameSize.Y = int.Parse(definition.Attribute(FRAME_HEIGHT).Value, NumberStyles.Integer);
+            sheetSize.X = int.Parse(definition.Attribute(SHEET_COLUMNS).Value, NumberStyles.Integer);
+            sheetSize.Y = int.Parse(definition.Attribute(SHEET_ROWS).Value, NumberStyles.Integer);
+            frameInterval = TimeSpan.FromSeconds(1.0f / int.Parse(definition.Attribute(SPEED).Value, NumberStyles.Integer));
             PistolShotNorthAnimation.Add(new Animation(PistolShotNorthTexture[2], frameSize, sheetSize, frameInterval));
 
         }
@@ -4113,11 +4118,11 @@ namespace ZombustersWindows
             var definition = doc.Root.Element("RayShotgunEDef");
             ShotgunEastTexture.Add(game.Content.Load<Texture2D>(@"InGame/Ray/ray_shotgun_E"));
             ShotgunShotEastOrigin.Add(new Vector2(ShotgunEastTexture[2].Width / 2, PistolShotEastTexture[2].Height / 2));
-            frameSize.X = int.Parse(definition.Attribute("FrameWidth").Value, NumberStyles.Integer);
-            frameSize.Y = int.Parse(definition.Attribute("FrameHeight").Value, NumberStyles.Integer);
-            sheetSize.X = int.Parse(definition.Attribute("SheetColumns").Value, NumberStyles.Integer);
-            sheetSize.Y = int.Parse(definition.Attribute("SheetRows").Value, NumberStyles.Integer);
-            frameInterval = TimeSpan.FromSeconds(1.0f / int.Parse(definition.Attribute("Speed").Value, NumberStyles.Integer));
+            frameSize.X = int.Parse(definition.Attribute(FRAME_WIDTH).Value, NumberStyles.Integer);
+            frameSize.Y = int.Parse(definition.Attribute(FRAME_HEIGHT).Value, NumberStyles.Integer);
+            sheetSize.X = int.Parse(definition.Attribute(SHEET_COLUMNS).Value, NumberStyles.Integer);
+            sheetSize.Y = int.Parse(definition.Attribute(SHEET_ROWS).Value, NumberStyles.Integer);
+            frameInterval = TimeSpan.FromSeconds(1.0f / int.Parse(definition.Attribute(SPEED).Value, NumberStyles.Integer));
             ShotgunShotEastAnimation.Add(new Animation(ShotgunEastTexture[2], frameSize, sheetSize, frameInterval));
 
         }
@@ -4129,11 +4134,11 @@ namespace ZombustersWindows
             var definition = doc.Root.Element("RayShotgunNEDef");
             ShotgunNETexture.Add(game.Content.Load<Texture2D>(@"InGame/Ray/ray_shotgun_NE"));
             ShotgunNEOrigin.Add(new Vector2(ShotgunNETexture[2].Width / 2, ShotgunNETexture[2].Height / 2));
-            frameSize.X = int.Parse(definition.Attribute("FrameWidth").Value, NumberStyles.Integer);
-            frameSize.Y = int.Parse(definition.Attribute("FrameHeight").Value, NumberStyles.Integer);
-            sheetSize.X = int.Parse(definition.Attribute("SheetColumns").Value, NumberStyles.Integer);
-            sheetSize.Y = int.Parse(definition.Attribute("SheetRows").Value, NumberStyles.Integer);
-            frameInterval = TimeSpan.FromSeconds(1.0f / int.Parse(definition.Attribute("Speed").Value, NumberStyles.Integer));
+            frameSize.X = int.Parse(definition.Attribute(FRAME_WIDTH).Value, NumberStyles.Integer);
+            frameSize.Y = int.Parse(definition.Attribute(FRAME_HEIGHT).Value, NumberStyles.Integer);
+            sheetSize.X = int.Parse(definition.Attribute(SHEET_COLUMNS).Value, NumberStyles.Integer);
+            sheetSize.Y = int.Parse(definition.Attribute(SHEET_ROWS).Value, NumberStyles.Integer);
+            frameInterval = TimeSpan.FromSeconds(1.0f / int.Parse(definition.Attribute(SPEED).Value, NumberStyles.Integer));
             ShotgunNEAnimation.Add(new Animation(ShotgunNETexture[2], frameSize, sheetSize, frameInterval));
 
         }
@@ -4145,11 +4150,11 @@ namespace ZombustersWindows
             var definition = doc.Root.Element("RayShotgunSEDef");
             ShotgunSETexture.Add(game.Content.Load<Texture2D>(@"InGame/Ray/ray_shotgun_SE"));
             ShotgunSEOrigin.Add(new Vector2(ShotgunSETexture[2].Width / 2, ShotgunSETexture[2].Height / 2));
-            frameSize.X = int.Parse(definition.Attribute("FrameWidth").Value, NumberStyles.Integer);
-            frameSize.Y = int.Parse(definition.Attribute("FrameHeight").Value, NumberStyles.Integer);
-            sheetSize.X = int.Parse(definition.Attribute("SheetColumns").Value, NumberStyles.Integer);
-            sheetSize.Y = int.Parse(definition.Attribute("SheetRows").Value, NumberStyles.Integer);
-            frameInterval = TimeSpan.FromSeconds(1.0f / int.Parse(definition.Attribute("Speed").Value, NumberStyles.Integer));
+            frameSize.X = int.Parse(definition.Attribute(FRAME_WIDTH).Value, NumberStyles.Integer);
+            frameSize.Y = int.Parse(definition.Attribute(FRAME_HEIGHT).Value, NumberStyles.Integer);
+            sheetSize.X = int.Parse(definition.Attribute(SHEET_COLUMNS).Value, NumberStyles.Integer);
+            sheetSize.Y = int.Parse(definition.Attribute(SHEET_ROWS).Value, NumberStyles.Integer);
+            frameInterval = TimeSpan.FromSeconds(1.0f / int.Parse(definition.Attribute(SPEED).Value, NumberStyles.Integer));
             ShotgunSEAnimation.Add(new Animation(ShotgunSETexture[2], frameSize, sheetSize, frameInterval));
 
         }
@@ -4161,11 +4166,11 @@ namespace ZombustersWindows
             var definition = doc.Root.Element("RayShotgunSouthDef");
             ShotgunSouthTexture.Add(game.Content.Load<Texture2D>(@"InGame/Ray/ray_shotgun_S"));
             ShotgunSouthOrigin.Add(new Vector2(ShotgunSouthTexture[2].Width / 2, ShotgunSouthTexture[2].Height / 2));
-            frameSize.X = int.Parse(definition.Attribute("FrameWidth").Value, NumberStyles.Integer);
-            frameSize.Y = int.Parse(definition.Attribute("FrameHeight").Value, NumberStyles.Integer);
-            sheetSize.X = int.Parse(definition.Attribute("SheetColumns").Value, NumberStyles.Integer);
-            sheetSize.Y = int.Parse(definition.Attribute("SheetRows").Value, NumberStyles.Integer);
-            frameInterval = TimeSpan.FromSeconds(1.0f / int.Parse(definition.Attribute("Speed").Value, NumberStyles.Integer));
+            frameSize.X = int.Parse(definition.Attribute(FRAME_WIDTH).Value, NumberStyles.Integer);
+            frameSize.Y = int.Parse(definition.Attribute(FRAME_HEIGHT).Value, NumberStyles.Integer);
+            sheetSize.X = int.Parse(definition.Attribute(SHEET_COLUMNS).Value, NumberStyles.Integer);
+            sheetSize.Y = int.Parse(definition.Attribute(SHEET_ROWS).Value, NumberStyles.Integer);
+            frameInterval = TimeSpan.FromSeconds(1.0f / int.Parse(definition.Attribute(SPEED).Value, NumberStyles.Integer));
             ShotgunSouthAnimation.Add(new Animation(ShotgunSouthTexture[2], frameSize, sheetSize, frameInterval));
         }
         private void RayShotgunShotNorthAnimationLoad(XDocument doc)
@@ -4176,11 +4181,11 @@ namespace ZombustersWindows
             var definition = doc.Root.Element("RayShotgunNorthDef");
             ShotgunNorthTexture.Add(game.Content.Load<Texture2D>(@"InGame/Ray/ray_shotgun_N"));
             ShotgunNorthOrigin.Add(new Vector2(ShotgunNorthTexture[2].Width / 2, ShotgunNorthTexture[2].Height / 2));
-            frameSize.X = int.Parse(definition.Attribute("FrameWidth").Value, NumberStyles.Integer);
-            frameSize.Y = int.Parse(definition.Attribute("FrameHeight").Value, NumberStyles.Integer);
-            sheetSize.X = int.Parse(definition.Attribute("SheetColumns").Value, NumberStyles.Integer);
-            sheetSize.Y = int.Parse(definition.Attribute("SheetRows").Value, NumberStyles.Integer);
-            frameInterval = TimeSpan.FromSeconds(1.0f / int.Parse(definition.Attribute("Speed").Value, NumberStyles.Integer));
+            frameSize.X = int.Parse(definition.Attribute(FRAME_WIDTH).Value, NumberStyles.Integer);
+            frameSize.Y = int.Parse(definition.Attribute(FRAME_HEIGHT).Value, NumberStyles.Integer);
+            sheetSize.X = int.Parse(definition.Attribute(SHEET_COLUMNS).Value, NumberStyles.Integer);
+            sheetSize.Y = int.Parse(definition.Attribute(SHEET_ROWS).Value, NumberStyles.Integer);
+            frameInterval = TimeSpan.FromSeconds(1.0f / int.Parse(definition.Attribute(SPEED).Value, NumberStyles.Integer));
             ShotgunNorthAnimation.Add(new Animation(ShotgunNorthTexture[2], frameSize, sheetSize, frameInterval)); // Define a new Animation instance
 
         }
@@ -4194,11 +4199,11 @@ namespace ZombustersWindows
             IdleLegsTexture.Add(game.Content.Load<Texture2D>(@"InGame/Peter/peter_legs_idle"));
             IdleTrunkTexture.Add(game.Content.Load<Texture2D>(@"InGame/Peter/peter_idle"));
             IdleTrunkOrigin.Add(new Vector2(IdleTrunkTexture[3].Width / 2, IdleTrunkTexture[3].Height / 2));
-            frameSize.X = int.Parse(definition.Attribute("FrameWidth").Value, NumberStyles.Integer);
-            frameSize.Y = int.Parse(definition.Attribute("FrameHeight").Value, NumberStyles.Integer);
-            sheetSize.X = int.Parse(definition.Attribute("SheetColumns").Value, NumberStyles.Integer);
-            sheetSize.Y = int.Parse(definition.Attribute("SheetRows").Value, NumberStyles.Integer);
-            frameInterval = TimeSpan.FromSeconds(1.0f / int.Parse(definition.Attribute("Speed").Value, NumberStyles.Integer));
+            frameSize.X = int.Parse(definition.Attribute(FRAME_WIDTH).Value, NumberStyles.Integer);
+            frameSize.Y = int.Parse(definition.Attribute(FRAME_HEIGHT).Value, NumberStyles.Integer);
+            sheetSize.X = int.Parse(definition.Attribute(SHEET_COLUMNS).Value, NumberStyles.Integer);
+            sheetSize.Y = int.Parse(definition.Attribute(SHEET_ROWS).Value, NumberStyles.Integer);
+            frameInterval = TimeSpan.FromSeconds(1.0f / int.Parse(definition.Attribute(SPEED).Value, NumberStyles.Integer));
             IdleTrunkAnimation.Add(new Animation(IdleTrunkTexture[3], frameSize, sheetSize, frameInterval)); // Define a new Animation instance
 
         }
@@ -4210,11 +4215,11 @@ namespace ZombustersWindows
             var definition = doc.Root.Element("PeterRunEDef");
             RunEastTexture.Add(game.Content.Load<Texture2D>(@"InGame/Peter/peter_run_E"));
             RunEastOrigin.Add(new Vector2(RunEastTexture[3].Width / 2, RunEastTexture[3].Height / 2));
-            frameSize.X = int.Parse(definition.Attribute("FrameWidth").Value, NumberStyles.Integer);
-            frameSize.Y = int.Parse(definition.Attribute("FrameHeight").Value, NumberStyles.Integer);
-            sheetSize.X = int.Parse(definition.Attribute("SheetColumns").Value, NumberStyles.Integer);
-            sheetSize.Y = int.Parse(definition.Attribute("SheetRows").Value, NumberStyles.Integer);
-            frameInterval = TimeSpan.FromSeconds(1.0f / int.Parse(definition.Attribute("Speed").Value, NumberStyles.Integer));
+            frameSize.X = int.Parse(definition.Attribute(FRAME_WIDTH).Value, NumberStyles.Integer);
+            frameSize.Y = int.Parse(definition.Attribute(FRAME_HEIGHT).Value, NumberStyles.Integer);
+            sheetSize.X = int.Parse(definition.Attribute(SHEET_COLUMNS).Value, NumberStyles.Integer);
+            sheetSize.Y = int.Parse(definition.Attribute(SHEET_ROWS).Value, NumberStyles.Integer);
+            frameInterval = TimeSpan.FromSeconds(1.0f / int.Parse(definition.Attribute(SPEED).Value, NumberStyles.Integer));
             RunEastAnimation.Add(new Animation(RunEastTexture[3], frameSize, sheetSize, frameInterval)); // Define a new Animation instance
 
         }
@@ -4226,11 +4231,11 @@ namespace ZombustersWindows
             var definition = doc.Root.Element("PeterPistolEDef");
             PistolShotEastTexture.Add(game.Content.Load<Texture2D>(@"InGame/Peter/peter_pistol_E"));
             PistolShotEastOrigin.Add(new Vector2(PistolShotEastTexture[3].Width / 2, PistolShotEastTexture[3].Height / 2));
-            frameSize.X = int.Parse(definition.Attribute("FrameWidth").Value, NumberStyles.Integer);
-            frameSize.Y = int.Parse(definition.Attribute("FrameHeight").Value, NumberStyles.Integer);
-            sheetSize.X = int.Parse(definition.Attribute("SheetColumns").Value, NumberStyles.Integer);
-            sheetSize.Y = int.Parse(definition.Attribute("SheetRows").Value, NumberStyles.Integer);
-            frameInterval = TimeSpan.FromSeconds(1.0f / int.Parse(definition.Attribute("Speed").Value, NumberStyles.Integer));
+            frameSize.X = int.Parse(definition.Attribute(FRAME_WIDTH).Value, NumberStyles.Integer);
+            frameSize.Y = int.Parse(definition.Attribute(FRAME_HEIGHT).Value, NumberStyles.Integer);
+            sheetSize.X = int.Parse(definition.Attribute(SHEET_COLUMNS).Value, NumberStyles.Integer);
+            sheetSize.Y = int.Parse(definition.Attribute(SHEET_ROWS).Value, NumberStyles.Integer);
+            frameInterval = TimeSpan.FromSeconds(1.0f / int.Parse(definition.Attribute(SPEED).Value, NumberStyles.Integer));
             PistolShotEastAnimation.Add(new Animation(PistolShotEastTexture[3], frameSize, sheetSize, frameInterval)); // Define a new Animation instance
 
         }
@@ -4242,11 +4247,11 @@ namespace ZombustersWindows
             var definition = doc.Root.Element("PeterPistolNEDef");
             PistolShotNETexture.Add(game.Content.Load<Texture2D>(@"InGame/Peter/peter_pistol_NE"));
             PistolShotNEOrigin.Add(new Vector2(PistolShotNETexture[3].Width / 2, PistolShotNETexture[3].Height / 2));
-            frameSize.X = int.Parse(definition.Attribute("FrameWidth").Value, NumberStyles.Integer);
-            frameSize.Y = int.Parse(definition.Attribute("FrameHeight").Value, NumberStyles.Integer);
-            sheetSize.X = int.Parse(definition.Attribute("SheetColumns").Value, NumberStyles.Integer);
-            sheetSize.Y = int.Parse(definition.Attribute("SheetRows").Value, NumberStyles.Integer);
-            frameInterval = TimeSpan.FromSeconds(1.0f / int.Parse(definition.Attribute("Speed").Value, NumberStyles.Integer));
+            frameSize.X = int.Parse(definition.Attribute(FRAME_WIDTH).Value, NumberStyles.Integer);
+            frameSize.Y = int.Parse(definition.Attribute(FRAME_HEIGHT).Value, NumberStyles.Integer);
+            sheetSize.X = int.Parse(definition.Attribute(SHEET_COLUMNS).Value, NumberStyles.Integer);
+            sheetSize.Y = int.Parse(definition.Attribute(SHEET_ROWS).Value, NumberStyles.Integer);
+            frameInterval = TimeSpan.FromSeconds(1.0f / int.Parse(definition.Attribute(SPEED).Value, NumberStyles.Integer));
             PistolShotNEAnimation.Add(new Animation(PistolShotNETexture[3], frameSize, sheetSize, frameInterval)); // Define a new Animation instance
 
         }
@@ -4258,11 +4263,11 @@ namespace ZombustersWindows
             var definition = doc.Root.Element("PeterPistolSEDef");
             PistolShotSETexture.Add(game.Content.Load<Texture2D>(@"InGame/Peter/peter_pistol_SE"));
             PistolShotSEOrigin.Add(new Vector2(PistolShotSETexture[3].Width / 2, PistolShotSETexture[3].Height / 2));
-            frameSize.X = int.Parse(definition.Attribute("FrameWidth").Value, NumberStyles.Integer);
-            frameSize.Y = int.Parse(definition.Attribute("FrameHeight").Value, NumberStyles.Integer);
-            sheetSize.X = int.Parse(definition.Attribute("SheetColumns").Value, NumberStyles.Integer);
-            sheetSize.Y = int.Parse(definition.Attribute("SheetRows").Value, NumberStyles.Integer);
-            frameInterval = TimeSpan.FromSeconds(1.0f / int.Parse(definition.Attribute("Speed").Value, NumberStyles.Integer));
+            frameSize.X = int.Parse(definition.Attribute(FRAME_WIDTH).Value, NumberStyles.Integer);
+            frameSize.Y = int.Parse(definition.Attribute(FRAME_HEIGHT).Value, NumberStyles.Integer);
+            sheetSize.X = int.Parse(definition.Attribute(SHEET_COLUMNS).Value, NumberStyles.Integer);
+            sheetSize.Y = int.Parse(definition.Attribute(SHEET_ROWS).Value, NumberStyles.Integer);
+            frameInterval = TimeSpan.FromSeconds(1.0f / int.Parse(definition.Attribute(SPEED).Value, NumberStyles.Integer));
             PistolShotSEAnimation.Add(new Animation(PistolShotSETexture[3], frameSize, sheetSize, frameInterval)); // Define a new Animation instance
 
         }
@@ -4274,11 +4279,11 @@ namespace ZombustersWindows
             var definition = doc.Root.Element("PeterPistolSouthDef");
             PistolShotSouthTexture.Add(game.Content.Load<Texture2D>(@"InGame/Peter/peter_pistol_S"));
             PistolShotSouthOrigin.Add(new Vector2(PistolShotSouthTexture[3].Width / 2, PistolShotSouthTexture[3].Height / 2));
-            frameSize.X = int.Parse(definition.Attribute("FrameWidth").Value, NumberStyles.Integer);
-            frameSize.Y = int.Parse(definition.Attribute("FrameHeight").Value, NumberStyles.Integer);
-            sheetSize.X = int.Parse(definition.Attribute("SheetColumns").Value, NumberStyles.Integer);
-            sheetSize.Y = int.Parse(definition.Attribute("SheetRows").Value, NumberStyles.Integer);
-            frameInterval = TimeSpan.FromSeconds(1.0f / int.Parse(definition.Attribute("Speed").Value, NumberStyles.Integer));
+            frameSize.X = int.Parse(definition.Attribute(FRAME_WIDTH).Value, NumberStyles.Integer);
+            frameSize.Y = int.Parse(definition.Attribute(FRAME_HEIGHT).Value, NumberStyles.Integer);
+            sheetSize.X = int.Parse(definition.Attribute(SHEET_COLUMNS).Value, NumberStyles.Integer);
+            sheetSize.Y = int.Parse(definition.Attribute(SHEET_ROWS).Value, NumberStyles.Integer);
+            frameInterval = TimeSpan.FromSeconds(1.0f / int.Parse(definition.Attribute(SPEED).Value, NumberStyles.Integer));
             PistolShotSouthAnimation.Add(new Animation(PistolShotSouthTexture[3], frameSize, sheetSize, frameInterval)); // Define a new Animation instance
 
         }
@@ -4290,11 +4295,11 @@ namespace ZombustersWindows
             var definition = doc.Root.Element("PeterPistolNorthDef");
             PistolShotNorthTexture.Add(game.Content.Load<Texture2D>(@"InGame/Peter/peter_pistol_N"));
             PistolShotNorthOrigin.Add(new Vector2(PistolShotNorthTexture[3].Width / 2, PistolShotNorthTexture[3].Height / 2));
-            frameSize.X = int.Parse(definition.Attribute("FrameWidth").Value, NumberStyles.Integer);
-            frameSize.Y = int.Parse(definition.Attribute("FrameHeight").Value, NumberStyles.Integer);
-            sheetSize.X = int.Parse(definition.Attribute("SheetColumns").Value, NumberStyles.Integer);
-            sheetSize.Y = int.Parse(definition.Attribute("SheetRows").Value, NumberStyles.Integer);
-            frameInterval = TimeSpan.FromSeconds(1.0f / int.Parse(definition.Attribute("Speed").Value, NumberStyles.Integer));
+            frameSize.X = int.Parse(definition.Attribute(FRAME_WIDTH).Value, NumberStyles.Integer);
+            frameSize.Y = int.Parse(definition.Attribute(FRAME_HEIGHT).Value, NumberStyles.Integer);
+            sheetSize.X = int.Parse(definition.Attribute(SHEET_COLUMNS).Value, NumberStyles.Integer);
+            sheetSize.Y = int.Parse(definition.Attribute(SHEET_ROWS).Value, NumberStyles.Integer);
+            frameInterval = TimeSpan.FromSeconds(1.0f / int.Parse(definition.Attribute(SPEED).Value, NumberStyles.Integer));
             PistolShotNorthAnimation.Add(new Animation(PistolShotNorthTexture[3], frameSize, sheetSize, frameInterval)); // Define a new Animation instance
 
         }
@@ -4306,11 +4311,11 @@ namespace ZombustersWindows
             var definition = doc.Root.Element("PeterShotgunEDef");
             ShotgunEastTexture.Add(game.Content.Load<Texture2D>(@"InGame/Peter/peter_shotgun_E"));
             ShotgunShotEastOrigin.Add(new Vector2(ShotgunEastTexture[3].Width / 2, PistolShotEastTexture[3].Height / 2));
-            frameSize.X = int.Parse(definition.Attribute("FrameWidth").Value, NumberStyles.Integer);
-            frameSize.Y = int.Parse(definition.Attribute("FrameHeight").Value, NumberStyles.Integer);
-            sheetSize.X = int.Parse(definition.Attribute("SheetColumns").Value, NumberStyles.Integer);
-            sheetSize.Y = int.Parse(definition.Attribute("SheetRows").Value, NumberStyles.Integer);
-            frameInterval = TimeSpan.FromSeconds(1.0f / int.Parse(definition.Attribute("Speed").Value, NumberStyles.Integer));
+            frameSize.X = int.Parse(definition.Attribute(FRAME_WIDTH).Value, NumberStyles.Integer);
+            frameSize.Y = int.Parse(definition.Attribute(FRAME_HEIGHT).Value, NumberStyles.Integer);
+            sheetSize.X = int.Parse(definition.Attribute(SHEET_COLUMNS).Value, NumberStyles.Integer);
+            sheetSize.Y = int.Parse(definition.Attribute(SHEET_ROWS).Value, NumberStyles.Integer);
+            frameInterval = TimeSpan.FromSeconds(1.0f / int.Parse(definition.Attribute(SPEED).Value, NumberStyles.Integer));
             ShotgunShotEastAnimation.Add(new Animation(ShotgunEastTexture[3], frameSize, sheetSize, frameInterval)); // Define a new Animation instance
 
         }
@@ -4322,11 +4327,11 @@ namespace ZombustersWindows
             var definition = doc.Root.Element("PeterShotgunNEDef");
             ShotgunNETexture.Add(game.Content.Load<Texture2D>(@"InGame/Peter/peter_shotgun_NE"));
             ShotgunNEOrigin.Add(new Vector2(ShotgunNETexture[3].Width / 2, ShotgunNETexture[3].Height / 2));
-            frameSize.X = int.Parse(definition.Attribute("FrameWidth").Value, NumberStyles.Integer);
-            frameSize.Y = int.Parse(definition.Attribute("FrameHeight").Value, NumberStyles.Integer);
-            sheetSize.X = int.Parse(definition.Attribute("SheetColumns").Value, NumberStyles.Integer);
-            sheetSize.Y = int.Parse(definition.Attribute("SheetRows").Value, NumberStyles.Integer);
-            frameInterval = TimeSpan.FromSeconds(1.0f / int.Parse(definition.Attribute("Speed").Value, NumberStyles.Integer));
+            frameSize.X = int.Parse(definition.Attribute(FRAME_WIDTH).Value, NumberStyles.Integer);
+            frameSize.Y = int.Parse(definition.Attribute(FRAME_HEIGHT).Value, NumberStyles.Integer);
+            sheetSize.X = int.Parse(definition.Attribute(SHEET_COLUMNS).Value, NumberStyles.Integer);
+            sheetSize.Y = int.Parse(definition.Attribute(SHEET_ROWS).Value, NumberStyles.Integer);
+            frameInterval = TimeSpan.FromSeconds(1.0f / int.Parse(definition.Attribute(SPEED).Value, NumberStyles.Integer));
             ShotgunNEAnimation.Add(new Animation(ShotgunNETexture[3], frameSize, sheetSize, frameInterval)); // Define a new Animation instance
 
         }
@@ -4338,11 +4343,11 @@ namespace ZombustersWindows
             var definition = doc.Root.Element("PeterShotgunSEDef");
             ShotgunSETexture.Add(game.Content.Load<Texture2D>(@"InGame/Peter/peter_shotgun_SE"));
             ShotgunSEOrigin.Add(new Vector2(ShotgunSETexture[3].Width / 2, ShotgunSETexture[3].Height / 2));
-            frameSize.X = int.Parse(definition.Attribute("FrameWidth").Value, NumberStyles.Integer);
-            frameSize.Y = int.Parse(definition.Attribute("FrameHeight").Value, NumberStyles.Integer);
-            sheetSize.X = int.Parse(definition.Attribute("SheetColumns").Value, NumberStyles.Integer);
-            sheetSize.Y = int.Parse(definition.Attribute("SheetRows").Value, NumberStyles.Integer);
-            frameInterval = TimeSpan.FromSeconds(1.0f / int.Parse(definition.Attribute("Speed").Value, NumberStyles.Integer));
+            frameSize.X = int.Parse(definition.Attribute(FRAME_WIDTH).Value, NumberStyles.Integer);
+            frameSize.Y = int.Parse(definition.Attribute(FRAME_HEIGHT).Value, NumberStyles.Integer);
+            sheetSize.X = int.Parse(definition.Attribute(SHEET_COLUMNS).Value, NumberStyles.Integer);
+            sheetSize.Y = int.Parse(definition.Attribute(SHEET_ROWS).Value, NumberStyles.Integer);
+            frameInterval = TimeSpan.FromSeconds(1.0f / int.Parse(definition.Attribute(SPEED).Value, NumberStyles.Integer));
             ShotgunSEAnimation.Add(new Animation(ShotgunSETexture[3], frameSize, sheetSize, frameInterval)); // Define a new Animation instance
 
         }
@@ -4354,11 +4359,11 @@ namespace ZombustersWindows
             var definition = doc.Root.Element("PeterShotgunSouthDef");
             ShotgunSouthTexture.Add(game.Content.Load<Texture2D>(@"InGame/Peter/peter_shotgun_S"));
             ShotgunSouthOrigin.Add(new Vector2(ShotgunSouthTexture[3].Width / 2, ShotgunSouthTexture[3].Height / 2));
-            frameSize.X = int.Parse(definition.Attribute("FrameWidth").Value, NumberStyles.Integer);
-            frameSize.Y = int.Parse(definition.Attribute("FrameHeight").Value, NumberStyles.Integer);
-            sheetSize.X = int.Parse(definition.Attribute("SheetColumns").Value, NumberStyles.Integer);
-            sheetSize.Y = int.Parse(definition.Attribute("SheetRows").Value, NumberStyles.Integer);
-            frameInterval = TimeSpan.FromSeconds(1.0f / int.Parse(definition.Attribute("Speed").Value, NumberStyles.Integer));
+            frameSize.X = int.Parse(definition.Attribute(FRAME_WIDTH).Value, NumberStyles.Integer);
+            frameSize.Y = int.Parse(definition.Attribute(FRAME_HEIGHT).Value, NumberStyles.Integer);
+            sheetSize.X = int.Parse(definition.Attribute(SHEET_COLUMNS).Value, NumberStyles.Integer);
+            sheetSize.Y = int.Parse(definition.Attribute(SHEET_ROWS).Value, NumberStyles.Integer);
+            frameInterval = TimeSpan.FromSeconds(1.0f / int.Parse(definition.Attribute(SPEED).Value, NumberStyles.Integer));
             ShotgunSouthAnimation.Add(new Animation(ShotgunSouthTexture[3], frameSize, sheetSize, frameInterval)); // Define a new Animation instance
 
         }
@@ -4370,11 +4375,11 @@ namespace ZombustersWindows
             var definition = doc.Root.Element("PeterShotgunNorthDef");
             ShotgunNorthTexture.Add(game.Content.Load<Texture2D>(@"InGame/Peter/peter_shotgun_N"));
             ShotgunNorthOrigin.Add(new Vector2(ShotgunNorthTexture[3].Width / 2, ShotgunNorthTexture[3].Height / 2));
-            frameSize.X = int.Parse(definition.Attribute("FrameWidth").Value, NumberStyles.Integer);
-            frameSize.Y = int.Parse(definition.Attribute("FrameHeight").Value, NumberStyles.Integer);
-            sheetSize.X = int.Parse(definition.Attribute("SheetColumns").Value, NumberStyles.Integer);
-            sheetSize.Y = int.Parse(definition.Attribute("SheetRows").Value, NumberStyles.Integer);
-            frameInterval = TimeSpan.FromSeconds(1.0f / int.Parse(definition.Attribute("Speed").Value, NumberStyles.Integer));
+            frameSize.X = int.Parse(definition.Attribute(FRAME_WIDTH).Value, NumberStyles.Integer);
+            frameSize.Y = int.Parse(definition.Attribute(FRAME_HEIGHT).Value, NumberStyles.Integer);
+            sheetSize.X = int.Parse(definition.Attribute(SHEET_COLUMNS).Value, NumberStyles.Integer);
+            sheetSize.Y = int.Parse(definition.Attribute(SHEET_ROWS).Value, NumberStyles.Integer);
+            frameInterval = TimeSpan.FromSeconds(1.0f / int.Parse(definition.Attribute(SPEED).Value, NumberStyles.Integer));
             ShotgunNorthAnimation.Add(new Animation(ShotgunNorthTexture[3], frameSize, sheetSize, frameInterval)); // Define a new Animation instance
 
         }
@@ -4386,11 +4391,11 @@ namespace ZombustersWindows
             Point frameSize = new Point();
             var definition = doc.Root.Element("FlameThrowerDef");
             flamethrowerTexture = game.Content.Load<Texture2D>(@"InGame/flamethrower");
-            frameSize.X = int.Parse(definition.Attribute("FrameWidth").Value, NumberStyles.Integer);
-            frameSize.Y = int.Parse(definition.Attribute("FrameHeight").Value, NumberStyles.Integer);
-            sheetSize.X = int.Parse(definition.Attribute("SheetColumns").Value, NumberStyles.Integer);
-            sheetSize.Y = int.Parse(definition.Attribute("SheetRows").Value, NumberStyles.Integer);
-            frameInterval = TimeSpan.FromSeconds(1.0f / int.Parse(definition.Attribute("Speed").Value, NumberStyles.Integer));
+            frameSize.X = int.Parse(definition.Attribute(FRAME_WIDTH).Value, NumberStyles.Integer);
+            frameSize.Y = int.Parse(definition.Attribute(FRAME_HEIGHT).Value, NumberStyles.Integer);
+            sheetSize.X = int.Parse(definition.Attribute(SHEET_COLUMNS).Value, NumberStyles.Integer);
+            sheetSize.Y = int.Parse(definition.Attribute(SHEET_ROWS).Value, NumberStyles.Integer);
+            frameInterval = TimeSpan.FromSeconds(1.0f / int.Parse(definition.Attribute(SPEED).Value, NumberStyles.Integer));
             flamethrowerAnimation = new Animation(flamethrowerTexture, frameSize, sheetSize, frameInterval);
 
         }
@@ -4438,7 +4443,6 @@ namespace ZombustersWindows
             pistolammoUI = game.Content.Load<Texture2D>(@"InGame/GUI/pistolammo");
             grenadeammoUI = game.Content.Load<Texture2D>(@"InGame/GUI/grenadeammo");
             flamethrowerammoUI = game.Content.Load<Texture2D>(@"InGame/GUI/flamethrowerammo");
-            gamerPictureBorder = game.Content.Load<Texture2D>(@"UI/gamerpicture_border");
             jadeUI = game.Content.Load<Texture2D>(@"InGame/GUI/jade_gui");
             rayUI = game.Content.Load<Texture2D>(@"InGame/GUI/ray_gui");
             peterUI = game.Content.Load<Texture2D>(@"InGame/GUI/peter_gui");
