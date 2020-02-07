@@ -68,6 +68,7 @@
     <Compile Include="Components\LanguageComponent.cs" />
     <Compile Include="ContentManager\EnemiesCount.cs" />
     <Compile Include="ContentManager\Furniture.cs" />
+    <Compile Include="ContentManager\FurnitureComparer.cs" />
     <Compile Include="ContentManager\Level.cs" />
     <Compile Include="ContentManager\SubLevel.cs" />
     <Compile Include="ContentManager\SubLevelType.cs" />
@@ -179,6 +180,7 @@
     <Compile Include="SubsystemManagers\RotatedRectangle.cs" />
     <Compile Include="SubsystemManagers\ScrollingTextManager.cs" />
     <Compile Include="SubsystemManagers\StorageDataSource.cs" />
+    <Compile Include="SubsystemManagers\GameplayHelper.cs" />
     <Compile Include="SubsystemManagers\VirtualThumbsticks.cs" />
     <Compile Include="SupportScreens\ExitMessageBox.cs" />
     <Compile Include="SupportScreens\NetworkBusyScreen.cs" />
