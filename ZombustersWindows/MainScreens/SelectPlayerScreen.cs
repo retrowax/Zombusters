@@ -305,9 +305,9 @@ namespace ZombustersWindows
                     state.DPadRight = false;
                 }
 
-                if (input.IsNewButtonPress(Buttons.LeftTrigger, player.Player.Controller)
-                || (input.IsNewKeyPress(Keys.Down))                    
-                    ) // || (gpState.Buttons.LeftShoulder == ButtonState.Pressed))
+                if (input.IsNewButtonPress(Buttons.DPadDown, player.Player.Controller)
+                || input.IsNewKeyPress(Keys.Down)         
+                || input.IsNewButtonPress(Buttons.LeftTrigger, player.Player.Controller))
                 {
                     state.ButtonLT = true;
                 }
@@ -316,9 +316,9 @@ namespace ZombustersWindows
                     state.ButtonLT = false;
                 }
 
-                if (input.IsNewButtonPress(Buttons.RightTrigger, player.Player.Controller)
-                || (input.IsNewKeyPress(Keys.Up))                    
-                    ) // || (gpState.Buttons.RightShoulder == ButtonState.Pressed))
+                if (input.IsNewButtonPress(Buttons.DPadUp, player.Player.Controller)
+                || input.IsNewKeyPress(Keys.Up)
+                || input.IsNewButtonPress(Buttons.RightTrigger, player.Player.Controller))
                 {
                     state.ButtonRT = true;
                 }
