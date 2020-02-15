@@ -3,6 +3,7 @@ using System.IO;
 using System.Xml.Serialization;
 using System.IO.IsolatedStorage;
 using Bugsnag.Clients;
+using System.Reflection;
 
 namespace ZombustersWindows.Subsystem_Managers
 {
@@ -52,6 +53,11 @@ namespace ZombustersWindows.Subsystem_Managers
             try
             {
                 IsolatedStorageFileStream isolatedFileStream = null;
+
+                if (isolatedStorageFile.FileExists(filename)) {
+                    isolatedStorageFile.DeleteFile(filename);
+                }
+
                 using (isolatedFileStream = isolatedStorageFile.OpenFile(filename, FileMode.OpenOrCreate, FileAccess.ReadWrite))
                 {
                     XmlSerializer serializer = new XmlSerializer(classObjectToSave.GetType());
