@@ -1759,34 +1759,34 @@ namespace ZombustersWindows
             float layerIndex = GetLayerIndex(state, furniturelist);
             Vector2 offsetPosition = new Vector2(-20, -55);
 
-            if (GamePlayStatus == GameplayState.Playing)
+            if (GamePlayStatus == GameplayState.Playing 
+                || GamePlayStatus == GameplayState.StageCleared
+                || GamePlayStatus == GameplayState.StartLevel)
             {
                 timerplayer += (float)gameTime.ElapsedGameTime.TotalSeconds;
-                if (timerplayer <= 5.0f)
+
+                foreach (Avatar player in game.currentPlayers)
                 {
-                    foreach (Avatar player in game.currentPlayers)
+                    if (player.IsPlaying)
                     {
-                        if (player.IsPlaying)
+                        if (state.color == Color.Blue)
                         {
-                            if (state.color == Color.Blue)
-                            {
-                                this.ScreenManager.SpriteBatch.Draw(UIPlayerBlue, new Vector2(state.position.X + IdleTrunkAnimation[0].frameSize.X / 2 - UIPlayerBlue.Width / 2 + offsetPosition.X, state.position.Y - 20 + offsetPosition.Y), Color.White);
-                            }
+                            this.ScreenManager.SpriteBatch.Draw(UIPlayerBlue, new Vector2(state.position.X + IdleTrunkAnimation[0].frameSize.X / 2 - UIPlayerBlue.Width / 2 + offsetPosition.X, state.position.Y - 20 + offsetPosition.Y), Color.White);
+                        }
 
-                            if (state.color == Color.Red)
-                            {
-                                this.ScreenManager.SpriteBatch.Draw(UIPlayerRed, new Vector2(state.position.X + IdleTrunkAnimation[0].frameSize.X / 2 - UIPlayerRed.Width / 2 + offsetPosition.X, state.position.Y - 20 + offsetPosition.Y), Color.White);
-                            }
+                        if (state.color == Color.Red)
+                        {
+                            this.ScreenManager.SpriteBatch.Draw(UIPlayerRed, new Vector2(state.position.X + IdleTrunkAnimation[0].frameSize.X / 2 - UIPlayerRed.Width / 2 + offsetPosition.X, state.position.Y - 20 + offsetPosition.Y), Color.White);
+                        }
 
-                            if (state.color == Color.Green)
-                            {
-                                this.ScreenManager.SpriteBatch.Draw(UIPlayerGreen, new Vector2(state.position.X + IdleTrunkAnimation[0].frameSize.X / 2 - UIPlayerGreen.Width / 2 + offsetPosition.X, state.position.Y - 20 + offsetPosition.Y), Color.White);
-                            }
+                        if (state.color == Color.Green)
+                        {
+                            this.ScreenManager.SpriteBatch.Draw(UIPlayerGreen, new Vector2(state.position.X + IdleTrunkAnimation[0].frameSize.X / 2 - UIPlayerGreen.Width / 2 + offsetPosition.X, state.position.Y - 20 + offsetPosition.Y), Color.White);
+                        }
 
-                            if (state.color == Color.Yellow)
-                            {
-                                this.ScreenManager.SpriteBatch.Draw(UIPlayerYellow, new Vector2(state.position.X + IdleTrunkAnimation[0].frameSize.X / 2 - UIPlayerYellow.Width / 2 + offsetPosition.X, state.position.Y - 20 + offsetPosition.Y), Color.White);
-                            }
+                        if (state.color == Color.Yellow)
+                        {
+                            this.ScreenManager.SpriteBatch.Draw(UIPlayerYellow, new Vector2(state.position.X + IdleTrunkAnimation[0].frameSize.X / 2 - UIPlayerYellow.Width / 2 + offsetPosition.X, state.position.Y - 20 + offsetPosition.Y), Color.White);
                         }
                     }
                 }
