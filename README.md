@@ -11,6 +11,7 @@ Zombusters: Enhanced Edition
 It will let you sticked on your seat until the end. Its 2D graphics and isometric view make it a different specie in its genre. You will have to face a horde of Zombies that try to get you down with the help of various weapons/power ups and different moving styles.
 
 <br/>
+
 <p align="center">
 <b><a href="#features">Features</a></b>
 |
@@ -26,6 +27,9 @@ It will let you sticked on your seat until the end. Its 2D graphics and isometri
 |
 <b><a href="#licensing">Licensing</a></b>
 </p>
+<br/>
+
+<a href="https://retrowax.itch.io/zombusters"><img align="center" src="https://github.com/retrowax/Zombusters-Enhanced-Edition/raw/master/media/github_banner.png" /></a>
 <br/>
 
 ### Features
