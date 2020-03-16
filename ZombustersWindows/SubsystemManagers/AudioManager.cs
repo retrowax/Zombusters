@@ -48,7 +48,7 @@ namespace ZombustersWindows
         {
             MediaPlayer.Volume = MusicVolume;
             MediaPlayer.IsRepeating = true;
-
+/*
             Shot = Game.Content.Load<SoundEffect>("SoundFX/pistol_shot");
 
 
@@ -84,7 +84,7 @@ namespace ZombustersWindows
             ManScreamInstance = ManScream.CreateInstance();
             ManScreamInstance.Volume = FXVolume;
             ManScreamInstance.IsLooped = false;
-
+            */
             base.LoadContent();
         }
 
@@ -105,11 +105,11 @@ namespace ZombustersWindows
         private Queue<SoundEffectInstance> Sounds;
         private void AddSound(SoundEffect sound, float volume, float pitch)
         {
-            SoundEffectInstance handle = sound.CreateInstance();
+            /*SoundEffectInstance handle = sound.CreateInstance();
             handle.Volume = volume;
             handle.Pitch = pitch;
             handle.Play();
-            Sounds.Enqueue(handle);
+            Sounds.Enqueue(handle);*/
         }
         public void PlaySplashSound()
         {

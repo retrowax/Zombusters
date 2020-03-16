@@ -166,7 +166,7 @@ namespace ZombustersWindows
                 throw new InvalidOperationException(string.Format("Song '{0}' has already been loaded", songName));
             }
 
-            songsDictionary.Add(songName, contentManager.Load<Song>(songPath));
+            //songsDictionary.Add(songName, contentManager.Load<Song>(songPath));
         }
 
         /// <summary>
@@ -192,6 +192,7 @@ namespace ZombustersWindows
         /// <param name="loop">True if song should loop, false otherwise</param>
         public void PlaySong(string song, bool loop)
         {
+            /*
             string songName = song.Split('|')[0];
 
             if (CurrentSong != songName)
@@ -225,7 +226,7 @@ namespace ZombustersWindows
                 {
                     MediaPlayer.Pause();
                 }
-            }
+            }*/
         }
 
         /// <summary>

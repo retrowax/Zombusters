@@ -6,7 +6,6 @@ using System.Linq;
 
 namespace ZombustersWindows
 {
-#if WINDOWS || LINUX
     /// <summary>
     /// The main class.
     /// </summary>
@@ -22,5 +21,4 @@ namespace ZombustersWindows
                 game.Run();
         }
     }
-#endif
 }
