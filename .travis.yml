@@ -22,7 +22,8 @@ install:
   - sudo apt-get install gtk-sharp3
   - sudo apt-get install libopenal-dev referenceassemblies-pcl ttf-mscorefonts-installer
   - echo y | sudo ./monogame-sdk.run
-  - nuget restore
+  - nuget restore ZombustersWindows.sln
+  - nuget restore ZombustersMac.sln
 
   # Install Butler
   - cp ./butler ~/bin
