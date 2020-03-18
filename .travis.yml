@@ -22,7 +22,6 @@ install:
   - sudo apt-get install gtk-sharp3
   - sudo apt-get install libopenal-dev referenceassemblies-pcl ttf-mscorefonts-installer
   - echo y | sudo ./monogame-sdk.run
-  - nuget restore ZombustersWindows.sln
   - nuget restore ZombustersMac.sln
 
   # Install Butler
@@ -37,7 +36,9 @@ install:
   #- sudo apt-get install wine
 script:
   - find * -type f -exec chmod 777 {} \;
+  - nuget restore ZombustersWindows.sln
   - msbuild /t:ZombustersWindows /p:Configuration=Release ZombustersWindows.sln
+  - nuget restore ZombustersMac.sln
   - msbuild /p:Configuration=Release ZombustersMac.sln
 
   # Tests
