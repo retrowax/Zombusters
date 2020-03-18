@@ -13,6 +13,6 @@ zip -r -v zombusters-windows-beta.zip ./ZombustersPCWindowsBETA
 ~/bin/butler wipe zombusters-mac-beta.zip
 rm -fr ZombustersMacBETA
 mkdir ZombustersMacBETA
-mv /home/travis/build/retrowax/Zombusters-Enhanced-Edition/ZombustersWindows/bin/Release/* ZombustersMacBETA
+mv /home/travis/build/retrowax/Zombusters-Enhanced-Edition/ZombustersWindows/bin/Release/netcoreapp2.2/* ZombustersMacBETA
 zip -r -v zombusters-mac-beta.zip ./ZombustersMacBETA
 ~/bin/butler push zombusters-mac-beta.zip retrowax/zombusters:macos-beta --userversion $MAJOR.$MINOR.$PATCH-$SNAPSHOT_NOW
