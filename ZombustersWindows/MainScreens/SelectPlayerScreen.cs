@@ -227,13 +227,13 @@ namespace ZombustersWindows
 
         public override void HandleInput(InputState input)
         {
-            if (game.currentPlayers[0].Player.Controller == PlayerIndex.One && GamePad.GetState(PlayerIndex.One).IsConnected)
+            if (game.currentPlayers[0].Player.Controller == PlayerIndex.One)
                 playerOneInput = ProcessPlayer(game.currentPlayers[0], input);
-            if (game.currentPlayers[1].Player.Controller == PlayerIndex.Two && GamePad.GetState(PlayerIndex.Two).IsConnected)
+            if (game.currentPlayers[1].Player.Controller == PlayerIndex.Two)
                 playerTwoInput = ProcessPlayer(game.currentPlayers[1], input);
-            if (game.currentPlayers[2].Player.Controller == PlayerIndex.Three && GamePad.GetState(PlayerIndex.Three).IsConnected)
+            if (game.currentPlayers[2].Player.Controller == PlayerIndex.Three)
                 playerThreeInput = ProcessPlayer(game.currentPlayers[2], input);
-            if (game.currentPlayers[3].Player.Controller == PlayerIndex.Four && GamePad.GetState(PlayerIndex.Four).IsConnected)
+            if (game.currentPlayers[3].Player.Controller == PlayerIndex.Four)
                 playerFourInput = ProcessPlayer(game.currentPlayers[3], input);
 
             base.HandleInput(input);

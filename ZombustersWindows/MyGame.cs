@@ -8,7 +8,7 @@ using ZombustersWindows.Subsystem_Managers;
 using Microsoft.Xna.Framework.Input.Touch;
 using ZombustersWindows.MainScreens;
 using ZombustersWindows.Localization;
-using Bugsnag.Clients;
+using Bugsnag;
 using GameAnalyticsSDK.Net;
 
 namespace ZombustersWindows
@@ -32,7 +32,7 @@ namespace ZombustersWindows
         public TopScoreListContainer topScoreListContainer;
         public MusicComponent musicComponent;
         public Texture2D blackTexture;
-        public BaseClient bugSnagClient;
+        public Client bugSnagClient;
         public StorageDataSource storageDataSource;
         public float totalGameSeconds;
 
@@ -80,8 +80,8 @@ namespace ZombustersWindows
             bloom.Settings = BloomSettings.PresetSettings[6];
             bloom.Visible = true;
             */
-            bugSnagClient = new BaseClient("1cad9818fb8d84290d776245cd1f948d");
-            bugSnagClient.StartAutoNotify();
+            bugSnagClient = new Client("1cad9818fb8d84290d776245cd1f948d");
+            //bugSnagClient.StartAutoNotify();
 
             storageDataSource = new StorageDataSource(ref bugSnagClient);
 

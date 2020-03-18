@@ -188,8 +188,8 @@
     <Compile Include="GameObjects\Enemies\TankState.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="Bugsnag, Version=1.4.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Bugsnag.1.4.0.0\lib\Net45\Bugsnag.dll</HintPath>
+    <Reference Include="Bugsnag, Version=2.2.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Bugsnag.2.2.0\lib\net45\Bugsnag.dll</HintPath>
     </Reference>
     <Reference Include="GameAnalytics.Mono, Version=1.0.7296.1820, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\GameAnalytics.Mono.SDK.3.0.6\lib\net45\GameAnalytics.Mono.dll</HintPath>
@@ -213,6 +213,7 @@
       <HintPath>..\packages\Microsoft.Bcl.1.1.8\lib\net40\System.Runtime.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="EntityFramework">

@@ -102,7 +102,7 @@ namespace ZombustersWindows
             }
 #endif
 
-#if !WINDOWS_PHONE && !WINDOWS
+#if !WINDOWS_PHONE && !WINDOWS && !NETCOREAPP
             if (mygame.networkSessionManager.networkSession != null)
             {
                 position = new Vector2(position.X, position.Y + 32);
@@ -137,7 +137,7 @@ namespace ZombustersWindows
                     position = new Vector2(position.X, position.Y + 32);
                     spriteBatch.DrawString(spriteFont, "ULevels" + count.ToString() + ": " + avatar.Player.levelsUnlocked.ToString(), position, Color.White);
 
-#if !WINDOWS_PHONE && !WINDOWS
+#if !WINDOWS_PHONE && !WINDOWS && !NETCOREAPP
                     if (avatar.Player.Container != null)
                     {
                         position = new Vector2(position.X, position.Y + 32);

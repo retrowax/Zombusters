@@ -1,6 +1,5 @@
 sudo: required
 language: csharp
-solution: ZombustersWindows.sln
 #services:
 #  - docker
 
@@ -23,7 +22,6 @@ install:
   - sudo apt-get install gtk-sharp3
   - sudo apt-get install libopenal-dev referenceassemblies-pcl ttf-mscorefonts-installer
   - echo y | sudo ./monogame-sdk.run
-  - nuget restore
 
   # Install Butler
   - cp ./butler ~/bin
@@ -37,7 +35,10 @@ install:
   #- sudo apt-get install wine
 script:
   - find * -type f -exec chmod 777 {} \;
-  - msbuild /t:ZombustersWindows /p:Configuration=Release
+  - nuget restore ZombustersWindows.sln
+  - msbuild /t:ZombustersWindows /p:Configuration=Release ZombustersWindows.sln
+  - nuget restore ZombustersMac.sln
+  - msbuild /p:Configuration=Release ZombustersMac.sln
 
   # Tests
   #- mono ./testrunner/NUnit.Runners.2.6.4/tools/nunit-console.exe ./MonoGameSample.UnitTests/bin/Debug/MonoGameSample.UnitTests.dll
