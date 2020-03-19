@@ -1,8 +1,7 @@
 #!/bin/bash
 echo "Beta Deploy"
 ~/bin/butler -V
-~/bin/butler upgrade
-echo y
+~/bin/butler upgrade --assume-yes
 ~/bin/butler login
 
 ~/bin/butler wipe zombusters-windows-beta.zip
