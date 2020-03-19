@@ -2,6 +2,7 @@
 echo "Beta Deploy"
 ~/bin/butler -V
 ~/bin/butler upgrade
+echo y
 ~/bin/butler login
 
 ~/bin/butler wipe zombusters-windows.zip
