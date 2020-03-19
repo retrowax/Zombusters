@@ -1,6 +1,7 @@
 #!/bin/bash
 echo "Beta Deploy"
 ~/bin/butler -V
+~/bin/butler upgrade
 ~/bin/butler login
 
 ~/bin/butler wipe zombusters-windows.zip
@@ -15,4 +16,4 @@ rm -fr ZombustersMac
 mkdir ZombustersMac
 mv /home/travis/build/retrowax/Zombusters-Enhanced-Edition/ZombustersWindows/bin/Release/netcoreapp2.2/* ZombustersMac
 zip -r -v zombusters-mac.zip ./ZombustersMac
-~/bin/butler push zombusters-mac.zip retrowax/zombusters:macos --userversion $MAJOR.$MINOR.$PATCH
+~/bin/butler push zombusters-mac.zip retrowax/zombusters:mac --userversion $MAJOR.$MINOR.$PATCH
