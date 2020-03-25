@@ -1,42 +1,42 @@
 ﻿<?xml version="1.0"?>
-<ArrayOfCEnemies>
-  <CEnemies>
+<ArrayOfEnemiesCount>
+  <EnemiesCount>
     <Zombies>20</Zombies>
-  </CEnemies>
+  </EnemiesCount>
   
-  <CEnemies>
+  <EnemiesCount>
     <Zombies>25</Zombies>
-  </CEnemies>
+  </EnemiesCount>
   
-  <CEnemies>
+  <EnemiesCount>
     <Zombies>30</Zombies>
-  </CEnemies>
+  </EnemiesCount>
   
-  <CEnemies>
+  <EnemiesCount>
     <Zombies>35</Zombies>
-  </CEnemies>
+  </EnemiesCount>
   
-  <CEnemies>
+  <EnemiesCount>
     <Zombies>40</Zombies>
-  </CEnemies>
+  </EnemiesCount>
   
-  <CEnemies>
+  <EnemiesCount>
     <Zombies>45</Zombies>
-  </CEnemies>
+  </EnemiesCount>
   
-  <CEnemies>
+  <EnemiesCount>
     <Zombies>50</Zombies>
-  </CEnemies>
+  </EnemiesCount>
   
-  <CEnemies>
+  <EnemiesCount>
     <Zombies>55</Zombies>
-  </CEnemies>
+  </EnemiesCount>
   
-  <CEnemies>
+  <EnemiesCount>
     <Zombies>60</Zombies>
-  </CEnemies>
+  </EnemiesCount>
   
-  <CEnemies>
+  <EnemiesCount>
     <Zombies>65</Zombies>
-  </CEnemies>
-</ArrayOfCEnemies>
+  </EnemiesCount>
+</ArrayOfEnemiesCount>

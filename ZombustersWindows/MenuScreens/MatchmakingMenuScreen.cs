@@ -12,7 +12,7 @@ using Microsoft.Xna.Framework.Input;
 using GameStateManagement;
 using ZombustersWindows.Subsystem_Managers;
 
-#if !WINDOWS
+#if !WINDOWS && !NETCOREAPP
 namespace ZombustersWindows
 {
     public class MatchmakingMenuScreen : BackgroundScreen
@@ -98,7 +98,7 @@ namespace ZombustersWindows
         void menu_MenuCanceled(Object sender, MenuSelection selection)
         {
             // If they hit B or Back, go back to Menu Screen
-            ScreenManager.AddScreen(new MenuScreen());
+            ExitScreen();
         }
 
 

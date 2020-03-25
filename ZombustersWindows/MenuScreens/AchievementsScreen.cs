@@ -50,7 +50,7 @@ namespace ZombustersWindows
         public override void Initialize()
         {
             _achievements = new AchievementManager(ScreenManager.Game, player).Achievements();
-#if !WINDOWS_PHONE && !WINDOWS
+#if !WINDOWS_PHONE && !WINDOWS && !NETCOREAPP
             this.PresenceMode = GamerPresenceMode.ConfiguringSettings;
 #endif
 

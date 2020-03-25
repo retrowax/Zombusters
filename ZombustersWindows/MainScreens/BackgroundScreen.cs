@@ -1,101 +1,18 @@
-﻿#region File Description
-//-----------------------------------------------------------------------------
-// Game1.cs
-//
-// Microsoft XNA Community Game Platform
-// Copyright (C) Microsoft Corporation. All rights reserved.
-//-----------------------------------------------------------------------------
-#endregion
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
 using GameStateManagement;
 using Microsoft.Xna.Framework.Input.Touch;
 
 namespace ZombustersWindows
 {
-    public sealed class Explosion
-    {
-        private static Texture2D texture;
-        public static Texture2D Texture
-        {
-            get { return texture; }
-            set { texture = value; }
-        }
-        private Explosion() { }
-        public static void Draw(SpriteBatch batch, Vector2 pos, float rotation, double totalSeconds, double startSeconds, double endSeconds)
-        {
-            // If the explosion is finished, or hasn't started yet, return
-            if ((totalSeconds > endSeconds) || (startSeconds > totalSeconds))
-                return;
-
-            double duration = endSeconds - startSeconds;
-            double time = totalSeconds - startSeconds;
-            
-            // The explosion gets bigger as time goes on
-            float scale = (float) ((time / duration)*.5f) + .6f;
-
-            Vector2 origin = new Vector2(texture.Height / 2);
-            
-            // The explosion gets brighter as time goes on
-            float intensity = (float)(time / duration) * .5f;
-            Vector4 colorval = new Vector4(0.75f + intensity);
-
-            // The explosion also fades in and out
-            colorval.W = (float)Math.Sin((time / duration) * MathHelper.Pi)+.2f;
-
-            // The intensity and fade determines our tint color
-            Color color = new Color(colorval);
-
-            // Draw the texture with the appropriate scale and tint
-            batch.Draw(texture, pos, null, color, rotation, origin, scale, SpriteEffects.None, 0.5f);            
-        }
-    }
-
-    public class ScrollingBackground
-    {
-        private Vector2 screenpos, origin, texturesize;
-        private Texture2D mytexture;
-        private int screenheight;
-        public void Load(GraphicsDevice device, Texture2D backgroundTexture)
-        {
-            mytexture = backgroundTexture;
-            screenheight = device.Viewport.Height;
-            int screenwidth = device.Viewport.Width;
-            // Set the origin so that we're drawing from the 
-            // center of the top edge.
-            origin = new Vector2(mytexture.Width / 2, 0);
-            // Set the screen position to the center of the screen.
-            screenpos = new Vector2(screenwidth / 2, screenheight / 2);
-            // Offset to draw the second texture, when necessary.
-            texturesize = new Vector2(0, mytexture.Height);
-        }
-        public void Update(float deltaY)
-        {
-            screenpos.Y += deltaY;
-            screenpos.Y = screenpos.Y % mytexture.Height;
-        }
-        public void Draw(SpriteBatch batch, Color color)
-        {
-            // Draw the texture, if it is still onscreen.
-            if (screenpos.Y < screenheight)
-            {
-                batch.Draw(mytexture, screenpos, null,
-                     color, 0, origin, 1, SpriteEffects.None, 0f);
-            }
-            // Draw the texture a second time, behind the first,
-            // to create the scrolling illusion.
-            batch.Draw(mytexture, screenpos - texturesize, null,
-                 color, 0, origin, 1, SpriteEffects.None, 0f);
-        }
-    }
-
     public class BackgroundScreen : GameScreen
     {
+        const int MAX_POSITION = 0;
+        const int MIN_POSITION = -200;
+        const float VELOCITY = 0.0015f;
+
         ScrollingBackground stars;
         ScrollingBackground dust;
         Texture2D corner;
@@ -108,10 +25,11 @@ namespace ZombustersWindows
         Texture2D background_title_scrolling2;
         Texture2D background_title_scrolling3;
 
-        public float BackgroundDriftRatePerSec = 64.0f;
-        int maxPosition = 0;
-        int minPosition = -200;
-        float velocity = 0.0015f;
+        private readonly List<Texture2D> noisedMap = new List<Texture2D>(4);
+        private readonly Random random = new Random(4);
+        public Vector2 position = new Vector2(-200, 0);
+        public Vector2 position2 = new Vector2(-200, 0);
+        public bool directionRight = true;
 
         public BackgroundScreen()
         {
@@ -138,12 +56,22 @@ namespace ZombustersWindows
             background_title_scrolling1 = this.ScreenManager.Game.Content.Load<Texture2D>(@"menu/background_title_scrolling1");
             background_title_scrolling2 = this.ScreenManager.Game.Content.Load<Texture2D>(@"menu/background_title_scrolling2");
             background_title_scrolling3 = this.ScreenManager.Game.Content.Load<Texture2D>(@"menu/background_title_scrolling3");
+
+            for (int i = 0; i < 4; i++)
+            {
+                noisedMap.Add(new Texture2D(this.ScreenManager.GraphicsDevice, 512, 512, false, SurfaceFormat.Color));
+            }
+            noisedMap[0].SetData<Color>(CreateTexture.FillNoise(noisedMap[0].Width, noisedMap[0].Height, 0.5f));
+            noisedMap[1].SetData<Color>(CreateTexture.FillNoise(noisedMap[1].Width, noisedMap[1].Height, 0.4f));
+            noisedMap[2].SetData<Color>(CreateTexture.FillNoise(noisedMap[2].Width, noisedMap[2].Height, 0.6f));
+            noisedMap[3].SetData<Color>(CreateTexture.FillNoise(noisedMap[3].Width, noisedMap[3].Height, 0.7f));
+
             base.LoadContent();
         }
 
         public override void HandleInput(InputState input)
         {
-            ((MyGame)ScreenManager.Game).checkIfControllerChanged(input);
+            ((MyGame)ScreenManager.Game).CheckIfControllerChanged(input);
             base.HandleInput(input);
         }
 
@@ -215,59 +143,59 @@ namespace ZombustersWindows
                 float time = (float)gameTime.TotalGameTime.TotalMilliseconds / 100.0f;
 
                 //Scrolling Effect
-                if (((MyGame)this.ScreenManager.Game).directionRight == true)
+                if (directionRight == true)
                 {
                     // BKG 1
-                    if (((MyGame)this.ScreenManager.Game).position.X <= maxPosition)
+                    if (position.X <= MAX_POSITION)
                     {
-                        ((MyGame)this.ScreenManager.Game).position.X += (velocity * 2) * gameTime.ElapsedGameTime.Milliseconds;
+                        position.X += (VELOCITY * 2) * gameTime.ElapsedGameTime.Milliseconds;
                     }
                     else
                     {
-                        ((MyGame)this.ScreenManager.Game).directionRight = false;
-                        ((MyGame)this.ScreenManager.Game).position.X -= (velocity * 2) * gameTime.ElapsedGameTime.Milliseconds;
+                        directionRight = false;
+                        position.X -= (VELOCITY * 2) * gameTime.ElapsedGameTime.Milliseconds;
                     }
 
                     // BKG 2
-                    if ((((MyGame)this.ScreenManager.Game).position2.X <= maxPosition))
+                    if (position2.X <= MAX_POSITION)
                     {
-                        ((MyGame)this.ScreenManager.Game).position2.X += (velocity) * gameTime.ElapsedGameTime.Milliseconds;
+                        position2.X += (VELOCITY) * gameTime.ElapsedGameTime.Milliseconds;
                     }
                     else
                     {
-                        ((MyGame)this.ScreenManager.Game).position2.X -= (velocity) * gameTime.ElapsedGameTime.Milliseconds;
+                        position2.X -= (VELOCITY) * gameTime.ElapsedGameTime.Milliseconds;
                     }
                 }
                 else
                 {
                     // BKG 1
-                    if (((MyGame)this.ScreenManager.Game).position.X >= minPosition)
+                    if (position.X >= MIN_POSITION)
                     {
-                        ((MyGame)this.ScreenManager.Game).position.X -= (velocity * 2) * gameTime.ElapsedGameTime.Milliseconds;
+                        position.X -= (VELOCITY * 2) * gameTime.ElapsedGameTime.Milliseconds;
                     }
                     else
                     {
-                        ((MyGame)this.ScreenManager.Game).directionRight = true;
-                        ((MyGame)this.ScreenManager.Game).position.X += (velocity * 2) * gameTime.ElapsedGameTime.Milliseconds;
+                        directionRight = true;
+                        position.X += (VELOCITY * 2) * gameTime.ElapsedGameTime.Milliseconds;
                     }
 
                     // BKG 2
-                    if ((((MyGame)this.ScreenManager.Game).position2.X <= maxPosition))
+                    if (position2.X <= MAX_POSITION)
                     {
-                        ((MyGame)this.ScreenManager.Game).position2.X -= (velocity) * gameTime.ElapsedGameTime.Milliseconds;
+                        position2.X -= (VELOCITY) * gameTime.ElapsedGameTime.Milliseconds;
                     }
                     else
                     {
-                        ((MyGame)this.ScreenManager.Game).position2.X += (velocity) * gameTime.ElapsedGameTime.Milliseconds;
+                        position2.X += (VELOCITY) * gameTime.ElapsedGameTime.Milliseconds;
                     }
                 }
 
                 float transitionOffset = (float)Math.Pow(TransitionPosition, 2);
                 this.ScreenManager.SpriteBatch.Begin(SpriteSortMode.Deferred, BlendState.NonPremultiplied);
                 this.ScreenManager.SpriteBatch.Draw(background_title, new Vector2(0, 0), Color.White);
-                this.ScreenManager.SpriteBatch.Draw(background_title_scrolling2, new Vector2(((MyGame)this.ScreenManager.Game).position2.X, ((MyGame)this.ScreenManager.Game).position2.Y), Color.White);
+                this.ScreenManager.SpriteBatch.Draw(background_title_scrolling2, new Vector2(position2.X, position2.Y), Color.White);
                 this.ScreenManager.SpriteBatch.Draw(background_title_scrolling3, new Vector2(0, 0), Color.White);
-                this.ScreenManager.SpriteBatch.Draw(background_title_scrolling1, new Vector2(((MyGame)this.ScreenManager.Game).position.X, ((MyGame)this.ScreenManager.Game).position.Y), Color.White);
+                this.ScreenManager.SpriteBatch.Draw(background_title_scrolling1, new Vector2(position.X, position.Y), Color.White);
 
                 if (((MyGame)this.ScreenManager.Game).isInMenu)
                 {
@@ -275,7 +203,7 @@ namespace ZombustersWindows
                 }
 
                 // Perlin Noise effect draw
-                this.ScreenManager.SpriteBatch.Draw(((MyGame)this.ScreenManager.Game).NoisedMap[((MyGame)this.ScreenManager.Game).rand.Next(0, 3)], new Rectangle(0, 0, 1280, 720), new Color(255, 255, 255, 12));
+                this.ScreenManager.SpriteBatch.Draw(noisedMap[random.Next(0, 3)], new Rectangle(0, 0, 1280, 720), new Color(255, 255, 255, 12));
                 this.ScreenManager.SpriteBatch.End();
             }
             else

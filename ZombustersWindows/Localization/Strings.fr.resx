@@ -294,7 +294,7 @@ de paramètres.</value>
     <value>hôte</value>
   </data>
   <data name="HowToPlayInGameString" xml:space="preserve">
-    <value>Comment jouer</value>
+    <value>COMMENT JOUER</value>
   </data>
   <data name="HTPAimShootString" xml:space="preserve">
     <value>VISER + TIRER</value>
@@ -337,7 +337,7 @@ vie ou de nouvelles armes.</value>
     <value>Rejoindre une Session</value>
   </data>
   <data name="LeaderboardMenuString" xml:space="preserve">
-    <value>Scores</value>
+    <value>SCORES</value>
   </data>
   <data name="LeaderboardMMString" xml:space="preserve">
     <value>Consuter les scores de vos amis en ligne ou en local.</value>
@@ -492,7 +492,7 @@ Jouer sur Xbox LIVE ou en réseau local.</value>
 joueur.</value>
   </data>
   <data name="QuitGame" xml:space="preserve">
-    <value>Quitter le jeu</value>
+    <value>QUITTER LE JEU</value>
   </data>
   <data name="QuitToMainMenuInGameString" xml:space="preserve">
     <value>Quitter vers le Menu Principal</value>
@@ -633,7 +633,7 @@ joueur.</value>
     <value>SCORE</value>
   </data>
   <data name="WPPlayNewGame" xml:space="preserve">
-    <value>Jouer</value>
+    <value>JOUER</value>
   </data>
   <data name="WPPlayNewGameMMString" xml:space="preserve">
     <value>Commencez une nouvelle partie.</value>

@@ -7,8 +7,7 @@ using ZombustersWindows.Localization;
 namespace ZombustersWindows
 {
     public class StartScreen : BackgroundScreen {
-        MyGame Game;
-        //private BloomComponent bloom;
+        MyGame game;
         Rectangle uiBounds;
         Rectangle titleBounds;
         Vector2 startPos;
@@ -20,34 +19,31 @@ namespace ZombustersWindows
         PlayerIndex playerOne;
         bool Exiting = false;
 
-        public StartScreen(MyGame game) {
-            this.Game = game;
+        public StartScreen() {
+            
         }
 
         public override void Initialize() {
             base.Initialize();
+            this.game = (MyGame)this.ScreenManager.Game;
             Viewport view = this.ScreenManager.GraphicsDevice.Viewport;
             int borderheight = (int)(view.Height * .05);
             uiBounds = GetTitleSafeArea();
             titleBounds = new Rectangle(115, 65, 1000, 323);
             startPos = new Vector2(uiBounds.X + uiBounds.Width / 2,  uiBounds.Height * .75f);
             rightsPos = new Vector2(uiBounds.X + uiBounds.Width / 2, uiBounds.Height + 50);
-            // Play music for the title screen
-            //Game.audio.PlayMusic();
-            //Game.audio.PlayMenuMusic();
-            //bloom = new BloomComponent(this.Game);
-            Game.musicComponent.Enabled = true;
-            Game.musicComponent.StartPlayingMusic(6);
-            Game.isInMenu = false;
+            game.musicComponent.Enabled = true;
+            game.musicComponent.StartPlayingMusic(6);
+            game.isInMenu = false;
             this.isBackgroundOn = true;
         }
 
         public override void LoadContent() {
-            title = this.ScreenManager.Game.Content.Load<Texture2D>("title");
-            font = this.ScreenManager.Game.Content.Load<SpriteFont>(@"menu\ArialMenuInfo");
-            if (((MyGame)this.Game).Main.Options == InputMode.GamePad) {
+            title = game.Content.Load<Texture2D>("title");
+            font = game.Content.Load<SpriteFont>(@"menu\ArialMenuInfo");
+            if (game.player1.Options == InputMode.GamePad) {
                 startOrigin = font.MeasureString(Strings.PressStartString) / 2;
-            } else if (((MyGame)this.Game).Main.Options == InputMode.Keyboard) {
+            } else if (game.player1.Options == InputMode.Keyboard) {
                 startOrigin = font.MeasureString(Strings.PCPressAnyKeyString) / 2;
             }
             rightsOrigin = font.MeasureString(Strings.CopyRightString) / 2;
@@ -55,13 +51,9 @@ namespace ZombustersWindows
         }
 
         public override void HandleInput(InputState input) {
-            //if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed)
-            //{
-            //    this.ScreenManager.Game.Exit();
-            //}
             if (!Exiting && InputManager.CheckPlayerOneStart(out playerOne, input)) {
                 Exiting = true;
-                Game.TrySignIn(true, FinishStart);
+                game.TrySignIn(true, FinishStart);
             }
             base.HandleInput(input);
         }
@@ -78,8 +70,9 @@ namespace ZombustersWindows
         }
 
         void ConfirmExitMessageBoxAccepted(object sender, PlayerIndexEventArgs e) {
-            Game.InitializeMain(playerOne);
+            game.InitializeMain(playerOne);
             this.ScreenManager.AddScreen(new MenuScreen());
+            ExitScreen();
         }
 
         public override void Draw(GameTime gameTime) {
@@ -91,9 +84,9 @@ namespace ZombustersWindows
             float value = (float)Math.Cos(gameTime.TotalGameTime.TotalSeconds * interval);
             value = (value + 1) / 2;  // Shift the sine wave into positive 
             Color color = new Color(value, value, value, value);
-            if (((MyGame)this.Game).Main.Options == InputMode.GamePad) {
+            if (game.player1.Options == InputMode.GamePad) {
                 batch.DrawString(font, Strings.PressStartString, startPos, color, 0, startOrigin, 1.0f, SpriteEffects.None, 0.1f);
-            } else if (((MyGame)this.Game).Main.Options == InputMode.Keyboard) {
+            } else if (game.player1.Options == InputMode.Keyboard) {
                 batch.DrawString(font, Strings.PCPressAnyKeyString, startPos, color, 0, startOrigin, 1.0f, SpriteEffects.None, 0.1f);
             }
             batch.DrawString(font, Strings.CopyRightString, rightsPos, Color.White, 0, rightsOrigin, 1.0f, SpriteEffects.None, 0.1f);

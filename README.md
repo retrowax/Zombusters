@@ -1,5 +1,5 @@
-Zombusters
-==========
+Zombusters: Enhanced Edition
+============================
 
 <img src="media/zombusters_logo.png" align="left" width="168px" height="168px"/>
 <img align="left" width="0" height="168px" hspace="10"/>
@@ -11,6 +11,7 @@ Zombusters
 It will let you sticked on your seat until the end. Its 2D graphics and isometric view make it a different specie in its genre. You will have to face a horde of Zombies that try to get you down with the help of various weapons/power ups and different moving styles.
 
 <br/>
+
 <p align="center">
 <b><a href="#features">Features</a></b>
 |
@@ -28,6 +29,9 @@ It will let you sticked on your seat until the end. Its 2D graphics and isometri
 </p>
 <br/>
 
+<a href="https://retrowax.itch.io/zombusters"><img align="center" src="https://github.com/retrowax/Zombusters-Enhanced-Edition/raw/master/media/github_banner.png" /></a>
+<br/>
+
 ### Features
 
 <img align="right" width="0" height="328px" hspace="20"/>
@@ -43,19 +47,17 @@ It will let you sticked on your seat until the end. Its 2D graphics and isometri
 <br><br><br>
 
 
-**IMPORTANT!: This is a work in progress project. It's possible that at any moment the project will not run or have bugs!**
-
 ### Download
 
-For now, if you want to play this game, you can download the **commercial version** released (v1.0.0) for PC Windows **for free** [here](https://github.com/retrowax/Zombusters/raw/master/releases/ZombustersInstaller-v1.0.0.msi).
+You can download it on **itch.io** here: [https://retrowax.itch.io/zombusters](https://retrowax.itch.io/zombusters)
 
-It's planned to have newer versions available any time soon.
+**NOTE:** If you want to play the original version that was published to the Windows Store you can download the **commercial version** released (v1.0.0) for PC Windows **for free** [here](https://github.com/retrowax/Zombusters-Enhanced-Edition/raw/master/releases/ZombustersInstaller-v1.0.0.msi).
 
 ### Requirements
 
 If you want to build this project, this is what you are going to need:
 
-* Visual Studio Community 2017 (Visual C#)
+* Visual Studio Community 2019 (Visual C#)
 * Monogame 3.6
 
 
@@ -64,17 +66,15 @@ A bit of history
 
 [![Zombusters Trailer](https://img.youtube.com/vi/mYXBIZX9VgQ/0.jpg)](https://www.youtube.com/watch?v=mYXBIZX9VgQ)
 
-This game started its development by the end of 2010 as a personal project that quickly escalated to a commercial project. It was published for the Xbox360 on November 5th of 2011. The next steps were the windows phone port release and finally the PC for the windows store and Desura on July 2014. It wasn't commercially a success. After that the game was something like abandoned until now. After 5 years of the first release on Xbox360 we though that would be cool to revive this project and make it open-source.
+This game started its development by the end of 2010 as a personal project that quickly escalated to a commercial project. It was published for the Xbox360 on November 5th of 2011. The next steps were the windows phone port release and finally the PC for the windows store and Desura on July 2014. After that the game was something like abandoned until now, it's been almost 10 years of the first release on Xbox360 so we though that would be cool to revive this project and make it open-source.
 
-The code released is not the original (that included all the code for other platforms), it's a modification that aim to be released into Steam.
+The code released is not the original (that included all the code for other platforms), it's a modification that aim to be released for PC.
 
 
 Roadmap
 -------
 
-Ok, it's been 6 years... as developers we evolve and a project with 6 years could be painful to manage, and more if there is no SOLID principles in it... this project is in that point.
-
-To celebrate these 6 years we would like to make an special version that enhances it; and publish it sometime into Steam... so there is a lot of work to do:
+We would like to make an special version that enhances it; and publish it sometime into itch.io. There is a lot of work to do:
 
 * Automate builds and package generation. (CI) :heavy_check_mark:
 * Refactor and Clean code. Apply SOLID principles at least.
@@ -83,10 +83,7 @@ To celebrate these 6 years we would like to make an special version that enhance
 * Improve scenes, remove blocking spots.
 * Add more weapons and balance them.
 * Add more Power-Ups.
-* Add Level Bosses.
 * Improve Leaderboards.
-* Add achievements.
-* Multiplayer.
 
 (:heavy_check_mark: all marked with this symbol are "done / completed")
 
@@ -98,13 +95,13 @@ Who made this
 |---
 | [Ferran Pons](https://github.com/ferranpons)
 
-Hi! I'm Ferran Pons; a Senior Android Developer that works for Schibsted Spain developing the Vibbo application. With almost 15 years of experience as a programmer, my experience covers a lot of different kind of applications, from web app development to the desktop, mobile apps and videogames. I've participated in some blockbuster games such as Burnout Paradise, DeadSpace and the Skate franchise. Also I've tried to start up my own indie videogame studio, labeled "Retrowax Games" with which I've made this game that it's published for the Xbox360 and Windows Phone and PC Windows.
+Hi! I'm Ferran Pons; a Senior Android Developer that works for Adevinta Spain developing the Milanuncios application. With almost 15 years of experience as a programmer, my experience covers a lot of different kind of applications, from web app development to the desktop, mobile apps and videogames. I've participated in some blockbuster games such as Burnout Paradise, DeadSpace and the Skate franchise. Also I've tried to start up my own indie videogame studio, labeled "Retrowax Games" with which I've made this game that it's published for the Xbox360 and Windows Phone and PC Windows.
 
 
 Bugs and Feedback
 -----------------
 
-For bugs, questions and discussions please use the [Github Issues](https://github.com/retrowax/Zombusters/issues).
+For bugs, questions and discussions please use the [Github Issues](https://github.com/retrowax/Zombusters-Enhanced-Edition/issues).
 
 
 Licensing
@@ -120,7 +117,7 @@ All art assets (``art``, ``music`` and
 
 #### Code
 
-Copyright 2016 Ferran Pons
+Copyright 2019 Ferran Pons
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

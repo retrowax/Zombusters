@@ -12,7 +12,7 @@ using Microsoft.Xna.Framework.Content;
 
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-#if !WINDOWS_PHONE
+#if !WINDOWS_PHONE && !NETCOREAPP
 using Microsoft.Xna.Framework.Storage;
 #endif
 using GameStateManagement;
@@ -24,7 +24,7 @@ namespace ZombustersWindows
     /// <summary>
     /// A message box screen, used to display "debug" messages.
     /// </summary>
-    public class DebugInfoComponent : DrawableGameComponent
+    public class DebugInfoPortlet : DrawableGameComponent
     {
         MyGame mygame;
         ContentManager content;
@@ -37,7 +37,7 @@ namespace ZombustersWindows
         String previousNetDebugText = "";
         public String NetDebugText = "";
 
-        public DebugInfoComponent(MyGame game)
+        public DebugInfoPortlet(MyGame game)
             : base(game)
         {
             content = game.Content;
@@ -104,7 +104,7 @@ namespace ZombustersWindows
 
             //spriteBatch.DrawString(spriteFont, "Signed In Gamers: " + Gamer.SignedInGamers.Count.ToString(), position, Color.White);
 
-#if !WINDOWS_PHONE && !WINDOWS
+#if !WINDOWS_PHONE && !WINDOWS && !NETCOREAPP
             if (mygame.networkSessionManager.networkSession != null)
             {
                 position = new Vector2(position.X, position.Y + 32);
@@ -132,7 +132,7 @@ namespace ZombustersWindows
             }
 #endif
 
-#if !WINDOWS_PHONE && !WINDOWS
+#if !WINDOWS_PHONE && !WINDOWS && !NETCOREAPP
             if (mygame.networkSessionManager.networkSession != null)
             {
                 position = new Vector2(position.X, position.Y + 32);
@@ -169,7 +169,7 @@ namespace ZombustersWindows
                     position = new Vector2(position.X, position.Y + 32);
                     spriteBatch.DrawString(spriteFont, "ULevels" + count.ToString() + ": " + avatar.Player.levelsUnlocked.ToString(), position, Color.White);
 
-#if !WINDOWS_PHONE && !WINDOWS
+#if !WINDOWS_PHONE && !WINDOWS && !NETCOREAPP
                     if (avatar.Player.Container != null)
                     {
                         position = new Vector2(position.X, position.Y + 32);
@@ -196,7 +196,7 @@ namespace ZombustersWindows
     /// <summary>
     /// A message box screen, used to display framerate.
     /// </summary>
-    public class FrameRateCounter : DrawableGameComponent
+    public class FrameRateCounterBis : DrawableGameComponent
     {
         ContentManager content;
         SpriteBatch spriteBatch;
@@ -207,7 +207,7 @@ namespace ZombustersWindows
         TimeSpan elapsedTime = TimeSpan.Zero;
 
 
-        public FrameRateCounter(Game game)
+        public FrameRateCounterBis(Game game)
             : base(game)
         {
             content = game.Content;

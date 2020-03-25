@@ -1,17 +1,7 @@
 using System;
 using System.Collections.Generic;
-using System.Text;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
-#if !WINDOWS_PHONE
-//using Microsoft.Xna.Framework.Storage;
-#endif
-
-using System.Xml;
-using System.Xml.Serialization;
-using System.IO;
-using System.Diagnostics;
 
 namespace ZombustersWindows.Subsystem_Managers
 {
@@ -58,7 +48,7 @@ namespace ZombustersWindows.Subsystem_Managers
 
         public AchievementManager(Game game, Player player)
         {
-#if !WINDOWS_PHONE && !WINDOWS
+#if !WINDOWS_PHONE && !WINDOWS && !NETCOREAPP
             //load achievements
             _achievements = new List<Achievement>();
             StorageContainer container;
@@ -139,7 +129,7 @@ namespace ZombustersWindows.Subsystem_Managers
 
         public void Save(Player player)
         {
-#if !WINDOWS_PHONE && !WINDOWS
+#if !WINDOWS_PHONE && !WINDOWS && !NETCOREAPP
             // Open a storage container.
             IAsyncResult result = player.Device.BeginOpenContainer("Zombusters", null, null);
             if (result.IsCompleted)
@@ -156,22 +146,22 @@ namespace ZombustersWindows.Subsystem_Managers
                 container.Dispose();
             }
 #endif
-/*
-            //achievements
-            XmlSerializer serializer = new XmlSerializer(typeof(PlayerAchievement));
-            //load achievements
-            StorageContainer container = player.Device.OpenContainer("Zombusters");
-            // Get the path of the save game.
-            string filename = Path.Combine(container.Path, "playerachievements.xml");
+            /*
+                        //achievements
+                        XmlSerializer serializer = new XmlSerializer(typeof(PlayerAchievement));
+                        //load achievements
+                        StorageContainer container = player.Device.OpenContainer("Zombusters");
+                        // Get the path of the save game.
+                        string filename = Path.Combine(container.Path, "playerachievements.xml");
 
 
-            FileStream fs = File.Open(filename, FileMode.Create);
-            //FileStream fs = new FileStream(StorageContainer.TitleLocation + "\\playerachievements.xml", FileMode.Create);
+                        FileStream fs = File.Open(filename, FileMode.Create);
+                        //FileStream fs = new FileStream(StorageContainer.TitleLocation + "\\playerachievements.xml", FileMode.Create);
 
-            serializer.Serialize(fs, _playerAchievements);
+                        serializer.Serialize(fs, _playerAchievements);
 
-            fs.Close();
- */
+                        fs.Close();
+             */
         }
 
         public bool PlayerHasAchievements()

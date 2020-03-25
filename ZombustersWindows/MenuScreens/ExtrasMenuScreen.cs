@@ -74,9 +74,9 @@ namespace ZombustersWindows
             menu.Initialize();
 
             //Adding Options text for the Menu
-            menu.AddText(Strings.HowToPlayInGameString.ToUpper(), Strings.HTPMenuSupportString);  // How To Play
-            menu.AddText(Strings.LeaderboardMenuString.ToUpper(), Strings.LeaderboardMMString);    // Leaderboard
-            menu.AddText(Strings.CreditsMenuString, Strings.CreditsMMString);            // Credits
+            menu.AddText("HowToPlayInGameString", "HTPMenuSupportString");  // How To Play
+            menu.AddText("LeaderboardMenuString", "LeaderboardMMString");    // Leaderboard
+            menu.AddText("CreditsMenuString", "CreditsMMString");            // Credits
 
             menu.uiBounds = menu.Extents;
 
@@ -91,7 +91,7 @@ namespace ZombustersWindows
 
             //Posiciona el menu
             menu.CenterInXLeftMenu(view);
-#if !WINDOWS_PHONE && !WINDOWS
+#if !WINDOWS_PHONE && !WINDOWS && !NETCOREAPP
             this.PresenceMode = GamerPresenceMode.AtMenu;
 #endif
 
@@ -116,7 +116,7 @@ namespace ZombustersWindows
             //SignedInGamer gamer;
             if (GamePad.GetState(PlayerIndex.One).IsButtonDown(Buttons.Start))
             {
-#if !WINDOWS_PHONE && !WINDOWS
+#if !WINDOWS_PHONE && !WINDOWS && !NETCOREAPP
                 gamer = NetworkSessionManager.FindGamer(PlayerIndex.One);
                 if (gamer != null)
                 {
@@ -126,7 +126,7 @@ namespace ZombustersWindows
             }
             else if (GamePad.GetState(PlayerIndex.Two).IsButtonDown(Buttons.Start))
             {
-#if !WINDOWS_PHONE && !WINDOWS
+#if !WINDOWS_PHONE && !WINDOWS && !NETCOREAPP
                 gamer = NetworkSessionManager.FindGamer(PlayerIndex.Two);
                 if (gamer != null)
                 {
@@ -136,7 +136,7 @@ namespace ZombustersWindows
             }
             else if (GamePad.GetState(PlayerIndex.Three).IsButtonDown(Buttons.Start))
             {
-#if !WINDOWS_PHONE && !WINDOWS
+#if !WINDOWS_PHONE && !WINDOWS && !NETCOREAPP
                 gamer = NetworkSessionManager.FindGamer(PlayerIndex.Three);
                 if (gamer != null)
                 {
@@ -146,7 +146,7 @@ namespace ZombustersWindows
             }
             else if (GamePad.GetState(PlayerIndex.Four).IsButtonDown(Buttons.Start))
             {
-#if !WINDOWS_PHONE && !WINDOWS
+#if !WINDOWS_PHONE && !WINDOWS && !NETCOREAPP
                 gamer = NetworkSessionManager.FindGamer(PlayerIndex.Four);
                 if (gamer != null)
                 {
@@ -213,7 +213,7 @@ namespace ZombustersWindows
         {
             // Menu update
             if (!coveredByOtherScreen
-#if !WINDOWS
+#if !WINDOWS && !NETCOREAPP
                 && !Guide.IsVisible
 #endif
                 )
@@ -298,7 +298,7 @@ namespace ZombustersWindows
             pos.Y += 115;
 
             //Texto de contexto de menu
-            lines = Regex.Split(menu.HelpText[menu.Selection], "\r\n");
+            lines = Regex.Split(Strings.ResourceManager.GetString(menu.HelpText[menu.Selection]), "\r\n");
             foreach (string line in lines)
             {
                 batch.DrawString(MenuInfoFont, line.Replace("	", ""), contextMenuPosition, Color.White);

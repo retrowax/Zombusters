@@ -64,7 +64,7 @@ namespace ZombustersWindows
             
             //Posiciona el menu
             menu.CenterInXLeftMenu(view);
-#if !WINDOWS_PHONE && !WINDOWS
+#if !WINDOWS_PHONE && !WINDOWS && !NETCOREAPP
             this.PresenceMode = GamerPresenceMode.AtMenu;
 #endif
 
@@ -73,9 +73,9 @@ namespace ZombustersWindows
             // Array to hold one page. Declare as a member, to avoid allocating a new one each time:
             page = new TopScoreEntry[10];
             pageIndex = 0;
-            if (((MyGame)this.ScreenManager.Game).mScores != null)
+            if (((MyGame)this.ScreenManager.Game).topScoreListContainer != null)
             {
-                ((MyGame)this.ScreenManager.Game).mScores.fillPageFromFullList(0, pageIndex, page);
+                ((MyGame)this.ScreenManager.Game).topScoreListContainer.fillPageFromFullList(0, pageIndex, page);
             }
 
             base.Initialize();
@@ -86,8 +86,7 @@ namespace ZombustersWindows
 
         void menu_MenuCanceled(Object sender, MenuSelection selection)
         {
-            // If they hit B or Back, go back to Menu Screen
-            ScreenManager.AddScreen(new ExtrasMenuScreen());
+            ExitScreen();
         }
         
         public override void LoadContent()
@@ -128,7 +127,7 @@ namespace ZombustersWindows
                         (gesture.Position.Y >= 614 && gesture.Position.Y <= 650))
                     {
                         // If they hit B or Back, go back to Menu Screen
-                        ScreenManager.AddScreen(new ExtrasMenuScreen());
+                        ExitScreen();
                     }
                 }
             }
@@ -141,7 +140,7 @@ namespace ZombustersWindows
         {
             // Menu Update
             if (!coveredByOtherScreen
-#if !WINDOWS
+#if !WINDOWS && !NETCOREAPP
                 && !Guide.IsVisible
 #endif
                 )
@@ -245,9 +244,9 @@ namespace ZombustersWindows
             this.ScreenManager.SpriteBatch.Draw(lineaMenu, pos, Color.White);
 
             // Leave Button
-            if (((MyGame)this.ScreenManager.Game).Main.Options != InputMode.Touch)
+            if (((MyGame)this.ScreenManager.Game).player1.Options != InputMode.Touch)
             {
-                if (((MyGame)this.ScreenManager.Game).Main.Options == InputMode.Keyboard)
+                if (((MyGame)this.ScreenManager.Game).player1.Options == InputMode.Keyboard)
                 {
                     spaceBetweenButtonAndText = Convert.ToInt32(kbEsc.Width * 0.7f) + 5;
                     this.ScreenManager.SpriteBatch.Draw(kbEsc, new Vector2(158 + distanceBetweenButtonsText, 613), null, Color.White, 0, Vector2.Zero, 0.7f, SpriteEffects.None, 1.0f);

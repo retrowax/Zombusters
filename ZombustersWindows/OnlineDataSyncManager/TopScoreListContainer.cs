@@ -31,11 +31,11 @@ namespace ZombustersWindows
 {
     public class TopScoreListContainer : IOnlineSyncTarget
     {
-        private TopScoreList[] mScoreLists;
+        public TopScoreList[] scoreList;
 
-        private bool mChanged;
-        private int mTransferCurrentListIndex;
-        private int mTransferCurrentEntryIndex;
+        private bool isChanged;
+        private int transferCurrentListIndex;
+        private int transferCurrentEntryIndex;
 
         public const byte MARKER_ENTRY = 0;					// bit pattern 00000000
         private const byte MARKER_CONTAINER_END = 0x55;		// bit pattern 01010101
@@ -46,9 +46,9 @@ namespace ZombustersWindows
          * lists, where each list can have up to "listMaxSize" many entries. */
         public TopScoreListContainer(int listCount, int listMaxSize)
         {
-            mScoreLists = new TopScoreList[listCount];
+            scoreList = new TopScoreList[listCount];
             for (int i = 0; i < listCount; i++)
-                mScoreLists[i] = new TopScoreList(listMaxSize);
+                scoreList[i] = new TopScoreList(listMaxSize);
         }
 
         /* Use this ctor to load an existing TopScoreListContainer from file. The BinaryReader
@@ -58,15 +58,15 @@ namespace ZombustersWindows
         public TopScoreListContainer(BinaryReader reader)
         {
             int listCount = reader.ReadInt32();
-            mScoreLists = new TopScoreList[listCount];
+            scoreList = new TopScoreList[listCount];
             for (int i = 0; i < listCount; i++)
-                mScoreLists[i] = new TopScoreList(reader);
+                scoreList[i] = new TopScoreList(reader);
         }
 
         /* Checks if the list with the given index contains an entry for the given gamertag. */
         public bool containsEntryForGamertag(int listIndex, string gamertag)
         {
-            return mScoreLists[listIndex].containsEntryForGamertag(gamertag);
+            return scoreList[listIndex].containsEntryForGamertag(gamertag);
         }
 
         /* Fills the "page" array with one page from the full top score list with the given index.
@@ -80,7 +80,7 @@ namespace ZombustersWindows
          * from the RankAtLastPageFill property of the entry. */
         public void fillPageFromFullList(int listIndex, int pageNumber, TopScoreEntry[] page)
         {
-            mScoreLists[listIndex].fillPageFromFullList(pageNumber, page);
+            scoreList[listIndex].fillPageFromFullList(pageNumber, page);
         }
 
         /* Fills the "page" array with one page from the filtered top score list with the given index.
@@ -110,7 +110,7 @@ namespace ZombustersWindows
          * from the RankAtLastPageFill property of the entry. */
         public int fillPageThatContainsGamertagFromFullList(int listIndex, TopScoreEntry[] page, string gamertag)
         {
-            return mScoreLists[listIndex].fillPageThatContainsGamertagFromFullList(page, gamertag);
+            return scoreList[listIndex].fillPageThatContainsGamertagFromFullList(page, gamertag);
         }
 
         /* Fills the "page" array with a specific page from the filtered top score list with the given index.
@@ -129,7 +129,7 @@ namespace ZombustersWindows
         //    return mScoreLists[listIndex].fillPageThatContainsGamertagFromFilteredList(page, gamer);
         //}
 
-#if WINDOWS_PHONE || WINDOWS
+#if WINDOWS_PHONE || WINDOWS || NETCOREAPP
         /* Saves the TopScoreListContainer, and all lists and entries in it, into the given BinaryWriter.
          * Usually you would first open a FileStream on which you then construct the BinaryWriter, so
          * that the TopScoreListContainer is written to a file. The resulting file can then be used
@@ -138,8 +138,8 @@ namespace ZombustersWindows
         public void save(BinaryWriter writer)
         {
             // Lock to make sure there are no changes while saving
-            writer.Write(mScoreLists.Length);
-            foreach (TopScoreList list in mScoreLists)
+            writer.Write(scoreList.Length);
+            foreach (TopScoreList list in scoreList)
                 list.write(writer);
         }
 
@@ -150,7 +150,7 @@ namespace ZombustersWindows
             // Lock to sync the change with a possible background saving
             lock (SYNC)
             {
-                mScoreLists[listIndex].addEntry(entry);
+                scoreList[listIndex].addEntry(entry);
             }
         }
 #else
@@ -177,7 +177,7 @@ namespace ZombustersWindows
         /* Returns the count of entries in the full list with the specified index. */
         public int getFullListSize(int listIndex)
         {
-            return mScoreLists[listIndex].getFullCount();
+            return scoreList[listIndex].getFullCount();
         }
 
         /* Returns the count of entries in the filtered list with the specified index.
@@ -190,18 +190,18 @@ namespace ZombustersWindows
 
         public void startSynchronization()
         {
-            mChanged = false;
+            isChanged = false;
             // Lock to sync the change with a possible background saving
             lock (SYNC)
             {
-                foreach (TopScoreList list in mScoreLists)
+                foreach (TopScoreList list in scoreList)
                     list.initForTransfer();
             }
         }
 
         public void endSynchronization(Player player, TopScoreListContainer mScores)
         {
-#if !WINDOWS_PHONE && !WINDOWS
+#if !WINDOWS_PHONE && !WINDOWS && !NETCOREAPP
             if (mChanged) {
                 // TODO: Trigger saving of container here
                 if (player.Device != null)
@@ -220,11 +220,11 @@ namespace ZombustersWindows
 
         public void prepareForSending()
         {
-            mTransferCurrentListIndex = 0;
-            mTransferCurrentEntryIndex = 0;
+            transferCurrentListIndex = 0;
+            transferCurrentEntryIndex = 0;
         }
 
-#if !WINDOWS_PHONE && !WINDOWS
+#if !WINDOWS_PHONE && !WINDOWS && !NETCOREAPP
         public bool readTransferRecord(PacketReader reader)
         {
             byte marker = reader.ReadByte();

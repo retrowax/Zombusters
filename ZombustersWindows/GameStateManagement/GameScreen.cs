@@ -1,33 +1,11 @@
-﻿#region File Description
-//-----------------------------------------------------------------------------
-// GameScreen.cs
-//
-// Microsoft XNA Community Game Platform
-// Copyright (C) Microsoft Corporation. All rights reserved.
-//-----------------------------------------------------------------------------
-#endregion
-
-#region Using Statements
+﻿#region Using Statements
 using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input.Touch;
-
 #endregion
 
 namespace GameStateManagement
 {
-    /// <summary>
-    /// Enum describes the screen transition state.
-    /// </summary>
-    public enum ScreenState
-    {
-        TransitionOn,
-        Active,
-        TransitionOff,
-        Hidden,
-    }
-
-
     /// <summary>
     /// A screen is a single layer that has update and draw logic, and which
     /// can be combined with other layers to build up a complex menu system.
@@ -117,20 +95,6 @@ namespace GameStateManagement
         }
 
         ScreenState screenState = ScreenState.TransitionOn;
-
-        /// <summary>
-        /// This is not part of the base sample; it was added to make it
-        /// easy to for Game1 to set PresenceMode based the topmost screen
-        /// </summary>
-#if !WINDOWS_PHONE && !WINDOWS
-        public GamerPresenceMode PresenceMode
-        {
-            get { return presenceMode; }
-            protected set { presenceMode = value; }
-        }
-
-        GamerPresenceMode presenceMode = GamerPresenceMode.None;
-#endif
 
         /// <summary>
         /// There are two possible reasons why a screen might be transitioning
@@ -229,45 +193,6 @@ namespace GameStateManagement
         }
 
         GestureType enabledGestures = GestureType.None;
-#if WINDOWS_PHONE
-        /// <summary>
-        /// Gets whether or not this screen is serializable. If this is true,
-        /// the screen will be recorded into the screen manager's state and
-        /// its Serialize and Deserialize methods will be called as appropriate.
-        /// If this is false, the screen will be ignored during serialization.
-        /// By default, all screens are assumed to be serializable.
-        /// </summary>
-        public bool IsSerializable
-        {
-            get { return isSerializable; }
-            protected set { isSerializable = value; }
-        }
-
-        bool isSerializable = true;
-
-
-        /// <summary>
-        /// Activates the screen. Called when the screen is added to the screen manager or if the game resumes
-        /// from being paused or tombstoned.
-        /// </summary>
-        /// <param name="instancePreserved">
-        /// True if the game was preserved during deactivation, false if the screen is just being added or if the game was tombstoned.
-        /// On Xbox and Windows this will always be false.
-        /// </param>
-        public virtual void Activate(bool instancePreserved) { }
-
-
-        /// <summary>
-        /// Deactivates the screen. Called when the game is being deactivated due to pausing or tombstoning.
-        /// </summary>
-        public virtual void Deactivate() { }
-
-
-        /// <summary>
-        /// Unload content for the screen. Called when the screen is removed from the screen manager.
-        /// </summary>
-        public virtual void Unload() { }
-#endif
 
         #endregion
 

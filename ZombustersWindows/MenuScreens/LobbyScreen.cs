@@ -13,7 +13,7 @@ using Microsoft.Xna.Framework.Input;
 using GameStateManagement;
 using ZombustersWindows.Subsystem_Managers;
 
-#if !WINDOWS_PHONE && !WINDOWS
+#if !WINDOWS_PHONE && !WINDOWS && !NETCOREAPP
 namespace ZombustersWindows
 {
     public class LobbyScreen : BackgroundScreen
@@ -48,7 +48,7 @@ namespace ZombustersWindows
         //static int CurrentPlaylistSetting = 0;
 
 
-        #endregion
+#endregion
 
 #region Game Settings
 
@@ -56,7 +56,7 @@ namespace ZombustersWindows
         public int PrivateSlotsSettings = 0;
         public int MaxPlayersSettings = 0;
 
-        #endregion
+#endregion
 
         public LobbyScreen(Boolean create)
         {
@@ -179,7 +179,7 @@ namespace ZombustersWindows
         {
             ((Game1)this.ScreenManager.Game).networkSessionManager.CloseSession();
             // If they hit B or Back, go back to Menu Screen
-            ScreenManager.AddScreen(new MatchmakingMenuScreen());
+            ExitScreen();
         }
 
         // Setup Menu
@@ -349,7 +349,7 @@ namespace ZombustersWindows
              */
         }
 
-        #endregion
+#endregion
 
         public override void LoadContent()
         {
@@ -532,7 +532,7 @@ namespace ZombustersWindows
             batch.End();
         }
 
-        #endregion
+#endregion
 
     }
 

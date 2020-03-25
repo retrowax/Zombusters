@@ -20,7 +20,8 @@
     <SccProvider>SAK</SccProvider>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <TargetFrameworkProfile />
-    <NuGetPackageImportStamp>672a3668</NuGetPackageImportStamp>
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
     <IsWebBootstrapper>false</IsWebBootstrapper>
     <PublishUrl>publish\</PublishUrl>
     <Install>true</Install>
@@ -62,21 +63,46 @@
     <ApplicationIcon>Game.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="Avatar.cs" />
+    <Compile Include="Components\DebugComponent.cs" />
+    <Compile Include="Components\FrameRateCounter.cs" />
+    <Compile Include="Components\LanguageComponent.cs" />
+    <Compile Include="ContentManager\EnemiesCount.cs" />
+    <Compile Include="ContentManager\Furniture.cs" />
+    <Compile Include="ContentManager\FurnitureComparer.cs" />
+    <Compile Include="ContentManager\Level.cs" />
+    <Compile Include="ContentManager\SubLevel.cs" />
+    <Compile Include="ContentManager\SubLevelType.cs" />
+    <Compile Include="ContentManager\Wall.cs" />
+    <Compile Include="ContentManager\FurnitureOrientation.cs" />
+    <Compile Include="ContentManager\FurnitureType.cs" />
+    <Compile Include="ContentManager\LevelType.cs" />
+    <Compile Include="GameObjects\Avatar.cs" />
     <Compile Include="BloomPostProcess\BloomComponent.cs" />
     <Compile Include="BloomPostProcess\BloomSettings.cs" />
-    <Compile Include="ContentManager\LevelManager.cs" />
-    <Compile Include="Enemies.cs" />
+    <Compile Include="ContentManager\PowerUp.cs" />
+    <Compile Include="GameObjects\AvatarState.cs" />
+    <Compile Include="GameObjects\Enemies\Enemies.cs" />
+    <Compile Include="GameObjects\Explosion.cs" />
+    <Compile Include="GameObjects\Enemies\EnemyType.cs" />
+    <Compile Include="GameObjects\ShotgunShell.cs" />
+    <Compile Include="GameStateManagement\GameState.cs" />
+    <Compile Include="GameStateManagement\InputMode.cs" />
+    <Compile Include="GameStateManagement\ScreenState.cs" />
+    <Compile Include="MainScreens\ErrorScreen.cs" />
     <Compile Include="MainScreens\LoadInScreen.cs" />
+    <Compile Include="GameStateManagement\MessageType.cs" />
+    <Compile Include="GameObjects\ObjectStatus.cs" />
+    <Compile Include="Components\SliderComponent.cs" />
+    <Compile Include="GameStateManagement\OptionsState.cs" />
+    <Compile Include="Components\MenuComponent.cs" />
+    <Compile Include="MenuScreens\MenuSelection.cs" />
     <Compile Include="MyGame.cs" />
-    <Compile Include="GameStateManagement\Button.cs" />
     <Compile Include="GameStateManagement\GameScreen.cs" />
-    <Compile Include="GameStateManagement\InputAction.cs" />
     <Compile Include="GameStateManagement\InputState.cs" />
     <Compile Include="GameStateManagement\IScreenFactory.cs" />
     <Compile Include="GameStateManagement\PlayerIndexEventArgs.cs" />
     <Compile Include="GameStateManagement\ScreenManager.cs" />
-    <Compile Include="Graphics.cs" />
+    <Compile Include="MainScreens\BackgroundScreen.cs" />
     <Compile Include="MainScreens\GameOverMenu.cs" />
     <Compile Include="MainScreens\GamePlayMenu.cs" />
     <Compile Include="MainScreens\GamePlayScreen.cs" />
@@ -94,7 +120,8 @@
     <Compile Include="MenuScreens\LobbyScreen.cs" />
     <Compile Include="MenuScreens\MatchmakingMenuScreen.cs" />
     <Compile Include="MenuScreens\MenuScreen.cs" />
-    <Compile Include="MusicComponent\MusicComponent.cs" />
+    <Compile Include="Components\MusicComponent.cs" />
+    <Compile Include="GameStateManagement\NeutralInput.cs" />
     <Compile Include="OnlineDataSyncManager\IOnlineSyncTarget.cs" />
     <Compile Include="OnlineDataSyncManager\OnlineDataSyncManager.cs" />
     <Compile Include="OnlineDataSyncManager\TopScoreEntry.cs" />
@@ -102,9 +129,10 @@
     <Compile Include="OnlineDataSyncManager\TopScoreListContainer.cs" />
     <Compile Include="PerlinNoisePostProcess\CreateTexture.cs" />
     <Compile Include="PerlinNoisePostProcess\Noise.cs" />
-    <Compile Include="Player.cs" />
+    <Compile Include="GameObjects\Player.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="MainScreens\ScrollingBackground.cs" />
     <Compile Include="SteeringBehaviors\Arrive.cs" />
     <Compile Include="SteeringBehaviors\Circle.cs" />
     <Compile Include="SteeringBehaviors\GameWorld.cs" />
@@ -151,20 +179,31 @@
     <Compile Include="SubsystemManagers\NetworkSessionManager.cs" />
     <Compile Include="SubsystemManagers\RotatedRectangle.cs" />
     <Compile Include="SubsystemManagers\ScrollingTextManager.cs" />
-    <Compile Include="SubsystemManagers\StorageDeviceManager.cs" />
+    <Compile Include="SubsystemManagers\StorageDataSource.cs" />
+    <Compile Include="SubsystemManagers\GameplayHelper.cs" />
     <Compile Include="SubsystemManagers\VirtualThumbsticks.cs" />
     <Compile Include="SupportScreens\ExitMessageBox.cs" />
-    <Compile Include="SupportScreens\LoadingScreen.cs" />
     <Compile Include="SupportScreens\NetworkBusyScreen.cs" />
+    <Compile Include="GameObjects\Enemies\ZombieState.cs" />
+    <Compile Include="GameObjects\Enemies\TankState.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="Bugsnag, Version=1.4.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Bugsnag.1.4.0.0\lib\Net45\Bugsnag.dll</HintPath>
+    <Reference Include="Bugsnag, Version=2.2.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Bugsnag.2.2.0\lib\net45\Bugsnag.dll</HintPath>
+    </Reference>
+    <Reference Include="GameAnalytics.Mono, Version=1.0.7296.1820, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\GameAnalytics.Mono.SDK.3.0.6\lib\net45\GameAnalytics.Mono.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.6.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
+    <Reference Include="NLog, Version=4.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
+      <HintPath>..\packages\NLog.4.3.8\lib\net45\NLog.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Data.SQLite, Version=1.0.102.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139, processorArchitecture=MSIL">
+      <HintPath>..\packages\GameAnalytics.Mono.SDK.3.0.6\lib\net45\System.Data.SQLite.dll</HintPath>
+    </Reference>
     <Reference Include="System.IO, Version=2.6.8.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Bcl.1.1.8\lib\net40\System.IO.dll</HintPath>
       <Private>True</Private>
@@ -174,6 +213,7 @@
       <HintPath>..\packages\Microsoft.Bcl.1.1.8\lib\net40\System.Runtime.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="EntityFramework">
@@ -1172,6 +1212,7 @@
     <EmbeddedResource Include="Localization\Strings.es.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Strings.es.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Localization\Strings.fr.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -1214,6 +1255,7 @@
       <ErrorText>This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
     </PropertyGroup>
     <Error Condition="!Exists('..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets'))" />
+    <Error Condition="!Exists('..\packages\GameAnalytics.Mono.SDK.3.0.6\build\net45\GameAnalytics.Mono.SDK.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\GameAnalytics.Mono.SDK.3.0.6\build\net45\GameAnalytics.Mono.SDK.targets'))" />
   </Target>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
        Other similar extension points exist, see Microsoft.Common.targets.
@@ -1223,4 +1265,5 @@
   </Target>
   -->
   <Import Project="..\packages\MonoGame.Content.Builder.3.6.0.1\build\MonoGame.Content.Builder.targets" Condition="Exists('..\packages\MonoGame.Content.Builder.3.6.0.1\build\MonoGame.Content.Builder.targets')" />
+  <Import Project="..\packages\GameAnalytics.Mono.SDK.3.0.6\build\net45\GameAnalytics.Mono.SDK.targets" Condition="Exists('..\packages\GameAnalytics.Mono.SDK.3.0.6\build\net45\GameAnalytics.Mono.SDK.targets')" />
 </Project>
