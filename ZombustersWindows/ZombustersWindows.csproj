@@ -1212,6 +1212,7 @@
     <Content Include="Content\fx\GaussianBlur.xnb">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <None Include="Content\fx\Macros.fxh" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>

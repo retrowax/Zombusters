@@ -65,7 +65,7 @@ namespace ZombustersWindows
 
         void FinishLogo() {
             this.ScreenManager.AddScreen(new StartScreen());
-            game.bloom.Visible = false;
+            game.bloom.Visible = true;
             ExitScreen();
         }
 

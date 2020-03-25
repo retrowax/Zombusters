@@ -74,9 +74,7 @@ namespace ZombustersWindows
             {
                 Settings = BloomSettings.PresetSettings[6]
             };
-            bloom.Visible = false;
             Components.Add(bloom);
-            bloom.Settings = BloomSettings.PresetSettings[6];
             bloom.Visible = true;
 
             bugSnagClient = new Client("1cad9818fb8d84290d776245cd1f948d");
