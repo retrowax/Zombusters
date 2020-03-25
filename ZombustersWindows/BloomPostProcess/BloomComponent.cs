@@ -2,6 +2,7 @@
 using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using System.IO;
 #endregion
 
 namespace ZombustersWindows
@@ -71,8 +72,8 @@ namespace ZombustersWindows
         {
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
-            bloomExtractEffect = Game.Content.Load<Effect>("fx/BloomExtract");
             bloomCombineEffect = Game.Content.Load<Effect>("fx/BloomCombine");
+            bloomExtractEffect = Game.Content.Load<Effect>("fx/BloomExtract");
             gaussianBlurEffect = Game.Content.Load<Effect>("fx/GaussianBlur");
 
             // Look up the resolution and format of our main backbuffer.
