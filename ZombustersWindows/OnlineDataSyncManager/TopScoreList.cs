@@ -296,7 +296,7 @@ namespace ZombustersWindows
             }
         }
 
-#if !WINDOWS_PHONE && !WINDOWS
+#if !WINDOWS_PHONE && !WINDOWS && !NETCOREAPP
         public int writeNextTransferEntry(PacketWriter writer, int myListIndex, int entryIndex)
         {
             lock (SYNC)

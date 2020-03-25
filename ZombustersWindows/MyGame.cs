@@ -8,11 +8,15 @@ using ZombustersWindows.Subsystem_Managers;
 using Microsoft.Xna.Framework.Input.Touch;
 using ZombustersWindows.MainScreens;
 using ZombustersWindows.Localization;
-using Bugsnag.Clients;
+using Bugsnag;
+using GameAnalyticsSDK.Net;
 
 namespace ZombustersWindows
 {
     public class MyGame : Game {
+        private const string ANALYTICS_GAME_KEY = "2a9782ff7b0d7b1326cc50178f587678";
+        private const string ANALYTICS_SEC_KEY = "8924590c2447e4a6e5335aea11e16f5ff8150d04";
+
         public GraphicsDeviceManager graphics;
         public ScreenManager screenManager;
         public GamePlayScreen playScreen;
@@ -28,7 +32,8 @@ namespace ZombustersWindows
         public TopScoreListContainer topScoreListContainer;
         public MusicComponent musicComponent;
         public Texture2D blackTexture;
-        public BaseClient bugSnagClient;
+        public Client bugSnagClient;
+        public StorageDataSource storageDataSource;
         public float totalGameSeconds;
 
         public BloomComponent bloom;
@@ -38,7 +43,7 @@ namespace ZombustersWindows
         public FrameRateCounter FrameRateComponent;
         public DebugInfoComponent DebugComponent;
 #endif
-        
+
         public String[] networkSettings = { "XBOX LIVE", "SYSTEM LINK" };
         public int currentNetworkSetting;
         public int maxGamers = 4;
@@ -71,7 +76,14 @@ namespace ZombustersWindows
             };
             bloom.Visible = false;
             Components.Add(bloom);
-           
+            bloom.Settings = BloomSettings.PresetSettings[6];
+            bloom.Visible = true;
+
+            bugSnagClient = new Client("1cad9818fb8d84290d776245cd1f948d");
+            //bugSnagClient.StartAutoNotify();
+
+            storageDataSource = new StorageDataSource(ref bugSnagClient);
+
             player1 = new Player(options, audio, this);
             player2 = new Player(options, audio, this);
             player3 = new Player(options, audio, this);
@@ -88,11 +100,12 @@ namespace ZombustersWindows
             Components.Add(musicComponent);
             musicComponent.Enabled = true;
 
-            bugSnagClient = new BaseClient("1cad9818fb8d84290d776245cd1f948d");
-            bugSnagClient.StartAutoNotify();
+
         }
 
         protected override void Initialize() {
+            InitializeMetrics();
+
             currentPlayers = new Avatar[maxGamers];
             for (int i = 0; i < maxGamers; i++) {
                 currentPlayers[i] = new Avatar();
@@ -100,7 +113,7 @@ namespace ZombustersWindows
                 if (i == 0) {
                     this.InitializeMain(PlayerIndex.One);
                 }
-            }      
+            }
             base.Initialize();
             screenManager.AddScreen(new LogoScreen());
             currentGameState = GameState.SignIn;
@@ -187,11 +200,16 @@ namespace ZombustersWindows
                     currentPlayers[i].Player.Controller = PlayerIndex.Three;
                     currentPlayers[i].Activate(player3);
                     currentPlayers[i].color = Color.Green;
-                } else {
+                } else if (i == 3){
                     currentPlayers[i].Player = player4;
                     currentPlayers[i].Player.Controller = PlayerIndex.Four;
                     currentPlayers[i].Activate(player4);
                     currentPlayers[i].color = Color.Yellow;
+                } else
+                {
+                    currentPlayers[i].Activate(player1);
+                    currentPlayers[i].Player.Controller = PlayerIndex.One;
+                    currentPlayers[i].color = Color.Blue;
                 }
                 currentPlayers[i].Player.IsRemote = true;
                 if (PlayersActive.Contains(i)) {
@@ -210,11 +228,7 @@ namespace ZombustersWindows
         }
 
         public void BeginSelectPlayerScreen(Boolean isMatchmaking) {
-            int i;
             Reset();
-            for (i = 0; i < maxGamers; i++) {
-                currentPlayers[i].Player = player4;
-            }
             bStateReady = true;
             currentGameState = GameState.InLobby;
             screenManager.AddScreen(new SelectPlayerScreen(isMatchmaking));
@@ -226,6 +240,10 @@ namespace ZombustersWindows
             currentPlayers[1].Reset(Color.Red);
             currentPlayers[2].Reset(Color.Green);
             currentPlayers[3].Reset(Color.Yellow);
+            currentPlayers[0].Player = player1;
+            currentPlayers[1].Player = player2;
+            currentPlayers[2].Player = player3;
+            currentPlayers[3].Player = player4;
         }
 
         public void Restart() {
@@ -299,8 +317,6 @@ namespace ZombustersWindows
             bloom.Visible = true;
             Reset();
             bPaused = EndPause();
-            //GamePlayStatus = GameplayState.StartLevel;
-            screenManager.AddScreen(new MenuScreen());
         }
 
         #region Setting Options
@@ -369,6 +385,17 @@ namespace ZombustersWindows
         protected override void Draw(GameTime gameTime) {
             graphics.GraphicsDevice.Clear(Color.Black);
             base.Draw(gameTime);
+        }
+
+        private void InitializeMetrics()
+        {
+#if DEBUG
+            GameAnalytics.SetEnabledInfoLog(true);
+            GameAnalytics.SetEnabledVerboseLog(true);
+#endif
+            GameAnalytics.ConfigureBuild("windows 1.1.0");
+            GameAnalytics.Initialize(ANALYTICS_GAME_KEY, ANALYTICS_SEC_KEY);
+            GameAnalytics.AddDesignEvent("GameStart", 1);
         }
     }
 }

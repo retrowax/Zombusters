@@ -12,7 +12,7 @@ using Microsoft.Xna.Framework.Input;
 using GameStateManagement;
 using ZombustersWindows.Subsystem_Managers;
 
-#if !WINDOWS
+#if !WINDOWS && !NETCOREAPP
 namespace ZombustersWindows
 {
     public class CreateFindMenuScreen : BackgroundScreen
@@ -32,7 +32,7 @@ namespace ZombustersWindows
         SpriteFont MenuInfoFont;
         SpriteFont MenuListFont;
 
-        #region Network Settings
+#region Network Settings
 
         Boolean CreateGame = false;
 
@@ -42,15 +42,15 @@ namespace ZombustersWindows
         //static String[] NetworkSettings = { "XBOX LIVE", "SYSTEM LINK" };
         //static int CurrentNetworkSetting = 0;
 
-        #endregion
+#endregion
 
-        #region Game Settings
+#region Game Settings
 
         public int LevelSettings = 1;
         public int PrivateSlotsSettings = 0;
         public int MaxPlayersSettings = 4;
 
-        #endregion
+#endregion
 
         public CreateFindMenuScreen(Boolean create)
         {

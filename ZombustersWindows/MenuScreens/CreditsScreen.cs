@@ -61,7 +61,7 @@ namespace ZombustersWindows
         {
             if (canLeaveScreen == true)
             {
-                ScreenManager.AddScreen(new ExtrasMenuScreen());
+                ExitScreen();
             }
         }
 
@@ -86,7 +86,7 @@ namespace ZombustersWindows
                     {
                         if (canLeaveScreen == true)
                         {
-                            ScreenManager.AddScreen(new ExtrasMenuScreen());
+                            ExitScreen();
                         }
                     }
                 }

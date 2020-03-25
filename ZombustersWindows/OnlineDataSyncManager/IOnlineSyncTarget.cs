@@ -65,7 +65,7 @@ namespace ZombustersWindows
          * IMPORTANT: The method is called by a separate worker thread. Make sure that it is properly
          * synched with the normal game main thread where necessary (if the two threads may possibly
          * access the same data). */
-#if !WINDOWS_PHONE && !WINDOWS
+#if !WINDOWS_PHONE && !WINDOWS && !NETCOREAPP
         bool writeTransferRecord(PacketWriter writer);
 #endif
 
@@ -88,7 +88,7 @@ namespace ZombustersWindows
          * IMPORTANT: The method is called by a separate worker thread. Make sure that it is properly
          * synched with the normal game main thread where necessary (if the two threads may possibly
          * access the same data). */
-#if !WINDOWS_PHONE && !WINDOWS
+#if !WINDOWS_PHONE && !WINDOWS && !NETCOREAPP
         bool readTransferRecord(PacketReader reader);
 #endif
     }

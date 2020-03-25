@@ -19,7 +19,7 @@ namespace ZombustersWindows.Localization {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     internal class Strings {
@@ -39,7 +39,11 @@ namespace ZombustersWindows.Localization {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
+#if WINDOWS
                     global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("ZombustersWindows.Localization.Strings", typeof(Strings).Assembly);
+#elif NETCOREAPP
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("ZombustersMac.Localization.Strings", typeof(Strings).Assembly);
+#endif
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -132,6 +136,15 @@ namespace ZombustersWindows.Localization {
         internal static string ChangeCharacterMenuString {
             get {
                 return ResourceManager.GetString("ChangeCharacterMenuString", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Change Language.
+        /// </summary>
+        internal static string ChangeLanguageOption {
+            get {
+                return ResourceManager.GetString("ChangeLanguageOption", resourceCulture);
             }
         }
         
@@ -588,7 +601,7 @@ namespace ZombustersWindows.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to How to Play.
+        ///   Looks up a localized string similar to HOW TO PLAY.
         /// </summary>
         internal static string HowToPlayInGameString {
             get {
@@ -709,7 +722,7 @@ namespace ZombustersWindows.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Leaderboards.
+        ///   Looks up a localized string similar to LEADERBOARDS.
         /// </summary>
         internal static string LeaderboardMenuString {
             get {
@@ -1284,7 +1297,7 @@ namespace ZombustersWindows.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Quit Game.
+        ///   Looks up a localized string similar to QUIT GAME.
         /// </summary>
         internal static string QuitGame {
             get {
@@ -1662,7 +1675,7 @@ namespace ZombustersWindows.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Play.
+        ///   Looks up a localized string similar to PLAY.
         /// </summary>
         internal static string WPPlayNewGame {
             get {

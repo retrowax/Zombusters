@@ -64,7 +64,7 @@ namespace ZombustersWindows
             
             //Posiciona el menu
             menu.CenterInXLeftMenu(view);
-#if !WINDOWS_PHONE && !WINDOWS
+#if !WINDOWS_PHONE && !WINDOWS && !NETCOREAPP
             this.PresenceMode = GamerPresenceMode.AtMenu;
 #endif
 
@@ -86,8 +86,7 @@ namespace ZombustersWindows
 
         void menu_MenuCanceled(Object sender, MenuSelection selection)
         {
-            // If they hit B or Back, go back to Menu Screen
-            ScreenManager.AddScreen(new ExtrasMenuScreen());
+            ExitScreen();
         }
         
         public override void LoadContent()
@@ -128,7 +127,7 @@ namespace ZombustersWindows
                         (gesture.Position.Y >= 614 && gesture.Position.Y <= 650))
                     {
                         // If they hit B or Back, go back to Menu Screen
-                        ScreenManager.AddScreen(new ExtrasMenuScreen());
+                        ExitScreen();
                     }
                 }
             }
@@ -141,7 +140,7 @@ namespace ZombustersWindows
         {
             // Menu Update
             if (!coveredByOtherScreen
-#if !WINDOWS
+#if !WINDOWS && !NETCOREAPP
                 && !Guide.IsVisible
 #endif
                 )

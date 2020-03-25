@@ -296,7 +296,7 @@ geht dein aktueller Fortschritt verloren.</value>
     <value>(Host)</value>
   </data>
   <data name="HowToPlayInGameString" xml:space="preserve">
-    <value>Spielanleitung</value>
+    <value>SPIELANLEITUNG</value>
   </data>
   <data name="HTPAimShootString" xml:space="preserve">
     <value>ZIELEN + SCHIESSEN</value>
@@ -338,7 +338,7 @@ Sammle Powerups um Extraleben und neue Waffen zu erhalten.</value>
     <value>Spiel beitreten</value>
   </data>
   <data name="LeaderboardMenuString" xml:space="preserve">
-    <value>Bestenlisten</value>
+    <value>BESTENLISTEN</value>
   </data>
   <data name="LeaderboardMMString" xml:space="preserve">
     <value>Schau dir die Online und Offline Rekorde deiner Freunde an.</value>
@@ -491,7 +491,7 @@ gegen die Zombies antreten und um ihr Leben bangen.</value>
     <value>Einem anderen Spiel beitreten.</value>
   </data>
   <data name="QuitGame" xml:space="preserve">
-    <value>Spiel verlassen</value>
+    <value>SPIEL VERLASSEN</value>
   </data>
   <data name="QuitToMainMenuInGameString" xml:space="preserve">
     <value>Zurück zum Hauptmenü</value>
@@ -632,7 +632,7 @@ gegen die Zombies antreten und um ihr Leben bangen.</value>
     <value>Bitte den Controller wieder anschließen</value>
   </data>
   <data name="WPPlayNewGame" xml:space="preserve">
-    <value>Spielen</value>
+    <value>SPIELEN</value>
   </data>
   <data name="WPPlayNewGameMMString" xml:space="preserve">
     <value>Starten eines neuen Spiels.</value>
