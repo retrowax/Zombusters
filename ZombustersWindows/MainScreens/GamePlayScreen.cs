@@ -1489,7 +1489,7 @@ namespace ZombustersWindows
                 }
 
                 // Perlin Noise effect draw
-                this.ScreenManager.SpriteBatch.Begin(SpriteSortMode.Deferred, BlendState.NonPremultiplied);
+                this.ScreenManager.SpriteBatch.Begin(SpriteSortMode.Deferred, BlendState.NonPremultiplied, null, null, null, null, Resolution.getTransformationMatrix());
 #if DEBUG
             Level.gameWorld.Draw(this.ScreenManager.SpriteBatch, gameTime, this.ScreenManager.SpriteBatch);
 #endif
@@ -1515,7 +1515,7 @@ namespace ZombustersWindows
                 }
 
                 // Draw the Storage Device Icon
-                this.ScreenManager.SpriteBatch.Begin(SpriteSortMode.FrontToBack, BlendState.AlphaBlend);
+                this.ScreenManager.SpriteBatch.Begin(SpriteSortMode.FrontToBack, BlendState.AlphaBlend, null, null, null, null, Resolution.getTransformationMatrix());
 
                 if (game.player1.Options == InputMode.Keyboard)
                 {
@@ -1539,7 +1539,7 @@ namespace ZombustersWindows
         private void DrawMap(Texture2D map)
         {
             SpriteBatch batch = this.ScreenManager.SpriteBatch;
-            batch.Begin();
+            batch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, null, null, null, null, Resolution.getTransformationMatrix());
 
             batch.Draw(map, new Rectangle(0, 0, 1280, 720), Color.White);
 
@@ -1566,7 +1566,7 @@ namespace ZombustersWindows
             int timeLeftWaitingPlayers;
             int fixedTimeLeft = 5;
             this.ScreenManager.FadeBackBufferToBlack(64);
-            this.ScreenManager.SpriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend);
+            this.ScreenManager.SpriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, null, null, null, null, Resolution.getTransformationMatrix());
 
             Vector2 UICenter = new Vector2(uiBounds.X + uiBounds.Width / 2, uiBounds.Y + uiBounds.Height / 2);
             this.ScreenManager.SpriteBatch.Draw(whiteLine, new Vector2(UICenter.X - whiteLine.Width /2, UICenter.Y - 10), Color.White);
@@ -1687,7 +1687,7 @@ namespace ZombustersWindows
             if (bGameOver)
             {
                 this.ScreenManager.FadeBackBufferToBlack(64);
-                this.ScreenManager.SpriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend);
+                this.ScreenManager.SpriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, null, null, null, null, Resolution.getTransformationMatrix());
 
                 Vector2 UICenter = new Vector2(uiBounds.X + uiBounds.Width / 2, uiBounds.Y + uiBounds.Height / 2);
                 this.ScreenManager.SpriteBatch.Draw(gameover, UICenter, null, Color.Red, 0, gameoverOrigin, 1.0f, SpriteEffects.None, 1.0f);
@@ -1699,7 +1699,7 @@ namespace ZombustersWindows
             {
                 string levelshowstring;
                 this.ScreenManager.FadeBackBufferToBlack(64);
-                this.ScreenManager.SpriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend);
+                this.ScreenManager.SpriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, null, null, null, null, Resolution.getTransformationMatrix());
 
                 Vector2 UICenter = new Vector2(uiBounds.X + uiBounds.Width / 2, uiBounds.Y + uiBounds.Height / 2);
                 this.ScreenManager.SpriteBatch.Draw(whiteLine, new Vector2(UICenter.X - whiteLine.Width / 2, UICenter.Y - 10), Color.White);
@@ -2896,7 +2896,7 @@ namespace ZombustersWindows
         private void DrawShotgunShots(List<ShotgunShell> shotgunbullets, double TotalGameSeconds)
         {
             SpriteBatch batch = this.ScreenManager.SpriteBatch;
-            batch.Begin();
+            batch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, null, null, null, null, Resolution.getTransformationMatrix());
             Vector2 pos;
             for (int i = 0; i < shotgunbullets.Count; i++)
             {
@@ -2926,7 +2926,7 @@ namespace ZombustersWindows
         private void DrawBullets(List<Vector4> bullets, double TotalGameSeconds)
         {
             SpriteBatch batch = this.ScreenManager.SpriteBatch;
-            batch.Begin();
+            batch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, null, null, null, null, Resolution.getTransformationMatrix());
             Vector2 pos;
             for (int i = 0; i < bullets.Count; i++)
             {
@@ -2949,7 +2949,7 @@ namespace ZombustersWindows
         {
             Vector2 Pos = new Vector2(uiBounds.X+ 10, uiBounds.Y+20);
             SpriteBatch batch = this.ScreenManager.SpriteBatch;
-            batch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend);
+            batch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, null, null, null, null, Resolution.getTransformationMatrix());
 
             foreach (Avatar cplayer in game.currentPlayers)
             {
