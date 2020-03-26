@@ -1854,7 +1854,7 @@ namespace ZombustersWindows
                                         this.ScreenManager.SpriteBatch.Draw(ShotgunNorthTexture[state.character], new Rectangle(Convert.ToInt32(state.position.X + 12 + offsetPosition.X), Convert.ToInt32(state.position.Y + offsetPosition.Y - 36), 21, ShotgunNorthTexture[state.character].Height),
                                             new Rectangle(0, 0, 21, ShotgunNorthTexture[state.character].Height), color, 0.0f, Vector2.Zero, SpriteEffects.None, layerIndex);
                                     }
-                                    DrawFlameThrower(state, game.totalGameSeconds, layerIndex);
+                                    DrawFlameThrower(state, layerIndex);
                                     break;
 
                                 default:
@@ -1900,7 +1900,7 @@ namespace ZombustersWindows
                                         this.ScreenManager.SpriteBatch.Draw(ShotgunNETexture[state.character], new Rectangle(Convert.ToInt32(state.position.X + 10 + offsetPosition.X), Convert.ToInt32(state.position.Y + offsetPosition.Y - 14), 53, ShotgunNETexture[state.character].Height),
                                             new Rectangle(0, 0, 53, ShotgunNETexture[state.character].Height), color, 0.0f, Vector2.Zero, SpriteEffects.None, layerIndex);
                                     }
-                                    DrawFlameThrower(state, game.totalGameSeconds, layerIndex);
+                                    DrawFlameThrower(state, layerIndex);
                                     break;
 
                                 default:
@@ -1947,7 +1947,7 @@ namespace ZombustersWindows
                                         this.ScreenManager.SpriteBatch.Draw(ShotgunEastTexture[state.character], new Rectangle(Convert.ToInt32(state.position.X + 10 + offsetPosition.X), Convert.ToInt32(state.position.Y + offsetPosition.Y + 1), 69, ShotgunEastTexture[state.character].Height),
                                             new Rectangle(0, 0, 69, ShotgunEastTexture[state.character].Height), color, 0.0f, Vector2.Zero, SpriteEffects.None, layerIndex);
                                     }
-                                    DrawFlameThrower(state, game.totalGameSeconds, layerIndex);
+                                    DrawFlameThrower(state, layerIndex);
                                     break;
 
                                 default:
@@ -1994,7 +1994,7 @@ namespace ZombustersWindows
                                         this.ScreenManager.SpriteBatch.Draw(ShotgunSETexture[state.character], new Rectangle(Convert.ToInt32(state.position.X + 10 + offsetPosition.X), Convert.ToInt32(state.position.Y + offsetPosition.Y + 1), 54, ShotgunSETexture[state.character].Height),
                                             new Rectangle(0, 0, 54, ShotgunSETexture[state.character].Height), color, 0.0f, Vector2.Zero, SpriteEffects.None, layerIndex);
                                     }
-                                    DrawFlameThrower(state, game.totalGameSeconds, layerIndex);
+                                    DrawFlameThrower(state, layerIndex);
                                     break;
 
                                 default:
@@ -2041,7 +2041,7 @@ namespace ZombustersWindows
                                         this.ScreenManager.SpriteBatch.Draw(ShotgunSouthTexture[state.character], new Rectangle(Convert.ToInt32(state.position.X + 10 + offsetPosition.X), Convert.ToInt32(state.position.Y + offsetPosition.Y + 1), 20, ShotgunSouthTexture[state.character].Height),
                                             new Rectangle(0, 0, 20, ShotgunSouthTexture[state.character].Height), color, 0.0f, Vector2.Zero, SpriteEffects.None, layerIndex);
                                     }
-                                    DrawFlameThrower(state, game.totalGameSeconds, layerIndex);
+                                    DrawFlameThrower(state, layerIndex);
                                     break;
 
                                 default:
@@ -2088,7 +2088,7 @@ namespace ZombustersWindows
                                         this.ScreenManager.SpriteBatch.Draw(ShotgunSETexture[state.character], new Rectangle(Convert.ToInt32(state.position.X + 4 + offsetPosition.X - 27), Convert.ToInt32(state.position.Y + offsetPosition.Y + 2), 54, ShotgunSETexture[state.character].Height),
                                             new Rectangle(0, 0, 54, ShotgunSETexture[state.character].Height), color, 0.0f, Vector2.Zero, SpriteEffects.FlipHorizontally, layerIndex);
                                     }
-                                    DrawFlameThrower(state, game.totalGameSeconds, layerIndex);
+                                    DrawFlameThrower(state, layerIndex);
                                     break;
 
                                 default:
@@ -2135,7 +2135,7 @@ namespace ZombustersWindows
                                         this.ScreenManager.SpriteBatch.Draw(ShotgunEastTexture[state.character], new Rectangle(Convert.ToInt32(state.position.X - 4 + offsetPosition.X - 34), Convert.ToInt32(state.position.Y + offsetPosition.Y + 2), 69, ShotgunEastTexture[state.character].Height),
                                             new Rectangle(0, 0, 69, ShotgunEastTexture[state.character].Height), color, 0.0f, Vector2.Zero, SpriteEffects.FlipHorizontally, layerIndex);
                                     }
-                                    DrawFlameThrower(state, game.totalGameSeconds, layerIndex);
+                                    DrawFlameThrower(state, layerIndex);
                                     break;
 
                                 default:
@@ -2182,7 +2182,7 @@ namespace ZombustersWindows
                                         this.ScreenManager.SpriteBatch.Draw(ShotgunNETexture[state.character], new Rectangle(Convert.ToInt32(state.position.X + offsetPosition.X + 4 - 26), Convert.ToInt32(state.position.Y + offsetPosition.Y - 13), 53, ShotgunNETexture[state.character].Height),
                                             new Rectangle(0, 0, 53, ShotgunNETexture[state.character].Height), color, 0.0f, Vector2.Zero, SpriteEffects.FlipHorizontally, layerIndex);
                                     }
-                                    DrawFlameThrower(state, game.totalGameSeconds, layerIndex);
+                                    DrawFlameThrower(state, layerIndex);
                                     break;
 
                                 default:
@@ -2417,7 +2417,7 @@ namespace ZombustersWindows
                                             this.ScreenManager.SpriteBatch.Draw(ShotgunNorthTexture[state.character], new Rectangle(Convert.ToInt32(state.position.X + 12 + offsetPosition.X), Convert.ToInt32(state.position.Y + offsetPosition.Y - 36), 21, ShotgunNorthTexture[state.character].Height),
                                                 new Rectangle(0, 0, 21, ShotgunNorthTexture[state.character].Height), Color.White, 0.0f, Vector2.Zero, SpriteEffects.None, layerIndex);
                                         }
-                                        DrawFlameThrower(state, game.totalGameSeconds, layerIndex);
+                                        DrawFlameThrower(state, layerIndex);
                                         break;
 
                                     default:
@@ -2463,7 +2463,7 @@ namespace ZombustersWindows
                                             this.ScreenManager.SpriteBatch.Draw(ShotgunNETexture[state.character], new Rectangle(Convert.ToInt32(state.position.X + 10 + offsetPosition.X), Convert.ToInt32(state.position.Y + offsetPosition.Y - 14), 53, ShotgunNETexture[state.character].Height),
                                                 new Rectangle(0, 0, 53, ShotgunNETexture[state.character].Height), Color.White, 0.0f, Vector2.Zero, SpriteEffects.None, layerIndex);
                                         }
-                                        DrawFlameThrower(state, game.totalGameSeconds, layerIndex);
+                                        DrawFlameThrower(state, layerIndex);
                                         break;
 
                                     default:
@@ -2510,7 +2510,7 @@ namespace ZombustersWindows
                                             this.ScreenManager.SpriteBatch.Draw(ShotgunEastTexture[state.character], new Rectangle(Convert.ToInt32(state.position.X + 10 + offsetPosition.X), Convert.ToInt32(state.position.Y + offsetPosition.Y + 1), 69, ShotgunEastTexture[state.character].Height),
                                                 new Rectangle(0, 0, 69, ShotgunEastTexture[state.character].Height), Color.White, 0.0f, Vector2.Zero, SpriteEffects.None, layerIndex);
                                         }
-                                        DrawFlameThrower(state, game.totalGameSeconds, layerIndex);
+                                        DrawFlameThrower(state, layerIndex);
                                         break;
 
                                     default:
@@ -2557,7 +2557,7 @@ namespace ZombustersWindows
                                             this.ScreenManager.SpriteBatch.Draw(ShotgunSETexture[state.character], new Rectangle(Convert.ToInt32(state.position.X + 10 + offsetPosition.X), Convert.ToInt32(state.position.Y + offsetPosition.Y + 1), 54, ShotgunSETexture[state.character].Height),
                                                 new Rectangle(0, 0, 54, ShotgunSETexture[state.character].Height), Color.White, 0.0f, Vector2.Zero, SpriteEffects.None, layerIndex);
                                         }
-                                        DrawFlameThrower(state, game.totalGameSeconds, layerIndex);
+                                        DrawFlameThrower(state, layerIndex);
                                         break;
 
                                     default:
@@ -2604,7 +2604,7 @@ namespace ZombustersWindows
                                             this.ScreenManager.SpriteBatch.Draw(ShotgunSouthTexture[state.character], new Rectangle(Convert.ToInt32(state.position.X + 10 + offsetPosition.X), Convert.ToInt32(state.position.Y + offsetPosition.Y + 1), 20, ShotgunSouthTexture[state.character].Height),
                                                 new Rectangle(0, 0, 20, ShotgunSouthTexture[state.character].Height), Color.White, 0.0f, Vector2.Zero, SpriteEffects.None, layerIndex);
                                         }
-                                        DrawFlameThrower(state, game.totalGameSeconds, layerIndex);
+                                        DrawFlameThrower(state, layerIndex);
                                         break;
 
                                     default:
@@ -2651,7 +2651,7 @@ namespace ZombustersWindows
                                             this.ScreenManager.SpriteBatch.Draw(ShotgunSETexture[state.character], new Rectangle(Convert.ToInt32(state.position.X + 4 + offsetPosition.X - 27), Convert.ToInt32(state.position.Y + offsetPosition.Y + 2), 54, ShotgunSETexture[state.character].Height),
                                                 new Rectangle(0, 0, 54, ShotgunSETexture[state.character].Height), Color.White, 0.0f, Vector2.Zero, SpriteEffects.FlipHorizontally, layerIndex);
                                         }
-                                        DrawFlameThrower(state, game.totalGameSeconds, layerIndex);
+                                        DrawFlameThrower(state, layerIndex);
                                         break;
 
                                     default:
@@ -2698,7 +2698,7 @@ namespace ZombustersWindows
                                             this.ScreenManager.SpriteBatch.Draw(ShotgunEastTexture[state.character], new Rectangle(Convert.ToInt32(state.position.X - 4 + offsetPosition.X - 34), Convert.ToInt32(state.position.Y + offsetPosition.Y + 2), 69, ShotgunEastTexture[state.character].Height),
                                                 new Rectangle(0, 0, 69, ShotgunEastTexture[state.character].Height), Color.White, 0.0f, Vector2.Zero, SpriteEffects.FlipHorizontally, layerIndex);
                                         }
-                                        DrawFlameThrower(state, game.totalGameSeconds, layerIndex);
+                                        DrawFlameThrower(state, layerIndex);
                                         break;
 
                                     default:
@@ -2745,7 +2745,7 @@ namespace ZombustersWindows
                                             this.ScreenManager.SpriteBatch.Draw(ShotgunNETexture[state.character], new Rectangle(Convert.ToInt32(state.position.X + offsetPosition.X + 4 - 26), Convert.ToInt32(state.position.Y + offsetPosition.Y - 13), 53, ShotgunNETexture[state.character].Height),
                                                 new Rectangle(0, 0, 53, ShotgunNETexture[state.character].Height), Color.White, 0.0f, Vector2.Zero, SpriteEffects.FlipHorizontally, layerIndex);
                                         }
-                                        DrawFlameThrower(state, game.totalGameSeconds, layerIndex);
+                                        DrawFlameThrower(state, layerIndex);
                                         break;
 
                                     default:
@@ -2881,17 +2881,12 @@ namespace ZombustersWindows
             }
         }
 
-        private void DrawFlameThrower(Avatar player, double TotalGameSeconds, float layerIndex)
+        private void DrawFlameThrower(Avatar player, float layerIndex)
         {
             if (player.currentgun == 3 && player.ammo[3] > 0)
             {
                 flamethrowerAnimation.Draw(this.ScreenManager.SpriteBatch, player.FlameThrowerPosition, SpriteEffects.None, layerIndex, player.FlameThrowerAngle, Color.White);
-#if DEBUG
-                //Rectangle aPositionAdjusted = new Rectangle(player.FlameThrowerRectangle.X, player.FlameThrowerRectangle.Y, player.FlameThrowerRectangle.Width, player.FlameThrowerRectangle.Height);
-                //this.ScreenManager.SpriteBatch.Draw(FT_CollisionTexture, aPositionAdjusted, new Rectangle(0, 0, 88, 43), Color.BlueViolet, player.FlameThrowerRectangle.Rotation, Vector2.Zero, SpriteEffects.None, 0.1f);
-#endif
             }
-            //this.ScreenManager.SpriteBatch.End();
         }
 
         private void DrawShotgunShots(List<ShotgunShell> shotgunbullets, double TotalGameSeconds)
