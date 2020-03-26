@@ -346,7 +346,7 @@
 //            PlayerGamertag.Clear();
 //            PlayerSignedIn.Clear();
 
-            
+
 
 //            //BUSCAR SOLUCION AL PROBLEMA DE LOS PERFILES QUE NO SON ONLINE, GAMERPICTURE!!!
 //            if (Gamer.SignedInGamers.Count > 0)
@@ -453,7 +453,7 @@
 //            Vector2 textPosition = new Vector2(pos.X + 5, pos.Y + 5); //uiBounds.Height - 100);
 //            Vector2 controllerPosition = new Vector2(pos.X + 250, pos.Y + 5);
 
-//            batch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend);
+//            batch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, null, null, null, null, Resolution.getTransformationMatrix());
 
 //            batch.Draw(myGroupBKG, myGroupPosition, Color.White);
 //            batch.DrawString(font, Strings.MyGroupString, new Vector2(myGroupPosition.X + 7, myGroupPosition.Y + 6), Color.White);
@@ -648,7 +648,7 @@
 //                            batch.Draw(connectedIcon, new Vector2(controllerPosition.X, controllerPosition.Y + (33 * i)), Color.White);
 //                        }
 //                    }
-                    
+
 //                    //Gamertag Text
 //                    batch.DrawString(font, OnlinePlayerGamertag[i], new Vector2(textPosition.X, textPosition.Y + (33 * i)), Color.White);
 
@@ -736,7 +736,7 @@
 //                    for (i = 0; i < PlayerIcons.Count - Gamer.SignedInGamers.Count; i++)
 //                    {
 //                        batch.Draw(notLoggedInGamerPic, new Rectangle(Convert.ToInt32(pos.X) - 31, Convert.ToInt32(pos.Y) + (33 * (i + Gamer.SignedInGamers.Count)), 30, 30), Color.White);
-                        
+
 //                        //Gray Block Short
 //                        batch.Draw(grayBlockShort, new Vector2(iconPosition.X, iconPosition.Y + (33 * (i + Gamer.SignedInGamers.Count))), Color.White);
 

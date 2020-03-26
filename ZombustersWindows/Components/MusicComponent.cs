@@ -402,7 +402,7 @@ namespace ZombustersWindows
             String[] song;
 
             SpriteBatch batch = ((MyGame)this.Game).screenManager.SpriteBatch;
-            batch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend);
+            batch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, null, null, null, null, Resolution.getTransformationMatrix());
 
             if (isShowingInfo)
             {

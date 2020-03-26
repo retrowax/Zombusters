@@ -114,7 +114,7 @@ namespace ZombustersWindows
             
             SpriteBatch batch = this.ScreenManager.SpriteBatch;
 
-            batch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend);
+            batch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend, null, null, null, null, Resolution.getTransformationMatrix());
 
 
             //draw title

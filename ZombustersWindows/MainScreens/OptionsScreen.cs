@@ -9,6 +9,7 @@ using ZombustersWindows.Localization;
 using System.Threading;
 using System.Globalization;
 using System.Collections.Generic;
+using ZombustersWindows.Subsystem_Managers;
 
 namespace ZombustersWindows
 {
@@ -118,13 +119,7 @@ namespace ZombustersWindows
             }
             else if (menu.Selection == 3)
             {
-                if (state.FullScreenMode) {
-                    state.FullScreenMode = false;
-                } else
-                {
-                    state.FullScreenMode = true;
-                }
-                this.game.graphics.ToggleFullScreen();
+                ToggleFullScreen();
             }
             else if (menu.Selection == 4)  // Save and Exit
             {
@@ -297,6 +292,27 @@ namespace ZombustersWindows
 
             base.HandleInput(input);
         }
+
+        private void ToggleFullScreen()
+        {
+            Resolution.SetVirtualResolution(game.VIRTUAL_RESOLUTION_WIDTH, game.VIRTUAL_RESOLUTION_HEIGHT);
+            if (state.FullScreenMode)
+            {
+                Resolution.SetResolution(game.VIRTUAL_RESOLUTION_WIDTH, game.VIRTUAL_RESOLUTION_HEIGHT, false);
+                state.FullScreenMode = false;
+                game.graphics.IsFullScreen = true;
+            }
+            else
+            {
+                int screenWidth = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width;
+                int screenHeight = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height;
+                Resolution.SetResolution(screenWidth, screenHeight, true);
+                state.FullScreenMode = true;
+                game.graphics.IsFullScreen = false;
+            }
+            this.game.graphics.ToggleFullScreen();
+        }
+
         private void HandlePlayer(InputState input, PlayerIndex index)
         {
             if (input.IsNewButtonPress(Buttons.LeftThumbstickRight, index) ||
@@ -388,7 +404,7 @@ namespace ZombustersWindows
             Vector2 contextMenuPosition = new Vector2(uiBounds.X + 22, pos.Y - 100);
             Vector2 MenuTitlePosition = new Vector2(contextMenuPosition.X - 3, contextMenuPosition.Y - 300);
 
-            batch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend);
+            batch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, null, null, null, null, Resolution.getTransformationMatrix());
 
             //Logo Menu
             batch.Draw(logoMenu, new Vector2(MenuTitlePosition.X - 55, MenuTitlePosition.Y - 5), Color.White);

@@ -30,7 +30,9 @@ namespace ZombustersWindows.Subsystem_Managers
                     XmlSerializer serializer = new XmlSerializer(returningClass.GetType());
                     returningObject = serializer.Deserialize(isolatedFileStream);
                 }
+#if WINDOWS
                 isolatedFileStream.FlushAsync();
+#endif
             }
             catch (Exception exception)
             {
@@ -63,7 +65,9 @@ namespace ZombustersWindows.Subsystem_Managers
                     XmlSerializer serializer = new XmlSerializer(classObjectToSave.GetType());
                     serializer.Serialize(isolatedFileStream, classObjectToSave);
                 }
+#if WINDOWS
                 isolatedFileStream.FlushAsync();
+#endif
             }
             catch (Exception exception)
             {
@@ -91,7 +95,9 @@ namespace ZombustersWindows.Subsystem_Managers
                     BinaryReader binaryReader = new BinaryReader(isolatedFileStream);
                     topScoreListContainer = new TopScoreListContainer(binaryReader);
                 }
+#if WINDOWS
                 isolatedFileStream.FlushAsync();
+#endif
             }
             catch (Exception exception)
             {
@@ -122,7 +128,9 @@ namespace ZombustersWindows.Subsystem_Managers
                     foreach (TopScoreList list in scoreList)
                         list.write(binaryWriter);
                 }
+#if WINDOWS
                 isolatedFileStream.FlushAsync();
+#endif
             }
             catch (Exception exception)
             {

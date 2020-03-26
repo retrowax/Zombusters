@@ -115,7 +115,7 @@ namespace ZombustersWindows
         public void Draw(SpriteBatch batch, GameTime gameTime, SpriteBatch spriteBatch)
         {
             //SpriteBatch batch = spriteBatch;
-            //batch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend);
+            //batch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, null, null, null, null, Resolution.getTransformationMatrix());
 
             if (_renderWalls)
                 foreach (Wall pared in _walls)

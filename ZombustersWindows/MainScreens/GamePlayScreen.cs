@@ -82,7 +82,7 @@ namespace ZombustersWindows
 
         public GamePlayScreen(MyGame game, LevelType startingLevel, SubLevel.SubLevelType startingSublevel)
             : base()
-        {            
+        {
             this.game = game;
             this.currentLevel = startingLevel;
             this.currentSublevel = startingSublevel;
@@ -131,7 +131,7 @@ namespace ZombustersWindows
         {
             switch (selection.Selection)
             {
-                case 0: // Resume                    
+                case 0: // Resume
                     break;
                 case 1: // Help
                     ScreenManager.AddScreen(new HowToPlayScreen());
@@ -156,7 +156,7 @@ namespace ZombustersWindows
                     break;
                 default:
                     break;
-            }           
+            }
         }
 
         void GameOverMenuOptionSelected(Object sender, MenuSelection selection)
@@ -190,9 +190,10 @@ namespace ZombustersWindows
         public void QuitToMenu()
         {
             GameScreen[] screenList = ScreenManager.GetScreens();
-            screenList[screenList.Length - 1].ExitScreen();
-            screenList[screenList.Length - 2].ExitScreen();
-            screenList[screenList.Length - 3].ExitScreen();
+            for (int i = screenList.Length -1; i > 0; i--)
+            {
+                screenList[i].ExitScreen();
+            }  
         }
 
         public override void Initialize()
@@ -313,7 +314,7 @@ namespace ZombustersWindows
                         {
                             this.ScreenManager.AddScreen(menu);
 
-                            // Use this to keep from adding more than one menu to the stack 
+                            // Use this to keep from adding more than one menu to the stack
                             bPaused = game.BeginPause();
                             GamePlayStatus = GameplayState.Pause;
                         }
@@ -323,7 +324,7 @@ namespace ZombustersWindows
             mouseState = Mouse.GetState();
             base.HandleInput(input);
         }
-        
+
         private NeutralInput ProcessPlayer(Player player, InputState input)
         {
             NeutralInput state = new NeutralInput
@@ -402,8 +403,8 @@ namespace ZombustersWindows
                 }
             }
 
-            if (input.IsNewButtonPress(Buttons.Y, player.Controller) 
-                || input.IsNewKeyPress(Keys.R) 
+            if (input.IsNewButtonPress(Buttons.Y, player.Controller)
+                || input.IsNewKeyPress(Keys.R)
                 || input.GetCurrentMouseState().RightButton == ButtonState.Pressed)
             {
                 state.ButtonY = true;
@@ -414,7 +415,7 @@ namespace ZombustersWindows
             }
 
             if (input.IsNewButtonPress(Buttons.RightShoulder, player.Controller)
-                || input.IsNewKeyPress(Keys.Tab) 
+                || input.IsNewKeyPress(Keys.Tab)
                 || input.GetCurrentMouseState().MiddleButton == ButtonState.Pressed)
             {
                 state.ButtonRB = true;
@@ -430,13 +431,13 @@ namespace ZombustersWindows
         }
         #endregion
 
-        public override void Update(GameTime gameTime, bool otherScreenHasFocus, 
+        public override void Update(GameTime gameTime, bool otherScreenHasFocus,
             bool coveredByOtherScreen)
         {
             byte i, j;
             cursorPos = new Vector2(mouseState.X, mouseState.Y);
             input.Update();
-            
+
             // If the user activates the menu...
             for (i = 0; i < game.currentPlayers.Length; i++)
             {
@@ -449,7 +450,7 @@ namespace ZombustersWindows
                         {
                             this.ScreenManager.AddScreen(menu);
 
-                            // Use this to keep from adding more than one menu to the stack 
+                            // Use this to keep from adding more than one menu to the stack
                             bPaused = game.BeginPause();
                             GamePlayStatus = GameplayState.Pause;
                             return;
@@ -701,17 +702,17 @@ namespace ZombustersWindows
         }
 
         #region Player-centric code
-        public void UpdatePlayer(int player, float totalGameSeconds, 
+        public void UpdatePlayer(int player, float totalGameSeconds,
             float elapsedGameSeconds, NeutralInput input)
         {
             if ((game.currentPlayers[player].status == ObjectStatus.Active) ||
                 (game.currentPlayers[player].status == ObjectStatus.Immune))
             {
                 ProcessInput(player, totalGameSeconds, elapsedGameSeconds, input);
-            }            
+            }
         }
 
-        public void ProcessInput(int player, float totalGameSeconds, 
+        public void ProcessInput(int player, float totalGameSeconds,
             float elapsedGameSeconds, NeutralInput input)
         {
             if (input.StickLeftMovement.X > 0)
@@ -1073,7 +1074,7 @@ namespace ZombustersWindows
                     }
                 }
             }
-        }       
+        }
 
         private void TryMove(int Player)
         {
@@ -1081,7 +1082,7 @@ namespace ZombustersWindows
             game.currentPlayers[Player].accumMove = accumMove;
 
             if (accumMove.Length() > .5)
-            {                
+            {
                 Vector2 move = game.currentPlayers[Player].VerifyMove(accumMove);
                 Vector2 pos = game.currentPlayers[Player].position + move;
 
@@ -1124,7 +1125,7 @@ namespace ZombustersWindows
                 {
                     PlayerMove((byte)Player, pos);
                 }
-                
+
                 accumMove = Vector2.Zero;
             }
         }
@@ -1489,7 +1490,7 @@ namespace ZombustersWindows
                 }
 
                 // Perlin Noise effect draw
-                this.ScreenManager.SpriteBatch.Begin(SpriteSortMode.Deferred, BlendState.NonPremultiplied);
+                this.ScreenManager.SpriteBatch.Begin(SpriteSortMode.Deferred, BlendState.NonPremultiplied, null, null, null, null, Resolution.getTransformationMatrix());
 #if DEBUG
             Level.gameWorld.Draw(this.ScreenManager.SpriteBatch, gameTime, this.ScreenManager.SpriteBatch);
 #endif
@@ -1515,7 +1516,7 @@ namespace ZombustersWindows
                 }
 
                 // Draw the Storage Device Icon
-                this.ScreenManager.SpriteBatch.Begin(SpriteSortMode.FrontToBack, BlendState.AlphaBlend);
+                this.ScreenManager.SpriteBatch.Begin(SpriteSortMode.FrontToBack, BlendState.AlphaBlend, null, null, null, null, Resolution.getTransformationMatrix());
 
                 if (game.player1.Options == InputMode.Keyboard)
                 {
@@ -1539,7 +1540,7 @@ namespace ZombustersWindows
         private void DrawMap(Texture2D map)
         {
             SpriteBatch batch = this.ScreenManager.SpriteBatch;
-            batch.Begin();
+            batch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, null, null, null, null, Resolution.getTransformationMatrix());
 
             batch.Draw(map, new Rectangle(0, 0, 1280, 720), Color.White);
 
@@ -1550,7 +1551,7 @@ namespace ZombustersWindows
         {
             this.ScreenManager.FadeBackBufferToBlack(64);
             this.ScreenManager.SpriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend);
-            
+
             Vector2 UICenter = new Vector2(uiBounds.X + uiBounds.Width / 2, uiBounds.Y + uiBounds.Height / 2);
             this.ScreenManager.SpriteBatch.Draw(whiteLine, new Vector2(UICenter.X - whiteLine.Width / 2, UICenter.Y - 10), Color.White);
             this.ScreenManager.SpriteBatch.DrawString(MenuHeaderFont, Strings.ClearedGameplayString.ToUpper(), new Vector2(UICenter.X - Convert.ToInt32(MenuHeaderFont.MeasureString(Strings.ClearedGameplayString.ToUpper()).X)/2, UICenter.Y), Color.White);
@@ -1566,8 +1567,8 @@ namespace ZombustersWindows
             int timeLeftWaitingPlayers;
             int fixedTimeLeft = 5;
             this.ScreenManager.FadeBackBufferToBlack(64);
-            this.ScreenManager.SpriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend);
-            
+            this.ScreenManager.SpriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, null, null, null, null, Resolution.getTransformationMatrix());
+
             Vector2 UICenter = new Vector2(uiBounds.X + uiBounds.Width / 2, uiBounds.Y + uiBounds.Height / 2);
             this.ScreenManager.SpriteBatch.Draw(whiteLine, new Vector2(UICenter.X - whiteLine.Width /2, UICenter.Y - 10), Color.White);
 
@@ -1687,7 +1688,7 @@ namespace ZombustersWindows
             if (bGameOver)
             {
                 this.ScreenManager.FadeBackBufferToBlack(64);
-                this.ScreenManager.SpriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend);
+                this.ScreenManager.SpriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, null, null, null, null, Resolution.getTransformationMatrix());
 
                 Vector2 UICenter = new Vector2(uiBounds.X + uiBounds.Width / 2, uiBounds.Y + uiBounds.Height / 2);
                 this.ScreenManager.SpriteBatch.Draw(gameover, UICenter, null, Color.Red, 0, gameoverOrigin, 1.0f, SpriteEffects.None, 1.0f);
@@ -1699,7 +1700,7 @@ namespace ZombustersWindows
             {
                 string levelshowstring;
                 this.ScreenManager.FadeBackBufferToBlack(64);
-                this.ScreenManager.SpriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend);
+                this.ScreenManager.SpriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, null, null, null, null, Resolution.getTransformationMatrix());
 
                 Vector2 UICenter = new Vector2(uiBounds.X + uiBounds.Width / 2, uiBounds.Y + uiBounds.Height / 2);
                 this.ScreenManager.SpriteBatch.Draw(whiteLine, new Vector2(UICenter.X - whiteLine.Width / 2, UICenter.Y - 10), Color.White);
@@ -1759,7 +1760,7 @@ namespace ZombustersWindows
             float layerIndex = GetLayerIndex(state, furniturelist);
             Vector2 offsetPosition = new Vector2(-20, -55);
 
-            if (GamePlayStatus == GameplayState.Playing 
+            if (GamePlayStatus == GameplayState.Playing
                 || GamePlayStatus == GameplayState.StageCleared
                 || GamePlayStatus == GameplayState.StartLevel)
             {
@@ -1798,7 +1799,7 @@ namespace ZombustersWindows
 
             switch (state.status)
             {
-                case ObjectStatus.Inactive:  
+                case ObjectStatus.Inactive:
                     break;
                 case ObjectStatus.Active:
                     Color color;
@@ -2896,7 +2897,7 @@ namespace ZombustersWindows
         private void DrawShotgunShots(List<ShotgunShell> shotgunbullets, double TotalGameSeconds)
         {
             SpriteBatch batch = this.ScreenManager.SpriteBatch;
-            batch.Begin();
+            batch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, null, null, null, null, Resolution.getTransformationMatrix());
             Vector2 pos;
             for (int i = 0; i < shotgunbullets.Count; i++)
             {
@@ -2926,7 +2927,7 @@ namespace ZombustersWindows
         private void DrawBullets(List<Vector4> bullets, double TotalGameSeconds)
         {
             SpriteBatch batch = this.ScreenManager.SpriteBatch;
-            batch.Begin();
+            batch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, null, null, null, null, Resolution.getTransformationMatrix());
             Vector2 pos;
             for (int i = 0; i < bullets.Count; i++)
             {
@@ -2949,7 +2950,7 @@ namespace ZombustersWindows
         {
             Vector2 Pos = new Vector2(uiBounds.X+ 10, uiBounds.Y+20);
             SpriteBatch batch = this.ScreenManager.SpriteBatch;
-            batch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend);
+            batch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, null, null, null, null, Resolution.getTransformationMatrix());
 
             foreach (Avatar cplayer in game.currentPlayers)
             {
@@ -3378,7 +3379,7 @@ namespace ZombustersWindows
                     }
                 }
             }
-            else if (angle > 1.19625f && angle < 2.7275f) //SOUTH-EAST 
+            else if (angle > 1.19625f && angle < 2.7275f) //SOUTH-EAST
             {
                 if (game.currentPlayers[player].currentgun == 3)
                 {

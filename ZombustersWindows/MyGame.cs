@@ -14,6 +14,8 @@ using GameAnalyticsSDK.Net;
 namespace ZombustersWindows
 {
     public class MyGame : Game {
+        public int VIRTUAL_RESOLUTION_WIDTH = 1280;
+        public int VIRTUAL_RESOLUTION_HEIGHT = 720;
         private const string ANALYTICS_GAME_KEY = "2a9782ff7b0d7b1326cc50178f587678";
         private const string ANALYTICS_SEC_KEY = "8924590c2447e4a6e5335aea11e16f5ff8150d04";
 
@@ -57,11 +59,14 @@ namespace ZombustersWindows
         public MyGame() {
             graphics = new GraphicsDeviceManager(this)
             {
-                PreferredBackBufferWidth = 1280,
-                PreferredBackBufferHeight = 720,
                 IsFullScreen = false
             };
+            Resolution.Init(ref graphics);
             Content.RootDirectory = "Content";
+
+            Resolution.SetVirtualResolution(VIRTUAL_RESOLUTION_WIDTH, VIRTUAL_RESOLUTION_HEIGHT);
+            Resolution.SetResolution(VIRTUAL_RESOLUTION_WIDTH, VIRTUAL_RESOLUTION_HEIGHT, graphics.IsFullScreen);
+
             options = new OptionsState();
             screenManager = new ScreenManager(this);
             Components.Add(screenManager);
@@ -100,8 +105,6 @@ namespace ZombustersWindows
             musicComponent = new MusicComponent(this);
             Components.Add(musicComponent);
             musicComponent.Enabled = true;
-
-            
         }
 
         protected override void Initialize() {
