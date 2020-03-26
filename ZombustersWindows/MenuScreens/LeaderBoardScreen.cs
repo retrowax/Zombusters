@@ -92,7 +92,7 @@ namespace ZombustersWindows
         
         public override void LoadContent()
         {
-#if WINDOWS
+#if WINDOWS || NETCOREAPP
             //Key "Scape"
             kbEsc = this.ScreenManager.Game.Content.Load<Texture2D>(@"Keyboard/key_esc");
 #endif
