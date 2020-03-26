@@ -78,6 +78,8 @@ namespace ZombustersWindows
 
         void ConfirmExitMessageBoxAccepted(object sender, PlayerIndexEventArgs e) {
             game.Exit();
+            // WARNING: This is a workaround because the game is not exiting correctly
+            Environment.Exit(0);
         }
 
         void OnMenuOptionSelected(Object sender, MenuSelection selection) {

@@ -105,8 +105,6 @@ namespace ZombustersWindows
             musicComponent = new MusicComponent(this);
             Components.Add(musicComponent);
             musicComponent.Enabled = true;
-
-            
         }
 
         protected override void Initialize() {
