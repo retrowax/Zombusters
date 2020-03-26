@@ -190,9 +190,10 @@ namespace ZombustersWindows
         public void QuitToMenu()
         {
             GameScreen[] screenList = ScreenManager.GetScreens();
-            screenList[screenList.Length - 1].ExitScreen();
-            screenList[screenList.Length - 2].ExitScreen();
-            screenList[screenList.Length - 3].ExitScreen();
+            for (int i = screenList.Length -1; i > 0; i--)
+            {
+                screenList[i].ExitScreen();
+            }  
         }
 
         public override void Initialize()
