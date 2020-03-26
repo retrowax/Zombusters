@@ -68,6 +68,7 @@
     <Compile Include="Components\LanguageComponent.cs" />
     <Compile Include="ContentManager\EnemiesCount.cs" />
     <Compile Include="ContentManager\Furniture.cs" />
+    <Compile Include="ContentManager\FurnitureComparer.cs" />
     <Compile Include="ContentManager\Level.cs" />
     <Compile Include="ContentManager\SubLevel.cs" />
     <Compile Include="ContentManager\SubLevelType.cs" />
@@ -180,6 +181,7 @@
     <Compile Include="SubsystemManagers\RotatedRectangle.cs" />
     <Compile Include="SubsystemManagers\ScrollingTextManager.cs" />
     <Compile Include="SubsystemManagers\StorageDataSource.cs" />
+    <Compile Include="SubsystemManagers\GameplayHelper.cs" />
     <Compile Include="SubsystemManagers\VirtualThumbsticks.cs" />
     <Compile Include="SupportScreens\ExitMessageBox.cs" />
     <Compile Include="SupportScreens\NetworkBusyScreen.cs" />
@@ -187,8 +189,8 @@
     <Compile Include="GameObjects\Enemies\TankState.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="Bugsnag, Version=1.4.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Bugsnag.1.4.0.0\lib\Net45\Bugsnag.dll</HintPath>
+    <Reference Include="Bugsnag, Version=2.2.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Bugsnag.2.2.0\lib\net45\Bugsnag.dll</HintPath>
     </Reference>
     <Reference Include="GameAnalytics.Mono, Version=1.0.7296.1820, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\GameAnalytics.Mono.SDK.3.0.6\lib\net45\GameAnalytics.Mono.dll</HintPath>
@@ -212,6 +214,7 @@
       <HintPath>..\packages\Microsoft.Bcl.1.1.8\lib\net40\System.Runtime.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="EntityFramework">

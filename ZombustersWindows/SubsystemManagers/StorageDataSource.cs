@@ -2,15 +2,16 @@ using System;
 using System.IO;
 using System.Xml.Serialization;
 using System.IO.IsolatedStorage;
-using Bugsnag.Clients;
+using Bugsnag;
+using System.Reflection;
 
 namespace ZombustersWindows.Subsystem_Managers
 {
     public class StorageDataSource
     {
-        private readonly BaseClient BugSnagClient;
+        private readonly Client BugSnagClient;
 
-        public StorageDataSource(ref BaseClient bugSnagClient)
+        public StorageDataSource(ref Client bugSnagClient)
         {
             this.BugSnagClient = bugSnagClient;
         }
@@ -52,6 +53,11 @@ namespace ZombustersWindows.Subsystem_Managers
             try
             {
                 IsolatedStorageFileStream isolatedFileStream = null;
+
+                if (isolatedStorageFile.FileExists(filename)) {
+                    isolatedStorageFile.DeleteFile(filename);
+                }
+
                 using (isolatedFileStream = isolatedStorageFile.OpenFile(filename, FileMode.OpenOrCreate, FileAccess.ReadWrite))
                 {
                     XmlSerializer serializer = new XmlSerializer(classObjectToSave.GetType());

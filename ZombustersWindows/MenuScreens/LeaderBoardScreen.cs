@@ -65,7 +65,7 @@ namespace ZombustersWindows
             
             //Posiciona el menu
             menu.CenterInXLeftMenu(view);
-#if !WINDOWS_PHONE && !WINDOWS
+#if !WINDOWS_PHONE && !WINDOWS && !NETCOREAPP
             this.PresenceMode = GamerPresenceMode.AtMenu;
 #endif
 
@@ -141,7 +141,7 @@ namespace ZombustersWindows
         {
             // Menu Update
             if (!coveredByOtherScreen
-#if !WINDOWS
+#if !WINDOWS && !NETCOREAPP
                 && !Guide.IsVisible
 #endif
                 )

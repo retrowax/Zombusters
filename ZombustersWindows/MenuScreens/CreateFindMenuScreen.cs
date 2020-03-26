@@ -12,7 +12,7 @@ using Microsoft.Xna.Framework.Input;
 using GameStateManagement;
 using ZombustersWindows.Subsystem_Managers;
 
-#if !WINDOWS
+#if !WINDOWS && !NETCOREAPP
 namespace ZombustersWindows
 {
     public class CreateFindMenuScreen : BackgroundScreen
