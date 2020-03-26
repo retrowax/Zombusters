@@ -6,9 +6,9 @@ namespace ZombustersWindows
 {
     public class Player
     {
-        private static string OPTIONS_FILENAME = "options.xml";
-        private static string LEADERBOARD_FILENAME = "leaderboard.txt";
-        private static string SAVE_GAME_FILENAME = "savegame.sav";
+        private static readonly string OPTIONS_FILENAME = "options.xml";
+        private static readonly string LEADERBOARD_FILENAME = "leaderboard.txt";
+        private static readonly string SAVE_GAME_FILENAME = "savegame.sav";
 
         public bool IsPlaying;
         public PlayerIndex Controller;
