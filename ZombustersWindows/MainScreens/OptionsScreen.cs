@@ -312,6 +312,7 @@ namespace ZombustersWindows
             }
             this.game.graphics.ToggleFullScreen();
         }
+
         private void HandlePlayer(InputState input, PlayerIndex index)
         {
             if (input.IsNewButtonPress(Buttons.LeftThumbstickRight, index) ||

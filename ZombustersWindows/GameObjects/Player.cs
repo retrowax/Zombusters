@@ -1,9 +1,6 @@
-﻿using System;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System.IO;
-using System.Xml.Serialization;
-using System.IO.IsolatedStorage;
+using ZombustersWindows.Subsystem_Managers;
 
 namespace ZombustersWindows
 {
@@ -116,6 +113,11 @@ namespace ZombustersWindows
             audioManager.SetOptions(optionsState.FXLevel, optionsState.MusicLevel);
             if (optionsState.FullScreenMode && game.graphics.IsFullScreen == false)
             {
+                int screenWidth = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width;
+                int screenHeight = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height;
+                Resolution.SetResolution(screenWidth, screenHeight, true);
+                optionsState.FullScreenMode = true;
+                game.graphics.IsFullScreen = false;
                 game.graphics.ToggleFullScreen();
             }
         }
