@@ -532,7 +532,7 @@ namespace ZombustersWindows
                     {
                         ZombieState zombie = Zombies[i];
                         {
-                            zombie.Update(gameTime, game);
+                            zombie.Update(gameTime, game, Zombies);
                         }
                     }
 
@@ -572,7 +572,7 @@ namespace ZombustersWindows
                     {
                         if (zombie.status == ObjectStatus.Dying)
                         {
-                            zombie.Update(gameTime, ((MyGame)this.ScreenManager.Game));
+                            zombie.Update(gameTime, ((MyGame)this.ScreenManager.Game), Zombies);
                         }
                     }
 

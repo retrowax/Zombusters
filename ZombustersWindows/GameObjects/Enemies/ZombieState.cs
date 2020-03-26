@@ -138,7 +138,7 @@ namespace ZombustersWindows
 #endif
         }
 
-        public void Update(GameTime gameTime, MyGame game)
+        public void Update(GameTime gameTime, MyGame game, List<ZombieState> zombies)
         {
             if (this.status != ObjectStatus.Dying)
             {
@@ -149,12 +149,13 @@ namespace ZombustersWindows
                 this.entity.Velocity = VectorHelper.TruncateVector(this.entity.Velocity, this.entity.MaxSpeed / 1.5f);
                 this.entity.Position += this.entity.Velocity;
 
-                //for (int i = 0; i < Zombies.Count; i++)
-                //{
-                    if (entity.Position != this.entity.Position && status == ObjectStatus.Active)
+                for (int i = 0; i < zombies.Count; i++)
+                {
+                    SteeringEntity zombieEntity = zombies[i].entity;
+                    if (entity.Position != zombieEntity.Position && status == ObjectStatus.Active)
                     {
                         //calculate the distance between the positions of the entities
-                        Vector2 ToEntity = entity.Position - entity.Position;
+                        Vector2 ToEntity = entity.Position - zombieEntity.Position;
 
                         float DistFromEachOther = ToEntity.Length();
 
@@ -169,7 +170,7 @@ namespace ZombustersWindows
                             entity.Position = (entity.Position + (ToEntity / DistFromEachOther) * AmountOfOverLap);
                         }
                     }
-                //}
+                }
             }
             else
             {
