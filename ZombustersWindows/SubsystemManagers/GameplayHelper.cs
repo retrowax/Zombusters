@@ -1,5 +1,6 @@
 using Microsoft.Xna.Framework;
 using System;
+using ZombustersWindows.GameObjects;
 
 namespace ZombustersWindows
 {
@@ -14,8 +15,7 @@ namespace ZombustersWindows
         /// <param name="enemy"></param>
         /// <param name="gameTime"></param>
         /// <returns></returns>
-        public static bool DetectCollision(int currentgun, Vector4 bullet, Vector2 enemy,
-            double totalGameSeconds)
+        public static bool DetectCollision(Vector4 bullet, Vector2 enemy, double totalGameSeconds)
         {
 
             Vector2 pos = FindBulletPosition(bullet, totalGameSeconds);

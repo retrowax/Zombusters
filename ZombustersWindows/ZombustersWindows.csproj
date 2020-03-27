@@ -84,6 +84,7 @@
     <Compile Include="GameObjects\Enemies\Enemies.cs" />
     <Compile Include="GameObjects\Explosion.cs" />
     <Compile Include="GameObjects\Enemies\EnemyType.cs" />
+    <Compile Include="GameObjects\GunType.cs" />
     <Compile Include="GameObjects\ShotgunShell.cs" />
     <Compile Include="GameStateManagement\GameState.cs" />
     <Compile Include="GameStateManagement\InputMode.cs" />

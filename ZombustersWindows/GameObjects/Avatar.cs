@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using ZombustersWindows.GameObjects;
 
 namespace ZombustersWindows
 {
@@ -19,7 +20,7 @@ namespace ZombustersWindows
         public Color color;
         public byte character;
         public float shotAngle;
-        public int currentgun;
+        public GunType currentgun;
         public Vector2 accumMove;
         public Vector2 accumFire;
 
@@ -302,9 +303,9 @@ namespace ZombustersWindows
             lives = 3;
             score = 0;
             lifecounter = 100;
-            currentgun = 0;
-            ammo = new List<int>(4);
-            for (i = 0; i < 4; i++)
+            currentgun = GunType.pistol;
+            ammo = new List<int>(Enum.GetNames(typeof(GunType)).Length);
+            for (i = 0; i < Enum.GetNames(typeof(GunType)).Length; i++)
             {
                 ammo.Add(0);
             }

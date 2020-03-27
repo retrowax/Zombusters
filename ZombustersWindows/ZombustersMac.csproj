@@ -142,6 +142,11 @@
         <WCFMetadata Include="Service References\" />
     </ItemGroup>
     <ItemGroup>
+      <None Remove="LevelXMLs\Level1\Level1_enemies.xml" />
+      <None Remove="LevelXMLs\Level1\Level1_furnitures.xml" />
+      <None Remove="LevelXMLs\Level1\Level1_walls.xml" />
+    </ItemGroup>
+    <ItemGroup>
         <Content Include="Content\Achievements\achieve_1.xnb">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </Content>
