@@ -404,7 +404,8 @@ namespace ZombustersWindows
             }
 
             if (input.IsNewButtonPress(Buttons.Y, player.Controller)
-                || input.IsNewKeyPress(Keys.R)
+                || input.IsNewKeyPress(Keys.LeftControl)
+                || input.IsNewKeyPress(Keys.E)
                 || input.GetCurrentMouseState().RightButton == ButtonState.Pressed)
             {
                 state.ButtonY = true;
