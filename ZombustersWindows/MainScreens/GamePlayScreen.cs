@@ -10,6 +10,7 @@ using Microsoft.Xna.Framework.Input.Touch;
 using ZombustersWindows.MainScreens;
 using ZombustersWindows.Localization;
 using System.Xml.Linq;
+using ZombustersWindows.GameObjects;
 
 namespace ZombustersWindows
 {
@@ -749,13 +750,13 @@ namespace ZombustersWindows
 
             if (input.ButtonY == true)
             {
-                if (game.currentPlayers[player].currentgun == 0)
+                if (game.currentPlayers[player].currentgun == GunType.pistol)
                 {
-                    game.currentPlayers[player].currentgun = 3;
+                    game.currentPlayers[player].currentgun = GunType.flamethrower;
                 }
                 else
                 {
-                    game.currentPlayers[player].currentgun = 0;
+                    game.currentPlayers[player].currentgun = GunType.pistol;
                 }
             }
 
@@ -927,8 +928,7 @@ namespace ZombustersWindows
                 {
                     for (int l = 0; l < player.bullets.Count; l++)
                     {
-                        if (GameplayHelper.DetectCollision(player.currentgun, player.bullets[l],
-                            tank.entity.Position, totalGameSeconds))
+                        if (GameplayHelper.DetectCollision(player.bullets[l], tank.entity.Position, totalGameSeconds))
                         {
                             TankDestroyed(tank, (byte)playerId);
                             player.bullets.RemoveAt(l);
@@ -945,7 +945,7 @@ namespace ZombustersWindows
                 ZombieState zombie = Zombies[i];
                 if (zombie.status == ObjectStatus.Active)
                 {
-                    if (player.currentgun == 3 && player.ammo[player.currentgun] > 0)
+                    if (player.currentgun == GunType.flamethrower && player.ammo[(int)player.currentgun] > 0)
                     {
                         if (player.accumFire.Length() > .5)
                         {
@@ -971,8 +971,7 @@ namespace ZombustersWindows
                     {
                         for (int l = 0; l < player.bullets.Count; l++)
                         {
-                            if (GameplayHelper.DetectCollision(player.currentgun, player.bullets[l],
-                                zombie.entity.Position, totalGameSeconds))
+                            if (GameplayHelper.DetectCollision(player.bullets[l], zombie.entity.Position, totalGameSeconds))
                             {
                                 if (zombie.lifecounter > 1.0f)
                                 {
@@ -1138,7 +1137,7 @@ namespace ZombustersWindows
                 return;
 
             // Check if we have ammo; if not we change the current gun to pistol
-            if (game.currentPlayers[Player].ammo[game.currentPlayers[Player].currentgun] == 0)
+            if (game.currentPlayers[Player].ammo[(int)game.currentPlayers[Player].currentgun] == 0)
             {
                 game.currentPlayers[Player].currentgun = 0;
             }
@@ -1147,7 +1146,7 @@ namespace ZombustersWindows
             {
                 RateOfFire = 10;
             }
-            else if (game.currentPlayers[Player].currentgun == 3 && game.currentPlayers[Player].ammo[3] > 0)
+            else if (game.currentPlayers[Player].currentgun == GunType.flamethrower && game.currentPlayers[Player].ammo[3] > 0)
             {
                 RateOfFire = 15;
             }
@@ -1156,7 +1155,7 @@ namespace ZombustersWindows
                 RateOfFire = game.currentPlayers[Player].RateOfFire;
             }
 
-            if (game.currentPlayers[Player].currentgun == 0 || (game.currentPlayers[Player].currentgun != 0 && game.currentPlayers[Player].ammo[game.currentPlayers[Player].currentgun] > 0))
+            if (game.currentPlayers[Player].currentgun == 0 || (game.currentPlayers[Player].currentgun != 0 && game.currentPlayers[Player].ammo[(int)game.currentPlayers[Player].currentgun] > 0))
             {
                 if (game.currentPlayers[Player].VerifyFire(TotalGameSeconds, RateOfFire))
                 {
@@ -1819,7 +1818,7 @@ namespace ZombustersWindows
                         {
                             switch (state.currentgun)
                             {
-                                case 0:
+                                case GunType.pistol:
                                     if (state.character == 0)
                                     {
                                         if (state.ammo[0] > 0)
@@ -1844,7 +1843,7 @@ namespace ZombustersWindows
                                     }
                                     break;
 
-                                case 3:
+                                case GunType.flamethrower:
                                     if (state.character == 0)
                                     {
                                         this.ScreenManager.SpriteBatch.Draw(ShotgunNorthTexture[state.character], new Rectangle(Convert.ToInt32(state.position.X + 6 + offsetPosition.X), Convert.ToInt32(state.position.Y + offsetPosition.Y - 34), 26, ShotgunNorthTexture[state.character].Height),
@@ -1866,7 +1865,7 @@ namespace ZombustersWindows
                         {
                             switch (state.currentgun)
                             {
-                                case 0:
+                                case GunType.pistol:
                                     if (state.character == 0)
                                     {
                                         if (state.ammo[0] > 0)
@@ -1890,7 +1889,7 @@ namespace ZombustersWindows
                                         }
                                     }
                                     break;
-                                case 3:
+                                case GunType.flamethrower:
                                     if (state.character == 0)
                                     {
                                         this.ScreenManager.SpriteBatch.Draw(ShotgunNETexture[state.character], new Rectangle(Convert.ToInt32(state.position.X + 7 + offsetPosition.X), Convert.ToInt32(state.position.Y + offsetPosition.Y - 14), 59, ShotgunNETexture[state.character].Height),
@@ -1912,7 +1911,7 @@ namespace ZombustersWindows
                         {
                             switch (state.currentgun)
                             {
-                                case 0:
+                                case GunType.pistol:
                                     if (state.character == 0)
                                     {
                                         if (state.ammo[0] > 0)
@@ -1937,7 +1936,7 @@ namespace ZombustersWindows
                                     }
                                     break;
 
-                                case 3:
+                                case GunType.flamethrower:
                                     if (state.character == 0)
                                     {
                                         this.ScreenManager.SpriteBatch.Draw(ShotgunEastTexture[state.character], new Rectangle(Convert.ToInt32(state.position.X + 7 + offsetPosition.X), Convert.ToInt32(state.position.Y + offsetPosition.Y + 4), 71, ShotgunEastTexture[state.character].Height),
@@ -1959,7 +1958,7 @@ namespace ZombustersWindows
                         {
                             switch (state.currentgun)
                             {
-                                case 0:
+                                case GunType.pistol:
                                     if (state.character == 0)
                                     {
                                         if (state.ammo[0] > 0)
@@ -1984,7 +1983,7 @@ namespace ZombustersWindows
                                     }
                                     break;
 
-                                case 3:
+                                case GunType.flamethrower:
                                     if (state.character == 0)
                                     {
                                         this.ScreenManager.SpriteBatch.Draw(ShotgunSETexture[state.character], new Rectangle(Convert.ToInt32(state.position.X + 7 + offsetPosition.X), Convert.ToInt32(state.position.Y + offsetPosition.Y + 4), 58, ShotgunSETexture[state.character].Height),
@@ -2006,7 +2005,7 @@ namespace ZombustersWindows
                         {
                             switch (state.currentgun)
                             {
-                                case 0:
+                                case GunType.pistol:
                                     if (state.character == 0)
                                     {
                                         if (state.ammo[0] > 0)
@@ -2031,7 +2030,7 @@ namespace ZombustersWindows
                                     }
                                     break;
 
-                                case 3:
+                                case GunType.flamethrower:
                                     if (state.character == 0)
                                     {
                                         this.ScreenManager.SpriteBatch.Draw(ShotgunSouthTexture[state.character], new Rectangle(Convert.ToInt32(state.position.X + 7 + offsetPosition.X), Convert.ToInt32(state.position.Y + offsetPosition.Y + 4), 21, ShotgunSouthTexture[state.character].Height),
@@ -2053,7 +2052,7 @@ namespace ZombustersWindows
                         {
                             switch (state.currentgun)
                             {
-                                case 0:
+                                case GunType.pistol:
                                     if (state.character == 0)
                                     {
                                         if (state.ammo[0] > 0)
@@ -2078,7 +2077,7 @@ namespace ZombustersWindows
                                     }
                                     break;
 
-                                case 3:
+                                case GunType.flamethrower:
                                     if (state.character == 0)
                                     {
                                         this.ScreenManager.SpriteBatch.Draw(ShotgunSETexture[state.character], new Rectangle(Convert.ToInt32(state.position.X + 1 + offsetPosition.X - 29), Convert.ToInt32(state.position.Y + offsetPosition.Y + 4), 58, ShotgunSETexture[state.character].Height),
@@ -2100,7 +2099,7 @@ namespace ZombustersWindows
                         {
                             switch (state.currentgun)
                             {
-                                case 0:
+                                case GunType.pistol:
                                     if (state.character == 0)
                                     {
                                         if (state.ammo[0] > 0)
@@ -2125,7 +2124,7 @@ namespace ZombustersWindows
                                     }
                                     break;
 
-                                case 3:
+                                case GunType.flamethrower:
                                     if (state.character == 0)
                                     {
                                         this.ScreenManager.SpriteBatch.Draw(ShotgunEastTexture[state.character], new Rectangle(Convert.ToInt32(state.position.X - 6 + offsetPosition.X - 35), Convert.ToInt32(state.position.Y + offsetPosition.Y + 4), 71, ShotgunEastTexture[state.character].Height),
@@ -2147,7 +2146,7 @@ namespace ZombustersWindows
                         {
                             switch (state.currentgun)
                             {
-                                case 0:
+                                case GunType.pistol:
                                     if (state.character == 0)
                                     {
                                         if (state.ammo[0] > 0)
@@ -2172,7 +2171,7 @@ namespace ZombustersWindows
                                     }
                                     break;
 
-                                case 3:
+                                case GunType.flamethrower:
                                     if (state.character == 0)
                                     {
                                         this.ScreenManager.SpriteBatch.Draw(ShotgunNETexture[state.character], new Rectangle(Convert.ToInt32(state.position.X + offsetPosition.X - 29), Convert.ToInt32(state.position.Y + offsetPosition.Y - 14), 59, ShotgunNETexture[state.character].Height),
@@ -2382,7 +2381,7 @@ namespace ZombustersWindows
                             {
                                 switch (state.currentgun)
                                 {
-                                    case 0:
+                                    case GunType.pistol:
                                         if (state.character == 0)
                                         {
                                             if (state.ammo[0] > 0)
@@ -2407,7 +2406,7 @@ namespace ZombustersWindows
                                         }
                                         break;
 
-                                    case 3:
+                                    case GunType.flamethrower:
                                         if (state.character == 0)
                                         {
                                             this.ScreenManager.SpriteBatch.Draw(ShotgunNorthTexture[state.character], new Rectangle(Convert.ToInt32(state.position.X + 6 + offsetPosition.X), Convert.ToInt32(state.position.Y + offsetPosition.Y - 34), 26, ShotgunNorthTexture[state.character].Height),
@@ -2429,7 +2428,7 @@ namespace ZombustersWindows
                             {
                                 switch (state.currentgun)
                                 {
-                                    case 0:
+                                    case GunType.pistol:
                                         if (state.character == 0)
                                         {
                                             if (state.ammo[0] > 0)
@@ -2453,7 +2452,7 @@ namespace ZombustersWindows
                                             }
                                         }
                                         break;
-                                    case 3:
+                                    case GunType.flamethrower:
                                         if (state.character == 0)
                                         {
                                             this.ScreenManager.SpriteBatch.Draw(ShotgunNETexture[state.character], new Rectangle(Convert.ToInt32(state.position.X + 7 + offsetPosition.X), Convert.ToInt32(state.position.Y + offsetPosition.Y - 14), 59, ShotgunNETexture[state.character].Height),
@@ -2475,7 +2474,7 @@ namespace ZombustersWindows
                             {
                                 switch (state.currentgun)
                                 {
-                                    case 0:
+                                    case GunType.pistol:
                                         if (state.character == 0)
                                         {
                                             if (state.ammo[0] > 0)
@@ -2500,7 +2499,7 @@ namespace ZombustersWindows
                                         }
                                         break;
 
-                                    case 3:
+                                    case GunType.flamethrower:
                                         if (state.character == 0)
                                         {
                                             this.ScreenManager.SpriteBatch.Draw(ShotgunEastTexture[state.character], new Rectangle(Convert.ToInt32(state.position.X + 7 + offsetPosition.X), Convert.ToInt32(state.position.Y + offsetPosition.Y + 4), 71, ShotgunEastTexture[state.character].Height),
@@ -2522,7 +2521,7 @@ namespace ZombustersWindows
                             {
                                 switch (state.currentgun)
                                 {
-                                    case 0:
+                                    case GunType.pistol:
                                         if (state.character == 0)
                                         {
                                             if (state.ammo[0] > 0)
@@ -2547,7 +2546,7 @@ namespace ZombustersWindows
                                         }
                                         break;
 
-                                    case 3:
+                                    case GunType.flamethrower:
                                         if (state.character == 0)
                                         {
                                             this.ScreenManager.SpriteBatch.Draw(ShotgunSETexture[state.character], new Rectangle(Convert.ToInt32(state.position.X + 7 + offsetPosition.X), Convert.ToInt32(state.position.Y + offsetPosition.Y + 4), 58, ShotgunSETexture[state.character].Height),
@@ -2569,7 +2568,7 @@ namespace ZombustersWindows
                             {
                                 switch (state.currentgun)
                                 {
-                                    case 0:
+                                    case GunType.pistol:
                                         if (state.character == 0)
                                         {
                                             if (state.ammo[0] > 0)
@@ -2594,7 +2593,7 @@ namespace ZombustersWindows
                                         }
                                         break;
 
-                                    case 3:
+                                    case GunType.flamethrower:
                                         if (state.character == 0)
                                         {
                                             this.ScreenManager.SpriteBatch.Draw(ShotgunSouthTexture[state.character], new Rectangle(Convert.ToInt32(state.position.X + 7 + offsetPosition.X), Convert.ToInt32(state.position.Y + offsetPosition.Y + 4), 21, ShotgunSouthTexture[state.character].Height),
@@ -2616,7 +2615,7 @@ namespace ZombustersWindows
                             {
                                 switch (state.currentgun)
                                 {
-                                    case 0:
+                                    case GunType.pistol:
                                         if (state.character == 0)
                                         {
                                             if (state.ammo[0] > 0)
@@ -2641,7 +2640,7 @@ namespace ZombustersWindows
                                         }
                                         break;
 
-                                    case 3:
+                                    case GunType.flamethrower:
                                         if (state.character == 0)
                                         {
                                             this.ScreenManager.SpriteBatch.Draw(ShotgunSETexture[state.character], new Rectangle(Convert.ToInt32(state.position.X + 1 + offsetPosition.X - 29), Convert.ToInt32(state.position.Y + offsetPosition.Y + 4), 58, ShotgunSETexture[state.character].Height),
@@ -2663,7 +2662,7 @@ namespace ZombustersWindows
                             {
                                 switch (state.currentgun)
                                 {
-                                    case 0:
+                                    case GunType.pistol:
                                         if (state.character == 0)
                                         {
                                             if (state.ammo[0] > 0)
@@ -2688,7 +2687,7 @@ namespace ZombustersWindows
                                         }
                                         break;
 
-                                    case 3:
+                                    case GunType.flamethrower:
                                         if (state.character == 0)
                                         {
                                             this.ScreenManager.SpriteBatch.Draw(ShotgunEastTexture[state.character], new Rectangle(Convert.ToInt32(state.position.X - 6 + offsetPosition.X - 35), Convert.ToInt32(state.position.Y + offsetPosition.Y + 4), 71, ShotgunEastTexture[state.character].Height),
@@ -2710,7 +2709,7 @@ namespace ZombustersWindows
                             {
                                 switch (state.currentgun)
                                 {
-                                    case 0:
+                                    case GunType.pistol:
                                         if (state.character == 0)
                                         {
                                             if (state.ammo[0] > 0)
@@ -2735,7 +2734,7 @@ namespace ZombustersWindows
                                         }
                                         break;
 
-                                    case 3:
+                                    case GunType.flamethrower:
                                         if (state.character == 0)
                                         {
                                             this.ScreenManager.SpriteBatch.Draw(ShotgunNETexture[state.character], new Rectangle(Convert.ToInt32(state.position.X + offsetPosition.X - 29), Convert.ToInt32(state.position.Y + offsetPosition.Y - 14), 59, ShotgunNETexture[state.character].Height),
@@ -2884,7 +2883,7 @@ namespace ZombustersWindows
 
         private void DrawFlameThrower(Avatar player, float layerIndex)
         {
-            if (player.currentgun == 3 && player.ammo[3] > 0)
+            if (player.currentgun == GunType.flamethrower && player.ammo[(int)GunType.flamethrower] > 0)
             {
                 flamethrowerAnimation.Draw(this.ScreenManager.SpriteBatch, player.FlameThrowerPosition, SpriteEffects.None, layerIndex, player.FlameThrowerAngle, Color.White);
             }
@@ -3003,19 +3002,19 @@ namespace ZombustersWindows
 
                             switch (cplayer.currentgun)
                             {
-                                case 0:
+                                case GunType.pistol:
                                     batch.Draw(pistolammoUI, new Vector2(Pos.X + 124, Pos.Y + 23), Color.White);
                                     batch.DrawString(arcade14, cplayer.ammo[0].ToString("000"), new Vector2(Pos.X + heart.Width + 125, Pos.Y + 20), Color.White);
                                     break;
-                                case 1:
+                                case GunType.shotgun:
                                     batch.Draw(shotgunammoUI, new Vector2(Pos.X + 123, Pos.Y + 22), Color.White);
                                     batch.DrawString(arcade14, cplayer.ammo[1].ToString("000"), new Vector2(Pos.X + heart.Width + 125, Pos.Y + 20), Color.White);
                                     break;
-                                case 2:
+                                case GunType.grenade:
                                     batch.Draw(grenadeammoUI, new Vector2(Pos.X + 122, Pos.Y + 21), Color.White);
                                     batch.DrawString(arcade14, cplayer.ammo[2].ToString("000"), new Vector2(Pos.X + heart.Width + 125, Pos.Y + 20), Color.White);
                                     break;
-                                case 3:
+                                case GunType.flamethrower:
                                     batch.Draw(flamethrowerammoUI, new Vector2(Pos.X + 124, Pos.Y + 23), Color.White);
                                     batch.DrawString(arcade14, cplayer.ammo[3].ToString("000"), new Vector2(Pos.X + heart.Width + 125, Pos.Y + 20), Color.White);
                                     break;
@@ -3262,7 +3261,7 @@ namespace ZombustersWindows
             //NORTH
             if (angle > -0.3925f && angle < 0.3925f)
             {
-                if (game.currentPlayers[player].currentgun == 3)
+                if (game.currentPlayers[player].currentgun == GunType.flamethrower)
                 {
                     if (game.currentPlayers[player].character == 0)
                     {
@@ -3273,7 +3272,7 @@ namespace ZombustersWindows
                         game.currentPlayers[player].setFlameThrower(new Vector2(game.currentPlayers[player].position.X - 25, game.currentPlayers[player].position.Y - 61), angle);
                     }
                 }
-                else if (game.currentPlayers[player].currentgun == 1)
+                else if (game.currentPlayers[player].currentgun == GunType.shotgun)
                 {
                     game.currentPlayers[player].shotgunbullets.Add(new ShotgunShell(game.currentPlayers[player].position, direction, angle, totalGameSeconds));
                 }
@@ -3305,7 +3304,7 @@ namespace ZombustersWindows
             }
             else if (angle > 0.3925f && angle < 1.1775f) //NORTH-EAST
             {
-                if (game.currentPlayers[player].currentgun == 3)
+                if (game.currentPlayers[player].currentgun == GunType.flamethrower)
                 {
                     if (game.currentPlayers[player].character == 0)
                     {
@@ -3316,7 +3315,7 @@ namespace ZombustersWindows
                         game.currentPlayers[player].setFlameThrower(new Vector2(game.currentPlayers[player].position.X, game.currentPlayers[player].position.Y - 70), angle);
                     }
                 }
-                else if (game.currentPlayers[player].currentgun == 1)
+                else if (game.currentPlayers[player].currentgun == GunType.shotgun)
                 {
                     game.currentPlayers[player].shotgunbullets.Add(new ShotgunShell(game.currentPlayers[player].position, direction, angle, totalGameSeconds));
                 }
@@ -3334,7 +3333,7 @@ namespace ZombustersWindows
             }
             else if (angle > 1.1775f && angle < 1.9625f) //EAST
             {
-                if (game.currentPlayers[player].currentgun == 3)
+                if (game.currentPlayers[player].currentgun == GunType.flamethrower)
                 {
                     if (game.currentPlayers[player].character == 0)
                     {
@@ -3345,7 +3344,7 @@ namespace ZombustersWindows
                         game.currentPlayers[player].setFlameThrower(new Vector2(game.currentPlayers[player].position.X + 30, game.currentPlayers[player].position.Y - 60), angle);
                     }
                 }
-                else if (game.currentPlayers[player].currentgun == 1)
+                else if (game.currentPlayers[player].currentgun == GunType.shotgun)
                 {
                     game.currentPlayers[player].shotgunbullets.Add(new ShotgunShell(game.currentPlayers[player].position, direction, angle, totalGameSeconds));
                 }
@@ -3377,7 +3376,7 @@ namespace ZombustersWindows
             }
             else if (angle > 1.19625f && angle < 2.7275f) //SOUTH-EAST
             {
-                if (game.currentPlayers[player].currentgun == 3)
+                if (game.currentPlayers[player].currentgun == GunType.flamethrower)
                 {
                     if (game.currentPlayers[player].character == 0)
                     {
@@ -3388,7 +3387,7 @@ namespace ZombustersWindows
                         game.currentPlayers[player].setFlameThrower(new Vector2(game.currentPlayers[player].position.X + 47, game.currentPlayers[player].position.Y - 28), angle);
                     }
                 }
-                else if (game.currentPlayers[player].currentgun == 1)
+                else if (game.currentPlayers[player].currentgun == GunType.shotgun)
                 {
                     game.currentPlayers[player].shotgunbullets.Add(new ShotgunShell(game.currentPlayers[player].position, direction, angle, totalGameSeconds));
                 }
@@ -3406,7 +3405,7 @@ namespace ZombustersWindows
             }
             else if (angle > 2.7275f || angle < -2.7275f) //SOUTH
             {
-                if (game.currentPlayers[player].currentgun == 3)
+                if (game.currentPlayers[player].currentgun == GunType.flamethrower)
                 {
                     if (game.currentPlayers[player].character == 0)
                     {
@@ -3417,7 +3416,7 @@ namespace ZombustersWindows
                         game.currentPlayers[player].setFlameThrower(new Vector2(game.currentPlayers[player].position.X + 37, game.currentPlayers[player].position.Y + 2), angle);
                     }
                 }
-                else if (game.currentPlayers[player].currentgun == 1)
+                else if (game.currentPlayers[player].currentgun == GunType.shotgun)
                 {
                     game.currentPlayers[player].shotgunbullets.Add(new ShotgunShell(game.currentPlayers[player].position, direction, angle, totalGameSeconds));
                 }
@@ -3449,7 +3448,7 @@ namespace ZombustersWindows
             }
             else if (angle < -1.9625f && angle > -2.7275f) //SOUTH-WEST
             {
-                if (game.currentPlayers[player].currentgun == 3)
+                if (game.currentPlayers[player].currentgun == GunType.flamethrower)
                 {
                     if (game.currentPlayers[player].character == 0)
                     {
@@ -3460,7 +3459,7 @@ namespace ZombustersWindows
                         game.currentPlayers[player].setFlameThrower(new Vector2(game.currentPlayers[player].position.X, game.currentPlayers[player].position.Y + 19), angle);
                     }
                 }
-                else if (game.currentPlayers[player].currentgun == 1)
+                else if (game.currentPlayers[player].currentgun == GunType.shotgun)
                 {
                     game.currentPlayers[player].shotgunbullets.Add(new ShotgunShell(game.currentPlayers[player].position, direction, angle, totalGameSeconds));
                 }
@@ -3478,7 +3477,7 @@ namespace ZombustersWindows
             }
             else if (angle < -1.1775f && angle > -1.9625f) //WEST
             {
-                if (game.currentPlayers[player].currentgun == 3)
+                if (game.currentPlayers[player].currentgun == GunType.flamethrower)
                 {
                     if (game.currentPlayers[player].character == 0)
                     {
@@ -3489,7 +3488,7 @@ namespace ZombustersWindows
                         game.currentPlayers[player].setFlameThrower(new Vector2(game.currentPlayers[player].position.X - 30, game.currentPlayers[player].position.Y + 6), angle);
                     }
                 }
-                else if (game.currentPlayers[player].currentgun == 1)
+                else if (game.currentPlayers[player].currentgun == GunType.shotgun)
                 {
                     game.currentPlayers[player].shotgunbullets.Add(new ShotgunShell(game.currentPlayers[player].position, direction, angle, totalGameSeconds));
                 }
@@ -3514,7 +3513,7 @@ namespace ZombustersWindows
             }
             else if (angle < -0.3925f && angle > -1.1775f) //NORTH-WEST
             {
-                if (game.currentPlayers[player].currentgun == 3)
+                if (game.currentPlayers[player].currentgun == GunType.flamethrower)
                 {
                     if (game.currentPlayers[player].character == 0)
                     {
@@ -3525,7 +3524,7 @@ namespace ZombustersWindows
                         game.currentPlayers[player].setFlameThrower(new Vector2(game.currentPlayers[player].position.X - 44, game.currentPlayers[player].position.Y - 22), angle);
                     }
                 }
-                else if (game.currentPlayers[player].currentgun == 1)
+                else if (game.currentPlayers[player].currentgun == GunType.shotgun)
                 {
                     game.currentPlayers[player].shotgunbullets.Add(new ShotgunShell(game.currentPlayers[player].position, direction, angle, totalGameSeconds));
                 }
@@ -3542,15 +3541,15 @@ namespace ZombustersWindows
                 }
             }
 
-            if (game.currentPlayers[player].ammo[game.currentPlayers[player].currentgun] > 0)
+            if (game.currentPlayers[player].ammo[(int)game.currentPlayers[player].currentgun] > 0)
             {
-                game.currentPlayers[player].ammo[game.currentPlayers[player].currentgun] -= 1;
+                game.currentPlayers[player].ammo[(int)game.currentPlayers[player].currentgun] -= 1;
             }
 
             switch (game.currentPlayers[player].currentgun)
             {
-                case 0:
-                    if (game.currentPlayers[player].ammo[game.currentPlayers[player].currentgun] > 0)
+                case GunType.pistol:
+                    if (game.currentPlayers[player].ammo[(int)game.currentPlayers[player].currentgun] > 0)
                     {
                         game.audio.PlayMachineGun();
                     }
@@ -3559,7 +3558,7 @@ namespace ZombustersWindows
                         game.audio.PlayShot();
                     }
                     break;
-                case 3:
+                case GunType.flamethrower:
                     game.audio.PlayFlameThrower();
                     break;
                 default:

@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Microsoft.Xna.Framework;
+using ZombustersWindows.GameObjects;
 
 namespace ZombustersWindows
 {
@@ -15,6 +16,6 @@ namespace ZombustersWindows
         public int lifecounter;
         public float deathTimeTotalSeconds;
         public Color color;
-        public int currentgun;
+        public GunType currentgun;
     }
 }
