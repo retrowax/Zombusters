@@ -752,7 +752,15 @@ namespace ZombustersWindows
             {
                 if (game.currentPlayers[player].currentgun == GunType.pistol)
                 {
+                    game.currentPlayers[player].currentgun = GunType.machinegun;
+                }
+                else if (game.currentPlayers[player].currentgun == GunType.machinegun)
+                {
                     game.currentPlayers[player].currentgun = GunType.flamethrower;
+                }
+                else if (game.currentPlayers[player].currentgun == GunType.flamethrower)
+                {
+                    game.currentPlayers[player].currentgun = GunType.pistol;
                 }
                 else
                 {
@@ -883,28 +891,28 @@ namespace ZombustersWindows
 
                         if (powerup.PUType == PowerUp.Type.machinegun_ammo)
                         {
-                            player.ammo[0] += powerup.Value;
+                            player.ammo[(int)GunType.machinegun] += powerup.Value;
                             powerup.status = ObjectStatus.Dying;
 
                         }
 
                         if (powerup.PUType == PowerUp.Type.shotgun_ammo)
                         {
-                            player.ammo[1] += powerup.Value;
+                            player.ammo[(int)GunType.shotgun] += powerup.Value;
                             powerup.status = ObjectStatus.Dying;
 
                         }
 
                         if (powerup.PUType == PowerUp.Type.grenadelauncher_ammo)
                         {
-                            player.ammo[2] += powerup.Value;
+                            player.ammo[(int)GunType.grenade] += powerup.Value;
                             powerup.status = ObjectStatus.Dying;
 
                         }
 
                         if (powerup.PUType == PowerUp.Type.flamethrower_ammo)
                         {
-                            player.ammo[3] += powerup.Value;
+                            player.ammo[(int)GunType.flamethrower] += powerup.Value;
                             powerup.status = ObjectStatus.Dying;
 
                         }
@@ -1139,14 +1147,14 @@ namespace ZombustersWindows
             // Check if we have ammo; if not we change the current gun to pistol
             if (game.currentPlayers[Player].ammo[(int)game.currentPlayers[Player].currentgun] == 0)
             {
-                game.currentPlayers[Player].currentgun = 0;
+                game.currentPlayers[Player].currentgun = GunType.pistol;
             }
 
-            if (game.currentPlayers[Player].currentgun == 0 && game.currentPlayers[Player].ammo[0] > 0)
+            if (game.currentPlayers[Player].currentgun == GunType.machinegun && game.currentPlayers[Player].ammo[(int)GunType.machinegun] > 0)
             {
                 RateOfFire = 10;
             }
-            else if (game.currentPlayers[Player].currentgun == GunType.flamethrower && game.currentPlayers[Player].ammo[3] > 0)
+            else if (game.currentPlayers[Player].currentgun == GunType.flamethrower && game.currentPlayers[Player].ammo[(int)GunType.flamethrower] > 0)
             {
                 RateOfFire = 15;
             }
@@ -1155,7 +1163,7 @@ namespace ZombustersWindows
                 RateOfFire = game.currentPlayers[Player].RateOfFire;
             }
 
-            if (game.currentPlayers[Player].currentgun == 0 || (game.currentPlayers[Player].currentgun != 0 && game.currentPlayers[Player].ammo[(int)game.currentPlayers[Player].currentgun] > 0))
+            if (game.currentPlayers[Player].currentgun == GunType.pistol || (game.currentPlayers[Player].currentgun != GunType.pistol && game.currentPlayers[Player].ammo[(int)game.currentPlayers[Player].currentgun] > 0))
             {
                 if (game.currentPlayers[Player].VerifyFire(TotalGameSeconds, RateOfFire))
                 {
@@ -1819,9 +1827,10 @@ namespace ZombustersWindows
                             switch (state.currentgun)
                             {
                                 case GunType.pistol:
+                                case GunType.machinegun:
                                     if (state.character == 0)
                                     {
-                                        if (state.ammo[0] > 0)
+                                        if (state.ammo[(int)GunType.machinegun] > 0)
                                         {
                                             ShotgunNorthAnimation[state.character].Draw(this.ScreenManager.SpriteBatch, new Vector2(state.position.X + 6 + offsetPosition.X, state.position.Y + offsetPosition.Y - 34), SpriteEffects.None, layerIndex, 0f, color);
                                         }
@@ -1832,7 +1841,7 @@ namespace ZombustersWindows
                                     }
                                     else
                                     {
-                                        if (state.ammo[0] > 0)
+                                        if (state.ammo[(int)GunType.machinegun] > 0)
                                         {
                                             ShotgunNorthAnimation[state.character].Draw(this.ScreenManager.SpriteBatch, new Vector2(state.position.X + 12 + offsetPosition.X, state.position.Y + offsetPosition.Y - 36), SpriteEffects.None, layerIndex, 0f, color);
                                         }
@@ -1865,10 +1874,12 @@ namespace ZombustersWindows
                         {
                             switch (state.currentgun)
                             {
+
                                 case GunType.pistol:
+                                case GunType.machinegun:
                                     if (state.character == 0)
                                     {
-                                        if (state.ammo[0] > 0)
+                                        if (state.ammo[(int)GunType.machinegun] > 0)
                                         {
                                             ShotgunNEAnimation[state.character].Draw(this.ScreenManager.SpriteBatch, new Vector2(state.position.X + 7 + offsetPosition.X, state.position.Y + offsetPosition.Y - 14), SpriteEffects.None, layerIndex, 0f, color);
                                         }
@@ -1879,7 +1890,7 @@ namespace ZombustersWindows
                                     }
                                     else
                                     {
-                                        if (state.ammo[0] > 0)
+                                        if (state.ammo[(int)GunType.machinegun] > 0)
                                         {
                                             ShotgunNEAnimation[state.character].Draw(this.ScreenManager.SpriteBatch, new Vector2(state.position.X + 10 + offsetPosition.X, state.position.Y + offsetPosition.Y - 14), SpriteEffects.None, layerIndex, 0f, color);
                                         }
@@ -1912,9 +1923,10 @@ namespace ZombustersWindows
                             switch (state.currentgun)
                             {
                                 case GunType.pistol:
+                                case GunType.machinegun:
                                     if (state.character == 0)
                                     {
-                                        if (state.ammo[0] > 0)
+                                        if (state.ammo[(int)GunType.machinegun] > 0)
                                         {
                                             ShotgunShotEastAnimation[state.character].Draw(this.ScreenManager.SpriteBatch, new Vector2(state.position.X + 7 + offsetPosition.X, state.position.Y + offsetPosition.Y + 4), SpriteEffects.None, layerIndex, 0f, color);
                                         }
@@ -1925,7 +1937,7 @@ namespace ZombustersWindows
                                     }
                                     else
                                     {
-                                        if (state.ammo[0] > 0)
+                                        if (state.ammo[(int)GunType.machinegun] > 0)
                                         {
                                             ShotgunShotEastAnimation[state.character].Draw(this.ScreenManager.SpriteBatch, new Vector2(state.position.X + 10 + offsetPosition.X, state.position.Y + offsetPosition.Y + 1), SpriteEffects.None, layerIndex, 0f, color);
                                         }
@@ -1959,9 +1971,10 @@ namespace ZombustersWindows
                             switch (state.currentgun)
                             {
                                 case GunType.pistol:
+                                case GunType.machinegun:
                                     if (state.character == 0)
                                     {
-                                        if (state.ammo[0] > 0)
+                                        if (state.ammo[(int)GunType.machinegun] > 0)
                                         {
                                             ShotgunSEAnimation[state.character].Draw(this.ScreenManager.SpriteBatch, new Vector2(state.position.X + 7 + offsetPosition.X, state.position.Y + offsetPosition.Y + 4), SpriteEffects.None, layerIndex, 0f, color);
                                         }
@@ -1972,7 +1985,7 @@ namespace ZombustersWindows
                                     }
                                     else
                                     {
-                                        if (state.ammo[0] > 0)
+                                        if (state.ammo[(int)GunType.machinegun] > 0)
                                         {
                                             ShotgunSEAnimation[state.character].Draw(this.ScreenManager.SpriteBatch, new Vector2(state.position.X + 10 + offsetPosition.X, state.position.Y + offsetPosition.Y + 1), SpriteEffects.None, layerIndex, 0f, color);
                                         }
@@ -2006,9 +2019,10 @@ namespace ZombustersWindows
                             switch (state.currentgun)
                             {
                                 case GunType.pistol:
+                                case GunType.machinegun:
                                     if (state.character == 0)
                                     {
-                                        if (state.ammo[0] > 0)
+                                        if (state.ammo[(int)GunType.machinegun] > 0)
                                         {
                                             ShotgunSouthAnimation[state.character].Draw(this.ScreenManager.SpriteBatch, new Vector2(state.position.X + 7 + offsetPosition.X, state.position.Y + offsetPosition.Y + 4), SpriteEffects.None, layerIndex, 0f, color);
                                         }
@@ -2019,7 +2033,7 @@ namespace ZombustersWindows
                                     }
                                     else
                                     {
-                                        if (state.ammo[0] > 0)
+                                        if (state.ammo[(int)GunType.machinegun] > 0)
                                         {
                                             ShotgunSouthAnimation[state.character].Draw(this.ScreenManager.SpriteBatch, new Vector2(state.position.X + 10 + offsetPosition.X, state.position.Y + offsetPosition.Y + 1), SpriteEffects.None, layerIndex, 0f, color);
                                         }
@@ -2053,9 +2067,10 @@ namespace ZombustersWindows
                             switch (state.currentgun)
                             {
                                 case GunType.pistol:
+                                case GunType.machinegun:
                                     if (state.character == 0)
                                     {
-                                        if (state.ammo[0] > 0)
+                                        if (state.ammo[(int)GunType.machinegun] > 0)
                                         {
                                             ShotgunSEAnimation[state.character].Draw(this.ScreenManager.SpriteBatch, new Vector2(state.position.X + 1 + offsetPosition.X, state.position.Y + offsetPosition.Y + 4), SpriteEffects.FlipHorizontally, layerIndex, 0f, color);
                                         }
@@ -2066,7 +2081,7 @@ namespace ZombustersWindows
                                     }
                                     else
                                     {
-                                        if (state.ammo[0] > 0)
+                                        if (state.ammo[(int)GunType.machinegun] > 0)
                                         {
                                             ShotgunSEAnimation[state.character].Draw(this.ScreenManager.SpriteBatch, new Vector2(state.position.X + 4 + offsetPosition.X, state.position.Y + offsetPosition.Y + 2), SpriteEffects.FlipHorizontally, layerIndex, 0f, color);
                                         }
@@ -2100,9 +2115,10 @@ namespace ZombustersWindows
                             switch (state.currentgun)
                             {
                                 case GunType.pistol:
+                                case GunType.machinegun:
                                     if (state.character == 0)
                                     {
-                                        if (state.ammo[0] > 0)
+                                        if (state.ammo[(int)GunType.machinegun] > 0)
                                         {
                                             ShotgunShotEastAnimation[state.character].Draw(this.ScreenManager.SpriteBatch, new Vector2(state.position.X - 6 + offsetPosition.X, state.position.Y + offsetPosition.Y + 4), SpriteEffects.FlipHorizontally, layerIndex, 0f, color);
                                         }
@@ -2113,7 +2129,7 @@ namespace ZombustersWindows
                                     }
                                     else
                                     {
-                                        if (state.ammo[0] > 0)
+                                        if (state.ammo[(int)GunType.machinegun] > 0)
                                         {
                                             ShotgunShotEastAnimation[state.character].Draw(this.ScreenManager.SpriteBatch, new Vector2(state.position.X - 4 + offsetPosition.X, state.position.Y + offsetPosition.Y + 2), SpriteEffects.FlipHorizontally, layerIndex, 0f, color);
                                         }
@@ -2147,9 +2163,10 @@ namespace ZombustersWindows
                             switch (state.currentgun)
                             {
                                 case GunType.pistol:
+                                case GunType.machinegun:
                                     if (state.character == 0)
                                     {
-                                        if (state.ammo[0] > 0)
+                                        if (state.ammo[(int)GunType.machinegun] > 0)
                                         {
                                             ShotgunNEAnimation[state.character].Draw(this.ScreenManager.SpriteBatch, new Vector2(state.position.X + offsetPosition.X, state.position.Y + offsetPosition.Y - 14), SpriteEffects.FlipHorizontally, layerIndex, 0f, color);
                                         }
@@ -2160,7 +2177,7 @@ namespace ZombustersWindows
                                     }
                                     else
                                     {
-                                        if (state.ammo[0] > 0)
+                                        if (state.ammo[(int)GunType.machinegun] > 0)
                                         {
                                             ShotgunNEAnimation[state.character].Draw(this.ScreenManager.SpriteBatch, new Vector2(state.position.X + offsetPosition.X + 4, state.position.Y + offsetPosition.Y - 13), SpriteEffects.FlipHorizontally, layerIndex, 0f, color);
                                         }
@@ -2200,7 +2217,7 @@ namespace ZombustersWindows
                             {
                                 if (state.accumFire.Length() < .5)
                                 {
-                                    if (state.currentgun == 0 && state.ammo[0] == 0)
+                                    if (state.currentgun == GunType.pistol && state.ammo[(int)GunType.pistol] == 0)
                                     {
                                         IdleTrunkAnimation[state.character].Draw(this.ScreenManager.SpriteBatch, new Vector2(state.position.X + offsetPosition.X, state.position.Y + offsetPosition.Y), SpriteEffects.None, layerIndex, 0f, color);
                                     }
@@ -2218,7 +2235,7 @@ namespace ZombustersWindows
                             {
                                 if (state.accumFire.Length() < .5)
                                 {
-                                    if (state.currentgun == 0 && state.ammo[0] == 0)
+                                    if (state.currentgun == GunType.pistol && state.ammo[(int)GunType.pistol] == 0)
                                     {
                                         IdleTrunkAnimation[state.character].Draw(this.ScreenManager.SpriteBatch, new Vector2(state.position.X + offsetPosition.X + 16, state.position.Y + offsetPosition.Y), SpriteEffects.FlipHorizontally, layerIndex, 0f, color);
                                     }
@@ -2239,7 +2256,7 @@ namespace ZombustersWindows
                             {
                                 if (state.accumFire.Length() < .5)
                                 {
-                                    if (state.currentgun == 0 && state.ammo[0] == 0)
+                                    if (state.currentgun == GunType.pistol && state.ammo[(int)GunType.pistol] == 0)
                                     {
                                         IdleTrunkAnimation[state.character].Draw(this.ScreenManager.SpriteBatch, new Vector2(state.position.X + offsetPosition.X + 10, state.position.Y + offsetPosition.Y + 1), SpriteEffects.None, layerIndex, 0f, color);
                                     }
@@ -2257,7 +2274,7 @@ namespace ZombustersWindows
                             {
                                 if (state.accumFire.Length() < .5)
                                 {
-                                    if (state.currentgun == 0 && state.ammo[0] == 0)
+                                    if (state.currentgun == GunType.pistol && state.ammo[(int)GunType.pistol] == 0)
                                     {
                                         IdleTrunkAnimation[state.character].Draw(this.ScreenManager.SpriteBatch, new Vector2(state.position.X + offsetPosition.X + 19, state.position.Y + offsetPosition.Y + 1), SpriteEffects.FlipHorizontally, layerIndex, 0f, color);
                                     }
@@ -2279,7 +2296,7 @@ namespace ZombustersWindows
                         {
                             if (state.character == 0)
                             {
-                                if (state.currentgun == 0 && state.ammo[0] == 0)
+                                if (state.currentgun == GunType.pistol && state.ammo[(int)GunType.pistol] == 0)
                                 {
                                     IdleTrunkAnimation[state.character].Draw(this.ScreenManager.SpriteBatch, new Vector2(state.position.X + offsetPosition.X, state.position.Y + offsetPosition.Y), SpriteEffects.None, layerIndex, 0f, color);
                                 }
@@ -2291,7 +2308,7 @@ namespace ZombustersWindows
                             }
                             else
                             {
-                                if (state.currentgun == 0 && state.ammo[0] == 0)
+                                if (state.currentgun == GunType.pistol && state.ammo[(int)GunType.pistol] == 0)
                                 {
                                     IdleTrunkAnimation[state.character].Draw(this.ScreenManager.SpriteBatch, new Vector2(state.position.X + offsetPosition.X + 10, state.position.Y + offsetPosition.Y + 1), SpriteEffects.None, layerIndex, 0f, color);
                                 }
@@ -2382,9 +2399,10 @@ namespace ZombustersWindows
                                 switch (state.currentgun)
                                 {
                                     case GunType.pistol:
+                                    case GunType.machinegun:
                                         if (state.character == 0)
                                         {
-                                            if (state.ammo[0] > 0)
+                                            if (state.ammo[(int)GunType.machinegun] > 0)
                                             {
                                                 ShotgunNorthAnimation[state.character].Draw(this.ScreenManager.SpriteBatch, new Vector2(state.position.X + 6 + offsetPosition.X, state.position.Y + offsetPosition.Y - 34), SpriteEffects.None, layerIndex, 0f, Color.White);
                                             }
@@ -2395,7 +2413,7 @@ namespace ZombustersWindows
                                         }
                                         else
                                         {
-                                            if (state.ammo[0] > 0)
+                                            if (state.ammo[(int)GunType.machinegun] > 0)
                                             {
                                                 ShotgunNorthAnimation[state.character].Draw(this.ScreenManager.SpriteBatch, new Vector2(state.position.X + 12 + offsetPosition.X, state.position.Y + offsetPosition.Y - 36), SpriteEffects.None, layerIndex, 0f, Color.White);
                                             }
@@ -2429,9 +2447,10 @@ namespace ZombustersWindows
                                 switch (state.currentgun)
                                 {
                                     case GunType.pistol:
+                                    case GunType.machinegun:
                                         if (state.character == 0)
                                         {
-                                            if (state.ammo[0] > 0)
+                                            if (state.ammo[(int)GunType.machinegun] > 0)
                                             {
                                                 ShotgunNEAnimation[state.character].Draw(this.ScreenManager.SpriteBatch, new Vector2(state.position.X + 7 + offsetPosition.X, state.position.Y + offsetPosition.Y - 14), SpriteEffects.None, layerIndex, 0f, Color.White);
                                             }
@@ -2442,7 +2461,7 @@ namespace ZombustersWindows
                                         }
                                         else
                                         {
-                                            if (state.ammo[0] > 0)
+                                            if (state.ammo[(int)GunType.machinegun] > 0)
                                             {
                                                 ShotgunNEAnimation[state.character].Draw(this.ScreenManager.SpriteBatch, new Vector2(state.position.X + 10 + offsetPosition.X, state.position.Y + offsetPosition.Y - 14), SpriteEffects.None, layerIndex, 0f, Color.White);
                                             }
@@ -2475,9 +2494,10 @@ namespace ZombustersWindows
                                 switch (state.currentgun)
                                 {
                                     case GunType.pistol:
+                                    case GunType.machinegun:
                                         if (state.character == 0)
                                         {
-                                            if (state.ammo[0] > 0)
+                                            if (state.ammo[(int)GunType.machinegun] > 0)
                                             {
                                                 ShotgunShotEastAnimation[state.character].Draw(this.ScreenManager.SpriteBatch, new Vector2(state.position.X + 7 + offsetPosition.X, state.position.Y + offsetPosition.Y + 4), SpriteEffects.None, layerIndex, 0f, Color.White);
                                             }
@@ -2488,7 +2508,7 @@ namespace ZombustersWindows
                                         }
                                         else
                                         {
-                                            if (state.ammo[0] > 0)
+                                            if (state.ammo[(int)GunType.machinegun] > 0)
                                             {
                                                 ShotgunShotEastAnimation[state.character].Draw(this.ScreenManager.SpriteBatch, new Vector2(state.position.X + 10 + offsetPosition.X, state.position.Y + offsetPosition.Y + 1), SpriteEffects.None, layerIndex, 0f, Color.White);
                                             }
@@ -2522,9 +2542,10 @@ namespace ZombustersWindows
                                 switch (state.currentgun)
                                 {
                                     case GunType.pistol:
+                                    case GunType.machinegun:
                                         if (state.character == 0)
                                         {
-                                            if (state.ammo[0] > 0)
+                                            if (state.ammo[(int)GunType.machinegun] > 0)
                                             {
                                                 ShotgunSEAnimation[state.character].Draw(this.ScreenManager.SpriteBatch, new Vector2(state.position.X + 7 + offsetPosition.X, state.position.Y + offsetPosition.Y + 4), SpriteEffects.None, layerIndex, 0f, Color.White);
                                             }
@@ -2535,7 +2556,7 @@ namespace ZombustersWindows
                                         }
                                         else
                                         {
-                                            if (state.ammo[0] > 0)
+                                            if (state.ammo[(int)GunType.machinegun] > 0)
                                             {
                                                 ShotgunSEAnimation[state.character].Draw(this.ScreenManager.SpriteBatch, new Vector2(state.position.X + 10 + offsetPosition.X, state.position.Y + offsetPosition.Y + 1), SpriteEffects.None, layerIndex, 0f, Color.White);
                                             }
@@ -2569,9 +2590,10 @@ namespace ZombustersWindows
                                 switch (state.currentgun)
                                 {
                                     case GunType.pistol:
+                                    case GunType.machinegun:
                                         if (state.character == 0)
                                         {
-                                            if (state.ammo[0] > 0)
+                                            if (state.ammo[(int)GunType.machinegun] > 0)
                                             {
                                                 ShotgunSouthAnimation[state.character].Draw(this.ScreenManager.SpriteBatch, new Vector2(state.position.X + 7 + offsetPosition.X, state.position.Y + offsetPosition.Y + 4), SpriteEffects.None, layerIndex, 0f, Color.White);
                                             }
@@ -2582,7 +2604,7 @@ namespace ZombustersWindows
                                         }
                                         else
                                         {
-                                            if (state.ammo[0] > 0)
+                                            if (state.ammo[(int)GunType.machinegun] > 0)
                                             {
                                                 ShotgunSouthAnimation[state.character].Draw(this.ScreenManager.SpriteBatch, new Vector2(state.position.X + 10 + offsetPosition.X, state.position.Y + offsetPosition.Y + 1), SpriteEffects.None, layerIndex, 0f, Color.White);
                                             }
@@ -2616,9 +2638,10 @@ namespace ZombustersWindows
                                 switch (state.currentgun)
                                 {
                                     case GunType.pistol:
+                                    case GunType.machinegun:
                                         if (state.character == 0)
                                         {
-                                            if (state.ammo[0] > 0)
+                                            if (state.ammo[(int)GunType.machinegun] > 0)
                                             {
                                                 ShotgunSEAnimation[state.character].Draw(this.ScreenManager.SpriteBatch, new Vector2(state.position.X + 1 + offsetPosition.X, state.position.Y + offsetPosition.Y + 4), SpriteEffects.FlipHorizontally, layerIndex, 0f, Color.White);
                                             }
@@ -2629,7 +2652,7 @@ namespace ZombustersWindows
                                         }
                                         else
                                         {
-                                            if (state.ammo[0] > 0)
+                                            if (state.ammo[(int)GunType.machinegun] > 0)
                                             {
                                                 ShotgunSEAnimation[state.character].Draw(this.ScreenManager.SpriteBatch, new Vector2(state.position.X + 4 + offsetPosition.X, state.position.Y + offsetPosition.Y + 2), SpriteEffects.FlipHorizontally, layerIndex, 0f, Color.White);
                                             }
@@ -2663,9 +2686,10 @@ namespace ZombustersWindows
                                 switch (state.currentgun)
                                 {
                                     case GunType.pistol:
+                                    case GunType.machinegun:
                                         if (state.character == 0)
                                         {
-                                            if (state.ammo[0] > 0)
+                                            if (state.ammo[(int)GunType.machinegun] > 0)
                                             {
                                                 ShotgunShotEastAnimation[state.character].Draw(this.ScreenManager.SpriteBatch, new Vector2(state.position.X - 6 + offsetPosition.X, state.position.Y + offsetPosition.Y + 4), SpriteEffects.FlipHorizontally, layerIndex, 0f, Color.White);
                                             }
@@ -2676,7 +2700,7 @@ namespace ZombustersWindows
                                         }
                                         else
                                         {
-                                            if (state.ammo[0] > 0)
+                                            if (state.ammo[(int)GunType.machinegun] > 0)
                                             {
                                                 ShotgunShotEastAnimation[state.character].Draw(this.ScreenManager.SpriteBatch, new Vector2(state.position.X - 4 + offsetPosition.X, state.position.Y + offsetPosition.Y + 2), SpriteEffects.FlipHorizontally, layerIndex, 0f, Color.White);
                                             }
@@ -2710,9 +2734,10 @@ namespace ZombustersWindows
                                 switch (state.currentgun)
                                 {
                                     case GunType.pistol:
+                                    case GunType.machinegun:
                                         if (state.character == 0)
                                         {
-                                            if (state.ammo[0] > 0)
+                                            if (state.ammo[(int)GunType.machinegun] > 0)
                                             {
                                                 ShotgunNEAnimation[state.character].Draw(this.ScreenManager.SpriteBatch, new Vector2(state.position.X + offsetPosition.X, state.position.Y + offsetPosition.Y - 14), SpriteEffects.FlipHorizontally, layerIndex, 0f, Color.White);
                                             }
@@ -2723,7 +2748,7 @@ namespace ZombustersWindows
                                         }
                                         else
                                         {
-                                            if (state.ammo[0] > 0)
+                                            if (state.ammo[(int)GunType.machinegun] > 0)
                                             {
                                                 ShotgunNEAnimation[state.character].Draw(this.ScreenManager.SpriteBatch, new Vector2(state.position.X + offsetPosition.X + 4, state.position.Y + offsetPosition.Y - 13), SpriteEffects.FlipHorizontally, layerIndex, 0f, Color.White);
                                             }
@@ -2763,7 +2788,7 @@ namespace ZombustersWindows
                                 {
                                     if (state.accumFire.Length() < .5)
                                     {
-                                        if (state.currentgun == 0 && state.ammo[0] == 0)
+                                        if (state.currentgun == GunType.pistol && state.ammo[(int)GunType.pistol] == 0)
                                         {
                                             IdleTrunkAnimation[state.character].Draw(this.ScreenManager.SpriteBatch, new Vector2(state.position.X + offsetPosition.X, state.position.Y + offsetPosition.Y), SpriteEffects.None, layerIndex, 0f, Color.White);
                                         }
@@ -2781,7 +2806,7 @@ namespace ZombustersWindows
                                 {
                                     if (state.accumFire.Length() < .5)
                                     {
-                                        if (state.currentgun == 0 && state.ammo[0] == 0)
+                                        if (state.currentgun == GunType.pistol && state.ammo[(int)GunType.pistol] == 0)
                                         {
                                             IdleTrunkAnimation[state.character].Draw(this.ScreenManager.SpriteBatch, new Vector2(state.position.X + offsetPosition.X + 16, state.position.Y + offsetPosition.Y), SpriteEffects.FlipHorizontally, layerIndex, 0f, Color.White);
                                         }
@@ -2802,7 +2827,7 @@ namespace ZombustersWindows
                                 {
                                     if (state.accumFire.Length() < .5)
                                     {
-                                        if (state.currentgun == 0 && state.ammo[0] == 0)
+                                        if (state.currentgun == GunType.pistol && state.ammo[(int)GunType.pistol] == 0)
                                         {
                                             IdleTrunkAnimation[state.character].Draw(this.ScreenManager.SpriteBatch, new Vector2(state.position.X + offsetPosition.X + 10, state.position.Y + offsetPosition.Y + 1), SpriteEffects.None, layerIndex, 0f, Color.White);
                                         }
@@ -2820,7 +2845,7 @@ namespace ZombustersWindows
                                 {
                                     if (state.accumFire.Length() < .5)
                                     {
-                                        if (state.currentgun == 0 && state.ammo[0] == 0)
+                                        if (state.currentgun == GunType.pistol && state.ammo[(int)GunType.pistol] == 0)
                                         {
                                             IdleTrunkAnimation[state.character].Draw(this.ScreenManager.SpriteBatch, new Vector2(state.position.X + offsetPosition.X + 19, state.position.Y + offsetPosition.Y + 1), SpriteEffects.FlipHorizontally, layerIndex, 0f, Color.White);
                                         }
@@ -2842,7 +2867,7 @@ namespace ZombustersWindows
                             {
                                 if (state.character == 0)
                                 {
-                                    if (state.currentgun == 0 && state.ammo[0] == 0)
+                                    if (state.currentgun == GunType.pistol && state.ammo[(int)GunType.pistol] == 0)
                                     {
                                         IdleTrunkAnimation[state.character].Draw(this.ScreenManager.SpriteBatch, new Vector2(state.position.X + offsetPosition.X, state.position.Y + offsetPosition.Y), SpriteEffects.None, layerIndex, 0f, Color.White);
                                     }
@@ -2854,7 +2879,7 @@ namespace ZombustersWindows
                                 }
                                 else
                                 {
-                                    if (state.currentgun == 0 && state.ammo[0] == 0)
+                                    if (state.currentgun == GunType.pistol && state.ammo[(int)GunType.pistol] == 0)
                                     {
                                         IdleTrunkAnimation[state.character].Draw(this.ScreenManager.SpriteBatch, new Vector2(state.position.X + offsetPosition.X + 10, state.position.Y + offsetPosition.Y + 1), SpriteEffects.None, layerIndex, 0f, Color.White);
                                     }
@@ -3002,25 +3027,25 @@ namespace ZombustersWindows
 
                             switch (cplayer.currentgun)
                             {
-                                case GunType.pistol:
+                                case GunType.machinegun:
                                     batch.Draw(pistolammoUI, new Vector2(Pos.X + 124, Pos.Y + 23), Color.White);
-                                    batch.DrawString(arcade14, cplayer.ammo[0].ToString("000"), new Vector2(Pos.X + heart.Width + 125, Pos.Y + 20), Color.White);
+                                    batch.DrawString(arcade14, cplayer.ammo[(int)GunType.machinegun].ToString("000"), new Vector2(Pos.X + heart.Width + 125, Pos.Y + 20), Color.White);
                                     break;
                                 case GunType.shotgun:
                                     batch.Draw(shotgunammoUI, new Vector2(Pos.X + 123, Pos.Y + 22), Color.White);
-                                    batch.DrawString(arcade14, cplayer.ammo[1].ToString("000"), new Vector2(Pos.X + heart.Width + 125, Pos.Y + 20), Color.White);
+                                    batch.DrawString(arcade14, cplayer.ammo[(int)GunType.shotgun].ToString("000"), new Vector2(Pos.X + heart.Width + 125, Pos.Y + 20), Color.White);
                                     break;
                                 case GunType.grenade:
                                     batch.Draw(grenadeammoUI, new Vector2(Pos.X + 122, Pos.Y + 21), Color.White);
-                                    batch.DrawString(arcade14, cplayer.ammo[2].ToString("000"), new Vector2(Pos.X + heart.Width + 125, Pos.Y + 20), Color.White);
+                                    batch.DrawString(arcade14, cplayer.ammo[(int)GunType.grenade].ToString("000"), new Vector2(Pos.X + heart.Width + 125, Pos.Y + 20), Color.White);
                                     break;
                                 case GunType.flamethrower:
                                     batch.Draw(flamethrowerammoUI, new Vector2(Pos.X + 124, Pos.Y + 23), Color.White);
-                                    batch.DrawString(arcade14, cplayer.ammo[3].ToString("000"), new Vector2(Pos.X + heart.Width + 125, Pos.Y + 20), Color.White);
+                                    batch.DrawString(arcade14, cplayer.ammo[(int)GunType.flamethrower].ToString("000"), new Vector2(Pos.X + heart.Width + 125, Pos.Y + 20), Color.White);
                                     break;
+                                case GunType.pistol:
                                 default:
-                                    batch.Draw(pistolammoUI, new Vector2(Pos.X + 124, Pos.Y + 23), Color.White);
-                                    batch.DrawString(arcade14, cplayer.ammo[0].ToString("000"), new Vector2(Pos.X + heart.Width + 125, Pos.Y + 20), Color.White);
+                                    batch.DrawString(arcade14, "000", new Vector2(Pos.X + heart.Width + 125, Pos.Y + 20), Color.White);
                                     break;
                             }
 
@@ -3278,7 +3303,7 @@ namespace ZombustersWindows
                 }
                 else
                 {
-                    if (game.currentPlayers[player].ammo[0] > 0)
+                    if (game.currentPlayers[player].ammo[(int)GunType.machinegun] > 0)
                     {
                         if (game.currentPlayers[player].character == 0)
                         {
@@ -3321,7 +3346,7 @@ namespace ZombustersWindows
                 }
                 else
                 {
-                    if (game.currentPlayers[player].ammo[0] > 0)
+                    if (game.currentPlayers[player].ammo[(int)GunType.machinegun] > 0)
                     {
                         game.currentPlayers[player].bullets.Add(new Vector4(game.currentPlayers[player].position.X + 33, game.currentPlayers[player].position.Y - 60, totalGameSeconds, angle));
                     }
@@ -3350,7 +3375,7 @@ namespace ZombustersWindows
                 }
                 else
                 {
-                    if (game.currentPlayers[player].ammo[0] > 0)
+                    if (game.currentPlayers[player].ammo[(int)GunType.machinegun] > 0)
                     {
                         if (game.currentPlayers[player].character == 0)
                         {
@@ -3393,7 +3418,7 @@ namespace ZombustersWindows
                 }
                 else
                 {
-                    if (game.currentPlayers[player].ammo[0] > 0)
+                    if (game.currentPlayers[player].ammo[(int)GunType.machinegun] > 0)
                     {
                         game.currentPlayers[player].bullets.Add(new Vector4(game.currentPlayers[player].position.X + 27, game.currentPlayers[player].position.Y, totalGameSeconds, angle));
                     }
@@ -3422,7 +3447,7 @@ namespace ZombustersWindows
                 }
                 else
                 {
-                    if (game.currentPlayers[player].ammo[0] > 0)
+                    if (game.currentPlayers[player].ammo[(int)GunType.machinegun] > 0)
                     {
                         if (game.currentPlayers[player].character == 0)
                         {
@@ -3465,7 +3490,7 @@ namespace ZombustersWindows
                 }
                 else
                 {
-                    if (game.currentPlayers[player].ammo[0] > 0)
+                    if (game.currentPlayers[player].ammo[(int)GunType.machinegun] > 0)
                     {
                         game.currentPlayers[player].bullets.Add(new Vector4(game.currentPlayers[player].position.X - 28, game.currentPlayers[player].position.Y, totalGameSeconds, angle));
                     }
@@ -3494,7 +3519,7 @@ namespace ZombustersWindows
                 }
                 else
                 {
-                    if (game.currentPlayers[player].ammo[0] > 0)
+                    if (game.currentPlayers[player].ammo[(int)GunType.machinegun] > 0)
                     {
                         game.currentPlayers[player].bullets.Add(new Vector4(new Vector2(game.currentPlayers[player].position.X - 35, game.currentPlayers[player].position.Y - 26), totalGameSeconds, angle));
                     }
@@ -3530,7 +3555,7 @@ namespace ZombustersWindows
                 }
                 else
                 {
-                    if (game.currentPlayers[player].ammo[0] > 0)
+                    if (game.currentPlayers[player].ammo[(int)GunType.machinegun] > 0)
                     {
                         game.currentPlayers[player].bullets.Add(new Vector4(game.currentPlayers[player].position.X - 36, game.currentPlayers[player].position.Y - 57, totalGameSeconds, angle));
                     }
@@ -3549,14 +3574,10 @@ namespace ZombustersWindows
             switch (game.currentPlayers[player].currentgun)
             {
                 case GunType.pistol:
-                    if (game.currentPlayers[player].ammo[(int)game.currentPlayers[player].currentgun] > 0)
-                    {
-                        game.audio.PlayMachineGun();
-                    }
-                    else
-                    {
-                        game.audio.PlayShot();
-                    }
+                    game.audio.PlayShot();
+                    break;
+                case GunType.machinegun:
+                    game.audio.PlayMachineGun();
                     break;
                 case GunType.flamethrower:
                     game.audio.PlayFlameThrower();

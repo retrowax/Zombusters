@@ -304,8 +304,8 @@ namespace ZombustersWindows
             score = 0;
             lifecounter = 100;
             currentgun = GunType.pistol;
-            ammo = new List<int>(4);
-            for (i = 0; i < 4; i++)
+            ammo = new List<int>(Enum.GetNames(typeof(GunType)).Length);
+            for (i = 0; i < Enum.GetNames(typeof(GunType)).Length; i++)
             {
                 ammo.Add(0);
             }

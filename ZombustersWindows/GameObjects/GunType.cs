@@ -11,6 +11,7 @@ namespace ZombustersWindows.GameObjects
         pistol = 0,
         shotgun = 1,
         grenade = 2,
-        flamethrower = 3
+        flamethrower = 3,
+        machinegun = 4
     }
 }
