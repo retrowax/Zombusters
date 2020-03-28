@@ -6,6 +6,7 @@ using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using System.Globalization;
 using ZombustersWindows.Subsystem_Managers;
+using ZombustersWindows.GameObjects;
 
 namespace ZombustersWindows
 {
@@ -41,7 +42,7 @@ namespace ZombustersWindows
         Animation ZombieDeathAnimation;
 
         private readonly Random random = new Random();
-        private int currentgun;
+        private GunType currentgun;
         private float timer;
 
 #if DEBUG
@@ -179,7 +180,7 @@ namespace ZombustersWindows
             }
         }
 
-        public void DestroyZombie(float totalGameSeconds, byte currentgun)
+        public void DestroyZombie(float totalGameSeconds, GunType currentgun)
         {
             this.deathTimeTotalSeconds = totalGameSeconds;
             this.status = ObjectStatus.Dying;
@@ -277,7 +278,7 @@ namespace ZombustersWindows
             else if (this.status == ObjectStatus.Dying)
             {
                 // Produce animation
-                if (this.currentgun == 0)
+                if (this.currentgun != GunType.flamethrower)
                 {
                     timer += (float)gameTime.ElapsedGameTime.TotalSeconds;
                     if (timer <= 1.2f)

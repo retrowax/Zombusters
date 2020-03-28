@@ -966,7 +966,7 @@ namespace ZombustersWindows
                                 }
                                 else
                                 {
-                                    ZombieDestroyed(zombie, (byte)playerId, (byte)player.currentgun);
+                                    ZombieDestroyed(zombie, (byte)playerId, player.currentgun);
                                     if (PowerUpIsInRange(zombie))
                                     {
                                         SpawnPowerUp(zombie);
@@ -989,7 +989,7 @@ namespace ZombustersWindows
                                 }
                                 else
                                 {
-                                    ZombieDestroyed(zombie, (byte)playerId, (byte)player.currentgun);
+                                    ZombieDestroyed(zombie, (byte)playerId, player.currentgun);
                                     player.bullets.RemoveAt(l);
                                     if (PowerUpIsInRange(zombie))
                                     {
@@ -3230,7 +3230,7 @@ namespace ZombustersWindows
             }
         }
 
-        public void ZombieDestroyed(ZombieState zombie, byte player, byte currentgun)
+        public void ZombieDestroyed(ZombieState zombie, byte player, GunType currentgun)
         {
             zombie.DestroyZombie(game.totalGameSeconds, currentgun);
             ActiveZombies--;
