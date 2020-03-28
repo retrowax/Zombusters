@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using GameStateManagement;
 using Microsoft.Xna.Framework.Input.Touch;
+using ZombustersWindows.Subsystem_Managers;
 
 namespace ZombustersWindows
 {
@@ -191,7 +192,7 @@ namespace ZombustersWindows
                 }
 
                 float transitionOffset = (float)Math.Pow(TransitionPosition, 2);
-                this.ScreenManager.SpriteBatch.Begin(SpriteSortMode.Deferred, BlendState.NonPremultiplied);
+                this.ScreenManager.SpriteBatch.Begin(SpriteSortMode.Deferred, BlendState.NonPremultiplied, null, null, null, null, Resolution.getTransformationMatrix());
                 this.ScreenManager.SpriteBatch.Draw(background_title, new Vector2(0, 0), Color.White);
                 this.ScreenManager.SpriteBatch.Draw(background_title_scrolling2, new Vector2(position2.X, position2.Y), Color.White);
                 this.ScreenManager.SpriteBatch.Draw(background_title_scrolling3, new Vector2(0, 0), Color.White);
@@ -212,7 +213,7 @@ namespace ZombustersWindows
             }
 
             // Draw the Storage Device Icon
-            this.ScreenManager.SpriteBatch.Begin(SpriteSortMode.FrontToBack, BlendState.AlphaBlend);
+            this.ScreenManager.SpriteBatch.Begin(SpriteSortMode.FrontToBack, BlendState.AlphaBlend, null, null, null, null, Resolution.getTransformationMatrix());
             this.ScreenManager.SpriteBatch.End();
 
             base.Draw(gameTime);

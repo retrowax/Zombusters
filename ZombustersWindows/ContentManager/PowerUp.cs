@@ -111,7 +111,7 @@ namespace ZombustersWindows.Subsystem_Managers
             Vector2 texturePosition;
             Vector2 startPosition;
             SpriteBatch batch = spriteBatch;
-            batch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend);
+            batch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, null, null, null, null, Resolution.getTransformationMatrix());
 
             if (this.status == ObjectStatus.Active)
             {

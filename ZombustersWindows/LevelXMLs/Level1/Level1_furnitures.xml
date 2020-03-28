@@ -210,53 +210,7 @@
   </Furniture>
   <!-- END Basuras -->
   
-  
-  <!-- Bancos SouthEast -->
-  <Furniture>
-    <Type>Banco</Type>
-    <Orientation>SouthEast</Orientation>
-    <Position>
-      <X>1095</X>
-      <Y>118</Y>
-    </Position>
-    <ObstaclePosition>
-      <X>1120</X>
-      <Y>141</Y>
-    </ObstaclePosition>
-    <ObstacleRadius>20.0</ObstacleRadius>
-  </Furniture>
-
-  <Furniture>
-    <Type>Banco</Type>
-    <Orientation>SouthEast</Orientation>
-    <Position>
-      <X>731</X>
-      <Y>457</Y>
-    </Position>
-    <ObstaclePosition>
-      <X>756</X>
-      <Y>478</Y>
-    </ObstaclePosition>
-    <ObstacleRadius>20.0</ObstacleRadius>
-  </Furniture>
-  <!-- END Bancos SouthEast -->
-  
-  
   <!-- Bancos SouthWest -->
-  <Furniture>
-    <Type>Banco</Type>
-    <Orientation>SouthWest</Orientation>
-    <Position>
-      <X>917</X>
-      <Y>125</Y>
-    </Position>
-    <ObstaclePosition>
-      <X>941</X>
-      <Y>145</Y>
-    </ObstaclePosition>
-    <ObstacleRadius>20.0</ObstacleRadius>
-  </Furniture>
-
   <Furniture>
     <Type>Banco</Type>
     <Orientation>SouthWest</Orientation>
@@ -311,20 +265,6 @@
     <ObstaclePosition>
       <X>826</X>
       <Y>430</Y>
-    </ObstaclePosition>
-    <ObstacleRadius>10.0</ObstacleRadius>
-  </Furniture>
-
-  <Furniture>
-    <Type>Arbol</Type>
-    <Orientation>SouthEast</Orientation>
-    <Position>
-      <X>582</X>
-      <Y>381</Y>
-    </Position>
-    <ObstaclePosition>
-      <X>635</X>
-      <Y>527</Y>
     </ObstaclePosition>
     <ObstacleRadius>10.0</ObstacleRadius>
   </Furniture>

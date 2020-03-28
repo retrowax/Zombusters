@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework.Graphics;
 using GameStateManagement;
 using Microsoft.Xna.Framework.Input.Touch;
 using ZombustersWindows.Localization;
+using ZombustersWindows.Subsystem_Managers;
 
 namespace ZombustersWindows
 {
@@ -91,7 +92,7 @@ namespace ZombustersWindows
         
         public override void LoadContent()
         {
-#if WINDOWS
+#if WINDOWS || NETCOREAPP
             //Key "Scape"
             kbEsc = this.ScreenManager.Game.Content.Load<Texture2D>(@"Keyboard/key_esc");
 #endif
@@ -181,7 +182,7 @@ namespace ZombustersWindows
 
             base.Draw(gameTime);
 
-            this.ScreenManager.SpriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend);
+            this.ScreenManager.SpriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, null, null, null, null, Resolution.getTransformationMatrix());
 
             // Logo Menu
             this.ScreenManager.SpriteBatch.Draw(logoMenu, new Vector2(MenuTitlePosition.X - 55, MenuTitlePosition.Y - 5), Color.White);

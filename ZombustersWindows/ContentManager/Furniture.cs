@@ -21,7 +21,7 @@ namespace ZombustersWindows.Subsystem_Managers
         [XmlElement]
         public Vector2 ObstaclePosition;
 
-        [XmlIgnore]
+        [XmlElement]
         public float ObstacleRadius;
 
         [XmlIgnore]

@@ -1,17 +1,14 @@
-﻿using System;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System.IO;
-using System.Xml.Serialization;
-using System.IO.IsolatedStorage;
+using ZombustersWindows.Subsystem_Managers;
 
 namespace ZombustersWindows
 {
     public class Player
     {
-        private static string OPTIONS_FILENAME = "options.xml";
-        private static string LEADERBOARD_FILENAME = "leaderboard.txt";
-        private static string SAVE_GAME_FILENAME = "savegame.sav";
+        private static readonly string OPTIONS_FILENAME = "options.xml";
+        private static readonly string LEADERBOARD_FILENAME = "leaderboard.txt";
+        private static readonly string SAVE_GAME_FILENAME = "savegame.sav";
 
         public bool IsPlaying;
         public PlayerIndex Controller;
@@ -116,6 +113,11 @@ namespace ZombustersWindows
             audioManager.SetOptions(optionsState.FXLevel, optionsState.MusicLevel);
             if (optionsState.FullScreenMode && game.graphics.IsFullScreen == false)
             {
+                int screenWidth = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width;
+                int screenHeight = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height;
+                Resolution.SetResolution(screenWidth, screenHeight, true);
+                optionsState.FullScreenMode = true;
+                game.graphics.IsFullScreen = false;
                 game.graphics.ToggleFullScreen();
             }
         }
