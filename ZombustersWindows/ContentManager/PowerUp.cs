@@ -1,6 +1,7 @@
 using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using ZombustersWindows.ContentManagement;
 
 namespace ZombustersWindows.Subsystem_Managers
 {
@@ -11,71 +12,59 @@ namespace ZombustersWindows.Subsystem_Managers
         public Vector2 Position;
         public int Value;
         public ObjectStatus status;
-        public Type PUType;
+        public PowerUpType powerUpType;
         public float buffTimer;
 
         private float timer;
         private float dyingtimer;
         private Color color;
 
-        public enum Type
-        {
-            live = 0, 
-            extralife = 1, 
-            shotgun_ammo = 2, 
-            machinegun_ammo = 3, 
-            flamethrower_ammo = 4, 
-            grenadelauncher_ammo = 5, 
-            speedbuff = 6, 
-            immunebuff = 7
-        }
-
-        public PowerUp(Texture2D texture, Texture2D uitexture, Vector2 position, Type type)
+        public PowerUp(Texture2D texture, Texture2D uitexture, Vector2 position, PowerUpType type)
         {
             this.Texture = texture;
             this.UITexture = uitexture;
             this.Position = position;
             this.status = ObjectStatus.Active;
             this.color = Color.White;
-            this.PUType = type;
+            this.powerUpType = type;
 
-            if (this.PUType == Type.extralife)
+            if (this.powerUpType == PowerUpType.extralife)
             {
                 Value = 1;
             }
 
-            if (this.PUType == Type.live)
+            if (this.powerUpType == PowerUpType.live)
             {
                 Value = 30;
             }
 
-            if (this.PUType == Type.shotgun_ammo)
+            if (this.powerUpType == PowerUpType.shotgun)
             {
                 Value = 50;
             }
 
-            if (this.PUType == Type.machinegun_ammo)
+            if (this.powerUpType == PowerUpType.machinegun)
             {
                 Value = 50;
             }
 
-            if (this.PUType == Type.flamethrower_ammo)
+            if (this.powerUpType == PowerUpType.flamethrower)
             {
                 Value = 50;
             }
 
-            if (this.PUType == Type.grenadelauncher_ammo)
+            if (this.powerUpType == PowerUpType.grenade)
             {
                 Value = 10;
             }
 
-            if (this.PUType == Type.speedbuff)
+            if (this.powerUpType == PowerUpType.speedbuff)
             {
                 // Timer
                 buffTimer = 20.0f;
             }
 
-            if (this.PUType == Type.immunebuff)
+            if (this.powerUpType == PowerUpType.immunebuff)
             {
                 // Timer
                 buffTimer = 20.0f;
@@ -134,42 +123,42 @@ namespace ZombustersWindows.Subsystem_Managers
 
             if (this.status == ObjectStatus.Dying)
             {
-                if (this.PUType == Type.live)
+                if (this.powerUpType == PowerUpType.live)
                 {
                     this.color = Color.Red;
                 }
 
-                if (this.PUType == Type.shotgun_ammo)
+                if (this.powerUpType == PowerUpType.shotgun)
                 {
                     this.color = Color.LightYellow;
                 }
 
-                if (this.PUType == Type.machinegun_ammo)
+                if (this.powerUpType == PowerUpType.machinegun)
                 {
                     this.color = Color.LightYellow;
                 }
 
-                if (this.PUType == Type.flamethrower_ammo)
+                if (this.powerUpType == PowerUpType.flamethrower)
                 {
                     this.color = Color.LightYellow;
                 }
 
-                if (this.PUType == Type.grenadelauncher_ammo)
+                if (this.powerUpType == PowerUpType.grenade)
                 {
                     this.color = Color.LightYellow;
                 }
 
-                if (this.PUType == Type.speedbuff)
+                if (this.powerUpType == PowerUpType.speedbuff)
                 {
                     this.color = new Color(95, 172, 226, 255);
                 }
 
-                if (this.PUType == Type.immunebuff)
+                if (this.powerUpType == PowerUpType.immunebuff)
                 {
                     this.color = Color.BlueViolet;
                 }
 
-                if (this.PUType == Type.immunebuff || this.PUType == Type.speedbuff)
+                if (this.powerUpType == PowerUpType.immunebuff || this.powerUpType == PowerUpType.speedbuff)
                 {
                     textToShow = "+ " + Convert.ToInt32(this.buffTimer).ToString() + "s";
                 }

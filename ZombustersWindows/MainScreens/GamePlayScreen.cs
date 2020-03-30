@@ -11,6 +11,7 @@ using ZombustersWindows.MainScreens;
 using ZombustersWindows.Localization;
 using System.Xml.Linq;
 using ZombustersWindows.GameObjects;
+using ZombustersWindows.ContentManagement;
 
 namespace ZombustersWindows
 {
@@ -21,6 +22,9 @@ namespace ZombustersWindows
         private const string SHEET_COLUMNS = "SheetColumns";
         private const string SHEET_ROWS = "SheetRows";
         private const string SPEED = "Speed";
+        private const int MACHINEGUN_RATE_OF_FIRE = 10;
+        private const int FLAMETHROWER_RATE_OF_FIRE = 15;
+
 
         readonly MyGame game;
         Rectangle uiBounds;
@@ -756,6 +760,10 @@ namespace ZombustersWindows
                 }
                 else if (game.currentPlayers[player].currentgun == GunType.machinegun)
                 {
+                    game.currentPlayers[player].currentgun = GunType.shotgun;
+                }
+                else if (game.currentPlayers[player].currentgun == GunType.shotgun)
+                {
                     game.currentPlayers[player].currentgun = GunType.flamethrower;
                 }
                 else if (game.currentPlayers[player].currentgun == GunType.flamethrower)
@@ -807,43 +815,43 @@ namespace ZombustersWindows
         {
             if (this.random.Next(1, 16) == 8)
             {
-                int r = this.random.Next(0, 3);
-                switch (r)
+                PowerUpType powerUpType = (PowerUpType)Enum.ToObject(typeof(PowerUpType), this.random.Next(0, Enum.GetNames(typeof(PowerUpType)).Length));
+                switch (powerUpType)
                 {
-                    case 0: // Live
-                        PowerUpList.Add(new PowerUp(livePowerUp, heart, zombie.entity.Position, PowerUp.Type.live));
+                    case PowerUpType.live:
+                        PowerUpList.Add(new PowerUp(livePowerUp, heart, zombie.entity.Position, PowerUpType.live));
                         break;
 
-                    case 1: // Machinegun Ammo
-                        PowerUpList.Add(new PowerUp(machinegunAmmoPowerUp, pistolammoUI, zombie.entity.Position, PowerUp.Type.machinegun_ammo));
+                    case PowerUpType.machinegun:
+                        PowerUpList.Add(new PowerUp(machinegunAmmoPowerUp, pistolammoUI, zombie.entity.Position, PowerUpType.machinegun));
                         break;
 
-                    case 2: // Flamethrower Ammo
-                        PowerUpList.Add(new PowerUp(flamethrowerAmmoPowerUp, flamethrowerammoUI, zombie.entity.Position, PowerUp.Type.flamethrower_ammo));
+                    case PowerUpType.flamethrower:
+                        PowerUpList.Add(new PowerUp(flamethrowerAmmoPowerUp, flamethrowerammoUI, zombie.entity.Position, PowerUpType.flamethrower));
                         break;
 
-                    case 3: // ExtraLife
-                        PowerUpList.Add(new PowerUp(extraLivePowerUp, extraLivePowerUp, zombie.entity.Position, PowerUp.Type.extralife));
+                    case PowerUpType.extralife:
+                        PowerUpList.Add(new PowerUp(extraLivePowerUp, extraLivePowerUp, zombie.entity.Position, PowerUpType.extralife));
                         break;
 
-                    case 4: // Shotgun Ammo
-                        PowerUpList.Add(new PowerUp(shotgunAmmoPowerUp, shotgunammoUI, zombie.entity.Position, PowerUp.Type.shotgun_ammo));
+                    case PowerUpType.shotgun:
+                        PowerUpList.Add(new PowerUp(shotgunAmmoPowerUp, shotgunammoUI, zombie.entity.Position, PowerUpType.shotgun));
                         break;
 
-                    case 5: // Grenade Ammo
-                        PowerUpList.Add(new PowerUp(grenadeammoUI, grenadeammoUI, zombie.entity.Position, PowerUp.Type.grenadelauncher_ammo));
+                    case PowerUpType.grenade:
+                        PowerUpList.Add(new PowerUp(grenadeammoUI, grenadeammoUI, zombie.entity.Position, PowerUpType.grenade));
                         break;
 
-                    case 6: // Speed Buff
-                        PowerUpList.Add(new PowerUp(livePowerUp, heart, zombie.entity.Position, PowerUp.Type.speedbuff));
+                    case PowerUpType.speedbuff:
+                        PowerUpList.Add(new PowerUp(livePowerUp, heart, zombie.entity.Position, PowerUpType.speedbuff));
                         break;
 
-                    case 7: // Immune Buff
-                        PowerUpList.Add(new PowerUp(immunePowerUp, immunePowerUp, zombie.entity.Position, PowerUp.Type.immunebuff));
+                    case PowerUpType.immunebuff:
+                        PowerUpList.Add(new PowerUp(immunePowerUp, immunePowerUp, zombie.entity.Position, PowerUpType.immunebuff));
                         break;
 
                     default:
-                        PowerUpList.Add(new PowerUp(livePowerUp, heart, zombie.entity.Position, PowerUp.Type.live));
+                        PowerUpList.Add(new PowerUp(livePowerUp, heart, zombie.entity.Position, PowerUpType.live));
                         break;
                 }
             }
@@ -868,13 +876,13 @@ namespace ZombustersWindows
                 {
                     if (GameplayHelper.DetectCrash(player, powerup.Position))
                     {
-                        if (powerup.PUType == PowerUp.Type.extralife)
+                        if (powerup.powerUpType == PowerUpType.extralife)
                         {
                             IncreaseLife(playerId);
                             powerup.status = ObjectStatus.Dying;
                         }
 
-                        if (powerup.PUType == PowerUp.Type.live)
+                        if (powerup.powerUpType == PowerUpType.live)
                         {
                             if (player.lifecounter < 100)
                             {
@@ -889,35 +897,35 @@ namespace ZombustersWindows
                             powerup.status = ObjectStatus.Dying;
                         }
 
-                        if (powerup.PUType == PowerUp.Type.machinegun_ammo)
+                        if (powerup.powerUpType == PowerUpType.machinegun)
                         {
                             player.ammo[(int)GunType.machinegun] += powerup.Value;
                             powerup.status = ObjectStatus.Dying;
 
                         }
 
-                        if (powerup.PUType == PowerUp.Type.shotgun_ammo)
+                        if (powerup.powerUpType == PowerUpType.shotgun)
                         {
                             player.ammo[(int)GunType.shotgun] += powerup.Value;
                             powerup.status = ObjectStatus.Dying;
 
                         }
 
-                        if (powerup.PUType == PowerUp.Type.grenadelauncher_ammo)
+                        if (powerup.powerUpType == PowerUpType.grenade)
                         {
                             player.ammo[(int)GunType.grenade] += powerup.Value;
                             powerup.status = ObjectStatus.Dying;
 
                         }
 
-                        if (powerup.PUType == PowerUp.Type.flamethrower_ammo)
+                        if (powerup.powerUpType == PowerUpType.flamethrower)
                         {
                             player.ammo[(int)GunType.flamethrower] += powerup.Value;
                             powerup.status = ObjectStatus.Dying;
 
                         }
 
-                        if (powerup.PUType == PowerUp.Type.speedbuff || powerup.PUType == PowerUp.Type.immunebuff)
+                        if (powerup.powerUpType == PowerUpType.speedbuff || powerup.powerUpType == PowerUpType.immunebuff)
                         {
                             //player. += powerup.Value;
                             powerup.status = ObjectStatus.Dying;
@@ -1152,11 +1160,11 @@ namespace ZombustersWindows
 
             if (game.currentPlayers[Player].currentgun == GunType.machinegun && game.currentPlayers[Player].ammo[(int)GunType.machinegun] > 0)
             {
-                RateOfFire = 10;
+                RateOfFire = MACHINEGUN_RATE_OF_FIRE;
             }
             else if (game.currentPlayers[Player].currentgun == GunType.flamethrower && game.currentPlayers[Player].ammo[(int)GunType.flamethrower] > 0)
             {
-                RateOfFire = 15;
+                RateOfFire = FLAMETHROWER_RATE_OF_FIRE;
             }
             else
             {
@@ -1836,6 +1844,7 @@ namespace ZombustersWindows
                                         PistolShotNorthAnimation[state.character].Draw(this.ScreenManager.SpriteBatch, new Vector2(state.position.X + 12 + offsetPosition.X, state.position.Y + offsetPosition.Y - 30), SpriteEffects.None, layerIndex, 0f, color);
                                     }
                                     break;
+                                case GunType.shotgun:
                                 case GunType.machinegun:
                                     if (state.character == 0)
                                     {
@@ -1879,6 +1888,7 @@ namespace ZombustersWindows
                                         PistolShotNEAnimation[state.character].Draw(this.ScreenManager.SpriteBatch, new Vector2(state.position.X + 7 + offsetPosition.X, state.position.Y + offsetPosition.Y - 18), SpriteEffects.None, layerIndex, 0f, color);
                                     }
                                     break;
+                                case GunType.shotgun:
                                 case GunType.machinegun:
                                     if (state.character == 0)
                                     {
@@ -1921,6 +1931,7 @@ namespace ZombustersWindows
                                         PistolShotEastAnimation[state.character].Draw(this.ScreenManager.SpriteBatch, new Vector2(state.position.X + 7 + offsetPosition.X, state.position.Y + offsetPosition.Y + 1), SpriteEffects.None, layerIndex, 0f, color);
                                     }
                                     break;
+                                case GunType.shotgun:
                                 case GunType.machinegun:
                                     if (state.character == 0)
                                     {
@@ -1964,6 +1975,7 @@ namespace ZombustersWindows
                                         PistolShotSEAnimation[state.character].Draw(this.ScreenManager.SpriteBatch, new Vector2(state.position.X + 10 + offsetPosition.X, state.position.Y + offsetPosition.Y + 1), SpriteEffects.None, layerIndex, 0f, color);
                                     }
                                     break;
+                                case GunType.shotgun:
                                 case GunType.machinegun:
                                     if (state.character == 0)
                                     {
@@ -2007,6 +2019,7 @@ namespace ZombustersWindows
                                         PistolShotSouthAnimation[state.character].Draw(this.ScreenManager.SpriteBatch, new Vector2(state.position.X + 3 + offsetPosition.X, state.position.Y + offsetPosition.Y + 1), SpriteEffects.None, layerIndex, 0f, color);
                                     }
                                     break;
+                                case GunType.shotgun:
                                 case GunType.machinegun:
                                     if (state.character == 0)
                                     {
@@ -2050,6 +2063,7 @@ namespace ZombustersWindows
                                         PistolShotSEAnimation[state.character].Draw(this.ScreenManager.SpriteBatch, new Vector2(state.position.X + 7 + offsetPosition.X, state.position.Y + offsetPosition.Y + 1), SpriteEffects.FlipHorizontally, layerIndex, 0f, color);
                                     }
                                     break;
+                                case GunType.shotgun:
                                 case GunType.machinegun:
                                     if (state.character == 0)
                                     {
@@ -2093,6 +2107,7 @@ namespace ZombustersWindows
                                         PistolShotEastAnimation[state.character].Draw(this.ScreenManager.SpriteBatch, new Vector2(state.position.X + 2 + offsetPosition.X, state.position.Y + offsetPosition.Y + 1), SpriteEffects.FlipHorizontally, layerIndex, 0f, color);
                                     }
                                     break;
+                                case GunType.shotgun:
                                 case GunType.machinegun:
                                     if (state.character == 0)
                                     {
@@ -2136,6 +2151,7 @@ namespace ZombustersWindows
                                         PistolShotNEAnimation[state.character].Draw(this.ScreenManager.SpriteBatch, new Vector2(state.position.X + 2 + offsetPosition.X, state.position.Y + offsetPosition.Y - 18), SpriteEffects.FlipHorizontally, layerIndex, 0f, color);
                                     }
                                     break;
+                                case GunType.shotgun:
                                 case GunType.machinegun:
                                     if (state.character == 0)
                                     {
@@ -3262,7 +3278,7 @@ namespace ZombustersWindows
                 }
                 else
                 {
-                    if (game.currentPlayers[player].ammo[(int)GunType.machinegun] > 0)
+                    if (game.currentPlayers[player].ammo[(int)GunType.machinegun] > 0 || game.currentPlayers[player].ammo[(int)GunType.shotgun] > 0)
                     {
                         if (game.currentPlayers[player].character == 0)
                         {
