@@ -6,7 +6,7 @@ Zombusters
 
 *An action-packed 3rd person game for Windows, MacOS and Linux available for dowload on itch.io*
 
-[![zombusters-v1.1.0](https://img.shields.io/badge/zombusters-v1.1.0-green.svg)](itch://install/?build_id=235870&game_id=193462&upload_id=1825877)
+<a href="itch://install/?build_id=235870&game_id=193462&upload_id=1825877"><img src="https://img.shields.io/badge/zombusters-v1.1.0-green.svg" /></a>
 
 It will let you sticked on your seat until the end. Its 2D graphics and isometric view make it a different specie in its genre. You will have to face a horde of Zombies that try to get you down with the help of various weapons/power ups and different moving styles.
 
