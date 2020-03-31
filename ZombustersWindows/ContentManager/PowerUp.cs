@@ -7,6 +7,17 @@ namespace ZombustersWindows.Subsystem_Managers
 
     public class PowerUp
     {
+        private const int EXTRA_LIFE = 1;
+        private const int LIVE_TO_SUM = 30;
+        private const int SHOTGUN_AMMO = 25;
+        private const int MACHINEGUN_AMMO = 50;
+        private const int FLAMETHROWER_AMMO = 25;
+        private const int GRENADES = 5;
+        private const float SPEED_BUFF = 20.0f;
+        private const float IMMUNE_BUFF = 20.0f;
+
+        private const float TIME_TO_DIE = 1.5f;
+
         public Texture2D Texture, UITexture;
         public Vector2 Position;
         public int Value;
@@ -29,44 +40,44 @@ namespace ZombustersWindows.Subsystem_Managers
 
             if (this.powerUpType == PowerUpType.extralife)
             {
-                Value = 1;
+                Value = EXTRA_LIFE;
             }
 
             if (this.powerUpType == PowerUpType.live)
             {
-                Value = 30;
+                Value = LIVE_TO_SUM;
             }
 
             if (this.powerUpType == PowerUpType.shotgun)
             {
-                Value = 50;
+                Value = SHOTGUN_AMMO;
             }
 
             if (this.powerUpType == PowerUpType.machinegun)
             {
-                Value = 50;
+                Value = MACHINEGUN_AMMO;
             }
 
             if (this.powerUpType == PowerUpType.flamethrower)
             {
-                Value = 50;
+                Value = FLAMETHROWER_AMMO;
             }
 
             if (this.powerUpType == PowerUpType.grenade)
             {
-                Value = 10;
+                Value = GRENADES;
             }
 
             if (this.powerUpType == PowerUpType.speedbuff)
             {
                 // Timer
-                buffTimer = 20.0f;
+                buffTimer = SPEED_BUFF;
             }
 
             if (this.powerUpType == PowerUpType.immunebuff)
             {
                 // Timer
-                buffTimer = 20.0f;
+                buffTimer = IMMUNE_BUFF;
             }
         }
 
@@ -85,7 +96,7 @@ namespace ZombustersWindows.Subsystem_Managers
             if (this.status == ObjectStatus.Dying)
             {
                 dyingtimer += (float)gameTime.ElapsedGameTime.TotalSeconds;
-                if (dyingtimer >= 1.5f)
+                if (dyingtimer >= TIME_TO_DIE)
                 {
                     this.status = ObjectStatus.Inactive;
                     dyingtimer = 0;

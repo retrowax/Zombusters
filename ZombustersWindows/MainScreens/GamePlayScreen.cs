@@ -1005,6 +1005,31 @@ namespace ZombustersWindows
                                 }
                             }
                         }
+
+                        for (int bulletCount = 0; bulletCount < player.shotgunbullets.Count; bulletCount++)
+                        {
+                            for (int pelletCount = 0; pelletCount < player.shotgunbullets[bulletCount].Pellet.Count; pelletCount++)
+                            {
+                                if (GameplayHelper.DetectCollision(player.shotgunbullets[bulletCount].Pellet[pelletCount], zombie.entity.Position, totalGameSeconds))
+                                {
+                                    player.shotgunbullets[bulletCount].Pellet.RemoveAt(pelletCount);
+                                    if (zombie.lifecounter > 1.0f)
+                                    {
+                                        zombie.lifecounter -= 1.0f;
+                                        zombie.isLoosingLife = true;
+                                    }
+                                    else
+                                    {
+                                        ZombieDestroyed(zombie, (byte)playerId, player.currentgun);
+                                        
+                                        if (PowerUpIsInRange(zombie))
+                                        {
+                                            SpawnPowerUp(zombie);
+                                        }
+                                    }
+                                }
+                            }
+                        }
                     }
                 }
 

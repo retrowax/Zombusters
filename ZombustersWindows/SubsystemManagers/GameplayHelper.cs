@@ -41,7 +41,7 @@ namespace ZombustersWindows
             return false;
         }
 
-        public static Vector2 FindShotgunBulletPosition(Vector3 bullet, float angle, int pelletcount, double totalGameSeconds)
+        public static Vector2 FindShotgunBulletPosition(Vector4 bullet, float angle, int pelletcount, double totalGameSeconds)
         {
             Vector2 pos = Vector2.Zero;
             float overAngle = 0;

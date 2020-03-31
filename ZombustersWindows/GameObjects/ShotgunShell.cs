@@ -6,7 +6,7 @@ namespace ZombustersWindows
 {
     public class ShotgunShell
     {
-        public List<Vector3> Pellet;
+        public List<Vector4> Pellet;
         public Vector2 Position, Direction, Velocity;
         public float Angle;
 
@@ -39,10 +39,10 @@ namespace ZombustersWindows
                  (float)Math.Sin(rotation + pelletsSpreadRadians),
                 -(float)Math.Cos(rotation + pelletsSpreadRadians));
 
-            Pellet = new List<Vector3>();
-            Pellet.Add(new Vector3(this.Position, totalgameseconds));
-            Pellet.Add(new Vector3(this.Position, totalgameseconds));
-            Pellet.Add(new Vector3(this.Position, totalgameseconds));
+            Pellet = new List<Vector4>();
+            Pellet.Add(new Vector4(new Vector2(Position.X - 5, Position.Y - 5), totalgameseconds, angle));
+            Pellet.Add(new Vector4(this.Position, totalgameseconds, angle));
+            Pellet.Add(new Vector4(new Vector2(Position.X + 5, Position.Y + 5), totalgameseconds, angle));
         }
     }
 }
