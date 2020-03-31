@@ -57,8 +57,8 @@ namespace ZombustersWindows.Subsystem_Managers
                 case LevelType.Three:
                     furnituresfilename = "LevelXMLs/Level3/Level3_furnitures.xml";
                     enemiesfilename = "LevelXMLs/Level3/Level3_enemies.xml";
-                    wallsfilename = "LevelXMLs/Level3/Level3_walls.xml";
-                    mapTextureFileName = @"Maps/map3";
+                    wallsfilename = "LevelXMLs/Level3/Level3WP_walls.xml";
+                    mapTextureFileName = @"Maps/map3wp";
                     levelparameters = doc.Root.Element("Level3");
                     break;
                 case LevelType.Four:
@@ -85,8 +85,8 @@ namespace ZombustersWindows.Subsystem_Managers
                 case LevelType.Seven:
                     furnituresfilename = "LevelXMLs/Level7/Level7_furnitures.xml";
                     enemiesfilename = "LevelXMLs/Level7/Level7_enemies.xml";
-                    wallsfilename = "LevelXMLs/Level7/Level7_walls.xml";
-                    mapTextureFileName = @"Maps/map7";
+                    wallsfilename = "LevelXMLs/Level7/Level7WP_walls.xml";
+                    mapTextureFileName = @"Maps/map7wp";
                     levelparameters = doc.Root.Element("Level7");
                     break;
                 case LevelType.Eight:
