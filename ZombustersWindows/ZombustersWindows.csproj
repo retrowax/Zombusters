@@ -70,6 +70,7 @@
     <Compile Include="ContentManager\Furniture.cs" />
     <Compile Include="ContentManager\FurnitureComparer.cs" />
     <Compile Include="ContentManager\Level.cs" />
+    <Compile Include="ContentManager\PowerUpType.cs" />
     <Compile Include="ContentManager\SubLevel.cs" />
     <Compile Include="ContentManager\SubLevelType.cs" />
     <Compile Include="ContentManager\Wall.cs" />

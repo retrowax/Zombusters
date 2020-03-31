@@ -11,7 +11,6 @@ using ZombustersWindows.MainScreens;
 using ZombustersWindows.Localization;
 using System.Xml.Linq;
 using ZombustersWindows.GameObjects;
-using ZombustersWindows.ContentManagement;
 
 namespace ZombustersWindows
 {

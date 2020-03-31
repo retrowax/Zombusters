@@ -1,7 +1,6 @@
 using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using ZombustersWindows.ContentManagement;
 
 namespace ZombustersWindows.Subsystem_Managers
 {
