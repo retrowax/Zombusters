@@ -1,5 +1,4 @@
-﻿using System;
-namespace ZombustersMac.ContentManager
+﻿namespace ZombustersWindows.Subsystem_Managers
 {
     public static class Angles
     {

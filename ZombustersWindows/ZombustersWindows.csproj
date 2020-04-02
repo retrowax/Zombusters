@@ -66,6 +66,7 @@
     <Compile Include="Components\DebugComponent.cs" />
     <Compile Include="Components\FrameRateCounter.cs" />
     <Compile Include="Components\LanguageComponent.cs" />
+    <Compile Include="ContentManager\Angles.cs" />
     <Compile Include="ContentManager\EnemiesCount.cs" />
     <Compile Include="ContentManager\Furniture.cs" />
     <Compile Include="ContentManager\FurnitureComparer.cs" />
