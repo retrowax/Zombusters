@@ -38,7 +38,7 @@ namespace ZombustersWindows
         public StorageDataSource storageDataSource;
         public float totalGameSeconds;
 
-        //public BloomComponent bloom;
+        public BloomComponent bloom;
         //public StorageDeviceManager storageDeviceManager;
 
 #if DEBUG
@@ -46,8 +46,6 @@ namespace ZombustersWindows
         public DebugInfoComponent DebugComponent;
 #endif
 
-        //int bloomSettingsIndex = 0;
-        
         public String[] networkSettings = { "XBOX LIVE", "SYSTEM LINK" };
         public int currentNetworkSetting;
         public int maxGamers = 4;
@@ -76,15 +74,14 @@ namespace ZombustersWindows
             audio.SetOptions(0.7f, 0.5f);
             input = new InputManager(this);
             Components.Add(input);
-            //Bloom Component
-            //REVISAR!!!
-            //graphics.MinimumPixelShaderProfile = ShaderProfile.PS_2_0;            
-            /*
-            bloom = new BloomComponent(this);
+
+            bloom = new BloomComponent(this)
+            {
+                Settings = BloomSettings.PresetSettings[6]
+            };
             Components.Add(bloom);
-            bloom.Settings = BloomSettings.PresetSettings[6];
             bloom.Visible = true;
-            */
+
             bugSnagClient = new Client("1cad9818fb8d84290d776245cd1f948d");
             //bugSnagClient.StartAutoNotify();
 
@@ -117,7 +114,7 @@ namespace ZombustersWindows
                 if (i == 0) {
                     this.InitializeMain(PlayerIndex.One);
                 }
-            }      
+            }
             base.Initialize();
             screenManager.AddScreen(new LogoScreen());
             currentGameState = GameState.SignIn;
@@ -318,6 +315,7 @@ namespace ZombustersWindows
 
         public void QuitGame() {
             playScreen = null;
+            bloom.Visible = true;
             Reset();
             bPaused = EndPause();
         }

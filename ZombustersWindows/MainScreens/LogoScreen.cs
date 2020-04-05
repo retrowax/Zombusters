@@ -65,8 +65,7 @@ namespace ZombustersWindows
 
         void FinishLogo() {
             this.ScreenManager.AddScreen(new StartScreen());
-            //Removes the Bloom Effect from the Menu
-            //this.Game.bloom.Visible = !this.Game.bloom.Visible;
+            game.bloom.Visible = true;
             ExitScreen();
         }
 

@@ -39,7 +39,6 @@ namespace ZombustersWindows
             fontItalic = game.Content.Load<SpriteFont>(@"menu\ArialMusic");
             fontSmallItalic = game.Content.Load<SpriteFont>(@"menu\ArialMusicItalic");
             menu = new MenuComponent(game, MenuListFont);
-            //bloom = new BloomComponent(game);
             menu.Initialize();
             menu.AddText("WPPlayNewGame", "WPPlayNewGameMMString");
             menu.AddText("ExtrasMenuString", "ExtrasMMString");
@@ -58,7 +57,6 @@ namespace ZombustersWindows
             menu.MenuConfigSelected += new EventHandler<MenuSelection>(OnMenuConfigSelected);
             //menu.MenuShowMarketplace += new EventHandler<MenuSelection>(OnShowMarketplace);
             menu.CenterInXLeftMenu(view);
-            //bloom.Visible = !bloom.Visible;
             game.isInMenu = true;
             base.Initialize();
             this.isBackgroundOn = true;
