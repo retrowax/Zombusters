@@ -1,11 +1,9 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.27004.2005
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29920.165
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ZombustersWindows", "ZombustersWindows\ZombustersWindows.csproj", "{29A4CB64-5FC5-4E7B-9599-1E763B602360}"
-EndProject
-Project("{930C7802-8A8C-48F9-8165-68863BCCD9DD}") = "ZombustersInstaller", "ZombustersInstaller\ZombustersInstaller.wixproj", "{EF29CE28-E60B-4FDA-9FF0-EE46F13CF041}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -14,6 +12,11 @@ Global
 		Debug|Mixed Platforms = Debug|Mixed Platforms
 		Debug|x64 = Debug|x64
 		Debug|x86 = Debug|x86
+		Demo|Any CPU = Demo|Any CPU
+		Demo|ARM = Demo|ARM
+		Demo|Mixed Platforms = Demo|Mixed Platforms
+		Demo|x64 = Demo|x64
+		Demo|x86 = Demo|x86
 		Release|Any CPU = Release|Any CPU
 		Release|ARM = Release|ARM
 		Release|Mixed Platforms = Release|Mixed Platforms
@@ -28,6 +31,13 @@ Global
 		{29A4CB64-5FC5-4E7B-9599-1E763B602360}.Debug|x64.ActiveCfg = Debug|x86
 		{29A4CB64-5FC5-4E7B-9599-1E763B602360}.Debug|x86.ActiveCfg = Debug|x86
 		{29A4CB64-5FC5-4E7B-9599-1E763B602360}.Debug|x86.Build.0 = Debug|x86
+		{29A4CB64-5FC5-4E7B-9599-1E763B602360}.Demo|Any CPU.ActiveCfg = Demo|x86
+		{29A4CB64-5FC5-4E7B-9599-1E763B602360}.Demo|ARM.ActiveCfg = Demo|x86
+		{29A4CB64-5FC5-4E7B-9599-1E763B602360}.Demo|Mixed Platforms.ActiveCfg = Demo|x86
+		{29A4CB64-5FC5-4E7B-9599-1E763B602360}.Demo|Mixed Platforms.Build.0 = Demo|x86
+		{29A4CB64-5FC5-4E7B-9599-1E763B602360}.Demo|x64.ActiveCfg = Demo|x86
+		{29A4CB64-5FC5-4E7B-9599-1E763B602360}.Demo|x86.ActiveCfg = Demo|x86
+		{29A4CB64-5FC5-4E7B-9599-1E763B602360}.Demo|x86.Build.0 = Demo|x86
 		{29A4CB64-5FC5-4E7B-9599-1E763B602360}.Release|Any CPU.ActiveCfg = Release|x86
 		{29A4CB64-5FC5-4E7B-9599-1E763B602360}.Release|ARM.ActiveCfg = Release|x86
 		{29A4CB64-5FC5-4E7B-9599-1E763B602360}.Release|Mixed Platforms.ActiveCfg = Release|x86
@@ -35,20 +45,6 @@ Global
 		{29A4CB64-5FC5-4E7B-9599-1E763B602360}.Release|x64.ActiveCfg = Release|x86
 		{29A4CB64-5FC5-4E7B-9599-1E763B602360}.Release|x86.ActiveCfg = Release|x86
 		{29A4CB64-5FC5-4E7B-9599-1E763B602360}.Release|x86.Build.0 = Release|x86
-		{EF29CE28-E60B-4FDA-9FF0-EE46F13CF041}.Debug|Any CPU.ActiveCfg = Debug|x86
-		{EF29CE28-E60B-4FDA-9FF0-EE46F13CF041}.Debug|ARM.ActiveCfg = Debug|x86
-		{EF29CE28-E60B-4FDA-9FF0-EE46F13CF041}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
-		{EF29CE28-E60B-4FDA-9FF0-EE46F13CF041}.Debug|Mixed Platforms.Build.0 = Debug|x86
-		{EF29CE28-E60B-4FDA-9FF0-EE46F13CF041}.Debug|x64.ActiveCfg = Debug|x86
-		{EF29CE28-E60B-4FDA-9FF0-EE46F13CF041}.Debug|x86.ActiveCfg = Debug|x86
-		{EF29CE28-E60B-4FDA-9FF0-EE46F13CF041}.Debug|x86.Build.0 = Debug|x86
-		{EF29CE28-E60B-4FDA-9FF0-EE46F13CF041}.Release|Any CPU.ActiveCfg = Release|x86
-		{EF29CE28-E60B-4FDA-9FF0-EE46F13CF041}.Release|ARM.ActiveCfg = Release|x86
-		{EF29CE28-E60B-4FDA-9FF0-EE46F13CF041}.Release|Mixed Platforms.ActiveCfg = Release|x86
-		{EF29CE28-E60B-4FDA-9FF0-EE46F13CF041}.Release|Mixed Platforms.Build.0 = Release|x86
-		{EF29CE28-E60B-4FDA-9FF0-EE46F13CF041}.Release|x64.ActiveCfg = Release|x86
-		{EF29CE28-E60B-4FDA-9FF0-EE46F13CF041}.Release|x86.ActiveCfg = Release|x86
-		{EF29CE28-E60B-4FDA-9FF0-EE46F13CF041}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
