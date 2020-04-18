@@ -39,11 +39,7 @@ namespace ZombustersWindows.Localization {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-#if WINDOWS
                     global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("ZombustersWindows.Localization.Strings", typeof(Strings).Assembly);
-#elif NETCOREAPP
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("ZombustersMac.Localization.Strings", typeof(Strings).Assembly);
-#endif
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -275,7 +271,7 @@ namespace ZombustersWindows.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to © RETROWAX GAMES. 2011-2013 ALL RIGHTS RESERVED.
+        ///   Looks up a localized string similar to © RETROWAX GAMES. 2011-2020 ALL RIGHTS RESERVED.
         /// </summary>
         internal static string CopyRightString {
             get {
