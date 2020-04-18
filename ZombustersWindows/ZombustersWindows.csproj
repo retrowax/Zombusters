@@ -116,6 +116,7 @@
     <Compile Include="Components\SliderComponent.cs" />
     <Compile Include="GameStateManagement\OptionsState.cs" />
     <Compile Include="Components\MenuComponent.cs" />
+    <Compile Include="MenuScreens\DemoEndingScreen.cs" />
     <Compile Include="MenuScreens\MenuSelection.cs" />
     <Compile Include="MyGame.cs" />
     <Compile Include="GameStateManagement\GameScreen.cs" />

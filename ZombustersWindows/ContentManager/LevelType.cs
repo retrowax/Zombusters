@@ -2,6 +2,6 @@
 {
     public enum LevelType
     {
-        One, Two, Three, Four, Five, Six, Seven, Eight, Nine, Ten, FinalJuego
+        One, Two, Three, Four, Five, Six, Seven, Eight, Nine, Ten, EndGame, EndDemo
     }
 }
