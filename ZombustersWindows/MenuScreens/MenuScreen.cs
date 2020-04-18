@@ -138,7 +138,7 @@ namespace ZombustersWindows
                 menu.Draw(gameTime);
                 menu.DrawLogoRetrowaxMenu(this.ScreenManager.SpriteBatch, new Vector2(uiBounds.Width, uiBounds.Height), MenuInfoFont);
 #if DEMO
-                menu.DrawDemoWIPDisclaimer(this.ScreenManager.SpriteBatch, fontItalic, fontSmallItalic);
+                menu.DrawDemoWIPDisclaimer(this.ScreenManager.SpriteBatch);
 #endif
                 menu.DrawContextMenu(selectPos, this.ScreenManager.SpriteBatch);
             } else {

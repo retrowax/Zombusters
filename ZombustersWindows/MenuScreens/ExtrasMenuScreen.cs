@@ -12,8 +12,6 @@ namespace ZombustersWindows
         Vector2 selectPos;
         SpriteFont MenuInfoFont;
         SpriteFont MenuListFont;
-        SpriteFont fontItalic;
-        SpriteFont fontSmallItalic;
 
         private MenuComponent menu;
 
@@ -37,8 +35,6 @@ namespace ZombustersWindows
 #endif
             MenuInfoFont = this.ScreenManager.Game.Content.Load<SpriteFont>(@"menu\ArialMenuInfo");
             MenuListFont = this.ScreenManager.Game.Content.Load<SpriteFont>(@"menu\ArialMenuList");
-            fontItalic = this.ScreenManager.Game.Content.Load<SpriteFont>(@"menu\ArialMusic");
-            fontSmallItalic = this.ScreenManager.Game.Content.Load<SpriteFont>(@"menu\ArialMusicItalic");
 
 #if WINDOWS_PHONE
             menu = new MenuComponent(this.ScreenManager.Game, MenuHeaderFont);
@@ -195,7 +191,7 @@ namespace ZombustersWindows
             menu.Draw(gameTime);
             menu.DrawLogoRetrowaxMenu(this.ScreenManager.SpriteBatch, new Vector2(uiBounds.Width, uiBounds.Height), MenuInfoFont);
 #if DEMO
-            menu.DrawDemoWIPDisclaimer(this.ScreenManager.SpriteBatch, fontItalic, fontSmallItalic);
+            menu.DrawDemoWIPDisclaimer(this.ScreenManager.SpriteBatch);
 #endif
             menu.DrawContextMenu(selectPos, this.ScreenManager.SpriteBatch);
 

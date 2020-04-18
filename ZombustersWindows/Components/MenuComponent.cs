@@ -26,6 +26,8 @@ namespace ZombustersWindows
         public SpriteFont Font;
         SpriteFont MenuInfoFont;
         SpriteFont MenuHeaderFont;
+        SpriteFont fontItalic;
+        SpriteFont fontSmallItalic;
         public Color SelectedColor = Color.White;
         public Color UnselectedColor = Color.LightGray;
         public int Selection = 0;
@@ -155,6 +157,8 @@ namespace ZombustersWindows
 
             MenuHeaderFont = this.Game.Content.Load<SpriteFont>(@"menu\ArialMenuHeader");
             MenuInfoFont = this.Game.Content.Load<SpriteFont>(@"menu\ArialMenuInfo");
+            fontItalic = this.Game.Content.Load<SpriteFont>(@"menu\ArialMusic");
+            fontSmallItalic = this.Game.Content.Load<SpriteFont>(@"menu\ArialMusicItalic");
             base.LoadContent();            
         }
 
@@ -368,15 +372,15 @@ namespace ZombustersWindows
 #endif
         }
 
-        public void DrawDemoWIPDisclaimer(SpriteBatch batch, SpriteFont fontBig, SpriteFont fontSmall)
+        public void DrawDemoWIPDisclaimer(SpriteBatch batch)
         {
             batch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend, null, null, null, null, Resolution.getTransformationMatrix());
             string build = "'Demo' Build v1.0";
             string disclaimer = "This demo does not represent the final features or quality of the software.";
-            batch.DrawString(fontBig, build,
+            batch.DrawString(fontItalic, build,
                     new Vector2(65, 65), Color.White);
-            batch.DrawString(fontSmall, disclaimer,
-                    new Vector2(65, 65 + fontBig.MeasureString(build).Y + 2), Color.White);
+            batch.DrawString(fontSmallItalic, disclaimer,
+                    new Vector2(65, 65 + fontItalic.MeasureString(build).Y + 2), Color.White);
             batch.End();
         }
 

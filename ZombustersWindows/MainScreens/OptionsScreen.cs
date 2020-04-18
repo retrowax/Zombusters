@@ -380,6 +380,9 @@ namespace ZombustersWindows
             languageComponent.Draw(gameTime);
             menu.DrawLogoRetrowaxMenu(this.ScreenManager.SpriteBatch, new Vector2(uiBounds.Width, uiBounds.Height), MenuInfoFont);
             menu.DrawContextMenu(selectPos, this.ScreenManager.SpriteBatch);
+#if DEMO
+            menu.DrawDemoWIPDisclaimer(this.ScreenManager.SpriteBatch);
+#endif
         }
     }
 }

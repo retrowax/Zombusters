@@ -272,8 +272,10 @@ namespace ZombustersWindows
 
             this.ScreenManager.SpriteBatch.End();
 
-            // Draw Retrowax Logo
             menu.DrawLogoRetrowaxMenu(this.ScreenManager.SpriteBatch, new Vector2(uiBounds.Width, uiBounds.Height), MenuInfoFont);
+#if DEMO
+            menu.DrawDemoWIPDisclaimer(this.ScreenManager.SpriteBatch);
+#endif
 
 #if WINDOWS_PHONE
             menu.DrawBackButtonMenu(this.ScreenManager.SpriteBatch, new Vector2(uiBounds.Width + 55, uiBounds.Y - 30), MenuInfoFont);
