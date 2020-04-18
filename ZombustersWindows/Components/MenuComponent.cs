@@ -7,11 +7,15 @@ using Microsoft.Xna.Framework.Input.Touch;
 using GameStateManagement;
 using ZombustersWindows.Localization;
 using ZombustersWindows.Subsystem_Managers;
+using System.Text.RegularExpressions;
 
 namespace ZombustersWindows
 {
     public class MenuComponent : DrawableGameComponent
     {
+        private const int LINE_X_OFFSET = 40;
+        private const int MENU_TITLE_Y_OFFSET = 400;
+
         private SpriteBatch batch;
         private List<string> MenuItems;
         public List<string> HelpText;
@@ -20,11 +24,14 @@ namespace ZombustersWindows
         //public Vector2 TopLeft;
         public Rectangle uiBounds;
         public SpriteFont Font;
+        SpriteFont MenuInfoFont;
+        SpriteFont MenuHeaderFont;
         public Color SelectedColor = Color.White;
         public Color UnselectedColor = Color.LightGray;
         public int Selection = 0;
         public PlayerIndex Controller;
-        Texture2D lineaTextoMenu; //Linea de fondo del texto de las opciones
+        Texture2D menuTextLine;
+        Texture2D menuLine;
         Texture2D logoRetrowaxMenu;
         Texture2D kbEnter;
         Texture2D kbSpace;
@@ -46,6 +53,7 @@ namespace ZombustersWindows
         Texture2D twitterLogo;
         Texture2D googleLogo;
         Texture2D buyNow;
+        Texture2D logoMenu;
         public event EventHandler<MenuSelection> MenuOptionSelected;
         public event EventHandler<MenuSelection> MenuCanceled;
         public event EventHandler<MenuSelection> MenuConfigSelected;
@@ -140,8 +148,13 @@ namespace ZombustersWindows
             googleLogo = this.Game.Content.Load<Texture2D>(@"menu/google-64x64");
             goBackButton = this.Game.Content.Load<Texture2D>(@"menu/goBackButton");
             buyNow = this.Game.Content.Load<Texture2D>(@"menu/buynow");
-            lineaTextoMenu = this.Game.Content.Load<Texture2D>(@"menu/linea_texto_menu");
+            menuTextLine = this.Game.Content.Load<Texture2D>(@"menu/linea_texto_menu");
+            menuLine = this.Game.Content.Load<Texture2D>(@"menu/linea_menu");
             logoRetrowaxMenu = this.Game.Content.Load<Texture2D>(@"menu/logo_retrowax_menu");
+            logoMenu = this.Game.Content.Load<Texture2D>(@"menu/logo_menu");
+
+            MenuHeaderFont = this.Game.Content.Load<SpriteFont>(@"menu\ArialMenuHeader");
+            MenuInfoFont = this.Game.Content.Load<SpriteFont>(@"menu\ArialMenuInfo");
             base.LoadContent();            
         }
 
@@ -189,8 +202,8 @@ namespace ZombustersWindows
             for (int i = 0; i < MenuItems.Count; i++) {
                 foreach (GestureSample gesture in input.GetGestures()) {
                     if (gesture.GestureType == GestureType.Tap) {
-                        if ((gesture.Position.X >= current.X && gesture.Position.X <= (current.X + lineaTextoMenu.Width)) &&
-                            (gesture.Position.Y >= current.Y && gesture.Position.Y <= (current.Y + lineaTextoMenu.Height)))
+                        if ((gesture.Position.X >= current.X && gesture.Position.X <= (current.X + menuTextLine.Width)) &&
+                            (gesture.Position.Y >= current.Y && gesture.Position.Y <= (current.Y + menuTextLine.Height)))
                         {
                             if (MenuOptionSelected != null)
                                 MenuOptionSelected(this, new MenuSelection(i));
@@ -325,7 +338,7 @@ namespace ZombustersWindows
                 if (Selection == i) {
                     if (((MyGame)this.Game).player1.Options != InputMode.Touch) {
                         batch.DrawString(Font, Strings.ResourceManager.GetString(MenuItems[i]), new Vector2(current.X + 5, current.Y + 1), SelectedColor);
-                        batch.Draw(lineaTextoMenu, current, color);
+                        batch.Draw(menuTextLine, current, color);
                     } else {
                         if (Strings.ResourceManager.GetString(MenuItems[i]) != Strings.SaveAndExitString) {
                             batch.DrawString(Font, Strings.ResourceManager.GetString(MenuItems[i]), new Vector2(current.X + 5, current.Y + 1), SelectedColor);
@@ -348,21 +361,17 @@ namespace ZombustersWindows
         }
 
         public void DrawBuyNow(GameTime gameTime) {
-            /*if (licenseInformation.IsTrial)
-            {
-                batch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, null, null, null, null, Resolution.getTransformationMatrix());
-
-                // Arrow Left
-                batch.Draw(buyNow, new Vector2(-25, -25), null, Color.White, 0, Vector2.Zero, 1.0f, SpriteEffects.None, 1.0f);
-
-                batch.End();
-            }*/
+#if DEMO
+            batch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, null, null, null, null, Resolution.getTransformationMatrix());
+            batch.Draw(buyNow, new Vector2(-25, -25), null, Color.White, 0, Vector2.Zero, 1.0f, SpriteEffects.None, 1.0f);
+            batch.End();
+#endif
         }
 
-        public void DrawDreamBuildPlayDisclaimer(SpriteBatch batch, SpriteFont fontBig, SpriteFont fontSmall)
+        public void DrawDemoWIPDisclaimer(SpriteBatch batch, SpriteFont fontBig, SpriteFont fontSmall)
         {
             batch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend, null, null, null, null, Resolution.getTransformationMatrix());
-            string build = "'Dream Build Play' Build v1.0";
+            string build = "'Demo' Build v1.0";
             string disclaimer = "This demo does not represent the final features or quality of the software.";
             batch.DrawString(fontBig, build,
                     new Vector2(65, 65), Color.White);
@@ -374,11 +383,10 @@ namespace ZombustersWindows
         public void DrawLogoRetrowaxMenu(SpriteBatch batch, Vector2 position, SpriteFont MenuFont) {
             batch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend, null, null, null, null, Resolution.getTransformationMatrix());
             batch.Draw(logoRetrowaxMenu, position, Color.White);
-            /*if (licenseInformation.IsTrial) 
-            { 
-                batch.DrawString(MenuFont, Strings.TrialModeMenuString").ToUpper(), 
-                    new Vector2(position.X + logoRetrowaxMenu.Width/2 - MenuFont.MeasureString(Strings.TrialModeMenuString").ToUpper()).X/2, position.Y + logoRetrowaxMenu.Height), Color.White);
-            }*/
+#if DEMO
+            batch.DrawString(MenuFont, Strings.TrialModeMenuString.ToUpper(), 
+                    new Vector2(position.X + logoRetrowaxMenu.Width/2 - MenuFont.MeasureString(Strings.TrialModeMenuString.ToUpper()).X/2, position.Y + logoRetrowaxMenu.Height), Color.White);
+#endif
             batch.End();
         }
 
@@ -589,5 +597,77 @@ namespace ZombustersWindows
             batch.DrawString(MenuFont, Strings.BackString.ToUpper(), new Vector2(iconPos.X - 10 - MenuFont.MeasureString(Strings.BackString.ToUpper()).X, iconPos.Y + 15), Color.White);
             batch.End();
         }
+
+        public void DrawContextMenu(Vector2 position, SpriteBatch batch)
+        {
+            batch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend, null, null, null, null, Resolution.getTransformationMatrix());
+
+            Vector2 MenuTitlePosition = new Vector2(position.X - LINE_X_OFFSET, position.Y - MENU_TITLE_Y_OFFSET);
+            batch.Draw(logoMenu, new Vector2(MenuTitlePosition.X - 55, MenuTitlePosition.Y - 5), Color.White);
+            batch.DrawString(MenuHeaderFont, Strings.MainMenuString, MenuTitlePosition, Color.White);
+
+            batch.Draw(menuLine, new Vector2(position.X - LINE_X_OFFSET, position.Y - 270), Color.White);
+            batch.Draw(menuLine, new Vector2(position.X - LINE_X_OFFSET, position.Y - (21 * this.Count)), Color.White);
+
+            DrawContextMenuDescriptionLines(position, batch);
+
+            batch.Draw(menuLine, new Vector2(position.X - LINE_X_OFFSET, position.Y - 15), Color.White);
+            DrawMenuButtons(batch, new Vector2(position.X - 30, position.Y - 5), MenuInfoFont, false, false, true);
+
+            batch.End();
+        }
+
+        public void DrawContextMenuDescriptionLines(Vector2 position, SpriteBatch batch)
+        {
+            if (this.HelpText[this.Selection] != "")
+            {
+                string[] lines;
+                Vector2 contextMenuPosition = new Vector2(position.X - 32, position.Y - 100);
+                lines = Regex.Split(Strings.ResourceManager.GetString(this.HelpText[this.Selection]), "\r\n");
+                foreach (string line in lines)
+                {
+                    batch.DrawString(MenuInfoFont, line.Replace("	", ""), contextMenuPosition, Color.White);
+                    contextMenuPosition.Y += 20;
+                }
+            }
+        }
+
+#if WINDOWS_PHONE
+        //Draw all the Selection buttons on the bottom of the menu
+        private void DrawContextMenuWP(MenuComponent menu, Vector2 pos, SpriteBatch batch)
+        {
+            string[] lines;
+            Vector2 contextMenuPosition = new Vector2(uiBounds.X + 22, pos.Y - 100);
+            Vector2 MenuTitlePosition = new Vector2(contextMenuPosition.X - 3, contextMenuPosition.Y - 225);
+
+            batch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend, null, null, null, null, Resolution.getTransformationMatrix());
+
+            //Logo Menu
+            batch.Draw(logoMenu, new Vector2(MenuTitlePosition.X - 55, MenuTitlePosition.Y - 5), Color.White);
+
+            //Texto de MENU PRINCIPAL
+            batch.DrawString(MenuHeaderFont, Strings.ExtrasMenuString, MenuTitlePosition, Color.White);
+
+            //Linea divisoria
+            pos.X -= 40;
+            pos.Y -= 270;
+            batch.Draw(lineaMenu, pos, Color.White);
+            pos.Y += 270;
+
+            pos.Y -= 115;
+            batch.Draw(lineaMenu, pos, Color.White);
+            pos.Y += 115;
+
+            //Texto de contexto de menu
+            lines = Regex.Split(menu.HelpText[menu.Selection], "\r\n");
+            foreach (string line in lines)
+            {
+                batch.DrawString(MenuInfoFont, line.Replace("	", ""), contextMenuPosition, Color.White);
+                contextMenuPosition.Y += 20;
+            }
+
+            batch.End();
+        }
+#endif
     }
 }
