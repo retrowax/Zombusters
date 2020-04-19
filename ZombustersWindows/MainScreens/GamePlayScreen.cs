@@ -627,24 +627,20 @@ namespace ZombustersWindows
                         }
                     } else if(currentLevel == LevelType.EndDemo)
                     {
-                        timer += (float)gameTime.ElapsedGameTime.TotalSeconds;
-                        if (timer >= 5.0f)
+                        foreach (Avatar player in game.currentPlayers)
                         {
-                            foreach (Avatar player in game.currentPlayers)
+                            if (player.Player.IsPlaying)
                             {
-                                if (player.Player.IsPlaying)
+                                if (game.topScoreListContainer != null)
                                 {
-                                    if (game.topScoreListContainer != null)
-                                    {
-                                        player.Player.SaveLeaderBoard(player.score);
-                                    }
-
+                                    player.Player.SaveLeaderBoard(player.score);
                                 }
-                            }
 
-                            QuitToMenu();
-                            ScreenManager.AddScreen(new DemoEndingScreen());
+                            }
                         }
+
+                        QuitToMenu();
+                        ScreenManager.AddScreen(new DemoEndingScreen());
                     }
                 }
 
