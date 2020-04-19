@@ -352,7 +352,7 @@ namespace ZombustersWindows
                 state.Fire = gpState.ThumbSticks.Right;
             }
 
-            if (player.Controller == PlayerIndex.One)
+            if (player.inputMode == InputMode.Keyboard)
             {
                 if (input.IsNewKeyPress(Keys.Left))
                 {
@@ -751,14 +751,17 @@ namespace ZombustersWindows
             if (input.StickRightMovement.Y < 0)
                 accumFire.Y += GameplayHelper.Move(-input.StickRightMovement.Y, elapsedGameSeconds);
 
-            if (Keyboard.GetState().IsKeyDown(Keys.Right) || Keyboard.GetState().IsKeyDown(Keys.D))
-                accumMove.X += GameplayHelper.Move(1, elapsedGameSeconds);
-            if (Keyboard.GetState().IsKeyDown(Keys.Left) || Keyboard.GetState().IsKeyDown(Keys.A))
-                accumMove.X -= GameplayHelper.Move(1, elapsedGameSeconds);
-            if (Keyboard.GetState().IsKeyDown(Keys.Down) || Keyboard.GetState().IsKeyDown(Keys.S))
-                accumMove.Y += GameplayHelper.Move(1, elapsedGameSeconds);
-            if (Keyboard.GetState().IsKeyDown(Keys.Up) || Keyboard.GetState().IsKeyDown(Keys.W))
-                accumMove.Y -= GameplayHelper.Move(1, elapsedGameSeconds);
+            if (game.currentPlayers[player].Player.inputMode == InputMode.Keyboard)
+            {
+                if (Keyboard.GetState().IsKeyDown(Keys.Right) || Keyboard.GetState().IsKeyDown(Keys.D))
+                    accumMove.X += GameplayHelper.Move(1, elapsedGameSeconds);
+                if (Keyboard.GetState().IsKeyDown(Keys.Left) || Keyboard.GetState().IsKeyDown(Keys.A))
+                    accumMove.X -= GameplayHelper.Move(1, elapsedGameSeconds);
+                if (Keyboard.GetState().IsKeyDown(Keys.Down) || Keyboard.GetState().IsKeyDown(Keys.S))
+                    accumMove.Y += GameplayHelper.Move(1, elapsedGameSeconds);
+                if (Keyboard.GetState().IsKeyDown(Keys.Up) || Keyboard.GetState().IsKeyDown(Keys.W))
+                    accumMove.Y -= GameplayHelper.Move(1, elapsedGameSeconds);
+            }
 
             game.currentPlayers[player].accumFire = accumFire;
 
