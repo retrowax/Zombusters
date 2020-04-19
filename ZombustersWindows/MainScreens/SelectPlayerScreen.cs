@@ -694,10 +694,13 @@ namespace ZombustersWindows
 
             if (game.currentGameState != GameState.Paused)
             {
+#if !DEMO
                 DrawLevelSelectionMenu(this.ScreenManager.SpriteBatch);
+#endif
                 DrawSelectCharacters(selectPos, this.ScreenManager.SpriteBatch);
                 DrawContextMenu(menu, selectPos, this.ScreenManager.SpriteBatch);
                 DrawHowToPlay(this.ScreenManager.SpriteBatch, selectPos);
+                menu.DrawLogoRetrowaxMenu(this.ScreenManager.SpriteBatch, new Vector2(uiBounds.Width, uiBounds.Height), MenuInfoFont);
 #if DEMO
                 menu.DrawDemoWIPDisclaimer(this.ScreenManager.SpriteBatch);
 #endif

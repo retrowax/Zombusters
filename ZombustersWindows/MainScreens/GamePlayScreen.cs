@@ -3143,6 +3143,11 @@ namespace ZombustersWindows
 
             batch.DrawString(MenuInfoFont, sublevelstring.ToUpper(), new Vector2(uiBounds.Width - MenuInfoFont.MeasureString(sublevelstring).X / 2, uiBounds.Height), Color.White);
 
+#if DEMO
+            batch.DrawString(MenuInfoFont, Strings.TrialModeMenuString.ToUpper(),
+                    new Vector2(uiBounds.Width - MenuInfoFont.MeasureString(Strings.TrialModeMenuString.ToUpper()).X / 2, uiBounds.Height + 20), Color.White);
+#endif
+
             if (game.player1.Options == InputMode.Touch)
             {
                 batch.Draw(pause_icon, new Vector2(uiBounds.Width + 70, uiBounds.Y - 30), Color.White);
