@@ -1,14 +1,9 @@
 ﻿using System;
-using System.Text.RegularExpressions;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using GameStateManagement;
 using Microsoft.Xna.Framework.Input.Touch;
-using ZombustersWindows.Localization;
-using System.Threading;
-using System.Globalization;
-using System.Collections.Generic;
 using ZombustersWindows.Subsystem_Managers;
 
 namespace ZombustersWindows
@@ -23,9 +18,6 @@ namespace ZombustersWindows
         Vector2 playerStringLoc;
         Vector2 selectPos;
 
-        Texture2D logoMenu;
-        Texture2D menuSeparatorLine;
-        SpriteFont MenuHeaderFont;
         SpriteFont MenuInfoFont;
         SpriteFont MenuListFont;
 
@@ -45,7 +37,6 @@ namespace ZombustersWindows
             Viewport view = this.ScreenManager.GraphicsDevice.Viewport;
             uiBounds = GetTitleSafeArea();
             selectPos = new Vector2(uiBounds.X + 60, uiBounds.Bottom - 30);
-            MenuHeaderFont = game.Content.Load<SpriteFont>(@"menu\ArialMenuHeader");
             MenuInfoFont = game.Content.Load<SpriteFont>(@"menu\ArialMenuInfo");
             MenuListFont = game.Content.Load<SpriteFont>(@"menu\ArialMenuList");
 
@@ -146,12 +137,6 @@ namespace ZombustersWindows
         
         public override void LoadContent()
         {
-            //Linea blanca separatoria
-            menuSeparatorLine = this.game.Content.Load<Texture2D>(@"menu/linea_menu");
-
-            //Logo Menu
-            logoMenu = this.game.Content.Load<Texture2D>(@"menu/logo_menu");
-
             volumeSlider.LoadContent();
             musicSlider.LoadContent();
             languageComponent.LoadContent();
@@ -394,56 +379,10 @@ namespace ZombustersWindows
             musicSlider.Draw(gameTime);
             languageComponent.Draw(gameTime);
             menu.DrawLogoRetrowaxMenu(this.ScreenManager.SpriteBatch, new Vector2(uiBounds.Width, uiBounds.Height), MenuInfoFont);
-            DrawContextMenu(menu, selectPos, this.ScreenManager.SpriteBatch);
-        }
-
-        //Draw all the Selection buttons on the bottom of the menu
-        private void DrawContextMenu(MenuComponent menu, Vector2 pos, SpriteBatch batch)
-        {
-            string[] lines;
-            Vector2 contextMenuPosition = new Vector2(uiBounds.X + 22, pos.Y - 100);
-            Vector2 MenuTitlePosition = new Vector2(contextMenuPosition.X - 3, contextMenuPosition.Y - 300);
-
-            batch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, null, null, null, null, Resolution.getTransformationMatrix());
-
-            //Logo Menu
-            batch.Draw(logoMenu, new Vector2(MenuTitlePosition.X - 55, MenuTitlePosition.Y - 5), Color.White);
-
-            //Texto de OPCIONES
-            batch.DrawString(MenuHeaderFont, Strings.SettingsMenuString, MenuTitlePosition, Color.White);
-
-            //Linea divisoria
-            pos.X -= 40;
-            pos.Y -= 270;
-            batch.Draw(menuSeparatorLine, pos, Color.White);
-            pos.Y += 270;
-
-            pos.Y -= 115;
-            batch.Draw(menuSeparatorLine, pos, Color.White);
-            pos.Y += 115;
-
-            //Texto de contexto de menu
-            lines = Array.Empty<string>();
-            if (menu.HelpText[menu.Selection] != "")
-            {
-                lines = Regex.Split(Strings.ResourceManager.GetString(menu.HelpText[menu.Selection]), "\r\n");
-            }
-            
-            foreach (string line in lines)
-            {
-                batch.DrawString(MenuInfoFont, line.Replace("	", ""), contextMenuPosition, Color.White);
-                contextMenuPosition.Y += 20;
-            }
-
-            //Linea divisoria
-            pos.Y -= 15;
-            batch.Draw(menuSeparatorLine, pos, Color.White);
-
-
-            // Draw context buttons
-            menu.DrawOptionsMenuButtons(batch, new Vector2(pos.X + 10, pos.Y + 10), MenuInfoFont);
-
-            batch.End();
+            menu.DrawContextMenu(selectPos, this.ScreenManager.SpriteBatch);
+#if DEMO
+            menu.DrawDemoWIPDisclaimer(this.ScreenManager.SpriteBatch);
+#endif
         }
     }
 }

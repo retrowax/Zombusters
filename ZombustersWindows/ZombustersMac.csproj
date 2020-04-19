@@ -5,7 +5,9 @@
         <TargetFramework>netcoreapp2.2</TargetFramework>
     </PropertyGroup>
 
-    <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' " />
+    <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+      <IntermediateOutputPath>obj\Debug\netcoreapp2.2</IntermediateOutputPath>
+    </PropertyGroup>
     <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
       <DebugType></DebugType>
     </PropertyGroup>
@@ -16,6 +18,14 @@
       <OutputPath>bin\Demo\netcoreapp2.2</OutputPath>
       <DefineConstants>TRACE;DEMO;NETCOREAPP;NETCOREAPP2_2</DefineConstants>
       <NoWarn>1701;1702</NoWarn>
+    </PropertyGroup>
+    <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'DemoDebug|AnyCPU' ">
+      <IntermediateOutputPath>obj\DemoDebug\netcoreapp2.2</IntermediateOutputPath>
+      <DebugSymbols>true</DebugSymbols>
+      <Optimize>false</Optimize>
+      <OutputPath>bin\DemoDebug\netcoreapp2.2</OutputPath>
+      <DefineConstants>TRACE;DEMO;NETCOREAPP;NETCOREAPP2_2</DefineConstants>
+      <NoStdLib>true</NoStdLib>
     </PropertyGroup>
     <ItemGroup>
         <MonoGameContentReference Include="**\*.mgcb" />

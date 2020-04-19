@@ -17,6 +17,11 @@ Global
 		Demo|Mixed Platforms = Demo|Mixed Platforms
 		Demo|x64 = Demo|x64
 		Demo|x86 = Demo|x86
+		DemoDebug|Any CPU = DemoDebug|Any CPU
+		DemoDebug|ARM = DemoDebug|ARM
+		DemoDebug|Mixed Platforms = DemoDebug|Mixed Platforms
+		DemoDebug|x64 = DemoDebug|x64
+		DemoDebug|x86 = DemoDebug|x86
 		Release|Any CPU = Release|Any CPU
 		Release|ARM = Release|ARM
 		Release|Mixed Platforms = Release|Mixed Platforms
@@ -38,6 +43,13 @@ Global
 		{29A4CB64-5FC5-4E7B-9599-1E763B602360}.Demo|x64.ActiveCfg = Demo|x86
 		{29A4CB64-5FC5-4E7B-9599-1E763B602360}.Demo|x86.ActiveCfg = Demo|x86
 		{29A4CB64-5FC5-4E7B-9599-1E763B602360}.Demo|x86.Build.0 = Demo|x86
+		{29A4CB64-5FC5-4E7B-9599-1E763B602360}.DemoDebug|Any CPU.ActiveCfg = DemoDebug|x86
+		{29A4CB64-5FC5-4E7B-9599-1E763B602360}.DemoDebug|ARM.ActiveCfg = DemoDebug|x86
+		{29A4CB64-5FC5-4E7B-9599-1E763B602360}.DemoDebug|Mixed Platforms.ActiveCfg = DemoDebug|x86
+		{29A4CB64-5FC5-4E7B-9599-1E763B602360}.DemoDebug|Mixed Platforms.Build.0 = DemoDebug|x86
+		{29A4CB64-5FC5-4E7B-9599-1E763B602360}.DemoDebug|x64.ActiveCfg = DemoDebug|x86
+		{29A4CB64-5FC5-4E7B-9599-1E763B602360}.DemoDebug|x86.ActiveCfg = DemoDebug|x86
+		{29A4CB64-5FC5-4E7B-9599-1E763B602360}.DemoDebug|x86.Build.0 = DemoDebug|x86
 		{29A4CB64-5FC5-4E7B-9599-1E763B602360}.Release|Any CPU.ActiveCfg = Release|x86
 		{29A4CB64-5FC5-4E7B-9599-1E763B602360}.Release|ARM.ActiveCfg = Release|x86
 		{29A4CB64-5FC5-4E7B-9599-1E763B602360}.Release|Mixed Platforms.ActiveCfg = Release|x86

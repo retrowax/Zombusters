@@ -238,7 +238,7 @@ namespace ZombustersWindows.Subsystem_Managers
             }
         } 
 
-        public LevelType getNextLevel(LevelType currentLevel)
+        public LevelType GetNextLevel(LevelType currentLevel)
         {
             LevelType nextLevel;
 
@@ -248,7 +248,11 @@ namespace ZombustersWindows.Subsystem_Managers
                     nextLevel = LevelType.Two;
                     break;
                 case LevelType.Two:
+#if DEMO
+                    nextLevel = LevelType.EndDemo;
+#else
                     nextLevel = LevelType.Three;
+#endif
                     break;
                 case LevelType.Three:
                     nextLevel = LevelType.Four;
@@ -272,7 +276,7 @@ namespace ZombustersWindows.Subsystem_Managers
                     nextLevel = LevelType.Ten;
                     break;
                 case LevelType.Ten:
-                    nextLevel = LevelType.FinalJuego;
+                    nextLevel = LevelType.EndGame;
                     break;
                 default:
                     nextLevel = LevelType.One;

@@ -605,7 +605,7 @@ namespace ZombustersWindows
                 }
                 else if (GamePlayStatus == GameplayState.GameOver)
                 {
-                    if (currentLevel == LevelType.FinalJuego)
+                    if (currentLevel == LevelType.EndGame)
                     {
                         timer += (float)gameTime.ElapsedGameTime.TotalSeconds;
                         if (timer >= 5.0f)
@@ -625,6 +625,22 @@ namespace ZombustersWindows
                             QuitToMenu();
                             ScreenManager.AddScreen(new CreditsScreen(false));
                         }
+                    } else if(currentLevel == LevelType.EndDemo)
+                    {
+                        foreach (Avatar player in game.currentPlayers)
+                        {
+                            if (player.Player.IsPlaying)
+                            {
+                                if (game.topScoreListContainer != null)
+                                {
+                                    player.Player.SaveLeaderBoard(player.score);
+                                }
+
+                            }
+                        }
+
+                        QuitToMenu();
+                        ScreenManager.AddScreen(new DemoEndingScreen());
                     }
                 }
 
@@ -1203,8 +1219,8 @@ namespace ZombustersWindows
             {
                 if (subLevelIndex == 9)
                 {
-                    currentLevel = Level.getNextLevel(currentLevel);
-                    if (currentLevel == LevelType.FinalJuego)
+                    currentLevel = Level.GetNextLevel(currentLevel);
+                    if (currentLevel == LevelType.EndGame || currentLevel == LevelType.EndDemo)
                     {
                         {
                             GamePlayStatus = GameplayState.GameOver;
@@ -1267,7 +1283,7 @@ namespace ZombustersWindows
             Zombies.Clear();
             Tanks.Clear();
 
-            if (currentLevel != LevelType.FinalJuego)
+            if (currentLevel != LevelType.EndGame && currentLevel != LevelType.EndDemo)
             {
 
                 for (i = 0; i < game.currentPlayers.Length; i++)
@@ -1704,7 +1720,7 @@ namespace ZombustersWindows
                 this.ScreenManager.SpriteBatch.End();
             }
 
-            if (currentLevel == LevelType.FinalJuego)
+            if (currentLevel == LevelType.EndGame)
             {
                 string levelshowstring;
                 this.ScreenManager.FadeBackBufferToBlack(64);
@@ -1722,6 +1738,11 @@ namespace ZombustersWindows
                 this.ScreenManager.SpriteBatch.Draw(whiteLine, new Vector2(UICenter.X - whiteLine.Width / 2, UICenter.Y + 90), Color.White);
 
                 this.ScreenManager.SpriteBatch.End();
+            }
+
+            if (currentLevel == LevelType.EndDemo)
+            {
+
             }
         }
 
@@ -3121,6 +3142,11 @@ namespace ZombustersWindows
             }
 
             batch.DrawString(MenuInfoFont, sublevelstring.ToUpper(), new Vector2(uiBounds.Width - MenuInfoFont.MeasureString(sublevelstring).X / 2, uiBounds.Height), Color.White);
+
+#if DEMO
+            batch.DrawString(MenuInfoFont, Strings.TrialModeMenuString.ToUpper(),
+                    new Vector2(uiBounds.Width - MenuInfoFont.MeasureString(Strings.TrialModeMenuString.ToUpper()).X / 2, uiBounds.Height + 20), Color.White);
+#endif
 
             if (game.player1.Options == InputMode.Touch)
             {

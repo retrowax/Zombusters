@@ -147,7 +147,7 @@
     <value>Conecta el mando para jugar</value>
   </data>
   <data name="CopyRightString" xml:space="preserve">
-    <value>© RETROWAX GAMES. 2011-2013 TODOS LOS DERECHOS RESERVADOS.</value>
+    <value>© RETROWAX GAMES. 2011-2020 TODOS LOS DERECHOS RESERVADOS.</value>
     <comment>Copyright String</comment>
   </data>
   <data name="CreateSession" xml:space="preserve">
