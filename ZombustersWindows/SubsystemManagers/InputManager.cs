@@ -257,7 +257,7 @@ namespace ZombustersWindows
         /// </summary>
         /// <param name="playerOne">The index of player one.</param>
         /// <returns>True if a player pressed Start, false otherwise.</returns>
-        public static bool CheckPlayerOneStart(out PlayerIndex playerOne, InputState input)
+       /* public static bool CheckPlayerOneStart(out PlayerIndex playerOne, InputState input)
         {
             playerOne = PlayerIndex.One;
 
@@ -300,6 +300,7 @@ namespace ZombustersWindows
             }
             return false;
         }
+        */
 
         /// <summary>
         /// This method checks to see if any GamePads other than Player One have pressed start.
@@ -350,6 +351,17 @@ namespace ZombustersWindows
             return false;
         }
 
+        public static bool CheckIfGamePadIsConnected()
+        {
+            if (GamePad.GetCapabilities(PlayerIndex.One).IsConnected
+                || GamePad.GetCapabilities(PlayerIndex.Two).IsConnected
+                || GamePad.GetCapabilities(PlayerIndex.Three).IsConnected
+                || GamePad.GetCapabilities(PlayerIndex.Four).IsConnected)
+            {
+                return true;
+            }
+            return false;
+        }
 
 
 

@@ -33,6 +33,7 @@ namespace ZombustersWindows
         List<Texture2D> avatarTexture, avatarPixelatedTexture, cardBkgTexture;
         List<String> avatarNameList;
 
+        NeutralInput[] playerInputList; 
         NeutralInput playerOneInput;
         NeutralInput playerTwoInput;
         NeutralInput playerThreeInput;
@@ -48,6 +49,7 @@ namespace ZombustersWindows
         Boolean canStartGame;
         Boolean isMMandHost;
         public byte levelSelected;
+        Boolean isThereAPlayerWithKeyboard = false;
 
         public SelectPlayerScreen(Boolean ismatchmaking)
         {
@@ -117,6 +119,8 @@ namespace ZombustersWindows
                 }
             }
 
+            playerInputList = new NeutralInput[] { playerOneInput, playerTwoInput, playerThreeInput, playerFourInput };
+
             base.Initialize();
 
             this.isBackgroundOn = true;
@@ -164,50 +168,39 @@ namespace ZombustersWindows
             base.LoadContent();
         }
 
-        void ToggleReady(int PlayerIndex)
+        void ToggleReady(Avatar avatar)
         {
-            if (game.currentPlayers[PlayerIndex].isReady == true)
+            if (avatar.isReady == true)
             {
-                game.currentPlayers[PlayerIndex].isReady = false;
+                avatar.isReady = false;
             }
             else
             {
-                game.currentPlayers[PlayerIndex].isReady = true;
-            }
-
-            for (int i = 0; i < game.currentPlayers.Length; i++)
-            {
-                if (i != PlayerIndex)
-                {
-                    if (game.currentPlayers[i].character == game.currentPlayers[PlayerIndex].character && game.currentPlayers[i].isReady == true)
-                    {
-                        game.currentPlayers[PlayerIndex].isReady = false;
-                    }
-                }
+                avatar.isReady = true;
             }
         }
 
-        void ChangeCharacterSelected(int PlayerIndex, Boolean directionToRight)
+        void ChangeCharacterSelected(Avatar avatar, Boolean directionToRight)
         {
             if (directionToRight == true)
             {
-                if (game.currentPlayers[PlayerIndex].isReady == false)
+                if (avatar.isReady == false)
                 {
-                    game.currentPlayers[PlayerIndex].character += 1;
-                    if (game.currentPlayers[PlayerIndex].character > 3)
+                    avatar.character += 1;
+                    if (avatar.character > 3)
                     {
-                        game.currentPlayers[PlayerIndex].character = 0;
+                        avatar.character = 0;
                     }
                 }
             }
             else
             {
-                if (game.currentPlayers[PlayerIndex].isReady == false)
+                if (avatar.isReady == false)
                 {
-                    game.currentPlayers[PlayerIndex].character -= 1;
-                    if (game.currentPlayers[PlayerIndex].character < 0 || game.currentPlayers[PlayerIndex].character > 3)
+                    avatar.character -= 1;
+                    if (avatar.character < 0 || avatar.character > 3)
                     {
-                        game.currentPlayers[PlayerIndex].character = 3;
+                        avatar.character = 3;
                     }
                 }
             }
@@ -228,7 +221,7 @@ namespace ZombustersWindows
         }
 
 
-        private static NeutralInput ProcessPlayer(Avatar player, InputState input)
+        private NeutralInput ProcessPlayer(Avatar avatar, InputState input)
         {
             NeutralInput state = new NeutralInput
             {
@@ -236,14 +229,14 @@ namespace ZombustersWindows
             };
             Vector2 stickLeft = Vector2.Zero;
             Vector2 stickRight = Vector2.Zero;
-            GamePadState gpState = input.GetCurrentGamePadStates()[(int)player.Player.Controller];
+            GamePadState gpState = input.GetCurrentGamePadStates()[(int)avatar.Player.Controller];
 
-            if (player.IsPlaying)
+            if (avatar.IsPlaying)
             {
-                if (input.IsNewButtonPress(Buttons.A, player.Player.Controller)
-                || (input.IsNewKeyPress(Keys.Space))                                     
-                    )
+                if ((input.IsNewButtonPress(Buttons.A, avatar.Player.Controller) && avatar.Player.inputMode == InputMode.GamePad)
+                || ((input.IsNewKeyPress(Keys.Space, avatar.Player.Controller) && avatar.Player.inputMode == InputMode.Keyboard)))
                 {
+                    ToggleReady(avatar);
                     state.ButtonA = true;
                 }
                 else
@@ -251,15 +244,15 @@ namespace ZombustersWindows
                     state.ButtonA = false;
                 }
 
-                if (input.IsNewButtonPress(Buttons.DPadLeft, player.Player.Controller) ||
-                input.IsNewButtonPress(Buttons.LeftThumbstickLeft, player.Player.Controller)
-                || input.IsNewKeyPress(Keys.Left)                   
-                    )
+                if ((input.IsNewButtonPress(Buttons.DPadLeft, avatar.Player.Controller) && avatar.Player.inputMode == InputMode.GamePad)
+                    || ((input.IsNewButtonPress(Buttons.LeftThumbstickLeft, avatar.Player.Controller) && avatar.Player.inputMode == InputMode.GamePad)
+                    || ((input.IsNewKeyPress(Keys.Left, avatar.Player.Controller) && avatar.Player.inputMode == InputMode.Keyboard))))
                 {
                     if ((gpState.DPad.Left == ButtonState.Pressed) || (gpState.ThumbSticks.Left.X < 0)
-                    || input.IsNewKeyPress(Keys.Left)                           
+                    || input.IsNewKeyPress(Keys.Left, avatar.Player.Controller)                           
                         )
                     {
+                        ChangeCharacterSelected(avatar, false);
                         state.DPadLeft = true;
                     }
                     else
@@ -272,15 +265,15 @@ namespace ZombustersWindows
                     state.DPadLeft = false;
                 }
 
-                if (input.IsNewButtonPress(Buttons.DPadRight, player.Player.Controller) ||
-                    input.IsNewButtonPress(Buttons.LeftThumbstickRight, player.Player.Controller)
-                    || input.IsNewKeyPress(Keys.Right)
-                    )
+                if ((input.IsNewButtonPress(Buttons.DPadRight, avatar.Player.Controller) && avatar.Player.inputMode == InputMode.GamePad)
+                    || ((input.IsNewButtonPress(Buttons.LeftThumbstickRight, avatar.Player.Controller) && avatar.Player.inputMode == InputMode.GamePad)
+                    || ((input.IsNewKeyPress(Keys.Right, avatar.Player.Controller) && avatar.Player.inputMode == InputMode.Keyboard))))
                 {
                     if ((gpState.DPad.Right == ButtonState.Pressed) || (gpState.ThumbSticks.Left.X > 0)
-                    || input.IsNewKeyPress(Keys.Right)    
+                    || input.IsNewKeyPress(Keys.Right, avatar.Player.Controller)    
                         )
                     {
+                        ChangeCharacterSelected(avatar, true);
                         state.DPadRight = true;
                     }
                     else
@@ -293,10 +286,27 @@ namespace ZombustersWindows
                     state.DPadRight = false;
                 }
 
-                if (input.IsNewButtonPress(Buttons.DPadDown, player.Player.Controller)
-                || input.IsNewKeyPress(Keys.Down)         
-                || input.IsNewButtonPress(Buttons.LeftTrigger, player.Player.Controller))
+                if ((input.IsNewButtonPress(Buttons.DPadDown, avatar.Player.Controller) && avatar.Player.inputMode == InputMode.GamePad)
+                || ((input.IsNewKeyPress(Keys.Down, avatar.Player.Controller) && avatar.Player.inputMode == InputMode.Keyboard)
+                || ((input.IsNewButtonPress(Buttons.LeftTrigger, avatar.Player.Controller) && avatar.Player.inputMode == InputMode.GamePad))))
                 {
+#if !DEMO
+                    if (levelSelected > 1)
+                    {
+                        levelSelected -= 1;
+                    }
+                    else
+                    {
+                        if (avatar.Player.levelsUnlocked != 0)
+                        {
+                            levelSelected = (byte)avatar.Player.levelsUnlocked;
+                        }
+                        else
+                        {
+                            levelSelected = 1;
+                        }
+                    }
+#endif
                     state.ButtonLT = true;
                 }
                 else
@@ -304,10 +314,20 @@ namespace ZombustersWindows
                     state.ButtonLT = false;
                 }
 
-                if (input.IsNewButtonPress(Buttons.DPadUp, player.Player.Controller)
-                || input.IsNewKeyPress(Keys.Up)
-                || input.IsNewButtonPress(Buttons.RightTrigger, player.Player.Controller))
+                if ((input.IsNewButtonPress(Buttons.DPadUp, avatar.Player.Controller) && avatar.Player.inputMode == InputMode.GamePad)
+                || ((input.IsNewKeyPress(Keys.Up, avatar.Player.Controller) && avatar.Player.inputMode == InputMode.Keyboard)
+                || ((input.IsNewButtonPress(Buttons.RightTrigger, avatar.Player.Controller) && avatar.Player.inputMode == InputMode.Keyboard))))
                 {
+#if !DEMO
+                    if (levelSelected < avatar.Player.levelsUnlocked)
+                    {
+                        levelSelected += 1;
+                    }
+                    else
+                    {
+                        levelSelected = 1;
+                    }
+#endif
                     state.ButtonRT = true;
                 }
                 else
@@ -320,12 +340,30 @@ namespace ZombustersWindows
                 state.Fire = gpState.ThumbSticks.Right;
                 state.StickLeftMovement = stickLeft;
                 state.StickRightMovement = stickRight;
+            } else
+            {
+                if (input.IsNewButtonPress(Buttons.Start, avatar.Player.Controller))
+                {
+                    canStartGame = false;
+                    avatar.Player.inputMode = InputMode.GamePad;
+                    avatar.Activate(avatar.Player);
+                    avatar.isReady = false;
+                }
+                if (input.IsNewKeyPress(Keys.Enter, avatar.Player.Controller) && !isThereAPlayerWithKeyboard)
+                {
+                    canStartGame = false;
+                    avatar.Player.inputMode = InputMode.Keyboard;
+                    avatar.Activate(avatar.Player);
+                    avatar.isReady = false;
+                    isThereAPlayerWithKeyboard = true;
+                }
             }
 
-            if (input.IsNewButtonPress(Buttons.B, player.Player.Controller)
-                || (input.IsNewKeyPress(Keys.Escape) || input.IsNewKeyPress(Keys.Back))
-                )
+            if ((input.IsNewButtonPress(Buttons.B, avatar.Player.Controller) && avatar.Player.inputMode == InputMode.GamePad)
+                || ((input.IsNewKeyPress(Keys.Escape, avatar.Player.Controller) && avatar.Player.inputMode == InputMode.Keyboard)
+                || ((input.IsNewKeyPress(Keys.Back, avatar.Player.Controller) && avatar.Player.inputMode == InputMode.Keyboard))))
             {
+                MenuCanceled(this);
                 state.ButtonB = true;
             }
             else
@@ -333,10 +371,57 @@ namespace ZombustersWindows
                 state.ButtonB = false;
             }
 
-            if (input.IsNewButtonPress(Buttons.Start, player.Player.Controller)
-            || (input.IsNewKeyPress(Keys.Enter))
-                )
+            if ((input.IsNewButtonPress(Buttons.Start, avatar.Player.Controller) && avatar.Player.inputMode == InputMode.GamePad)
+            || ((input.IsNewKeyPress(Keys.Enter, avatar.Player.Controller) && avatar.Player.inputMode == InputMode.Keyboard)))
             {
+                if (canStartGame)
+                {
+                    List<int> ListPlayersAreGoingToPlay = new List<int>();
+                    for (int i = 0; i < game.currentPlayers.Length; i++)
+                    {
+                        if (game.currentPlayers[i].status == ObjectStatus.Active)
+                        {
+                            ListPlayersAreGoingToPlay.Add(i);
+                        }
+                    }
+
+                    switch (levelSelected)
+                    {
+                        case 1:
+                            game.BeginLocalGame(LevelType.One, ListPlayersAreGoingToPlay);
+                            break;
+                        case 2:
+                            game.BeginLocalGame(LevelType.Two, ListPlayersAreGoingToPlay);
+                            break;
+                        case 3:
+                            game.BeginLocalGame(LevelType.Three, ListPlayersAreGoingToPlay);
+                            break;
+                        case 4:
+                            game.BeginLocalGame(LevelType.Four, ListPlayersAreGoingToPlay);
+                            break;
+                        case 5:
+                            game.BeginLocalGame(LevelType.Five, ListPlayersAreGoingToPlay);
+                            break;
+                        case 6:
+                            game.BeginLocalGame(LevelType.Six, ListPlayersAreGoingToPlay);
+                            break;
+                        case 7:
+                            game.BeginLocalGame(LevelType.Seven, ListPlayersAreGoingToPlay);
+                            break;
+                        case 8:
+                            game.BeginLocalGame(LevelType.Eight, ListPlayersAreGoingToPlay);
+                            break;
+                        case 9:
+                            game.BeginLocalGame(LevelType.Nine, ListPlayersAreGoingToPlay);
+                            break;
+                        case 10:
+                            game.BeginLocalGame(LevelType.Ten, ListPlayersAreGoingToPlay);
+                            break;
+                        default:
+                            game.BeginLocalGame(LevelType.One, ListPlayersAreGoingToPlay);
+                            break;
+                    }
+                }
                 state.ButtonStart = true;
             }
             else
@@ -428,13 +513,6 @@ namespace ZombustersWindows
         {
             if (game.currentGameState != GameState.Paused)
             {
-                {
-                    UpdatePlayer(0, playerOneInput);
-                    UpdatePlayer(1, playerTwoInput);
-                    UpdatePlayer(2, playerThreeInput);
-                    UpdatePlayer(3, playerFourInput);
-                }
-
                 CheckIfCanStartTheGame();
             }
             base.Update(gameTime, otherScreenHasFocus, coveredByOtherScreen);
@@ -443,11 +521,6 @@ namespace ZombustersWindows
         public void UpdateCurrentPlayersList()
         {
 
-        }
-
-        public void UpdatePlayer(int player, NeutralInput input)
-        {
-            ProcessInput(player, input);
         }
 
         private void CheckIfCanStartTheGame()
@@ -479,189 +552,6 @@ namespace ZombustersWindows
                     canStartGame = false;
                 }
             }
-        }
-
-        /// <summary>
-        /// This function takes a NeutralInput structure for a player and turns that data into
-        /// ship commands
-        /// </summary>
-        /// <param name="Player">The player giving the input.</param>
-        /// <param name="TotalGameSeconds">The current game time.</param>
-        /// <param name="ElapsedGameSeconds">The game time elapsed since the last Update.</param>
-        /// <param name="input">The input structure for the player.</param>
-        public void ProcessInput(int player, NeutralInput input)
-        {
-            if ((input.ButtonStart && GamePad.GetState((PlayerIndex)player).Buttons.Start == ButtonState.Pressed) ||
-                input.ButtonStart && Keyboard.GetState().IsKeyDown(Keys.Enter))
-            {
-                if (game.currentPlayers[player].IsPlaying == false)
-                {
-                    game.currentPlayers[player].status = ObjectStatus.Active;
-                    canStartGame = false;
-
-                    switch (player)
-                    {
-                        case 0:
-                            game.player1 = new Player(game.options, game.audio, game);
-                            game.currentPlayers[player] = new Avatar();
-                            game.currentPlayers[player].Initialize(game.GraphicsDevice.Viewport);
-                            game.InitializeMain((PlayerIndex)player);
-                            game.currentPlayers[player].Player = game.player1;
-                            game.currentPlayers[player].Activate(game.player1);
-                            game.currentPlayers[player].Player.isReady = false;
-
-                            break;
-                        case 1:
-                            game.player2 = new Player(game.options, game.audio, game);
-                            game.currentPlayers[player] = new Avatar();
-                            game.currentPlayers[player].Initialize(game.GraphicsDevice.Viewport);
-                            game.InitializeMain((PlayerIndex)player);
-                            game.currentPlayers[player].Player = game.player2;
-                            game.currentPlayers[player].Player.isReady = false;
-                            break;
-                        case 2:
-                            game.player3 = new Player(game.options, game.audio, game);
-                            game.currentPlayers[player] = new Avatar();
-                            game.currentPlayers[player].Initialize(game.GraphicsDevice.Viewport);
-                            game.InitializeMain((PlayerIndex)player);
-                            game.currentPlayers[player].Player = game.player3;
-                            game.currentPlayers[player].Player.isReady = false;
-                            break;
-                        case 3:
-                            game.player4 = new Player(game.options, game.audio, game);
-                            game.currentPlayers[player] = new Avatar();
-                            game.currentPlayers[player].Initialize(game.GraphicsDevice.Viewport);
-                            game.InitializeMain((PlayerIndex)player);
-                            game.currentPlayers[player].Player = game.player4;
-                            game.currentPlayers[player].Player.isReady = false;
-                            break;
-                        default:
-                            game.player1 = new Player(game.options, game.audio, game);
-                            game.currentPlayers[player] = new Avatar();
-                            game.currentPlayers[player].Initialize(game.GraphicsDevice.Viewport);
-                            game.InitializeMain((PlayerIndex)player);
-                            game.currentPlayers[player].Player = game.player1;
-                            game.currentPlayers[player].Activate(game.player1);
-                            game.currentPlayers[player].Player.isReady = false;
-                            break;
-                    }
-                    
-                }
-            }
-
-            if (input.ButtonA)
-            {
-                ToggleReady(player);
-            }
-
-            if (input.ButtonB)
-            {
-                MenuCanceled(this);
-            }
-
-            if (input.DPadLeft)
-            {
-                ChangeCharacterSelected(player, false);
-                input.DPadLeft = false;
-            }
-            if (input.DPadRight)
-            {
-                ChangeCharacterSelected(player, true);
-                input.DPadRight = false;
-            }
-
-            if (isMMandHost == true || isMatchmaking == false)
-            {
-#if !DEMO
-                if (player == 0)
-                {
-                    if (input.ButtonLT)
-                    {
-                        if (levelSelected > 1)
-                        {
-                            levelSelected -= 1;
-                        }
-                        else
-                        {
-                            if ((byte)game.currentPlayers[player].Player.levelsUnlocked != 0)
-                            {
-                                levelSelected = (byte)game.currentPlayers[player].Player.levelsUnlocked;
-                            }
-                            else
-                            {
-                                levelSelected = 1;
-                            }
-                        }
-                    }
-
-                    if (input.ButtonRT)
-                    {
-
-                        if (levelSelected < game.currentPlayers[player].Player.levelsUnlocked)
-                        {
-                            levelSelected += 1;
-                        }
-                        else
-                        {
-                            levelSelected = 1;
-                        }
-                    }
-                }
-#endif
-            }
-
-            if (canStartGame)
-            {
-                if (input.ButtonStart)
-                {
-                    List<int> ListPlayersAreGoingToPlay = new List<int>();
-                    for (int i = 0; i < game.currentPlayers.Length; i++)
-                    {
-                        if (game.currentPlayers[i].status == ObjectStatus.Active)
-                        {
-                            ListPlayersAreGoingToPlay.Add(i);
-                        }
-                    }
-
-                    switch (levelSelected)
-                    {
-                        case 1:
-                            game.BeginLocalGame(LevelType.One, ListPlayersAreGoingToPlay);
-                            break;
-                        case 2:
-                            game.BeginLocalGame(LevelType.Two, ListPlayersAreGoingToPlay);
-                            break;
-                        case 3:
-                            game.BeginLocalGame(LevelType.Three, ListPlayersAreGoingToPlay);
-                            break;
-                        case 4:
-                            game.BeginLocalGame(LevelType.Four, ListPlayersAreGoingToPlay);
-                            break;
-                        case 5:
-                            game.BeginLocalGame(LevelType.Five, ListPlayersAreGoingToPlay);
-                            break;
-                        case 6:
-                            game.BeginLocalGame(LevelType.Six, ListPlayersAreGoingToPlay);
-                            break;
-                        case 7:
-                            game.BeginLocalGame(LevelType.Seven, ListPlayersAreGoingToPlay);
-                            break;
-                        case 8:
-                            game.BeginLocalGame(LevelType.Eight, ListPlayersAreGoingToPlay);
-                            break;
-                        case 9:
-                            game.BeginLocalGame(LevelType.Nine, ListPlayersAreGoingToPlay);
-                            break;
-                        case 10:
-                            game.BeginLocalGame(LevelType.Ten, ListPlayersAreGoingToPlay);
-                            break;
-                        default:
-                            game.BeginLocalGame(LevelType.One, ListPlayersAreGoingToPlay);
-                            break;
-                    }
-                }
-            }
-
         }
 
         /// <summary>
@@ -699,7 +589,7 @@ namespace ZombustersWindows
 #endif
                 DrawSelectCharacters(selectPos, this.ScreenManager.SpriteBatch);
                 DrawContextMenu(menu, selectPos, this.ScreenManager.SpriteBatch);
-                DrawHowToPlay(this.ScreenManager.SpriteBatch, selectPos);
+                //DrawHowToPlay(this.ScreenManager.SpriteBatch, selectPos);
                 menu.DrawLogoRetrowaxMenu(this.ScreenManager.SpriteBatch, new Vector2(uiBounds.Width, uiBounds.Height), MenuInfoFont);
 #if DEMO
                 menu.DrawDemoWIPDisclaimer(this.ScreenManager.SpriteBatch);
@@ -718,7 +608,7 @@ namespace ZombustersWindows
         {
             string[] lines;
             Avatar cplayer;
-            byte i;
+            byte index;
             Vector2 contextMenuPosition = new Vector2(uiBounds.X + 22, pos.Y - 100);
             Vector2 MenuTitlePosition = new Vector2(contextMenuPosition.X - 3, contextMenuPosition.Y - 300);
             Vector2 CharacterPosition = new Vector2(MenuTitlePosition.X + 50, MenuTitlePosition.Y + 70);
@@ -726,138 +616,135 @@ namespace ZombustersWindows
 
             batch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, null, null, null, null, Resolution.getTransformationMatrix());
 
-            //foreach (Avatar cplayer in ((Game1)this.ScreenManager.Game).currentPlayers)
-            for (i = 0; i < game.currentPlayers.Length; i++)
+            //foreach (Avatar cplayer in game.currentPlayers)
+            for (index = 0; index < game.currentPlayers.Length; index++)
             {
-                if (i == 0)
+                cplayer = game.currentPlayers[index];
+
+                if (cplayer.Player != null)
                 {
-                    cplayer = game.currentPlayers[i];
-
-                    if (cplayer.Player != null)
+                    if (cplayer.status == ObjectStatus.Active)
                     {
-                        if (cplayer.status == ObjectStatus.Active)
+                        batch.Draw(cardBkgTexture[0], CharacterPosition, Color.White);
+                        batch.Draw(cardBkgTexture[1], CharacterPosition, Color.White);
+
+                        batch.Draw(avatarTexture[cplayer.character], CharacterPosition, Color.White);
+
+                        batch.Draw(cardBkgTexture[2], CharacterPosition, Color.White);
+
+                        if (cplayer.isReady == true)
                         {
-                            batch.Draw(cardBkgTexture[0], CharacterPosition, Color.White);
-                            batch.Draw(cardBkgTexture[1], CharacterPosition, Color.White);
-
-                            batch.Draw(avatarTexture[cplayer.character], CharacterPosition, Color.White);
-
-                            batch.Draw(cardBkgTexture[2], CharacterPosition, Color.White);
-
-                            if (cplayer.isReady == true)
-                            {
-                                batch.Draw(cardBkgTexture[3], CharacterPosition, Color.White);
-                                batch.DrawString(DigitLowFont, Strings.ReadySelPlayerString,
-                                    new Vector2(CharacterPosition.X + cardBkgTexture[0].Width / 2 - Convert.ToInt32(MenuInfoFont.MeasureString(Strings.ReadySelPlayerString).X) / 2, CharacterPosition.Y + cardBkgTexture[0].Height / 2 - Convert.ToInt32(MenuInfoFont.MeasureString(Strings.ReadySelPlayerString).Y)),
-                                    Color.Black);
-                            }
-
-                            batch.Draw(avatarPixelatedTexture[cplayer.character], new Vector2(CharacterPosition.X + (avatarTexture[cplayer.character].Width / 2) - avatarPixelatedTexture[cplayer.character].Width / 2,
-                                CharacterPosition.Y + (avatarTexture[cplayer.character].Height - avatarPixelatedTexture[cplayer.character].Height)), null, Color.White, 0, Vector2.Zero, 1.0f, SpriteEffects.None, 1.0f);
-
-                            if (cplayer.Player.Name != null)
-                            {
-                                batch.DrawString(MenuInfoFont, cplayer.Player.Name, new Vector2(CharacterPosition.X - Convert.ToInt32(MenuInfoFont.MeasureString(cplayer.Player.Name).Y), CharacterPosition.Y + 2 + cardBkgTexture[1].Height),
-                                        Color.White, 4.70f, Vector2.Zero, 1.0f, SpriteEffects.None, 1.0f);
-                            }
-
-                            batch.DrawString(MenuInfoFont, avatarNameList[cplayer.character], new Vector2(CharacterPosition.X - 5 + cardBkgTexture[1].Width - Convert.ToInt32(MenuInfoFont.MeasureString(avatarNameList[cplayer.character]).X), CharacterPosition.Y + 3),
-                                    Color.Black);
-
-                            // Character NOT AVAILABLE
-                            /*
-                            if (cplayer.character != 0)
-                            {
-                                batch.DrawString(MenuInfoFont, "NOT", new Vector2(CharacterPosition.X + (pAvatar[cplayer.character].Width / 2) - pAvatarPixelated[cplayer.character].Width / 2,
-                                    CharacterPosition.Y + (pAvatar[cplayer.character].Height - pAvatarPixelated[cplayer.character].Height)), Color.Black);
-                                batch.DrawString(MenuInfoFont, "AVAILABLE", new Vector2(CharacterPosition.X - 30 + (pAvatar[cplayer.character].Width / 2) - pAvatarPixelated[cplayer.character].Width / 2,
-                                    CharacterPosition.Y + 20 + (pAvatar[cplayer.character].Height - pAvatarPixelated[cplayer.character].Height)), Color.Black);
-                            }*/
-
-                            if (cplayer.isReady == false)
-                            {
-                                batch.Draw(arrow, new Vector2(CharacterPosition.X - arrow.Width, CharacterPosition.Y + cardBkgTexture[1].Height / 2 - arrow.Height / 2),
-                                    null, Color.White, 0, Vector2.Zero, 0.7f, SpriteEffects.None, 1.0f);
-                                batch.Draw(arrow, new Vector2(CharacterPosition.X + 8 + cardBkgTexture[1].Width, CharacterPosition.Y + cardBkgTexture[1].Height / 2 - arrow.Height / 2),
-                                    null, Color.White, 0, Vector2.Zero, 0.7f, SpriteEffects.FlipHorizontally, 1.0f);
-                            }
+                            batch.Draw(cardBkgTexture[3], CharacterPosition, Color.White);
+                            batch.DrawString(DigitLowFont, Strings.ReadySelPlayerString,
+                                new Vector2(CharacterPosition.X + cardBkgTexture[0].Width / 2 - Convert.ToInt32(MenuInfoFont.MeasureString(Strings.ReadySelPlayerString).X) / 2, CharacterPosition.Y + cardBkgTexture[0].Height / 2 - Convert.ToInt32(MenuInfoFont.MeasureString(Strings.ReadySelPlayerString).Y)),
+                                Color.Black);
                         }
-                        else
+
+                        batch.Draw(avatarPixelatedTexture[cplayer.character], new Vector2(CharacterPosition.X + (avatarTexture[cplayer.character].Width / 2) - avatarPixelatedTexture[cplayer.character].Width / 2,
+                            CharacterPosition.Y + (avatarTexture[cplayer.character].Height - avatarPixelatedTexture[cplayer.character].Height)), null, Color.White, 0, Vector2.Zero, 1.0f, SpriteEffects.None, 1.0f);
+
+                        if (cplayer.Player.Name != null)
                         {
-                            if (GamePad.GetState(cplayer.Player.Controller).IsConnected && cplayer.Player.Name != null)
-                            {
-                                batch.Draw(cardBkgTexture[0], CharacterPosition, Color.White);
-                                batch.Draw(cardBkgTexture[1], CharacterPosition, Color.White);
+                            batch.DrawString(MenuInfoFont, cplayer.Player.Name, new Vector2(CharacterPosition.X - Convert.ToInt32(MenuInfoFont.MeasureString(cplayer.Player.Name).Y), CharacterPosition.Y + 2 + cardBkgTexture[1].Height),
+                                    Color.White, 4.70f, Vector2.Zero, 1.0f, SpriteEffects.None, 1.0f);
+                        }
 
-                                switch (i)
-                                {
-                                    case 0:
-                                        lines = Regex.Split(Strings.P1PressStartString, " ");
-                                        break;
-                                    case 1:
-                                        lines = Regex.Split(Strings.P2PressStartString, " ");
-                                        break;
-                                    case 2:
-                                        lines = Regex.Split(Strings.P3PressStartString, " ");
-                                        break;
-                                    case 3:
-                                        lines = Regex.Split(Strings.P4PressStartString, " ");
-                                        break;
-                                    default:
-                                        lines = Regex.Split(Strings.P1PressStartString, " ");
-                                        break;
-                                }
+                        batch.DrawString(MenuInfoFont, avatarNameList[cplayer.character], new Vector2(CharacterPosition.X - 5 + cardBkgTexture[1].Width - Convert.ToInt32(MenuInfoFont.MeasureString(avatarNameList[cplayer.character]).X), CharacterPosition.Y + 3),
+                                Color.Black);
 
-                                foreach (string line in lines)
-                                {
-                                    batch.DrawString(MenuInfoFont, line.Replace("	", ""),
-                                        new Vector2(ConnectControlerStringPosition.X - Convert.ToInt32(MenuInfoFont.MeasureString(line).X) / 2 - cardBkgTexture[0].Width / 2, ConnectControlerStringPosition.Y - Convert.ToInt32(MenuInfoFont.MeasureString(line).Y) - 25),
-                                        Color.Black);
-                                    ConnectControlerStringPosition.Y += 20;
-                                }
-                                // Connect Controller to play
-                                //batch.DrawString(MenuInfoFont, Strings.ConnectControllerToJoinString,
-                                //    new Vector2(CharacterPosition.X - 5 + cardBkg[1].Width - Convert.ToInt32(MenuInfoFont.MeasureString(Strings.ConnectControllerToJoinString).X), CharacterPosition.Y + cardBkg[1].Height / 2 - Convert.ToInt32(MenuInfoFont.MeasureString(Strings.ConnectControllerToJoinString).Y)),
-                                //    Color.Black);
-                            }
-                            else
-                            {
-                                lines = Regex.Split(Strings.ConnectControllerToJoinString, " ");
-                                foreach (string line in lines)
-                                {
-                                    batch.DrawString(MenuInfoFont, line.Replace("	", ""),
-                                        new Vector2(ConnectControlerStringPosition.X - Convert.ToInt32(MenuInfoFont.MeasureString(line).X) / 2 - cardBkgTexture[0].Width / 2, ConnectControlerStringPosition.Y - Convert.ToInt32(MenuInfoFont.MeasureString(line).Y) - 25),
-                                        Color.White);
-                                    ConnectControlerStringPosition.Y += 20;
-                                }
-                            }
+                        // Character NOT AVAILABLE
+                        /*
+                        if (cplayer.character != 0)
+                        {
+                            batch.DrawString(MenuInfoFont, "NOT", new Vector2(CharacterPosition.X + (pAvatar[cplayer.character].Width / 2) - pAvatarPixelated[cplayer.character].Width / 2,
+                                CharacterPosition.Y + (pAvatar[cplayer.character].Height - pAvatarPixelated[cplayer.character].Height)), Color.Black);
+                            batch.DrawString(MenuInfoFont, "AVAILABLE", new Vector2(CharacterPosition.X - 30 + (pAvatar[cplayer.character].Width / 2) - pAvatarPixelated[cplayer.character].Width / 2,
+                                CharacterPosition.Y + 20 + (pAvatar[cplayer.character].Height - pAvatarPixelated[cplayer.character].Height)), Color.Black);
+                        }*/
+
+                        if (cplayer.isReady == false)
+                        {
+                            batch.Draw(arrow, new Vector2(CharacterPosition.X - arrow.Width, CharacterPosition.Y + cardBkgTexture[1].Height / 2 - arrow.Height / 2),
+                                null, Color.White, 0, Vector2.Zero, 0.7f, SpriteEffects.None, 1.0f);
+                            batch.Draw(arrow, new Vector2(CharacterPosition.X + 8 + cardBkgTexture[1].Width, CharacterPosition.Y + cardBkgTexture[1].Height / 2 - arrow.Height / 2),
+                                null, Color.White, 0, Vector2.Zero, 0.7f, SpriteEffects.FlipHorizontally, 1.0f);
                         }
                     }
                     else
                     {
-                        // Background Images
-                        //batch.Draw(cardBkg[0], CharacterPosition, Color.White);
-                        //batch.Draw(cardBkg[1], CharacterPosition, Color.White);
-
-                        //Texto de contexto de menu
-                        lines = Regex.Split(Strings.ConnectControllerToJoinString, " ");
-                        foreach (string line in lines)
+                        if (GamePad.GetState(cplayer.Player.Controller).IsConnected && cplayer.Player.Name != null)
                         {
-                            batch.DrawString(MenuInfoFont, line.Replace("	", ""),
-                                new Vector2(ConnectControlerStringPosition.X - Convert.ToInt32(MenuInfoFont.MeasureString(line).X) / 2 - cardBkgTexture[0].Width / 2, ConnectControlerStringPosition.Y - Convert.ToInt32(MenuInfoFont.MeasureString(line).Y) - 25),
-                                Color.White);
-                            ConnectControlerStringPosition.Y += 20;
-                        }
-                        // Connect Controller to play
-                        //batch.DrawString(MenuInfoFont, Strings.ConnectControllerToJoinString,
-                        //    new Vector2(CharacterPosition.X - 5 + cardBkg[1].Width - Convert.ToInt32(MenuInfoFont.MeasureString(Strings.ConnectControllerToJoinString).X), CharacterPosition.Y + cardBkg[1].Height / 2 - Convert.ToInt32(MenuInfoFont.MeasureString(Strings.ConnectControllerToJoinString).Y)),
-                        //    Color.Black);
-                    }
+                            batch.Draw(cardBkgTexture[0], CharacterPosition, Color.White);
+                            batch.Draw(cardBkgTexture[1], CharacterPosition, Color.White);
 
-                    CharacterPosition.X += 250;
-                    ConnectControlerStringPosition.X += 250;
-                    ConnectControlerStringPosition.Y = CharacterPosition.Y + cardBkgTexture[1].Height / 2;
+                            switch (index)
+                            {
+                                case 0:
+                                    lines = Regex.Split(Strings.P1PressStartString, " ");
+                                    break;
+                                case 1:
+                                    lines = Regex.Split(Strings.P2PressStartString, " ");
+                                    break;
+                                case 2:
+                                    lines = Regex.Split(Strings.P3PressStartString, " ");
+                                    break;
+                                case 3:
+                                    lines = Regex.Split(Strings.P4PressStartString, " ");
+                                    break;
+                                default:
+                                    lines = Regex.Split(Strings.P1PressStartString, " ");
+                                    break;
+                            }
+
+                            foreach (string line in lines)
+                            {
+                                batch.DrawString(MenuInfoFont, line.Replace("	", ""),
+                                    new Vector2(ConnectControlerStringPosition.X - Convert.ToInt32(MenuInfoFont.MeasureString(line).X) / 2 - cardBkgTexture[0].Width / 2, ConnectControlerStringPosition.Y - Convert.ToInt32(MenuInfoFont.MeasureString(line).Y) - 25),
+                                    Color.Black);
+                                ConnectControlerStringPosition.Y += 20;
+                            }
+                            // Connect Controller to play
+                            //batch.DrawString(MenuInfoFont, Strings.ConnectControllerToJoinString,
+                            //    new Vector2(CharacterPosition.X - 5 + cardBkg[1].Width - Convert.ToInt32(MenuInfoFont.MeasureString(Strings.ConnectControllerToJoinString).X), CharacterPosition.Y + cardBkg[1].Height / 2 - Convert.ToInt32(MenuInfoFont.MeasureString(Strings.ConnectControllerToJoinString).Y)),
+                            //    Color.Black);
+                        }
+                        else
+                        {
+                            lines = Regex.Split(Strings.ConnectControllerToJoinString, " ");
+                            foreach (string line in lines)
+                            {
+                                batch.DrawString(MenuInfoFont, line.Replace("	", ""),
+                                    new Vector2(ConnectControlerStringPosition.X - Convert.ToInt32(MenuInfoFont.MeasureString(line).X) / 2 - cardBkgTexture[0].Width / 2, ConnectControlerStringPosition.Y - Convert.ToInt32(MenuInfoFont.MeasureString(line).Y) - 25),
+                                    Color.White);
+                                ConnectControlerStringPosition.Y += 20;
+                            }
+                        }
+                    }
                 }
+                else
+                {
+                    // Background Images
+                    //batch.Draw(cardBkg[0], CharacterPosition, Color.White);
+                    //batch.Draw(cardBkg[1], CharacterPosition, Color.White);
+
+                    //Texto de contexto de menu
+                    lines = Regex.Split(Strings.ConnectControllerToJoinString, " ");
+                    foreach (string line in lines)
+                    {
+                        batch.DrawString(MenuInfoFont, line.Replace("	", ""),
+                            new Vector2(ConnectControlerStringPosition.X - Convert.ToInt32(MenuInfoFont.MeasureString(line).X) / 2 - cardBkgTexture[0].Width / 2, ConnectControlerStringPosition.Y - Convert.ToInt32(MenuInfoFont.MeasureString(line).Y) - 25),
+                            Color.White);
+                        ConnectControlerStringPosition.Y += 20;
+                    }
+                    // Connect Controller to play
+                    //batch.DrawString(MenuInfoFont, Strings.ConnectControllerToJoinString,
+                    //    new Vector2(CharacterPosition.X - 5 + cardBkg[1].Width - Convert.ToInt32(MenuInfoFont.MeasureString(Strings.ConnectControllerToJoinString).X), CharacterPosition.Y + cardBkg[1].Height / 2 - Convert.ToInt32(MenuInfoFont.MeasureString(Strings.ConnectControllerToJoinString).Y)),
+                    //    Color.Black);
+                }
+
+                CharacterPosition.X += 250;
+                ConnectControlerStringPosition.X += 250;
+                ConnectControlerStringPosition.Y = CharacterPosition.Y + cardBkgTexture[1].Height / 2;
             }
 
             batch.End();
@@ -872,7 +759,7 @@ namespace ZombustersWindows
             batch.DrawString(DigitBigFont, String.Format("{0:00}", levelSelected), new Vector2(uiBounds.X + uiBounds.Width - 135, 90), Color.Salmon);
             batch.DrawString(DigitLowFont, "-", new Vector2(uiBounds.X + uiBounds.Width - 210, 80), Color.White);
 
-            if (game.player1.Options == InputMode.Keyboard)
+            if (game.player1.inputMode == InputMode.Keyboard)
             {   
                 batch.Draw(kbDown, new Vector2(uiBounds.X + uiBounds.Width - 217, 115), new Rectangle(0, 0, kbDown.Width, kbDown.Height), Color.White, 0.0f, Vector2.Zero, 0.7f, SpriteEffects.None, 0.0f);
             }
@@ -883,7 +770,7 @@ namespace ZombustersWindows
 
             batch.DrawString(DigitLowFont, "+", new Vector2(uiBounds.X + uiBounds.Width - 5, 80), Color.White);
             
-            if (game.player1.Options == InputMode.Keyboard)
+            if (game.player1.inputMode == InputMode.Keyboard)
             {
                 batch.Draw(kbUp, new Vector2(uiBounds.X + uiBounds.Width - 10, 115), new Rectangle(0, 0, kbUp.Width, kbUp.Height), Color.White, 0.0f, Vector2.Zero, 0.7f, SpriteEffects.None, 0.0f);
             }
@@ -942,7 +829,7 @@ namespace ZombustersWindows
 
             //Texto de contexto del How to Play
             contextMenuPosition = new Vector2(position.X + 300, position.Y - 30);
-            if (game.player1.Options == InputMode.Keyboard)
+            if (game.player1.inputMode == InputMode.Keyboard)
             {
                 lines = Regex.Split(Strings.PCExplanationString, "\r\n");
             }

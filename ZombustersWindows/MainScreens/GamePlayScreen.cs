@@ -1542,10 +1542,12 @@ namespace ZombustersWindows
                 // Draw the Storage Device Icon
                 this.ScreenManager.SpriteBatch.Begin(SpriteSortMode.FrontToBack, BlendState.AlphaBlend, null, null, null, null, Resolution.getTransformationMatrix());
 
-                if (game.player1.Options == InputMode.Keyboard)
+                foreach (Avatar avatar in game.currentPlayers)
                 {
-                    // Draw Cursor
-                    this.ScreenManager.SpriteBatch.Draw(cursorTexture, cursorPos, Color.White);
+                    if (avatar.Player.inputMode == InputMode.Keyboard)
+                    {
+                        this.ScreenManager.SpriteBatch.Draw(cursorTexture, cursorPos, Color.White);
+                    }
                 }
 
                 this.ScreenManager.SpriteBatch.End();
@@ -3148,7 +3150,7 @@ namespace ZombustersWindows
                     new Vector2(uiBounds.Width - MenuInfoFont.MeasureString(Strings.TrialModeMenuString.ToUpper()).X / 2, uiBounds.Height + 20), Color.White);
 #endif
 
-            if (game.player1.Options == InputMode.Touch)
+            if (game.player1.inputMode == InputMode.Touch)
             {
                 batch.Draw(pause_icon, new Vector2(uiBounds.Width + 70, uiBounds.Y - 30), Color.White);
 
