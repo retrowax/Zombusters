@@ -98,7 +98,7 @@ namespace ZombustersWindows
             SpriteBatch batch = this.ScreenManager.SpriteBatch;
             batch.Begin();
             batch.Draw(title, titleBounds, Color.White);
-            float interval = 2.0f; // Two second interval
+            float interval = 2.0f; // in seconds
             float value = (float)Math.Cos(gameTime.TotalGameTime.TotalSeconds * interval);
             value = (value + 1) / 2;  // Shift the sine wave into positive 
             Color color = new Color(value, value, value, value);
