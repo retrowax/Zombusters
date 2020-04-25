@@ -241,21 +241,6 @@ namespace ZombustersWindows
 
         private void SetKeyboardAsInputMode(InputState input)
         {
-           /* if (input.IsNewKeyPress(Keys.Space)
-                    || input.IsNewKeyPress(Keys.Enter)
-                    || input.IsNewKeyPress(Keys.Left)
-                    || input.IsNewKeyPress(Keys.Right)
-                    || input.IsNewKeyPress(Keys.Up)
-                    || input.IsNewKeyPress(Keys.Down)
-                    || input.IsNewKeyPress(Keys.W)
-                    || input.IsNewKeyPress(Keys.S)
-                    || input.IsNewKeyPress(Keys.A)
-                    || input.IsNewKeyPress(Keys.D))
-            {
-                game.currentPlayers[0].Player = new Player(game.options, game.audio, game);
-                game.currentPlayers[0].Player.inputMode = InputMode.Keyboard;
-                game.currentPlayers[0].Activate(game.currentPlayers[0].Player);
-            }*/
             currentInputMode = InputMode.Keyboard;
         }
 

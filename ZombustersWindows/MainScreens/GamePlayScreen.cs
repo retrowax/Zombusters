@@ -1519,7 +1519,7 @@ namespace ZombustersWindows
                 // Perlin Noise effect draw
                 this.ScreenManager.SpriteBatch.Begin(SpriteSortMode.Deferred, BlendState.NonPremultiplied, null, null, null, null, Resolution.getTransformationMatrix());
 #if DEBUG
-            Level.gameWorld.Draw(this.ScreenManager.SpriteBatch, gameTime, this.ScreenManager.SpriteBatch);
+                Level.gameWorld.Draw(this.ScreenManager.SpriteBatch, gameTime, this.ScreenManager.SpriteBatch);
 #endif
 
                 this.ScreenManager.SpriteBatch.End();
