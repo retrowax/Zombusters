@@ -588,7 +588,7 @@ namespace ZombustersWindows
                     hasConfirmationScreen = true;
                 }
             }
-            return hasConfirmationScreen
+            return hasConfirmationScreen;
         }
 
         void Menu_ShowMarketPlace(Object sender, MenuSelection selection)

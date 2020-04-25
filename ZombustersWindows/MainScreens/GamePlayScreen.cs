@@ -2350,30 +2350,6 @@ namespace ZombustersWindows
 
 
                 case ObjectStatus.Immune://blink 5 times per second
-                    // Draw Player Name and Highlight for Blue
-                    if (state.color == Color.Blue)
-                    {
-                        this.ScreenManager.SpriteBatch.Draw(UIPlayerBlue, new Vector2(state.position.X + IdleTrunkAnimation[state.character].frameSize.X / 2 - UIPlayerBlue.Width / 2 + offsetPosition.X, state.position.Y - 20 + offsetPosition.Y), Color.White);
-                    }
-
-                    // Draw Player Name and Highlight for Red
-                    if (state.color == Color.Red)
-                    {
-                        this.ScreenManager.SpriteBatch.Draw(UIPlayerRed, new Vector2(state.position.X + IdleTrunkAnimation[state.character].frameSize.X / 2 - UIPlayerRed.Width / 2 + offsetPosition.X, state.position.Y - 20 + offsetPosition.Y), Color.White);
-                    }
-
-                    // Draw Player Name and Highlight for Green
-                    if (state.color == Color.Green)
-                    {
-                        this.ScreenManager.SpriteBatch.Draw(UIPlayerGreen, new Vector2(state.position.X + IdleTrunkAnimation[state.character].frameSize.X / 2 - UIPlayerGreen.Width / 2 + offsetPosition.X, state.position.Y - 20 + offsetPosition.Y), Color.White);
-                    }
-
-                    // Draw Player Name and Highlight for Yellow
-                    if (state.color == Color.Yellow)
-                    {
-                        this.ScreenManager.SpriteBatch.Draw(UIPlayerYellow, new Vector2(state.position.X + IdleTrunkAnimation[state.character].frameSize.X / 2 - UIPlayerYellow.Width / 2 + offsetPosition.X, state.position.Y - 20 + offsetPosition.Y), Color.White);
-                    }
-
                     if (((int)(TotalGameSeconds * 10) % 2) == 0)
                     {
                         // Draws our avatar at the current position with no tinting
@@ -3280,11 +3256,11 @@ namespace ZombustersWindows
                 {
                     if (game.currentPlayers[player].character == 0)
                     {
-                        game.currentPlayers[player].setFlameThrower(new Vector2(game.currentPlayers[player].position.X - 27, game.currentPlayers[player].position.Y - 55), angle);
+                        game.currentPlayers[player].SetFlameThrower(new Vector2(game.currentPlayers[player].position.X - 27, game.currentPlayers[player].position.Y - 55), angle);
                     }
                     else
                     {
-                        game.currentPlayers[player].setFlameThrower(new Vector2(game.currentPlayers[player].position.X - 25, game.currentPlayers[player].position.Y - 61), angle);
+                        game.currentPlayers[player].SetFlameThrower(new Vector2(game.currentPlayers[player].position.X - 25, game.currentPlayers[player].position.Y - 61), angle);
                     }
                 }
                 else if (game.currentPlayers[player].currentgun == GunType.shotgun)
@@ -3323,11 +3299,11 @@ namespace ZombustersWindows
                 {
                     if (game.currentPlayers[player].character == 0)
                     {
-                        game.currentPlayers[player].setFlameThrower(new Vector2(game.currentPlayers[player].position.X - 3, game.currentPlayers[player].position.Y - 67), angle);
+                        game.currentPlayers[player].SetFlameThrower(new Vector2(game.currentPlayers[player].position.X - 3, game.currentPlayers[player].position.Y - 67), angle);
                     }
                     else
                     {
-                        game.currentPlayers[player].setFlameThrower(new Vector2(game.currentPlayers[player].position.X, game.currentPlayers[player].position.Y - 70), angle);
+                        game.currentPlayers[player].SetFlameThrower(new Vector2(game.currentPlayers[player].position.X, game.currentPlayers[player].position.Y - 70), angle);
                     }
                 }
                 else if (game.currentPlayers[player].currentgun == GunType.shotgun)
@@ -3352,11 +3328,11 @@ namespace ZombustersWindows
                 {
                     if (game.currentPlayers[player].character == 0)
                     {
-                        game.currentPlayers[player].setFlameThrower(new Vector2(game.currentPlayers[player].position.X + 30, game.currentPlayers[player].position.Y - 58), angle);
+                        game.currentPlayers[player].SetFlameThrower(new Vector2(game.currentPlayers[player].position.X + 30, game.currentPlayers[player].position.Y - 58), angle);
                     }
                     else
                     {
-                        game.currentPlayers[player].setFlameThrower(new Vector2(game.currentPlayers[player].position.X + 30, game.currentPlayers[player].position.Y - 60), angle);
+                        game.currentPlayers[player].SetFlameThrower(new Vector2(game.currentPlayers[player].position.X + 30, game.currentPlayers[player].position.Y - 60), angle);
                     }
                 }
                 else if (game.currentPlayers[player].currentgun == GunType.shotgun)
@@ -3395,11 +3371,11 @@ namespace ZombustersWindows
                 {
                     if (game.currentPlayers[player].character == 0)
                     {
-                        game.currentPlayers[player].setFlameThrower(new Vector2(game.currentPlayers[player].position.X + 45, game.currentPlayers[player].position.Y - 27), angle);
+                        game.currentPlayers[player].SetFlameThrower(new Vector2(game.currentPlayers[player].position.X + 45, game.currentPlayers[player].position.Y - 27), angle);
                     }
                     else
                     {
-                        game.currentPlayers[player].setFlameThrower(new Vector2(game.currentPlayers[player].position.X + 47, game.currentPlayers[player].position.Y - 28), angle);
+                        game.currentPlayers[player].SetFlameThrower(new Vector2(game.currentPlayers[player].position.X + 47, game.currentPlayers[player].position.Y - 28), angle);
                     }
                 }
                 else if (game.currentPlayers[player].currentgun == GunType.shotgun)
@@ -3424,11 +3400,11 @@ namespace ZombustersWindows
                 {
                     if (game.currentPlayers[player].character == 0)
                     {
-                        game.currentPlayers[player].setFlameThrower(new Vector2(game.currentPlayers[player].position.X + 35, game.currentPlayers[player].position.Y + 2), angle);
+                        game.currentPlayers[player].SetFlameThrower(new Vector2(game.currentPlayers[player].position.X + 35, game.currentPlayers[player].position.Y + 2), angle);
                     }
                     else
                     {
-                        game.currentPlayers[player].setFlameThrower(new Vector2(game.currentPlayers[player].position.X + 37, game.currentPlayers[player].position.Y + 2), angle);
+                        game.currentPlayers[player].SetFlameThrower(new Vector2(game.currentPlayers[player].position.X + 37, game.currentPlayers[player].position.Y + 2), angle);
                     }
                 }
                 else if (game.currentPlayers[player].currentgun == GunType.shotgun)
@@ -3467,11 +3443,11 @@ namespace ZombustersWindows
                 {
                     if (game.currentPlayers[player].character == 0)
                     {
-                        game.currentPlayers[player].setFlameThrower(new Vector2(game.currentPlayers[player].position.X - 3, game.currentPlayers[player].position.Y + 19), angle);
+                        game.currentPlayers[player].SetFlameThrower(new Vector2(game.currentPlayers[player].position.X - 3, game.currentPlayers[player].position.Y + 19), angle);
                     }
                     else
                     {
-                        game.currentPlayers[player].setFlameThrower(new Vector2(game.currentPlayers[player].position.X, game.currentPlayers[player].position.Y + 19), angle);
+                        game.currentPlayers[player].SetFlameThrower(new Vector2(game.currentPlayers[player].position.X, game.currentPlayers[player].position.Y + 19), angle);
                     }
                 }
                 else if (game.currentPlayers[player].currentgun == GunType.shotgun)
@@ -3496,11 +3472,11 @@ namespace ZombustersWindows
                 {
                     if (game.currentPlayers[player].character == 0)
                     {
-                        game.currentPlayers[player].setFlameThrower(new Vector2(game.currentPlayers[player].position.X - 30, game.currentPlayers[player].position.Y + 6), angle);
+                        game.currentPlayers[player].SetFlameThrower(new Vector2(game.currentPlayers[player].position.X - 30, game.currentPlayers[player].position.Y + 6), angle);
                     }
                     else
                     {
-                        game.currentPlayers[player].setFlameThrower(new Vector2(game.currentPlayers[player].position.X - 30, game.currentPlayers[player].position.Y + 6), angle);
+                        game.currentPlayers[player].SetFlameThrower(new Vector2(game.currentPlayers[player].position.X - 30, game.currentPlayers[player].position.Y + 6), angle);
                     }
                 }
                 else if (game.currentPlayers[player].currentgun == GunType.shotgun)
@@ -3532,11 +3508,11 @@ namespace ZombustersWindows
                 {
                     if (game.currentPlayers[player].character == 0)
                     {
-                        game.currentPlayers[player].setFlameThrower(new Vector2(game.currentPlayers[player].position.X - 46, game.currentPlayers[player].position.Y - 23), angle);
+                        game.currentPlayers[player].SetFlameThrower(new Vector2(game.currentPlayers[player].position.X - 46, game.currentPlayers[player].position.Y - 23), angle);
                     }
                     else
                     {
-                        game.currentPlayers[player].setFlameThrower(new Vector2(game.currentPlayers[player].position.X - 44, game.currentPlayers[player].position.Y - 22), angle);
+                        game.currentPlayers[player].SetFlameThrower(new Vector2(game.currentPlayers[player].position.X - 44, game.currentPlayers[player].position.Y - 22), angle);
                     }
                 }
                 else if (game.currentPlayers[player].currentgun == GunType.shotgun)
