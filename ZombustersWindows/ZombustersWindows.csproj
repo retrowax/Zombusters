@@ -1242,6 +1242,8 @@
     <Content Include="Content\Music\ThisCo_TakeItAway.ogg">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <None Include="libsteam_api.dylib" />
+    <None Include="libsteam_api.so" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
