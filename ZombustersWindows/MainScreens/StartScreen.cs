@@ -75,6 +75,23 @@ namespace ZombustersWindows
         void ConfirmExitMessageBoxAccepted(object sender, PlayerIndexEventArgs e) {
             InputMode inputMode = InputMode.Keyboard;
             InputState input = ((MessageBoxScreen)sender).inputState;
+            /*
+            if (input.IsNewKeyPress(Keys.Space)
+                    || input.IsNewKeyPress(Keys.Enter)
+                    || input.IsNewKeyPress(Keys.Left)
+                    || input.IsNewKeyPress(Keys.Right)
+                    || input.IsNewKeyPress(Keys.Up)
+                    || input.IsNewKeyPress(Keys.Down)
+                    || input.IsNewKeyPress(Keys.W)
+                    || input.IsNewKeyPress(Keys.S)
+                    || input.IsNewKeyPress(Keys.A)
+                    || input.IsNewKeyPress(Keys.D))
+            {
+                game.currentPlayers[0].Player = new Player(game.options, game.audio, game);
+                game.currentPlayers[0].Player.inputMode = InputMode.Keyboard;
+                game.currentPlayers[0].Activate(game.currentPlayers[0].Player);
+            }
+            */
             for (int gamePadIndex = 0; gamePadIndex < input.GetCurrentGamePadStates().Length; gamePadIndex++)
             {
                 GamePadState gamePadState = input.GetCurrentGamePadStates()[gamePadIndex];

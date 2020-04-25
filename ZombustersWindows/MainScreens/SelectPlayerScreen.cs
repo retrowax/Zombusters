@@ -571,7 +571,24 @@ namespace ZombustersWindows
 
             confirmExitMessageBox.Accepted += ConfirmExitMessageBoxAccepted;
 
-            ScreenManager.AddScreen(confirmExitMessageBox);
+            if (!IsConfirmationScreenAlreadyShown())
+            {
+                ScreenManager.AddScreen(confirmExitMessageBox);
+            }
+        }
+
+        private bool IsConfirmationScreenAlreadyShown()
+        {
+            bool hasConfirmationScreen = false;
+            GameScreen[] screenList = ScreenManager.GetScreens();
+            for (int i = screenList.Length - 1; i > 0; i--)
+            {
+                if (screenList[i] is MessageBoxScreen)
+                {
+                    hasConfirmationScreen = true;
+                }
+            }
+            return hasConfirmationScreen
         }
 
         void Menu_ShowMarketPlace(Object sender, MenuSelection selection)

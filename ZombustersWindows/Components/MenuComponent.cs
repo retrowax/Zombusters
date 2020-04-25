@@ -169,24 +169,24 @@ namespace ZombustersWindows
 
         public void HandleInput(InputState input) {
             if (input.IsNewKeyPress(Keys.Escape) || input.IsNewKeyPress(Keys.Back)) {
-                SetKeyboardAsInputMode();
+                SetKeyboardAsInputMode(input);
                 MenuCanceled.Invoke(this, new MenuSelection(-1));
                 return;
             }
 
             if (input.IsNewKeyPress(Keys.Enter) || input.IsNewKeyPress(Keys.Space)) {
-                SetKeyboardAsInputMode();
+                SetKeyboardAsInputMode(input);
                 MenuOptionSelected?.Invoke(this, new MenuSelection(Selection));
                 return;
             }
 
             if (input.IsNewKeyPress(Keys.Down)) {
-                SetKeyboardAsInputMode();
+                SetKeyboardAsInputMode(input);
                 Selection++;
             }
 
             if (input.IsNewKeyPress(Keys.Up)) {
-                SetKeyboardAsInputMode();
+                SetKeyboardAsInputMode(input);
                 Selection--;
             }
 
@@ -239,8 +239,23 @@ namespace ZombustersWindows
                 Selection += MenuItems.Count;
         }
 
-        private void SetKeyboardAsInputMode()
+        private void SetKeyboardAsInputMode(InputState input)
         {
+           /* if (input.IsNewKeyPress(Keys.Space)
+                    || input.IsNewKeyPress(Keys.Enter)
+                    || input.IsNewKeyPress(Keys.Left)
+                    || input.IsNewKeyPress(Keys.Right)
+                    || input.IsNewKeyPress(Keys.Up)
+                    || input.IsNewKeyPress(Keys.Down)
+                    || input.IsNewKeyPress(Keys.W)
+                    || input.IsNewKeyPress(Keys.S)
+                    || input.IsNewKeyPress(Keys.A)
+                    || input.IsNewKeyPress(Keys.D))
+            {
+                game.currentPlayers[0].Player = new Player(game.options, game.audio, game);
+                game.currentPlayers[0].Player.inputMode = InputMode.Keyboard;
+                game.currentPlayers[0].Activate(game.currentPlayers[0].Player);
+            }*/
             currentInputMode = InputMode.Keyboard;
         }
 
