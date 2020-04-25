@@ -47,14 +47,14 @@ script:
 deploy:
   - provider: script
     script:
-      ./travis/release.sh
+      ./travis/steam_release.sh
     on:
       tags: true
     skip_cleanup: true
 
   - provider: script
     script:
-      ./travis/beta.sh
+      ./travis/steam_beta.sh
     on:
       branch: master
     skip_cleanup: true
