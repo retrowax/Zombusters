@@ -72,7 +72,11 @@ namespace ZombustersWindows
         }
 
         void ConfirmExitMessageBoxAccepted(object sender, PlayerIndexEventArgs e) {
-            SteamClient.Shutdown();
+            try
+            {
+                SteamClient.Shutdown();
+            } catch {}
+            
             game.Exit();
             // WARNING: This is a workaround because the game is not exiting correctly
             Environment.Exit(0);

@@ -17,6 +17,7 @@ namespace ZombustersWindows
         public int VIRTUAL_RESOLUTION_HEIGHT = 720;
         private const string ANALYTICS_GAME_KEY = "2a9782ff7b0d7b1326cc50178f587678";
         private const string ANALYTICS_SEC_KEY = "8924590c2447e4a6e5335aea11e16f5ff8150d04";
+        private const string BUGSNAG_KEY = "1cad9818fb8d84290d776245cd1f948d";
 
         public GraphicsDeviceManager graphics;
         public ScreenManager screenManager;
@@ -75,21 +76,9 @@ namespace ZombustersWindows
             audio.SetOptions(0.7f, 0.5f);
             input = new InputManager(this);
             Components.Add(input);
-            //Bloom Component
-            //REVISAR!!!
-            //graphics.MinimumPixelShaderProfile = ShaderProfile.PS_2_0;            
-            /*
-            bloom = new BloomComponent(this);
-            Components.Add(bloom);
-            bloom.Settings = BloomSettings.PresetSettings[6];
-            bloom.Visible = true;
-            */
-            bugSnagClient = new Client("1cad9818fb8d84290d776245cd1f948d");
-#if DEMO
-            SteamClient.Init(1294640);
-#else
-            SteamClient.Init(1272300);
-#endif
+
+            bugSnagClient = new Client(BUGSNAG_KEY);
+            InitSteamClient();
 
             storageDataSource = new StorageDataSource(ref bugSnagClient);
 
@@ -103,11 +92,22 @@ namespace ZombustersWindows
             Components.Add(FrameRateComponent);
             DebugComponent = new DebugInfoComponent(this);
             Components.Add(DebugComponent);
-            //Guide.SimulateTrialMode = true;
 #endif
             musicComponent = new MusicComponent(this);
             Components.Add(musicComponent);
             musicComponent.Enabled = true;
+        }
+
+        private void InitSteamClient()
+        {
+            try
+            {
+#if DEMO
+                SteamClient.Init(1294640);
+#else
+                SteamClient.Init(1272300);
+#endif
+            } catch {}
         }
 
         protected override void Initialize() {
