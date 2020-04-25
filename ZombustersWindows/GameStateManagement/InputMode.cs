@@ -4,6 +4,7 @@
     {
         Keyboard,
         GamePad,
-        Touch
+        Touch,
+        NotExistent
     }
 }

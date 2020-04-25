@@ -13,7 +13,7 @@ namespace ZombustersWindows
         public bool IsPlaying;
         public PlayerIndex Controller;
         public bool IsRemote;
-        public InputMode Options;
+        public InputMode inputMode = InputMode.NotExistent;
         public OptionsState optionsState;
         public AudioManager audioManager;
         public bool isReady;
@@ -48,12 +48,12 @@ namespace ZombustersWindows
             this.game = game;
         }
 
-        public void InitLocal(PlayerIndex controller, string name, InputMode options, MyGame game)
+        public void InitLocal(PlayerIndex controller, string name, InputMode inputMode, MyGame game)
         {
             this.game = game;
+            this.inputMode = inputMode;
             this.Controller = controller;
             this.Name = name;
-            this.Options = options;
         }
 
         #region Managing Gamer Presence

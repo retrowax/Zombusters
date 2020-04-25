@@ -205,7 +205,7 @@ namespace ZombustersWindows
 
             // Let the menu handle input regarding selection change
             // and the A/B/Back buttons:
-            if (this.game.player1.Options != InputMode.Touch)
+            if (this.game.player1.inputMode != InputMode.Touch)
             {
                 menu.HandleInput(input);
             }

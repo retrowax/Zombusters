@@ -24,6 +24,7 @@ namespace ZombustersWindows
         Texture2D lineaMenu;
         Texture2D SaveTexture;
         Texture2D submit_button;
+        public InputState inputState;
 
         string title;
         string message;
@@ -115,6 +116,7 @@ namespace ZombustersWindows
         /// </summary>
         public override void HandleInput(InputState input)
         {
+            inputState = input;
             PlayerIndex playerIndex;
 
             // Read in our gestures
@@ -193,8 +195,6 @@ namespace ZombustersWindows
                 }
             }
         }
-
-
         #endregion
 
 
@@ -203,12 +203,7 @@ namespace ZombustersWindows
             base.Update(gameTime, otherScreenHasFocus, coveredByOtherScreen);
         }
 
-
-
-
         #region Draw
-
-
         /// <summary>
         /// Draws the message box.
         /// </summary>
@@ -251,11 +246,8 @@ namespace ZombustersWindows
 
             spriteBatch.Begin();
 
-
-            // Draw the message box text.
             spriteBatch.DrawString(font, title, textPosition, color);
 
-            // Linea blanca
             textPosition.Y += 30;
             spriteBatch.Draw(lineaMenu, textPosition, Color.White);
 
@@ -277,9 +269,9 @@ namespace ZombustersWindows
             // Show Gamer Card Button
             buttonsPossition = new Vector2(textPosition.X, textPosition.Y + 10);
 
-            if (((MyGame)this.ScreenManager.Game).player1.Options != InputMode.Touch)
+            if (((MyGame)this.ScreenManager.Game).player1.inputMode != InputMode.Touch)
             {
-                if (((MyGame)this.ScreenManager.Game).player1.Options == InputMode.Keyboard)
+                if (!InputManager.CheckIfGamePadIsConnected())
                 {
                     spaceBetweenButtonAndText = Convert.ToInt32(kbEnter.Width * 0.7f) + 5;
                     spriteBatch.Draw(kbEnter, buttonsPossition, null, Color.White, 0, Vector2.Zero, 0.7f, SpriteEffects.None, 1.0f);
@@ -295,8 +287,7 @@ namespace ZombustersWindows
 
                 if (includeButtons)
                 {
-                    // Leave Button
-                    if (((MyGame)this.ScreenManager.Game).player1.Options == InputMode.Keyboard)
+                    if (!InputManager.CheckIfGamePadIsConnected())
                     {
                         spaceBetweenButtonAndText = Convert.ToInt32(kbEsc.Width * 0.7f) + 5;
                         spriteBatch.Draw(kbEsc, new Vector2(buttonsPossition.X + distanceBetweenButtonsText, buttonsPossition.Y), null, Color.White, 0, Vector2.Zero, 0.7f, SpriteEffects.None, 1.0f);

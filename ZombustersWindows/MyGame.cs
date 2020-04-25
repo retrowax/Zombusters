@@ -111,12 +111,10 @@ namespace ZombustersWindows
             InitializeMetrics();
 
             currentPlayers = new Avatar[maxGamers];
-            for (int i = 0; i < maxGamers; i++) {
-                currentPlayers[i] = new Avatar();
-                currentPlayers[i].Initialize(GraphicsDevice.Viewport);
-                if (i == 0) {
-                    this.InitializeMain(PlayerIndex.One);
-                }
+            for (int player = 0; player < maxGamers; player++) {
+                currentPlayers[player] = new Avatar();
+                currentPlayers[player].Initialize(GraphicsDevice.Viewport);
+                this.InitializeMain((PlayerIndex)player, InputMode.NotExistent);
             }      
             base.Initialize();
             screenManager.AddScreen(new LogoScreen());
@@ -148,40 +146,27 @@ namespace ZombustersWindows
             }
         }
 
-        public void CheckIfControllerChanged(InputState inputCheck) {
-            if (inputCheck.IsNewKeyPress(Keys.Enter) || inputCheck.IsNewKeyPress(Keys.Space) || inputCheck.IsNewKeyPress(Keys.Escape) || inputCheck.IsNewKeyPress(Keys.A) ||
-                inputCheck.IsNewKeyPress(Keys.S) || inputCheck.IsNewKeyPress(Keys.D) || inputCheck.IsNewKeyPress(Keys.W) || inputCheck.IsNewKeyPress(Keys.Up) ||
-                inputCheck.IsNewKeyPress(Keys.Down) || inputCheck.IsNewKeyPress(Keys.Left) || inputCheck.IsNewKeyPress(Keys.Right))
-            {
-                player1.Options = InputMode.Keyboard;
-            }
-
-            if (inputCheck.IsNewButtonPress(Buttons.A) || inputCheck.IsNewButtonPress(Buttons.B) || inputCheck.IsNewButtonPress(Buttons.X) || inputCheck.IsNewButtonPress(Buttons.Y) ||
-                inputCheck.IsNewButtonPress(Buttons.Back) || inputCheck.IsNewButtonPress(Buttons.Start) || inputCheck.IsNewButtonPress(Buttons.RightShoulder) ||
-                inputCheck.IsNewButtonPress(Buttons.LeftShoulder) || inputCheck.IsNewButtonPress(Buttons.DPadLeft) || inputCheck.IsNewButtonPress(Buttons.DPadRight)
-                || inputCheck.IsNewButtonPress(Buttons.LeftThumbstickLeft) || inputCheck.IsNewButtonPress(Buttons.LeftThumbstickRight) || inputCheck.IsNewButtonPress(Buttons.LeftThumbstickDown)
-                || inputCheck.IsNewButtonPress(Buttons.LeftThumbstickUp))
-            {
-                player1.Options = InputMode.GamePad;
-            }
-
-            foreach (GestureSample gesture in inputCheck.GetGestures()) {
-                if (gesture.GestureType == GestureType.Tap || gesture.GestureType == GestureType.DoubleTap || gesture.GestureType == GestureType.DragComplete ||
-                    gesture.GestureType == GestureType.Flick || gesture.GestureType == GestureType.FreeDrag || gesture.GestureType == GestureType.Hold ||
-                    gesture.GestureType == GestureType.HorizontalDrag || gesture.GestureType == GestureType.Pinch || gesture.GestureType == GestureType.PinchComplete ||
-                    gesture.GestureType == GestureType.VerticalDrag)
-                {
-                    player1.Options = InputMode.Touch;
-                }
-            }
-        }
-
         #region Start Games
 
-        public void InitializeMain(PlayerIndex index) {
-            if (!player1.IsPlaying) {
-                player1.InitLocal(index, Strings.PlayerOneString, InputMode.Keyboard, this);
-                LoadOptions(player1);
+        public void InitializeMain(PlayerIndex index, InputMode inputMode) {
+            switch(index)
+            {
+                case PlayerIndex.One:
+                    player1.InitLocal(index, Strings.PlayerOneString, inputMode, this);
+                    LoadOptions(player1);
+                    break;
+                case PlayerIndex.Two:
+                    player2.InitLocal(index, Strings.PlayerTwoString, inputMode, this);
+                    LoadOptions(player2);
+                    break;
+                case PlayerIndex.Three:
+                    player3.InitLocal(index, Strings.PlayerThreeString, inputMode, this);
+                    LoadOptions(player3);
+                    break;
+                case PlayerIndex.Four:
+                    player4.InitLocal(index, Strings.PlayerFourString, inputMode, this);
+                    LoadOptions(player4);
+                    break;
             }
         }
 
@@ -303,7 +288,6 @@ namespace ZombustersWindows
         #endregion
 
         public void TrySignIn(bool isSignedInGamer, EventHandler handler) {
-            InitializeMain(PlayerIndex.One);
             LoadInScreen screen = new LoadInScreen(1, false);
             screen.ScreenFinished += new EventHandler(handler);
             screenManager.AddScreen(screen);
@@ -324,7 +308,7 @@ namespace ZombustersWindows
 
         #region Setting Options
         public void DisplayOptions(int player) {
-            this.InitializeMain((PlayerIndex)player);
+            this.InitializeMain((PlayerIndex)player, currentPlayers[player].Player.inputMode);
             switch (player) {
                 case 0:
                     screenManager.AddScreen(new OptionsScreen(this, this.player1.optionsState));
@@ -346,7 +330,6 @@ namespace ZombustersWindows
 
         public void SetOptions(OptionsState state, Player player) {
             this.options = state;
-            player.Options = state.Player;
             player.optionsState = state;
             audio.SetOptions(state.FXLevel, state.MusicLevel);
             player.SaveOptions();
