@@ -2,14 +2,13 @@
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
 using GameStateManagement;
 using ZombustersWindows.Subsystem_Managers;
-using Microsoft.Xna.Framework.Input.Touch;
 using ZombustersWindows.MainScreens;
 using ZombustersWindows.Localization;
 using Bugsnag;
 using GameAnalyticsSDK.Net;
+using Steamworks;
 
 namespace ZombustersWindows
 {
@@ -86,7 +85,11 @@ namespace ZombustersWindows
             bloom.Visible = true;
             */
             bugSnagClient = new Client("1cad9818fb8d84290d776245cd1f948d");
-            //bugSnagClient.StartAutoNotify();
+#if DEMO
+            SteamClient.Init(1294640);
+#else
+            SteamClient.Init(1272300);
+#endif
 
             storageDataSource = new StorageDataSource(ref bugSnagClient);
 
@@ -146,7 +149,7 @@ namespace ZombustersWindows
             }
         }
 
-        #region Start Games
+#region Start Games
 
         public void InitializeMain(PlayerIndex index, InputMode inputMode) {
             switch(index)
@@ -261,9 +264,9 @@ namespace ZombustersWindows
             playScreen.bGameOver = false;
         }
 
-        #endregion
+#endregion
 
-        #region Extras Menu
+#region Extras Menu
 
         public void DisplayHowToPlay() {
             screenManager.AddScreen(new HowToPlayScreen());
@@ -285,7 +288,7 @@ namespace ZombustersWindows
             screenManager.AddScreen(new AchievementsScreen(player));
         }
 
-        #endregion
+#endregion
 
         public void TrySignIn(bool isSignedInGamer, EventHandler handler) {
             LoadInScreen screen = new LoadInScreen(1, false);
@@ -306,7 +309,7 @@ namespace ZombustersWindows
             bPaused = EndPause();
         }
 
-        #region Setting Options
+#region Setting Options
         public void DisplayOptions(int player) {
             this.InitializeMain((PlayerIndex)player, currentPlayers[player].Player.inputMode);
             switch (player) {
@@ -340,9 +343,9 @@ namespace ZombustersWindows
             player.LoadLeaderBoard();
         }
 
-        #endregion
+#endregion
 
-        #region Pausing
+#region Pausing
         public bool IsPaused {
             get { return bPaused; }
         }
@@ -366,7 +369,7 @@ namespace ZombustersWindows
             }
             return IsPaused;
         }
-        #endregion
+#endregion
 
         protected override void Draw(GameTime gameTime) {
             graphics.GraphicsDevice.Clear(Color.Black);

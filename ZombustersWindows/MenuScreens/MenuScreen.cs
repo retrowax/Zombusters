@@ -5,6 +5,7 @@ using Microsoft.Xna.Framework.Input.Touch;
 using GameStateManagement;
 using ZombustersWindows.Localization;
 using ZombustersWindows.Subsystem_Managers;
+using Steamworks;
 
 namespace ZombustersWindows
 {
@@ -14,8 +15,6 @@ namespace ZombustersWindows
         Vector2 selectPos;
         SpriteFont MenuInfoFont;
         SpriteFont MenuListFont;
-        SpriteFont fontItalic;
-        SpriteFont fontSmallItalic;
         private MenuComponent menu;
 
         public MenuScreen() {
@@ -30,8 +29,6 @@ namespace ZombustersWindows
             selectPos = new Vector2(uiBounds.X + 60, uiBounds.Bottom - 30);
             MenuInfoFont = game.Content.Load<SpriteFont>(@"menu\ArialMenuInfo");
             MenuListFont = game.Content.Load<SpriteFont>(@"menu\ArialMenuList");
-            fontItalic = game.Content.Load<SpriteFont>(@"menu\ArialMusic");
-            fontSmallItalic = game.Content.Load<SpriteFont>(@"menu\ArialMusicItalic");
 
             menu = new MenuComponent(game, MenuListFont);
             //bloom = new BloomComponent(game);
@@ -75,6 +72,7 @@ namespace ZombustersWindows
         }
 
         void ConfirmExitMessageBoxAccepted(object sender, PlayerIndexEventArgs e) {
+            SteamClient.Shutdown();
             game.Exit();
             // WARNING: This is a workaround because the game is not exiting correctly
             Environment.Exit(0);
