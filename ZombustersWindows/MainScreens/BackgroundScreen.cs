@@ -72,7 +72,6 @@ namespace ZombustersWindows
 
         public override void HandleInput(InputState input)
         {
-            ((MyGame)ScreenManager.Game).CheckIfControllerChanged(input);
             base.HandleInput(input);
         }
 

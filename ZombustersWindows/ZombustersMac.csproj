@@ -5,6 +5,28 @@
         <TargetFramework>netcoreapp2.2</TargetFramework>
     </PropertyGroup>
 
+    <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+      <IntermediateOutputPath>obj\Debug\netcoreapp2.2</IntermediateOutputPath>
+    </PropertyGroup>
+    <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+      <DebugType></DebugType>
+    </PropertyGroup>
+    <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Demo|AnyCPU' ">
+      <IntermediateOutputPath>obj\Demo</IntermediateOutputPath>
+      <DebugType></DebugType>
+      <Optimize>true</Optimize>
+      <OutputPath>bin\Demo\netcoreapp2.2</OutputPath>
+      <DefineConstants>TRACE;DEMO;NETCOREAPP;NETCOREAPP2_2</DefineConstants>
+      <NoWarn>1701;1702</NoWarn>
+    </PropertyGroup>
+    <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'DemoDebug|AnyCPU' ">
+      <IntermediateOutputPath>obj\DemoDebug\netcoreapp2.2</IntermediateOutputPath>
+      <DebugSymbols>true</DebugSymbols>
+      <Optimize>false</Optimize>
+      <OutputPath>bin\DemoDebug\netcoreapp2.2</OutputPath>
+      <DefineConstants>TRACE;DEMO;NETCOREAPP;NETCOREAPP2_2</DefineConstants>
+      <NoStdLib>true</NoStdLib>
+    </PropertyGroup>
     <ItemGroup>
         <MonoGameContentReference Include="**\*.mgcb" />
     </ItemGroup>
@@ -16,6 +38,7 @@
         <PackageReference Include="MonoGame.Framework.DesktopGL.Core" Version="3.8.0.2" />
         <PackageReference Include="NLog" Version="4.6.8" />
         <PackageReference Include="Bugsnag" Version="2.2.0" />
+        <PackageReference Include="Facepunch.Steamworks" Version="2.3.3" />
     </ItemGroup>
 
     <ItemGroup>
@@ -134,6 +157,15 @@
         <Content Include="LevelXMLs\Level9\Level9_walls.xml">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </Content>
+        <Content Include="libsteam_api64.dylib">
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="steam_api64.dll">
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="steam_api.dll">
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
     </ItemGroup>
     <ItemGroup>
         <MonoGameContentReference Include="Content\Content.mgcb" />
@@ -145,6 +177,9 @@
       <None Remove="LevelXMLs\Level1\Level1_enemies.xml" />
       <None Remove="LevelXMLs\Level1\Level1_furnitures.xml" />
       <None Remove="LevelXMLs\Level1\Level1_walls.xml" />
+      <None Remove="libsteam_api.dylib" />
+      <None Remove="steam_api64.dll" />
+      <None Remove="steam_api.dll" />
     </ItemGroup>
     <ItemGroup>
         <Content Include="Content\Achievements\achieve_1.xnb">

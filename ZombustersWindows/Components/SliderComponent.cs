@@ -59,7 +59,7 @@ namespace ZombustersWindows
         {            
             batch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, null, null, null, null, Resolution.getTransformationMatrix());
 
-            if (this.game.player1.Options == InputMode.Touch)
+            if (this.game.player1.inputMode == InputMode.Touch)
             {
                 batch.DrawString(MenuInfoFont, "-", new Vector2(SliderArea.Left + 20, SliderArea.Bottom - 25), Color.Yellow, 0.0f, Vector2.Zero, 1.5f, SpriteEffects.None, 1.0f);
             }
@@ -75,7 +75,7 @@ namespace ZombustersWindows
                 x= ((i - 1) * 2 * width);
 
                 Rectangle displayArea;
-                if (this.game.player1.Options != InputMode.Touch)
+                if (this.game.player1.inputMode != InputMode.Touch)
                 {
                     displayArea = new Rectangle(SliderArea.Left + x, SliderArea.Bottom, width, height);
                 }
@@ -90,7 +90,7 @@ namespace ZombustersWindows
                     batch.Draw(blank, displayArea, null, UnsetColor, 0, origin, SpriteEffects.None, 1.0f);
                 
             }
-            if (this.game.player1.Options == InputMode.Touch)
+            if (this.game.player1.inputMode == InputMode.Touch)
             {
                 batch.DrawString(MenuInfoFont, "+", new Vector2(SliderArea.Left + 70 + x, SliderArea.Bottom - 28), Color.Yellow, 0.0f, Vector2.Zero, 1.5f, SpriteEffects.None, 1.0f);
             }

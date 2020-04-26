@@ -80,15 +80,11 @@ namespace ZombustersWindows
         public override void Draw(GameTime gameTime)
         {
             int count = 0;
-
             Vector2 position = new Vector2(32, 64);
-
             spriteBatch.Begin();
 
-            //spriteBatch.DrawString(spriteFont, "Signed In Gamers: " + Gamer.SignedInGamers.Count.ToString(), position, Color.White);
-
-
 #if XBOX
+            spriteBatch.DrawString(spriteFont, "Signed In Gamers: " + Gamer.SignedInGamers.Count.ToString(), position, Color.White);
             if (mygame.gamerManager.getOnlinePlayerGamertag() != null)
             {
                 position = new Vector2(position.X, position.Y + 32);
@@ -116,17 +112,12 @@ namespace ZombustersWindows
             }
 #endif
 
-            /*if (Guide.IsTrialMode == true)
-            {
-                position = new Vector2(position.X, position.Y + 32);
-                spriteBatch.DrawString(spriteFont, "Trial Mode On", position, Color.White);
-            }
-            else*/
-            {
-                position = new Vector2(position.X, position.Y + 32);
-                spriteBatch.DrawString(spriteFont, "Trial Mode Off", position, Color.White);
-            }
-
+            position = new Vector2(position.X, position.Y + 32);
+#if DEMO
+            spriteBatch.DrawString(spriteFont, "Demo On", position, Color.White);
+#else
+            spriteBatch.DrawString(spriteFont, "Demo Off", position, Color.White);
+#endif
             count = 0;
             foreach (Avatar avatar in game.currentPlayers)
             {

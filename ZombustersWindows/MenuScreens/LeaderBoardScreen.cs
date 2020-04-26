@@ -245,9 +245,9 @@ namespace ZombustersWindows
             this.ScreenManager.SpriteBatch.Draw(lineaMenu, pos, Color.White);
 
             // Leave Button
-            if (((MyGame)this.ScreenManager.Game).player1.Options != InputMode.Touch)
+            if (((MyGame)this.ScreenManager.Game).player1.inputMode != InputMode.Touch)
             {
-                if (((MyGame)this.ScreenManager.Game).player1.Options == InputMode.Keyboard)
+                if (((MyGame)this.ScreenManager.Game).player1.inputMode == InputMode.Keyboard)
                 {
                     spaceBetweenButtonAndText = Convert.ToInt32(kbEsc.Width * 0.7f) + 5;
                     this.ScreenManager.SpriteBatch.Draw(kbEsc, new Vector2(158 + distanceBetweenButtonsText, 613), null, Color.White, 0, Vector2.Zero, 0.7f, SpriteEffects.None, 1.0f);
@@ -272,8 +272,10 @@ namespace ZombustersWindows
 
             this.ScreenManager.SpriteBatch.End();
 
-            // Draw Retrowax Logo
             menu.DrawLogoRetrowaxMenu(this.ScreenManager.SpriteBatch, new Vector2(uiBounds.Width, uiBounds.Height), MenuInfoFont);
+#if DEMO
+            menu.DrawDemoWIPDisclaimer(this.ScreenManager.SpriteBatch);
+#endif
 
 #if WINDOWS_PHONE
             menu.DrawBackButtonMenu(this.ScreenManager.SpriteBatch, new Vector2(uiBounds.Width + 55, uiBounds.Y - 30), MenuInfoFont);

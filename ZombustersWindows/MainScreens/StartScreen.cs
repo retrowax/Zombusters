@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using GameStateManagement;
 using ZombustersWindows.Localization;
+using Microsoft.Xna.Framework.Input;
 
 namespace ZombustersWindows
 {
@@ -16,7 +17,6 @@ namespace ZombustersWindows
         Vector2 rightsOrigin;
         Texture2D title;
         SpriteFont font;
-        PlayerIndex playerOne;
         bool Exiting = false;
 
         public StartScreen() {
@@ -41,9 +41,12 @@ namespace ZombustersWindows
         public override void LoadContent() {
             title = game.Content.Load<Texture2D>("title");
             font = game.Content.Load<SpriteFont>(@"menu\ArialMenuInfo");
-            if (game.player1.Options == InputMode.GamePad) {
+            if (InputManager.CheckIfGamePadIsConnected())
+            {
                 startOrigin = font.MeasureString(Strings.PressStartString) / 2;
-            } else if (game.player1.Options == InputMode.Keyboard) {
+            } 
+            else 
+            {
                 startOrigin = font.MeasureString(Strings.PCPressAnyKeyString) / 2;
             }
             rightsOrigin = font.MeasureString(Strings.CopyRightString) / 2;
@@ -51,7 +54,7 @@ namespace ZombustersWindows
         }
 
         public override void HandleInput(InputState input) {
-            if (!Exiting && InputManager.CheckPlayerOneStart(out playerOne, input)) {
+            if (!Exiting) {
                 Exiting = true;
                 game.TrySignIn(true, FinishStart);
             }
@@ -70,7 +73,22 @@ namespace ZombustersWindows
         }
 
         void ConfirmExitMessageBoxAccepted(object sender, PlayerIndexEventArgs e) {
-            game.InitializeMain(playerOne);
+            InputMode inputMode = InputMode.Keyboard;
+            InputState input = ((MessageBoxScreen)sender).inputState;
+
+            for (int gamePadIndex = 0; gamePadIndex < input.GetCurrentGamePadStates().Length; gamePadIndex++)
+            {
+                GamePadState gamePadState = input.GetCurrentGamePadStates()[gamePadIndex];
+                if (gamePadState.IsButtonDown(Buttons.DPadDown) || gamePadState.IsButtonDown(Buttons.LeftThumbstickDown)
+                    || gamePadState.IsButtonDown(Buttons.DPadUp) || gamePadState.IsButtonDown(Buttons.LeftThumbstickUp)
+                    || gamePadState.IsButtonDown(Buttons.B) || gamePadState.IsButtonDown(Buttons.Back)
+                    || gamePadState.IsButtonDown(Buttons.A) || gamePadState.IsButtonDown(Buttons.Start))
+                {
+                    inputMode = InputMode.GamePad;
+                }
+            }
+
+            game.InitializeMain(e.PlayerIndex, inputMode);
             this.ScreenManager.AddScreen(new MenuScreen());
             ExitScreen();
         }
@@ -80,13 +98,16 @@ namespace ZombustersWindows
             SpriteBatch batch = this.ScreenManager.SpriteBatch;
             batch.Begin();
             batch.Draw(title, titleBounds, Color.White);
-            float interval = 2.0f; // Two second interval
+            float interval = 2.0f; // in seconds
             float value = (float)Math.Cos(gameTime.TotalGameTime.TotalSeconds * interval);
             value = (value + 1) / 2;  // Shift the sine wave into positive 
             Color color = new Color(value, value, value, value);
-            if (game.player1.Options == InputMode.GamePad) {
+            if (InputManager.CheckIfGamePadIsConnected())
+            {
                 batch.DrawString(font, Strings.PressStartString, startPos, color, 0, startOrigin, 1.0f, SpriteEffects.None, 0.1f);
-            } else if (game.player1.Options == InputMode.Keyboard) {
+            } 
+            else 
+            {
                 batch.DrawString(font, Strings.PCPressAnyKeyString, startPos, color, 0, startOrigin, 1.0f, SpriteEffects.None, 0.1f);
             }
             batch.DrawString(font, Strings.CopyRightString, rightsPos, Color.White, 0, rightsOrigin, 1.0f, SpriteEffects.None, 0.1f);

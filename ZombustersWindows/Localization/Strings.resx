@@ -147,7 +147,7 @@
     <value>Connect controller to play</value>
   </data>
   <data name="CopyRightString" xml:space="preserve">
-    <value>© RETROWAX GAMES. 2011-2013 ALL RIGHTS RESERVED</value>
+    <value>© RETROWAX GAMES. 2011-2020 ALL RIGHTS RESERVED</value>
     <comment>Copyright String</comment>
   </data>
   <data name="CreateSession" xml:space="preserve">

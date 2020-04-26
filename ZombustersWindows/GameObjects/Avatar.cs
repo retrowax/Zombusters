@@ -31,7 +31,6 @@ namespace ZombustersWindows
             get { return status != ObjectStatus.Inactive; }
         }
 
-        //PRUEBASS
         public SteeringEntity entity;
         public SteeringBehaviors behaviors;
         public const float VELOCIDAD_MAXIMA = 1.0f;
@@ -39,29 +38,22 @@ namespace ZombustersWindows
         public Vector2 ObjectAvoidCalc = Vector2.Zero;
 
         public static float CrashRadius = 20f;
-        public static float RespawnTime = 5.0f;
+        public static float RespawnTime = 2.0f;
+        public static float ImmuneTime = 8.0f;
         public static float PixelsPerSecond = 200;
         public static int bulletmax = 20;
         public static int pelletmax = 50;
         
         public Rectangle ScreenBounds;
         
-        // Variables to control bullet behavior
         public int RateOfFire = 2; // per second
         private float LastShot;
 
-        // FlameThrower Particle Effect
         public Vector2 FlameThrowerPosition;
         public float FlameThrowerAngle;
         public RotatedRectangle FlameThrowerRectangle;
 
         public bool isLoosingLife;
-        /*
-        public Vector2 FlameThrowerEffectPosition;
-        private Renderer particleRenderer1, particleRenderer2;
-        private ParticleEffect FlameThrowerEffect, FlameThrowerEffectYellow;
-        private ConeEmitter FlameThrowerConeEmitter, FlameThrowerConeEmitterYellow;
-        private LinearGravityModifier linearGravityModifier; */
 
         public Avatar()             
         {
@@ -72,16 +64,17 @@ namespace ZombustersWindows
                
         public void Initialize(Viewport view)
         {
-            this.entity = new SteeringEntity();
-            this.entity.Width = 28;
-            this.entity.Height = 50;
-            this.entity.Velocity = Vector2.Zero;
-            this.entity.Position = Vector2.Zero;
-            this.entity.BoundingRadius = 10.0f;
-            this.entity.MaxSpeed = VELOCIDAD_MAXIMA;
+            this.entity = new SteeringEntity
+            {
+                Width = 28,
+                Height = 50,
+                Velocity = Vector2.Zero,
+                Position = Vector2.Zero,
+                BoundingRadius = 10.0f,
+                MaxSpeed = VELOCIDAD_MAXIMA
+            };
             this.behaviors = new SteeringBehaviors(0.15f, CombinationType.prioritized);
 
-            //ScreenBounds = new Rectangle(view.X + 50, 50, view.Width - 100, view.Height - 100);
             ScreenBounds = new Rectangle(view.X + 60, 60, view.Width - 60, view.Height - 55);
             position = new Vector2(ScreenBounds.Left + (ScreenBounds.Width / 2), ScreenBounds.Bottom - 60);
 
@@ -89,180 +82,7 @@ namespace ZombustersWindows
             this.isLoosingLife = false;
         }
 
-/*
-        public void LoadFlameThrower(Game1 game)
-        {
-
-            // Efecto particulas de Humo
-            FlameThrowerEffect = new ParticleEffect();
-
-            linearGravityModifier = new LinearGravityModifier { Gravity = new Vector2(75, 0) };
-
-            FlameThrowerConeEmitter = new ConeEmitter
-                {
-                    Budget = 500,
-                    Term = 3f,
-
-                    Enabled = true,
-                    Name = "FlameThrowerEmitter",
-                    BlendMode = EmitterBlendMode.Alpha,
-                    TriggerOffset = new Vector2(0, 0),
-                    MinimumTriggerPeriod = 0.0f,
-                    ReleaseColour = new VariableFloat3 { Value = new Vector3(1, 0.5f, 0), Variation = new Vector3(0, 0, 0) },
-                    ReleaseImpulse = new Vector2(10, 0),
-                    ReleaseOpacity = new VariableFloat { Value = 1f, Variation = 0f },
-                    ReleaseQuantity = 1,
-                    ReleaseRotation = new VariableFloat { Value = 0, Variation = MathHelper.Pi },
-                    ReleaseSpeed = new VariableFloat { Value = 200, Variation = 100 },
-                    ReleaseScale = new VariableFloat { Value = 0.1f, Variation = 1 },
-                    ParticleTextureAssetName = "Flame2",
-                    Direction = 0.1f,
-                    ConeAngle = 0.1f,
-
-                    Modifiers = new ModifierCollection
-                    {
-                        new DampingModifier { DampingCoefficient = 2 },
-                        new ScaleModifier 
-                        {
-                            InitialScale = 1,
-                            UltimateScale = 50,
-                        },
-                        new RotationRateModifier
-                        {
-                            InitialRate = 1.57f,
-                            FinalRate = 0,
-                        },
-                        //new LinearGravityModifier { Gravity = new Vector2(75,0) },
-                        new OpacityInterpolatorModifier
-                        {
-                            InitialOpacity = 0.1f,
-                            MiddleOpacity = 0.5f,
-                            MiddlePosition = 0.1f,
-                            FinalOpacity = 0,
-                        },
-                    },
-                };
-
-            FlameThrowerConeEmitter.Modifiers.Add(linearGravityModifier);
-
-            //particleEffect = new ParticleEffect();
-            //particleEffect = effect.DeepCopy();
-            FlameThrowerEffect.Add(FlameThrowerConeEmitter);
-            FlameThrowerEffect.Initialise();
-            FlameThrowerEffect.LoadContent(game.Content);
-
-            FlameThrowerEffectYellow = new ParticleEffect();
-
-            FlameThrowerConeEmitterYellow = new ConeEmitter
-                {
-                    Budget = 500,
-                    Term = 3f,
-
-                    Enabled = true,
-                    Name = "FlameThrowerEmitterYellow",
-                    BlendMode = EmitterBlendMode.Alpha,
-                    TriggerOffset = new Vector2(0, 0),
-                    MinimumTriggerPeriod = 0.0f,
-                    ReleaseColour = new VariableFloat3 { Value = new Vector3(1, 1, 0), Variation = new Vector3(0, 0, 0) },
-                    ReleaseImpulse = new Vector2(0, 0),
-                    ReleaseOpacity = new VariableFloat { Value = 1f, Variation = 0f },
-                    ReleaseQuantity = 1,
-                    ReleaseRotation = new VariableFloat { Value = 0, Variation = MathHelper.Pi },
-                    ReleaseSpeed = new VariableFloat { Value = 200, Variation = 100 },
-                    ReleaseScale = new VariableFloat { Value = 0.1f, Variation = 0.5f },
-                    ParticleTextureAssetName = "Flame2",
-                    Direction = 0.1f,
-                    ConeAngle = 0.1f,
-
-                    Modifiers = new ModifierCollection
-                    {
-                        new DampingModifier { DampingCoefficient = 3 },
-                        new ScaleModifier 
-                        {
-                            InitialScale = 1,
-                            UltimateScale = 20,
-                        },
-                        new RotationRateModifier
-                        {
-                            InitialRate = 1.57f,
-                            FinalRate = 0,
-                        },
-                        //new LinearGravityModifier { Gravity = new Vector2(75,0) },
-                        new OpacityInterpolatorModifier
-                        {
-                            InitialOpacity = 1.0f,
-                            MiddleOpacity = 0.2f,
-                            MiddlePosition = 0.2f,
-                            FinalOpacity = 0,
-                        },
-                    },
-                };
-
-            FlameThrowerConeEmitter.Modifiers.Add(linearGravityModifier);
-
-            //particleEffect = new ParticleEffect();
-            //particleEffect = effect.DeepCopy();
-            FlameThrowerEffectYellow.Add(FlameThrowerConeEmitterYellow);
-            FlameThrowerEffectYellow.Initialise();
-            FlameThrowerEffectYellow.LoadContent(game.Content);
-
-            FlameThrowerEffectPosition = this.position;
-
-            particleRenderer1 = new SpriteBatchRenderer
-            {
-                GraphicsDeviceService = game.graphics
-            };
-            particleRenderer1.LoadContent(game.Content);
-
-            particleRenderer2 = new SpriteBatchRenderer
-            {
-                GraphicsDeviceService = game.graphics
-            };
-            particleRenderer2.LoadContent(game.Content);
-        }
-
-        public void setFlameThrower(Vector2 position, float angle)
-        {
-            this.FlameThrowerEffectPosition = position;
-
-            FlameThrowerEffect.Clear();
-            FlameThrowerConeEmitter.Direction = angle - MathHelper.ToRadians(90);
-            if (angle < 0)
-            {
-                FlameThrowerConeEmitter.ReleaseImpulse = new Vector2(-10,0);
-                FlameThrowerConeEmitter.Modifiers.Remove(linearGravityModifier);
-                linearGravityModifier.Gravity = new Vector2(-75,0);
-                FlameThrowerConeEmitter.Modifiers.Add(linearGravityModifier);
-            }
-            else
-            {
-                FlameThrowerConeEmitter.ReleaseImpulse = new Vector2(10, 0);
-                FlameThrowerConeEmitter.Modifiers.Remove(linearGravityModifier);
-                linearGravityModifier.Gravity = new Vector2(75, 0);
-                FlameThrowerConeEmitter.Modifiers.Add(linearGravityModifier);
-            }
-            //ReleaseImpulse,Direction, LinearGravityModifier
-
-            FlameThrowerEffect.Add(FlameThrowerConeEmitter);
-
-            FlameThrowerEffectYellow.Clear();
-            FlameThrowerConeEmitterYellow.Direction = angle - MathHelper.ToRadians(90);
-            //FlameThrowerConeEmitterYellow.ConeAngle = MathHelper.WrapAngle(angle);
-            FlameThrowerEffectYellow.Add(FlameThrowerConeEmitter);
-        }
-
-        public void DrawFlameThrower()
-        {
-            if (this.currentgun == 3 && this.ammo[3] > 0)
-            {
-                // Render Efecto Particulas
-                particleRenderer1.RenderEffect(FlameThrowerEffect);
-                particleRenderer2.RenderEffect(FlameThrowerEffectYellow);
-            }
-        }
-*/
-
-        public void setFlameThrower(Vector2 position, float angle)
+        public void SetFlameThrower(Vector2 position, float angle)
         {
             this.FlameThrowerPosition = position;
             this.FlameThrowerAngle = angle - MathHelper.ToRadians(90);
@@ -382,7 +202,6 @@ namespace ZombustersWindows
                 {
                     if (lives > 0)
                     {
-                        //state.lives--;
                         status = ObjectStatus.Immune;
                     }
                     else
@@ -393,32 +212,13 @@ namespace ZombustersWindows
             }
             else if (status == ObjectStatus.Immune)
             {
-                //Ship.ClampPlayer(ref state, ScreenBounds);
-
-                if (totalGameSeconds > deathTimeTotalSeconds + 
-                    (Avatar.RespawnTime * 2))
+                if (totalGameSeconds > deathTimeTotalSeconds + Avatar.ImmuneTime)
                 {
                     status = ObjectStatus.Active;
                 }
             }
 
             this.ObjectAvoidCalc = this.behaviors.Update(gameTime, this.entity);
-            //this.entity.Velocity += this.behaviors.Update(gameTime, this.entity);
-            //this.entity.Velocity = VectorHelper.TruncateVector(this.entity.Velocity, this.entity.MaxSpeed / 1.5f);
-
-            // Set presence info for Player
-            //Player.SetPresenceValue(score);
-/*
-            // Particle Engine Update
-            if (this.currentgun == 3 && this.ammo[3] > 0)
-            {
-                FlameThrowerEffect.Trigger(FlameThrowerEffectPosition);
-                FlameThrowerEffectYellow.Trigger(FlameThrowerEffectPosition);
-                float deltaSeconds = (float)gameTime.ElapsedGameTime.TotalSeconds;
-                FlameThrowerEffect.Update(deltaSeconds);
-                FlameThrowerEffectYellow.Update(deltaSeconds);
-            }
- */
         }
 
         public AvatarState State

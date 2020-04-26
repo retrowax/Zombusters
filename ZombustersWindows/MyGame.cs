@@ -2,14 +2,13 @@
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
 using GameStateManagement;
 using ZombustersWindows.Subsystem_Managers;
-using Microsoft.Xna.Framework.Input.Touch;
 using ZombustersWindows.MainScreens;
 using ZombustersWindows.Localization;
 using Bugsnag;
 using GameAnalyticsSDK.Net;
+using Steamworks;
 
 namespace ZombustersWindows
 {
@@ -18,6 +17,7 @@ namespace ZombustersWindows
         public int VIRTUAL_RESOLUTION_HEIGHT = 720;
         private const string ANALYTICS_GAME_KEY = "2a9782ff7b0d7b1326cc50178f587678";
         private const string ANALYTICS_SEC_KEY = "8924590c2447e4a6e5335aea11e16f5ff8150d04";
+        private const string BUGSNAG_KEY = "1cad9818fb8d84290d776245cd1f948d";
 
         public GraphicsDeviceManager graphics;
         public ScreenManager screenManager;
@@ -76,17 +76,9 @@ namespace ZombustersWindows
             audio.SetOptions(0.7f, 0.5f);
             input = new InputManager(this);
             Components.Add(input);
-            //Bloom Component
-            //REVISAR!!!
-            //graphics.MinimumPixelShaderProfile = ShaderProfile.PS_2_0;            
-            /*
-            bloom = new BloomComponent(this);
-            Components.Add(bloom);
-            bloom.Settings = BloomSettings.PresetSettings[6];
-            bloom.Visible = true;
-            */
-            bugSnagClient = new Client("1cad9818fb8d84290d776245cd1f948d");
-            //bugSnagClient.StartAutoNotify();
+
+            bugSnagClient = new Client(BUGSNAG_KEY);
+            InitSteamClient();
 
             storageDataSource = new StorageDataSource(ref bugSnagClient);
 
@@ -100,23 +92,32 @@ namespace ZombustersWindows
             Components.Add(FrameRateComponent);
             DebugComponent = new DebugInfoComponent(this);
             Components.Add(DebugComponent);
-            //Guide.SimulateTrialMode = true;
 #endif
             musicComponent = new MusicComponent(this);
             Components.Add(musicComponent);
             musicComponent.Enabled = true;
         }
 
+        private void InitSteamClient()
+        {
+            try
+            {
+#if DEMO
+                SteamClient.Init(1294640);
+#else
+                SteamClient.Init(1272300);
+#endif
+            } catch {}
+        }
+
         protected override void Initialize() {
             InitializeMetrics();
 
             currentPlayers = new Avatar[maxGamers];
-            for (int i = 0; i < maxGamers; i++) {
-                currentPlayers[i] = new Avatar();
-                currentPlayers[i].Initialize(GraphicsDevice.Viewport);
-                if (i == 0) {
-                    this.InitializeMain(PlayerIndex.One);
-                }
+            for (int player = 0; player < maxGamers; player++) {
+                currentPlayers[player] = new Avatar();
+                currentPlayers[player].Initialize(GraphicsDevice.Viewport);
+                this.InitializeMain((PlayerIndex)player, InputMode.NotExistent);
             }      
             base.Initialize();
             screenManager.AddScreen(new LogoScreen());
@@ -148,40 +149,27 @@ namespace ZombustersWindows
             }
         }
 
-        public void CheckIfControllerChanged(InputState inputCheck) {
-            if (inputCheck.IsNewKeyPress(Keys.Enter) || inputCheck.IsNewKeyPress(Keys.Space) || inputCheck.IsNewKeyPress(Keys.Escape) || inputCheck.IsNewKeyPress(Keys.A) ||
-                inputCheck.IsNewKeyPress(Keys.S) || inputCheck.IsNewKeyPress(Keys.D) || inputCheck.IsNewKeyPress(Keys.W) || inputCheck.IsNewKeyPress(Keys.Up) ||
-                inputCheck.IsNewKeyPress(Keys.Down) || inputCheck.IsNewKeyPress(Keys.Left) || inputCheck.IsNewKeyPress(Keys.Right))
+#region Start Games
+
+        public void InitializeMain(PlayerIndex index, InputMode inputMode) {
+            switch(index)
             {
-                player1.Options = InputMode.Keyboard;
-            }
-
-            if (inputCheck.IsNewButtonPress(Buttons.A) || inputCheck.IsNewButtonPress(Buttons.B) || inputCheck.IsNewButtonPress(Buttons.X) || inputCheck.IsNewButtonPress(Buttons.Y) ||
-                inputCheck.IsNewButtonPress(Buttons.Back) || inputCheck.IsNewButtonPress(Buttons.Start) || inputCheck.IsNewButtonPress(Buttons.RightShoulder) ||
-                inputCheck.IsNewButtonPress(Buttons.LeftShoulder) || inputCheck.IsNewButtonPress(Buttons.DPadLeft) || inputCheck.IsNewButtonPress(Buttons.DPadRight)
-                || inputCheck.IsNewButtonPress(Buttons.LeftThumbstickLeft) || inputCheck.IsNewButtonPress(Buttons.LeftThumbstickRight) || inputCheck.IsNewButtonPress(Buttons.LeftThumbstickDown)
-                || inputCheck.IsNewButtonPress(Buttons.LeftThumbstickUp))
-            {
-                player1.Options = InputMode.GamePad;
-            }
-
-            foreach (GestureSample gesture in inputCheck.GetGestures()) {
-                if (gesture.GestureType == GestureType.Tap || gesture.GestureType == GestureType.DoubleTap || gesture.GestureType == GestureType.DragComplete ||
-                    gesture.GestureType == GestureType.Flick || gesture.GestureType == GestureType.FreeDrag || gesture.GestureType == GestureType.Hold ||
-                    gesture.GestureType == GestureType.HorizontalDrag || gesture.GestureType == GestureType.Pinch || gesture.GestureType == GestureType.PinchComplete ||
-                    gesture.GestureType == GestureType.VerticalDrag)
-                {
-                    player1.Options = InputMode.Touch;
-                }
-            }
-        }
-
-        #region Start Games
-
-        public void InitializeMain(PlayerIndex index) {
-            if (!player1.IsPlaying) {
-                player1.InitLocal(index, Strings.PlayerOneString, InputMode.Keyboard, this);
-                LoadOptions(player1);
+                case PlayerIndex.One:
+                    player1.InitLocal(index, Strings.PlayerOneString, inputMode, this);
+                    LoadOptions(player1);
+                    break;
+                case PlayerIndex.Two:
+                    player2.InitLocal(index, Strings.PlayerTwoString, inputMode, this);
+                    LoadOptions(player2);
+                    break;
+                case PlayerIndex.Three:
+                    player3.InitLocal(index, Strings.PlayerThreeString, inputMode, this);
+                    LoadOptions(player3);
+                    break;
+                case PlayerIndex.Four:
+                    player4.InitLocal(index, Strings.PlayerFourString, inputMode, this);
+                    LoadOptions(player4);
+                    break;
             }
         }
 
@@ -276,9 +264,9 @@ namespace ZombustersWindows
             playScreen.bGameOver = false;
         }
 
-        #endregion
+#endregion
 
-        #region Extras Menu
+#region Extras Menu
 
         public void DisplayHowToPlay() {
             screenManager.AddScreen(new HowToPlayScreen());
@@ -300,10 +288,9 @@ namespace ZombustersWindows
             screenManager.AddScreen(new AchievementsScreen(player));
         }
 
-        #endregion
+#endregion
 
         public void TrySignIn(bool isSignedInGamer, EventHandler handler) {
-            InitializeMain(PlayerIndex.One);
             LoadInScreen screen = new LoadInScreen(1, false);
             screen.ScreenFinished += new EventHandler(handler);
             screenManager.AddScreen(screen);
@@ -322,9 +309,9 @@ namespace ZombustersWindows
             bPaused = EndPause();
         }
 
-        #region Setting Options
+#region Setting Options
         public void DisplayOptions(int player) {
-            this.InitializeMain((PlayerIndex)player);
+            this.InitializeMain((PlayerIndex)player, currentPlayers[player].Player.inputMode);
             switch (player) {
                 case 0:
                     screenManager.AddScreen(new OptionsScreen(this, this.player1.optionsState));
@@ -346,7 +333,6 @@ namespace ZombustersWindows
 
         public void SetOptions(OptionsState state, Player player) {
             this.options = state;
-            player.Options = state.Player;
             player.optionsState = state;
             audio.SetOptions(state.FXLevel, state.MusicLevel);
             player.SaveOptions();
@@ -357,9 +343,9 @@ namespace ZombustersWindows
             player.LoadLeaderBoard();
         }
 
-        #endregion
+#endregion
 
-        #region Pausing
+#region Pausing
         public bool IsPaused {
             get { return bPaused; }
         }
@@ -383,7 +369,7 @@ namespace ZombustersWindows
             }
             return IsPaused;
         }
-        #endregion
+#endregion
 
         protected override void Draw(GameTime gameTime) {
             graphics.GraphicsDevice.Clear(Color.Black);
