@@ -83,7 +83,7 @@ Roadmap
 We would like to make an special version that enhances it. There is a lot of work to do:
 
 * Automate builds and package generation. (CI) :heavy_check_mark:
-* Add compatibility with MacOS and Linux.
+* Add compatibility with MacOS and Linux. :heavy_check_mark:
 * Update to latest version of Monogame.
 * Improve controls.
 * Improve scenes, remove blocking spots. :heavy_check_mark:
