@@ -72,6 +72,7 @@ namespace ZombustersWindows
         Texture2D pause_icon;
         Texture2D left_thumbstick;
         Texture2D right_thumbstick;
+        Texture2D coffinMeme;
         public Random random;
         private float timer, timerplayer;
         private int subLevelIndex;
@@ -1721,6 +1722,7 @@ namespace ZombustersWindows
 
                 Vector2 UICenter = new Vector2(uiBounds.X + uiBounds.Width / 2, uiBounds.Y + uiBounds.Height / 2);
                 this.ScreenManager.SpriteBatch.Draw(gameover, UICenter, null, Color.Red, 0, gameoverOrigin, 1.0f, SpriteEffects.None, 1.0f);
+                this.ScreenManager.SpriteBatch.Draw(coffinMeme, UICenter, null, Color.White, 0, gameoverOrigin, 1.0f, SpriteEffects.None, 1.0f);
 
                 this.ScreenManager.SpriteBatch.End();
             }
@@ -4435,6 +4437,8 @@ namespace ZombustersWindows
             pause_icon = game.Content.Load<Texture2D>(@"UI/pause_iconWP");
             left_thumbstick = game.Content.Load<Texture2D>(@"UI/left_thumbstick");
             right_thumbstick = game.Content.Load<Texture2D>(@"UI/right_thumbstick");
+
+            coffinMeme = game.Content.Load<Texture2D>(@"InGame/coffin_meme");
         }
 
         private void FontsLoad()
