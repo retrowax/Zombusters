@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input.Touch;
 using System;
 using ZombustersWindows.Localization;
+using ZombustersWindows.Subsystem_Managers;
 
 namespace ZombustersWindows.MainScreens
 {
@@ -11,6 +12,10 @@ namespace ZombustersWindows.MainScreens
     {
         MenuComponent menu;
         public event EventHandler<MenuSelection> GameOverMenuOptionSelected;
+        Texture2D gameover;
+        Texture2D coffinMeme;
+        Vector2 gameoverOrigin;
+        Rectangle uiBounds;
 
         public GameOverMenu()
         {
@@ -29,6 +34,7 @@ namespace ZombustersWindows.MainScreens
             //menu.MenuConfigSelected += new EventHandler<MenuSelection>(menu_MenuConfigSelected);
             menu.Initialize();
             Viewport view = this.ScreenManager.GraphicsDevice.Viewport;
+            uiBounds = GetTitleSafeArea();
             menu.CenterMenu(view);
             TransitionPosition = 0.5f;
             base.Initialize();
@@ -37,6 +43,9 @@ namespace ZombustersWindows.MainScreens
         public override void LoadContent()
         {
             base.LoadContent();
+            coffinMeme = this.ScreenManager.Game.Content.Load<Texture2D>(@"InGame/coffin_meme");
+            gameover = this.ScreenManager.Game.Content.Load<Texture2D>(@"InGame/gameover");
+            gameoverOrigin = new Vector2(gameover.Width / 2, gameover.Height / 2);
         }
 
         void CancelMenu(Object sender, MenuSelection selection)
@@ -66,7 +75,26 @@ namespace ZombustersWindows.MainScreens
         {
             this.ScreenManager.FadeBackBufferToBlack(127);
             menu.Draw(gameTime);
+            this.ScreenManager.SpriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, null, null, null, null, Resolution.getTransformationMatrix());
+            this.ScreenManager.SpriteBatch.Draw(gameover, new Vector2(uiBounds.X + uiBounds.Width / 2 - 204, uiBounds.Y + 254), null, Color.Black, 0, gameoverOrigin, 1.0f, SpriteEffects.None, 1.0f);
+            this.ScreenManager.SpriteBatch.Draw(gameover, new Vector2(uiBounds.X + uiBounds.Width / 2 - 200, uiBounds.Y + 250), null, Color.AntiqueWhite, 0, gameoverOrigin, 1.0f, SpriteEffects.None, 1.0f);
+            this.ScreenManager.SpriteBatch.Draw(coffinMeme, new Vector2(uiBounds.X + uiBounds.Width / 2 - 75, uiBounds.Y + uiBounds.Height / 2 + 100), null, Color.White, 0, gameoverOrigin, 1.0f, SpriteEffects.None, 1.0f);
+            this.ScreenManager.SpriteBatch.End();
             base.Draw(gameTime);
+        }
+
+        public Rectangle GetTitleSafeArea()
+        {
+            PresentationParameters pp =
+                this.ScreenManager.GraphicsDevice.PresentationParameters;
+            Rectangle retval =
+                new Rectangle(0, 0, pp.BackBufferWidth, pp.BackBufferHeight);
+
+            int offsetx = (pp.BackBufferWidth + 9) / 10;
+            int offsety = (pp.BackBufferHeight + 9) / 10;
+
+            retval.Inflate(-offsetx, -offsety);  // Deflate the rectangle
+            return retval;
         }
     }
 }

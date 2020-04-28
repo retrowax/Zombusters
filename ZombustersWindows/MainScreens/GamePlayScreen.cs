@@ -33,7 +33,6 @@ namespace ZombustersWindows
         private readonly GamePlayMenu menu = null;
         private readonly GameOverMenu gomenu = null;
         private bool bPaused = false;
-        public bool bGameOver = false;
         public Vector2 accumMove, accumFire;
         public Texture2D Map;
         public List<Player> PlayersInSession;
@@ -63,8 +62,6 @@ namespace ZombustersWindows
         Texture2D CharacterShadow;
         Texture2D cursorTexture;
         private Vector2 cursorPos;
-        Texture2D gameover;
-        Vector2 gameoverOrigin;
         Texture2D UIStats, jadeUI, rayUI, peterUI, richardUI, whiteLine;
         Texture2D UIStatsBlue, UIStatsRed, UIStatsGreen, UIStatsYellow, UIPlayerBlue, UIPlayerRed, UIPlayerGreen, UIPlayerYellow;
         SpriteFont arcade14, arcade28;
@@ -72,7 +69,7 @@ namespace ZombustersWindows
         Texture2D pause_icon;
         Texture2D left_thumbstick;
         Texture2D right_thumbstick;
-        Texture2D coffinMeme;
+        
         public Random random;
         private float timer, timerplayer;
         private int subLevelIndex;
@@ -1715,18 +1712,6 @@ namespace ZombustersWindows
 
         private void DrawGameOver()
         {
-            if (bGameOver)
-            {
-                this.ScreenManager.FadeBackBufferToBlack(64);
-                this.ScreenManager.SpriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, null, null, null, null, Resolution.getTransformationMatrix());
-
-                Vector2 UICenter = new Vector2(uiBounds.X + uiBounds.Width / 2, uiBounds.Y + uiBounds.Height / 2);
-                this.ScreenManager.SpriteBatch.Draw(gameover, UICenter, null, Color.Red, 0, gameoverOrigin, 1.0f, SpriteEffects.None, 1.0f);
-                this.ScreenManager.SpriteBatch.Draw(coffinMeme, UICenter, null, Color.White, 0, gameoverOrigin, 1.0f, SpriteEffects.None, 1.0f);
-
-                this.ScreenManager.SpriteBatch.End();
-            }
-
             if (currentLevel == LevelType.EndGame)
             {
                 string levelshowstring;
@@ -3175,7 +3160,6 @@ namespace ZombustersWindows
         public void GameOver(byte player)
         {
             PlayerDestroyed(player);
-            game.playScreen.bGameOver = true;
         }
 
         public void TankCrashed(TankState tank)
@@ -4419,8 +4403,6 @@ namespace ZombustersWindows
 
             CharacterShadow = game.Content.Load<Texture2D>(@"InGame/character_shadow");
             Explosion.Texture = game.Content.Load<Texture2D>(@"InGame/Explosion");
-            gameover = game.Content.Load<Texture2D>(@"InGame/gameover");
-            gameoverOrigin = new Vector2(gameover.Width / 2, gameover.Height / 2);
             cursorTexture = game.Content.Load<Texture2D>(@"InGame/GUI/aimcursor");
 
             heart = game.Content.Load<Texture2D>(@"InGame/GUI/heart");
@@ -4437,8 +4419,6 @@ namespace ZombustersWindows
             pause_icon = game.Content.Load<Texture2D>(@"UI/pause_iconWP");
             left_thumbstick = game.Content.Load<Texture2D>(@"UI/left_thumbstick");
             right_thumbstick = game.Content.Load<Texture2D>(@"UI/right_thumbstick");
-
-            coffinMeme = game.Content.Load<Texture2D>(@"InGame/coffin_meme");
         }
 
         private void FontsLoad()
