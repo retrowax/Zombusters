@@ -261,7 +261,6 @@ namespace ZombustersWindows
             }
 
             totalGameSeconds = 0;
-            playScreen.bGameOver = false;
         }
 
 #endregion
