@@ -23,10 +23,9 @@ namespace ZombustersWindows
         public GunType currentgun;
         public Vector2 accumMove;
         public Vector2 accumFire;
-
-        public Player Player;
         public bool isReady;
-        public bool IsPlaying
+
+        public bool IsPlayingTheGame
         {
             get { return status != ObjectStatus.Inactive; }
         }
@@ -62,7 +61,6 @@ namespace ZombustersWindows
             this.color = color;
         }
       
-               
         public void Initialize(Viewport view)
         {
             this.entity = new SteeringEntity
@@ -139,10 +137,8 @@ namespace ZombustersWindows
         /// Activates ship and assigns it to a player.
         /// </summary>
         /// <param name="player"></param>
-        public void Activate(Player player)
+        public void Activate()
         {
-            player.IsPlaying = true;
-            this.Player = player;
             this.status = ObjectStatus.Active;
         }
 

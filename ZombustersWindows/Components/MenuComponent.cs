@@ -257,7 +257,7 @@ namespace ZombustersWindows
                     if (game.players[gamePadIndex] != null)
                     {
                         game.players[gamePadIndex].inputMode = InputMode.GamePad;
-                        game.players[gamePadIndex].avatar.Activate(game.players[gamePadIndex]);
+                        game.players[gamePadIndex].IsPlaying = true;
                     }
                 }
             }

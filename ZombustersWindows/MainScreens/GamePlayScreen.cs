@@ -522,7 +522,7 @@ namespace ZombustersWindows
 
                     for (i = 0; i < game.players.Length; i++)
                     {
-                        if (game.players[i].avatar.IsPlaying)
+                        if (game.players[i].avatar.IsPlayingTheGame)
                         {
                             HandleCollisions(game.players[i].avatar, i, game.totalGameSeconds);
                         }
@@ -540,7 +540,7 @@ namespace ZombustersWindows
 
                     for (i = 0; i < game.players.Length; i++)
                     {
-                        if (game.players[i].avatar.IsPlaying)
+                        if (game.players[i].avatar.IsPlayingTheGame)
                         {
                             HandleCollisions(game.players[i].avatar, i, game.totalGameSeconds);
                         }
@@ -571,7 +571,7 @@ namespace ZombustersWindows
 
                     for (i = 0; i < game.players.Length; i++)
                     {
-                        if (game.players[i].avatar.IsPlaying)
+                        if (game.players[i].avatar.IsPlayingTheGame)
                         {
                             HandleCollisions(game.players[i].avatar, i, game.totalGameSeconds);
                         }
@@ -592,7 +592,7 @@ namespace ZombustersWindows
                                 {
                                     if (game.topScoreListContainer != null)
                                     {
-                                        player.SaveLeaderBoard(player.avatar.score);
+                                        player.SaveLeaderBoard();
                                     }
 
                                 }
@@ -609,7 +609,7 @@ namespace ZombustersWindows
                             {
                                 if (game.topScoreListContainer != null)
                                 {
-                                    player.SaveLeaderBoard(player.avatar.score);
+                                    player.SaveLeaderBoard();
                                 }
 
                             }
@@ -1024,12 +1024,12 @@ namespace ZombustersWindows
                 GamePlayStatus = GameplayState.GameOver;
                 this.ScreenManager.AddScreen(gomenu);
 
-                if (game.players[playerIndex].avatar.IsPlaying)
+                if (game.players[playerIndex].avatar.IsPlayingTheGame)
                 {
                     if (game.topScoreListContainer != null && game.players[playerIndex].avatar.score > 250)
                     {
-                        game.players[playerIndex].avatar.Player.SaveLeaderBoard(game.players[playerIndex].avatar.score);
-                        game.players[playerIndex].avatar.Player.SaveGame(Level.getLevelNumber(currentLevel));
+                        game.players[playerIndex].SaveLeaderBoard();
+                        game.players[playerIndex].SaveGame(Level.getLevelNumber(currentLevel));
                     }
                 }
             }
@@ -1387,7 +1387,7 @@ namespace ZombustersWindows
 
                 foreach (Player player in game.players)
                 {
-                    if (player.avatar.IsPlaying)
+                    if (player.avatar.IsPlayingTheGame)
                     {
 
                         DrawPlayer(player.avatar, game.totalGameSeconds, gameTime, Level.furnitureList);
@@ -1443,7 +1443,7 @@ namespace ZombustersWindows
 
                 foreach (Player player in game.players)
                 {
-                    if (player.avatar.IsPlaying)
+                    if (player.avatar.IsPlayingTheGame)
                     {
                         DrawShotgunShots(player.avatar.shotgunbullets, game.totalGameSeconds);
                         DrawBullets(player.avatar.bullets, game.totalGameSeconds);
@@ -1725,7 +1725,7 @@ namespace ZombustersWindows
 
                 foreach (Player player in game.players)
                 {
-                    if (player.avatar.IsPlaying)
+                    if (player.avatar.IsPlayingTheGame)
                     {
                         if (state.color == Color.Blue)
                         {
@@ -2860,7 +2860,7 @@ namespace ZombustersWindows
             {
                 if (player != null)
                 {
-                    if (player.avatar.status == ObjectStatus.Active || player.avatar.IsPlaying)
+                    if (player.avatar.status == ObjectStatus.Active || player.avatar.IsPlayingTheGame)
                     {
                         if (player.avatar.lives != 0)
                         {

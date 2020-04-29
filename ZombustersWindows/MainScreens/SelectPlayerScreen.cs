@@ -225,7 +225,7 @@ namespace ZombustersWindows
             Vector2 stickRight = Vector2.Zero;
             GamePadState gpState = input.GetCurrentGamePadStates()[(int)player.Controller];
 
-            if (player.avatar.IsPlaying)
+            if (player.avatar.IsPlayingTheGame)
             {
                 if ((input.IsNewButtonPress(Buttons.A, player.Controller) && player.inputMode == InputMode.GamePad)
                 || ((input.IsNewKeyPress(Keys.Space, player.Controller) && player.inputMode == InputMode.Keyboard)))
@@ -340,14 +340,15 @@ namespace ZombustersWindows
                 {
                     canStartGame = false;
                     player.inputMode = InputMode.GamePad;
-                    player.avatar.Activate(player);
+                    player.avatar.Activate();
+                    player.IsPlaying = true;
                     player.isReady = false;
                 }
                 if (input.IsNewKeyPress(Keys.Enter, player.Controller) && !isThereAPlayerWithKeyboard)
                 {
                     canStartGame = false;
                     player.inputMode = InputMode.Keyboard;
-                    player.avatar.Activate(player);
+                    player.IsPlaying = true;
                     player.isReady = false;
                     isThereAPlayerWithKeyboard = true;
                 }

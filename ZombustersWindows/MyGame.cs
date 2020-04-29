@@ -141,10 +141,10 @@ namespace ZombustersWindows
             if (currentGameState != GameState.Paused) {
                 if (!bPaused && bStateReady) {
                     totalGameSeconds += (float)gameTime.ElapsedGameTime.TotalSeconds;
-                    foreach (Player cplayer in players) {
-                        if (cplayer.IsPlaying)
+                    foreach (Player player in players) {
+                        if (player.IsPlaying)
                         {
-                            cplayer.avatar.Update(gameTime, totalGameSeconds);
+                            player.avatar.Update(gameTime, totalGameSeconds);
                         }
                     }
                 }

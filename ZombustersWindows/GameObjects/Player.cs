@@ -130,9 +130,9 @@ namespace ZombustersWindows
             }
         }
 
-        public void SaveLeaderBoard(int score)
+        public void SaveLeaderBoard()
         {
-            TopScoreEntry entry = new TopScoreEntry(name, score);
+            TopScoreEntry entry = new TopScoreEntry(name, avatar.score);
             game.topScoreListContainer.addEntry(0, entry);
             game.storageDataSource.SaveScoreListToFile(LEADERBOARD_FILENAME, game.topScoreListContainer.scoreList);
         }
