@@ -82,7 +82,7 @@ namespace ZombustersWindows
 
             storageDataSource = new StorageDataSource(ref bugSnagClient);
 
-            InitPlayers();
+            
             currentNetworkSetting = 0;
 #if DEBUG
             FrameRateComponent = new FrameRateCounter(this);
@@ -97,10 +97,10 @@ namespace ZombustersWindows
 
         private void InitPlayers()
         {
-            players[(int)PlayerIndex.One] = new Player(options, audio, this, Color.Blue, Strings.PlayerOneString);
-            players[(int)PlayerIndex.Two] = new Player(options, audio, this, Color.Red, Strings.PlayerTwoString);
-            players[(int)PlayerIndex.Three] = new Player(options, audio, this, Color.Green, Strings.PlayerThreeString);
-            players[(int)PlayerIndex.Four] = new Player(options, audio, this, Color.Yellow, Strings.PlayerFourString);
+            players[(int)PlayerIndex.One] = new Player(options, audio, this, Color.Blue, Strings.PlayerOneString, GraphicsDevice.Viewport);
+            players[(int)PlayerIndex.Two] = new Player(options, audio, this, Color.Red, Strings.PlayerTwoString, GraphicsDevice.Viewport);
+            players[(int)PlayerIndex.Three] = new Player(options, audio, this, Color.Green, Strings.PlayerThreeString, GraphicsDevice.Viewport);
+            players[(int)PlayerIndex.Four] = new Player(options, audio, this, Color.Yellow, Strings.PlayerFourString, GraphicsDevice.Viewport);
 
             for (int playerIndex = 0; playerIndex < MAX_PLAYERS; playerIndex++)
             {
@@ -121,8 +121,9 @@ namespace ZombustersWindows
         }
 
         protected override void Initialize() {
-            InitializeMetrics();   
+            InitializeMetrics();
             base.Initialize();
+            InitPlayers();
             screenManager.AddScreen(new LogoScreen());
             currentGameState = GameState.SignIn;
         }

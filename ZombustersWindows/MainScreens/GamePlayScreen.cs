@@ -24,10 +24,6 @@ namespace ZombustersWindows
 
         readonly MyGame game;
         Rectangle uiBounds;
-        NeutralInput playerOneInput;
-        NeutralInput playerTwoInput;
-        NeutralInput playerThreeInput;
-        NeutralInput playerFourInput;
         MouseState mouseState;
         readonly InputState input = new InputState();
         private readonly GamePlayMenu menu = null;
@@ -290,14 +286,14 @@ namespace ZombustersWindows
         #region Input Processing
         public override void HandleInput(InputState input)
         {
-            playerOneInput = ProcessPlayer(game.players[0], input);
+            game.players[0].neutralInput = ProcessPlayer(game.players[0], input);
 
             if (game.players[1].IsPlaying)
-                playerTwoInput = ProcessPlayer(game.players[1], input);
+                game.players[1].neutralInput = ProcessPlayer(game.players[1], input);
             if (game.players[2].IsPlaying)
-                playerThreeInput = ProcessPlayer(game.players[2], input);
+                game.players[2].neutralInput = ProcessPlayer(game.players[2], input);
             if (game.players[3].IsPlaying)
-                playerFourInput = ProcessPlayer(game.players[3], input);
+                game.players[3].neutralInput = ProcessPlayer(game.players[3], input);
 
             // Read in our gestures
             foreach (GestureSample gesture in input.GetGestures())
@@ -678,24 +674,7 @@ namespace ZombustersWindows
         {
             for (byte i = 0; i < game.players.Length; i++)
             {
-                switch (i)
-                {
-                    case 0:
-                        UpdatePlayer(i, game.totalGameSeconds, (float)gameTime.ElapsedGameTime.TotalSeconds, playerOneInput);
-                        break;
-                    case 1:
-                        UpdatePlayer(i, game.totalGameSeconds, (float)gameTime.ElapsedGameTime.TotalSeconds, playerTwoInput);
-                        break;
-                    case 2:
-                        UpdatePlayer(i, game.totalGameSeconds, (float)gameTime.ElapsedGameTime.TotalSeconds, playerThreeInput);
-                        break;
-                    case 3:
-                        UpdatePlayer(i, game.totalGameSeconds, (float)gameTime.ElapsedGameTime.TotalSeconds, playerFourInput);
-                        break;
-                    default:
-                        UpdatePlayer(0, game.totalGameSeconds, (float)gameTime.ElapsedGameTime.TotalSeconds, playerOneInput);
-                        break;
-                }
+                UpdatePlayer(i, game.totalGameSeconds, (float)gameTime.ElapsedGameTime.TotalSeconds, game.players[i].neutralInput);
             }
         }
 

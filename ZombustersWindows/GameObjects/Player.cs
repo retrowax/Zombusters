@@ -14,6 +14,7 @@ namespace ZombustersWindows
         public PlayerIndex Controller;
         public bool IsRemote;
         public InputMode inputMode = InputMode.NotExistent;
+        public NeutralInput neutralInput;
         public OptionsState optionsState;
         public AudioManager audioManager;
         public bool isReady;
@@ -42,13 +43,13 @@ namespace ZombustersWindows
             public int Level;
         }
 
-        public Player(OptionsState options, AudioManager audio, MyGame game, Color color, string name)
+        public Player(OptionsState options, AudioManager audio, MyGame game, Color color, string name, Viewport viewport)
         {
             this.optionsState = options;
             this.audioManager = audio;
             this.game = game;
             this.avatar = new Avatar(color);
-            this.avatar.Initialize(game.GraphicsDevice.Viewport);
+            this.avatar.Initialize(viewport);
             this.inputMode = InputMode.NotExistent;
             this.name = name;
         }
