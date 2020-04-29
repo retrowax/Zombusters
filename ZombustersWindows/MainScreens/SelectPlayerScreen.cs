@@ -88,34 +88,36 @@ namespace ZombustersWindows
             avatarTexture = new List<Texture2D>(4);
             avatarPixelatedTexture = new List<Texture2D>(4);
             cardBkgTexture = new List<Texture2D>(4);
-            for (i = 0; i < 4; i++)
+            for (i = 0; i < game.players.Length; i++)
             {
-                game.currentPlayers[i].character = 0;
+                game.players[i].avatar.character = 0;
             }
-            avatarNameList = new List<string>(4);
-            avatarNameList.Add("Tracy");
-            avatarNameList.Add("Charles");
-            avatarNameList.Add("Ryan");
-            avatarNameList.Add("Peter");
+            avatarNameList = new List<string>(4)
+            {
+                "Tracy",
+                "Charles",
+                "Ryan",
+                "Peter"
+            };
 
             levelSelected = 1;
             canStartGame = false;
             isMMandHost = false;
 
-            game.currentPlayers[0].Player.LoadSavedGame();
+            game.players[0].LoadSavedGame();
 
             // Nos aseguramos que no se queda marcado el flag de selección de personaje
-            foreach (Avatar player in game.currentPlayers)
+            foreach (Player player in game.players)
             {
-                if (game.currentPlayers[0].Equals(player))
+                if (game.players[0].Equals(player))
                 {
-                    player.isReady = false;
-                    player.status = ObjectStatus.Active;
+                    player.avatar.isReady = false;
+                    player.avatar.status = ObjectStatus.Active;
                 }
                 else
                 {
-                    player.isReady = false;
-                    player.status = ObjectStatus.Inactive;
+                    player.avatar.isReady = false;
+                    player.avatar.status = ObjectStatus.Inactive;
                 }
             }
 
@@ -208,14 +210,14 @@ namespace ZombustersWindows
 
         public override void HandleInput(InputState input)
         {
-            if (game.currentPlayers[0].Player.Controller == PlayerIndex.One)
-                playerOneInput = ProcessPlayer(game.currentPlayers[0], input);
-            if (game.currentPlayers[1].Player.Controller == PlayerIndex.Two)
-                playerTwoInput = ProcessPlayer(game.currentPlayers[1], input);
-            if (game.currentPlayers[2].Player.Controller == PlayerIndex.Three)
-                playerThreeInput = ProcessPlayer(game.currentPlayers[2], input);
-            if (game.currentPlayers[3].Player.Controller == PlayerIndex.Four)
-                playerFourInput = ProcessPlayer(game.currentPlayers[3], input);
+            if (game.players[0].Controller == PlayerIndex.One)
+                playerOneInput = ProcessPlayer(game.players[0].avatar, input);
+            if (game.players[1].Controller == PlayerIndex.Two)
+                playerTwoInput = ProcessPlayer(game.players[1].avatar, input);
+            if (game.players[2].Controller == PlayerIndex.Three)
+                playerThreeInput = ProcessPlayer(game.players[2].avatar, input);
+            if (game.players[3].Controller == PlayerIndex.Four)
+                playerFourInput = ProcessPlayer(game.players[3].avatar, input);
 
             base.HandleInput(input);
         }
@@ -377,9 +379,9 @@ namespace ZombustersWindows
                 if (canStartGame)
                 {
                     List<int> ListPlayersAreGoingToPlay = new List<int>();
-                    for (int i = 0; i < game.currentPlayers.Length; i++)
+                    for (int i = 0; i < game.players.Length; i++)
                     {
-                        if (game.currentPlayers[i].status == ObjectStatus.Active)
+                        if (game.players[i].avatar.status == ObjectStatus.Active)
                         {
                             ListPlayersAreGoingToPlay.Add(i);
                         }
@@ -528,14 +530,14 @@ namespace ZombustersWindows
             int playersActive = 0;
             int numPlayersReady = 0;
 
-            foreach (Avatar player in game.currentPlayers)
+            foreach (Player player in game.players)
             {
-                if (player.status == ObjectStatus.Active)
+                if (player.avatar.status == ObjectStatus.Active)
                 {
                     playersActive += 1;
                 }
 
-                if (player.isReady == true)
+                if (player.avatar.isReady == true)
                 {
                     numPlayersReady += 1;
                 }
@@ -624,7 +626,7 @@ namespace ZombustersWindows
         private void DrawSelectCharacters(Vector2 pos, SpriteBatch batch)
         {
             string[] lines;
-            Avatar cplayer;
+            Player player;
             byte index;
             Vector2 contextMenuPosition = new Vector2(uiBounds.X + 22, pos.Y - 100);
             Vector2 MenuTitlePosition = new Vector2(contextMenuPosition.X - 3, contextMenuPosition.Y - 300);
@@ -634,22 +636,22 @@ namespace ZombustersWindows
             batch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, null, null, null, null, Resolution.getTransformationMatrix());
 
             //foreach (Avatar cplayer in game.currentPlayers)
-            for (index = 0; index < game.currentPlayers.Length; index++)
+            for (index = 0; index < game.players.Length; index++)
             {
-                cplayer = game.currentPlayers[index];
+                player = game.players[index];
 
-                if (cplayer.Player != null)
+                if (player != null)
                 {
-                    if (cplayer.status == ObjectStatus.Active)
+                    if (player.avatar.status == ObjectStatus.Active)
                     {
                         batch.Draw(cardBkgTexture[0], CharacterPosition, Color.White);
                         batch.Draw(cardBkgTexture[1], CharacterPosition, Color.White);
 
-                        batch.Draw(avatarTexture[cplayer.character], CharacterPosition, Color.White);
+                        batch.Draw(avatarTexture[player.avatar.character], CharacterPosition, Color.White);
 
                         batch.Draw(cardBkgTexture[2], CharacterPosition, Color.White);
 
-                        if (cplayer.isReady == true)
+                        if (player.isReady == true)
                         {
                             batch.Draw(cardBkgTexture[3], CharacterPosition, Color.White);
                             batch.DrawString(DigitLowFont, Strings.ReadySelPlayerString,
@@ -657,16 +659,16 @@ namespace ZombustersWindows
                                 Color.Black);
                         }
 
-                        batch.Draw(avatarPixelatedTexture[cplayer.character], new Vector2(CharacterPosition.X + (avatarTexture[cplayer.character].Width / 2) - avatarPixelatedTexture[cplayer.character].Width / 2,
-                            CharacterPosition.Y + (avatarTexture[cplayer.character].Height - avatarPixelatedTexture[cplayer.character].Height)), null, Color.White, 0, Vector2.Zero, 1.0f, SpriteEffects.None, 1.0f);
+                        batch.Draw(avatarPixelatedTexture[player.avatar.character], new Vector2(CharacterPosition.X + (avatarTexture[player.avatar.character].Width / 2) - avatarPixelatedTexture[player.avatar.character].Width / 2,
+                            CharacterPosition.Y + (avatarTexture[player.avatar.character].Height - avatarPixelatedTexture[player.avatar.character].Height)), null, Color.White, 0, Vector2.Zero, 1.0f, SpriteEffects.None, 1.0f);
 
-                        if (cplayer.Player.Name != null)
+                        if (player.Name != null)
                         {
-                            batch.DrawString(MenuInfoFont, cplayer.Player.Name, new Vector2(CharacterPosition.X - Convert.ToInt32(MenuInfoFont.MeasureString(cplayer.Player.Name).Y), CharacterPosition.Y + 2 + cardBkgTexture[1].Height),
+                            batch.DrawString(MenuInfoFont, player.Name, new Vector2(CharacterPosition.X - Convert.ToInt32(MenuInfoFont.MeasureString(player.Name).Y), CharacterPosition.Y + 2 + cardBkgTexture[1].Height),
                                     Color.White, 4.70f, Vector2.Zero, 1.0f, SpriteEffects.None, 1.0f);
                         }
 
-                        batch.DrawString(MenuInfoFont, avatarNameList[cplayer.character], new Vector2(CharacterPosition.X - 5 + cardBkgTexture[1].Width - Convert.ToInt32(MenuInfoFont.MeasureString(avatarNameList[cplayer.character]).X), CharacterPosition.Y + 3),
+                        batch.DrawString(MenuInfoFont, avatarNameList[player.avatar.character], new Vector2(CharacterPosition.X - 5 + cardBkgTexture[1].Width - Convert.ToInt32(MenuInfoFont.MeasureString(avatarNameList[player.avatar.character]).X), CharacterPosition.Y + 3),
                                 Color.Black);
 
                         // Character NOT AVAILABLE
@@ -679,7 +681,7 @@ namespace ZombustersWindows
                                 CharacterPosition.Y + 20 + (pAvatar[cplayer.character].Height - pAvatarPixelated[cplayer.character].Height)), Color.Black);
                         }*/
 
-                        if (cplayer.isReady == false)
+                        if (player.isReady == false)
                         {
                             batch.Draw(arrow, new Vector2(CharacterPosition.X - arrow.Width, CharacterPosition.Y + cardBkgTexture[1].Height / 2 - arrow.Height / 2),
                                 null, Color.White, 0, Vector2.Zero, 0.7f, SpriteEffects.None, 1.0f);
@@ -689,7 +691,7 @@ namespace ZombustersWindows
                     }
                     else
                     {
-                        if (GamePad.GetState(cplayer.Player.Controller).IsConnected && cplayer.Player.Name != null)
+                        if (GamePad.GetState(player.Controller).IsConnected && player.Name != null)
                         {
                             batch.Draw(cardBkgTexture[0], CharacterPosition, Color.White);
                             batch.Draw(cardBkgTexture[1], CharacterPosition, Color.White);
@@ -776,7 +778,7 @@ namespace ZombustersWindows
             batch.DrawString(DigitBigFont, String.Format("{0:00}", levelSelected), new Vector2(uiBounds.X + uiBounds.Width - 135, 90), Color.Salmon);
             batch.DrawString(DigitLowFont, "-", new Vector2(uiBounds.X + uiBounds.Width - 210, 80), Color.White);
 
-            if (game.player1.inputMode == InputMode.Keyboard)
+            if (game.currentInputMode == InputMode.Keyboard)
             {   
                 batch.Draw(kbDown, new Vector2(uiBounds.X + uiBounds.Width - 217, 115), new Rectangle(0, 0, kbDown.Width, kbDown.Height), Color.White, 0.0f, Vector2.Zero, 0.7f, SpriteEffects.None, 0.0f);
             }
@@ -787,7 +789,7 @@ namespace ZombustersWindows
 
             batch.DrawString(DigitLowFont, "+", new Vector2(uiBounds.X + uiBounds.Width - 5, 80), Color.White);
             
-            if (game.player1.inputMode == InputMode.Keyboard)
+            if (game.currentInputMode == InputMode.Keyboard)
             {
                 batch.Draw(kbUp, new Vector2(uiBounds.X + uiBounds.Width - 10, 115), new Rectangle(0, 0, kbUp.Width, kbUp.Height), Color.White, 0.0f, Vector2.Zero, 0.7f, SpriteEffects.None, 0.0f);
             }
@@ -846,7 +848,7 @@ namespace ZombustersWindows
 
             //Texto de contexto del How to Play
             contextMenuPosition = new Vector2(position.X + 300, position.Y - 30);
-            if (game.player1.inputMode == InputMode.Keyboard)
+            if (game.currentInputMode == InputMode.Keyboard)
             {
                 lines = Regex.Split(Strings.PCExplanationString, "\r\n");
             }

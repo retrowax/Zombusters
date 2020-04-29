@@ -356,8 +356,8 @@ namespace ZombustersWindows
                 }
 
                 // If the user change the song...
-                if (((GamePad.GetState(((MyGame)this.Game).player1.Controller).Buttons.LeftShoulder == ButtonState.Pressed) || (GamePad.GetState(((MyGame)this.Game).player2.Controller).Buttons.LeftShoulder == ButtonState.Pressed) ||
-                    (GamePad.GetState(((MyGame)this.Game).player3.Controller).Buttons.LeftShoulder == ButtonState.Pressed) || (GamePad.GetState(((MyGame)this.Game).player4.Controller).Buttons.LeftShoulder == ButtonState.Pressed))
+                if (((GamePad.GetState(((MyGame)this.Game).players[0].Controller).Buttons.LeftShoulder == ButtonState.Pressed) || (GamePad.GetState(((MyGame)this.Game).players[1].Controller).Buttons.LeftShoulder == ButtonState.Pressed) ||
+                    (GamePad.GetState(((MyGame)this.Game).players[2].Controller).Buttons.LeftShoulder == ButtonState.Pressed) || (GamePad.GetState(((MyGame)this.Game).players[3].Controller).Buttons.LeftShoulder == ButtonState.Pressed))
                     && buttonReleased == true)
                 {
                     if (ShowText == false)
@@ -368,8 +368,8 @@ namespace ZombustersWindows
                 }
 
                 //Don't change the song until release.
-                if ((GamePad.GetState(((MyGame)this.Game).player1.Controller).Buttons.LeftShoulder == ButtonState.Released) && (GamePad.GetState(((MyGame)this.Game).player2.Controller).Buttons.LeftShoulder == ButtonState.Released) &&
-                    (GamePad.GetState(((MyGame)this.Game).player3.Controller).Buttons.LeftShoulder == ButtonState.Released) && (GamePad.GetState(((MyGame)this.Game).player4.Controller).Buttons.LeftShoulder == ButtonState.Released))
+                if ((GamePad.GetState(((MyGame)this.Game).players[0].Controller).Buttons.LeftShoulder == ButtonState.Released) && (GamePad.GetState(((MyGame)this.Game).players[1].Controller).Buttons.LeftShoulder == ButtonState.Released) &&
+                    (GamePad.GetState(((MyGame)this.Game).players[2].Controller).Buttons.LeftShoulder == ButtonState.Released) && (GamePad.GetState(((MyGame)this.Game).players[3].Controller).Buttons.LeftShoulder == ButtonState.Released))
                 {
                     buttonReleased = true;
                 }

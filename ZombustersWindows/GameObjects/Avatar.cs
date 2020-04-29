@@ -55,10 +55,11 @@ namespace ZombustersWindows
 
         public bool isLoosingLife;
 
-        public Avatar()             
+        public Avatar(Color color)             
         {
             bullets = new List<Vector4>(bulletmax);
             shotgunbullets = new List<ShotgunShell>(pelletmax);
+            this.color = color;
         }
       
                

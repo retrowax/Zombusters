@@ -103,8 +103,8 @@ namespace ZombustersWindows
             // Progress the Zombie animation
             bool isProgressed = TankAnimation.Update(gameTime);
 
-            this.behaviors.Pursuit.Target = game.currentPlayers[0].position;
-            this.behaviors.Pursuit.UpdateEvaderEntity(game.currentPlayers[0].entity);
+            this.behaviors.Pursuit.Target = game.avatars[0].position;
+            this.behaviors.Pursuit.UpdateEvaderEntity(game.avatars[0].entity);
             this.entity.Velocity += this.behaviors.Update(gameTime, this.entity);
             this.entity.Velocity = VectorHelper.TruncateVector(this.entity.Velocity, this.entity.MaxSpeed / 1.5f);
             this.entity.Position += this.entity.Velocity;

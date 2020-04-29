@@ -88,7 +88,7 @@ namespace ZombustersWindows
                 }
             }
 
-            game.InitializeMain(e.PlayerIndex, inputMode);
+            //game.InitializeMain(e.PlayerIndex, inputMode);
             this.ScreenManager.AddScreen(new MenuScreen());
             ExitScreen();
         }

@@ -22,6 +22,7 @@ namespace ZombustersWindows
         private MyGame game;
         public Texture2D gamerPicture;
         private string name;
+        public Avatar avatar;
 
         public string Name
         {
@@ -41,19 +42,15 @@ namespace ZombustersWindows
             public int Level;
         }
 
-        public Player(OptionsState options, AudioManager audio, MyGame game)
+        public Player(OptionsState options, AudioManager audio, MyGame game, Color color, string name)
         {
             this.optionsState = options;
             this.audioManager = audio;
             this.game = game;
-        }
-
-        public void InitLocal(PlayerIndex controller, string name, InputMode inputMode, MyGame game)
-        {
-            this.game = game;
-            this.inputMode = inputMode;
-            this.Controller = controller;
-            this.Name = name;
+            this.avatar = new Avatar(color);
+            this.avatar.Initialize(game.GraphicsDevice.Viewport);
+            this.inputMode = InputMode.NotExistent;
+            this.name = name;
         }
 
         #region Managing Gamer Presence
@@ -79,10 +76,10 @@ namespace ZombustersWindows
         {
             SaveGameData data = new SaveGameData
             {
-                PlayerName = game.currentPlayers[0].Player.Name,
+                PlayerName = game.players[0].Name,
                 Level = currentLevelNumber
             };
-            if (game.currentPlayers[0].Player.levelsUnlocked >= currentLevelNumber)
+            if (game.players[0].levelsUnlocked >= currentLevelNumber)
                 return;
             game.storageDataSource.SaveXMLFile(SAVE_GAME_FILENAME, data);
         }
@@ -91,7 +88,7 @@ namespace ZombustersWindows
         {
             SaveGameData data = new SaveGameData();
             data = (SaveGameData)game.storageDataSource.LoadXMLFile(SAVE_GAME_FILENAME, data);
-            game.currentPlayers[0].Player.levelsUnlocked = (byte)data.Level;
+            game.players[0].levelsUnlocked = (byte)data.Level;
         }
 
         public void SaveOptions()

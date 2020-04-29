@@ -15,22 +15,22 @@ namespace ZombustersWindows
     public class MyGame : Game {
         public int VIRTUAL_RESOLUTION_WIDTH = 1280;
         public int VIRTUAL_RESOLUTION_HEIGHT = 720;
+        public const int MAX_PLAYERS = 4;
         private const string ANALYTICS_GAME_KEY = "2a9782ff7b0d7b1326cc50178f587678";
         private const string ANALYTICS_SEC_KEY = "8924590c2447e4a6e5335aea11e16f5ff8150d04";
         private const string BUGSNAG_KEY = "1cad9818fb8d84290d776245cd1f948d";
 
+
         public GraphicsDeviceManager graphics;
         public ScreenManager screenManager;
         public GamePlayScreen playScreen;
-        public Avatar[] currentPlayers;
-        public Player player1;
-        public Player player2;
-        public Player player3;
-        public Player player4;
+        public Player[] players = new Player[MAX_PLAYERS];
+        public Color[] playerColors = new Color[MAX_PLAYERS];
         public OptionsState options;
         public AudioManager audio;
         public InputManager input;
         public GameState currentGameState;
+        public InputMode currentInputMode = InputMode.Keyboard;
         public TopScoreListContainer topScoreListContainer;
         public MusicComponent musicComponent;
         public Texture2D blackTexture;
@@ -82,10 +82,7 @@ namespace ZombustersWindows
 
             storageDataSource = new StorageDataSource(ref bugSnagClient);
 
-            player1 = new Player(options, audio, this);
-            player2 = new Player(options, audio, this);
-            player3 = new Player(options, audio, this);
-            player4 = new Player(options, audio, this);
+            InitPlayers();
             currentNetworkSetting = 0;
 #if DEBUG
             FrameRateComponent = new FrameRateCounter(this);
@@ -96,6 +93,19 @@ namespace ZombustersWindows
             musicComponent = new MusicComponent(this);
             Components.Add(musicComponent);
             musicComponent.Enabled = true;
+        }
+
+        private void InitPlayers()
+        {
+            players[(int)PlayerIndex.One] = new Player(options, audio, this, Color.Blue, Strings.PlayerOneString);
+            players[(int)PlayerIndex.Two] = new Player(options, audio, this, Color.Red, Strings.PlayerTwoString);
+            players[(int)PlayerIndex.Three] = new Player(options, audio, this, Color.Green, Strings.PlayerThreeString);
+            players[(int)PlayerIndex.Four] = new Player(options, audio, this, Color.Yellow, Strings.PlayerFourString);
+
+            for (int playerIndex = 0; playerIndex < MAX_PLAYERS; playerIndex++)
+            {
+                LoadOptions(players[playerIndex]);
+            }
         }
 
         private void InitSteamClient()
@@ -111,14 +121,7 @@ namespace ZombustersWindows
         }
 
         protected override void Initialize() {
-            InitializeMetrics();
-
-            currentPlayers = new Avatar[maxGamers];
-            for (int player = 0; player < maxGamers; player++) {
-                currentPlayers[player] = new Avatar();
-                currentPlayers[player].Initialize(GraphicsDevice.Viewport);
-                this.InitializeMain((PlayerIndex)player, InputMode.NotExistent);
-            }      
+            InitializeMetrics();   
             base.Initialize();
             screenManager.AddScreen(new LogoScreen());
             currentGameState = GameState.SignIn;
@@ -137,11 +140,10 @@ namespace ZombustersWindows
             if (currentGameState != GameState.Paused) {
                 if (!bPaused && bStateReady) {
                     totalGameSeconds += (float)gameTime.ElapsedGameTime.TotalSeconds;
-                    foreach (Avatar cplayer in currentPlayers) {
-                        if (cplayer.Player != null) {
-                            if (cplayer.Player.IsPlaying) {
-                                cplayer.Update(gameTime, totalGameSeconds);
-                            }
+                    foreach (Player cplayer in players) {
+                        if (cplayer.IsPlaying)
+                        {
+                            cplayer.avatar.Update(gameTime, totalGameSeconds);
                         }
                     }
                 }
@@ -151,67 +153,48 @@ namespace ZombustersWindows
 
 #region Start Games
 
-        public void InitializeMain(PlayerIndex index, InputMode inputMode) {
-            switch(index)
-            {
-                case PlayerIndex.One:
-                    player1.InitLocal(index, Strings.PlayerOneString, inputMode, this);
-                    LoadOptions(player1);
-                    break;
-                case PlayerIndex.Two:
-                    player2.InitLocal(index, Strings.PlayerTwoString, inputMode, this);
-                    LoadOptions(player2);
-                    break;
-                case PlayerIndex.Three:
-                    player3.InitLocal(index, Strings.PlayerThreeString, inputMode, this);
-                    LoadOptions(player3);
-                    break;
-                case PlayerIndex.Four:
-                    player4.InitLocal(index, Strings.PlayerFourString, inputMode, this);
-                    LoadOptions(player4);
-                    break;
-            }
-        }
 
         public void BeginLocalGame(LevelType level, List<int> PlayersActive) {
             byte i;
 
             Reset();
-            for (i = 0; i < currentPlayers.Length; i++) {
+            /*
+            for (i = 0; i < avatars.Length; i++) {
                 if (i == 0) {
-                    currentPlayers[i].Activate(player1);
-                    currentPlayers[i].Player.Controller = PlayerIndex.One;
-                    currentPlayers[i].color = Color.Blue;
+                    avatars[i].Activate(player1);
+                    avatars[i].Player.Controller = PlayerIndex.One;
+                    avatars[i].color = Color.Blue;
                 } else if (i == 1) {
-                    currentPlayers[i].Player = player2;
-                    currentPlayers[i].Player.Controller = PlayerIndex.Two;
-                    currentPlayers[i].Activate(player2);
-                    currentPlayers[i].color = Color.Red;
+                    avatars[i].Player = player2;
+                    avatars[i].Player.Controller = PlayerIndex.Two;
+                    avatars[i].Activate(player2);
+                    avatars[i].color = Color.Red;
                 } else if (i == 2) {
-                    currentPlayers[i].Player = player3;
-                    currentPlayers[i].Player.Controller = PlayerIndex.Three;
-                    currentPlayers[i].Activate(player3);
-                    currentPlayers[i].color = Color.Green;
+                    avatars[i].Player = player3;
+                    avatars[i].Player.Controller = PlayerIndex.Three;
+                    avatars[i].Activate(player3);
+                    avatars[i].color = Color.Green;
                 } else if (i == 3){
-                    currentPlayers[i].Player = player4;
-                    currentPlayers[i].Player.Controller = PlayerIndex.Four;
-                    currentPlayers[i].Activate(player4);
-                    currentPlayers[i].color = Color.Yellow;
+                    avatars[i].Player = player4;
+                    avatars[i].Player.Controller = PlayerIndex.Four;
+                    avatars[i].Activate(player4);
+                    avatars[i].color = Color.Yellow;
                 } else
                 {
-                    currentPlayers[i].Activate(player1);
-                    currentPlayers[i].Player.Controller = PlayerIndex.One;
-                    currentPlayers[i].color = Color.Blue;
+                    avatars[i].Activate(player1);
+                    avatars[i].Player.Controller = PlayerIndex.One;
+                    avatars[i].color = Color.Blue;
                 }
-                currentPlayers[i].Player.IsRemote = true;
+                avatars[i].Player.IsRemote = true;
                 if (PlayersActive.Contains(i)) {
-                    currentPlayers[i].Player.IsPlaying = true;
-                    currentPlayers[i].status = ObjectStatus.Active;
+                    avatars[i].Player.IsPlaying = true;
+                    avatars[i].status = ObjectStatus.Active;
                 } else {
-                    currentPlayers[i].Player.IsPlaying = false;
-                    currentPlayers[i].status = ObjectStatus.Inactive;
+                    avatars[i].Player.IsPlaying = false;
+                    avatars[i].status = ObjectStatus.Inactive;
                 }
             }
+            */
             bStateReady = true;
             this.audio.StopMenuMusic();
             currentGameState = GameState.InGame;
@@ -228,38 +211,28 @@ namespace ZombustersWindows
 
         public void Reset() {
             totalGameSeconds = 0;
-            currentPlayers[0].Reset(Color.Blue);
-            currentPlayers[1].Reset(Color.Red);
-            currentPlayers[2].Reset(Color.Green);
-            currentPlayers[3].Reset(Color.Yellow);
-            currentPlayers[0].Player = player1;
-            currentPlayers[1].Player = player2;
-            currentPlayers[2].Player = player3;
-            currentPlayers[3].Player = player4;
+            for (int playerIndex = 0; playerIndex < MAX_PLAYERS; playerIndex++)
+            {
+                players[playerIndex].avatar.Reset();
+            }
+            /*avatars[0].Reset(Color.Blue);
+            avatars[1].Reset(Color.Red);
+            avatars[2].Reset(Color.Green);
+            avatars[3].Reset(Color.Yellow);
+            avatars[0].Player = player1;
+            avatars[1].Player = player2;
+            avatars[2].Player = player3;
+            avatars[3].Player = player4;*/
         }
 
         public void Restart() {
-            if (player1.IsPlaying) {
-                currentPlayers[0].Restart();
-                currentPlayers[0].Activate(player1);
-                currentPlayers[0].color = Color.Blue;
+            for (int playerIndex = 0; playerIndex < MAX_PLAYERS; playerIndex++)
+            {
+                if (players[playerIndex].IsPlaying)
+                {
+                    players[playerIndex].avatar.Restart();
+                }
             }
-            if (player2.IsPlaying) {
-                currentPlayers[1].Restart();
-                currentPlayers[1].Activate(player2);
-                currentPlayers[1].color = Color.Red;
-            }
-            if (player3.IsPlaying) {
-                currentPlayers[2].Restart();
-                currentPlayers[2].Activate(player3);
-                currentPlayers[2].color = Color.Green;
-            }
-            if (player4.IsPlaying) {
-                currentPlayers[3].Restart();
-                currentPlayers[3].Activate(player4);
-                currentPlayers[3].color = Color.Yellow;
-            }
-
             totalGameSeconds = 0;
         }
 
@@ -310,24 +283,7 @@ namespace ZombustersWindows
 
 #region Setting Options
         public void DisplayOptions(int player) {
-            this.InitializeMain((PlayerIndex)player, currentPlayers[player].Player.inputMode);
-            switch (player) {
-                case 0:
-                    screenManager.AddScreen(new OptionsScreen(this, this.player1.optionsState));
-                    break;
-                case 1:
-                    screenManager.AddScreen(new OptionsScreen(this, this.player2.optionsState));
-                    break;
-                case 2:
-                    screenManager.AddScreen(new OptionsScreen(this, this.player3.optionsState));
-                    break;
-                case 3:
-                    screenManager.AddScreen(new OptionsScreen(this, this.player4.optionsState));
-                    break;
-                default:
-                    screenManager.AddScreen(new OptionsScreen(this, this.player1.optionsState));
-                    break;
-            }
+            screenManager.AddScreen(new OptionsScreen(this, players[player].optionsState));
         }
 
         public void SetOptions(OptionsState state, Player player) {
@@ -350,11 +306,15 @@ namespace ZombustersWindows
         }
 
         public bool BeginPause() {
-            if (!bPaused) {
+            if (!bPaused)
+            {
                 bPaused = true;
                 audio.PauseSounds();
                 input.BeginPause();
-                player1.BeginPause();
+                for (int playerIndex = 0; playerIndex < MAX_PLAYERS; playerIndex++)
+                {
+                    players[playerIndex].BeginPause();
+                }
             }
             return IsPaused;
         }
@@ -363,7 +323,10 @@ namespace ZombustersWindows
             if (bPaused) {
                 audio.ResumeAll();
                 input.EndPause();
-                player1.EndPause();
+                for (int playerIndex = 0; playerIndex < MAX_PLAYERS; playerIndex++)
+                {
+                    players[playerIndex].EndPause();
+                }
                 bPaused = false;
             }
             return IsPaused;
