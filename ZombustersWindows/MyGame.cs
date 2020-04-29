@@ -155,47 +155,23 @@ namespace ZombustersWindows
 #region Start Games
 
 
-        public void BeginLocalGame(LevelType level, List<int> PlayersActive) {
-            byte i;
-
+        public void BeginLocalGame(LevelType level, List<int> playersActive) {
             Reset();
-            /*
-            for (i = 0; i < avatars.Length; i++) {
-                if (i == 0) {
-                    avatars[i].Activate(player1);
-                    avatars[i].Player.Controller = PlayerIndex.One;
-                    avatars[i].color = Color.Blue;
-                } else if (i == 1) {
-                    avatars[i].Player = player2;
-                    avatars[i].Player.Controller = PlayerIndex.Two;
-                    avatars[i].Activate(player2);
-                    avatars[i].color = Color.Red;
-                } else if (i == 2) {
-                    avatars[i].Player = player3;
-                    avatars[i].Player.Controller = PlayerIndex.Three;
-                    avatars[i].Activate(player3);
-                    avatars[i].color = Color.Green;
-                } else if (i == 3){
-                    avatars[i].Player = player4;
-                    avatars[i].Player.Controller = PlayerIndex.Four;
-                    avatars[i].Activate(player4);
-                    avatars[i].color = Color.Yellow;
-                } else
+
+            for (int playerIndex = 0; playerIndex < players.Length; playerIndex++)
+            {
+                if (playersActive.Contains(playerIndex))
                 {
-                    avatars[i].Activate(player1);
-                    avatars[i].Player.Controller = PlayerIndex.One;
-                    avatars[i].color = Color.Blue;
+                    players[playerIndex].IsPlaying = true;
+                    players[playerIndex].avatar.status = ObjectStatus.Active;
                 }
-                avatars[i].Player.IsRemote = true;
-                if (PlayersActive.Contains(i)) {
-                    avatars[i].Player.IsPlaying = true;
-                    avatars[i].status = ObjectStatus.Active;
-                } else {
-                    avatars[i].Player.IsPlaying = false;
-                    avatars[i].status = ObjectStatus.Inactive;
+                else
+                {
+                    players[playerIndex].IsPlaying = false;
+                    players[playerIndex].avatar.status = ObjectStatus.Inactive;
                 }
             }
-            */
+
             bStateReady = true;
             this.audio.StopMenuMusic();
             currentGameState = GameState.InGame;
