@@ -283,7 +283,7 @@ namespace ZombustersWindows
 
 #region Setting Options
         public void DisplayOptions(int player) {
-            screenManager.AddScreen(new OptionsScreen(this, players[player].optionsState));
+            screenManager.AddScreen(new OptionsScreen(this, players[player]));
         }
 
         public void SetOptions(OptionsState state, Player player) {

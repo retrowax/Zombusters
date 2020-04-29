@@ -189,7 +189,7 @@ namespace ZombustersWindows
         }
 
 
-        public void DestroyShip(float totalGameSeconds)
+        public void DestroyAvatar(float totalGameSeconds)
         {
             deathTimeTotalSeconds = totalGameSeconds;
             status = ObjectStatus.Dying;

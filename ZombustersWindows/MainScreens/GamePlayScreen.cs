@@ -290,14 +290,14 @@ namespace ZombustersWindows
         #region Input Processing
         public override void HandleInput(InputState input)
         {
-            playerOneInput = ProcessPlayer(game.player1, input);
+            playerOneInput = ProcessPlayer(game.players[0], input);
 
-            if (game.player2.IsPlaying)
-                playerTwoInput = ProcessPlayer(game.player2, input);
-            if (game.player3.IsPlaying)
-                playerThreeInput = ProcessPlayer(game.player3, input);
-            if (game.player4.IsPlaying)
-                playerFourInput = ProcessPlayer(game.player4, input);
+            if (game.players[1].IsPlaying)
+                playerTwoInput = ProcessPlayer(game.players[1], input);
+            if (game.players[2].IsPlaying)
+                playerThreeInput = ProcessPlayer(game.players[2], input);
+            if (game.players[3].IsPlaying)
+                playerFourInput = ProcessPlayer(game.players[3], input);
 
             // Read in our gestures
             foreach (GestureSample gesture in input.GetGestures())
@@ -373,28 +373,28 @@ namespace ZombustersWindows
                 {
                     MouseState mouseState = input.GetCurrentMouseState();
                     // Right
-                    if (mouseState.X > game.avatars[0].position.X && (mouseState.X - game.avatars[0].position.X >=100))
+                    if (mouseState.X > game.players[0].avatar.position.X && (mouseState.X - game.players[0].avatar.position.X >=100))
                     {
                         stickRight += new Vector2(1, 0);
                         state.Fire += new Vector2(1, 0);
                     }
 
                     // Down
-                    if (mouseState.Y < game.avatars[0].position.Y && (game.avatars[0].position.Y - mouseState.Y >= 100))
+                    if (mouseState.Y < game.players[0].avatar.position.Y && (game.players[0].avatar.position.Y - mouseState.Y >= 100))
                     {
                         stickRight += new Vector2(0, 1);
                         state.Fire += new Vector2(0, 1);
                     }
 
                     // Left
-                    if (mouseState.X < game.avatars[0].position.X && (game.avatars[0].position.X - mouseState.X >= 100))
+                    if (mouseState.X < game.players[0].avatar.position.X && (game.players[0].avatar.position.X - mouseState.X >= 100))
                     {
                         stickRight += new Vector2(-1, 0);
                         state.Fire += new Vector2(-1, 0);
                     }
 
                     // Top
-                    if (mouseState.Y >= game.avatars[0].position.Y && (mouseState.Y - game.avatars[0].position.Y >= 100))
+                    if (mouseState.Y >= game.players[0].avatar.position.Y && (mouseState.Y - game.players[0].avatar.position.Y >= 100))
                     {
                         stickRight += new Vector2(0, -1);
                         state.Fire += new Vector2(0, -1);
@@ -439,12 +439,12 @@ namespace ZombustersWindows
             input.Update();
 
             // If the user activates the menu...
-            for (i = 0; i < game.avatars.Length; i++)
+            for (i = 0; i < game.players.Length; i++)
             {
-                if ((GamePad.GetState(game.avatars[i].Player.Controller).Buttons.Start == ButtonState.Pressed)
+                if ((GamePad.GetState(game.players[i].Controller).Buttons.Start == ButtonState.Pressed)
                     || (input.IsNewKeyPress(Keys.Escape) && i == 0) || (input.IsNewKeyPress(Keys.Back) && i == 0))
                 {
-                    if (game.avatars[i].status == ObjectStatus.Active)
+                    if (game.players[i].avatar.status == ObjectStatus.Active)
                     {
                         if (!bPaused && (GamePlayStatus != GameplayState.StartLevel && GamePlayStatus != GameplayState.StageCleared))
                         {
@@ -458,41 +458,23 @@ namespace ZombustersWindows
                     }
                     else
                     {
-                        if (game.avatars[i].lives > 0)
+                        if (game.players[i].avatar.lives > 0)
                         {
-                            game.avatars[i].status = ObjectStatus.Active;
-                            switch (game.avatars[i].Player.Controller)
-                            {
-                                case PlayerIndex.One:
-                                    game.avatars[i].Player.Name = Strings.PlayerOneString;
-                                    break;
-                                case PlayerIndex.Two:
-                                    game.avatars[i].Player.Name = Strings.PlayerTwoString;
-                                    break;
-                                case PlayerIndex.Three:
-                                    game.avatars[i].Player.Name = Strings.PlayerThreeString;
-                                    break;
-                                case PlayerIndex.Four:
-                                    game.avatars[i].Player.Name = Strings.PlayerFourString;
-                                    break;
-                                default:
-                                    game.avatars[i].Player.Name = Strings.PlayerOneString;
-                                    break;
-                            }
+                            game.players[i].avatar.status = ObjectStatus.Active;
 
-                            for (j = 0; j < game.avatars.Length; j++)
+                            for (j = 0; j < game.players.Length; j++)
                             {
-                                if (game.avatars[j].character == 0)
+                                if (game.players[j].avatar.character == 0)
                                 {
-                                    game.avatars[i].character = 1;
+                                    game.players[i].avatar.character = 1;
                                 }
-                                else if (game.avatars[j].character == 1)
+                                else if (game.players[j].avatar.character == 1)
                                 {
-                                    game.avatars[i].character = 2;
+                                    game.players[i].avatar.character = 2;
                                 }
                                 else
                                 {
-                                    game.avatars[i].character = 3;
+                                    game.players[i].avatar.character = 3;
                                 }
                             }
                         }
@@ -542,11 +524,11 @@ namespace ZombustersWindows
                         tank.Update(gameTime, game);
                     }
 
-                    for (i = 0; i < game.avatars.Length; i++)
+                    for (i = 0; i < game.players.Length; i++)
                     {
-                        if (game.avatars[i].IsPlaying)
+                        if (game.players[i].avatar.IsPlaying)
                         {
-                            HandleCollisions(game.avatars[i], i, game.totalGameSeconds);
+                            HandleCollisions(game.players[i].avatar, i, game.totalGameSeconds);
                         }
                     }
 
@@ -560,11 +542,11 @@ namespace ZombustersWindows
                     UpdatePlayerPlaying(gameTime);
                     UpdatePlayersAnimations(gameTime);
 
-                    for (i = 0; i < game.avatars.Length; i++)
+                    for (i = 0; i < game.players.Length; i++)
                     {
-                        if (game.avatars[i].IsPlaying)
+                        if (game.players[i].avatar.IsPlaying)
                         {
-                            HandleCollisions(game.avatars[i], i, game.totalGameSeconds);
+                            HandleCollisions(game.players[i].avatar, i, game.totalGameSeconds);
                         }
                     }
 
@@ -591,11 +573,11 @@ namespace ZombustersWindows
                     UpdatePlayerPlaying(gameTime);
                     UpdatePlayersAnimations(gameTime);
 
-                    for (i = 0; i < game.avatars.Length; i++)
+                    for (i = 0; i < game.players.Length; i++)
                     {
-                        if (game.avatars[i].IsPlaying)
+                        if (game.players[i].avatar.IsPlaying)
                         {
-                            HandleCollisions(game.avatars[i], i, game.totalGameSeconds);
+                            HandleCollisions(game.players[i].avatar, i, game.totalGameSeconds);
                         }
                     }
 
@@ -608,13 +590,13 @@ namespace ZombustersWindows
                         timer += (float)gameTime.ElapsedGameTime.TotalSeconds;
                         if (timer >= 5.0f)
                         {
-                            foreach (Avatar player in game.avatars)
+                            foreach (Player player in game.players)
                             {
-                                if (player.Player.IsPlaying)
+                                if (player.IsPlaying)
                                 {
                                     if (game.topScoreListContainer != null)
                                     {
-                                        player.Player.SaveLeaderBoard(player.score);
+                                        player.SaveLeaderBoard(player.avatar.score);
                                     }
 
                                 }
@@ -625,13 +607,13 @@ namespace ZombustersWindows
                         }
                     } else if(currentLevel == LevelType.EndDemo)
                     {
-                        foreach (Avatar player in game.avatars)
+                        foreach (Player player in game.players)
                         {
-                            if (player.Player.IsPlaying)
+                            if (player.IsPlaying)
                             {
                                 if (game.topScoreListContainer != null)
                                 {
-                                    player.Player.SaveLeaderBoard(player.score);
+                                    player.SaveLeaderBoard(player.avatar.score);
                                 }
 
                             }
@@ -694,7 +676,7 @@ namespace ZombustersWindows
 
         private void UpdatePlayerPlaying(GameTime gameTime)
         {
-            for (byte i = 0; i < game.avatars.Length - 1; i++)
+            for (byte i = 0; i < game.players.Length; i++)
             {
                 switch (i)
                 {
@@ -721,8 +703,8 @@ namespace ZombustersWindows
         public void UpdatePlayer(int player, float totalGameSeconds,
             float elapsedGameSeconds, NeutralInput input)
         {
-            if ((game.avatars[player].status == ObjectStatus.Active) ||
-                (game.avatars[player].status == ObjectStatus.Immune))
+            if ((game.players[player].avatar.status == ObjectStatus.Active) ||
+                (game.players[player].avatar.status == ObjectStatus.Immune))
             {
                 ProcessInput(player, totalGameSeconds, elapsedGameSeconds, input);
             }
@@ -749,7 +731,7 @@ namespace ZombustersWindows
             if (input.StickRightMovement.Y < 0)
                 accumFire.Y += GameplayHelper.Move(-input.StickRightMovement.Y, elapsedGameSeconds);
 
-            if (game.avatars[player].Player.inputMode == InputMode.Keyboard)
+            if (game.players[player].inputMode == InputMode.Keyboard)
             {
                 if (Keyboard.GetState().IsKeyDown(Keys.Right) || Keyboard.GetState().IsKeyDown(Keys.D))
                     accumMove.X += GameplayHelper.Move(1, elapsedGameSeconds);
@@ -761,27 +743,27 @@ namespace ZombustersWindows
                     accumMove.Y -= GameplayHelper.Move(1, elapsedGameSeconds);
             }
 
-            game.avatars[player].accumFire = accumFire;
+            game.players[player].avatar.accumFire = accumFire;
 
             TryMove(player);
 
             if (input.ButtonY == true)
             {
-                if (game.avatars[player].currentgun == GunType.pistol)
+                if (game.players[player].avatar.currentgun == GunType.pistol)
                 {
-                    game.avatars[player].currentgun = GunType.machinegun;
+                    game.players[player].avatar.currentgun = GunType.machinegun;
                 }
-                else if (game.avatars[player].currentgun == GunType.machinegun)
+                else if (game.players[player].avatar.currentgun == GunType.machinegun)
                 {
-                    game.avatars[player].currentgun = GunType.flamethrower;
+                    game.players[player].avatar.currentgun = GunType.flamethrower;
                 }
-                else if (game.avatars[player].currentgun == GunType.flamethrower)
+                else if (game.players[player].avatar.currentgun == GunType.flamethrower)
                 {
-                    game.avatars[player].currentgun = GunType.pistol;
+                    game.players[player].avatar.currentgun = GunType.pistol;
                 }
                 else
                 {
-                    game.avatars[player].currentgun = GunType.pistol;
+                    game.players[player].avatar.currentgun = GunType.pistol;
                 }
             }
 
@@ -799,7 +781,7 @@ namespace ZombustersWindows
                 //    angle = -angle;
                 Vector2 direction = Vector2.Normalize(input.Fire);
                 angle = (float)Math.Atan2(input.Fire.X, input.Fire.Y);
-                game.avatars[player].shotAngle = angle;
+                game.players[player].avatar.shotAngle = angle;
                 TryFire((byte)player, totalGameSeconds, angle, direction);
             }
 
@@ -1037,49 +1019,22 @@ namespace ZombustersWindows
             }
         }
 
-        private void DestroyPlayer(byte Player)
+        private void DestroyPlayer(byte playerIndex)
         {
             int i;
             int livesleft = 0;
-
-            if ((Player == 0) && (game.avatars[0].lives == 1))
+            if (game.players[playerIndex].avatar.lives <= 1 && game.players[playerIndex].avatar.status == ObjectStatus.Inactive)
             {
-                if ((game.avatars[1].status == ObjectStatus.Inactive) ||
-                    (game.avatars[1].lives == 0))
-                    GameOver(0);
-                else
-                    PlayerDestroyed(0);
-            }
-            else if ((Player == 1) && (game.avatars[1].lives == 1))
-            {
-                if ((game.avatars[0].status == ObjectStatus.Inactive) ||
-                    (game.avatars[0].lives == 0))
-                    GameOver(1);
-                else
-                    PlayerDestroyed(1);
-            }
-            else if ((Player == 2) && (game.avatars[1].lives == 1))
-            {
-                if ((game.avatars[0].status == ObjectStatus.Inactive) ||
-                    (game.avatars[0].lives == 0))
-                    GameOver(2);
-                else
-                    PlayerDestroyed(2);
-            }
-            else if ((Player == 3) && (game.avatars[1].lives == 1))
-            {
-                if ((game.avatars[0].status == ObjectStatus.Inactive) ||
-                    (game.avatars[0].lives == 0))
-                    GameOver(3);
-                else
-                    PlayerDestroyed(3);
-            }
+                GameOver(playerIndex);
+            } 
             else
-                PlayerDestroyed(Player);
-
-            for (i = 0; i < game.avatars.Length - 1; i++)
             {
-                if (game.avatars[i].lives > 0 && (game.avatars[i].status != ObjectStatus.Inactive))
+                PlayerDestroyed(playerIndex);
+            }
+
+            for (i = 0; i < game.players.Length; i++)
+            {
+                if (game.players[i].avatar.lives > 0 && (game.players[i].avatar.status != ObjectStatus.Inactive))
                 {
                     livesleft++;
                 }
@@ -1090,26 +1045,26 @@ namespace ZombustersWindows
                 GamePlayStatus = GameplayState.GameOver;
                 this.ScreenManager.AddScreen(gomenu);
 
-                if (game.avatars[0].IsPlaying)
+                if (game.players[playerIndex].avatar.IsPlaying)
                 {
-                    if (game.topScoreListContainer != null && game.avatars[0].score > 250)
+                    if (game.topScoreListContainer != null && game.players[playerIndex].avatar.score > 250)
                     {
-                        game.avatars[0].Player.SaveLeaderBoard(game.avatars[0].score);
-                        game.avatars[0].Player.SaveGame(Level.getLevelNumber(currentLevel));
+                        game.players[playerIndex].avatar.Player.SaveLeaderBoard(game.players[playerIndex].avatar.score);
+                        game.players[playerIndex].avatar.Player.SaveGame(Level.getLevelNumber(currentLevel));
                     }
                 }
             }
         }
 
-        private void TryMove(int Player)
+        private void TryMove(int playerIndex)
         {
             bool collision = false;
-            game.avatars[Player].accumMove = accumMove;
+            game.players[playerIndex].avatar.accumMove = accumMove;
 
             if (accumMove.Length() > .5)
             {
-                Vector2 move = game.avatars[Player].VerifyMove(accumMove);
-                Vector2 pos = game.avatars[Player].position + move;
+                Vector2 move = game.players[playerIndex].avatar.VerifyMove(accumMove);
+                Vector2 pos = game.players[playerIndex].avatar.position + move;
 
                 for (int i = 0; i < Level.gameWorld.Obstacles.Count; i++)
                 {
@@ -1148,43 +1103,45 @@ namespace ZombustersWindows
 
                 if (!collision)
                 {
-                    PlayerMove((byte)Player, pos);
+                    PlayerMove((byte)playerIndex, pos);
                 }
 
                 accumMove = Vector2.Zero;
             }
         }
 
-        private void TryFire(byte Player, float TotalGameSeconds, float angle, Vector2 direction)
+        private void TryFire(byte playerIndex, float TotalGameSeconds, float angle, Vector2 direction)
         {
             int RateOfFire;
-            if (game.avatars[Player].status != ObjectStatus.Active && game.avatars[Player].status != ObjectStatus.Immune)
+            if (game.players[playerIndex].avatar.status != ObjectStatus.Active && game.players[playerIndex].avatar.status != ObjectStatus.Immune)
                 return;
 
             // Check if we have ammo; if not we change the current gun to pistol
-            if (game.avatars[Player].ammo[(int)game.avatars[Player].currentgun] == 0)
+            if (game.players[playerIndex].avatar.ammo[(int)game.players[playerIndex].avatar.currentgun] == 0)
             {
-                game.avatars[Player].currentgun = GunType.pistol;
+                game.players[playerIndex].avatar.currentgun = GunType.pistol;
             }
 
-            if (game.avatars[Player].currentgun == GunType.machinegun && game.avatars[Player].ammo[(int)GunType.machinegun] > 0)
+            if (game.players[playerIndex].avatar.currentgun == GunType.machinegun && game.players[playerIndex].avatar.ammo[(int)GunType.machinegun] > 0)
             {
                 RateOfFire = 10;
             }
-            else if (game.avatars[Player].currentgun == GunType.flamethrower && game.avatars[Player].ammo[(int)GunType.flamethrower] > 0)
+            else if (game.players[playerIndex].avatar.currentgun == GunType.flamethrower && game.players[playerIndex].avatar.ammo[(int)GunType.flamethrower] > 0)
             {
                 RateOfFire = 15;
             }
             else
             {
-                RateOfFire = game.avatars[Player].RateOfFire;
+                RateOfFire = game.players[playerIndex].avatar.RateOfFire;
             }
 
-            if (game.avatars[Player].currentgun == GunType.pistol || (game.avatars[Player].currentgun != GunType.pistol && game.avatars[Player].ammo[(int)game.avatars[Player].currentgun] > 0))
+            if (game.players[playerIndex].avatar.currentgun == GunType.pistol 
+                || (game.players[playerIndex].avatar.currentgun != GunType.pistol 
+                && game.players[playerIndex].avatar.ammo[(int)game.players[playerIndex].avatar.currentgun] > 0))
             {
-                if (game.avatars[Player].VerifyFire(TotalGameSeconds, RateOfFire))
+                if (game.players[playerIndex].avatar.VerifyFire(TotalGameSeconds, RateOfFire))
                 {
-                    PlayerFire(Player, TotalGameSeconds, angle, direction);
+                    PlayerFire(playerIndex, TotalGameSeconds, angle, direction);
                 }
             }
         }
@@ -1247,17 +1204,17 @@ namespace ZombustersWindows
                             lIndex -= 0.004f;
                         }
 
-                        for (i = 0; i < game.avatars.Length - 1; i++)
+                        for (i = 0; i < game.players.Length - 1; i++)
                         {
-                            game.avatars[i].position = Level.PlayerSpawnPosition[i];
-                            game.avatars[i].entity.Position = Level.PlayerSpawnPosition[i];
+                            game.players[i].avatar.position = Level.PlayerSpawnPosition[i];
+                            game.players[i].avatar.entity.Position = Level.PlayerSpawnPosition[i];
                         }
 
-                        foreach (Avatar player in game.avatars)
+                        foreach (Player player in game.players)
                         {
-                            if (player.Player.IsPlaying)
+                            if (player.IsPlaying)
                             {
-                                player.Player.SaveGame(Level.getLevelNumber(currentLevel));
+                                player.SaveGame(Level.getLevelNumber(currentLevel));
                             }
                         }
                     }
@@ -1274,10 +1231,10 @@ namespace ZombustersWindows
                     subLevelIndex = 0;
                 }
 
-                for (i = 0; i < game.avatars.Length - 1; i++)
+                for (i = 0; i < game.players.Length; i++)
                 {
-                    game.avatars[i].position = Level.PlayerSpawnPosition[i];
-                    game.avatars[i].entity.Position = Level.PlayerSpawnPosition[i];
+                    game.players[i].avatar.position = Level.PlayerSpawnPosition[i];
+                    game.players[i].avatar.entity.Position = Level.PlayerSpawnPosition[i];
                 }
             }
 
@@ -1287,10 +1244,10 @@ namespace ZombustersWindows
             if (currentLevel != LevelType.EndGame && currentLevel != LevelType.EndDemo)
             {
 
-                for (i = 0; i < game.avatars.Length; i++)
+                for (i = 0; i < game.players.Length; i++)
                 {
-                    game.avatars[i].behaviors.AddBehavior(new ObstacleAvoidance(ref Level.gameWorld, 15.0f));
-                    if (game.avatars[i].status == ObjectStatus.Active || game.avatars[i].status == ObjectStatus.Immune)
+                    game.players[i].avatar.behaviors.AddBehavior(new ObstacleAvoidance(ref Level.gameWorld, 15.0f));
+                    if (game.players[i].avatar.status == ObjectStatus.Active || game.players[i].avatar.status == ObjectStatus.Immune)
                     {
                         numplayersIngame.Add(i);
                     }
@@ -1449,12 +1406,12 @@ namespace ZombustersWindows
 
                 this.ScreenManager.SpriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend);
 
-                foreach (Avatar cplayer in game.avatars)
+                foreach (Player player in game.players)
                 {
-                    if (cplayer.IsPlaying)
+                    if (player.avatar.IsPlaying)
                     {
 
-                        DrawPlayer(cplayer, game.totalGameSeconds, gameTime, Level.furnitureList);
+                        DrawPlayer(player.avatar, game.totalGameSeconds, gameTime, Level.furnitureList);
                     }
                 }
 
@@ -1505,12 +1462,12 @@ namespace ZombustersWindows
                     }
                 }
 
-                foreach (Avatar cplayer in game.avatars)
+                foreach (Player player in game.players)
                 {
-                    if (cplayer.IsPlaying)
+                    if (player.avatar.IsPlaying)
                     {
-                        DrawShotgunShots(cplayer.shotgunbullets, game.totalGameSeconds);
-                        DrawBullets(cplayer.bullets, game.totalGameSeconds);
+                        DrawShotgunShots(player.avatar.shotgunbullets, game.totalGameSeconds);
+                        DrawBullets(player.avatar.bullets, game.totalGameSeconds);
                     }
                 }
 
@@ -1543,9 +1500,9 @@ namespace ZombustersWindows
                 // Draw the Storage Device Icon
                 this.ScreenManager.SpriteBatch.Begin(SpriteSortMode.FrontToBack, BlendState.AlphaBlend, null, null, null, null, Resolution.getTransformationMatrix());
 
-                foreach (Avatar avatar in game.avatars)
+                foreach (Player player in game.players)
                 {
-                    if (avatar.Player.inputMode == InputMode.Keyboard)
+                    if (player.inputMode == InputMode.Keyboard)
                     {
                         this.ScreenManager.SpriteBatch.Draw(cursorTexture, cursorPos, Color.White);
                     }
@@ -1787,9 +1744,9 @@ namespace ZombustersWindows
             {
                 timerplayer += (float)gameTime.ElapsedGameTime.TotalSeconds;
 
-                foreach (Avatar player in game.avatars)
+                foreach (Player player in game.players)
                 {
-                    if (player.IsPlaying)
+                    if (player.avatar.IsPlaying)
                     {
                         if (state.color == Color.Blue)
                         {
@@ -2920,37 +2877,37 @@ namespace ZombustersWindows
             SpriteBatch batch = this.ScreenManager.SpriteBatch;
             batch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, null, null, null, null, Resolution.getTransformationMatrix());
 
-            foreach (Avatar cplayer in game.avatars)
+            foreach (Player player in game.players)
             {
-                if (cplayer.Player != null)
+                if (player != null)
                 {
-                    if (cplayer.status == ObjectStatus.Active || cplayer.IsPlaying)
+                    if (player.avatar.status == ObjectStatus.Active || player.avatar.IsPlaying)
                     {
-                        if (cplayer.lives != 0)
+                        if (player.avatar.lives != 0)
                         {
                             batch.Draw(UIStats, new Vector2(Pos.X, Pos.Y - 20), Color.White);
 
-                            if (cplayer.color == Color.Blue)
+                            if (player.avatar.color == Color.Blue)
                             {
                                 batch.Draw(UIStatsBlue, new Vector2(Pos.X, Pos.Y - 20), Color.White);
                             }
 
-                            if (cplayer.color == Color.Red)
+                            if (player.avatar.color == Color.Red)
                             {
                                 batch.Draw(UIStatsRed, new Vector2(Pos.X, Pos.Y - 20), Color.White);
                             }
 
-                            if (cplayer.color == Color.Green)
+                            if (player.avatar.color == Color.Green)
                             {
                                 batch.Draw(UIStatsGreen, new Vector2(Pos.X, Pos.Y - 20), Color.White);
                             }
 
-                            if (cplayer.color == Color.Yellow)
+                            if (player.avatar.color == Color.Yellow)
                             {
                                 batch.Draw(UIStatsYellow, new Vector2(Pos.X, Pos.Y - 20), Color.White);
                             }
 
-                            switch (cplayer.character)
+                            switch (player.avatar.character)
                             {
                                 case 0:
                                     batch.Draw(jadeUI, new Rectangle(Convert.ToInt32(Pos.X) - jadeUI.Width / 2 + 5, Convert.ToInt32(Pos.Y - 34), jadeUI.Width, jadeUI.Height), Color.White);
@@ -2967,29 +2924,29 @@ namespace ZombustersWindows
                             }
 
                             batch.DrawString(arcade14, "x", new Vector2(Pos.X + 40, Pos.Y + 17), Color.White);
-                            batch.DrawString(arcade28, cplayer.lives.ToString(), new Vector2(Pos.X + 60, Pos.Y), Color.White);
+                            batch.DrawString(arcade28, player.avatar.lives.ToString(), new Vector2(Pos.X + 60, Pos.Y), Color.White);
 
                             // Draw Player Life Counter
                             batch.Draw(heart, new Vector2(Pos.X + 120, Pos.Y + 3), Color.White);
-                            batch.DrawString(arcade14, cplayer.lifecounter.ToString("000"), new Vector2(Pos.X + heart.Width + 125, Pos.Y), Color.White);
+                            batch.DrawString(arcade14, player.avatar.lifecounter.ToString("000"), new Vector2(Pos.X + heart.Width + 125, Pos.Y), Color.White);
 
-                            switch (cplayer.currentgun)
+                            switch (player.avatar.currentgun)
                             {
                                 case GunType.machinegun:
                                     batch.Draw(pistolammoUI, new Vector2(Pos.X + 124, Pos.Y + 23), Color.White);
-                                    batch.DrawString(arcade14, cplayer.ammo[(int)GunType.machinegun].ToString("000"), new Vector2(Pos.X + heart.Width + 125, Pos.Y + 20), Color.White);
+                                    batch.DrawString(arcade14, player.avatar.ammo[(int)GunType.machinegun].ToString("000"), new Vector2(Pos.X + heart.Width + 125, Pos.Y + 20), Color.White);
                                     break;
                                 case GunType.shotgun:
                                     batch.Draw(shotgunammoUI, new Vector2(Pos.X + 123, Pos.Y + 22), Color.White);
-                                    batch.DrawString(arcade14, cplayer.ammo[(int)GunType.shotgun].ToString("000"), new Vector2(Pos.X + heart.Width + 125, Pos.Y + 20), Color.White);
+                                    batch.DrawString(arcade14, player.avatar.ammo[(int)GunType.shotgun].ToString("000"), new Vector2(Pos.X + heart.Width + 125, Pos.Y + 20), Color.White);
                                     break;
                                 case GunType.grenade:
                                     batch.Draw(grenadeammoUI, new Vector2(Pos.X + 122, Pos.Y + 21), Color.White);
-                                    batch.DrawString(arcade14, cplayer.ammo[(int)GunType.grenade].ToString("000"), new Vector2(Pos.X + heart.Width + 125, Pos.Y + 20), Color.White);
+                                    batch.DrawString(arcade14, player.avatar.ammo[(int)GunType.grenade].ToString("000"), new Vector2(Pos.X + heart.Width + 125, Pos.Y + 20), Color.White);
                                     break;
                                 case GunType.flamethrower:
                                     batch.Draw(flamethrowerammoUI, new Vector2(Pos.X + 124, Pos.Y + 23), Color.White);
-                                    batch.DrawString(arcade14, cplayer.ammo[(int)GunType.flamethrower].ToString("000"), new Vector2(Pos.X + heart.Width + 125, Pos.Y + 20), Color.White);
+                                    batch.DrawString(arcade14, player.avatar.ammo[(int)GunType.flamethrower].ToString("000"), new Vector2(Pos.X + heart.Width + 125, Pos.Y + 20), Color.White);
                                     break;
                                 case GunType.pistol:
                                 default:
@@ -2997,7 +2954,7 @@ namespace ZombustersWindows
                                     break;
                             }
 
-                            batch.DrawString(arcade14, "SC" + cplayer.score.ToString("0000000"), new Vector2(Pos.X + 13, Pos.Y + 48), Color.White);
+                            batch.DrawString(arcade14, "SC" + player.avatar.score.ToString("0000000"), new Vector2(Pos.X + 13, Pos.Y + 48), Color.White);
                             Pos.X += UIStats.Width + 50;
                         }
                         else
@@ -3116,7 +3073,7 @@ namespace ZombustersWindows
                     new Vector2(uiBounds.Width - MenuInfoFont.MeasureString(Strings.TrialModeMenuString.ToUpper()).X / 2, uiBounds.Height + 20), Color.White);
 #endif
 
-            if (game.player1.inputMode == InputMode.Touch)
+            if (game.currentInputMode == InputMode.Touch)
             {
                 batch.Draw(pause_icon, new Vector2(uiBounds.Width + 70, uiBounds.Y - 30), Color.White);
 
@@ -3176,9 +3133,9 @@ namespace ZombustersWindows
 
         public void IncreaseLife(byte player)
         {
-            if (game.avatars[player].lives < 9)
+            if (game.players[player].avatar.lives < 9)
             {
-                game.avatars[player].lives++;
+                game.players[player].avatar.lives++;
             }
         }
 
@@ -3186,12 +3143,12 @@ namespace ZombustersWindows
         {
             zombie.DestroyZombie(game.totalGameSeconds, currentgun);
             ActiveZombies--;
-            game.avatars[player].score += 10;
+            game.players[player].avatar.score += 10;
             game.audio.PlayZombieDying();
 
-            if (game.avatars[player].score % 8000 == 0)
+            if (game.players[player].avatar.score % 8000 == 0)
             {
-                game.avatars[player].lives += 1;
+                game.players[player].avatar.lives += 1;
             }
         }
 
@@ -3199,20 +3156,20 @@ namespace ZombustersWindows
         {
             tank.DestroyTank(game.totalGameSeconds);
             ActiveTanks--;
-            game.avatars[player].score += 10;
+            game.players[player].avatar.score += 10;
             game.audio.PlayZombieDying();
 
-            if (game.avatars[player].score % 8000 == 0)
+            if (game.players[player].avatar.score % 8000 == 0)
             {
-                game.avatars[player].lives += 1;
+                game.players[player].avatar.lives += 1;
             }
         }
 
         public void PlayerDestroyed(byte player)
         {
-            game.avatars[player].DestroyShip(game.totalGameSeconds);
-            game.avatars[player].lives--;
-            if (game.avatars[player].character == 0)
+            game.players[player].avatar.DestroyAvatar(game.totalGameSeconds);
+            game.players[player].avatar.lives--;
+            if (game.players[player].avatar.character == 0)
             {
                 game.audio.PlayWomanScream();
             }
@@ -3224,13 +3181,13 @@ namespace ZombustersWindows
 
         public void IncreaseScore(byte player, short amount)
         {
-            game.avatars[player].score += amount;
+            game.players[player].avatar.score += amount;
         }
 
         public void PlayerMove(byte player, Vector2 pos)
         {
-            game.avatars[player].position = pos;
-            game.avatars[player].entity.Position = pos;
+            game.players[player].avatar.position = pos;
+            game.players[player].avatar.entity.Position = pos;
         }
 
         public void PlayerFire(byte player, float totalGameSeconds, float angle, Vector2 direction)
@@ -3238,292 +3195,292 @@ namespace ZombustersWindows
             //NORTH
             if (angle > -0.3925f && angle < 0.3925f)
             {
-                if (game.avatars[player].currentgun == GunType.flamethrower)
+                if (game.players[player].avatar.currentgun == GunType.flamethrower)
                 {
-                    if (game.avatars[player].character == 0)
+                    if (game.players[player].avatar.character == 0)
                     {
-                        game.avatars[player].SetFlameThrower(new Vector2(game.avatars[player].position.X - 27, game.avatars[player].position.Y - 55), angle);
+                        game.players[player].avatar.SetFlameThrower(new Vector2(game.players[player].avatar.position.X - 27, game.players[player].avatar.position.Y - 55), angle);
                     }
                     else
                     {
-                        game.avatars[player].SetFlameThrower(new Vector2(game.avatars[player].position.X - 25, game.avatars[player].position.Y - 61), angle);
+                        game.players[player].avatar.SetFlameThrower(new Vector2(game.players[player].avatar.position.X - 25, game.players[player].avatar.position.Y - 61), angle);
                     }
                 }
-                else if (game.avatars[player].currentgun == GunType.shotgun)
+                else if (game.players[player].avatar.currentgun == GunType.shotgun)
                 {
-                    game.avatars[player].shotgunbullets.Add(new ShotgunShell(game.avatars[player].position, direction, angle, totalGameSeconds));
+                    game.players[player].avatar.shotgunbullets.Add(new ShotgunShell(game.players[player].avatar.position, direction, angle, totalGameSeconds));
                 }
                 else
                 {
-                    if (game.avatars[player].ammo[(int)GunType.machinegun] > 0)
+                    if (game.players[player].avatar.ammo[(int)GunType.machinegun] > 0)
                     {
-                        if (game.avatars[player].character == 0)
+                        if (game.players[player].avatar.character == 0)
                         {
-                            game.avatars[player].bullets.Add(new Vector4(game.avatars[player].position.X + 4, game.avatars[player].position.Y - 55, totalGameSeconds, angle));
+                            game.players[player].avatar.bullets.Add(new Vector4(game.players[player].avatar.position.X + 4, game.players[player].avatar.position.Y - 55, totalGameSeconds, angle));
                         }
                         else
                         {
-                            game.avatars[player].bullets.Add(new Vector4(game.avatars[player].position.X + 6, game.avatars[player].position.Y - 61, totalGameSeconds, angle));
+                            game.players[player].avatar.bullets.Add(new Vector4(game.players[player].avatar.position.X + 6, game.players[player].avatar.position.Y - 61, totalGameSeconds, angle));
                         }
                     }
                     else
                     {
-                        if (game.avatars[player].character == 0)
+                        if (game.players[player].avatar.character == 0)
                         {
-                            game.avatars[player].bullets.Add(new Vector4(game.avatars[player].position.X + 5, game.avatars[player].position.Y - 57, totalGameSeconds, angle));
+                            game.players[player].avatar.bullets.Add(new Vector4(game.players[player].avatar.position.X + 5, game.players[player].avatar.position.Y - 57, totalGameSeconds, angle));
                         }
                         else
                         {
-                            game.avatars[player].bullets.Add(new Vector4(game.avatars[player].position.X + 8, game.avatars[player].position.Y - 63, totalGameSeconds, angle));
+                            game.players[player].avatar.bullets.Add(new Vector4(game.players[player].avatar.position.X + 8, game.players[player].avatar.position.Y - 63, totalGameSeconds, angle));
                         }
                     }
                 }
             }
             else if (angle > 0.3925f && angle < 1.1775f) //NORTH-EAST
             {
-                if (game.avatars[player].currentgun == GunType.flamethrower)
+                if (game.players[player].avatar.currentgun == GunType.flamethrower)
                 {
-                    if (game.avatars[player].character == 0)
+                    if (game.players[player].avatar.character == 0)
                     {
-                        game.avatars[player].SetFlameThrower(new Vector2(game.avatars[player].position.X - 3, game.avatars[player].position.Y - 67), angle);
+                        game.players[player].avatar.SetFlameThrower(new Vector2(game.players[player].avatar.position.X - 3, game.players[player].avatar.position.Y - 67), angle);
                     }
                     else
                     {
-                        game.avatars[player].SetFlameThrower(new Vector2(game.avatars[player].position.X, game.avatars[player].position.Y - 70), angle);
+                        game.players[player].avatar.SetFlameThrower(new Vector2(game.players[player].avatar.position.X, game.players[player].avatar.position.Y - 70), angle);
                     }
                 }
-                else if (game.avatars[player].currentgun == GunType.shotgun)
+                else if (game.players[player].avatar.currentgun == GunType.shotgun)
                 {
-                    game.avatars[player].shotgunbullets.Add(new ShotgunShell(game.avatars[player].position, direction, angle, totalGameSeconds));
+                    game.players[player].avatar.shotgunbullets.Add(new ShotgunShell(game.players[player].avatar.position, direction, angle, totalGameSeconds));
                 }
                 else
                 {
-                    if (game.avatars[player].ammo[(int)GunType.machinegun] > 0)
+                    if (game.players[player].avatar.ammo[(int)GunType.machinegun] > 0)
                     {
-                        game.avatars[player].bullets.Add(new Vector4(game.avatars[player].position.X + 33, game.avatars[player].position.Y - 60, totalGameSeconds, angle));
+                        game.players[player].avatar.bullets.Add(new Vector4(game.players[player].avatar.position.X + 33, game.players[player].avatar.position.Y - 60, totalGameSeconds, angle));
                     }
                     else
                     {
-                        game.avatars[player].bullets.Add(new Vector4(game.avatars[player].position.X + 27, game.avatars[player].position.Y - 60, totalGameSeconds, angle));
+                        game.players[player].avatar.bullets.Add(new Vector4(game.players[player].avatar.position.X + 27, game.players[player].avatar.position.Y - 60, totalGameSeconds, angle));
                     }
                 }
             }
             else if (angle > 1.1775f && angle < 1.9625f) //EAST
             {
-                if (game.avatars[player].currentgun == GunType.flamethrower)
+                if (game.players[player].avatar.currentgun == GunType.flamethrower)
                 {
-                    if (game.avatars[player].character == 0)
+                    if (game.players[player].avatar.character == 0)
                     {
-                        game.avatars[player].SetFlameThrower(new Vector2(game.avatars[player].position.X + 30, game.avatars[player].position.Y - 58), angle);
+                        game.players[player].avatar.SetFlameThrower(new Vector2(game.players[player].avatar.position.X + 30, game.players[player].avatar.position.Y - 58), angle);
                     }
                     else
                     {
-                        game.avatars[player].SetFlameThrower(new Vector2(game.avatars[player].position.X + 30, game.avatars[player].position.Y - 60), angle);
+                        game.players[player].avatar.SetFlameThrower(new Vector2(game.players[player].avatar.position.X + 30, game.players[player].avatar.position.Y - 60), angle);
                     }
                 }
-                else if (game.avatars[player].currentgun == GunType.shotgun)
+                else if (game.players[player].avatar.currentgun == GunType.shotgun)
                 {
-                    game.avatars[player].shotgunbullets.Add(new ShotgunShell(game.avatars[player].position, direction, angle, totalGameSeconds));
+                    game.players[player].avatar.shotgunbullets.Add(new ShotgunShell(game.players[player].avatar.position, direction, angle, totalGameSeconds));
                 }
                 else
                 {
-                    if (game.avatars[player].ammo[(int)GunType.machinegun] > 0)
+                    if (game.players[player].avatar.ammo[(int)GunType.machinegun] > 0)
                     {
-                        if (game.avatars[player].character == 0)
+                        if (game.players[player].avatar.character == 0)
                         {
-                            game.avatars[player].bullets.Add(new Vector4(new Vector2(game.avatars[player].position.X + 35, game.avatars[player].position.Y - 27), totalGameSeconds, angle));
+                            game.players[player].avatar.bullets.Add(new Vector4(new Vector2(game.players[player].avatar.position.X + 35, game.players[player].avatar.position.Y - 27), totalGameSeconds, angle));
                         }
                         else
                         {
-                            game.avatars[player].bullets.Add(new Vector4(new Vector2(game.avatars[player].position.X + 37, game.avatars[player].position.Y - 29), totalGameSeconds, angle));
+                            game.players[player].avatar.bullets.Add(new Vector4(new Vector2(game.players[player].avatar.position.X + 37, game.players[player].avatar.position.Y - 29), totalGameSeconds, angle));
                         }
                     }
                     else
                     {
-                        if (game.avatars[player].character == 0)
+                        if (game.players[player].avatar.character == 0)
                         {
-                            game.avatars[player].bullets.Add(new Vector4(new Vector2(game.avatars[player].position.X + 35, game.avatars[player].position.Y - 34), totalGameSeconds, angle));
+                            game.players[player].avatar.bullets.Add(new Vector4(new Vector2(game.players[player].avatar.position.X + 35, game.players[player].avatar.position.Y - 34), totalGameSeconds, angle));
                         }
                         else
                         {
-                            game.avatars[player].bullets.Add(new Vector4(new Vector2(game.avatars[player].position.X + 36, game.avatars[player].position.Y - 38), totalGameSeconds, angle));
+                            game.players[player].avatar.bullets.Add(new Vector4(new Vector2(game.players[player].avatar.position.X + 36, game.players[player].avatar.position.Y - 38), totalGameSeconds, angle));
                         }
                     }
                 }
             }
             else if (angle > 1.19625f && angle < 2.7275f) //SOUTH-EAST
             {
-                if (game.avatars[player].currentgun == GunType.flamethrower)
+                if (game.players[player].avatar.currentgun == GunType.flamethrower)
                 {
-                    if (game.avatars[player].character == 0)
+                    if (game.players[player].avatar.character == 0)
                     {
-                        game.avatars[player].SetFlameThrower(new Vector2(game.avatars[player].position.X + 45, game.avatars[player].position.Y - 27), angle);
+                        game.players[player].avatar.SetFlameThrower(new Vector2(game.players[player].avatar.position.X + 45, game.players[player].avatar.position.Y - 27), angle);
                     }
                     else
                     {
-                        game.avatars[player].SetFlameThrower(new Vector2(game.avatars[player].position.X + 47, game.avatars[player].position.Y - 28), angle);
+                        game.players[player].avatar.SetFlameThrower(new Vector2(game.players[player].avatar.position.X + 47, game.players[player].avatar.position.Y - 28), angle);
                     }
                 }
-                else if (game.avatars[player].currentgun == GunType.shotgun)
+                else if (game.players[player].avatar.currentgun == GunType.shotgun)
                 {
-                    game.avatars[player].shotgunbullets.Add(new ShotgunShell(game.avatars[player].position, direction, angle, totalGameSeconds));
+                    game.players[player].avatar.shotgunbullets.Add(new ShotgunShell(game.players[player].avatar.position, direction, angle, totalGameSeconds));
                 }
                 else
                 {
-                    if (game.avatars[player].ammo[(int)GunType.machinegun] > 0)
+                    if (game.players[player].avatar.ammo[(int)GunType.machinegun] > 0)
                     {
-                        game.avatars[player].bullets.Add(new Vector4(game.avatars[player].position.X + 27, game.avatars[player].position.Y, totalGameSeconds, angle));
+                        game.players[player].avatar.bullets.Add(new Vector4(game.players[player].avatar.position.X + 27, game.players[player].avatar.position.Y, totalGameSeconds, angle));
                     }
                     else
                     {
-                        game.avatars[player].bullets.Add(new Vector4(game.avatars[player].position.X + 32, game.avatars[player].position.Y - 5, totalGameSeconds, angle));
+                        game.players[player].avatar.bullets.Add(new Vector4(game.players[player].avatar.position.X + 32, game.players[player].avatar.position.Y - 5, totalGameSeconds, angle));
                     }
                 }
             }
             else if (angle > 2.7275f || angle < -2.7275f) //SOUTH
             {
-                if (game.avatars[player].currentgun == GunType.flamethrower)
+                if (game.players[player].avatar.currentgun == GunType.flamethrower)
                 {
-                    if (game.avatars[player].character == 0)
+                    if (game.players[player].avatar.character == 0)
                     {
-                        game.avatars[player].SetFlameThrower(new Vector2(game.avatars[player].position.X + 35, game.avatars[player].position.Y + 2), angle);
+                        game.players[player].avatar.SetFlameThrower(new Vector2(game.players[player].avatar.position.X + 35, game.players[player].avatar.position.Y + 2), angle);
                     }
                     else
                     {
-                        game.avatars[player].SetFlameThrower(new Vector2(game.avatars[player].position.X + 37, game.avatars[player].position.Y + 2), angle);
+                        game.players[player].avatar.SetFlameThrower(new Vector2(game.players[player].avatar.position.X + 37, game.players[player].avatar.position.Y + 2), angle);
                     }
                 }
-                else if (game.avatars[player].currentgun == GunType.shotgun)
+                else if (game.players[player].avatar.currentgun == GunType.shotgun)
                 {
-                    game.avatars[player].shotgunbullets.Add(new ShotgunShell(game.avatars[player].position, direction, angle, totalGameSeconds));
+                    game.players[player].avatar.shotgunbullets.Add(new ShotgunShell(game.players[player].avatar.position, direction, angle, totalGameSeconds));
                 }
                 else
                 {
-                    if (game.avatars[player].ammo[(int)GunType.machinegun] > 0)
+                    if (game.players[player].avatar.ammo[(int)GunType.machinegun] > 0)
                     {
-                        if (game.avatars[player].character == 0)
+                        if (game.players[player].avatar.character == 0)
                         {
-                            game.avatars[player].bullets.Add(new Vector4(game.avatars[player].position.X + 1, game.avatars[player].position.Y + 5, totalGameSeconds, angle));
+                            game.players[player].avatar.bullets.Add(new Vector4(game.players[player].avatar.position.X + 1, game.players[player].avatar.position.Y + 5, totalGameSeconds, angle));
                         }
                         else
                         {
-                            game.avatars[player].bullets.Add(new Vector4(game.avatars[player].position.X + 4, game.avatars[player].position.Y + 7, totalGameSeconds, angle));
+                            game.players[player].avatar.bullets.Add(new Vector4(game.players[player].avatar.position.X + 4, game.players[player].avatar.position.Y + 7, totalGameSeconds, angle));
                         }
                     }
                     else
                     {
-                        if (game.avatars[player].character == 0)
+                        if (game.players[player].avatar.character == 0)
                         {
-                            game.avatars[player].bullets.Add(new Vector4(game.avatars[player].position.X + 5, game.avatars[player].position.Y + 5, totalGameSeconds, angle));
+                            game.players[player].avatar.bullets.Add(new Vector4(game.players[player].avatar.position.X + 5, game.players[player].avatar.position.Y + 5, totalGameSeconds, angle));
                         }
                         else
                         {
-                            game.avatars[player].bullets.Add(new Vector4(game.avatars[player].position.X - 7, game.avatars[player].position.Y + 5, totalGameSeconds, angle));
+                            game.players[player].avatar.bullets.Add(new Vector4(game.players[player].avatar.position.X - 7, game.players[player].avatar.position.Y + 5, totalGameSeconds, angle));
                         }
                     }
                 }
             }
             else if (angle < -1.9625f && angle > -2.7275f) //SOUTH-WEST
             {
-                if (game.avatars[player].currentgun == GunType.flamethrower)
+                if (game.players[player].avatar.currentgun == GunType.flamethrower)
                 {
-                    if (game.avatars[player].character == 0)
+                    if (game.players[player].avatar.character == 0)
                     {
-                        game.avatars[player].SetFlameThrower(new Vector2(game.avatars[player].position.X - 3, game.avatars[player].position.Y + 19), angle);
+                        game.players[player].avatar.SetFlameThrower(new Vector2(game.players[player].avatar.position.X - 3, game.players[player].avatar.position.Y + 19), angle);
                     }
                     else
                     {
-                        game.avatars[player].SetFlameThrower(new Vector2(game.avatars[player].position.X, game.avatars[player].position.Y + 19), angle);
+                        game.players[player].avatar.SetFlameThrower(new Vector2(game.players[player].avatar.position.X, game.players[player].avatar.position.Y + 19), angle);
                     }
                 }
-                else if (game.avatars[player].currentgun == GunType.shotgun)
+                else if (game.players[player].avatar.currentgun == GunType.shotgun)
                 {
-                    game.avatars[player].shotgunbullets.Add(new ShotgunShell(game.avatars[player].position, direction, angle, totalGameSeconds));
+                    game.players[player].avatar.shotgunbullets.Add(new ShotgunShell(game.players[player].avatar.position, direction, angle, totalGameSeconds));
                 }
                 else
                 {
-                    if (game.avatars[player].ammo[(int)GunType.machinegun] > 0)
+                    if (game.players[player].avatar.ammo[(int)GunType.machinegun] > 0)
                     {
-                        game.avatars[player].bullets.Add(new Vector4(game.avatars[player].position.X - 28, game.avatars[player].position.Y, totalGameSeconds, angle));
+                        game.players[player].avatar.bullets.Add(new Vector4(game.players[player].avatar.position.X - 28, game.players[player].avatar.position.Y, totalGameSeconds, angle));
                     }
                     else
                     {
-                        game.avatars[player].bullets.Add(new Vector4(game.avatars[player].position.X - 35, game.avatars[player].position.Y - 5, totalGameSeconds, angle));
+                        game.players[player].avatar.bullets.Add(new Vector4(game.players[player].avatar.position.X - 35, game.players[player].avatar.position.Y - 5, totalGameSeconds, angle));
                     }
                 }
             }
             else if (angle < -1.1775f && angle > -1.9625f) //WEST
             {
-                if (game.avatars[player].currentgun == GunType.flamethrower)
+                if (game.players[player].avatar.currentgun == GunType.flamethrower)
                 {
-                    if (game.avatars[player].character == 0)
+                    if (game.players[player].avatar.character == 0)
                     {
-                        game.avatars[player].SetFlameThrower(new Vector2(game.avatars[player].position.X - 30, game.avatars[player].position.Y + 6), angle);
+                        game.players[player].avatar.SetFlameThrower(new Vector2(game.players[player].avatar.position.X - 30, game.players[player].avatar.position.Y + 6), angle);
                     }
                     else
                     {
-                        game.avatars[player].SetFlameThrower(new Vector2(game.avatars[player].position.X - 30, game.avatars[player].position.Y + 6), angle);
+                        game.players[player].avatar.SetFlameThrower(new Vector2(game.players[player].avatar.position.X - 30, game.players[player].avatar.position.Y + 6), angle);
                     }
                 }
-                else if (game.avatars[player].currentgun == GunType.shotgun)
+                else if (game.players[player].avatar.currentgun == GunType.shotgun)
                 {
-                    game.avatars[player].shotgunbullets.Add(new ShotgunShell(game.avatars[player].position, direction, angle, totalGameSeconds));
+                    game.players[player].avatar.shotgunbullets.Add(new ShotgunShell(game.players[player].avatar.position, direction, angle, totalGameSeconds));
                 }
                 else
                 {
-                    if (game.avatars[player].ammo[(int)GunType.machinegun] > 0)
+                    if (game.players[player].avatar.ammo[(int)GunType.machinegun] > 0)
                     {
-                        game.avatars[player].bullets.Add(new Vector4(new Vector2(game.avatars[player].position.X - 35, game.avatars[player].position.Y - 26), totalGameSeconds, angle));
+                        game.players[player].avatar.bullets.Add(new Vector4(new Vector2(game.players[player].avatar.position.X - 35, game.players[player].avatar.position.Y - 26), totalGameSeconds, angle));
                     }
                     else
                     {
-                        if (game.avatars[player].character == 0)
+                        if (game.players[player].avatar.character == 0)
                         {
-                            game.avatars[player].bullets.Add(new Vector4(game.avatars[player].position.X - 37, game.avatars[player].position.Y - 34, totalGameSeconds, angle));
+                            game.players[player].avatar.bullets.Add(new Vector4(game.players[player].avatar.position.X - 37, game.players[player].avatar.position.Y - 34, totalGameSeconds, angle));
                         }
                         else
                         {
-                            game.avatars[player].bullets.Add(new Vector4(game.avatars[player].position.X - 36, game.avatars[player].position.Y - 38, totalGameSeconds, angle));
+                            game.players[player].avatar.bullets.Add(new Vector4(game.players[player].avatar.position.X - 36, game.players[player].avatar.position.Y - 38, totalGameSeconds, angle));
                         }
                     }
                 }
             }
             else if (angle < -0.3925f && angle > -1.1775f) //NORTH-WEST
             {
-                if (game.avatars[player].currentgun == GunType.flamethrower)
+                if (game.players[player].avatar.currentgun == GunType.flamethrower)
                 {
-                    if (game.avatars[player].character == 0)
+                    if (game.players[player].avatar.character == 0)
                     {
-                        game.avatars[player].SetFlameThrower(new Vector2(game.avatars[player].position.X - 46, game.avatars[player].position.Y - 23), angle);
+                        game.players[player].avatar.SetFlameThrower(new Vector2(game.players[player].avatar.position.X - 46, game.players[player].avatar.position.Y - 23), angle);
                     }
                     else
                     {
-                        game.avatars[player].SetFlameThrower(new Vector2(game.avatars[player].position.X - 44, game.avatars[player].position.Y - 22), angle);
+                        game.players[player].avatar.SetFlameThrower(new Vector2(game.players[player].avatar.position.X - 44, game.players[player].avatar.position.Y - 22), angle);
                     }
                 }
-                else if (game.avatars[player].currentgun == GunType.shotgun)
+                else if (game.players[player].avatar.currentgun == GunType.shotgun)
                 {
-                    game.avatars[player].shotgunbullets.Add(new ShotgunShell(game.avatars[player].position, direction, angle, totalGameSeconds));
+                    game.players[player].avatar.shotgunbullets.Add(new ShotgunShell(game.players[player].avatar.position, direction, angle, totalGameSeconds));
                 }
                 else
                 {
-                    if (game.avatars[player].ammo[(int)GunType.machinegun] > 0)
+                    if (game.players[player].avatar.ammo[(int)GunType.machinegun] > 0)
                     {
-                        game.avatars[player].bullets.Add(new Vector4(game.avatars[player].position.X - 36, game.avatars[player].position.Y - 57, totalGameSeconds, angle));
+                        game.players[player].avatar.bullets.Add(new Vector4(game.players[player].avatar.position.X - 36, game.players[player].avatar.position.Y - 57, totalGameSeconds, angle));
                     }
                     else
                     {
-                        game.avatars[player].bullets.Add(new Vector4(game.avatars[player].position.X - 32, game.avatars[player].position.Y - 60, totalGameSeconds, angle));
+                        game.players[player].avatar.bullets.Add(new Vector4(game.players[player].avatar.position.X - 32, game.players[player].avatar.position.Y - 60, totalGameSeconds, angle));
                     }
                 }
             }
 
-            if (game.avatars[player].ammo[(int)game.avatars[player].currentgun] > 0)
+            if (game.players[player].avatar.ammo[(int)game.players[player].avatar.currentgun] > 0)
             {
-                game.avatars[player].ammo[(int)game.avatars[player].currentgun] -= 1;
+                game.players[player].avatar.ammo[(int)game.players[player].avatar.currentgun] -= 1;
             }
 
-            switch (game.avatars[player].currentgun)
+            switch (game.players[player].avatar.currentgun)
             {
                 case GunType.pistol:
                     game.audio.PlayShot();
