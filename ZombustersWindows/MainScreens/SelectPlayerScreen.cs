@@ -33,12 +33,6 @@ namespace ZombustersWindows
         List<Texture2D> avatarTexture, avatarPixelatedTexture, cardBkgTexture;
         List<String> avatarNameList;
 
-        NeutralInput[] playerInputList; 
-        NeutralInput playerOneInput;
-        NeutralInput playerTwoInput;
-        NeutralInput playerThreeInput;
-        NeutralInput playerFourInput;
-
         SpriteFont DigitBigFont, DigitLowFont;
         SpriteFont MenuHeaderFont;
         SpriteFont MenuInfoFont;
@@ -120,8 +114,6 @@ namespace ZombustersWindows
                     player.avatar.status = ObjectStatus.Inactive;
                 }
             }
-
-            playerInputList = new NeutralInput[] { playerOneInput, playerTwoInput, playerThreeInput, playerFourInput };
 
             base.Initialize();
 
@@ -211,19 +203,19 @@ namespace ZombustersWindows
         public override void HandleInput(InputState input)
         {
             if (game.players[0].Controller == PlayerIndex.One)
-                playerOneInput = ProcessPlayer(game.players[0].avatar, input);
+                game.players[0].neutralInput = ProcessPlayer(game.players[0], input);
             if (game.players[1].Controller == PlayerIndex.Two)
-                playerTwoInput = ProcessPlayer(game.players[1].avatar, input);
+                game.players[1].neutralInput = ProcessPlayer(game.players[1], input);
             if (game.players[2].Controller == PlayerIndex.Three)
-                playerThreeInput = ProcessPlayer(game.players[2].avatar, input);
+                game.players[2].neutralInput = ProcessPlayer(game.players[2], input);
             if (game.players[3].Controller == PlayerIndex.Four)
-                playerFourInput = ProcessPlayer(game.players[3].avatar, input);
+                game.players[3].neutralInput = ProcessPlayer(game.players[3], input);
 
             base.HandleInput(input);
         }
 
 
-        private NeutralInput ProcessPlayer(Avatar avatar, InputState input)
+        private NeutralInput ProcessPlayer(Player player, InputState input)
         {
             NeutralInput state = new NeutralInput
             {
@@ -231,14 +223,14 @@ namespace ZombustersWindows
             };
             Vector2 stickLeft = Vector2.Zero;
             Vector2 stickRight = Vector2.Zero;
-            GamePadState gpState = input.GetCurrentGamePadStates()[(int)avatar.Player.Controller];
+            GamePadState gpState = input.GetCurrentGamePadStates()[(int)player.Controller];
 
-            if (avatar.IsPlaying)
+            if (player.avatar.IsPlaying)
             {
-                if ((input.IsNewButtonPress(Buttons.A, avatar.Player.Controller) && avatar.Player.inputMode == InputMode.GamePad)
-                || ((input.IsNewKeyPress(Keys.Space, avatar.Player.Controller) && avatar.Player.inputMode == InputMode.Keyboard)))
+                if ((input.IsNewButtonPress(Buttons.A, player.Controller) && player.inputMode == InputMode.GamePad)
+                || ((input.IsNewKeyPress(Keys.Space, player.Controller) && player.inputMode == InputMode.Keyboard)))
                 {
-                    ToggleReady(avatar);
+                    ToggleReady(player.avatar);
                     state.ButtonA = true;
                 }
                 else
@@ -246,15 +238,15 @@ namespace ZombustersWindows
                     state.ButtonA = false;
                 }
 
-                if ((input.IsNewButtonPress(Buttons.DPadLeft, avatar.Player.Controller) && avatar.Player.inputMode == InputMode.GamePad)
-                    || ((input.IsNewButtonPress(Buttons.LeftThumbstickLeft, avatar.Player.Controller) && avatar.Player.inputMode == InputMode.GamePad)
-                    || ((input.IsNewKeyPress(Keys.Left, avatar.Player.Controller) && avatar.Player.inputMode == InputMode.Keyboard))))
+                if ((input.IsNewButtonPress(Buttons.DPadLeft, player.Controller) && player.inputMode == InputMode.GamePad)
+                    || ((input.IsNewButtonPress(Buttons.LeftThumbstickLeft, player.Controller) && player.inputMode == InputMode.GamePad)
+                    || ((input.IsNewKeyPress(Keys.Left, player.Controller) && player.inputMode == InputMode.Keyboard))))
                 {
                     if ((gpState.DPad.Left == ButtonState.Pressed) || (gpState.ThumbSticks.Left.X < 0)
-                    || input.IsNewKeyPress(Keys.Left, avatar.Player.Controller)                           
+                    || input.IsNewKeyPress(Keys.Left, player.Controller)                           
                         )
                     {
-                        ChangeCharacterSelected(avatar, false);
+                        ChangeCharacterSelected(player.avatar, false);
                         state.DPadLeft = true;
                     }
                     else
@@ -267,15 +259,15 @@ namespace ZombustersWindows
                     state.DPadLeft = false;
                 }
 
-                if ((input.IsNewButtonPress(Buttons.DPadRight, avatar.Player.Controller) && avatar.Player.inputMode == InputMode.GamePad)
-                    || ((input.IsNewButtonPress(Buttons.LeftThumbstickRight, avatar.Player.Controller) && avatar.Player.inputMode == InputMode.GamePad)
-                    || ((input.IsNewKeyPress(Keys.Right, avatar.Player.Controller) && avatar.Player.inputMode == InputMode.Keyboard))))
+                if ((input.IsNewButtonPress(Buttons.DPadRight, player.Controller) && player.inputMode == InputMode.GamePad)
+                    || ((input.IsNewButtonPress(Buttons.LeftThumbstickRight, player.Controller) && player.inputMode == InputMode.GamePad)
+                    || ((input.IsNewKeyPress(Keys.Right, player.Controller) && player.inputMode == InputMode.Keyboard))))
                 {
                     if ((gpState.DPad.Right == ButtonState.Pressed) || (gpState.ThumbSticks.Left.X > 0)
-                    || input.IsNewKeyPress(Keys.Right, avatar.Player.Controller)    
+                    || input.IsNewKeyPress(Keys.Right, player.Controller)    
                         )
                     {
-                        ChangeCharacterSelected(avatar, true);
+                        ChangeCharacterSelected(player.avatar, true);
                         state.DPadRight = true;
                     }
                     else
@@ -288,9 +280,9 @@ namespace ZombustersWindows
                     state.DPadRight = false;
                 }
 
-                if ((input.IsNewButtonPress(Buttons.DPadDown, avatar.Player.Controller) && avatar.Player.inputMode == InputMode.GamePad)
-                || ((input.IsNewKeyPress(Keys.Down, avatar.Player.Controller) && avatar.Player.inputMode == InputMode.Keyboard)
-                || ((input.IsNewButtonPress(Buttons.LeftTrigger, avatar.Player.Controller) && avatar.Player.inputMode == InputMode.GamePad))))
+                if ((input.IsNewButtonPress(Buttons.DPadDown, player.Controller) && player.inputMode == InputMode.GamePad)
+                || ((input.IsNewKeyPress(Keys.Down, player.Controller) && player.inputMode == InputMode.Keyboard)
+                || ((input.IsNewButtonPress(Buttons.LeftTrigger, player.Controller) && player.inputMode == InputMode.GamePad))))
                 {
 #if !DEMO
                     if (levelSelected > 1)
@@ -299,9 +291,9 @@ namespace ZombustersWindows
                     }
                     else
                     {
-                        if (avatar.Player.levelsUnlocked != 0)
+                        if (player.levelsUnlocked != 0)
                         {
-                            levelSelected = (byte)avatar.Player.levelsUnlocked;
+                            levelSelected = (byte)player.levelsUnlocked;
                         }
                         else
                         {
@@ -316,12 +308,12 @@ namespace ZombustersWindows
                     state.ButtonLT = false;
                 }
 
-                if ((input.IsNewButtonPress(Buttons.DPadUp, avatar.Player.Controller) && avatar.Player.inputMode == InputMode.GamePad)
-                || ((input.IsNewKeyPress(Keys.Up, avatar.Player.Controller) && avatar.Player.inputMode == InputMode.Keyboard)
-                || ((input.IsNewButtonPress(Buttons.RightTrigger, avatar.Player.Controller) && avatar.Player.inputMode == InputMode.Keyboard))))
+                if ((input.IsNewButtonPress(Buttons.DPadUp, player.Controller) && player.inputMode == InputMode.GamePad)
+                || ((input.IsNewKeyPress(Keys.Up, player.Controller) && player.inputMode == InputMode.Keyboard)
+                || ((input.IsNewButtonPress(Buttons.RightTrigger, player.Controller) && player.inputMode == InputMode.Keyboard))))
                 {
 #if !DEMO
-                    if (levelSelected < avatar.Player.levelsUnlocked)
+                    if (levelSelected < player.levelsUnlocked)
                     {
                         levelSelected += 1;
                     }
@@ -344,26 +336,26 @@ namespace ZombustersWindows
                 state.StickRightMovement = stickRight;
             } else
             {
-                if (input.IsNewButtonPress(Buttons.Start, avatar.Player.Controller))
+                if (input.IsNewButtonPress(Buttons.Start, player.Controller))
                 {
                     canStartGame = false;
-                    avatar.Player.inputMode = InputMode.GamePad;
-                    avatar.Activate(avatar.Player);
-                    avatar.isReady = false;
+                    player.inputMode = InputMode.GamePad;
+                    player.avatar.Activate(player);
+                    player.isReady = false;
                 }
-                if (input.IsNewKeyPress(Keys.Enter, avatar.Player.Controller) && !isThereAPlayerWithKeyboard)
+                if (input.IsNewKeyPress(Keys.Enter, player.Controller) && !isThereAPlayerWithKeyboard)
                 {
                     canStartGame = false;
-                    avatar.Player.inputMode = InputMode.Keyboard;
-                    avatar.Activate(avatar.Player);
-                    avatar.isReady = false;
+                    player.inputMode = InputMode.Keyboard;
+                    player.avatar.Activate(player);
+                    player.isReady = false;
                     isThereAPlayerWithKeyboard = true;
                 }
             }
 
-            if ((input.IsNewButtonPress(Buttons.B, avatar.Player.Controller) && avatar.Player.inputMode == InputMode.GamePad)
-                || ((input.IsNewKeyPress(Keys.Escape, avatar.Player.Controller) && avatar.Player.inputMode == InputMode.Keyboard)
-                || ((input.IsNewKeyPress(Keys.Back, avatar.Player.Controller) && avatar.Player.inputMode == InputMode.Keyboard))))
+            if ((input.IsNewButtonPress(Buttons.B, player.Controller) && player.inputMode == InputMode.GamePad)
+                || ((input.IsNewKeyPress(Keys.Escape, player.Controller) && player.inputMode == InputMode.Keyboard)
+                || ((input.IsNewKeyPress(Keys.Back, player.Controller) && player.inputMode == InputMode.Keyboard))))
             {
                 MenuCanceled(this);
                 state.ButtonB = true;
@@ -373,8 +365,8 @@ namespace ZombustersWindows
                 state.ButtonB = false;
             }
 
-            if ((input.IsNewButtonPress(Buttons.Start, avatar.Player.Controller) && avatar.Player.inputMode == InputMode.GamePad)
-            || ((input.IsNewKeyPress(Keys.Enter, avatar.Player.Controller) && avatar.Player.inputMode == InputMode.Keyboard)))
+            if ((input.IsNewButtonPress(Buttons.Start, player.Controller) && player.inputMode == InputMode.GamePad)
+            || ((input.IsNewKeyPress(Keys.Enter, player.Controller) && player.inputMode == InputMode.Keyboard)))
             {
                 if (canStartGame)
                 {
