@@ -327,7 +327,7 @@ namespace ZombustersWindows
             };
             Vector2 stickLeft = Vector2.Zero;
             Vector2 stickRight = Vector2.Zero;
-            GamePadState gpState = input.GetCurrentGamePadStates()[(int)player.Controller];
+            GamePadState gpState = input.GetCurrentGamePadStates()[(int)player.playerIndex];
 
             // Get gamepad state
             if (VirtualThumbsticks.LeftThumbstick != Vector2.Zero || VirtualThumbsticks.RightThumbstick != Vector2.Zero)
@@ -397,7 +397,7 @@ namespace ZombustersWindows
                 }
             }
 
-            if (input.IsNewButtonPress(Buttons.Y, player.Controller)
+            if (input.IsNewButtonPress(Buttons.Y, player.playerIndex)
                 || input.IsNewKeyPress(Keys.LeftControl)
                 || input.IsNewKeyPress(Keys.E)
                 || input.GetCurrentMouseState().RightButton == ButtonState.Pressed)
@@ -409,7 +409,7 @@ namespace ZombustersWindows
                 state.ButtonY = false;
             }
 
-            if (input.IsNewButtonPress(Buttons.RightShoulder, player.Controller)
+            if (input.IsNewButtonPress(Buttons.RightShoulder, player.playerIndex)
                 || input.IsNewKeyPress(Keys.Tab)
                 || input.GetCurrentMouseState().MiddleButton == ButtonState.Pressed)
             {
@@ -436,7 +436,7 @@ namespace ZombustersWindows
             // If the user activates the menu...
             for (i = 0; i < game.players.Length; i++)
             {
-                if ((GamePad.GetState(game.players[i].Controller).Buttons.Start == ButtonState.Pressed)
+                if ((GamePad.GetState(game.players[i].playerIndex).Buttons.Start == ButtonState.Pressed)
                     || (input.IsNewKeyPress(Keys.Escape) && i == 0) || (input.IsNewKeyPress(Keys.Back) && i == 0))
                 {
                     if (game.players[i].avatar.status == ObjectStatus.Active)

@@ -144,11 +144,11 @@ namespace ZombustersWindows
             switch (menu.Selection)
             {
                 case 0:
-                    HandleFXAudio(input, player.Controller);
+                    HandleFXAudio(input, player.playerIndex);
                     volumeSlider.UnsetColor = menu.SelectedColor;
                     break;
                 case 1:
-                    HandleMusic(input, player.Controller);
+                    HandleMusic(input, player.playerIndex);
                     musicSlider.UnsetColor = menu.SelectedColor;
                     break;
                 default:
