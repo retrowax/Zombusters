@@ -155,22 +155,8 @@ namespace ZombustersWindows
 #region Start Games
 
 
-        public void BeginLocalGame(LevelType level, List<int> playersActive) {
+        public void BeginLocalGame(LevelType level) {
             Reset();
-
-            for (int playerIndex = 0; playerIndex < players.Length; playerIndex++)
-            {
-                if (playersActive.Contains(playerIndex))
-                {
-                    players[playerIndex].IsPlaying = true;
-                    players[playerIndex].avatar.status = ObjectStatus.Active;
-                }
-                else
-                {
-                    players[playerIndex].IsPlaying = false;
-                    players[playerIndex].avatar.status = ObjectStatus.Inactive;
-                }
-            }
 
             bStateReady = true;
             this.audio.StopMenuMusic();

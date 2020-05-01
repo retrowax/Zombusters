@@ -286,14 +286,13 @@ namespace ZombustersWindows
         #region Input Processing
         public override void HandleInput(InputState input)
         {
-            game.players[0].neutralInput = ProcessPlayer(game.players[0], input);
-
-            if (game.players[1].IsPlaying)
-                game.players[1].neutralInput = ProcessPlayer(game.players[1], input);
-            if (game.players[2].IsPlaying)
-                game.players[2].neutralInput = ProcessPlayer(game.players[2], input);
-            if (game.players[3].IsPlaying)
-                game.players[3].neutralInput = ProcessPlayer(game.players[3], input);
+            foreach (Player player in game.players)
+            {
+                if (player.IsPlaying)
+                {
+                    player.neutralInput = ProcessPlayer(player, input);
+                }
+            }
 
             // Read in our gestures
             foreach (GestureSample gesture in input.GetGestures())
@@ -550,7 +549,7 @@ namespace ZombustersWindows
                     {
                         if (zombie.status == ObjectStatus.Dying)
                         {
-                            zombie.Update(gameTime, ((MyGame)this.ScreenManager.Game), Zombies);
+                            zombie.Update(gameTime, game, Zombies);
                         }
                     }
 
@@ -558,7 +557,7 @@ namespace ZombustersWindows
                     {
                         if (tank.status == ObjectStatus.Dying)
                         {
-                            tank.Update(gameTime, ((MyGame)this.ScreenManager.Game));
+                            tank.Update(gameTime, game);
                         }
                     }
 

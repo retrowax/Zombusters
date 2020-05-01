@@ -114,17 +114,27 @@ namespace ZombustersWindows
 
             position = new Vector2(position.X, position.Y + 32);
 #if DEMO
-            spriteBatch.DrawString(spriteFont, "Demo On", position, Color.White);
+            spriteBatch.DrawString(smallspriteFont, "Demo On", position, Color.White);
 #else
-            spriteBatch.DrawString(spriteFont, "Demo Off", position, Color.White);
+            spriteBatch.DrawString(smallspriteFont, "Demo Off", position, Color.White);
 #endif
             count = 0;
             foreach (Player player in game.players)
             {
-                position = new Vector2(position.X, position.Y + 32);
-                spriteBatch.DrawString(spriteFont, "Name: " + player.Name, position, Color.White);
-                position = new Vector2(position.X, position.Y + 32);
-                spriteBatch.DrawString(spriteFont, "ULevels" + count.ToString() + ": " + player.levelsUnlocked.ToString(), position, Color.White);
+                position = new Vector2(position.X, position.Y + 22);
+                spriteBatch.DrawString(smallspriteFont, "Name: " + player.Name, position, Color.White);
+                position = new Vector2(position.X, position.Y + 22);
+                spriteBatch.DrawString(smallspriteFont, "Levels" + count.ToString() + ": " + player.levelsUnlocked.ToString(), position, Color.White);
+                position = new Vector2(position.X, position.Y + 22);
+                spriteBatch.DrawString(smallspriteFont, "Avatar Status: " + player.avatar.status.ToString(), position, Color.White);
+                position = new Vector2(position.X, position.Y + 22);
+                spriteBatch.DrawString(smallspriteFont, "Input: " + player.inputMode.ToString(), position, Color.White);
+                position = new Vector2(position.X, position.Y + 22);
+                spriteBatch.DrawString(smallspriteFont, "IsPlaying: " + player.IsPlaying.ToString(), position, Color.White);
+                position = new Vector2(position.X, position.Y + 22);
+                spriteBatch.DrawString(smallspriteFont, "IsReady: " + player.isReady.ToString(), position, Color.White);
+                position = new Vector2(position.X, position.Y + 22);
+
 
 #if !WINDOWS_PHONE && !WINDOWS && !NETCOREAPP
                 if (avatar.Player.Container != null)

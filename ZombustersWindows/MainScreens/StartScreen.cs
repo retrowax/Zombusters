@@ -85,11 +85,20 @@ namespace ZombustersWindows
                     || gamePadState.IsButtonDown(Buttons.A) || gamePadState.IsButtonDown(Buttons.Start))
                 {
                     inputMode = InputMode.GamePad;
+                    game.players[gamePadIndex].avatar.Activate();
+                    game.players[gamePadIndex].IsPlaying = true;
+                    game.players[gamePadIndex].inputMode = inputMode;
                 }
             }
 
+            if (inputMode == InputMode.Keyboard)
+            {
+                game.players[(int)PlayerIndex.One].avatar.Activate();
+                game.players[(int)PlayerIndex.One].IsPlaying = true;
+                game.players[(int)PlayerIndex.One].inputMode = inputMode;
+            }
+
             game.currentInputMode = inputMode;
-            game.players[(int)PlayerIndex.One].inputMode = inputMode;
             this.ScreenManager.AddScreen(new MenuScreen());
             ExitScreen();
         }

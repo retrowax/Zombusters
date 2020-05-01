@@ -23,7 +23,6 @@ namespace ZombustersWindows
         public GunType currentgun;
         public Vector2 accumMove;
         public Vector2 accumFire;
-        public bool isReady;
 
         public bool IsPlayingTheGame
         {
@@ -106,7 +105,6 @@ namespace ZombustersWindows
         public void Reset()
         {            
             Restart();
-            Deactivate();
         }
 
         /// <summary>

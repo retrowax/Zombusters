@@ -20,7 +20,8 @@ namespace ZombustersWindows
         Rectangle uiBounds;
         Vector2 selectPos;
 
-        Texture2D btnLT, btnRT;
+        Texture2D btnLT;
+        Texture2D btnRT;
 
         Texture2D logoMenu;
         Texture2D lineaMenu;
@@ -30,7 +31,9 @@ namespace ZombustersWindows
         Texture2D kbUp;
         Texture2D kbDown;
 
-        List<Texture2D> avatarTexture, avatarPixelatedTexture, cardBkgTexture;
+        List<Texture2D> avatarTexture;
+        List<Texture2D> avatarPixelatedTexture;
+        List<Texture2D> cardBkgTexture;
         List<String> avatarNameList;
 
         SpriteFont DigitBigFont, DigitLowFont;
@@ -40,10 +43,8 @@ namespace ZombustersWindows
 
         private MenuComponent menu;
         readonly Boolean isMatchmaking;
-        Boolean canStartGame;
         Boolean isMMandHost;
         public byte levelSelected;
-        Boolean isThereAPlayerWithKeyboard = false;
 
         public SelectPlayerScreen(Boolean ismatchmaking)
         {
@@ -76,7 +77,6 @@ namespace ZombustersWindows
             menu.Initialize();
             menu.uiBounds = menu.Extents;
 
-            //Offset de posicion del menu
             menu.uiBounds.Offset(uiBounds.X, 300);
 
             avatarTexture = new List<Texture2D>(4);
@@ -95,25 +95,10 @@ namespace ZombustersWindows
             };
 
             levelSelected = 1;
-            canStartGame = false;
             isMMandHost = false;
 
+            // TODO: Need to load all the saved games for all the players?
             game.players[0].LoadSavedGame();
-
-            // Nos aseguramos que no se queda marcado el flag de selección de personaje
-            foreach (Player player in game.players)
-            {
-                if (game.players[0].Equals(player))
-                {
-                    player.avatar.isReady = false;
-                    player.avatar.status = ObjectStatus.Active;
-                }
-                else
-                {
-                    player.avatar.isReady = false;
-                    player.avatar.status = ObjectStatus.Inactive;
-                }
-            }
 
             base.Initialize();
 
@@ -124,31 +109,16 @@ namespace ZombustersWindows
         {
             byte i;
 
-            // Key "Up"
             kbUp = game.Content.Load<Texture2D>(@"Keyboard/key_up");
-
-            // Key "Down"
             kbDown = game.Content.Load<Texture2D>(@"Keyboard/key_down");
-
-            // Button Left Trigger
             btnLT = game.Content.Load<Texture2D>("xboxControllerLeftTrigger");
-
-            // Button Right Trigger
             btnRT = game.Content.Load<Texture2D>("xboxControllerRightTrigger");
-
-            //Linea blanca separatoria
             lineaMenu = game.Content.Load<Texture2D>(@"menu/linea_menu");
-
-            //Logo Menu
             logoMenu = game.Content.Load<Texture2D>(@"menu/logo_menu");
-
-            //Arrow
             arrow = game.Content.Load<Texture2D>(@"InGame/SelectPlayer/arrowLeft");
-
-            //Fondo negro fade menu
             myGroupBKG = game.Content.Load<Texture2D>(@"menu/mygroup_bkg");
 
-            for (i=1; i <= 4; i++)
+            for (i=1; i <= game.players.Length; i++)
             {
                 avatarTexture.Add(game.Content.Load<Texture2D>(@"InGame/SelectPlayer/p" + i.ToString() + "Avatar"));
                 avatarPixelatedTexture.Add(game.Content.Load<Texture2D>(@"InGame/SelectPlayer/p" + i.ToString() + "Avatar_pixel"));
@@ -162,39 +132,39 @@ namespace ZombustersWindows
             base.LoadContent();
         }
 
-        void ToggleReady(Avatar avatar)
+        void ToggleReady(Player player)
         {
-            if (avatar.isReady == true)
+            if (player.isReady == true)
             {
-                avatar.isReady = false;
+                player.isReady = false;
             }
             else
             {
-                avatar.isReady = true;
+                player.isReady = true;
             }
         }
 
-        void ChangeCharacterSelected(Avatar avatar, Boolean directionToRight)
+        void ChangeCharacterSelected(Player player, Boolean directionToRight)
         {
             if (directionToRight == true)
             {
-                if (avatar.isReady == false)
+                if (player.isReady == false)
                 {
-                    avatar.character += 1;
-                    if (avatar.character > 3)
+                    player.avatar.character += 1;
+                    if (player.avatar.character > 3)
                     {
-                        avatar.character = 0;
+                        player.avatar.character = 0;
                     }
                 }
             }
             else
             {
-                if (avatar.isReady == false)
+                if (player.isReady == false)
                 {
-                    avatar.character -= 1;
-                    if (avatar.character < 0 || avatar.character > 3)
+                    player.avatar.character -= 1;
+                    if (player.avatar.character < 0 || player.avatar.character > 3)
                     {
-                        avatar.character = 3;
+                        player.avatar.character = 3;
                     }
                 }
             }
@@ -202,15 +172,10 @@ namespace ZombustersWindows
 
         public override void HandleInput(InputState input)
         {
-            if (game.players[0].Controller == PlayerIndex.One)
-                game.players[0].neutralInput = ProcessPlayer(game.players[0], input);
-            if (game.players[1].Controller == PlayerIndex.Two)
-                game.players[1].neutralInput = ProcessPlayer(game.players[1], input);
-            if (game.players[2].Controller == PlayerIndex.Three)
-                game.players[2].neutralInput = ProcessPlayer(game.players[2], input);
-            if (game.players[3].Controller == PlayerIndex.Four)
-                game.players[3].neutralInput = ProcessPlayer(game.players[3], input);
-
+            foreach (Player player in game.players)
+            {
+                player.neutralInput = ProcessPlayer(player, input);
+            }
             base.HandleInput(input);
         }
 
@@ -225,12 +190,12 @@ namespace ZombustersWindows
             Vector2 stickRight = Vector2.Zero;
             GamePadState gpState = input.GetCurrentGamePadStates()[(int)player.Controller];
 
-            if (player.avatar.IsPlayingTheGame)
+            if (player.IsPlaying)
             {
                 if ((input.IsNewButtonPress(Buttons.A, player.Controller) && player.inputMode == InputMode.GamePad)
                 || ((input.IsNewKeyPress(Keys.Space, player.Controller) && player.inputMode == InputMode.Keyboard)))
                 {
-                    ToggleReady(player.avatar);
+                    ToggleReady(player);
                     state.ButtonA = true;
                 }
                 else
@@ -246,7 +211,7 @@ namespace ZombustersWindows
                     || input.IsNewKeyPress(Keys.Left, player.Controller)                           
                         )
                     {
-                        ChangeCharacterSelected(player.avatar, false);
+                        ChangeCharacterSelected(player, false);
                         state.DPadLeft = true;
                     }
                     else
@@ -267,7 +232,7 @@ namespace ZombustersWindows
                     || input.IsNewKeyPress(Keys.Right, player.Controller)    
                         )
                     {
-                        ChangeCharacterSelected(player.avatar, true);
+                        ChangeCharacterSelected(player, true);
                         state.DPadRight = true;
                     }
                     else
@@ -338,19 +303,20 @@ namespace ZombustersWindows
             {
                 if (input.IsNewButtonPress(Buttons.Start, player.Controller))
                 {
-                    canStartGame = false;
                     player.inputMode = InputMode.GamePad;
                     player.avatar.Activate();
                     player.IsPlaying = true;
                     player.isReady = false;
                 }
-                if (input.IsNewKeyPress(Keys.Enter, player.Controller) && !isThereAPlayerWithKeyboard)
+                if (input.IsNewKeyPress(Keys.Enter, player.Controller))
                 {
-                    canStartGame = false;
-                    player.inputMode = InputMode.Keyboard;
-                    player.IsPlaying = true;
-                    player.isReady = false;
-                    isThereAPlayerWithKeyboard = true;
+                    if (!IsKeyboardAlreadyInUse())
+                    {
+                        player.inputMode = InputMode.Keyboard;
+                        player.avatar.Activate();
+                        player.IsPlaying = true;
+                        player.isReady = false;
+                    }                    
                 }
             }
 
@@ -369,51 +335,42 @@ namespace ZombustersWindows
             if ((input.IsNewButtonPress(Buttons.Start, player.Controller) && player.inputMode == InputMode.GamePad)
             || ((input.IsNewKeyPress(Keys.Enter, player.Controller) && player.inputMode == InputMode.Keyboard)))
             {
-                if (canStartGame)
+                if (CanStartGame())
                 {
-                    List<int> ListPlayersAreGoingToPlay = new List<int>();
-                    for (int i = 0; i < game.players.Length; i++)
-                    {
-                        if (game.players[i].avatar.status == ObjectStatus.Active)
-                        {
-                            ListPlayersAreGoingToPlay.Add(i);
-                        }
-                    }
-
                     switch (levelSelected)
                     {
                         case 1:
-                            game.BeginLocalGame(LevelType.One, ListPlayersAreGoingToPlay);
+                            game.BeginLocalGame(LevelType.One);
                             break;
                         case 2:
-                            game.BeginLocalGame(LevelType.Two, ListPlayersAreGoingToPlay);
+                            game.BeginLocalGame(LevelType.Two);
                             break;
                         case 3:
-                            game.BeginLocalGame(LevelType.Three, ListPlayersAreGoingToPlay);
+                            game.BeginLocalGame(LevelType.Three);
                             break;
                         case 4:
-                            game.BeginLocalGame(LevelType.Four, ListPlayersAreGoingToPlay);
+                            game.BeginLocalGame(LevelType.Four);
                             break;
                         case 5:
-                            game.BeginLocalGame(LevelType.Five, ListPlayersAreGoingToPlay);
+                            game.BeginLocalGame(LevelType.Five);
                             break;
                         case 6:
-                            game.BeginLocalGame(LevelType.Six, ListPlayersAreGoingToPlay);
+                            game.BeginLocalGame(LevelType.Six);
                             break;
                         case 7:
-                            game.BeginLocalGame(LevelType.Seven, ListPlayersAreGoingToPlay);
+                            game.BeginLocalGame(LevelType.Seven);
                             break;
                         case 8:
-                            game.BeginLocalGame(LevelType.Eight, ListPlayersAreGoingToPlay);
+                            game.BeginLocalGame(LevelType.Eight);
                             break;
                         case 9:
-                            game.BeginLocalGame(LevelType.Nine, ListPlayersAreGoingToPlay);
+                            game.BeginLocalGame(LevelType.Nine);
                             break;
                         case 10:
-                            game.BeginLocalGame(LevelType.Ten, ListPlayersAreGoingToPlay);
+                            game.BeginLocalGame(LevelType.Ten);
                             break;
                         default:
-                            game.BeginLocalGame(LevelType.One, ListPlayersAreGoingToPlay);
+                            game.BeginLocalGame(LevelType.One);
                             break;
                     }
                 }
@@ -508,45 +465,23 @@ namespace ZombustersWindows
         {
             if (game.currentGameState != GameState.Paused)
             {
-                CheckIfCanStartTheGame();
+                CanStartGame();
             }
             base.Update(gameTime, otherScreenHasFocus, coveredByOtherScreen);
         }
 
-        public void UpdateCurrentPlayersList()
+        public bool CanStartGame()
         {
-
-        }
-
-        private void CheckIfCanStartTheGame()
-        {
-            int playersActive = 0;
-            int numPlayersReady = 0;
-
-            foreach (Player player in game.players)
+            bool canStart = true;
+            foreach(Player player in game.players)
             {
-                if (player.avatar.status == ObjectStatus.Active)
+                if (player.IsPlaying && !player.isReady)
                 {
-                    playersActive += 1;
-                }
-
-                if (player.avatar.isReady == true)
-                {
-                    numPlayersReady += 1;
+                    canStart = false;
                 }
             }
 
-            if (playersActive != 0)
-            {
-                if (playersActive == numPlayersReady)
-                {
-                    canStartGame = true;
-                }
-                else
-                {
-                    canStartGame = false;
-                }
-            }
+            return canStart;
         }
 
         /// <summary>
@@ -570,6 +505,19 @@ namespace ZombustersWindows
             {
                 ScreenManager.AddScreen(confirmExitMessageBox);
             }
+        }
+
+        private bool IsKeyboardAlreadyInUse()
+        {
+            bool isKeyboardUsed = false;
+            foreach (Player player in game.players)
+            {
+                if (player.inputMode == InputMode.Keyboard)
+                {
+                    isKeyboardUsed = true;
+                }
+            }
+            return isKeyboardUsed;
         }
 
         private bool IsConfirmationScreenAlreadyShown()
@@ -628,7 +576,6 @@ namespace ZombustersWindows
 
             batch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, null, null, null, null, Resolution.getTransformationMatrix());
 
-            //foreach (Avatar cplayer in game.currentPlayers)
             for (index = 0; index < game.players.Length; index++)
             {
                 player = game.players[index];
@@ -644,7 +591,7 @@ namespace ZombustersWindows
 
                         batch.Draw(cardBkgTexture[2], CharacterPosition, Color.White);
 
-                        if (player.isReady == true)
+                        if (player.isReady)
                         {
                             batch.Draw(cardBkgTexture[3], CharacterPosition, Color.White);
                             batch.DrawString(DigitLowFont, Strings.ReadySelPlayerString,
@@ -655,11 +602,8 @@ namespace ZombustersWindows
                         batch.Draw(avatarPixelatedTexture[player.avatar.character], new Vector2(CharacterPosition.X + (avatarTexture[player.avatar.character].Width / 2) - avatarPixelatedTexture[player.avatar.character].Width / 2,
                             CharacterPosition.Y + (avatarTexture[player.avatar.character].Height - avatarPixelatedTexture[player.avatar.character].Height)), null, Color.White, 0, Vector2.Zero, 1.0f, SpriteEffects.None, 1.0f);
 
-                        if (player.Name != null)
-                        {
-                            batch.DrawString(MenuInfoFont, player.Name, new Vector2(CharacterPosition.X - Convert.ToInt32(MenuInfoFont.MeasureString(player.Name).Y), CharacterPosition.Y + 2 + cardBkgTexture[1].Height),
-                                    Color.White, 4.70f, Vector2.Zero, 1.0f, SpriteEffects.None, 1.0f);
-                        }
+                        batch.DrawString(MenuInfoFont, player.Name, new Vector2(CharacterPosition.X - Convert.ToInt32(MenuInfoFont.MeasureString(player.Name).Y), CharacterPosition.Y + 2 + cardBkgTexture[1].Height),
+                            Color.White, 4.70f, Vector2.Zero, 1.0f, SpriteEffects.None, 1.0f);
 
                         batch.DrawString(MenuInfoFont, avatarNameList[player.avatar.character], new Vector2(CharacterPosition.X - 5 + cardBkgTexture[1].Width - Convert.ToInt32(MenuInfoFont.MeasureString(avatarNameList[player.avatar.character]).X), CharacterPosition.Y + 3),
                                 Color.Black);
@@ -674,7 +618,7 @@ namespace ZombustersWindows
                                 CharacterPosition.Y + 20 + (pAvatar[cplayer.character].Height - pAvatarPixelated[cplayer.character].Height)), Color.Black);
                         }*/
 
-                        if (player.isReady == false)
+                        if (!player.isReady)
                         {
                             batch.Draw(arrow, new Vector2(CharacterPosition.X - arrow.Width, CharacterPosition.Y + cardBkgTexture[1].Height / 2 - arrow.Height / 2),
                                 null, Color.White, 0, Vector2.Zero, 0.7f, SpriteEffects.None, 1.0f);
@@ -684,7 +628,7 @@ namespace ZombustersWindows
                     }
                     else
                     {
-                        if (GamePad.GetState(player.Controller).IsConnected && player.Name != null)
+                        if (GamePad.GetState(player.Controller).IsConnected)
                         {
                             batch.Draw(cardBkgTexture[0], CharacterPosition, Color.White);
                             batch.Draw(cardBkgTexture[1], CharacterPosition, Color.White);
@@ -817,7 +761,7 @@ namespace ZombustersWindows
 
             batch.Draw(lineaMenu, new Vector2(position.X - LINE_X_OFFSET, position.Y - 15), Color.White);
 
-            menu.DrawSelectPlayerButtons(batch, new Vector2(position.X - 30, position.Y - 5), MenuInfoFont, canStartGame, true);
+            menu.DrawSelectPlayerButtons(batch, new Vector2(position.X - 30, position.Y - 5), MenuInfoFont, CanStartGame(), true);
 
             batch.End();
         }
