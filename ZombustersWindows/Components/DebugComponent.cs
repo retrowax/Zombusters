@@ -114,8 +114,10 @@ namespace ZombustersWindows
 
             //position = new Vector2(position.X, position.Y + 32);
 #if DEMO
+            spriteBatch.DrawString(smallspriteFont, "Demo: ON", new Vector2(position.X + 1, position.Y + 1), Color.Black);
             spriteBatch.DrawString(smallspriteFont, "Demo: ON", position, Color.White);
 #else
+            spriteBatch.DrawString(smallspriteFont, "Demo: OFF", new Vector2(position.X + 1, position.Y + 1), Color.Black);
             spriteBatch.DrawString(smallspriteFont, "Demo: OFF", position, Color.White);
 #endif
             count = 0;
@@ -123,16 +125,22 @@ namespace ZombustersWindows
             foreach (Player player in game.players)
             {
                 position = new Vector2(position.X, position.Y + 22);
+                spriteBatch.DrawString(smallspriteFont, "Name: " + player.Name, new Vector2(position.X + 1, position.Y + 1), Color.Black);
                 spriteBatch.DrawString(smallspriteFont, "Name: " + player.Name, position, Color.White);
                 position = new Vector2(position.X, position.Y + 22);
+                spriteBatch.DrawString(smallspriteFont, "Levels" + count.ToString() + ": " + player.levelsUnlocked.ToString(), new Vector2(position.X + 1, position.Y + 1), Color.Black);
                 spriteBatch.DrawString(smallspriteFont, "Levels" + count.ToString() + ": " + player.levelsUnlocked.ToString(), position, Color.White);
                 position = new Vector2(position.X, position.Y + 22);
+                spriteBatch.DrawString(smallspriteFont, "Avatar Status: " + player.avatar.status.ToString(), new Vector2(position.X + 1, position.Y + 1), Color.Black);
                 spriteBatch.DrawString(smallspriteFont, "Avatar Status: " + player.avatar.status.ToString(), position, Color.White);
                 position = new Vector2(position.X, position.Y + 22);
+                spriteBatch.DrawString(smallspriteFont, "Input: " + player.inputMode.ToString(), new Vector2(position.X + 1, position.Y + 1), Color.Black);
                 spriteBatch.DrawString(smallspriteFont, "Input: " + player.inputMode.ToString(), position, Color.White);
                 position = new Vector2(position.X, position.Y + 22);
+                spriteBatch.DrawString(smallspriteFont, "IsPlaying: " + player.IsPlaying.ToString(), new Vector2(position.X + 1, position.Y + 1), Color.Black);
                 spriteBatch.DrawString(smallspriteFont, "IsPlaying: " + player.IsPlaying.ToString(), position, Color.White);
                 position = new Vector2(position.X, position.Y + 22);
+                spriteBatch.DrawString(smallspriteFont, "IsReady: " + player.isReady.ToString(), new Vector2(position.X + 1, position.Y + 1), Color.Black);
                 spriteBatch.DrawString(smallspriteFont, "IsReady: " + player.isReady.ToString(), position, Color.White);
                 position = new Vector2(position.X, position.Y + 22);
 
