@@ -422,13 +422,12 @@ namespace ZombustersWindows
         public override void Update(GameTime gameTime, bool otherScreenHasFocus,
             bool coveredByOtherScreen)
         {
-            byte i, j;
             cursorPos = new Vector2(mouseState.X, mouseState.Y);
             input.Update();
 
-            for (i = 0; i < game.players.Length; i++)
+            foreach (Player player in game.players)
             {
-                if ((GamePad.GetState(game.players[i].playerIndex).Buttons.Start == ButtonState.Pressed)
+                if ((GamePad.GetState(player.playerIndex).Buttons.Start == ButtonState.Pressed)
                     || input.IsNewKeyPress(Keys.Escape) || input.IsNewKeyPress(Keys.Back))
                 {
                     if (!bPaused && (GamePlayStatus != GameplayState.StartLevel && GamePlayStatus != GameplayState.StageCleared))
@@ -468,25 +467,21 @@ namespace ZombustersWindows
                     UpdatePlayersAnimations(gameTime);
                     flamethrowerAnimation.Update(gameTime);
 
-                    for (i = 0; i < Zombies.Count; i++)
+                    foreach (ZombieState zombie in Zombies)
                     {
-                        ZombieState zombie = Zombies[i];
-                        {
-                            zombie.Update(gameTime, game, Zombies);
-                        }
+                        zombie.Update(gameTime, game, Zombies);
                     }
 
-                    for (i = 0; i < Tanks.Count; i++)
+                    foreach (TankState tank in Tanks)
                     {
-                        TankState tank = Tanks[i];
                         tank.Update(gameTime, game);
                     }
 
-                    for (i = 0; i < game.players.Length; i++)
+                    foreach (Player player in game.players)
                     {
-                        if (game.players[i].avatar.IsPlayingTheGame)
+                        if (player.avatar.IsPlayingTheGame)
                         {
-                            HandleCollisions(game.players[i].avatar, i, game.totalGameSeconds);
+                            HandleCollisions(player, game.totalGameSeconds);
                         }
                     }
 
@@ -500,11 +495,11 @@ namespace ZombustersWindows
                     UpdatePlayerPlaying(gameTime);
                     UpdatePlayersAnimations(gameTime);
 
-                    for (i = 0; i < game.players.Length; i++)
+                    foreach (Player player in game.players)
                     {
-                        if (game.players[i].avatar.IsPlayingTheGame)
+                        if (player.avatar.IsPlayingTheGame)
                         {
-                            HandleCollisions(game.players[i].avatar, i, game.totalGameSeconds);
+                            HandleCollisions(player, game.totalGameSeconds);
                         }
                     }
 
@@ -531,11 +526,11 @@ namespace ZombustersWindows
                     UpdatePlayerPlaying(gameTime);
                     UpdatePlayersAnimations(gameTime);
 
-                    for (i = 0; i < game.players.Length; i++)
+                    foreach (Player player in game.players)
                     {
-                        if (game.players[i].avatar.IsPlayingTheGame)
+                        if (player.avatar.IsPlayingTheGame)
                         {
-                            HandleCollisions(game.players[i].avatar, i, game.totalGameSeconds);
+                            HandleCollisions(player, game.totalGameSeconds);
                         }
                     }
 
@@ -810,115 +805,114 @@ namespace ZombustersWindows
             }
         }
 
-        public void HandleCollisions(Avatar player, byte playerId, float totalGameSeconds)
+        public void HandleCollisions(Player player, float totalGameSeconds)
         {
-            if (player.status == ObjectStatus.Inactive)
+            if (player.avatar.status == ObjectStatus.Inactive)
                 return;
 
-            HandleZombieCollisions(player, playerId, totalGameSeconds);
-            HandleTankCollisions(player, playerId, totalGameSeconds);
-            HandlePowerUpCollisions(player, playerId);
+            HandleZombieCollisions(player, totalGameSeconds);
+            HandleTankCollisions(player, totalGameSeconds);
+            HandlePowerUpCollisions(player);
         }
 
-        private void HandlePowerUpCollisions(Avatar player, byte playerId)
+        private void HandlePowerUpCollisions(Player player)
         {
-            for (int i = 0; i < PowerUpList.Count; i++)
+            foreach (PowerUp powerUp in PowerUpList)
             {
-                PowerUp powerup = PowerUpList[i];
-                if (powerup.status == ObjectStatus.Active)
+                if (powerUp.status == ObjectStatus.Active)
                 {
-                    if (GameplayHelper.DetectCrash(player, powerup.Position))
+                    if (GameplayHelper.DetectCrash(player.avatar, powerUp.Position))
                     {
-                        if (powerup.PUType == PowerUp.Type.extralife)
+                        if (powerUp.PUType == PowerUp.Type.extralife)
                         {
-                            IncreaseLife(playerId);
-                            powerup.status = ObjectStatus.Dying;
+                            IncreaseLife(player);
+                            powerUp.status = ObjectStatus.Dying;
                         }
 
-                        if (powerup.PUType == PowerUp.Type.live)
+                        if (powerUp.PUType == PowerUp.Type.live)
                         {
-                            if (player.lifecounter < 100)
+                            if (player.avatar.lifecounter < 100)
                             {
-                                player.lifecounter += powerup.Value;
+                                player.avatar.lifecounter += powerUp.Value;
 
-                                if (player.lifecounter > 100)
+                                if (player.avatar.lifecounter > 100)
                                 {
-                                    player.lifecounter = 100;
+                                    player.avatar.lifecounter = 100;
                                 }
                             }
 
-                            powerup.status = ObjectStatus.Dying;
+                            powerUp.status = ObjectStatus.Dying;
                         }
 
-                        if (powerup.PUType == PowerUp.Type.machinegun_ammo)
+                        if (powerUp.PUType == PowerUp.Type.machinegun_ammo)
                         {
-                            player.ammo[(int)GunType.machinegun] += powerup.Value;
-                            powerup.status = ObjectStatus.Dying;
+                            player.avatar.ammo[(int)GunType.machinegun] += powerUp.Value;
+                            powerUp.status = ObjectStatus.Dying;
 
                         }
 
-                        if (powerup.PUType == PowerUp.Type.shotgun_ammo)
+                        if (powerUp.PUType == PowerUp.Type.shotgun_ammo)
                         {
-                            player.ammo[(int)GunType.shotgun] += powerup.Value;
-                            powerup.status = ObjectStatus.Dying;
+                            player.avatar.ammo[(int)GunType.shotgun] += powerUp.Value;
+                            powerUp.status = ObjectStatus.Dying;
 
                         }
 
-                        if (powerup.PUType == PowerUp.Type.grenadelauncher_ammo)
+                        if (powerUp.PUType == PowerUp.Type.grenadelauncher_ammo)
                         {
-                            player.ammo[(int)GunType.grenade] += powerup.Value;
-                            powerup.status = ObjectStatus.Dying;
+                            player.avatar.ammo[(int)GunType.grenade] += powerUp.Value;
+                            powerUp.status = ObjectStatus.Dying;
 
                         }
 
-                        if (powerup.PUType == PowerUp.Type.flamethrower_ammo)
+                        if (powerUp.PUType == PowerUp.Type.flamethrower_ammo)
                         {
-                            player.ammo[(int)GunType.flamethrower] += powerup.Value;
-                            powerup.status = ObjectStatus.Dying;
+                            player.avatar.ammo[(int)GunType.flamethrower] += powerUp.Value;
+                            powerUp.status = ObjectStatus.Dying;
 
                         }
 
-                        if (powerup.PUType == PowerUp.Type.speedbuff || powerup.PUType == PowerUp.Type.immunebuff)
+                        if (powerUp.PUType == PowerUp.Type.speedbuff || powerUp.PUType == PowerUp.Type.immunebuff)
                         {
                             //player. += powerup.Value;
-                            powerup.status = ObjectStatus.Dying;
+                            powerUp.status = ObjectStatus.Dying;
                         }
                     }
                 }
             }
         }
 
-        private void HandleTankCollisions(Avatar player, byte playerId, float totalGameSeconds)
+        private void HandleTankCollisions(Player player, float totalGameSeconds)
         {
             for (int i = 0; i < Tanks.Count; i++)
             {
                 TankState tank = Tanks[i];
                 if (tank.status == ObjectStatus.Active)
                 {
-                    for (int l = 0; l < player.bullets.Count; l++)
+                    for (int l = 0; l < player.avatar.bullets.Count; l++)
                     {
-                        if (GameplayHelper.DetectCollision(player.bullets[l], tank.entity.Position, totalGameSeconds))
+                        if (GameplayHelper.DetectCollision(player.avatar.bullets[l], tank.entity.Position, totalGameSeconds))
                         {
-                            TankDestroyed(tank, (byte)playerId);
-                            player.bullets.RemoveAt(l);
+                            TankDestroyed(tank, player);
+                            player.avatar.bullets.RemoveAt(l);
                         }
                     }
                 }
             }
         }
 
-        private void HandleZombieCollisions(Avatar player, byte playerId, float totalGameSeconds)
+        private void HandleZombieCollisions(Player player, float totalGameSeconds)
         {
             for (int i = 0; i < Zombies.Count; i++)
             {
                 ZombieState zombie = Zombies[i];
                 if (zombie.status == ObjectStatus.Active)
                 {
-                    if (player.currentgun == GunType.flamethrower && player.ammo[(int)player.currentgun] > 0)
+                    if (player.avatar.currentgun == GunType.flamethrower && player.avatar.ammo[(int)player.avatar.currentgun] > 0)
                     {
-                        if (player.accumFire.Length() > .5)
+                        if (player.avatar.accumFire.Length() > .5)
                         {
-                            if (player.FlameThrowerRectangle.Intersects(new Rectangle((int)zombie.entity.Position.X, (int)zombie.entity.Position.Y, 48, (int)zombie.entity.Height)))
+                            if (player.avatar.FlameThrowerRectangle.Intersects(new Rectangle((int)zombie.entity.Position.X, (int)zombie.entity.Position.Y, 48, (int)zombie.entity.Height)))
                             {
                                 if (zombie.lifecounter > 1.0f)
                                 {
@@ -927,7 +921,7 @@ namespace ZombustersWindows
                                 }
                                 else
                                 {
-                                    ZombieDestroyed(zombie, (byte)playerId, player.currentgun);
+                                    ZombieDestroyed(zombie, player);
                                     if (PowerUpIsInRange(zombie))
                                     {
                                         SpawnPowerUp(zombie);
@@ -938,20 +932,20 @@ namespace ZombustersWindows
                     }
                     else
                     {
-                        for (int l = 0; l < player.bullets.Count; l++)
+                        for (int l = 0; l < player.avatar.bullets.Count; l++)
                         {
-                            if (GameplayHelper.DetectCollision(player.bullets[l], zombie.entity.Position, totalGameSeconds))
+                            if (GameplayHelper.DetectCollision(player.avatar.bullets[l], zombie.entity.Position, totalGameSeconds))
                             {
                                 if (zombie.lifecounter > 1.0f)
                                 {
                                     zombie.lifecounter -= 1.0f;
                                     zombie.isLoosingLife = true;
-                                    player.bullets.RemoveAt(l);
+                                    player.avatar.bullets.RemoveAt(l);
                                 }
                                 else
                                 {
-                                    ZombieDestroyed(zombie, (byte)playerId, player.currentgun);
-                                    player.bullets.RemoveAt(l);
+                                    ZombieDestroyed(zombie, player);
+                                    player.avatar.bullets.RemoveAt(l);
                                     if (PowerUpIsInRange(zombie))
                                     {
                                         SpawnPowerUp(zombie);
@@ -962,36 +956,36 @@ namespace ZombustersWindows
                     }
                 }
 
-                if (GameplayHelper.DetectCrash(player, zombie.entity.Position))
+                if (GameplayHelper.DetectCrash(player.avatar, zombie.entity.Position))
                 {
                     if (zombie.status == ObjectStatus.Active)
                     {
-                        if (player.lifecounter <= 0)
+                        if (player.avatar.lifecounter <= 0)
                         {
-                            DestroyPlayer((byte)playerId);
-                            player.lifecounter = 100;
+                            DestroyPlayer(player);
+                            player.avatar.lifecounter = 100;
                         }
                         else
                         {
-                            player.isLoosingLife = true;
-                            player.lifecounter -= 1;
+                            player.avatar.isLoosingLife = true;
+                            player.avatar.lifecounter -= 1;
                         }
                     }
                 }
             }
         }
 
-        private void DestroyPlayer(byte playerIndex)
+        private void DestroyPlayer(Player player)
         {
             int i;
             int livesleft = 0;
-            if (game.players[playerIndex].avatar.lives <= 1 && game.players[playerIndex].avatar.status == ObjectStatus.Inactive)
+            if (player.avatar.lives <= 1 && player.avatar.status == ObjectStatus.Inactive)
             {
-                GameOver(playerIndex);
+                GameOver(player);
             } 
             else
             {
-                PlayerDestroyed(playerIndex);
+                PlayerDestroyed(player);
             }
 
             for (i = 0; i < game.players.Length; i++)
@@ -1007,12 +1001,12 @@ namespace ZombustersWindows
                 GamePlayStatus = GameplayState.GameOver;
                 this.ScreenManager.AddScreen(gomenu);
 
-                if (game.players[playerIndex].avatar.IsPlayingTheGame)
+                if (player.avatar.IsPlayingTheGame)
                 {
-                    if (game.topScoreListContainer != null && game.players[playerIndex].avatar.score > 250)
+                    if (game.topScoreListContainer != null && player.avatar.score > 250)
                     {
-                        game.players[playerIndex].SaveLeaderBoard();
-                        game.players[playerIndex].SaveGame(Level.getLevelNumber(currentLevel));
+                        player.SaveLeaderBoard();
+                        player.SaveGame(Level.getLevelNumber(currentLevel));
                     }
                 }
             }
@@ -3071,7 +3065,7 @@ namespace ZombustersWindows
             enemies.tanks[tank].angle = angle;
         }
 
-        public void GameOver(byte player)
+        public void GameOver(Player player)
         {
             PlayerDestroyed(player);
         }
@@ -3088,45 +3082,45 @@ namespace ZombustersWindows
             ActiveZombies--;
         }
 
-        public void IncreaseLife(byte player)
+        public void IncreaseLife(Player player)
         {
-            if (game.players[player].avatar.lives < 9)
+            if (player.avatar.lives < 9)
             {
-                game.players[player].avatar.lives++;
+                player.avatar.lives++;
             }
         }
 
-        public void ZombieDestroyed(ZombieState zombie, byte player, GunType currentgun)
+        public void ZombieDestroyed(ZombieState zombie, Player player)
         {
-            zombie.DestroyZombie(game.totalGameSeconds, currentgun);
+            zombie.DestroyZombie(game.totalGameSeconds, player.avatar.currentgun);
             ActiveZombies--;
-            game.players[player].avatar.score += 10;
+            player.avatar.score += 10;
             game.audio.PlayZombieDying();
 
-            if (game.players[player].avatar.score % 8000 == 0)
+            if (player.avatar.score % 8000 == 0)
             {
-                game.players[player].avatar.lives += 1;
+                player.avatar.lives += 1;
             }
         }
 
-        public void TankDestroyed(TankState tank, byte player)
+        public void TankDestroyed(TankState tank, Player player)
         {
             tank.DestroyTank(game.totalGameSeconds);
             ActiveTanks--;
-            game.players[player].avatar.score += 10;
+            player.avatar.score += 10;
             game.audio.PlayZombieDying();
 
-            if (game.players[player].avatar.score % 8000 == 0)
+            if (player.avatar.score % 8000 == 0)
             {
-                game.players[player].avatar.lives += 1;
+                player.avatar.lives += 1;
             }
         }
 
-        public void PlayerDestroyed(byte player)
+        public void PlayerDestroyed(Player player)
         {
-            game.players[player].avatar.DestroyAvatar(game.totalGameSeconds);
-            game.players[player].avatar.lives--;
-            if (game.players[player].avatar.character == 0)
+            player.avatar.DestroyAvatar(game.totalGameSeconds);
+            player.avatar.lives--;
+            if (player.avatar.character == 0)
             {
                 game.audio.PlayWomanScream();
             }
