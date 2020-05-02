@@ -184,7 +184,7 @@ namespace ZombustersWindows
         {
             NeutralInput state = new NeutralInput
             {
-                Fire = Vector2.Zero
+                GamePadFire = Vector2.Zero
             };
             Vector2 stickLeft = Vector2.Zero;
             Vector2 stickRight = Vector2.Zero;
@@ -296,7 +296,7 @@ namespace ZombustersWindows
 
                 stickLeft = gpState.ThumbSticks.Left;
                 stickRight = gpState.ThumbSticks.Right;
-                state.Fire = gpState.ThumbSticks.Right;
+                state.GamePadFire = gpState.ThumbSticks.Right;
                 state.StickLeftMovement = stickLeft;
                 state.StickRightMovement = stickRight;
             } else
