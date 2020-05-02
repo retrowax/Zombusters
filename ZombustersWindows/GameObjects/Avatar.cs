@@ -24,9 +24,7 @@ namespace ZombustersWindows
         public Vector2 accumMove;
         public Vector2 accumFire;
 
-        public Player Player;
-        public bool isReady;
-        public bool IsPlaying
+        public bool IsPlayingTheGame
         {
             get { return status != ObjectStatus.Inactive; }
         }
@@ -55,13 +53,13 @@ namespace ZombustersWindows
 
         public bool isLoosingLife;
 
-        public Avatar()             
+        public Avatar(Color color)             
         {
             bullets = new List<Vector4>(bulletmax);
             shotgunbullets = new List<ShotgunShell>(pelletmax);
+            this.color = color;
         }
       
-               
         public void Initialize(Viewport view)
         {
             this.entity = new SteeringEntity
@@ -107,7 +105,6 @@ namespace ZombustersWindows
         public void Reset()
         {            
             Restart();
-            Deactivate();
         }
 
         /// <summary>
@@ -138,10 +135,8 @@ namespace ZombustersWindows
         /// Activates ship and assigns it to a player.
         /// </summary>
         /// <param name="player"></param>
-        public void Activate(Player player)
+        public void Activate()
         {
-            player.IsPlaying = true;
-            this.Player = player;
             this.status = ObjectStatus.Active;
         }
 
@@ -188,7 +183,7 @@ namespace ZombustersWindows
         }
 
 
-        public void DestroyShip(float totalGameSeconds)
+        public void DestroyAvatar(float totalGameSeconds)
         {
             deathTimeTotalSeconds = totalGameSeconds;
             status = ObjectStatus.Dying;

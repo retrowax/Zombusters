@@ -27,10 +27,6 @@ namespace ZombustersWindows
 
         readonly MyGame game;
         Rectangle uiBounds;
-        NeutralInput playerOneInput;
-        NeutralInput playerTwoInput;
-        NeutralInput playerThreeInput;
-        NeutralInput playerFourInput;
         MouseState mouseState;
         readonly InputState input = new InputState();
         private readonly GamePlayMenu menu = null;
@@ -72,7 +68,7 @@ namespace ZombustersWindows
         Texture2D pause_icon;
         Texture2D left_thumbstick;
         Texture2D right_thumbstick;
-        
+
         public Random random;
         private float timer, timerplayer;
         private int subLevelIndex;
@@ -191,11 +187,16 @@ namespace ZombustersWindows
 
         public void QuitToMenu()
         {
+            foreach (Player player in game.players)
+            {
+                player.avatar.Reset();
+                player.isReady = false;
+            }
             GameScreen[] screenList = ScreenManager.GetScreens();
             for (int i = screenList.Length -1; i > 0; i--)
             {
                 screenList[i].ExitScreen();
-            }  
+            }
         }
 
         public override void Initialize()
@@ -293,14 +294,13 @@ namespace ZombustersWindows
         #region Input Processing
         public override void HandleInput(InputState input)
         {
-            playerOneInput = ProcessPlayer(game.player1, input);
-
-            if (game.player2.IsPlaying)
-                playerTwoInput = ProcessPlayer(game.player2, input);
-            if (game.player3.IsPlaying)
-                playerThreeInput = ProcessPlayer(game.player3, input);
-            if (game.player4.IsPlaying)
-                playerFourInput = ProcessPlayer(game.player4, input);
+            foreach (Player player in game.players)
+            {
+                if (player.IsPlaying)
+                {
+                    player.neutralInput = ProcessPlayer(player, input);
+                }
+            }
 
             // Read in our gestures
             foreach (GestureSample gesture in input.GetGestures())
@@ -331,18 +331,18 @@ namespace ZombustersWindows
         {
             NeutralInput state = new NeutralInput
             {
-                Fire = Vector2.Zero
+                GamePadFire = Vector2.Zero
             };
             Vector2 stickLeft = Vector2.Zero;
             Vector2 stickRight = Vector2.Zero;
-            GamePadState gpState = input.GetCurrentGamePadStates()[(int)player.Controller];
+            GamePadState gpState = input.GetCurrentGamePadStates()[(int)player.playerIndex];
 
             // Get gamepad state
             if (VirtualThumbsticks.LeftThumbstick != Vector2.Zero || VirtualThumbsticks.RightThumbstick != Vector2.Zero)
             {
                 stickLeft = VirtualThumbsticks.LeftThumbstick;
                 stickRight = VirtualThumbsticks.RightThumbstick;
-                state.Fire = VirtualThumbsticks.RightThumbstick;
+                state.GamePadFire = VirtualThumbsticks.RightThumbstick;
             }
             else
             {
@@ -350,7 +350,7 @@ namespace ZombustersWindows
                 stickRight = gpState.ThumbSticks.Right;
                 //state.Fire = (gpState.Triggers.Right > 0);
 
-                state.Fire = gpState.ThumbSticks.Right;
+                state.GamePadFire = gpState.ThumbSticks.Right;
             }
 
             if (player.inputMode == InputMode.Keyboard)
@@ -375,37 +375,30 @@ namespace ZombustersWindows
                 if (input.GetCurrentMouseState().LeftButton == ButtonState.Pressed)
                 {
                     MouseState mouseState = input.GetCurrentMouseState();
-                    // Right
-                    if (mouseState.X > game.currentPlayers[0].position.X && (mouseState.X - game.currentPlayers[0].position.X >=100))
+
+                    if (mouseState.X > player.avatar.position.X && (mouseState.X - player.avatar.position.X >=100))
                     {
-                        stickRight += new Vector2(1, 0);
-                        state.Fire += new Vector2(1, 0);
+                        state.MouseFire += new Vector2(1, 0); // Right
                     }
 
-                    // Down
-                    if (mouseState.Y < game.currentPlayers[0].position.Y && (game.currentPlayers[0].position.Y - mouseState.Y >= 100))
+                    if (mouseState.Y < player.avatar.position.Y && (player.avatar.position.Y - mouseState.Y >= 100))
                     {
-                        stickRight += new Vector2(0, 1);
-                        state.Fire += new Vector2(0, 1);
+                        state.MouseFire += new Vector2(0, 1); // Down
                     }
 
-                    // Left
-                    if (mouseState.X < game.currentPlayers[0].position.X && (game.currentPlayers[0].position.X - mouseState.X >= 100))
+                    if (mouseState.X < player.avatar.position.X && (player.avatar.position.X - mouseState.X >= 100))
                     {
-                        stickRight += new Vector2(-1, 0);
-                        state.Fire += new Vector2(-1, 0);
+                        state.MouseFire += new Vector2(-1, 0); // Left
                     }
 
-                    // Top
-                    if (mouseState.Y >= game.currentPlayers[0].position.Y && (mouseState.Y - game.currentPlayers[0].position.Y >= 100))
+                    if (mouseState.Y >= player.avatar.position.Y && (mouseState.Y - player.avatar.position.Y >= 100))
                     {
-                        stickRight += new Vector2(0, -1);
-                        state.Fire += new Vector2(0, -1);
+                        state.MouseFire += new Vector2(0, -1); // Top
                     }
                 }
             }
 
-            if (input.IsNewButtonPress(Buttons.Y, player.Controller)
+            if (input.IsNewButtonPress(Buttons.Y, player.playerIndex)
                 || input.IsNewKeyPress(Keys.LeftControl)
                 || input.IsNewKeyPress(Keys.E)
                 || input.GetCurrentMouseState().RightButton == ButtonState.Pressed)
@@ -417,7 +410,7 @@ namespace ZombustersWindows
                 state.ButtonY = false;
             }
 
-            if (input.IsNewButtonPress(Buttons.RightShoulder, player.Controller)
+            if (input.IsNewButtonPress(Buttons.RightShoulder, player.playerIndex)
                 || input.IsNewKeyPress(Keys.Tab)
                 || input.GetCurrentMouseState().MiddleButton == ButtonState.Pressed)
             {
@@ -437,71 +430,22 @@ namespace ZombustersWindows
         public override void Update(GameTime gameTime, bool otherScreenHasFocus,
             bool coveredByOtherScreen)
         {
-            byte i, j;
             cursorPos = new Vector2(mouseState.X, mouseState.Y);
             input.Update();
 
-            // If the user activates the menu...
-            for (i = 0; i < game.currentPlayers.Length; i++)
+            foreach (Player player in game.players)
             {
-                if ((GamePad.GetState(game.currentPlayers[i].Player.Controller).Buttons.Start == ButtonState.Pressed)
-                    || (input.IsNewKeyPress(Keys.Escape) && i == 0) || (input.IsNewKeyPress(Keys.Back) && i == 0))
+                if ((GamePad.GetState(player.playerIndex).Buttons.Start == ButtonState.Pressed)
+                    || input.IsNewKeyPress(Keys.Escape) || input.IsNewKeyPress(Keys.Back))
                 {
-                    if (game.currentPlayers[i].status == ObjectStatus.Active)
+                    if (!bPaused && (GamePlayStatus != GameplayState.StartLevel && GamePlayStatus != GameplayState.StageCleared))
                     {
-                        if (!bPaused && (GamePlayStatus != GameplayState.StartLevel && GamePlayStatus != GameplayState.StageCleared))
-                        {
-                            this.ScreenManager.AddScreen(menu);
-
-                            // Use this to keep from adding more than one menu to the stack
-                            bPaused = game.BeginPause();
-                            GamePlayStatus = GameplayState.Pause;
-                            return;
-                        }
-                    }
-                    else
-                    {
-                        if (game.currentPlayers[i].lives > 0)
-                        {
-                            game.currentPlayers[i].status = ObjectStatus.Active;
-                            switch (game.currentPlayers[i].Player.Controller)
-                            {
-                                case PlayerIndex.One:
-                                    game.currentPlayers[i].Player.Name = Strings.PlayerOneString;
-                                    break;
-                                case PlayerIndex.Two:
-                                    game.currentPlayers[i].Player.Name = Strings.PlayerTwoString;
-                                    break;
-                                case PlayerIndex.Three:
-                                    game.currentPlayers[i].Player.Name = Strings.PlayerThreeString;
-                                    break;
-                                case PlayerIndex.Four:
-                                    game.currentPlayers[i].Player.Name = Strings.PlayerFourString;
-                                    break;
-                                default:
-                                    game.currentPlayers[i].Player.Name = Strings.PlayerOneString;
-                                    break;
-                            }
-
-                            for (j = 0; j < game.currentPlayers.Length; j++)
-                            {
-                                if (game.currentPlayers[j].character == 0)
-                                {
-                                    game.currentPlayers[i].character = 1;
-                                }
-                                else if (game.currentPlayers[j].character == 1)
-                                {
-                                    game.currentPlayers[i].character = 2;
-                                }
-                                else
-                                {
-                                    game.currentPlayers[i].character = 3;
-                                }
-                            }
-                        }
+                        this.ScreenManager.AddScreen(menu);
+                        bPaused = game.BeginPause();
+                        GamePlayStatus = GameplayState.Pause;
+                        return;
                     }
                 }
-
             }
             bool hidden = coveredByOtherScreen || otherScreenHasFocus;
 
@@ -531,25 +475,21 @@ namespace ZombustersWindows
                     UpdatePlayersAnimations(gameTime);
                     flamethrowerAnimation.Update(gameTime);
 
-                    for (i = 0; i < Zombies.Count; i++)
+                    foreach (ZombieState zombie in Zombies)
                     {
-                        ZombieState zombie = Zombies[i];
-                        {
-                            zombie.Update(gameTime, game, Zombies);
-                        }
+                        zombie.Update(gameTime, game, Zombies);
                     }
 
-                    for (i = 0; i < Tanks.Count; i++)
+                    foreach (TankState tank in Tanks)
                     {
-                        TankState tank = Tanks[i];
                         tank.Update(gameTime, game);
                     }
 
-                    for (i = 0; i < game.currentPlayers.Length; i++)
+                    foreach (Player player in game.players)
                     {
-                        if (game.currentPlayers[i].IsPlaying)
+                        if (player.avatar.IsPlayingTheGame)
                         {
-                            HandleCollisions(game.currentPlayers[i], i, game.totalGameSeconds);
+                            HandleCollisions(player, game.totalGameSeconds);
                         }
                     }
 
@@ -563,11 +503,11 @@ namespace ZombustersWindows
                     UpdatePlayerPlaying(gameTime);
                     UpdatePlayersAnimations(gameTime);
 
-                    for (i = 0; i < game.currentPlayers.Length; i++)
+                    foreach (Player player in game.players)
                     {
-                        if (game.currentPlayers[i].IsPlaying)
+                        if (player.avatar.IsPlayingTheGame)
                         {
-                            HandleCollisions(game.currentPlayers[i], i, game.totalGameSeconds);
+                            HandleCollisions(player, game.totalGameSeconds);
                         }
                     }
 
@@ -575,7 +515,7 @@ namespace ZombustersWindows
                     {
                         if (zombie.status == ObjectStatus.Dying)
                         {
-                            zombie.Update(gameTime, ((MyGame)this.ScreenManager.Game), Zombies);
+                            zombie.Update(gameTime, game, Zombies);
                         }
                     }
 
@@ -583,7 +523,7 @@ namespace ZombustersWindows
                     {
                         if (tank.status == ObjectStatus.Dying)
                         {
-                            tank.Update(gameTime, ((MyGame)this.ScreenManager.Game));
+                            tank.Update(gameTime, game);
                         }
                     }
 
@@ -594,11 +534,11 @@ namespace ZombustersWindows
                     UpdatePlayerPlaying(gameTime);
                     UpdatePlayersAnimations(gameTime);
 
-                    for (i = 0; i < game.currentPlayers.Length; i++)
+                    foreach (Player player in game.players)
                     {
-                        if (game.currentPlayers[i].IsPlaying)
+                        if (player.avatar.IsPlayingTheGame)
                         {
-                            HandleCollisions(game.currentPlayers[i], i, game.totalGameSeconds);
+                            HandleCollisions(player, game.totalGameSeconds);
                         }
                     }
 
@@ -611,13 +551,13 @@ namespace ZombustersWindows
                         timer += (float)gameTime.ElapsedGameTime.TotalSeconds;
                         if (timer >= 5.0f)
                         {
-                            foreach (Avatar player in game.currentPlayers)
+                            foreach (Player player in game.players)
                             {
-                                if (player.Player.IsPlaying)
+                                if (player.IsPlaying)
                                 {
                                     if (game.topScoreListContainer != null)
                                     {
-                                        player.Player.SaveLeaderBoard(player.score);
+                                        player.SaveLeaderBoard();
                                     }
 
                                 }
@@ -628,13 +568,13 @@ namespace ZombustersWindows
                         }
                     } else if(currentLevel == LevelType.EndDemo)
                     {
-                        foreach (Avatar player in game.currentPlayers)
+                        foreach (Player player in game.players)
                         {
-                            if (player.Player.IsPlaying)
+                            if (player.IsPlaying)
                             {
                                 if (game.topScoreListContainer != null)
                                 {
-                                    player.Player.SaveLeaderBoard(player.score);
+                                    player.SaveLeaderBoard();
                                 }
 
                             }
@@ -697,62 +637,61 @@ namespace ZombustersWindows
 
         private void UpdatePlayerPlaying(GameTime gameTime)
         {
-            for (byte i = 0; i < game.currentPlayers.Length - 1; i++)
+            foreach (Player player in game.players)
             {
-                switch (i)
-                {
-                    case 0:
-                        UpdatePlayer(i, game.totalGameSeconds, (float)gameTime.ElapsedGameTime.TotalSeconds, playerOneInput);
-                        break;
-                    case 1:
-                        UpdatePlayer(i, game.totalGameSeconds, (float)gameTime.ElapsedGameTime.TotalSeconds, playerTwoInput);
-                        break;
-                    case 2:
-                        UpdatePlayer(i, game.totalGameSeconds, (float)gameTime.ElapsedGameTime.TotalSeconds, playerThreeInput);
-                        break;
-                    case 3:
-                        UpdatePlayer(i, game.totalGameSeconds, (float)gameTime.ElapsedGameTime.TotalSeconds, playerFourInput);
-                        break;
-                    default:
-                        UpdatePlayer(0, game.totalGameSeconds, (float)gameTime.ElapsedGameTime.TotalSeconds, playerOneInput);
-                        break;
-                }
+                UpdatePlayer(player, game.totalGameSeconds, (float)gameTime.ElapsedGameTime.TotalSeconds, player.neutralInput);
             }
         }
 
         #region Player-centric code
-        public void UpdatePlayer(int player, float totalGameSeconds,
+        public void UpdatePlayer(Player player, float totalGameSeconds,
             float elapsedGameSeconds, NeutralInput input)
         {
-            if ((game.currentPlayers[player].status == ObjectStatus.Active) ||
-                (game.currentPlayers[player].status == ObjectStatus.Immune))
+            if ((player.avatar.status == ObjectStatus.Active) ||
+                (player.avatar.status == ObjectStatus.Immune))
             {
                 ProcessInput(player, totalGameSeconds, elapsedGameSeconds, input);
             }
         }
 
-        public void ProcessInput(int player, float totalGameSeconds,
+        public void ProcessInput(Player player, float totalGameSeconds,
             float elapsedGameSeconds, NeutralInput input)
         {
-            if (input.StickLeftMovement.X > 0)
-                accumMove.X += GameplayHelper.Move(input.StickLeftMovement.X, elapsedGameSeconds);
-            if (input.StickLeftMovement.X < 0)
-                accumMove.X -= GameplayHelper.Move(-input.StickLeftMovement.X, elapsedGameSeconds);
-            if (input.StickLeftMovement.Y > 0)
-                accumMove.Y -= GameplayHelper.Move(input.StickLeftMovement.Y, elapsedGameSeconds);
-            if (input.StickLeftMovement.Y < 0)
-                accumMove.Y += GameplayHelper.Move(-input.StickLeftMovement.Y, elapsedGameSeconds);
+            if (player.inputMode == InputMode.GamePad)
+            {
+                if (input.StickLeftMovement.X > 0)
+                    accumMove.X += GameplayHelper.Move(input.StickLeftMovement.X, elapsedGameSeconds);
+                if (input.StickLeftMovement.X < 0)
+                    accumMove.X -= GameplayHelper.Move(-input.StickLeftMovement.X, elapsedGameSeconds);
+                if (input.StickLeftMovement.Y > 0)
+                    accumMove.Y -= GameplayHelper.Move(input.StickLeftMovement.Y, elapsedGameSeconds);
+                if (input.StickLeftMovement.Y < 0)
+                    accumMove.Y += GameplayHelper.Move(-input.StickLeftMovement.Y, elapsedGameSeconds);
 
-            if (input.StickRightMovement.X > 0)
-                accumFire.X += GameplayHelper.Move(input.StickRightMovement.X, elapsedGameSeconds);
-            if (input.StickRightMovement.X < 0)
-                accumFire.X -= GameplayHelper.Move(-input.StickRightMovement.X, elapsedGameSeconds);
-            if (input.StickRightMovement.Y > 0)
-                accumFire.Y -= GameplayHelper.Move(input.StickRightMovement.Y, elapsedGameSeconds);
-            if (input.StickRightMovement.Y < 0)
-                accumFire.Y += GameplayHelper.Move(-input.StickRightMovement.Y, elapsedGameSeconds);
+                if (input.StickRightMovement.X > 0)
+                    accumFire.X += GameplayHelper.Move(input.StickRightMovement.X, elapsedGameSeconds);
+                if (input.StickRightMovement.X < 0)
+                    accumFire.X -= GameplayHelper.Move(-input.StickRightMovement.X, elapsedGameSeconds);
+                if (input.StickRightMovement.Y > 0)
+                    accumFire.Y -= GameplayHelper.Move(input.StickRightMovement.Y, elapsedGameSeconds);
+                if (input.StickRightMovement.Y < 0)
+                    accumFire.Y += GameplayHelper.Move(-input.StickRightMovement.Y, elapsedGameSeconds);
 
-            if (game.currentPlayers[player].Player.inputMode == InputMode.Keyboard)
+                input.GamePadFire.Normalize();
+                if ((input.GamePadFire.X >= 0 || input.GamePadFire.X <= 0) || (input.GamePadFire.Y >= 0 || input.GamePadFire.Y <= 0))
+                {
+                    //float angle = 0.0f;
+                    //angle = (float)Math.Acos(input.Fire.Y);
+                    //if (input.Fire.X < 0.0f)
+                    //    angle = -angle;
+                    Vector2 direction = Vector2.Normalize(input.GamePadFire);
+                    float angle = (float)Math.Atan2(input.GamePadFire.X, input.GamePadFire.Y);
+                    player.avatar.shotAngle = angle;
+                    TryFire(player, totalGameSeconds, angle, direction);
+                }
+            }
+
+            if (player.inputMode == InputMode.Keyboard)
             {
                 if (Keyboard.GetState().IsKeyDown(Keys.Right) || Keyboard.GetState().IsKeyDown(Keys.D))
                     accumMove.X += GameplayHelper.Move(1, elapsedGameSeconds);
@@ -762,52 +701,57 @@ namespace ZombustersWindows
                     accumMove.Y += GameplayHelper.Move(1, elapsedGameSeconds);
                 if (Keyboard.GetState().IsKeyDown(Keys.Up) || Keyboard.GetState().IsKeyDown(Keys.W))
                     accumMove.Y -= GameplayHelper.Move(1, elapsedGameSeconds);
+
+                if (Mouse.GetState().X > 0  && Mouse.GetState().LeftButton == ButtonState.Pressed)
+                    accumFire.X += GameplayHelper.Move(Mouse.GetState().X, elapsedGameSeconds);
+                if (Mouse.GetState().X < 0 && Mouse.GetState().LeftButton == ButtonState.Pressed)
+                    accumFire.X -= GameplayHelper.Move(-Mouse.GetState().X, elapsedGameSeconds);
+                if (Mouse.GetState().Y > 0 && Mouse.GetState().LeftButton == ButtonState.Pressed)
+                    accumFire.Y -= GameplayHelper.Move(Mouse.GetState().Y, elapsedGameSeconds);
+                if (Mouse.GetState().Y < 0 && Mouse.GetState().LeftButton == ButtonState.Pressed)
+                    accumFire.Y += GameplayHelper.Move(-Mouse.GetState().Y, elapsedGameSeconds);
+
+                input.MouseFire.Normalize();
+                if ((input.MouseFire.X >= 0 || input.MouseFire.X <= 0) || (input.MouseFire.Y >= 0 || input.MouseFire.Y <= 0))
+                {
+                    Vector2 direction = Vector2.Normalize(input.MouseFire);
+                    float angle = (float)Math.Atan2(input.MouseFire.X, input.MouseFire.Y);
+                    player.avatar.shotAngle = angle;
+                    TryFire(player, totalGameSeconds, angle, direction);
+                }
             }
 
-            game.currentPlayers[player].accumFire = accumFire;
+            player.avatar.accumFire = accumFire;
 
             TryMove(player);
 
             if (input.ButtonY == true)
             {
-                if (game.currentPlayers[player].currentgun == GunType.pistol)
+                if (player.avatar.currentgun == GunType.pistol)
                 {
-                    game.currentPlayers[player].currentgun = GunType.machinegun;
+                    player.avatar.currentgun = GunType.machinegun;
                 }
-                else if (game.currentPlayers[player].currentgun == GunType.machinegun)
+                else if (player.avatar.currentgun == GunType.machinegun)
                 {
-                    game.currentPlayers[player].currentgun = GunType.shotgun;
+                    player.avatar.currentgun = GunType.shotgun;
                 }
-                else if (game.currentPlayers[player].currentgun == GunType.shotgun)
+                else if (player.avatar.currentgun == GunType.shotgun)
                 {
-                    game.currentPlayers[player].currentgun = GunType.flamethrower;
+                    player.avatar.currentgun = GunType.flamethrower;
                 }
-                else if (game.currentPlayers[player].currentgun == GunType.flamethrower)
+                else if (player.avatar.currentgun == GunType.flamethrower)
                 {
-                    game.currentPlayers[player].currentgun = GunType.pistol;
+                    player.avatar.currentgun = GunType.pistol;
                 }
                 else
                 {
-                    game.currentPlayers[player].currentgun = GunType.pistol;
+                    player.avatar.currentgun = GunType.pistol;
                 }
             }
 
             if (input.ButtonRB == true)
             {
                 timerplayer = 0;
-            }
-
-            float angle = 0.0f;
-            input.Fire.Normalize();
-            if ((input.Fire.X >= 0 || input.Fire.X <= 0) || (input.Fire.Y >= 0 || input.Fire.Y <= 0))
-            {
-                //angle = (float)Math.Acos(input.Fire.Y);
-                //if (input.Fire.X < 0.0f)
-                //    angle = -angle;
-                Vector2 direction = Vector2.Normalize(input.Fire);
-                angle = (float)Math.Atan2(input.Fire.X, input.Fire.Y);
-                game.currentPlayers[player].shotAngle = angle;
-                TryFire((byte)player, totalGameSeconds, angle, direction);
             }
 
             accumFire = Vector2.Zero;
@@ -873,115 +817,114 @@ namespace ZombustersWindows
             }
         }
 
-        public void HandleCollisions(Avatar player, byte playerId, float totalGameSeconds)
+        public void HandleCollisions(Player player, float totalGameSeconds)
         {
-            if (player.status == ObjectStatus.Inactive)
+            if (player.avatar.status == ObjectStatus.Inactive)
                 return;
 
-            HandleZombieCollisions(player, playerId, totalGameSeconds);
-            HandleTankCollisions(player, playerId, totalGameSeconds);
-            HandlePowerUpCollisions(player, playerId);
+            HandleZombieCollisions(player, totalGameSeconds);
+            HandleTankCollisions(player, totalGameSeconds);
+            HandlePowerUpCollisions(player);
         }
 
-        private void HandlePowerUpCollisions(Avatar player, byte playerId)
+        private void HandlePowerUpCollisions(Player player)
         {
-            for (int i = 0; i < PowerUpList.Count; i++)
+            foreach (PowerUp powerUp in PowerUpList)
             {
-                PowerUp powerup = PowerUpList[i];
-                if (powerup.status == ObjectStatus.Active)
+                if (powerUp.status == ObjectStatus.Active)
                 {
-                    if (GameplayHelper.DetectCrash(player, powerup.Position))
+                    if (GameplayHelper.DetectCrash(player.avatar, powerUp.Position))
                     {
-                        if (powerup.powerUpType == PowerUpType.extralife)
+                        if (powerUp.powerUpType == PowerUpType.extralife)
                         {
-                            IncreaseLife(playerId);
-                            powerup.status = ObjectStatus.Dying;
+                            IncreaseLife(player);
+                            powerUp.status = ObjectStatus.Dying;
                         }
 
-                        if (powerup.powerUpType == PowerUpType.live)
+                        if (powerUp.powerUpType == PowerUpType.live)
                         {
-                            if (player.lifecounter < 100)
+                            if (player.avatar.lifecounter < 100)
                             {
-                                player.lifecounter += powerup.Value;
+                                player.avatar.lifecounter += powerUp.Value;
 
-                                if (player.lifecounter > 100)
+                                if (player.avatar.lifecounter > 100)
                                 {
-                                    player.lifecounter = 100;
+                                    player.avatar.lifecounter = 100;
                                 }
                             }
 
-                            powerup.status = ObjectStatus.Dying;
+                            powerUp.status = ObjectStatus.Dying;
                         }
 
-                        if (powerup.powerUpType == PowerUpType.machinegun)
+                        if (powerUp.powerUpType == PowerUpType.machinegun)
                         {
-                            player.ammo[(int)GunType.machinegun] += powerup.Value;
-                            powerup.status = ObjectStatus.Dying;
+                            player.avatar.ammo[(int)GunType.machinegun] += powerUp.Value;
+                            powerUp.status = ObjectStatus.Dying;
 
                         }
 
-                        if (powerup.powerUpType == PowerUpType.shotgun)
+                        if (powerUp.powerUpType == PowerUpType.shotgun)
                         {
-                            player.ammo[(int)GunType.shotgun] += powerup.Value;
-                            powerup.status = ObjectStatus.Dying;
+                            player.avatar.ammo[(int)GunType.shotgun] += powerUp.Value;
+                            powerUp.status = ObjectStatus.Dying;
 
                         }
 
-                        if (powerup.powerUpType == PowerUpType.grenade)
+                        if (powerUp.powerUpType == PowerUpType.grenade)
                         {
-                            player.ammo[(int)GunType.grenade] += powerup.Value;
-                            powerup.status = ObjectStatus.Dying;
+                            player.avatar.ammo[(int)GunType.grenade] += powerUp.Value;
+                            powerUp.status = ObjectStatus.Dying;
 
                         }
 
-                        if (powerup.powerUpType == PowerUpType.flamethrower)
+                        if (powerUp.powerUpType == PowerUpType.flamethrower)
                         {
-                            player.ammo[(int)GunType.flamethrower] += powerup.Value;
-                            powerup.status = ObjectStatus.Dying;
+                            player.avatar.ammo[(int)GunType.flamethrower] += powerUp.Value;
+                            powerUp.status = ObjectStatus.Dying;
 
                         }
 
-                        if (powerup.powerUpType == PowerUpType.speedbuff || powerup.powerUpType == PowerUpType.immunebuff)
+                        if (powerUp.powerUpType == PowerUpType.speedbuff || powerUp.powerUpType == PowerUpType.immunebuff)
                         {
                             //player. += powerup.Value;
-                            powerup.status = ObjectStatus.Dying;
+                            powerUp.status = ObjectStatus.Dying;
                         }
                     }
                 }
             }
         }
 
-        private void HandleTankCollisions(Avatar player, byte playerId, float totalGameSeconds)
+        private void HandleTankCollisions(Player player, float totalGameSeconds)
         {
             for (int i = 0; i < Tanks.Count; i++)
             {
                 TankState tank = Tanks[i];
                 if (tank.status == ObjectStatus.Active)
                 {
-                    for (int l = 0; l < player.bullets.Count; l++)
+                    for (int l = 0; l < player.avatar.bullets.Count; l++)
                     {
-                        if (GameplayHelper.DetectCollision(player.bullets[l], tank.entity.Position, totalGameSeconds))
+                        if (GameplayHelper.DetectCollision(player.avatar.bullets[l], tank.entity.Position, totalGameSeconds))
                         {
-                            TankDestroyed(tank, (byte)playerId);
-                            player.bullets.RemoveAt(l);
+                            TankDestroyed(tank, player);
+                            player.avatar.bullets.RemoveAt(l);
                         }
                     }
                 }
             }
         }
 
-        private void HandleZombieCollisions(Avatar player, byte playerId, float totalGameSeconds)
+        private void HandleZombieCollisions(Player player, float totalGameSeconds)
         {
             for (int i = 0; i < Zombies.Count; i++)
             {
                 ZombieState zombie = Zombies[i];
                 if (zombie.status == ObjectStatus.Active)
                 {
-                    if (player.currentgun == GunType.flamethrower && player.ammo[(int)player.currentgun] > 0)
+                    if (player.avatar.currentgun == GunType.flamethrower && player.avatar.ammo[(int)player.avatar.currentgun] > 0)
                     {
-                        if (player.accumFire.Length() > .5)
+                        if (player.avatar.accumFire.Length() > .5)
                         {
-                            if (player.FlameThrowerRectangle.Intersects(new Rectangle((int)zombie.entity.Position.X, (int)zombie.entity.Position.Y, 48, (int)zombie.entity.Height)))
+                            if (player.avatar.FlameThrowerRectangle.Intersects(new Rectangle((int)zombie.entity.Position.X, (int)zombie.entity.Position.Y, 48, (int)zombie.entity.Height)))
                             {
                                 if (zombie.lifecounter > 1.0f)
                                 {
@@ -990,7 +933,7 @@ namespace ZombustersWindows
                                 }
                                 else
                                 {
-                                    ZombieDestroyed(zombie, (byte)playerId, player.currentgun);
+                                    ZombieDestroyed(zombie, player);
                                     if (PowerUpIsInRange(zombie))
                                     {
                                         SpawnPowerUp(zombie);
@@ -1001,20 +944,20 @@ namespace ZombustersWindows
                     }
                     else
                     {
-                        for (int l = 0; l < player.bullets.Count; l++)
+                        for (int l = 0; l < player.avatar.bullets.Count; l++)
                         {
-                            if (GameplayHelper.DetectCollision(player.bullets[l], zombie.entity.Position, totalGameSeconds))
+                            if (GameplayHelper.DetectCollision(player.avatar.bullets[l], zombie.entity.Position, totalGameSeconds))
                             {
                                 if (zombie.lifecounter > 1.0f)
                                 {
                                     zombie.lifecounter -= 1.0f;
                                     zombie.isLoosingLife = true;
-                                    player.bullets.RemoveAt(l);
+                                    player.avatar.bullets.RemoveAt(l);
                                 }
                                 else
                                 {
-                                    ZombieDestroyed(zombie, (byte)playerId, player.currentgun);
-                                    player.bullets.RemoveAt(l);
+                                    ZombieDestroyed(zombie, player);
+                                    player.avatar.bullets.RemoveAt(l);
                                     if (PowerUpIsInRange(zombie))
                                     {
                                         SpawnPowerUp(zombie);
@@ -1038,7 +981,7 @@ namespace ZombustersWindows
                                     else
                                     {
                                         ZombieDestroyed(zombie, (byte)playerId, player.currentgun);
-                                        
+
                                         if (PowerUpIsInRange(zombie))
                                         {
                                             SpawnPowerUp(zombie);
@@ -1050,68 +993,41 @@ namespace ZombustersWindows
                     }
                 }
 
-                if (GameplayHelper.DetectCrash(player, zombie.entity.Position))
+                if (GameplayHelper.DetectCrash(player.avatar, zombie.entity.Position))
                 {
                     if (zombie.status == ObjectStatus.Active)
                     {
-                        if (player.lifecounter <= 0)
+                        if (player.avatar.lifecounter <= 0)
                         {
-                            DestroyPlayer((byte)playerId);
-                            player.lifecounter = 100;
+                            DestroyPlayer(player);
+                            player.avatar.lifecounter = 100;
                         }
                         else
                         {
-                            player.isLoosingLife = true;
-                            player.lifecounter -= 1;
+                            player.avatar.isLoosingLife = true;
+                            player.avatar.lifecounter -= 1;
                         }
                     }
                 }
             }
         }
 
-        private void DestroyPlayer(byte Player)
+        private void DestroyPlayer(Player player)
         {
             int i;
             int livesleft = 0;
-
-            if ((Player == 0) && (game.currentPlayers[0].lives == 1))
+            if (player.avatar.lives <= 1 && player.avatar.status == ObjectStatus.Inactive)
             {
-                if ((game.currentPlayers[1].status == ObjectStatus.Inactive) ||
-                    (game.currentPlayers[1].lives == 0))
-                    GameOver(0);
-                else
-                    PlayerDestroyed(0);
-            }
-            else if ((Player == 1) && (game.currentPlayers[1].lives == 1))
-            {
-                if ((game.currentPlayers[0].status == ObjectStatus.Inactive) ||
-                    (game.currentPlayers[0].lives == 0))
-                    GameOver(1);
-                else
-                    PlayerDestroyed(1);
-            }
-            else if ((Player == 2) && (game.currentPlayers[1].lives == 1))
-            {
-                if ((game.currentPlayers[0].status == ObjectStatus.Inactive) ||
-                    (game.currentPlayers[0].lives == 0))
-                    GameOver(2);
-                else
-                    PlayerDestroyed(2);
-            }
-            else if ((Player == 3) && (game.currentPlayers[1].lives == 1))
-            {
-                if ((game.currentPlayers[0].status == ObjectStatus.Inactive) ||
-                    (game.currentPlayers[0].lives == 0))
-                    GameOver(3);
-                else
-                    PlayerDestroyed(3);
+                GameOver(player);
             }
             else
-                PlayerDestroyed(Player);
-
-            for (i = 0; i < game.currentPlayers.Length - 1; i++)
             {
-                if (game.currentPlayers[i].lives > 0 && (game.currentPlayers[i].status != ObjectStatus.Inactive))
+                PlayerDestroyed(player);
+            }
+
+            for (i = 0; i < game.players.Length; i++)
+            {
+                if (game.players[i].avatar.lives > 0 && (game.players[i].avatar.status != ObjectStatus.Inactive))
                 {
                     livesleft++;
                 }
@@ -1122,26 +1038,26 @@ namespace ZombustersWindows
                 GamePlayStatus = GameplayState.GameOver;
                 this.ScreenManager.AddScreen(gomenu);
 
-                if (game.currentPlayers[0].IsPlaying)
+                if (player.avatar.IsPlayingTheGame)
                 {
-                    if (game.topScoreListContainer != null && game.currentPlayers[0].score > 250)
+                    if (game.topScoreListContainer != null && player.avatar.score > 250)
                     {
-                        game.currentPlayers[0].Player.SaveLeaderBoard(game.currentPlayers[0].score);
-                        game.currentPlayers[0].Player.SaveGame(Level.getLevelNumber(currentLevel));
+                        player.SaveLeaderBoard();
+                        player.SaveGame(Level.getLevelNumber(currentLevel));
                     }
                 }
             }
         }
 
-        private void TryMove(int Player)
+        private void TryMove(Player player)
         {
             bool collision = false;
-            game.currentPlayers[Player].accumMove = accumMove;
+            player.avatar.accumMove = accumMove;
 
             if (accumMove.Length() > .5)
             {
-                Vector2 move = game.currentPlayers[Player].VerifyMove(accumMove);
-                Vector2 pos = game.currentPlayers[Player].position + move;
+                Vector2 move = player.avatar.VerifyMove(accumMove);
+                Vector2 pos = player.avatar.position + move;
 
                 for (int i = 0; i < Level.gameWorld.Obstacles.Count; i++)
                 {
@@ -1180,43 +1096,45 @@ namespace ZombustersWindows
 
                 if (!collision)
                 {
-                    PlayerMove((byte)Player, pos);
+                    PlayerMove(player, pos);
                 }
 
                 accumMove = Vector2.Zero;
             }
         }
 
-        private void TryFire(byte Player, float TotalGameSeconds, float angle, Vector2 direction)
+        private void TryFire(Player player, float TotalGameSeconds, float angle, Vector2 direction)
         {
             int RateOfFire;
-            if (game.currentPlayers[Player].status != ObjectStatus.Active && game.currentPlayers[Player].status != ObjectStatus.Immune)
+            if (player.avatar.status != ObjectStatus.Active && player.avatar.status != ObjectStatus.Immune)
                 return;
 
             // Check if we have ammo; if not we change the current gun to pistol
-            if (game.currentPlayers[Player].ammo[(int)game.currentPlayers[Player].currentgun] == 0)
+            if (player.avatar.ammo[(int)player.avatar.currentgun] == 0)
             {
-                game.currentPlayers[Player].currentgun = GunType.pistol;
+                player.avatar.currentgun = GunType.pistol;
             }
 
-            if (game.currentPlayers[Player].currentgun == GunType.machinegun && game.currentPlayers[Player].ammo[(int)GunType.machinegun] > 0)
+            if (player.avatar.currentgun == GunType.machinegun && player.avatar.ammo[(int)GunType.machinegun] > 0)
             {
                 RateOfFire = MACHINEGUN_RATE_OF_FIRE;
             }
-            else if (game.currentPlayers[Player].currentgun == GunType.flamethrower && game.currentPlayers[Player].ammo[(int)GunType.flamethrower] > 0)
+            else if (player.avatar.currentgun == GunType.flamethrower && player.avatar.ammo[(int)GunType.flamethrower] > 0)
             {
                 RateOfFire = FLAMETHROWER_RATE_OF_FIRE;
             }
             else
             {
-                RateOfFire = game.currentPlayers[Player].RateOfFire;
+                RateOfFire = player.avatar.RateOfFire;
             }
 
-            if (game.currentPlayers[Player].currentgun == GunType.pistol || (game.currentPlayers[Player].currentgun != GunType.pistol && game.currentPlayers[Player].ammo[(int)game.currentPlayers[Player].currentgun] > 0))
+            if (player.avatar.currentgun == GunType.pistol
+                || (player.avatar.currentgun != GunType.pistol
+                && player.avatar.ammo[(int)player.avatar.currentgun] > 0))
             {
-                if (game.currentPlayers[Player].VerifyFire(TotalGameSeconds, RateOfFire))
+                if (player.avatar.VerifyFire(TotalGameSeconds, RateOfFire))
                 {
-                    PlayerFire(Player, TotalGameSeconds, angle, direction);
+                    PlayerFire(player, TotalGameSeconds, angle, direction);
                 }
             }
         }
@@ -1279,17 +1197,17 @@ namespace ZombustersWindows
                             lIndex -= 0.004f;
                         }
 
-                        for (i = 0; i < game.currentPlayers.Length - 1; i++)
+                        for (i = 0; i < game.players.Length - 1; i++)
                         {
-                            game.currentPlayers[i].position = Level.PlayerSpawnPosition[i];
-                            game.currentPlayers[i].entity.Position = Level.PlayerSpawnPosition[i];
+                            game.players[i].avatar.position = Level.PlayerSpawnPosition[i];
+                            game.players[i].avatar.entity.Position = Level.PlayerSpawnPosition[i];
                         }
 
-                        foreach (Avatar player in game.currentPlayers)
+                        foreach (Player player in game.players)
                         {
-                            if (player.Player.IsPlaying)
+                            if (player.IsPlaying)
                             {
-                                player.Player.SaveGame(Level.getLevelNumber(currentLevel));
+                                player.SaveGame(Level.getLevelNumber(currentLevel));
                             }
                         }
                     }
@@ -1306,10 +1224,10 @@ namespace ZombustersWindows
                     subLevelIndex = 0;
                 }
 
-                for (i = 0; i < game.currentPlayers.Length - 1; i++)
+                for (i = 0; i < game.players.Length; i++)
                 {
-                    game.currentPlayers[i].position = Level.PlayerSpawnPosition[i];
-                    game.currentPlayers[i].entity.Position = Level.PlayerSpawnPosition[i];
+                    game.players[i].avatar.position = Level.PlayerSpawnPosition[i];
+                    game.players[i].avatar.entity.Position = Level.PlayerSpawnPosition[i];
                 }
             }
 
@@ -1319,10 +1237,10 @@ namespace ZombustersWindows
             if (currentLevel != LevelType.EndGame && currentLevel != LevelType.EndDemo)
             {
 
-                for (i = 0; i < game.currentPlayers.Length; i++)
+                for (i = 0; i < game.players.Length; i++)
                 {
-                    game.currentPlayers[i].behaviors.AddBehavior(new ObstacleAvoidance(ref Level.gameWorld, 15.0f));
-                    if (game.currentPlayers[i].status == ObjectStatus.Active || game.currentPlayers[i].status == ObjectStatus.Immune)
+                    game.players[i].avatar.behaviors.AddBehavior(new ObstacleAvoidance(ref Level.gameWorld, 15.0f));
+                    if (game.players[i].avatar.status == ObjectStatus.Active || game.players[i].avatar.status == ObjectStatus.Immune)
                     {
                         numplayersIngame.Add(i);
                     }
@@ -1481,12 +1399,11 @@ namespace ZombustersWindows
 
                 this.ScreenManager.SpriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend);
 
-                foreach (Avatar cplayer in game.currentPlayers)
+                foreach (Player player in game.players)
                 {
-                    if (cplayer.IsPlaying)
+                    if (player.avatar.IsPlayingTheGame)
                     {
-
-                        DrawPlayer(cplayer, game.totalGameSeconds, gameTime, Level.furnitureList);
+                        DrawPlayer(player, game.totalGameSeconds, gameTime, Level.furnitureList);
                     }
                 }
 
@@ -1537,12 +1454,12 @@ namespace ZombustersWindows
                     }
                 }
 
-                foreach (Avatar cplayer in game.currentPlayers)
+                foreach (Player player in game.players)
                 {
-                    if (cplayer.IsPlaying)
+                    if (player.avatar.IsPlayingTheGame)
                     {
-                        DrawShotgunShots(cplayer.shotgunbullets, game.totalGameSeconds);
-                        DrawBullets(cplayer.bullets, game.totalGameSeconds);
+                        DrawShotgunShots(player.avatar.shotgunbullets, game.totalGameSeconds);
+                        DrawBullets(player.avatar.bullets, game.totalGameSeconds);
                     }
                 }
 
@@ -1575,9 +1492,9 @@ namespace ZombustersWindows
                 // Draw the Storage Device Icon
                 this.ScreenManager.SpriteBatch.Begin(SpriteSortMode.FrontToBack, BlendState.AlphaBlend, null, null, null, null, Resolution.getTransformationMatrix());
 
-                foreach (Avatar avatar in game.currentPlayers)
+                foreach (Player player in game.players)
                 {
-                    if (avatar.Player.inputMode == InputMode.Keyboard)
+                    if (player.inputMode == InputMode.Keyboard)
                     {
                         this.ScreenManager.SpriteBatch.Draw(cursorTexture, cursorPos, Color.White);
                     }
@@ -1808,9 +1725,9 @@ namespace ZombustersWindows
             return lindex + 0.002f;
         }
 
-        private void DrawPlayer(Avatar state, double TotalGameSeconds, GameTime gameTime, List<Furniture> furniturelist)
+        private void DrawPlayer(Player player, double TotalGameSeconds, GameTime gameTime, List<Furniture> furniturelist)
         {
-            float layerIndex = GetLayerIndex(state, furniturelist);
+            float layerIndex = GetLayerIndex(player.avatar, furniturelist);
             Vector2 offsetPosition = new Vector2(-20, -55);
 
             if (GamePlayStatus == GameplayState.Playing
@@ -1818,30 +1735,26 @@ namespace ZombustersWindows
                 || GamePlayStatus == GameplayState.StartLevel)
             {
                 timerplayer += (float)gameTime.ElapsedGameTime.TotalSeconds;
-
-                foreach (Avatar player in game.currentPlayers)
+                if (player.avatar.IsPlayingTheGame)
                 {
-                    if (player.IsPlaying)
+                    if (player.avatar.color == Color.Blue)
                     {
-                        if (state.color == Color.Blue)
-                        {
-                            this.ScreenManager.SpriteBatch.Draw(UIPlayerBlue, new Vector2(state.position.X + IdleTrunkAnimation[0].frameSize.X / 2 - UIPlayerBlue.Width / 2 + offsetPosition.X, state.position.Y - 20 + offsetPosition.Y), Color.White);
-                        }
+                        this.ScreenManager.SpriteBatch.Draw(UIPlayerBlue, new Vector2(player.avatar.position.X + IdleTrunkAnimation[0].frameSize.X / 2 - UIPlayerBlue.Width / 2 + offsetPosition.X, player.avatar.position.Y - 20 + offsetPosition.Y), Color.White);
+                    }
 
-                        if (state.color == Color.Red)
-                        {
-                            this.ScreenManager.SpriteBatch.Draw(UIPlayerRed, new Vector2(state.position.X + IdleTrunkAnimation[0].frameSize.X / 2 - UIPlayerRed.Width / 2 + offsetPosition.X, state.position.Y - 20 + offsetPosition.Y), Color.White);
-                        }
+                    if (player.avatar.color == Color.Red)
+                    {
+                        this.ScreenManager.SpriteBatch.Draw(UIPlayerRed, new Vector2(player.avatar.position.X + IdleTrunkAnimation[0].frameSize.X / 2 - UIPlayerRed.Width / 2 + offsetPosition.X, player.avatar.position.Y - 20 + offsetPosition.Y), Color.White);
+                    }
 
-                        if (state.color == Color.Green)
-                        {
-                            this.ScreenManager.SpriteBatch.Draw(UIPlayerGreen, new Vector2(state.position.X + IdleTrunkAnimation[0].frameSize.X / 2 - UIPlayerGreen.Width / 2 + offsetPosition.X, state.position.Y - 20 + offsetPosition.Y), Color.White);
-                        }
+                    if (player.avatar.color == Color.Green)
+                    {
+                        this.ScreenManager.SpriteBatch.Draw(UIPlayerGreen, new Vector2(player.avatar.position.X + IdleTrunkAnimation[0].frameSize.X / 2 - UIPlayerGreen.Width / 2 + offsetPosition.X, player.avatar.position.Y - 20 + offsetPosition.Y), Color.White);
+                    }
 
-                        if (state.color == Color.Yellow)
-                        {
-                            this.ScreenManager.SpriteBatch.Draw(UIPlayerYellow, new Vector2(state.position.X + IdleTrunkAnimation[0].frameSize.X / 2 - UIPlayerYellow.Width / 2 + offsetPosition.X, state.position.Y - 20 + offsetPosition.Y), Color.White);
-                        }
+                    if (player.avatar.color == Color.Yellow)
+                    {
+                        this.ScreenManager.SpriteBatch.Draw(UIPlayerYellow, new Vector2(player.avatar.position.X + IdleTrunkAnimation[0].frameSize.X / 2 - UIPlayerYellow.Width / 2 + offsetPosition.X, player.avatar.position.Y - 20 + offsetPosition.Y), Color.White);
                     }
                 }
             }
@@ -1850,13 +1763,13 @@ namespace ZombustersWindows
                 timerplayer = 0;
             }
 
-            switch (state.status)
+            switch (player.avatar.status)
             {
                 case ObjectStatus.Inactive:
                     break;
                 case ObjectStatus.Active:
                     Color color;
-                    if (state.isLoosingLife == true)
+                    if (player.avatar.isLoosingLife == true)
                     {
                         color = Color.Red;
                     }
@@ -1865,353 +1778,353 @@ namespace ZombustersWindows
                         color = Color.White;
                     }
 
-                    if (state.accumFire.Length() > .5)
+                    if (player.avatar.accumFire.Length() > .5)
                     {
-                        if (state.shotAngle > -0.3925f && state.shotAngle < 0.3925f) //NORTH
+                        if (player.avatar.shotAngle > -0.3925f && player.avatar.shotAngle < 0.3925f) //NORTH
                         {
-                            switch (state.currentgun)
+                            switch (player.avatar.currentgun)
                             {
                                 case GunType.pistol:
-                                    if (state.character == 0)
+                                    if (player.avatar.character == 0)
                                     {
-                                        PistolShotNorthAnimation[state.character].Draw(this.ScreenManager.SpriteBatch, new Vector2(state.position.X + 7 + offsetPosition.X, state.position.Y + offsetPosition.Y - 30), SpriteEffects.None, layerIndex, 0f, color);
+                                        PistolShotNorthAnimation[player.avatar.character].Draw(this.ScreenManager.SpriteBatch, new Vector2(player.avatar.position.X + 7 + offsetPosition.X, player.avatar.position.Y + offsetPosition.Y - 30), SpriteEffects.None, layerIndex, 0f, color);
                                     }
-                                    else 
+                                    else
                                     {
-                                        PistolShotNorthAnimation[state.character].Draw(this.ScreenManager.SpriteBatch, new Vector2(state.position.X + 12 + offsetPosition.X, state.position.Y + offsetPosition.Y - 30), SpriteEffects.None, layerIndex, 0f, color);
+                                        PistolShotNorthAnimation[player.avatar.character].Draw(this.ScreenManager.SpriteBatch, new Vector2(player.avatar.position.X + 12 + offsetPosition.X, player.avatar.position.Y + offsetPosition.Y - 30), SpriteEffects.None, layerIndex, 0f, color);
                                     }
                                     break;
                                 case GunType.shotgun:
                                 case GunType.machinegun:
-                                    if (state.character == 0)
+                                    if (player.avatar.character == 0)
                                     {
-                                        ShotgunNorthAnimation[state.character].Draw(this.ScreenManager.SpriteBatch, new Vector2(state.position.X + 6 + offsetPosition.X, state.position.Y + offsetPosition.Y - 34), SpriteEffects.None, layerIndex, 0f, color);
+                                        ShotgunNorthAnimation[player.avatar.character].Draw(this.ScreenManager.SpriteBatch, new Vector2(player.avatar.position.X + 6 + offsetPosition.X, player.avatar.position.Y + offsetPosition.Y - 34), SpriteEffects.None, layerIndex, 0f, color);
                                     }
                                     else
                                     {
-                                        ShotgunNorthAnimation[state.character].Draw(this.ScreenManager.SpriteBatch, new Vector2(state.position.X + 12 + offsetPosition.X, state.position.Y + offsetPosition.Y - 36), SpriteEffects.None, layerIndex, 0f, color);
+                                        ShotgunNorthAnimation[player.avatar.character].Draw(this.ScreenManager.SpriteBatch, new Vector2(player.avatar.position.X + 12 + offsetPosition.X, player.avatar.position.Y + offsetPosition.Y - 36), SpriteEffects.None, layerIndex, 0f, color);
                                     }
                                     break;
 
                                 case GunType.flamethrower:
-                                    if (state.character == 0)
+                                    if (player.avatar.character == 0)
                                     {
-                                        this.ScreenManager.SpriteBatch.Draw(ShotgunNorthTexture[state.character], new Rectangle(Convert.ToInt32(state.position.X + 6 + offsetPosition.X), Convert.ToInt32(state.position.Y + offsetPosition.Y - 34), 26, ShotgunNorthTexture[state.character].Height),
-                                            new Rectangle(0, 0, 26, ShotgunNorthTexture[state.character].Height), color, 0.0f, Vector2.Zero, SpriteEffects.None, layerIndex);
+                                        this.ScreenManager.SpriteBatch.Draw(ShotgunNorthTexture[player.avatar.character], new Rectangle(Convert.ToInt32(player.avatar.position.X + 6 + offsetPosition.X), Convert.ToInt32(player.avatar.position.Y + offsetPosition.Y - 34), 26, ShotgunNorthTexture[player.avatar.character].Height),
+                                            new Rectangle(0, 0, 26, ShotgunNorthTexture[player.avatar.character].Height), color, 0.0f, Vector2.Zero, SpriteEffects.None, layerIndex);
                                     }
                                     else
                                     {
-                                        this.ScreenManager.SpriteBatch.Draw(ShotgunNorthTexture[state.character], new Rectangle(Convert.ToInt32(state.position.X + 12 + offsetPosition.X), Convert.ToInt32(state.position.Y + offsetPosition.Y - 36), 21, ShotgunNorthTexture[state.character].Height),
-                                            new Rectangle(0, 0, 21, ShotgunNorthTexture[state.character].Height), color, 0.0f, Vector2.Zero, SpriteEffects.None, layerIndex);
+                                        this.ScreenManager.SpriteBatch.Draw(ShotgunNorthTexture[player.avatar.character], new Rectangle(Convert.ToInt32(player.avatar.position.X + 12 + offsetPosition.X), Convert.ToInt32(player.avatar.position.Y + offsetPosition.Y - 36), 21, ShotgunNorthTexture[player.avatar.character].Height),
+                                            new Rectangle(0, 0, 21, ShotgunNorthTexture[player.avatar.character].Height), color, 0.0f, Vector2.Zero, SpriteEffects.None, layerIndex);
                                     }
-                                    DrawFlameThrower(state, layerIndex);
+                                    DrawFlameThrower(player.avatar, layerIndex);
                                     break;
 
                                 default:
                                     break;
                             }
                         }
-                        else if (state.shotAngle > 0.3925f && state.shotAngle < 1.1775f) //NORTH-EAST
+                        else if (player.avatar.shotAngle > 0.3925f && player.avatar.shotAngle < 1.1775f) //NORTH-EAST
                         {
-                            switch (state.currentgun)
+                            switch (player.avatar.currentgun)
                             {
                                 case GunType.pistol:
-                                    if (state.character == 0)
+                                    if (player.avatar.character == 0)
                                     {
-                                        PistolShotNEAnimation[state.character].Draw(this.ScreenManager.SpriteBatch, new Vector2(state.position.X + 7 + offsetPosition.X, state.position.Y + offsetPosition.Y - 18), SpriteEffects.None, layerIndex, 0f, color);
+                                        PistolShotNEAnimation[player.avatar.character].Draw(this.ScreenManager.SpriteBatch, new Vector2(player.avatar.position.X + 7 + offsetPosition.X, player.avatar.position.Y + offsetPosition.Y - 18), SpriteEffects.None, layerIndex, 0f, color);
                                     }
                                     else
                                     {
-                                        PistolShotNEAnimation[state.character].Draw(this.ScreenManager.SpriteBatch, new Vector2(state.position.X + 7 + offsetPosition.X, state.position.Y + offsetPosition.Y - 18), SpriteEffects.None, layerIndex, 0f, color);
+                                        PistolShotNEAnimation[player.avatar.character].Draw(this.ScreenManager.SpriteBatch, new Vector2(player.avatar.position.X + 7 + offsetPosition.X, player.avatar.position.Y + offsetPosition.Y - 18), SpriteEffects.None, layerIndex, 0f, color);
                                     }
                                     break;
                                 case GunType.shotgun:
                                 case GunType.machinegun:
-                                    if (state.character == 0)
+                                    if (player.avatar.character == 0)
                                     {
-                                        ShotgunNEAnimation[state.character].Draw(this.ScreenManager.SpriteBatch, new Vector2(state.position.X + 7 + offsetPosition.X, state.position.Y + offsetPosition.Y - 14), SpriteEffects.None, layerIndex, 0f, color);
+                                        ShotgunNEAnimation[player.avatar.character].Draw(this.ScreenManager.SpriteBatch, new Vector2(player.avatar.position.X + 7 + offsetPosition.X, player.avatar.position.Y + offsetPosition.Y - 14), SpriteEffects.None, layerIndex, 0f, color);
                                     }
                                     else
                                     {
-                                        ShotgunNEAnimation[state.character].Draw(this.ScreenManager.SpriteBatch, new Vector2(state.position.X + 10 + offsetPosition.X, state.position.Y + offsetPosition.Y - 14), SpriteEffects.None, layerIndex, 0f, color);
+                                        ShotgunNEAnimation[player.avatar.character].Draw(this.ScreenManager.SpriteBatch, new Vector2(player.avatar.position.X + 10 + offsetPosition.X, player.avatar.position.Y + offsetPosition.Y - 14), SpriteEffects.None, layerIndex, 0f, color);
                                     }
                                     break;
                                 case GunType.flamethrower:
-                                    if (state.character == 0)
+                                    if (player.avatar.character == 0)
                                     {
-                                        this.ScreenManager.SpriteBatch.Draw(ShotgunNETexture[state.character], new Rectangle(Convert.ToInt32(state.position.X + 7 + offsetPosition.X), Convert.ToInt32(state.position.Y + offsetPosition.Y - 14), 59, ShotgunNETexture[state.character].Height),
-                                            new Rectangle(0, 0, 59, ShotgunNETexture[state.character].Height), color, 0.0f, Vector2.Zero, SpriteEffects.None, layerIndex);
+                                        this.ScreenManager.SpriteBatch.Draw(ShotgunNETexture[player.avatar.character], new Rectangle(Convert.ToInt32(player.avatar.position.X + 7 + offsetPosition.X), Convert.ToInt32(player.avatar.position.Y + offsetPosition.Y - 14), 59, ShotgunNETexture[player.avatar.character].Height),
+                                            new Rectangle(0, 0, 59, ShotgunNETexture[player.avatar.character].Height), color, 0.0f, Vector2.Zero, SpriteEffects.None, layerIndex);
                                     }
                                     else
                                     {
-                                        this.ScreenManager.SpriteBatch.Draw(ShotgunNETexture[state.character], new Rectangle(Convert.ToInt32(state.position.X + 10 + offsetPosition.X), Convert.ToInt32(state.position.Y + offsetPosition.Y - 14), 53, ShotgunNETexture[state.character].Height),
-                                            new Rectangle(0, 0, 53, ShotgunNETexture[state.character].Height), color, 0.0f, Vector2.Zero, SpriteEffects.None, layerIndex);
+                                        this.ScreenManager.SpriteBatch.Draw(ShotgunNETexture[player.avatar.character], new Rectangle(Convert.ToInt32(player.avatar.position.X + 10 + offsetPosition.X), Convert.ToInt32(player.avatar.position.Y + offsetPosition.Y - 14), 53, ShotgunNETexture[player.avatar.character].Height),
+                                            new Rectangle(0, 0, 53, ShotgunNETexture[player.avatar.character].Height), color, 0.0f, Vector2.Zero, SpriteEffects.None, layerIndex);
                                     }
-                                    DrawFlameThrower(state, layerIndex);
+                                    DrawFlameThrower(player.avatar, layerIndex);
                                     break;
 
                                 default:
                                     break;
                             }
                         }
-                        else if (state.shotAngle > 1.1775f && state.shotAngle < 1.9625f) //EAST
+                        else if (player.avatar.shotAngle > 1.1775f && player.avatar.shotAngle < 1.9625f) //EAST
                         {
-                            switch (state.currentgun)
+                            switch (player.avatar.currentgun)
                             {
                                 case GunType.pistol:
-                                    if (state.character == 0)
+                                    if (player.avatar.character == 0)
                                     {
-                                        PistolShotEastAnimation[state.character].Draw(this.ScreenManager.SpriteBatch, new Vector2(state.position.X + 7 + offsetPosition.X, state.position.Y + offsetPosition.Y + 4), SpriteEffects.None, layerIndex, 0f, color);
+                                        PistolShotEastAnimation[player.avatar.character].Draw(this.ScreenManager.SpriteBatch, new Vector2(player.avatar.position.X + 7 + offsetPosition.X, player.avatar.position.Y + offsetPosition.Y + 4), SpriteEffects.None, layerIndex, 0f, color);
                                     }
                                     else
                                     {
-                                        PistolShotEastAnimation[state.character].Draw(this.ScreenManager.SpriteBatch, new Vector2(state.position.X + 7 + offsetPosition.X, state.position.Y + offsetPosition.Y + 1), SpriteEffects.None, layerIndex, 0f, color);
+                                        PistolShotEastAnimation[player.avatar.character].Draw(this.ScreenManager.SpriteBatch, new Vector2(player.avatar.position.X + 7 + offsetPosition.X, player.avatar.position.Y + offsetPosition.Y + 1), SpriteEffects.None, layerIndex, 0f, color);
                                     }
                                     break;
                                 case GunType.shotgun:
                                 case GunType.machinegun:
-                                    if (state.character == 0)
+                                    if (player.avatar.character == 0)
                                     {
-                                        ShotgunShotEastAnimation[state.character].Draw(this.ScreenManager.SpriteBatch, new Vector2(state.position.X + 7 + offsetPosition.X, state.position.Y + offsetPosition.Y + 4), SpriteEffects.None, layerIndex, 0f, color);
+                                        ShotgunShotEastAnimation[player.avatar.character].Draw(this.ScreenManager.SpriteBatch, new Vector2(player.avatar.position.X + 7 + offsetPosition.X, player.avatar.position.Y + offsetPosition.Y + 4), SpriteEffects.None, layerIndex, 0f, color);
                                     }
                                     else
                                     {
-                                        ShotgunShotEastAnimation[state.character].Draw(this.ScreenManager.SpriteBatch, new Vector2(state.position.X + 10 + offsetPosition.X, state.position.Y + offsetPosition.Y + 1), SpriteEffects.None, layerIndex, 0f, color);
+                                        ShotgunShotEastAnimation[player.avatar.character].Draw(this.ScreenManager.SpriteBatch, new Vector2(player.avatar.position.X + 10 + offsetPosition.X, player.avatar.position.Y + offsetPosition.Y + 1), SpriteEffects.None, layerIndex, 0f, color);
                                     }
                                     break;
 
                                 case GunType.flamethrower:
-                                    if (state.character == 0)
+                                    if (player.avatar.character == 0)
                                     {
-                                        this.ScreenManager.SpriteBatch.Draw(ShotgunEastTexture[state.character], new Rectangle(Convert.ToInt32(state.position.X + 7 + offsetPosition.X), Convert.ToInt32(state.position.Y + offsetPosition.Y + 4), 71, ShotgunEastTexture[state.character].Height),
-                                            new Rectangle(0, 0, 71, ShotgunEastTexture[state.character].Height), color, 0.0f, Vector2.Zero, SpriteEffects.None, layerIndex);
+                                        this.ScreenManager.SpriteBatch.Draw(ShotgunEastTexture[player.avatar.character], new Rectangle(Convert.ToInt32(player.avatar.position.X + 7 + offsetPosition.X), Convert.ToInt32(player.avatar.position.Y + offsetPosition.Y + 4), 71, ShotgunEastTexture[player.avatar.character].Height),
+                                            new Rectangle(0, 0, 71, ShotgunEastTexture[player.avatar.character].Height), color, 0.0f, Vector2.Zero, SpriteEffects.None, layerIndex);
                                     }
                                     else
                                     {
-                                        this.ScreenManager.SpriteBatch.Draw(ShotgunEastTexture[state.character], new Rectangle(Convert.ToInt32(state.position.X + 10 + offsetPosition.X), Convert.ToInt32(state.position.Y + offsetPosition.Y + 1), 69, ShotgunEastTexture[state.character].Height),
-                                            new Rectangle(0, 0, 69, ShotgunEastTexture[state.character].Height), color, 0.0f, Vector2.Zero, SpriteEffects.None, layerIndex);
+                                        this.ScreenManager.SpriteBatch.Draw(ShotgunEastTexture[player.avatar.character], new Rectangle(Convert.ToInt32(player.avatar.position.X + 10 + offsetPosition.X), Convert.ToInt32(player.avatar.position.Y + offsetPosition.Y + 1), 69, ShotgunEastTexture[player.avatar.character].Height),
+                                            new Rectangle(0, 0, 69, ShotgunEastTexture[player.avatar.character].Height), color, 0.0f, Vector2.Zero, SpriteEffects.None, layerIndex);
                                     }
-                                    DrawFlameThrower(state, layerIndex);
+                                    DrawFlameThrower(player.avatar, layerIndex);
                                     break;
 
                                 default:
                                     break;
                             }
                         }
-                        else if (state.shotAngle > 1.19625f && state.shotAngle < 2.7275f) //SOUTH-EAST
+                        else if (player.avatar.shotAngle > 1.19625f && player.avatar.shotAngle < 2.7275f) //SOUTH-EAST
                         {
-                            switch (state.currentgun)
+                            switch (player.avatar.currentgun)
                             {
                                 case GunType.pistol:
-                                    if (state.character == 0)
+                                    if (player.avatar.character == 0)
                                     {
-                                        PistolShotSEAnimation[state.character].Draw(this.ScreenManager.SpriteBatch, new Vector2(state.position.X + 7 + offsetPosition.X, state.position.Y + offsetPosition.Y + 4), SpriteEffects.None, layerIndex, 0f, color);
+                                        PistolShotSEAnimation[player.avatar.character].Draw(this.ScreenManager.SpriteBatch, new Vector2(player.avatar.position.X + 7 + offsetPosition.X, player.avatar.position.Y + offsetPosition.Y + 4), SpriteEffects.None, layerIndex, 0f, color);
                                     }
                                     else
                                     {
-                                        PistolShotSEAnimation[state.character].Draw(this.ScreenManager.SpriteBatch, new Vector2(state.position.X + 10 + offsetPosition.X, state.position.Y + offsetPosition.Y + 1), SpriteEffects.None, layerIndex, 0f, color);
+                                        PistolShotSEAnimation[player.avatar.character].Draw(this.ScreenManager.SpriteBatch, new Vector2(player.avatar.position.X + 10 + offsetPosition.X, player.avatar.position.Y + offsetPosition.Y + 1), SpriteEffects.None, layerIndex, 0f, color);
                                     }
                                     break;
                                 case GunType.shotgun:
                                 case GunType.machinegun:
-                                    if (state.character == 0)
+                                    if (player.avatar.character == 0)
                                     {
-                                        ShotgunSEAnimation[state.character].Draw(this.ScreenManager.SpriteBatch, new Vector2(state.position.X + 7 + offsetPosition.X, state.position.Y + offsetPosition.Y + 4), SpriteEffects.None, layerIndex, 0f, color);
+                                        ShotgunSEAnimation[player.avatar.character].Draw(this.ScreenManager.SpriteBatch, new Vector2(player.avatar.position.X + 7 + offsetPosition.X, player.avatar.position.Y + offsetPosition.Y + 4), SpriteEffects.None, layerIndex, 0f, color);
                                     }
                                     else
                                     {
-                                        ShotgunSEAnimation[state.character].Draw(this.ScreenManager.SpriteBatch, new Vector2(state.position.X + 10 + offsetPosition.X, state.position.Y + offsetPosition.Y + 1), SpriteEffects.None, layerIndex, 0f, color);
+                                        ShotgunSEAnimation[player.avatar.character].Draw(this.ScreenManager.SpriteBatch, new Vector2(player.avatar.position.X + 10 + offsetPosition.X, player.avatar.position.Y + offsetPosition.Y + 1), SpriteEffects.None, layerIndex, 0f, color);
                                     }
                                     break;
 
                                 case GunType.flamethrower:
-                                    if (state.character == 0)
+                                    if (player.avatar.character == 0)
                                     {
-                                        this.ScreenManager.SpriteBatch.Draw(ShotgunSETexture[state.character], new Rectangle(Convert.ToInt32(state.position.X + 7 + offsetPosition.X), Convert.ToInt32(state.position.Y + offsetPosition.Y + 4), 58, ShotgunSETexture[state.character].Height),
-                                            new Rectangle(0, 0, 58, ShotgunSETexture[state.character].Height), color, 0.0f, Vector2.Zero, SpriteEffects.None, layerIndex);
+                                        this.ScreenManager.SpriteBatch.Draw(ShotgunSETexture[player.avatar.character], new Rectangle(Convert.ToInt32(player.avatar.position.X + 7 + offsetPosition.X), Convert.ToInt32(player.avatar.position.Y + offsetPosition.Y + 4), 58, ShotgunSETexture[player.avatar.character].Height),
+                                            new Rectangle(0, 0, 58, ShotgunSETexture[player.avatar.character].Height), color, 0.0f, Vector2.Zero, SpriteEffects.None, layerIndex);
                                     }
                                     else
                                     {
-                                        this.ScreenManager.SpriteBatch.Draw(ShotgunSETexture[state.character], new Rectangle(Convert.ToInt32(state.position.X + 10 + offsetPosition.X), Convert.ToInt32(state.position.Y + offsetPosition.Y + 1), 54, ShotgunSETexture[state.character].Height),
-                                            new Rectangle(0, 0, 54, ShotgunSETexture[state.character].Height), color, 0.0f, Vector2.Zero, SpriteEffects.None, layerIndex);
+                                        this.ScreenManager.SpriteBatch.Draw(ShotgunSETexture[player.avatar.character], new Rectangle(Convert.ToInt32(player.avatar.position.X + 10 + offsetPosition.X), Convert.ToInt32(player.avatar.position.Y + offsetPosition.Y + 1), 54, ShotgunSETexture[player.avatar.character].Height),
+                                            new Rectangle(0, 0, 54, ShotgunSETexture[player.avatar.character].Height), color, 0.0f, Vector2.Zero, SpriteEffects.None, layerIndex);
                                     }
-                                    DrawFlameThrower(state, layerIndex);
+                                    DrawFlameThrower(player.avatar, layerIndex);
                                     break;
 
                                 default:
                                     break;
                             }
                         }
-                        else if (state.shotAngle > 2.7275f || state.shotAngle < -2.7275f) //SOUTH
+                        else if (player.avatar.shotAngle > 2.7275f || player.avatar.shotAngle < -2.7275f) //SOUTH
                         {
-                            switch (state.currentgun)
+                            switch (player.avatar.currentgun)
                             {
                                 case GunType.pistol:
-                                    if (state.character == 0)
+                                    if (player.avatar.character == 0)
                                     {
-                                        PistolShotSouthAnimation[state.character].Draw(this.ScreenManager.SpriteBatch, new Vector2(state.position.X + 7 + offsetPosition.X, state.position.Y + offsetPosition.Y + 4), SpriteEffects.None, layerIndex, 0f, color);
+                                        PistolShotSouthAnimation[player.avatar.character].Draw(this.ScreenManager.SpriteBatch, new Vector2(player.avatar.position.X + 7 + offsetPosition.X, player.avatar.position.Y + offsetPosition.Y + 4), SpriteEffects.None, layerIndex, 0f, color);
                                     }
                                     else
                                     {
-                                        PistolShotSouthAnimation[state.character].Draw(this.ScreenManager.SpriteBatch, new Vector2(state.position.X + 3 + offsetPosition.X, state.position.Y + offsetPosition.Y + 1), SpriteEffects.None, layerIndex, 0f, color);
+                                        PistolShotSouthAnimation[player.avatar.character].Draw(this.ScreenManager.SpriteBatch, new Vector2(player.avatar.position.X + 3 + offsetPosition.X, player.avatar.position.Y + offsetPosition.Y + 1), SpriteEffects.None, layerIndex, 0f, color);
                                     }
                                     break;
                                 case GunType.shotgun:
                                 case GunType.machinegun:
-                                    if (state.character == 0)
+                                    if (player.avatar.character == 0)
                                     {
-                                        ShotgunSouthAnimation[state.character].Draw(this.ScreenManager.SpriteBatch, new Vector2(state.position.X + 7 + offsetPosition.X, state.position.Y + offsetPosition.Y + 4), SpriteEffects.None, layerIndex, 0f, color);
+                                        ShotgunSouthAnimation[player.avatar.character].Draw(this.ScreenManager.SpriteBatch, new Vector2(player.avatar.position.X + 7 + offsetPosition.X, player.avatar.position.Y + offsetPosition.Y + 4), SpriteEffects.None, layerIndex, 0f, color);
                                     }
                                     else
                                     {
-                                        ShotgunSouthAnimation[state.character].Draw(this.ScreenManager.SpriteBatch, new Vector2(state.position.X + 10 + offsetPosition.X, state.position.Y + offsetPosition.Y + 1), SpriteEffects.None, layerIndex, 0f, color);
+                                        ShotgunSouthAnimation[player.avatar.character].Draw(this.ScreenManager.SpriteBatch, new Vector2(player.avatar.position.X + 10 + offsetPosition.X, player.avatar.position.Y + offsetPosition.Y + 1), SpriteEffects.None, layerIndex, 0f, color);
                                     }
                                     break;
 
                                 case GunType.flamethrower:
-                                    if (state.character == 0)
+                                    if (player.avatar.character == 0)
                                     {
-                                        this.ScreenManager.SpriteBatch.Draw(ShotgunSouthTexture[state.character], new Rectangle(Convert.ToInt32(state.position.X + 7 + offsetPosition.X), Convert.ToInt32(state.position.Y + offsetPosition.Y + 4), 21, ShotgunSouthTexture[state.character].Height),
-                                            new Rectangle(0, 0, 21, ShotgunSouthTexture[state.character].Height), color, 0.0f, Vector2.Zero, SpriteEffects.None, layerIndex);
+                                        this.ScreenManager.SpriteBatch.Draw(ShotgunSouthTexture[player.avatar.character], new Rectangle(Convert.ToInt32(player.avatar.position.X + 7 + offsetPosition.X), Convert.ToInt32(player.avatar.position.Y + offsetPosition.Y + 4), 21, ShotgunSouthTexture[player.avatar.character].Height),
+                                            new Rectangle(0, 0, 21, ShotgunSouthTexture[player.avatar.character].Height), color, 0.0f, Vector2.Zero, SpriteEffects.None, layerIndex);
                                     }
                                     else
                                     {
-                                        this.ScreenManager.SpriteBatch.Draw(ShotgunSouthTexture[state.character], new Rectangle(Convert.ToInt32(state.position.X + 10 + offsetPosition.X), Convert.ToInt32(state.position.Y + offsetPosition.Y + 1), 20, ShotgunSouthTexture[state.character].Height),
-                                            new Rectangle(0, 0, 20, ShotgunSouthTexture[state.character].Height), color, 0.0f, Vector2.Zero, SpriteEffects.None, layerIndex);
+                                        this.ScreenManager.SpriteBatch.Draw(ShotgunSouthTexture[player.avatar.character], new Rectangle(Convert.ToInt32(player.avatar.position.X + 10 + offsetPosition.X), Convert.ToInt32(player.avatar.position.Y + offsetPosition.Y + 1), 20, ShotgunSouthTexture[player.avatar.character].Height),
+                                            new Rectangle(0, 0, 20, ShotgunSouthTexture[player.avatar.character].Height), color, 0.0f, Vector2.Zero, SpriteEffects.None, layerIndex);
                                     }
-                                    DrawFlameThrower(state, layerIndex);
+                                    DrawFlameThrower(player.avatar, layerIndex);
                                     break;
 
                                 default:
                                     break;
                             }
                         }
-                        else if (state.shotAngle < -1.9625f && state.shotAngle > -2.7275f) //SOUTH-WEST
+                        else if (player.avatar.shotAngle < -1.9625f && player.avatar.shotAngle > -2.7275f) //SOUTH-WEST
                         {
-                            switch (state.currentgun)
+                            switch (player.avatar.currentgun)
                             {
                                 case GunType.pistol:
-                                    if (state.character == 0)
+                                    if (player.avatar.character == 0)
                                     {
-                                        PistolShotSEAnimation[state.character].Draw(this.ScreenManager.SpriteBatch, new Vector2(state.position.X - 6 + offsetPosition.X, state.position.Y + offsetPosition.Y + 4), SpriteEffects.FlipHorizontally, layerIndex, 0f, color);
+                                        PistolShotSEAnimation[player.avatar.character].Draw(this.ScreenManager.SpriteBatch, new Vector2(player.avatar.position.X - 6 + offsetPosition.X, player.avatar.position.Y + offsetPosition.Y + 4), SpriteEffects.FlipHorizontally, layerIndex, 0f, color);
                                     }
                                     else
                                     {
-                                        PistolShotSEAnimation[state.character].Draw(this.ScreenManager.SpriteBatch, new Vector2(state.position.X + 7 + offsetPosition.X, state.position.Y + offsetPosition.Y + 1), SpriteEffects.FlipHorizontally, layerIndex, 0f, color);
+                                        PistolShotSEAnimation[player.avatar.character].Draw(this.ScreenManager.SpriteBatch, new Vector2(player.avatar.position.X + 7 + offsetPosition.X, player.avatar.position.Y + offsetPosition.Y + 1), SpriteEffects.FlipHorizontally, layerIndex, 0f, color);
                                     }
                                     break;
                                 case GunType.shotgun:
                                 case GunType.machinegun:
-                                    if (state.character == 0)
+                                    if (player.avatar.character == 0)
                                     {
-                                        ShotgunSEAnimation[state.character].Draw(this.ScreenManager.SpriteBatch, new Vector2(state.position.X + 1 + offsetPosition.X, state.position.Y + offsetPosition.Y + 4), SpriteEffects.FlipHorizontally, layerIndex, 0f, color);
+                                        ShotgunSEAnimation[player.avatar.character].Draw(this.ScreenManager.SpriteBatch, new Vector2(player.avatar.position.X + 1 + offsetPosition.X, player.avatar.position.Y + offsetPosition.Y + 4), SpriteEffects.FlipHorizontally, layerIndex, 0f, color);
                                     }
                                     else
                                     {
-                                        ShotgunSEAnimation[state.character].Draw(this.ScreenManager.SpriteBatch, new Vector2(state.position.X + 4 + offsetPosition.X, state.position.Y + offsetPosition.Y + 2), SpriteEffects.FlipHorizontally, layerIndex, 0f, color);
+                                        ShotgunSEAnimation[player.avatar.character].Draw(this.ScreenManager.SpriteBatch, new Vector2(player.avatar.position.X + 4 + offsetPosition.X, player.avatar.position.Y + offsetPosition.Y + 2), SpriteEffects.FlipHorizontally, layerIndex, 0f, color);
                                     }
                                     break;
 
                                 case GunType.flamethrower:
-                                    if (state.character == 0)
+                                    if (player.avatar.character == 0)
                                     {
-                                        this.ScreenManager.SpriteBatch.Draw(ShotgunSETexture[state.character], new Rectangle(Convert.ToInt32(state.position.X + 1 + offsetPosition.X - 29), Convert.ToInt32(state.position.Y + offsetPosition.Y + 4), 58, ShotgunSETexture[state.character].Height),
-                                            new Rectangle(0, 0, 58, ShotgunSETexture[state.character].Height), color, 0.0f, Vector2.Zero, SpriteEffects.FlipHorizontally, layerIndex);
+                                        this.ScreenManager.SpriteBatch.Draw(ShotgunSETexture[player.avatar.character], new Rectangle(Convert.ToInt32(player.avatar.position.X + 1 + offsetPosition.X - 29), Convert.ToInt32(player.avatar.position.Y + offsetPosition.Y + 4), 58, ShotgunSETexture[player.avatar.character].Height),
+                                            new Rectangle(0, 0, 58, ShotgunSETexture[player.avatar.character].Height), color, 0.0f, Vector2.Zero, SpriteEffects.FlipHorizontally, layerIndex);
                                     }
                                     else
                                     {
-                                        this.ScreenManager.SpriteBatch.Draw(ShotgunSETexture[state.character], new Rectangle(Convert.ToInt32(state.position.X + 4 + offsetPosition.X - 27), Convert.ToInt32(state.position.Y + offsetPosition.Y + 2), 54, ShotgunSETexture[state.character].Height),
-                                            new Rectangle(0, 0, 54, ShotgunSETexture[state.character].Height), color, 0.0f, Vector2.Zero, SpriteEffects.FlipHorizontally, layerIndex);
+                                        this.ScreenManager.SpriteBatch.Draw(ShotgunSETexture[player.avatar.character], new Rectangle(Convert.ToInt32(player.avatar.position.X + 4 + offsetPosition.X - 27), Convert.ToInt32(player.avatar.position.Y + offsetPosition.Y + 2), 54, ShotgunSETexture[player.avatar.character].Height),
+                                            new Rectangle(0, 0, 54, ShotgunSETexture[player.avatar.character].Height), color, 0.0f, Vector2.Zero, SpriteEffects.FlipHorizontally, layerIndex);
                                     }
-                                    DrawFlameThrower(state, layerIndex);
+                                    DrawFlameThrower(player.avatar, layerIndex);
                                     break;
 
                                 default:
                                     break;
                             }
                         }
-                        else if (state.shotAngle < -1.1775f && state.shotAngle > -1.9625f) //WEST
+                        else if (player.avatar.shotAngle < -1.1775f && player.avatar.shotAngle > -1.9625f) //WEST
                         {
-                            switch (state.currentgun)
+                            switch (player.avatar.currentgun)
                             {
                                 case GunType.pistol:
-                                    if (state.character == 0)
+                                    if (player.avatar.character == 0)
                                     {
-                                        PistolShotEastAnimation[state.character].Draw(this.ScreenManager.SpriteBatch, new Vector2(state.position.X - 6 + offsetPosition.X, state.position.Y + offsetPosition.Y + 4), SpriteEffects.FlipHorizontally, layerIndex, 0f, color);
+                                        PistolShotEastAnimation[player.avatar.character].Draw(this.ScreenManager.SpriteBatch, new Vector2(player.avatar.position.X - 6 + offsetPosition.X, player.avatar.position.Y + offsetPosition.Y + 4), SpriteEffects.FlipHorizontally, layerIndex, 0f, color);
                                     }
                                     else
                                     {
-                                        PistolShotEastAnimation[state.character].Draw(this.ScreenManager.SpriteBatch, new Vector2(state.position.X + 2 + offsetPosition.X, state.position.Y + offsetPosition.Y + 1), SpriteEffects.FlipHorizontally, layerIndex, 0f, color);
+                                        PistolShotEastAnimation[player.avatar.character].Draw(this.ScreenManager.SpriteBatch, new Vector2(player.avatar.position.X + 2 + offsetPosition.X, player.avatar.position.Y + offsetPosition.Y + 1), SpriteEffects.FlipHorizontally, layerIndex, 0f, color);
                                     }
                                     break;
                                 case GunType.shotgun:
                                 case GunType.machinegun:
-                                    if (state.character == 0)
+                                    if (player.avatar.character == 0)
                                     {
-                                        ShotgunShotEastAnimation[state.character].Draw(this.ScreenManager.SpriteBatch, new Vector2(state.position.X - 6 + offsetPosition.X, state.position.Y + offsetPosition.Y + 4), SpriteEffects.FlipHorizontally, layerIndex, 0f, color);
+                                        ShotgunShotEastAnimation[player.avatar.character].Draw(this.ScreenManager.SpriteBatch, new Vector2(player.avatar.position.X - 6 + offsetPosition.X, player.avatar.position.Y + offsetPosition.Y + 4), SpriteEffects.FlipHorizontally, layerIndex, 0f, color);
                                     }
                                     else
                                     {
-                                        ShotgunShotEastAnimation[state.character].Draw(this.ScreenManager.SpriteBatch, new Vector2(state.position.X - 4 + offsetPosition.X, state.position.Y + offsetPosition.Y + 2), SpriteEffects.FlipHorizontally, layerIndex, 0f, color);
+                                        ShotgunShotEastAnimation[player.avatar.character].Draw(this.ScreenManager.SpriteBatch, new Vector2(player.avatar.position.X - 4 + offsetPosition.X, player.avatar.position.Y + offsetPosition.Y + 2), SpriteEffects.FlipHorizontally, layerIndex, 0f, color);
                                     }
                                     break;
 
                                 case GunType.flamethrower:
-                                    if (state.character == 0)
+                                    if (player.avatar.character == 0)
                                     {
-                                        this.ScreenManager.SpriteBatch.Draw(ShotgunEastTexture[state.character], new Rectangle(Convert.ToInt32(state.position.X - 6 + offsetPosition.X - 35), Convert.ToInt32(state.position.Y + offsetPosition.Y + 4), 71, ShotgunEastTexture[state.character].Height),
-                                            new Rectangle(0, 0, 71, ShotgunEastTexture[state.character].Height), color, 0.0f, Vector2.Zero, SpriteEffects.FlipHorizontally, layerIndex);
+                                        this.ScreenManager.SpriteBatch.Draw(ShotgunEastTexture[player.avatar.character], new Rectangle(Convert.ToInt32(player.avatar.position.X - 6 + offsetPosition.X - 35), Convert.ToInt32(player.avatar.position.Y + offsetPosition.Y + 4), 71, ShotgunEastTexture[player.avatar.character].Height),
+                                            new Rectangle(0, 0, 71, ShotgunEastTexture[player.avatar.character].Height), color, 0.0f, Vector2.Zero, SpriteEffects.FlipHorizontally, layerIndex);
                                     }
                                     else
                                     {
-                                        this.ScreenManager.SpriteBatch.Draw(ShotgunEastTexture[state.character], new Rectangle(Convert.ToInt32(state.position.X - 4 + offsetPosition.X - 34), Convert.ToInt32(state.position.Y + offsetPosition.Y + 2), 69, ShotgunEastTexture[state.character].Height),
-                                            new Rectangle(0, 0, 69, ShotgunEastTexture[state.character].Height), color, 0.0f, Vector2.Zero, SpriteEffects.FlipHorizontally, layerIndex);
+                                        this.ScreenManager.SpriteBatch.Draw(ShotgunEastTexture[player.avatar.character], new Rectangle(Convert.ToInt32(player.avatar.position.X - 4 + offsetPosition.X - 34), Convert.ToInt32(player.avatar.position.Y + offsetPosition.Y + 2), 69, ShotgunEastTexture[player.avatar.character].Height),
+                                            new Rectangle(0, 0, 69, ShotgunEastTexture[player.avatar.character].Height), color, 0.0f, Vector2.Zero, SpriteEffects.FlipHorizontally, layerIndex);
                                     }
-                                    DrawFlameThrower(state, layerIndex);
+                                    DrawFlameThrower(player.avatar, layerIndex);
                                     break;
 
                                 default:
                                     break;
                             }
                         }
-                        else if (state.shotAngle < -0.3925f && state.shotAngle > -1.1775f) //NORTH-WEST
+                        else if (player.avatar.shotAngle < -0.3925f && player.avatar.shotAngle > -1.1775f) //NORTH-WEST
                         {
-                            switch (state.currentgun)
+                            switch (player.avatar.currentgun)
                             {
                                 case GunType.pistol:
-                                    if (state.character == 0)
+                                    if (player.avatar.character == 0)
                                     {
-                                        PistolShotNEAnimation[state.character].Draw(this.ScreenManager.SpriteBatch, new Vector2(state.position.X - 6 + offsetPosition.X, state.position.Y + offsetPosition.Y - 18), SpriteEffects.FlipHorizontally, layerIndex, 0f, color);
+                                        PistolShotNEAnimation[player.avatar.character].Draw(this.ScreenManager.SpriteBatch, new Vector2(player.avatar.position.X - 6 + offsetPosition.X, player.avatar.position.Y + offsetPosition.Y - 18), SpriteEffects.FlipHorizontally, layerIndex, 0f, color);
                                     }
                                     else
                                     {
-                                        PistolShotNEAnimation[state.character].Draw(this.ScreenManager.SpriteBatch, new Vector2(state.position.X + 2 + offsetPosition.X, state.position.Y + offsetPosition.Y - 18), SpriteEffects.FlipHorizontally, layerIndex, 0f, color);
+                                        PistolShotNEAnimation[player.avatar.character].Draw(this.ScreenManager.SpriteBatch, new Vector2(player.avatar.position.X + 2 + offsetPosition.X, player.avatar.position.Y + offsetPosition.Y - 18), SpriteEffects.FlipHorizontally, layerIndex, 0f, color);
                                     }
                                     break;
                                 case GunType.shotgun:
                                 case GunType.machinegun:
-                                    if (state.character == 0)
+                                    if (player.avatar.character == 0)
                                     {
-                                        ShotgunNEAnimation[state.character].Draw(this.ScreenManager.SpriteBatch, new Vector2(state.position.X + offsetPosition.X, state.position.Y + offsetPosition.Y - 14), SpriteEffects.FlipHorizontally, layerIndex, 0f, color);
+                                        ShotgunNEAnimation[player.avatar.character].Draw(this.ScreenManager.SpriteBatch, new Vector2(player.avatar.position.X + offsetPosition.X, player.avatar.position.Y + offsetPosition.Y - 14), SpriteEffects.FlipHorizontally, layerIndex, 0f, color);
                                     }
                                     else
                                     {
-                                        ShotgunNEAnimation[state.character].Draw(this.ScreenManager.SpriteBatch, new Vector2(state.position.X + offsetPosition.X + 4, state.position.Y + offsetPosition.Y - 13), SpriteEffects.FlipHorizontally, layerIndex, 0f, color);
+                                        ShotgunNEAnimation[player.avatar.character].Draw(this.ScreenManager.SpriteBatch, new Vector2(player.avatar.position.X + offsetPosition.X + 4, player.avatar.position.Y + offsetPosition.Y - 13), SpriteEffects.FlipHorizontally, layerIndex, 0f, color);
                                     }
                                     break;
 
                                 case GunType.flamethrower:
-                                    if (state.character == 0)
+                                    if (player.avatar.character == 0)
                                     {
-                                        this.ScreenManager.SpriteBatch.Draw(ShotgunNETexture[state.character], new Rectangle(Convert.ToInt32(state.position.X + offsetPosition.X - 29), Convert.ToInt32(state.position.Y + offsetPosition.Y - 14), 59, ShotgunNETexture[state.character].Height),
-                                            new Rectangle(0, 0, 59, ShotgunNETexture[state.character].Height), color, 0.0f, Vector2.Zero, SpriteEffects.FlipHorizontally, layerIndex);
+                                        this.ScreenManager.SpriteBatch.Draw(ShotgunNETexture[player.avatar.character], new Rectangle(Convert.ToInt32(player.avatar.position.X + offsetPosition.X - 29), Convert.ToInt32(player.avatar.position.Y + offsetPosition.Y - 14), 59, ShotgunNETexture[player.avatar.character].Height),
+                                            new Rectangle(0, 0, 59, ShotgunNETexture[player.avatar.character].Height), color, 0.0f, Vector2.Zero, SpriteEffects.FlipHorizontally, layerIndex);
                                     }
                                     else
                                     {
-                                        this.ScreenManager.SpriteBatch.Draw(ShotgunNETexture[state.character], new Rectangle(Convert.ToInt32(state.position.X + offsetPosition.X + 4 - 26), Convert.ToInt32(state.position.Y + offsetPosition.Y - 13), 53, ShotgunNETexture[state.character].Height),
-                                            new Rectangle(0, 0, 53, ShotgunNETexture[state.character].Height), color, 0.0f, Vector2.Zero, SpriteEffects.FlipHorizontally, layerIndex);
+                                        this.ScreenManager.SpriteBatch.Draw(ShotgunNETexture[player.avatar.character], new Rectangle(Convert.ToInt32(player.avatar.position.X + offsetPosition.X + 4 - 26), Convert.ToInt32(player.avatar.position.Y + offsetPosition.Y - 13), 53, ShotgunNETexture[player.avatar.character].Height),
+                                            new Rectangle(0, 0, 53, ShotgunNETexture[player.avatar.character].Height), color, 0.0f, Vector2.Zero, SpriteEffects.FlipHorizontally, layerIndex);
                                     }
-                                    DrawFlameThrower(state, layerIndex);
+                                    DrawFlameThrower(player.avatar, layerIndex);
                                     break;
 
                                 default:
@@ -2221,157 +2134,157 @@ namespace ZombustersWindows
                     }
 
                     // Draw Movement LEGS
-                    if (state.accumMove.Length() > .5)
+                    if (player.avatar.accumMove.Length() > .5)
                     {
-                        if (state.character == 0)
+                        if (player.avatar.character == 0)
                         {
-                            if (state.accumMove.X > 0)
+                            if (player.avatar.accumMove.X > 0)
                             {
-                                if (state.accumFire.Length() < .5)
+                                if (player.avatar.accumFire.Length() < .5)
                                 {
-                                    if (state.currentgun == GunType.pistol && state.ammo[(int)GunType.pistol] == 0)
+                                    if (player.avatar.currentgun == GunType.pistol && player.avatar.ammo[(int)GunType.pistol] == 0)
                                     {
-                                        IdleTrunkAnimation[state.character].Draw(this.ScreenManager.SpriteBatch, new Vector2(state.position.X + offsetPosition.X, state.position.Y + offsetPosition.Y), SpriteEffects.None, layerIndex, 0f, color);
+                                        IdleTrunkAnimation[player.avatar.character].Draw(this.ScreenManager.SpriteBatch, new Vector2(player.avatar.position.X + offsetPosition.X, player.avatar.position.Y + offsetPosition.Y), SpriteEffects.None, layerIndex, 0f, color);
                                     }
                                     else
                                     {
-                                        this.ScreenManager.SpriteBatch.Draw(ShotgunEastTexture[state.character], new Rectangle(Convert.ToInt32(state.position.X + 7 + offsetPosition.X), Convert.ToInt32(state.position.Y + offsetPosition.Y + 4), 71, ShotgunEastTexture[state.character].Height),
-                                            new Rectangle(0, 0, 71, ShotgunEastTexture[state.character].Height), color, 0.0f, Vector2.Zero, SpriteEffects.None, layerIndex);
+                                        this.ScreenManager.SpriteBatch.Draw(ShotgunEastTexture[player.avatar.character], new Rectangle(Convert.ToInt32(player.avatar.position.X + 7 + offsetPosition.X), Convert.ToInt32(player.avatar.position.Y + offsetPosition.Y + 4), 71, ShotgunEastTexture[player.avatar.character].Height),
+                                            new Rectangle(0, 0, 71, ShotgunEastTexture[player.avatar.character].Height), color, 0.0f, Vector2.Zero, SpriteEffects.None, layerIndex);
                                     }
                                 }
 
-                                RunEastAnimation[state.character].Draw(this.ScreenManager.SpriteBatch,
-                                    new Vector2(state.position.X - 7 + offsetPosition.X, state.position.Y - 26), SpriteEffects.None, layerIndex + 0.001f, 0f, color);
+                                RunEastAnimation[player.avatar.character].Draw(this.ScreenManager.SpriteBatch,
+                                    new Vector2(player.avatar.position.X - 7 + offsetPosition.X, player.avatar.position.Y - 26), SpriteEffects.None, layerIndex + 0.001f, 0f, color);
                             }
                             else
                             {
-                                if (state.accumFire.Length() < .5)
+                                if (player.avatar.accumFire.Length() < .5)
                                 {
-                                    if (state.currentgun == GunType.pistol && state.ammo[(int)GunType.pistol] == 0)
+                                    if (player.avatar.currentgun == GunType.pistol && player.avatar.ammo[(int)GunType.pistol] == 0)
                                     {
-                                        IdleTrunkAnimation[state.character].Draw(this.ScreenManager.SpriteBatch, new Vector2(state.position.X + offsetPosition.X + 16, state.position.Y + offsetPosition.Y), SpriteEffects.FlipHorizontally, layerIndex, 0f, color);
+                                        IdleTrunkAnimation[player.avatar.character].Draw(this.ScreenManager.SpriteBatch, new Vector2(player.avatar.position.X + offsetPosition.X + 16, player.avatar.position.Y + offsetPosition.Y), SpriteEffects.FlipHorizontally, layerIndex, 0f, color);
                                     }
                                     else
                                     {
-                                        this.ScreenManager.SpriteBatch.Draw(ShotgunEastTexture[state.character], new Rectangle(Convert.ToInt32(state.position.X - 6 + offsetPosition.X - 35), Convert.ToInt32(state.position.Y + offsetPosition.Y + 4), 71, ShotgunEastTexture[state.character].Height),
-                                                new Rectangle(0, 0, 71, ShotgunEastTexture[state.character].Height), color, 0.0f, Vector2.Zero, SpriteEffects.FlipHorizontally, layerIndex);
+                                        this.ScreenManager.SpriteBatch.Draw(ShotgunEastTexture[player.avatar.character], new Rectangle(Convert.ToInt32(player.avatar.position.X - 6 + offsetPosition.X - 35), Convert.ToInt32(player.avatar.position.Y + offsetPosition.Y + 4), 71, ShotgunEastTexture[player.avatar.character].Height),
+                                                new Rectangle(0, 0, 71, ShotgunEastTexture[player.avatar.character].Height), color, 0.0f, Vector2.Zero, SpriteEffects.FlipHorizontally, layerIndex);
                                     }
                                 }
 
-                                RunEastAnimation[state.character].Draw(this.ScreenManager.SpriteBatch,
-                                    new Vector2(state.position.X + 18 + offsetPosition.X, state.position.Y - 26), SpriteEffects.FlipHorizontally, layerIndex + 0.001f, 0f, color);
+                                RunEastAnimation[player.avatar.character].Draw(this.ScreenManager.SpriteBatch,
+                                    new Vector2(player.avatar.position.X + 18 + offsetPosition.X, player.avatar.position.Y - 26), SpriteEffects.FlipHorizontally, layerIndex + 0.001f, 0f, color);
                             }
                         }
                         else
                         {
-                            if (state.accumMove.X > 0)
+                            if (player.avatar.accumMove.X > 0)
                             {
-                                if (state.accumFire.Length() < .5)
+                                if (player.avatar.accumFire.Length() < .5)
                                 {
-                                    if (state.currentgun == GunType.pistol && state.ammo[(int)GunType.pistol] == 0)
+                                    if (player.avatar.currentgun == GunType.pistol && player.avatar.ammo[(int)GunType.pistol] == 0)
                                     {
-                                        IdleTrunkAnimation[state.character].Draw(this.ScreenManager.SpriteBatch, new Vector2(state.position.X + offsetPosition.X + 10, state.position.Y + offsetPosition.Y + 1), SpriteEffects.None, layerIndex, 0f, color);
+                                        IdleTrunkAnimation[player.avatar.character].Draw(this.ScreenManager.SpriteBatch, new Vector2(player.avatar.position.X + offsetPosition.X + 10, player.avatar.position.Y + offsetPosition.Y + 1), SpriteEffects.None, layerIndex, 0f, color);
                                     }
                                     else
                                     {
-                                        this.ScreenManager.SpriteBatch.Draw(ShotgunEastTexture[state.character], new Rectangle(Convert.ToInt32(state.position.X + 10 + offsetPosition.X), Convert.ToInt32(state.position.Y + offsetPosition.Y + 1), 69, ShotgunEastTexture[state.character].Height),
-                                            new Rectangle(0, 0, 69, ShotgunEastTexture[state.character].Height), color, 0.0f, Vector2.Zero, SpriteEffects.None, layerIndex);
+                                        this.ScreenManager.SpriteBatch.Draw(ShotgunEastTexture[player.avatar.character], new Rectangle(Convert.ToInt32(player.avatar.position.X + 10 + offsetPosition.X), Convert.ToInt32(player.avatar.position.Y + offsetPosition.Y + 1), 69, ShotgunEastTexture[player.avatar.character].Height),
+                                            new Rectangle(0, 0, 69, ShotgunEastTexture[player.avatar.character].Height), color, 0.0f, Vector2.Zero, SpriteEffects.None, layerIndex);
                                     }
                                 }
 
-                                RunEastAnimation[state.character].Draw(this.ScreenManager.SpriteBatch,
-                                    new Vector2(state.position.X - 4 + offsetPosition.X, state.position.Y - 24), SpriteEffects.None, layerIndex + 0.001f, 0f, color);
+                                RunEastAnimation[player.avatar.character].Draw(this.ScreenManager.SpriteBatch,
+                                    new Vector2(player.avatar.position.X - 4 + offsetPosition.X, player.avatar.position.Y - 24), SpriteEffects.None, layerIndex + 0.001f, 0f, color);
                             }
                             else
                             {
-                                if (state.accumFire.Length() < .5)
+                                if (player.avatar.accumFire.Length() < .5)
                                 {
-                                    if (state.currentgun == GunType.pistol && state.ammo[(int)GunType.pistol] == 0)
+                                    if (player.avatar.currentgun == GunType.pistol && player.avatar.ammo[(int)GunType.pistol] == 0)
                                     {
-                                        IdleTrunkAnimation[state.character].Draw(this.ScreenManager.SpriteBatch, new Vector2(state.position.X + offsetPosition.X + 19, state.position.Y + offsetPosition.Y + 1), SpriteEffects.FlipHorizontally, layerIndex, 0f, color);
+                                        IdleTrunkAnimation[player.avatar.character].Draw(this.ScreenManager.SpriteBatch, new Vector2(player.avatar.position.X + offsetPosition.X + 19, player.avatar.position.Y + offsetPosition.Y + 1), SpriteEffects.FlipHorizontally, layerIndex, 0f, color);
                                     }
                                     else
                                     {
-                                        this.ScreenManager.SpriteBatch.Draw(ShotgunEastTexture[state.character], new Rectangle(Convert.ToInt32(state.position.X - 4 + offsetPosition.X - 34), Convert.ToInt32(state.position.Y + offsetPosition.Y + 2), 69, ShotgunEastTexture[state.character].Height),
-                                            new Rectangle(0, 0, 69, ShotgunEastTexture[state.character].Height), color, 0.0f, Vector2.Zero, SpriteEffects.FlipHorizontally, layerIndex);
+                                        this.ScreenManager.SpriteBatch.Draw(ShotgunEastTexture[player.avatar.character], new Rectangle(Convert.ToInt32(player.avatar.position.X - 4 + offsetPosition.X - 34), Convert.ToInt32(player.avatar.position.Y + offsetPosition.Y + 2), 69, ShotgunEastTexture[player.avatar.character].Height),
+                                            new Rectangle(0, 0, 69, ShotgunEastTexture[player.avatar.character].Height), color, 0.0f, Vector2.Zero, SpriteEffects.FlipHorizontally, layerIndex);
                                     }
                                 }
 
-                                RunEastAnimation[state.character].Draw(this.ScreenManager.SpriteBatch,
-                                    new Vector2(state.position.X + 20 + offsetPosition.X, state.position.Y - 24), SpriteEffects.FlipHorizontally, layerIndex + 0.001f, 0f, color);
+                                RunEastAnimation[player.avatar.character].Draw(this.ScreenManager.SpriteBatch,
+                                    new Vector2(player.avatar.position.X + 20 + offsetPosition.X, player.avatar.position.Y - 24), SpriteEffects.FlipHorizontally, layerIndex + 0.001f, 0f, color);
                             }
                         }
                     }
                     else
                     {
-                        if (state.accumFire.Length() < .5)
+                        if (player.avatar.accumFire.Length() < .5)
                         {
-                            if (state.character == 0)
+                            if (player.avatar.character == 0)
                             {
-                                if (state.currentgun == GunType.pistol && state.ammo[(int)GunType.pistol] == 0)
+                                if (player.avatar.currentgun == GunType.pistol && player.avatar.ammo[(int)GunType.pistol] == 0)
                                 {
-                                    IdleTrunkAnimation[state.character].Draw(this.ScreenManager.SpriteBatch, new Vector2(state.position.X + offsetPosition.X, state.position.Y + offsetPosition.Y), SpriteEffects.None, layerIndex, 0f, color);
+                                    IdleTrunkAnimation[player.avatar.character].Draw(this.ScreenManager.SpriteBatch, new Vector2(player.avatar.position.X + offsetPosition.X, player.avatar.position.Y + offsetPosition.Y), SpriteEffects.None, layerIndex, 0f, color);
                                 }
                                 else
                                 {
-                                    this.ScreenManager.SpriteBatch.Draw(ShotgunEastTexture[state.character], new Rectangle(Convert.ToInt32(state.position.X + 7 + offsetPosition.X), Convert.ToInt32(state.position.Y + offsetPosition.Y + 4), 71, ShotgunEastTexture[state.character].Height),
-                                            new Rectangle(0, 0, 71, ShotgunEastTexture[state.character].Height), color, 0.0f, Vector2.Zero, SpriteEffects.None, layerIndex);
+                                    this.ScreenManager.SpriteBatch.Draw(ShotgunEastTexture[player.avatar.character], new Rectangle(Convert.ToInt32(player.avatar.position.X + 7 + offsetPosition.X), Convert.ToInt32(player.avatar.position.Y + offsetPosition.Y + 4), 71, ShotgunEastTexture[player.avatar.character].Height),
+                                            new Rectangle(0, 0, 71, ShotgunEastTexture[player.avatar.character].Height), color, 0.0f, Vector2.Zero, SpriteEffects.None, layerIndex);
                                 }
                             }
                             else
                             {
-                                if (state.currentgun == GunType.pistol && state.ammo[(int)GunType.pistol] == 0)
+                                if (player.avatar.currentgun == GunType.pistol && player.avatar.ammo[(int)GunType.pistol] == 0)
                                 {
-                                    IdleTrunkAnimation[state.character].Draw(this.ScreenManager.SpriteBatch, new Vector2(state.position.X + offsetPosition.X + 10, state.position.Y + offsetPosition.Y + 1), SpriteEffects.None, layerIndex, 0f, color);
+                                    IdleTrunkAnimation[player.avatar.character].Draw(this.ScreenManager.SpriteBatch, new Vector2(player.avatar.position.X + offsetPosition.X + 10, player.avatar.position.Y + offsetPosition.Y + 1), SpriteEffects.None, layerIndex, 0f, color);
                                 }
                                 else
                                 {
-                                    this.ScreenManager.SpriteBatch.Draw(ShotgunEastTexture[state.character], new Rectangle(Convert.ToInt32(state.position.X + 10 + offsetPosition.X), Convert.ToInt32(state.position.Y + offsetPosition.Y + 1), 69, ShotgunEastTexture[state.character].Height),
-                                            new Rectangle(0, 0, 69, ShotgunEastTexture[state.character].Height), color, 0.0f, Vector2.Zero, SpriteEffects.None, layerIndex);
+                                    this.ScreenManager.SpriteBatch.Draw(ShotgunEastTexture[player.avatar.character], new Rectangle(Convert.ToInt32(player.avatar.position.X + 10 + offsetPosition.X), Convert.ToInt32(player.avatar.position.Y + offsetPosition.Y + 1), 69, ShotgunEastTexture[player.avatar.character].Height),
+                                            new Rectangle(0, 0, 69, ShotgunEastTexture[player.avatar.character].Height), color, 0.0f, Vector2.Zero, SpriteEffects.None, layerIndex);
                                 }
                             }
                         }
 
-                        this.ScreenManager.SpriteBatch.Draw(IdleLegsTexture[state.character], new Rectangle(Convert.ToInt32(state.position.X + 7 + offsetPosition.X), Convert.ToInt32(state.position.Y + offsetPosition.Y + 3), IdleLegsTexture[state.character].Width, IdleLegsTexture[state.character].Height),
-                        new Rectangle(0, 0, IdleLegsTexture[state.character].Width, IdleLegsTexture[state.character].Height), color, 0.0f, Vector2.Zero, SpriteEffects.None, layerIndex + 0.001f);
+                        this.ScreenManager.SpriteBatch.Draw(IdleLegsTexture[player.avatar.character], new Rectangle(Convert.ToInt32(player.avatar.position.X + 7 + offsetPosition.X), Convert.ToInt32(player.avatar.position.Y + offsetPosition.Y + 3), IdleLegsTexture[player.avatar.character].Width, IdleLegsTexture[player.avatar.character].Height),
+                        new Rectangle(0, 0, IdleLegsTexture[player.avatar.character].Width, IdleLegsTexture[player.avatar.character].Height), color, 0.0f, Vector2.Zero, SpriteEffects.None, layerIndex + 0.001f);
                     }
 
 #if DEBUG
-                    this.ScreenManager.SpriteBatch.DrawString(MenuInfoFont, layerIndex.ToString(), state.position, Color.White, 0.0f, Vector2.Zero, 1f, SpriteEffects.None, 0.4f);
+                    this.ScreenManager.SpriteBatch.DrawString(MenuInfoFont, layerIndex.ToString(), player.avatar.position, Color.White, 0.0f, Vector2.Zero, 1f, SpriteEffects.None, 0.4f);
 
                     // Position Reference TEMPORAL
-                    this.ScreenManager.SpriteBatch.Draw(PositionReference, new Rectangle(Convert.ToInt32(state.position.X), Convert.ToInt32(state.position.Y), PositionReference.Width, PositionReference.Height),
+                    this.ScreenManager.SpriteBatch.Draw(PositionReference, new Rectangle(Convert.ToInt32(player.avatar.position.X), Convert.ToInt32(player.avatar.position.Y), PositionReference.Width, PositionReference.Height),
                         new Rectangle(0, 0, PositionReference.Width, PositionReference.Height), Color.White, 0.0f, Vector2.Zero, SpriteEffects.None, 0.1f);
 #endif
 
                     // Draw the SHADOW OF THE CHARACTER
-                    this.ScreenManager.SpriteBatch.Draw(CharacterShadow, new Rectangle(Convert.ToInt32(state.position.X + IdleLegsTexture[state.character].Width / 2 - 5 + offsetPosition.X), Convert.ToInt32(state.position.Y + IdleLegsTexture[state.character].Height - 6 + offsetPosition.Y), CharacterShadow.Width, CharacterShadow.Height),
+                    this.ScreenManager.SpriteBatch.Draw(CharacterShadow, new Rectangle(Convert.ToInt32(player.avatar.position.X + IdleLegsTexture[player.avatar.character].Width / 2 - 5 + offsetPosition.X), Convert.ToInt32(player.avatar.position.Y + IdleLegsTexture[player.avatar.character].Height - 6 + offsetPosition.Y), CharacterShadow.Width, CharacterShadow.Height),
                         new Rectangle(0, 0, CharacterShadow.Width, CharacterShadow.Height), new Color(255, 255, 255, 50), 0.0f, Vector2.Zero, SpriteEffects.None, layerIndex + 0.01f);
 
-                    state.isLoosingLife = false;
+                    player.avatar.isLoosingLife = false;
                     break;
 
 
                 case ObjectStatus.Dying:
-                    if (state.accumMove.X > 0)
+                    if (player.avatar.accumMove.X > 0)
                     {
-                        this.ScreenManager.SpriteBatch.Draw(DiedTexture[state.character], new Rectangle(Convert.ToInt32(state.position.X + 7 + offsetPosition.X), Convert.ToInt32(state.position.Y - 27), DiedTexture[state.character].Width, DiedTexture[state.character].Height),
-                            new Rectangle(0, 0, DiedTexture[state.character].Width, DiedTexture[state.character].Height), Color.White, 0.0f, Vector2.Zero, SpriteEffects.FlipHorizontally, layerIndex + 0.001f);
+                        this.ScreenManager.SpriteBatch.Draw(DiedTexture[player.avatar.character], new Rectangle(Convert.ToInt32(player.avatar.position.X + 7 + offsetPosition.X), Convert.ToInt32(player.avatar.position.Y - 27), DiedTexture[player.avatar.character].Width, DiedTexture[player.avatar.character].Height),
+                            new Rectangle(0, 0, DiedTexture[player.avatar.character].Width, DiedTexture[player.avatar.character].Height), Color.White, 0.0f, Vector2.Zero, SpriteEffects.FlipHorizontally, layerIndex + 0.001f);
                     }
                     else
                     {
-                        this.ScreenManager.SpriteBatch.Draw(DiedTexture[state.character], new Rectangle(Convert.ToInt32(state.position.X + 7 + offsetPosition.X), Convert.ToInt32(state.position.Y - 27), DiedTexture[state.character].Width, DiedTexture[state.character].Height),
-                            new Rectangle(0, 0, DiedTexture[state.character].Width, DiedTexture[state.character].Height), Color.White, 0.0f, Vector2.Zero, SpriteEffects.None, layerIndex + 0.001f);
+                        this.ScreenManager.SpriteBatch.Draw(DiedTexture[player.avatar.character], new Rectangle(Convert.ToInt32(player.avatar.position.X + 7 + offsetPosition.X), Convert.ToInt32(player.avatar.position.Y - 27), DiedTexture[player.avatar.character].Width, DiedTexture[player.avatar.character].Height),
+                            new Rectangle(0, 0, DiedTexture[player.avatar.character].Width, DiedTexture[player.avatar.character].Height), Color.White, 0.0f, Vector2.Zero, SpriteEffects.None, layerIndex + 0.001f);
                     }
 
 #if DEBUG
                     // Position Reference TEMPORAL
-                    this.ScreenManager.SpriteBatch.Draw(PositionReference, new Rectangle(Convert.ToInt32(state.position.X), Convert.ToInt32(state.position.Y), PositionReference.Width, PositionReference.Height),
+                    this.ScreenManager.SpriteBatch.Draw(PositionReference, new Rectangle(Convert.ToInt32(player.avatar.position.X), Convert.ToInt32(player.avatar.position.Y), PositionReference.Width, PositionReference.Height),
                         new Rectangle(0, 0, PositionReference.Width, PositionReference.Height), Color.White, 0.0f, Vector2.Zero, SpriteEffects.None, 0.01f);
 #endif
 
                     // Draw the SHADOW OF THE CHARACTER
-                    this.ScreenManager.SpriteBatch.Draw(CharacterShadow, new Rectangle(Convert.ToInt32(state.position.X + IdleLegsTexture[state.character].Width / 2 - 5 + offsetPosition.X), Convert.ToInt32(state.position.Y + IdleLegsTexture[state.character].Height - 6 + offsetPosition.Y), CharacterShadow.Width, CharacterShadow.Height),
+                    this.ScreenManager.SpriteBatch.Draw(CharacterShadow, new Rectangle(Convert.ToInt32(player.avatar.position.X + IdleLegsTexture[player.avatar.character].Width / 2 - 5 + offsetPosition.X), Convert.ToInt32(player.avatar.position.Y + IdleLegsTexture[player.avatar.character].Height - 6 + offsetPosition.Y), CharacterShadow.Width, CharacterShadow.Height),
                         new Rectangle(0, 0, CharacterShadow.Width, CharacterShadow.Height), new Color(255, 255, 255, 50), 0.0f, Vector2.Zero, SpriteEffects.None, layerIndex + 0.01f);
                     break;
 
@@ -2380,385 +2293,385 @@ namespace ZombustersWindows
                     if (((int)(TotalGameSeconds * 10) % 2) == 0)
                     {
                         // Draws our avatar at the current position with no tinting
-                        if (state.accumFire.Length() > .5)
+                        if (player.avatar.accumFire.Length() > .5)
                         {
-                            if (state.shotAngle > -0.3925f && state.shotAngle < 0.3925f) //NORTH
+                            if (player.avatar.shotAngle > -0.3925f && player.avatar.shotAngle < 0.3925f) //NORTH
                             {
-                                switch (state.currentgun)
+                                switch (player.avatar.currentgun)
                                 {
                                     case GunType.pistol:
                                     case GunType.machinegun:
-                                        if (state.character == 0)
+                                        if (player.avatar.character == 0)
                                         {
-                                            if (state.ammo[(int)GunType.machinegun] > 0)
+                                            if (player.avatar.ammo[(int)GunType.machinegun] > 0)
                                             {
-                                                ShotgunNorthAnimation[state.character].Draw(this.ScreenManager.SpriteBatch, new Vector2(state.position.X + 6 + offsetPosition.X, state.position.Y + offsetPosition.Y - 34), SpriteEffects.None, layerIndex, 0f, Color.White);
+                                                ShotgunNorthAnimation[player.avatar.character].Draw(this.ScreenManager.SpriteBatch, new Vector2(player.avatar.position.X + 6 + offsetPosition.X, player.avatar.position.Y + offsetPosition.Y - 34), SpriteEffects.None, layerIndex, 0f, Color.White);
                                             }
                                             else
                                             {
-                                                PistolShotNorthAnimation[state.character].Draw(this.ScreenManager.SpriteBatch, new Vector2(state.position.X + 7 + offsetPosition.X, state.position.Y + offsetPosition.Y - 30), SpriteEffects.None, layerIndex, 0f, Color.White);
+                                                PistolShotNorthAnimation[player.avatar.character].Draw(this.ScreenManager.SpriteBatch, new Vector2(player.avatar.position.X + 7 + offsetPosition.X, player.avatar.position.Y + offsetPosition.Y - 30), SpriteEffects.None, layerIndex, 0f, Color.White);
                                             }
                                         }
                                         else
                                         {
-                                            if (state.ammo[(int)GunType.machinegun] > 0)
+                                            if (player.avatar.ammo[(int)GunType.machinegun] > 0)
                                             {
-                                                ShotgunNorthAnimation[state.character].Draw(this.ScreenManager.SpriteBatch, new Vector2(state.position.X + 12 + offsetPosition.X, state.position.Y + offsetPosition.Y - 36), SpriteEffects.None, layerIndex, 0f, Color.White);
+                                                ShotgunNorthAnimation[player.avatar.character].Draw(this.ScreenManager.SpriteBatch, new Vector2(player.avatar.position.X + 12 + offsetPosition.X, player.avatar.position.Y + offsetPosition.Y - 36), SpriteEffects.None, layerIndex, 0f, Color.White);
                                             }
                                             else
                                             {
-                                                PistolShotNorthAnimation[state.character].Draw(this.ScreenManager.SpriteBatch, new Vector2(state.position.X + 12 + offsetPosition.X, state.position.Y + offsetPosition.Y - 30), SpriteEffects.None, layerIndex, 0f, Color.White);
+                                                PistolShotNorthAnimation[player.avatar.character].Draw(this.ScreenManager.SpriteBatch, new Vector2(player.avatar.position.X + 12 + offsetPosition.X, player.avatar.position.Y + offsetPosition.Y - 30), SpriteEffects.None, layerIndex, 0f, Color.White);
                                             }
                                         }
                                         break;
 
                                     case GunType.flamethrower:
-                                        if (state.character == 0)
+                                        if (player.avatar.character == 0)
                                         {
-                                            this.ScreenManager.SpriteBatch.Draw(ShotgunNorthTexture[state.character], new Rectangle(Convert.ToInt32(state.position.X + 6 + offsetPosition.X), Convert.ToInt32(state.position.Y + offsetPosition.Y - 34), 26, ShotgunNorthTexture[state.character].Height),
-                                                new Rectangle(0, 0, 26, ShotgunNorthTexture[state.character].Height), Color.White, 0.0f, Vector2.Zero, SpriteEffects.None, layerIndex);
+                                            this.ScreenManager.SpriteBatch.Draw(ShotgunNorthTexture[player.avatar.character], new Rectangle(Convert.ToInt32(player.avatar.position.X + 6 + offsetPosition.X), Convert.ToInt32(player.avatar.position.Y + offsetPosition.Y - 34), 26, ShotgunNorthTexture[player.avatar.character].Height),
+                                                new Rectangle(0, 0, 26, ShotgunNorthTexture[player.avatar.character].Height), Color.White, 0.0f, Vector2.Zero, SpriteEffects.None, layerIndex);
                                         }
                                         else
                                         {
-                                            this.ScreenManager.SpriteBatch.Draw(ShotgunNorthTexture[state.character], new Rectangle(Convert.ToInt32(state.position.X + 12 + offsetPosition.X), Convert.ToInt32(state.position.Y + offsetPosition.Y - 36), 21, ShotgunNorthTexture[state.character].Height),
-                                                new Rectangle(0, 0, 21, ShotgunNorthTexture[state.character].Height), Color.White, 0.0f, Vector2.Zero, SpriteEffects.None, layerIndex);
+                                            this.ScreenManager.SpriteBatch.Draw(ShotgunNorthTexture[player.avatar.character], new Rectangle(Convert.ToInt32(player.avatar.position.X + 12 + offsetPosition.X), Convert.ToInt32(player.avatar.position.Y + offsetPosition.Y - 36), 21, ShotgunNorthTexture[player.avatar.character].Height),
+                                                new Rectangle(0, 0, 21, ShotgunNorthTexture[player.avatar.character].Height), Color.White, 0.0f, Vector2.Zero, SpriteEffects.None, layerIndex);
                                         }
-                                        DrawFlameThrower(state, layerIndex);
+                                        DrawFlameThrower(player.avatar, layerIndex);
                                         break;
 
                                     default:
                                         break;
                                 }
                             }
-                            else if (state.shotAngle > 0.3925f && state.shotAngle < 1.1775f) //NORTH-EAST
+                            else if (player.avatar.shotAngle > 0.3925f && player.avatar.shotAngle < 1.1775f) //NORTH-EAST
                             {
-                                switch (state.currentgun)
+                                switch (player.avatar.currentgun)
                                 {
                                     case GunType.pistol:
                                     case GunType.machinegun:
-                                        if (state.character == 0)
+                                        if (player.avatar.character == 0)
                                         {
-                                            if (state.ammo[(int)GunType.machinegun] > 0)
+                                            if (player.avatar.ammo[(int)GunType.machinegun] > 0)
                                             {
-                                                ShotgunNEAnimation[state.character].Draw(this.ScreenManager.SpriteBatch, new Vector2(state.position.X + 7 + offsetPosition.X, state.position.Y + offsetPosition.Y - 14), SpriteEffects.None, layerIndex, 0f, Color.White);
+                                                ShotgunNEAnimation[player.avatar.character].Draw(this.ScreenManager.SpriteBatch, new Vector2(player.avatar.position.X + 7 + offsetPosition.X, player.avatar.position.Y + offsetPosition.Y - 14), SpriteEffects.None, layerIndex, 0f, Color.White);
                                             }
                                             else
                                             {
-                                                PistolShotNEAnimation[state.character].Draw(this.ScreenManager.SpriteBatch, new Vector2(state.position.X + 7 + offsetPosition.X, state.position.Y + offsetPosition.Y - 18), SpriteEffects.None, layerIndex, 0f, Color.White);
+                                                PistolShotNEAnimation[player.avatar.character].Draw(this.ScreenManager.SpriteBatch, new Vector2(player.avatar.position.X + 7 + offsetPosition.X, player.avatar.position.Y + offsetPosition.Y - 18), SpriteEffects.None, layerIndex, 0f, Color.White);
                                             }
                                         }
                                         else
                                         {
-                                            if (state.ammo[(int)GunType.machinegun] > 0)
+                                            if (player.avatar.ammo[(int)GunType.machinegun] > 0)
                                             {
-                                                ShotgunNEAnimation[state.character].Draw(this.ScreenManager.SpriteBatch, new Vector2(state.position.X + 10 + offsetPosition.X, state.position.Y + offsetPosition.Y - 14), SpriteEffects.None, layerIndex, 0f, Color.White);
+                                                ShotgunNEAnimation[player.avatar.character].Draw(this.ScreenManager.SpriteBatch, new Vector2(player.avatar.position.X + 10 + offsetPosition.X, player.avatar.position.Y + offsetPosition.Y - 14), SpriteEffects.None, layerIndex, 0f, Color.White);
                                             }
                                             else
                                             {
-                                                PistolShotNEAnimation[state.character].Draw(this.ScreenManager.SpriteBatch, new Vector2(state.position.X + 7 + offsetPosition.X, state.position.Y + offsetPosition.Y - 18), SpriteEffects.None, layerIndex, 0f, Color.White);
+                                                PistolShotNEAnimation[player.avatar.character].Draw(this.ScreenManager.SpriteBatch, new Vector2(player.avatar.position.X + 7 + offsetPosition.X, player.avatar.position.Y + offsetPosition.Y - 18), SpriteEffects.None, layerIndex, 0f, Color.White);
                                             }
                                         }
                                         break;
                                     case GunType.flamethrower:
-                                        if (state.character == 0)
+                                        if (player.avatar.character == 0)
                                         {
-                                            this.ScreenManager.SpriteBatch.Draw(ShotgunNETexture[state.character], new Rectangle(Convert.ToInt32(state.position.X + 7 + offsetPosition.X), Convert.ToInt32(state.position.Y + offsetPosition.Y - 14), 59, ShotgunNETexture[state.character].Height),
-                                                new Rectangle(0, 0, 59, ShotgunNETexture[state.character].Height), Color.White, 0.0f, Vector2.Zero, SpriteEffects.None, layerIndex);
+                                            this.ScreenManager.SpriteBatch.Draw(ShotgunNETexture[player.avatar.character], new Rectangle(Convert.ToInt32(player.avatar.position.X + 7 + offsetPosition.X), Convert.ToInt32(player.avatar.position.Y + offsetPosition.Y - 14), 59, ShotgunNETexture[player.avatar.character].Height),
+                                                new Rectangle(0, 0, 59, ShotgunNETexture[player.avatar.character].Height), Color.White, 0.0f, Vector2.Zero, SpriteEffects.None, layerIndex);
                                         }
                                         else
                                         {
-                                            this.ScreenManager.SpriteBatch.Draw(ShotgunNETexture[state.character], new Rectangle(Convert.ToInt32(state.position.X + 10 + offsetPosition.X), Convert.ToInt32(state.position.Y + offsetPosition.Y - 14), 53, ShotgunNETexture[state.character].Height),
-                                                new Rectangle(0, 0, 53, ShotgunNETexture[state.character].Height), Color.White, 0.0f, Vector2.Zero, SpriteEffects.None, layerIndex);
+                                            this.ScreenManager.SpriteBatch.Draw(ShotgunNETexture[player.avatar.character], new Rectangle(Convert.ToInt32(player.avatar.position.X + 10 + offsetPosition.X), Convert.ToInt32(player.avatar.position.Y + offsetPosition.Y - 14), 53, ShotgunNETexture[player.avatar.character].Height),
+                                                new Rectangle(0, 0, 53, ShotgunNETexture[player.avatar.character].Height), Color.White, 0.0f, Vector2.Zero, SpriteEffects.None, layerIndex);
                                         }
-                                        DrawFlameThrower(state, layerIndex);
+                                        DrawFlameThrower(player.avatar, layerIndex);
                                         break;
 
                                     default:
                                         break;
                                 }
                             }
-                            else if (state.shotAngle > 1.1775f && state.shotAngle < 1.9625f) //EAST
+                            else if (player.avatar.shotAngle > 1.1775f && player.avatar.shotAngle < 1.9625f) //EAST
                             {
-                                switch (state.currentgun)
+                                switch (player.avatar.currentgun)
                                 {
                                     case GunType.pistol:
                                     case GunType.machinegun:
-                                        if (state.character == 0)
+                                        if (player.avatar.character == 0)
                                         {
-                                            if (state.ammo[(int)GunType.machinegun] > 0)
+                                            if (player.avatar.ammo[(int)GunType.machinegun] > 0)
                                             {
-                                                ShotgunShotEastAnimation[state.character].Draw(this.ScreenManager.SpriteBatch, new Vector2(state.position.X + 7 + offsetPosition.X, state.position.Y + offsetPosition.Y + 4), SpriteEffects.None, layerIndex, 0f, Color.White);
+                                                ShotgunShotEastAnimation[player.avatar.character].Draw(this.ScreenManager.SpriteBatch, new Vector2(player.avatar.position.X + 7 + offsetPosition.X, player.avatar.position.Y + offsetPosition.Y + 4), SpriteEffects.None, layerIndex, 0f, Color.White);
                                             }
                                             else
                                             {
-                                                PistolShotEastAnimation[state.character].Draw(this.ScreenManager.SpriteBatch, new Vector2(state.position.X + 7 + offsetPosition.X, state.position.Y + offsetPosition.Y + 4), SpriteEffects.None, layerIndex, 0f, Color.White);
+                                                PistolShotEastAnimation[player.avatar.character].Draw(this.ScreenManager.SpriteBatch, new Vector2(player.avatar.position.X + 7 + offsetPosition.X, player.avatar.position.Y + offsetPosition.Y + 4), SpriteEffects.None, layerIndex, 0f, Color.White);
                                             }
                                         }
                                         else
                                         {
-                                            if (state.ammo[(int)GunType.machinegun] > 0)
+                                            if (player.avatar.ammo[(int)GunType.machinegun] > 0)
                                             {
-                                                ShotgunShotEastAnimation[state.character].Draw(this.ScreenManager.SpriteBatch, new Vector2(state.position.X + 10 + offsetPosition.X, state.position.Y + offsetPosition.Y + 1), SpriteEffects.None, layerIndex, 0f, Color.White);
+                                                ShotgunShotEastAnimation[player.avatar.character].Draw(this.ScreenManager.SpriteBatch, new Vector2(player.avatar.position.X + 10 + offsetPosition.X, player.avatar.position.Y + offsetPosition.Y + 1), SpriteEffects.None, layerIndex, 0f, Color.White);
                                             }
                                             else
                                             {
-                                                PistolShotEastAnimation[state.character].Draw(this.ScreenManager.SpriteBatch, new Vector2(state.position.X + 7 + offsetPosition.X, state.position.Y + offsetPosition.Y + 1), SpriteEffects.None, layerIndex, 0f, Color.White);
+                                                PistolShotEastAnimation[player.avatar.character].Draw(this.ScreenManager.SpriteBatch, new Vector2(player.avatar.position.X + 7 + offsetPosition.X, player.avatar.position.Y + offsetPosition.Y + 1), SpriteEffects.None, layerIndex, 0f, Color.White);
                                             }
                                         }
                                         break;
 
                                     case GunType.flamethrower:
-                                        if (state.character == 0)
+                                        if (player.avatar.character == 0)
                                         {
-                                            this.ScreenManager.SpriteBatch.Draw(ShotgunEastTexture[state.character], new Rectangle(Convert.ToInt32(state.position.X + 7 + offsetPosition.X), Convert.ToInt32(state.position.Y + offsetPosition.Y + 4), 71, ShotgunEastTexture[state.character].Height),
-                                                new Rectangle(0, 0, 71, ShotgunEastTexture[state.character].Height), Color.White, 0.0f, Vector2.Zero, SpriteEffects.None, layerIndex);
+                                            this.ScreenManager.SpriteBatch.Draw(ShotgunEastTexture[player.avatar.character], new Rectangle(Convert.ToInt32(player.avatar.position.X + 7 + offsetPosition.X), Convert.ToInt32(player.avatar.position.Y + offsetPosition.Y + 4), 71, ShotgunEastTexture[player.avatar.character].Height),
+                                                new Rectangle(0, 0, 71, ShotgunEastTexture[player.avatar.character].Height), Color.White, 0.0f, Vector2.Zero, SpriteEffects.None, layerIndex);
                                         }
                                         else
                                         {
-                                            this.ScreenManager.SpriteBatch.Draw(ShotgunEastTexture[state.character], new Rectangle(Convert.ToInt32(state.position.X + 10 + offsetPosition.X), Convert.ToInt32(state.position.Y + offsetPosition.Y + 1), 69, ShotgunEastTexture[state.character].Height),
-                                                new Rectangle(0, 0, 69, ShotgunEastTexture[state.character].Height), Color.White, 0.0f, Vector2.Zero, SpriteEffects.None, layerIndex);
+                                            this.ScreenManager.SpriteBatch.Draw(ShotgunEastTexture[player.avatar.character], new Rectangle(Convert.ToInt32(player.avatar.position.X + 10 + offsetPosition.X), Convert.ToInt32(player.avatar.position.Y + offsetPosition.Y + 1), 69, ShotgunEastTexture[player.avatar.character].Height),
+                                                new Rectangle(0, 0, 69, ShotgunEastTexture[player.avatar.character].Height), Color.White, 0.0f, Vector2.Zero, SpriteEffects.None, layerIndex);
                                         }
-                                        DrawFlameThrower(state, layerIndex);
+                                        DrawFlameThrower(player.avatar, layerIndex);
                                         break;
 
                                     default:
                                         break;
                                 }
                             }
-                            else if (state.shotAngle > 1.19625f && state.shotAngle < 2.7275f) //SOUTH-EAST
+                            else if (player.avatar.shotAngle > 1.19625f && player.avatar.shotAngle < 2.7275f) //SOUTH-EAST
                             {
-                                switch (state.currentgun)
+                                switch (player.avatar.currentgun)
                                 {
                                     case GunType.pistol:
                                     case GunType.machinegun:
-                                        if (state.character == 0)
+                                        if (player.avatar.character == 0)
                                         {
-                                            if (state.ammo[(int)GunType.machinegun] > 0)
+                                            if (player.avatar.ammo[(int)GunType.machinegun] > 0)
                                             {
-                                                ShotgunSEAnimation[state.character].Draw(this.ScreenManager.SpriteBatch, new Vector2(state.position.X + 7 + offsetPosition.X, state.position.Y + offsetPosition.Y + 4), SpriteEffects.None, layerIndex, 0f, Color.White);
+                                                ShotgunSEAnimation[player.avatar.character].Draw(this.ScreenManager.SpriteBatch, new Vector2(player.avatar.position.X + 7 + offsetPosition.X, player.avatar.position.Y + offsetPosition.Y + 4), SpriteEffects.None, layerIndex, 0f, Color.White);
                                             }
                                             else
                                             {
-                                                PistolShotSEAnimation[state.character].Draw(this.ScreenManager.SpriteBatch, new Vector2(state.position.X + 7 + offsetPosition.X, state.position.Y + offsetPosition.Y + 4), SpriteEffects.None, layerIndex, 0f, Color.White);
+                                                PistolShotSEAnimation[player.avatar.character].Draw(this.ScreenManager.SpriteBatch, new Vector2(player.avatar.position.X + 7 + offsetPosition.X, player.avatar.position.Y + offsetPosition.Y + 4), SpriteEffects.None, layerIndex, 0f, Color.White);
                                             }
                                         }
                                         else
                                         {
-                                            if (state.ammo[(int)GunType.machinegun] > 0)
+                                            if (player.avatar.ammo[(int)GunType.machinegun] > 0)
                                             {
-                                                ShotgunSEAnimation[state.character].Draw(this.ScreenManager.SpriteBatch, new Vector2(state.position.X + 10 + offsetPosition.X, state.position.Y + offsetPosition.Y + 1), SpriteEffects.None, layerIndex, 0f, Color.White);
+                                                ShotgunSEAnimation[player.avatar.character].Draw(this.ScreenManager.SpriteBatch, new Vector2(player.avatar.position.X + 10 + offsetPosition.X, player.avatar.position.Y + offsetPosition.Y + 1), SpriteEffects.None, layerIndex, 0f, Color.White);
                                             }
                                             else
                                             {
-                                                PistolShotSEAnimation[state.character].Draw(this.ScreenManager.SpriteBatch, new Vector2(state.position.X + 10 + offsetPosition.X, state.position.Y + offsetPosition.Y + 1), SpriteEffects.None, layerIndex, 0f, Color.White);
+                                                PistolShotSEAnimation[player.avatar.character].Draw(this.ScreenManager.SpriteBatch, new Vector2(player.avatar.position.X + 10 + offsetPosition.X, player.avatar.position.Y + offsetPosition.Y + 1), SpriteEffects.None, layerIndex, 0f, Color.White);
                                             }
                                         }
                                         break;
 
                                     case GunType.flamethrower:
-                                        if (state.character == 0)
+                                        if (player.avatar.character == 0)
                                         {
-                                            this.ScreenManager.SpriteBatch.Draw(ShotgunSETexture[state.character], new Rectangle(Convert.ToInt32(state.position.X + 7 + offsetPosition.X), Convert.ToInt32(state.position.Y + offsetPosition.Y + 4), 58, ShotgunSETexture[state.character].Height),
-                                                new Rectangle(0, 0, 58, ShotgunSETexture[state.character].Height), Color.White, 0.0f, Vector2.Zero, SpriteEffects.None, layerIndex);
+                                            this.ScreenManager.SpriteBatch.Draw(ShotgunSETexture[player.avatar.character], new Rectangle(Convert.ToInt32(player.avatar.position.X + 7 + offsetPosition.X), Convert.ToInt32(player.avatar.position.Y + offsetPosition.Y + 4), 58, ShotgunSETexture[player.avatar.character].Height),
+                                                new Rectangle(0, 0, 58, ShotgunSETexture[player.avatar.character].Height), Color.White, 0.0f, Vector2.Zero, SpriteEffects.None, layerIndex);
                                         }
                                         else
                                         {
-                                            this.ScreenManager.SpriteBatch.Draw(ShotgunSETexture[state.character], new Rectangle(Convert.ToInt32(state.position.X + 10 + offsetPosition.X), Convert.ToInt32(state.position.Y + offsetPosition.Y + 1), 54, ShotgunSETexture[state.character].Height),
-                                                new Rectangle(0, 0, 54, ShotgunSETexture[state.character].Height), Color.White, 0.0f, Vector2.Zero, SpriteEffects.None, layerIndex);
+                                            this.ScreenManager.SpriteBatch.Draw(ShotgunSETexture[player.avatar.character], new Rectangle(Convert.ToInt32(player.avatar.position.X + 10 + offsetPosition.X), Convert.ToInt32(player.avatar.position.Y + offsetPosition.Y + 1), 54, ShotgunSETexture[player.avatar.character].Height),
+                                                new Rectangle(0, 0, 54, ShotgunSETexture[player.avatar.character].Height), Color.White, 0.0f, Vector2.Zero, SpriteEffects.None, layerIndex);
                                         }
-                                        DrawFlameThrower(state, layerIndex);
+                                        DrawFlameThrower(player.avatar, layerIndex);
                                         break;
 
                                     default:
                                         break;
                                 }
                             }
-                            else if (state.shotAngle > 2.7275f || state.shotAngle < -2.7275f) //SOUTH
+                            else if (player.avatar.shotAngle > 2.7275f || player.avatar.shotAngle < -2.7275f) //SOUTH
                             {
-                                switch (state.currentgun)
+                                switch (player.avatar.currentgun)
                                 {
                                     case GunType.pistol:
                                     case GunType.machinegun:
-                                        if (state.character == 0)
+                                        if (player.avatar.character == 0)
                                         {
-                                            if (state.ammo[(int)GunType.machinegun] > 0)
+                                            if (player.avatar.ammo[(int)GunType.machinegun] > 0)
                                             {
-                                                ShotgunSouthAnimation[state.character].Draw(this.ScreenManager.SpriteBatch, new Vector2(state.position.X + 7 + offsetPosition.X, state.position.Y + offsetPosition.Y + 4), SpriteEffects.None, layerIndex, 0f, Color.White);
+                                                ShotgunSouthAnimation[player.avatar.character].Draw(this.ScreenManager.SpriteBatch, new Vector2(player.avatar.position.X + 7 + offsetPosition.X, player.avatar.position.Y + offsetPosition.Y + 4), SpriteEffects.None, layerIndex, 0f, Color.White);
                                             }
                                             else
                                             {
-                                                PistolShotSouthAnimation[state.character].Draw(this.ScreenManager.SpriteBatch, new Vector2(state.position.X + 7 + offsetPosition.X, state.position.Y + offsetPosition.Y + 4), SpriteEffects.None, layerIndex, 0f, Color.White);
+                                                PistolShotSouthAnimation[player.avatar.character].Draw(this.ScreenManager.SpriteBatch, new Vector2(player.avatar.position.X + 7 + offsetPosition.X, player.avatar.position.Y + offsetPosition.Y + 4), SpriteEffects.None, layerIndex, 0f, Color.White);
                                             }
                                         }
                                         else
                                         {
-                                            if (state.ammo[(int)GunType.machinegun] > 0)
+                                            if (player.avatar.ammo[(int)GunType.machinegun] > 0)
                                             {
-                                                ShotgunSouthAnimation[state.character].Draw(this.ScreenManager.SpriteBatch, new Vector2(state.position.X + 10 + offsetPosition.X, state.position.Y + offsetPosition.Y + 1), SpriteEffects.None, layerIndex, 0f, Color.White);
+                                                ShotgunSouthAnimation[player.avatar.character].Draw(this.ScreenManager.SpriteBatch, new Vector2(player.avatar.position.X + 10 + offsetPosition.X, player.avatar.position.Y + offsetPosition.Y + 1), SpriteEffects.None, layerIndex, 0f, Color.White);
                                             }
                                             else
                                             {
-                                                PistolShotSouthAnimation[state.character].Draw(this.ScreenManager.SpriteBatch, new Vector2(state.position.X + 3 + offsetPosition.X, state.position.Y + offsetPosition.Y + 1), SpriteEffects.None, layerIndex, 0f, Color.White);
+                                                PistolShotSouthAnimation[player.avatar.character].Draw(this.ScreenManager.SpriteBatch, new Vector2(player.avatar.position.X + 3 + offsetPosition.X, player.avatar.position.Y + offsetPosition.Y + 1), SpriteEffects.None, layerIndex, 0f, Color.White);
                                             }
                                         }
                                         break;
 
                                     case GunType.flamethrower:
-                                        if (state.character == 0)
+                                        if (player.avatar.character == 0)
                                         {
-                                            this.ScreenManager.SpriteBatch.Draw(ShotgunSouthTexture[state.character], new Rectangle(Convert.ToInt32(state.position.X + 7 + offsetPosition.X), Convert.ToInt32(state.position.Y + offsetPosition.Y + 4), 21, ShotgunSouthTexture[state.character].Height),
-                                                new Rectangle(0, 0, 21, ShotgunSouthTexture[state.character].Height), Color.White, 0.0f, Vector2.Zero, SpriteEffects.None, layerIndex);
+                                            this.ScreenManager.SpriteBatch.Draw(ShotgunSouthTexture[player.avatar.character], new Rectangle(Convert.ToInt32(player.avatar.position.X + 7 + offsetPosition.X), Convert.ToInt32(player.avatar.position.Y + offsetPosition.Y + 4), 21, ShotgunSouthTexture[player.avatar.character].Height),
+                                                new Rectangle(0, 0, 21, ShotgunSouthTexture[player.avatar.character].Height), Color.White, 0.0f, Vector2.Zero, SpriteEffects.None, layerIndex);
                                         }
                                         else
                                         {
-                                            this.ScreenManager.SpriteBatch.Draw(ShotgunSouthTexture[state.character], new Rectangle(Convert.ToInt32(state.position.X + 10 + offsetPosition.X), Convert.ToInt32(state.position.Y + offsetPosition.Y + 1), 20, ShotgunSouthTexture[state.character].Height),
-                                                new Rectangle(0, 0, 20, ShotgunSouthTexture[state.character].Height), Color.White, 0.0f, Vector2.Zero, SpriteEffects.None, layerIndex);
+                                            this.ScreenManager.SpriteBatch.Draw(ShotgunSouthTexture[player.avatar.character], new Rectangle(Convert.ToInt32(player.avatar.position.X + 10 + offsetPosition.X), Convert.ToInt32(player.avatar.position.Y + offsetPosition.Y + 1), 20, ShotgunSouthTexture[player.avatar.character].Height),
+                                                new Rectangle(0, 0, 20, ShotgunSouthTexture[player.avatar.character].Height), Color.White, 0.0f, Vector2.Zero, SpriteEffects.None, layerIndex);
                                         }
-                                        DrawFlameThrower(state, layerIndex);
+                                        DrawFlameThrower(player.avatar, layerIndex);
                                         break;
 
                                     default:
                                         break;
                                 }
                             }
-                            else if (state.shotAngle < -1.9625f && state.shotAngle > -2.7275f) //SOUTH-WEST
+                            else if (player.avatar.shotAngle < -1.9625f && player.avatar.shotAngle > -2.7275f) //SOUTH-WEST
                             {
-                                switch (state.currentgun)
+                                switch (player.avatar.currentgun)
                                 {
                                     case GunType.pistol:
                                     case GunType.machinegun:
-                                        if (state.character == 0)
+                                        if (player.avatar.character == 0)
                                         {
-                                            if (state.ammo[(int)GunType.machinegun] > 0)
+                                            if (player.avatar.ammo[(int)GunType.machinegun] > 0)
                                             {
-                                                ShotgunSEAnimation[state.character].Draw(this.ScreenManager.SpriteBatch, new Vector2(state.position.X + 1 + offsetPosition.X, state.position.Y + offsetPosition.Y + 4), SpriteEffects.FlipHorizontally, layerIndex, 0f, Color.White);
+                                                ShotgunSEAnimation[player.avatar.character].Draw(this.ScreenManager.SpriteBatch, new Vector2(player.avatar.position.X + 1 + offsetPosition.X, player.avatar.position.Y + offsetPosition.Y + 4), SpriteEffects.FlipHorizontally, layerIndex, 0f, Color.White);
                                             }
                                             else
                                             {
-                                                PistolShotSEAnimation[state.character].Draw(this.ScreenManager.SpriteBatch, new Vector2(state.position.X - 6 + offsetPosition.X, state.position.Y + offsetPosition.Y + 4), SpriteEffects.FlipHorizontally, layerIndex, 0f, Color.White);
+                                                PistolShotSEAnimation[player.avatar.character].Draw(this.ScreenManager.SpriteBatch, new Vector2(player.avatar.position.X - 6 + offsetPosition.X, player.avatar.position.Y + offsetPosition.Y + 4), SpriteEffects.FlipHorizontally, layerIndex, 0f, Color.White);
                                             }
                                         }
                                         else
                                         {
-                                            if (state.ammo[(int)GunType.machinegun] > 0)
+                                            if (player.avatar.ammo[(int)GunType.machinegun] > 0)
                                             {
-                                                ShotgunSEAnimation[state.character].Draw(this.ScreenManager.SpriteBatch, new Vector2(state.position.X + 4 + offsetPosition.X, state.position.Y + offsetPosition.Y + 2), SpriteEffects.FlipHorizontally, layerIndex, 0f, Color.White);
+                                                ShotgunSEAnimation[player.avatar.character].Draw(this.ScreenManager.SpriteBatch, new Vector2(player.avatar.position.X + 4 + offsetPosition.X, player.avatar.position.Y + offsetPosition.Y + 2), SpriteEffects.FlipHorizontally, layerIndex, 0f, Color.White);
                                             }
                                             else
                                             {
-                                                PistolShotSEAnimation[state.character].Draw(this.ScreenManager.SpriteBatch, new Vector2(state.position.X + 7 + offsetPosition.X, state.position.Y + offsetPosition.Y + 1), SpriteEffects.FlipHorizontally, layerIndex, 0f, Color.White);
+                                                PistolShotSEAnimation[player.avatar.character].Draw(this.ScreenManager.SpriteBatch, new Vector2(player.avatar.position.X + 7 + offsetPosition.X, player.avatar.position.Y + offsetPosition.Y + 1), SpriteEffects.FlipHorizontally, layerIndex, 0f, Color.White);
                                             }
                                         }
                                         break;
 
                                     case GunType.flamethrower:
-                                        if (state.character == 0)
+                                        if (player.avatar.character == 0)
                                         {
-                                            this.ScreenManager.SpriteBatch.Draw(ShotgunSETexture[state.character], new Rectangle(Convert.ToInt32(state.position.X + 1 + offsetPosition.X - 29), Convert.ToInt32(state.position.Y + offsetPosition.Y + 4), 58, ShotgunSETexture[state.character].Height),
-                                                new Rectangle(0, 0, 58, ShotgunSETexture[state.character].Height), Color.White, 0.0f, Vector2.Zero, SpriteEffects.FlipHorizontally, layerIndex);
+                                            this.ScreenManager.SpriteBatch.Draw(ShotgunSETexture[player.avatar.character], new Rectangle(Convert.ToInt32(player.avatar.position.X + 1 + offsetPosition.X - 29), Convert.ToInt32(player.avatar.position.Y + offsetPosition.Y + 4), 58, ShotgunSETexture[player.avatar.character].Height),
+                                                new Rectangle(0, 0, 58, ShotgunSETexture[player.avatar.character].Height), Color.White, 0.0f, Vector2.Zero, SpriteEffects.FlipHorizontally, layerIndex);
                                         }
                                         else
                                         {
-                                            this.ScreenManager.SpriteBatch.Draw(ShotgunSETexture[state.character], new Rectangle(Convert.ToInt32(state.position.X + 4 + offsetPosition.X - 27), Convert.ToInt32(state.position.Y + offsetPosition.Y + 2), 54, ShotgunSETexture[state.character].Height),
-                                                new Rectangle(0, 0, 54, ShotgunSETexture[state.character].Height), Color.White, 0.0f, Vector2.Zero, SpriteEffects.FlipHorizontally, layerIndex);
+                                            this.ScreenManager.SpriteBatch.Draw(ShotgunSETexture[player.avatar.character], new Rectangle(Convert.ToInt32(player.avatar.position.X + 4 + offsetPosition.X - 27), Convert.ToInt32(player.avatar.position.Y + offsetPosition.Y + 2), 54, ShotgunSETexture[player.avatar.character].Height),
+                                                new Rectangle(0, 0, 54, ShotgunSETexture[player.avatar.character].Height), Color.White, 0.0f, Vector2.Zero, SpriteEffects.FlipHorizontally, layerIndex);
                                         }
-                                        DrawFlameThrower(state, layerIndex);
+                                        DrawFlameThrower(player.avatar, layerIndex);
                                         break;
 
                                     default:
                                         break;
                                 }
                             }
-                            else if (state.shotAngle < -1.1775f && state.shotAngle > -1.9625f) //WEST
+                            else if (player.avatar.shotAngle < -1.1775f && player.avatar.shotAngle > -1.9625f) //WEST
                             {
-                                switch (state.currentgun)
+                                switch (player.avatar.currentgun)
                                 {
                                     case GunType.pistol:
                                     case GunType.machinegun:
-                                        if (state.character == 0)
+                                        if (player.avatar.character == 0)
                                         {
-                                            if (state.ammo[(int)GunType.machinegun] > 0)
+                                            if (player.avatar.ammo[(int)GunType.machinegun] > 0)
                                             {
-                                                ShotgunShotEastAnimation[state.character].Draw(this.ScreenManager.SpriteBatch, new Vector2(state.position.X - 6 + offsetPosition.X, state.position.Y + offsetPosition.Y + 4), SpriteEffects.FlipHorizontally, layerIndex, 0f, Color.White);
+                                                ShotgunShotEastAnimation[player.avatar.character].Draw(this.ScreenManager.SpriteBatch, new Vector2(player.avatar.position.X - 6 + offsetPosition.X, player.avatar.position.Y + offsetPosition.Y + 4), SpriteEffects.FlipHorizontally, layerIndex, 0f, Color.White);
                                             }
                                             else
                                             {
-                                                PistolShotEastAnimation[state.character].Draw(this.ScreenManager.SpriteBatch, new Vector2(state.position.X - 6 + offsetPosition.X, state.position.Y + offsetPosition.Y + 4), SpriteEffects.FlipHorizontally, layerIndex, 0f, Color.White);
+                                                PistolShotEastAnimation[player.avatar.character].Draw(this.ScreenManager.SpriteBatch, new Vector2(player.avatar.position.X - 6 + offsetPosition.X, player.avatar.position.Y + offsetPosition.Y + 4), SpriteEffects.FlipHorizontally, layerIndex, 0f, Color.White);
                                             }
                                         }
                                         else
                                         {
-                                            if (state.ammo[(int)GunType.machinegun] > 0)
+                                            if (player.avatar.ammo[(int)GunType.machinegun] > 0)
                                             {
-                                                ShotgunShotEastAnimation[state.character].Draw(this.ScreenManager.SpriteBatch, new Vector2(state.position.X - 4 + offsetPosition.X, state.position.Y + offsetPosition.Y + 2), SpriteEffects.FlipHorizontally, layerIndex, 0f, Color.White);
+                                                ShotgunShotEastAnimation[player.avatar.character].Draw(this.ScreenManager.SpriteBatch, new Vector2(player.avatar.position.X - 4 + offsetPosition.X, player.avatar.position.Y + offsetPosition.Y + 2), SpriteEffects.FlipHorizontally, layerIndex, 0f, Color.White);
                                             }
                                             else
                                             {
-                                                PistolShotEastAnimation[state.character].Draw(this.ScreenManager.SpriteBatch, new Vector2(state.position.X + 2 + offsetPosition.X, state.position.Y + offsetPosition.Y + 1), SpriteEffects.FlipHorizontally, layerIndex, 0f, Color.White);
+                                                PistolShotEastAnimation[player.avatar.character].Draw(this.ScreenManager.SpriteBatch, new Vector2(player.avatar.position.X + 2 + offsetPosition.X, player.avatar.position.Y + offsetPosition.Y + 1), SpriteEffects.FlipHorizontally, layerIndex, 0f, Color.White);
                                             }
                                         }
                                         break;
 
                                     case GunType.flamethrower:
-                                        if (state.character == 0)
+                                        if (player.avatar.character == 0)
                                         {
-                                            this.ScreenManager.SpriteBatch.Draw(ShotgunEastTexture[state.character], new Rectangle(Convert.ToInt32(state.position.X - 6 + offsetPosition.X - 35), Convert.ToInt32(state.position.Y + offsetPosition.Y + 4), 71, ShotgunEastTexture[state.character].Height),
-                                                new Rectangle(0, 0, 71, ShotgunEastTexture[state.character].Height), Color.White, 0.0f, Vector2.Zero, SpriteEffects.FlipHorizontally, layerIndex);
+                                            this.ScreenManager.SpriteBatch.Draw(ShotgunEastTexture[player.avatar.character], new Rectangle(Convert.ToInt32(player.avatar.position.X - 6 + offsetPosition.X - 35), Convert.ToInt32(player.avatar.position.Y + offsetPosition.Y + 4), 71, ShotgunEastTexture[player.avatar.character].Height),
+                                                new Rectangle(0, 0, 71, ShotgunEastTexture[player.avatar.character].Height), Color.White, 0.0f, Vector2.Zero, SpriteEffects.FlipHorizontally, layerIndex);
                                         }
                                         else
                                         {
-                                            this.ScreenManager.SpriteBatch.Draw(ShotgunEastTexture[state.character], new Rectangle(Convert.ToInt32(state.position.X - 4 + offsetPosition.X - 34), Convert.ToInt32(state.position.Y + offsetPosition.Y + 2), 69, ShotgunEastTexture[state.character].Height),
-                                                new Rectangle(0, 0, 69, ShotgunEastTexture[state.character].Height), Color.White, 0.0f, Vector2.Zero, SpriteEffects.FlipHorizontally, layerIndex);
+                                            this.ScreenManager.SpriteBatch.Draw(ShotgunEastTexture[player.avatar.character], new Rectangle(Convert.ToInt32(player.avatar.position.X - 4 + offsetPosition.X - 34), Convert.ToInt32(player.avatar.position.Y + offsetPosition.Y + 2), 69, ShotgunEastTexture[player.avatar.character].Height),
+                                                new Rectangle(0, 0, 69, ShotgunEastTexture[player.avatar.character].Height), Color.White, 0.0f, Vector2.Zero, SpriteEffects.FlipHorizontally, layerIndex);
                                         }
-                                        DrawFlameThrower(state, layerIndex);
+                                        DrawFlameThrower(player.avatar, layerIndex);
                                         break;
 
                                     default:
                                         break;
                                 }
                             }
-                            else if (state.shotAngle < -0.3925f && state.shotAngle > -1.1775f) //NORTH-WEST
+                            else if (player.avatar.shotAngle < -0.3925f && player.avatar.shotAngle > -1.1775f) //NORTH-WEST
                             {
-                                switch (state.currentgun)
+                                switch (player.avatar.currentgun)
                                 {
                                     case GunType.pistol:
                                     case GunType.machinegun:
-                                        if (state.character == 0)
+                                        if (player.avatar.character == 0)
                                         {
-                                            if (state.ammo[(int)GunType.machinegun] > 0)
+                                            if (player.avatar.ammo[(int)GunType.machinegun] > 0)
                                             {
-                                                ShotgunNEAnimation[state.character].Draw(this.ScreenManager.SpriteBatch, new Vector2(state.position.X + offsetPosition.X, state.position.Y + offsetPosition.Y - 14), SpriteEffects.FlipHorizontally, layerIndex, 0f, Color.White);
+                                                ShotgunNEAnimation[player.avatar.character].Draw(this.ScreenManager.SpriteBatch, new Vector2(player.avatar.position.X + offsetPosition.X, player.avatar.position.Y + offsetPosition.Y - 14), SpriteEffects.FlipHorizontally, layerIndex, 0f, Color.White);
                                             }
                                             else
                                             {
-                                                PistolShotNEAnimation[state.character].Draw(this.ScreenManager.SpriteBatch, new Vector2(state.position.X - 6 + offsetPosition.X, state.position.Y + offsetPosition.Y - 18), SpriteEffects.FlipHorizontally, layerIndex, 0f, Color.White);
+                                                PistolShotNEAnimation[player.avatar.character].Draw(this.ScreenManager.SpriteBatch, new Vector2(player.avatar.position.X - 6 + offsetPosition.X, player.avatar.position.Y + offsetPosition.Y - 18), SpriteEffects.FlipHorizontally, layerIndex, 0f, Color.White);
                                             }
                                         }
                                         else
                                         {
-                                            if (state.ammo[(int)GunType.machinegun] > 0)
+                                            if (player.avatar.ammo[(int)GunType.machinegun] > 0)
                                             {
-                                                ShotgunNEAnimation[state.character].Draw(this.ScreenManager.SpriteBatch, new Vector2(state.position.X + offsetPosition.X + 4, state.position.Y + offsetPosition.Y - 13), SpriteEffects.FlipHorizontally, layerIndex, 0f, Color.White);
+                                                ShotgunNEAnimation[player.avatar.character].Draw(this.ScreenManager.SpriteBatch, new Vector2(player.avatar.position.X + offsetPosition.X + 4, player.avatar.position.Y + offsetPosition.Y - 13), SpriteEffects.FlipHorizontally, layerIndex, 0f, Color.White);
                                             }
                                             else
                                             {
-                                                PistolShotNEAnimation[state.character].Draw(this.ScreenManager.SpriteBatch, new Vector2(state.position.X + 2 + offsetPosition.X, state.position.Y + offsetPosition.Y - 18), SpriteEffects.FlipHorizontally, layerIndex, 0f, Color.White);
+                                                PistolShotNEAnimation[player.avatar.character].Draw(this.ScreenManager.SpriteBatch, new Vector2(player.avatar.position.X + 2 + offsetPosition.X, player.avatar.position.Y + offsetPosition.Y - 18), SpriteEffects.FlipHorizontally, layerIndex, 0f, Color.White);
                                             }
                                         }
                                         break;
 
                                     case GunType.flamethrower:
-                                        if (state.character == 0)
+                                        if (player.avatar.character == 0)
                                         {
-                                            this.ScreenManager.SpriteBatch.Draw(ShotgunNETexture[state.character], new Rectangle(Convert.ToInt32(state.position.X + offsetPosition.X - 29), Convert.ToInt32(state.position.Y + offsetPosition.Y - 14), 59, ShotgunNETexture[state.character].Height),
-                                                new Rectangle(0, 0, 59, ShotgunNETexture[state.character].Height), Color.White, 0.0f, Vector2.Zero, SpriteEffects.FlipHorizontally, layerIndex);
+                                            this.ScreenManager.SpriteBatch.Draw(ShotgunNETexture[player.avatar.character], new Rectangle(Convert.ToInt32(player.avatar.position.X + offsetPosition.X - 29), Convert.ToInt32(player.avatar.position.Y + offsetPosition.Y - 14), 59, ShotgunNETexture[player.avatar.character].Height),
+                                                new Rectangle(0, 0, 59, ShotgunNETexture[player.avatar.character].Height), Color.White, 0.0f, Vector2.Zero, SpriteEffects.FlipHorizontally, layerIndex);
                                         }
                                         else
                                         {
-                                            this.ScreenManager.SpriteBatch.Draw(ShotgunNETexture[state.character], new Rectangle(Convert.ToInt32(state.position.X + offsetPosition.X + 4 - 26), Convert.ToInt32(state.position.Y + offsetPosition.Y - 13), 53, ShotgunNETexture[state.character].Height),
-                                                new Rectangle(0, 0, 53, ShotgunNETexture[state.character].Height), Color.White, 0.0f, Vector2.Zero, SpriteEffects.FlipHorizontally, layerIndex);
+                                            this.ScreenManager.SpriteBatch.Draw(ShotgunNETexture[player.avatar.character], new Rectangle(Convert.ToInt32(player.avatar.position.X + offsetPosition.X + 4 - 26), Convert.ToInt32(player.avatar.position.Y + offsetPosition.Y - 13), 53, ShotgunNETexture[player.avatar.character].Height),
+                                                new Rectangle(0, 0, 53, ShotgunNETexture[player.avatar.character].Height), Color.White, 0.0f, Vector2.Zero, SpriteEffects.FlipHorizontally, layerIndex);
                                         }
-                                        DrawFlameThrower(state, layerIndex);
+                                        DrawFlameThrower(player.avatar, layerIndex);
                                         break;
 
                                     default:
@@ -2768,125 +2681,125 @@ namespace ZombustersWindows
                         }
 
                         // Draw Movement LEGS
-                        if (state.accumMove.Length() > .5)
+                        if (player.avatar.accumMove.Length() > .5)
                         {
-                            if (state.character == 0)
+                            if (player.avatar.character == 0)
                             {
-                                if (state.accumMove.X > 0)
+                                if (player.avatar.accumMove.X > 0)
                                 {
-                                    if (state.accumFire.Length() < .5)
+                                    if (player.avatar.accumFire.Length() < .5)
                                     {
-                                        if (state.currentgun == GunType.pistol && state.ammo[(int)GunType.pistol] == 0)
+                                        if (player.avatar.currentgun == GunType.pistol && player.avatar.ammo[(int)GunType.pistol] == 0)
                                         {
-                                            IdleTrunkAnimation[state.character].Draw(this.ScreenManager.SpriteBatch, new Vector2(state.position.X + offsetPosition.X, state.position.Y + offsetPosition.Y), SpriteEffects.None, layerIndex, 0f, Color.White);
+                                            IdleTrunkAnimation[player.avatar.character].Draw(this.ScreenManager.SpriteBatch, new Vector2(player.avatar.position.X + offsetPosition.X, player.avatar.position.Y + offsetPosition.Y), SpriteEffects.None, layerIndex, 0f, Color.White);
                                         }
                                         else
                                         {
-                                            this.ScreenManager.SpriteBatch.Draw(ShotgunEastTexture[state.character], new Rectangle(Convert.ToInt32(state.position.X + 7 + offsetPosition.X), Convert.ToInt32(state.position.Y + offsetPosition.Y + 4), 71, ShotgunEastTexture[state.character].Height),
-                                                new Rectangle(0, 0, 71, ShotgunEastTexture[state.character].Height), Color.White, 0.0f, Vector2.Zero, SpriteEffects.None, layerIndex);
+                                            this.ScreenManager.SpriteBatch.Draw(ShotgunEastTexture[player.avatar.character], new Rectangle(Convert.ToInt32(player.avatar.position.X + 7 + offsetPosition.X), Convert.ToInt32(player.avatar.position.Y + offsetPosition.Y + 4), 71, ShotgunEastTexture[player.avatar.character].Height),
+                                                new Rectangle(0, 0, 71, ShotgunEastTexture[player.avatar.character].Height), Color.White, 0.0f, Vector2.Zero, SpriteEffects.None, layerIndex);
                                         }
                                     }
 
-                                    RunEastAnimation[state.character].Draw(this.ScreenManager.SpriteBatch,
-                                        new Vector2(state.position.X - 7 + offsetPosition.X, state.position.Y - 26), SpriteEffects.None, layerIndex + 0.001f, 0f, Color.White);
+                                    RunEastAnimation[player.avatar.character].Draw(this.ScreenManager.SpriteBatch,
+                                        new Vector2(player.avatar.position.X - 7 + offsetPosition.X, player.avatar.position.Y - 26), SpriteEffects.None, layerIndex + 0.001f, 0f, Color.White);
                                 }
                                 else
                                 {
-                                    if (state.accumFire.Length() < .5)
+                                    if (player.avatar.accumFire.Length() < .5)
                                     {
-                                        if (state.currentgun == GunType.pistol && state.ammo[(int)GunType.pistol] == 0)
+                                        if (player.avatar.currentgun == GunType.pistol && player.avatar.ammo[(int)GunType.pistol] == 0)
                                         {
-                                            IdleTrunkAnimation[state.character].Draw(this.ScreenManager.SpriteBatch, new Vector2(state.position.X + offsetPosition.X + 16, state.position.Y + offsetPosition.Y), SpriteEffects.FlipHorizontally, layerIndex, 0f, Color.White);
+                                            IdleTrunkAnimation[player.avatar.character].Draw(this.ScreenManager.SpriteBatch, new Vector2(player.avatar.position.X + offsetPosition.X + 16, player.avatar.position.Y + offsetPosition.Y), SpriteEffects.FlipHorizontally, layerIndex, 0f, Color.White);
                                         }
                                         else
                                         {
-                                            this.ScreenManager.SpriteBatch.Draw(ShotgunEastTexture[state.character], new Rectangle(Convert.ToInt32(state.position.X - 6 + offsetPosition.X - 35), Convert.ToInt32(state.position.Y + offsetPosition.Y + 4), 71, ShotgunEastTexture[state.character].Height),
-                                                    new Rectangle(0, 0, 71, ShotgunEastTexture[state.character].Height), Color.White, 0.0f, Vector2.Zero, SpriteEffects.FlipHorizontally, layerIndex);
+                                            this.ScreenManager.SpriteBatch.Draw(ShotgunEastTexture[player.avatar.character], new Rectangle(Convert.ToInt32(player.avatar.position.X - 6 + offsetPosition.X - 35), Convert.ToInt32(player.avatar.position.Y + offsetPosition.Y + 4), 71, ShotgunEastTexture[player.avatar.character].Height),
+                                                    new Rectangle(0, 0, 71, ShotgunEastTexture[player.avatar.character].Height), Color.White, 0.0f, Vector2.Zero, SpriteEffects.FlipHorizontally, layerIndex);
                                         }
                                     }
 
-                                    RunEastAnimation[state.character].Draw(this.ScreenManager.SpriteBatch,
-                                        new Vector2(state.position.X + 18 + offsetPosition.X, state.position.Y - 26), SpriteEffects.FlipHorizontally, layerIndex + 0.001f, 0f, Color.White);
+                                    RunEastAnimation[player.avatar.character].Draw(this.ScreenManager.SpriteBatch,
+                                        new Vector2(player.avatar.position.X + 18 + offsetPosition.X, player.avatar.position.Y - 26), SpriteEffects.FlipHorizontally, layerIndex + 0.001f, 0f, Color.White);
                                 }
                             }
                             else
                             {
-                                if (state.accumMove.X > 0)
+                                if (player.avatar.accumMove.X > 0)
                                 {
-                                    if (state.accumFire.Length() < .5)
+                                    if (player.avatar.accumFire.Length() < .5)
                                     {
-                                        if (state.currentgun == GunType.pistol && state.ammo[(int)GunType.pistol] == 0)
+                                        if (player.avatar.currentgun == GunType.pistol && player.avatar.ammo[(int)GunType.pistol] == 0)
                                         {
-                                            IdleTrunkAnimation[state.character].Draw(this.ScreenManager.SpriteBatch, new Vector2(state.position.X + offsetPosition.X + 10, state.position.Y + offsetPosition.Y + 1), SpriteEffects.None, layerIndex, 0f, Color.White);
+                                            IdleTrunkAnimation[player.avatar.character].Draw(this.ScreenManager.SpriteBatch, new Vector2(player.avatar.position.X + offsetPosition.X + 10, player.avatar.position.Y + offsetPosition.Y + 1), SpriteEffects.None, layerIndex, 0f, Color.White);
                                         }
                                         else
                                         {
-                                            this.ScreenManager.SpriteBatch.Draw(ShotgunEastTexture[state.character], new Rectangle(Convert.ToInt32(state.position.X + 10 + offsetPosition.X), Convert.ToInt32(state.position.Y + offsetPosition.Y + 1), 69, ShotgunEastTexture[state.character].Height),
-                                                new Rectangle(0, 0, 69, ShotgunEastTexture[state.character].Height), Color.White, 0.0f, Vector2.Zero, SpriteEffects.None, layerIndex);
+                                            this.ScreenManager.SpriteBatch.Draw(ShotgunEastTexture[player.avatar.character], new Rectangle(Convert.ToInt32(player.avatar.position.X + 10 + offsetPosition.X), Convert.ToInt32(player.avatar.position.Y + offsetPosition.Y + 1), 69, ShotgunEastTexture[player.avatar.character].Height),
+                                                new Rectangle(0, 0, 69, ShotgunEastTexture[player.avatar.character].Height), Color.White, 0.0f, Vector2.Zero, SpriteEffects.None, layerIndex);
                                         }
                                     }
 
-                                    RunEastAnimation[state.character].Draw(this.ScreenManager.SpriteBatch,
-                                        new Vector2(state.position.X - 4 + offsetPosition.X, state.position.Y - 24), SpriteEffects.None, layerIndex + 0.001f, 0f, Color.White);
+                                    RunEastAnimation[player.avatar.character].Draw(this.ScreenManager.SpriteBatch,
+                                        new Vector2(player.avatar.position.X - 4 + offsetPosition.X, player.avatar.position.Y - 24), SpriteEffects.None, layerIndex + 0.001f, 0f, Color.White);
                                 }
                                 else
                                 {
-                                    if (state.accumFire.Length() < .5)
+                                    if (player.avatar.accumFire.Length() < .5)
                                     {
-                                        if (state.currentgun == GunType.pistol && state.ammo[(int)GunType.pistol] == 0)
+                                        if (player.avatar.currentgun == GunType.pistol && player.avatar.ammo[(int)GunType.pistol] == 0)
                                         {
-                                            IdleTrunkAnimation[state.character].Draw(this.ScreenManager.SpriteBatch, new Vector2(state.position.X + offsetPosition.X + 19, state.position.Y + offsetPosition.Y + 1), SpriteEffects.FlipHorizontally, layerIndex, 0f, Color.White);
+                                            IdleTrunkAnimation[player.avatar.character].Draw(this.ScreenManager.SpriteBatch, new Vector2(player.avatar.position.X + offsetPosition.X + 19, player.avatar.position.Y + offsetPosition.Y + 1), SpriteEffects.FlipHorizontally, layerIndex, 0f, Color.White);
                                         }
                                         else
                                         {
-                                            this.ScreenManager.SpriteBatch.Draw(ShotgunEastTexture[state.character], new Rectangle(Convert.ToInt32(state.position.X - 4 + offsetPosition.X - 34), Convert.ToInt32(state.position.Y + offsetPosition.Y + 2), 69, ShotgunEastTexture[state.character].Height),
-                                                new Rectangle(0, 0, 69, ShotgunEastTexture[state.character].Height), Color.White, 0.0f, Vector2.Zero, SpriteEffects.FlipHorizontally, layerIndex);
+                                            this.ScreenManager.SpriteBatch.Draw(ShotgunEastTexture[player.avatar.character], new Rectangle(Convert.ToInt32(player.avatar.position.X - 4 + offsetPosition.X - 34), Convert.ToInt32(player.avatar.position.Y + offsetPosition.Y + 2), 69, ShotgunEastTexture[player.avatar.character].Height),
+                                                new Rectangle(0, 0, 69, ShotgunEastTexture[player.avatar.character].Height), Color.White, 0.0f, Vector2.Zero, SpriteEffects.FlipHorizontally, layerIndex);
                                         }
                                     }
 
-                                    RunEastAnimation[state.character].Draw(this.ScreenManager.SpriteBatch,
-                                        new Vector2(state.position.X + 20 + offsetPosition.X, state.position.Y - 24), SpriteEffects.FlipHorizontally, layerIndex + 0.001f, 0f, Color.White);
+                                    RunEastAnimation[player.avatar.character].Draw(this.ScreenManager.SpriteBatch,
+                                        new Vector2(player.avatar.position.X + 20 + offsetPosition.X, player.avatar.position.Y - 24), SpriteEffects.FlipHorizontally, layerIndex + 0.001f, 0f, Color.White);
                                 }
                             }
                         }
                         else
                         {
-                            if (state.accumFire.Length() < .5)
+                            if (player.avatar.accumFire.Length() < .5)
                             {
-                                if (state.character == 0)
+                                if (player.avatar.character == 0)
                                 {
-                                    if (state.currentgun == GunType.pistol && state.ammo[(int)GunType.pistol] == 0)
+                                    if (player.avatar.currentgun == GunType.pistol && player.avatar.ammo[(int)GunType.pistol] == 0)
                                     {
-                                        IdleTrunkAnimation[state.character].Draw(this.ScreenManager.SpriteBatch, new Vector2(state.position.X + offsetPosition.X, state.position.Y + offsetPosition.Y), SpriteEffects.None, layerIndex, 0f, Color.White);
+                                        IdleTrunkAnimation[player.avatar.character].Draw(this.ScreenManager.SpriteBatch, new Vector2(player.avatar.position.X + offsetPosition.X, player.avatar.position.Y + offsetPosition.Y), SpriteEffects.None, layerIndex, 0f, Color.White);
                                     }
                                     else
                                     {
-                                        this.ScreenManager.SpriteBatch.Draw(ShotgunEastTexture[state.character], new Rectangle(Convert.ToInt32(state.position.X + 7 + offsetPosition.X), Convert.ToInt32(state.position.Y + offsetPosition.Y + 4), 71, ShotgunEastTexture[state.character].Height),
-                                                new Rectangle(0, 0, 71, ShotgunEastTexture[state.character].Height), Color.White, 0.0f, Vector2.Zero, SpriteEffects.None, layerIndex);
+                                        this.ScreenManager.SpriteBatch.Draw(ShotgunEastTexture[player.avatar.character], new Rectangle(Convert.ToInt32(player.avatar.position.X + 7 + offsetPosition.X), Convert.ToInt32(player.avatar.position.Y + offsetPosition.Y + 4), 71, ShotgunEastTexture[player.avatar.character].Height),
+                                                new Rectangle(0, 0, 71, ShotgunEastTexture[player.avatar.character].Height), Color.White, 0.0f, Vector2.Zero, SpriteEffects.None, layerIndex);
                                     }
                                 }
                                 else
                                 {
-                                    if (state.currentgun == GunType.pistol && state.ammo[(int)GunType.pistol] == 0)
+                                    if (player.avatar.currentgun == GunType.pistol && player.avatar.ammo[(int)GunType.pistol] == 0)
                                     {
-                                        IdleTrunkAnimation[state.character].Draw(this.ScreenManager.SpriteBatch, new Vector2(state.position.X + offsetPosition.X + 10, state.position.Y + offsetPosition.Y + 1), SpriteEffects.None, layerIndex, 0f, Color.White);
+                                        IdleTrunkAnimation[player.avatar.character].Draw(this.ScreenManager.SpriteBatch, new Vector2(player.avatar.position.X + offsetPosition.X + 10, player.avatar.position.Y + offsetPosition.Y + 1), SpriteEffects.None, layerIndex, 0f, Color.White);
                                     }
                                     else
                                     {
-                                        this.ScreenManager.SpriteBatch.Draw(ShotgunEastTexture[state.character], new Rectangle(Convert.ToInt32(state.position.X + 10 + offsetPosition.X), Convert.ToInt32(state.position.Y + offsetPosition.Y + 1), 69, ShotgunEastTexture[state.character].Height),
-                                                new Rectangle(0, 0, 69, ShotgunEastTexture[state.character].Height), Color.White, 0.0f, Vector2.Zero, SpriteEffects.None, layerIndex);
+                                        this.ScreenManager.SpriteBatch.Draw(ShotgunEastTexture[player.avatar.character], new Rectangle(Convert.ToInt32(player.avatar.position.X + 10 + offsetPosition.X), Convert.ToInt32(player.avatar.position.Y + offsetPosition.Y + 1), 69, ShotgunEastTexture[player.avatar.character].Height),
+                                                new Rectangle(0, 0, 69, ShotgunEastTexture[player.avatar.character].Height), Color.White, 0.0f, Vector2.Zero, SpriteEffects.None, layerIndex);
                                     }
                                 }
                             }
 
-                            this.ScreenManager.SpriteBatch.Draw(IdleLegsTexture[state.character], new Rectangle(Convert.ToInt32(state.position.X + 7 + offsetPosition.X), Convert.ToInt32(state.position.Y + offsetPosition.Y + 3), IdleLegsTexture[state.character].Width, IdleLegsTexture[state.character].Height),
-                            new Rectangle(0, 0, IdleLegsTexture[state.character].Width, IdleLegsTexture[state.character].Height), Color.White, 0.0f, Vector2.Zero, SpriteEffects.None, layerIndex + 0.001f);
+                            this.ScreenManager.SpriteBatch.Draw(IdleLegsTexture[player.avatar.character], new Rectangle(Convert.ToInt32(player.avatar.position.X + 7 + offsetPosition.X), Convert.ToInt32(player.avatar.position.Y + offsetPosition.Y + 3), IdleLegsTexture[player.avatar.character].Width, IdleLegsTexture[player.avatar.character].Height),
+                            new Rectangle(0, 0, IdleLegsTexture[player.avatar.character].Width, IdleLegsTexture[player.avatar.character].Height), Color.White, 0.0f, Vector2.Zero, SpriteEffects.None, layerIndex + 0.001f);
                         }
 
                     }
 
                     // Draw the SHADOW OF THE CHARACTER
-                    this.ScreenManager.SpriteBatch.Draw(CharacterShadow, new Rectangle(Convert.ToInt32(state.position.X + IdleLegsTexture[state.character].Width / 2 - 5 + offsetPosition.X), Convert.ToInt32(state.position.Y + IdleLegsTexture[state.character].Height - 6 + offsetPosition.Y), CharacterShadow.Width, CharacterShadow.Height),
+                    this.ScreenManager.SpriteBatch.Draw(CharacterShadow, new Rectangle(Convert.ToInt32(player.avatar.position.X + IdleLegsTexture[player.avatar.character].Width / 2 - 5 + offsetPosition.X), Convert.ToInt32(player.avatar.position.Y + IdleLegsTexture[player.avatar.character].Height - 6 + offsetPosition.Y), CharacterShadow.Width, CharacterShadow.Height),
                         new Rectangle(0, 0, CharacterShadow.Width, CharacterShadow.Height), new Color(255, 255, 255, 50), 0.0f, Vector2.Zero, SpriteEffects.None, layerIndex + 0.01f);
                     break;
                 default:
@@ -2960,37 +2873,37 @@ namespace ZombustersWindows
             SpriteBatch batch = this.ScreenManager.SpriteBatch;
             batch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, null, null, null, null, Resolution.getTransformationMatrix());
 
-            foreach (Avatar cplayer in game.currentPlayers)
+            foreach (Player player in game.players)
             {
-                if (cplayer.Player != null)
+                if (player != null)
                 {
-                    if (cplayer.status == ObjectStatus.Active || cplayer.IsPlaying)
+                    if (player.avatar.status == ObjectStatus.Active || player.avatar.IsPlayingTheGame)
                     {
-                        if (cplayer.lives != 0)
+                        if (player.avatar.lives != 0)
                         {
                             batch.Draw(UIStats, new Vector2(Pos.X, Pos.Y - 20), Color.White);
 
-                            if (cplayer.color == Color.Blue)
+                            if (player.avatar.color == Color.Blue)
                             {
                                 batch.Draw(UIStatsBlue, new Vector2(Pos.X, Pos.Y - 20), Color.White);
                             }
 
-                            if (cplayer.color == Color.Red)
+                            if (player.avatar.color == Color.Red)
                             {
                                 batch.Draw(UIStatsRed, new Vector2(Pos.X, Pos.Y - 20), Color.White);
                             }
 
-                            if (cplayer.color == Color.Green)
+                            if (player.avatar.color == Color.Green)
                             {
                                 batch.Draw(UIStatsGreen, new Vector2(Pos.X, Pos.Y - 20), Color.White);
                             }
 
-                            if (cplayer.color == Color.Yellow)
+                            if (player.avatar.color == Color.Yellow)
                             {
                                 batch.Draw(UIStatsYellow, new Vector2(Pos.X, Pos.Y - 20), Color.White);
                             }
 
-                            switch (cplayer.character)
+                            switch (player.avatar.character)
                             {
                                 case 0:
                                     batch.Draw(jadeUI, new Rectangle(Convert.ToInt32(Pos.X) - jadeUI.Width / 2 + 5, Convert.ToInt32(Pos.Y - 34), jadeUI.Width, jadeUI.Height), Color.White);
@@ -3007,29 +2920,29 @@ namespace ZombustersWindows
                             }
 
                             batch.DrawString(arcade14, "x", new Vector2(Pos.X + 40, Pos.Y + 17), Color.White);
-                            batch.DrawString(arcade28, cplayer.lives.ToString(), new Vector2(Pos.X + 60, Pos.Y), Color.White);
+                            batch.DrawString(arcade28, player.avatar.lives.ToString(), new Vector2(Pos.X + 60, Pos.Y), Color.White);
 
                             // Draw Player Life Counter
                             batch.Draw(heart, new Vector2(Pos.X + 120, Pos.Y + 3), Color.White);
-                            batch.DrawString(arcade14, cplayer.lifecounter.ToString("000"), new Vector2(Pos.X + heart.Width + 125, Pos.Y), Color.White);
+                            batch.DrawString(arcade14, player.avatar.lifecounter.ToString("000"), new Vector2(Pos.X + heart.Width + 125, Pos.Y), Color.White);
 
-                            switch (cplayer.currentgun)
+                            switch (player.avatar.currentgun)
                             {
                                 case GunType.machinegun:
                                     batch.Draw(pistolammoUI, new Vector2(Pos.X + 124, Pos.Y + 23), Color.White);
-                                    batch.DrawString(arcade14, cplayer.ammo[(int)GunType.machinegun].ToString("000"), new Vector2(Pos.X + heart.Width + 125, Pos.Y + 20), Color.White);
+                                    batch.DrawString(arcade14, player.avatar.ammo[(int)GunType.machinegun].ToString("000"), new Vector2(Pos.X + heart.Width + 125, Pos.Y + 20), Color.White);
                                     break;
                                 case GunType.shotgun:
                                     batch.Draw(shotgunammoUI, new Vector2(Pos.X + 123, Pos.Y + 22), Color.White);
-                                    batch.DrawString(arcade14, cplayer.ammo[(int)GunType.shotgun].ToString("000"), new Vector2(Pos.X + heart.Width + 125, Pos.Y + 20), Color.White);
+                                    batch.DrawString(arcade14, player.avatar.ammo[(int)GunType.shotgun].ToString("000"), new Vector2(Pos.X + heart.Width + 125, Pos.Y + 20), Color.White);
                                     break;
                                 case GunType.grenade:
                                     batch.Draw(grenadeammoUI, new Vector2(Pos.X + 122, Pos.Y + 21), Color.White);
-                                    batch.DrawString(arcade14, cplayer.ammo[(int)GunType.grenade].ToString("000"), new Vector2(Pos.X + heart.Width + 125, Pos.Y + 20), Color.White);
+                                    batch.DrawString(arcade14, player.avatar.ammo[(int)GunType.grenade].ToString("000"), new Vector2(Pos.X + heart.Width + 125, Pos.Y + 20), Color.White);
                                     break;
                                 case GunType.flamethrower:
                                     batch.Draw(flamethrowerammoUI, new Vector2(Pos.X + 124, Pos.Y + 23), Color.White);
-                                    batch.DrawString(arcade14, cplayer.ammo[(int)GunType.flamethrower].ToString("000"), new Vector2(Pos.X + heart.Width + 125, Pos.Y + 20), Color.White);
+                                    batch.DrawString(arcade14, player.avatar.ammo[(int)GunType.flamethrower].ToString("000"), new Vector2(Pos.X + heart.Width + 125, Pos.Y + 20), Color.White);
                                     break;
                                 case GunType.pistol:
                                 default:
@@ -3037,7 +2950,7 @@ namespace ZombustersWindows
                                     break;
                             }
 
-                            batch.DrawString(arcade14, "SC" + cplayer.score.ToString("0000000"), new Vector2(Pos.X + 13, Pos.Y + 48), Color.White);
+                            batch.DrawString(arcade14, "SC" + player.avatar.score.ToString("0000000"), new Vector2(Pos.X + 13, Pos.Y + 48), Color.White);
                             Pos.X += UIStats.Width + 50;
                         }
                         else
@@ -3156,7 +3069,7 @@ namespace ZombustersWindows
                     new Vector2(uiBounds.Width - MenuInfoFont.MeasureString(Strings.TrialModeMenuString.ToUpper()).X / 2, uiBounds.Height + 20), Color.White);
 #endif
 
-            if (game.player1.inputMode == InputMode.Touch)
+            if (game.currentInputMode == InputMode.Touch)
             {
                 batch.Draw(pause_icon, new Vector2(uiBounds.Width + 70, uiBounds.Y - 30), Color.White);
 
@@ -3197,7 +3110,7 @@ namespace ZombustersWindows
             enemies.tanks[tank].angle = angle;
         }
 
-        public void GameOver(byte player)
+        public void GameOver(Player player)
         {
             PlayerDestroyed(player);
         }
@@ -3214,45 +3127,45 @@ namespace ZombustersWindows
             ActiveZombies--;
         }
 
-        public void IncreaseLife(byte player)
+        public void IncreaseLife(Player player)
         {
-            if (game.currentPlayers[player].lives < 9)
+            if (player.avatar.lives < 9)
             {
-                game.currentPlayers[player].lives++;
+                player.avatar.lives++;
             }
         }
 
-        public void ZombieDestroyed(ZombieState zombie, byte player, GunType currentgun)
+        public void ZombieDestroyed(ZombieState zombie, Player player)
         {
-            zombie.DestroyZombie(game.totalGameSeconds, currentgun);
+            zombie.DestroyZombie(game.totalGameSeconds, player.avatar.currentgun);
             ActiveZombies--;
-            game.currentPlayers[player].score += 10;
+            player.avatar.score += 10;
             game.audio.PlayZombieDying();
 
-            if (game.currentPlayers[player].score % 8000 == 0)
+            if (player.avatar.score % 8000 == 0)
             {
-                game.currentPlayers[player].lives += 1;
+                player.avatar.lives += 1;
             }
         }
 
-        public void TankDestroyed(TankState tank, byte player)
+        public void TankDestroyed(TankState tank, Player player)
         {
             tank.DestroyTank(game.totalGameSeconds);
             ActiveTanks--;
-            game.currentPlayers[player].score += 10;
+            player.avatar.score += 10;
             game.audio.PlayZombieDying();
 
-            if (game.currentPlayers[player].score % 8000 == 0)
+            if (player.avatar.score % 8000 == 0)
             {
-                game.currentPlayers[player].lives += 1;
+                player.avatar.lives += 1;
             }
         }
 
-        public void PlayerDestroyed(byte player)
+        public void PlayerDestroyed(Player player)
         {
-            game.currentPlayers[player].DestroyShip(game.totalGameSeconds);
-            game.currentPlayers[player].lives--;
-            if (game.currentPlayers[player].character == 0)
+            player.avatar.DestroyAvatar(game.totalGameSeconds);
+            player.avatar.lives--;
+            if (player.avatar.character == 0)
             {
                 game.audio.PlayWomanScream();
             }
@@ -3264,306 +3177,306 @@ namespace ZombustersWindows
 
         public void IncreaseScore(byte player, short amount)
         {
-            game.currentPlayers[player].score += amount;
+            game.players[player].avatar.score += amount;
         }
 
-        public void PlayerMove(byte player, Vector2 pos)
+        public void PlayerMove(Player player, Vector2 pos)
         {
-            game.currentPlayers[player].position = pos;
-            game.currentPlayers[player].entity.Position = pos;
+            player.avatar.position = pos;
+            player.avatar.entity.Position = pos;
         }
 
-        public void PlayerFire(byte player, float totalGameSeconds, float angle, Vector2 direction)
+        public void PlayerFire(Player player, float totalGameSeconds, float angle, Vector2 direction)
         {
             //NORTH
             if (angle > -0.3925f && angle < 0.3925f)
             {
-                if (game.currentPlayers[player].currentgun == GunType.flamethrower)
+                if (player.avatar.currentgun == GunType.flamethrower)
                 {
-                    if (game.currentPlayers[player].character == 0)
+                    if (player.avatar.character == 0)
                     {
-                        game.currentPlayers[player].SetFlameThrower(new Vector2(game.currentPlayers[player].position.X - 27, game.currentPlayers[player].position.Y - 55), angle);
+                        player.avatar.SetFlameThrower(new Vector2(player.avatar.position.X - 27, player.avatar.position.Y - 55), angle);
                     }
                     else
                     {
-                        game.currentPlayers[player].SetFlameThrower(new Vector2(game.currentPlayers[player].position.X - 25, game.currentPlayers[player].position.Y - 61), angle);
+                        player.avatar.SetFlameThrower(new Vector2(player.avatar.position.X - 25, player.avatar.position.Y - 61), angle);
                     }
                 }
-                else if (game.currentPlayers[player].currentgun == GunType.shotgun)
+                else if (player.avatar.currentgun == GunType.shotgun)
                 {
-                    game.currentPlayers[player].shotgunbullets.Add(new ShotgunShell(game.currentPlayers[player].position, direction, angle, totalGameSeconds));
+                    player.avatar.shotgunbullets.Add(new ShotgunShell(player.avatar.position, direction, angle, totalGameSeconds));
                 }
                 else
                 {
-                    if (game.currentPlayers[player].ammo[(int)GunType.machinegun] > 0 || game.currentPlayers[player].ammo[(int)GunType.shotgun] > 0)
+                    if (player.avatar.ammo[(int)GunType.machinegun] > 0 || player.avatar.ammo[(int)GunType.shotgun] > 0)
                     {
-                        if (game.currentPlayers[player].character == 0)
+                        if (player.avatar.character == 0)
                         {
-                            game.currentPlayers[player].bullets.Add(new Vector4(game.currentPlayers[player].position.X + 4, game.currentPlayers[player].position.Y - 55, totalGameSeconds, angle));
+                            player.avatar.bullets.Add(new Vector4(player.avatar.position.X + 4, player.avatar.position.Y - 55, totalGameSeconds, angle));
                         }
                         else
                         {
-                            game.currentPlayers[player].bullets.Add(new Vector4(game.currentPlayers[player].position.X + 6, game.currentPlayers[player].position.Y - 61, totalGameSeconds, angle));
+                            player.avatar.bullets.Add(new Vector4(player.avatar.position.X + 6, player.avatar.position.Y - 61, totalGameSeconds, angle));
                         }
                     }
                     else
                     {
-                        if (game.currentPlayers[player].character == 0)
+                        if (player.avatar.character == 0)
                         {
-                            game.currentPlayers[player].bullets.Add(new Vector4(game.currentPlayers[player].position.X + 5, game.currentPlayers[player].position.Y - 57, totalGameSeconds, angle));
+                            player.avatar.bullets.Add(new Vector4(player.avatar.position.X + 5, player.avatar.position.Y - 57, totalGameSeconds, angle));
                         }
                         else
                         {
-                            game.currentPlayers[player].bullets.Add(new Vector4(game.currentPlayers[player].position.X + 8, game.currentPlayers[player].position.Y - 63, totalGameSeconds, angle));
+                            player.avatar.bullets.Add(new Vector4(player.avatar.position.X + 8, player.avatar.position.Y - 63, totalGameSeconds, angle));
                         }
                     }
                 }
             }
             else if (angle > 0.3925f && angle < 1.1775f) //NORTH-EAST
             {
-                if (game.currentPlayers[player].currentgun == GunType.flamethrower)
+                if (player.avatar.currentgun == GunType.flamethrower)
                 {
-                    if (game.currentPlayers[player].character == 0)
+                    if (player.avatar.character == 0)
                     {
-                        game.currentPlayers[player].SetFlameThrower(new Vector2(game.currentPlayers[player].position.X - 3, game.currentPlayers[player].position.Y - 67), angle);
+                        player.avatar.SetFlameThrower(new Vector2(player.avatar.position.X - 3, player.avatar.position.Y - 67), angle);
                     }
                     else
                     {
-                        game.currentPlayers[player].SetFlameThrower(new Vector2(game.currentPlayers[player].position.X, game.currentPlayers[player].position.Y - 70), angle);
+                        player.avatar.SetFlameThrower(new Vector2(player.avatar.position.X, player.avatar.position.Y - 70), angle);
                     }
                 }
-                else if (game.currentPlayers[player].currentgun == GunType.shotgun)
+                else if (player.avatar.currentgun == GunType.shotgun)
                 {
-                    game.currentPlayers[player].shotgunbullets.Add(new ShotgunShell(game.currentPlayers[player].position, direction, angle, totalGameSeconds));
+                    player.avatar.shotgunbullets.Add(new ShotgunShell(player.avatar.position, direction, angle, totalGameSeconds));
                 }
                 else
                 {
-                    if (game.currentPlayers[player].ammo[(int)GunType.machinegun] > 0)
+                    if (player.avatar.ammo[(int)GunType.machinegun] > 0)
                     {
-                        game.currentPlayers[player].bullets.Add(new Vector4(game.currentPlayers[player].position.X + 33, game.currentPlayers[player].position.Y - 60, totalGameSeconds, angle));
+                        player.avatar.bullets.Add(new Vector4(player.avatar.position.X + 33, player.avatar.position.Y - 60, totalGameSeconds, angle));
                     }
                     else
                     {
-                        game.currentPlayers[player].bullets.Add(new Vector4(game.currentPlayers[player].position.X + 27, game.currentPlayers[player].position.Y - 60, totalGameSeconds, angle));
+                        player.avatar.bullets.Add(new Vector4(player.avatar.position.X + 27, player.avatar.position.Y - 60, totalGameSeconds, angle));
                     }
                 }
             }
             else if (angle > 1.1775f && angle < 1.9625f) //EAST
             {
-                if (game.currentPlayers[player].currentgun == GunType.flamethrower)
+                if (player.avatar.currentgun == GunType.flamethrower)
                 {
-                    if (game.currentPlayers[player].character == 0)
+                    if (player.avatar.character == 0)
                     {
-                        game.currentPlayers[player].SetFlameThrower(new Vector2(game.currentPlayers[player].position.X + 30, game.currentPlayers[player].position.Y - 58), angle);
+                        player.avatar.SetFlameThrower(new Vector2(player.avatar.position.X + 30, player.avatar.position.Y - 58), angle);
                     }
                     else
                     {
-                        game.currentPlayers[player].SetFlameThrower(new Vector2(game.currentPlayers[player].position.X + 30, game.currentPlayers[player].position.Y - 60), angle);
+                        player.avatar.SetFlameThrower(new Vector2(player.avatar.position.X + 30, player.avatar.position.Y - 60), angle);
                     }
                 }
-                else if (game.currentPlayers[player].currentgun == GunType.shotgun)
+                else if (player.avatar.currentgun == GunType.shotgun)
                 {
-                    game.currentPlayers[player].shotgunbullets.Add(new ShotgunShell(game.currentPlayers[player].position, direction, angle, totalGameSeconds));
+                    player.avatar.shotgunbullets.Add(new ShotgunShell(player.avatar.position, direction, angle, totalGameSeconds));
                 }
                 else
                 {
-                    if (game.currentPlayers[player].ammo[(int)GunType.machinegun] > 0)
+                    if (player.avatar.ammo[(int)GunType.machinegun] > 0)
                     {
-                        if (game.currentPlayers[player].character == 0)
+                        if (player.avatar.character == 0)
                         {
-                            game.currentPlayers[player].bullets.Add(new Vector4(new Vector2(game.currentPlayers[player].position.X + 35, game.currentPlayers[player].position.Y - 27), totalGameSeconds, angle));
+                            player.avatar.bullets.Add(new Vector4(new Vector2(player.avatar.position.X + 35, player.avatar.position.Y - 27), totalGameSeconds, angle));
                         }
                         else
                         {
-                            game.currentPlayers[player].bullets.Add(new Vector4(new Vector2(game.currentPlayers[player].position.X + 37, game.currentPlayers[player].position.Y - 29), totalGameSeconds, angle));
+                            player.avatar.bullets.Add(new Vector4(new Vector2(player.avatar.position.X + 37, player.avatar.position.Y - 29), totalGameSeconds, angle));
                         }
                     }
                     else
                     {
-                        if (game.currentPlayers[player].character == 0)
+                        if (player.avatar.character == 0)
                         {
-                            game.currentPlayers[player].bullets.Add(new Vector4(new Vector2(game.currentPlayers[player].position.X + 35, game.currentPlayers[player].position.Y - 34), totalGameSeconds, angle));
+                            player.avatar.bullets.Add(new Vector4(new Vector2(player.avatar.position.X + 35, player.avatar.position.Y - 34), totalGameSeconds, angle));
                         }
                         else
                         {
-                            game.currentPlayers[player].bullets.Add(new Vector4(new Vector2(game.currentPlayers[player].position.X + 36, game.currentPlayers[player].position.Y - 38), totalGameSeconds, angle));
+                            player.avatar.bullets.Add(new Vector4(new Vector2(player.avatar.position.X + 36, player.avatar.position.Y - 38), totalGameSeconds, angle));
                         }
                     }
                 }
             }
             else if (angle > 1.19625f && angle < 2.7275f) //SOUTH-EAST
             {
-                if (game.currentPlayers[player].currentgun == GunType.flamethrower)
+                if (player.avatar.currentgun == GunType.flamethrower)
                 {
-                    if (game.currentPlayers[player].character == 0)
+                    if (player.avatar.character == 0)
                     {
-                        game.currentPlayers[player].SetFlameThrower(new Vector2(game.currentPlayers[player].position.X + 45, game.currentPlayers[player].position.Y - 27), angle);
+                        player.avatar.SetFlameThrower(new Vector2(player.avatar.position.X + 45, player.avatar.position.Y - 27), angle);
                     }
                     else
                     {
-                        game.currentPlayers[player].SetFlameThrower(new Vector2(game.currentPlayers[player].position.X + 47, game.currentPlayers[player].position.Y - 28), angle);
+                        player.avatar.SetFlameThrower(new Vector2(player.avatar.position.X + 47, player.avatar.position.Y - 28), angle);
                     }
                 }
-                else if (game.currentPlayers[player].currentgun == GunType.shotgun)
+                else if (player.avatar.currentgun == GunType.shotgun)
                 {
-                    game.currentPlayers[player].shotgunbullets.Add(new ShotgunShell(game.currentPlayers[player].position, direction, angle, totalGameSeconds));
+                    player.avatar.shotgunbullets.Add(new ShotgunShell(player.avatar.position, direction, angle, totalGameSeconds));
                 }
                 else
                 {
-                    if (game.currentPlayers[player].ammo[(int)GunType.machinegun] > 0)
+                    if (player.avatar.ammo[(int)GunType.machinegun] > 0)
                     {
-                        game.currentPlayers[player].bullets.Add(new Vector4(game.currentPlayers[player].position.X + 27, game.currentPlayers[player].position.Y, totalGameSeconds, angle));
+                        player.avatar.bullets.Add(new Vector4(player.avatar.position.X + 27, player.avatar.position.Y, totalGameSeconds, angle));
                     }
                     else
                     {
-                        game.currentPlayers[player].bullets.Add(new Vector4(game.currentPlayers[player].position.X + 32, game.currentPlayers[player].position.Y - 5, totalGameSeconds, angle));
+                        player.avatar.bullets.Add(new Vector4(player.avatar.position.X + 32, player.avatar.position.Y - 5, totalGameSeconds, angle));
                     }
                 }
             }
             else if (angle > 2.7275f || angle < -2.7275f) //SOUTH
             {
-                if (game.currentPlayers[player].currentgun == GunType.flamethrower)
+                if (player.avatar.currentgun == GunType.flamethrower)
                 {
-                    if (game.currentPlayers[player].character == 0)
+                    if (player.avatar.character == 0)
                     {
-                        game.currentPlayers[player].SetFlameThrower(new Vector2(game.currentPlayers[player].position.X + 35, game.currentPlayers[player].position.Y + 2), angle);
+                        player.avatar.SetFlameThrower(new Vector2(player.avatar.position.X + 35, player.avatar.position.Y + 2), angle);
                     }
                     else
                     {
-                        game.currentPlayers[player].SetFlameThrower(new Vector2(game.currentPlayers[player].position.X + 37, game.currentPlayers[player].position.Y + 2), angle);
+                        player.avatar.SetFlameThrower(new Vector2(player.avatar.position.X + 37, player.avatar.position.Y + 2), angle);
                     }
                 }
-                else if (game.currentPlayers[player].currentgun == GunType.shotgun)
+                else if (player.avatar.currentgun == GunType.shotgun)
                 {
-                    game.currentPlayers[player].shotgunbullets.Add(new ShotgunShell(game.currentPlayers[player].position, direction, angle, totalGameSeconds));
+                    player.avatar.shotgunbullets.Add(new ShotgunShell(player.avatar.position, direction, angle, totalGameSeconds));
                 }
                 else
                 {
-                    if (game.currentPlayers[player].ammo[(int)GunType.machinegun] > 0)
+                    if (player.avatar.ammo[(int)GunType.machinegun] > 0)
                     {
-                        if (game.currentPlayers[player].character == 0)
+                        if (player.avatar.character == 0)
                         {
-                            game.currentPlayers[player].bullets.Add(new Vector4(game.currentPlayers[player].position.X + 1, game.currentPlayers[player].position.Y + 5, totalGameSeconds, angle));
+                            player.avatar.bullets.Add(new Vector4(player.avatar.position.X + 1, player.avatar.position.Y + 5, totalGameSeconds, angle));
                         }
                         else
                         {
-                            game.currentPlayers[player].bullets.Add(new Vector4(game.currentPlayers[player].position.X + 4, game.currentPlayers[player].position.Y + 7, totalGameSeconds, angle));
+                            player.avatar.bullets.Add(new Vector4(player.avatar.position.X + 4, player.avatar.position.Y + 7, totalGameSeconds, angle));
                         }
                     }
                     else
                     {
-                        if (game.currentPlayers[player].character == 0)
+                        if (player.avatar.character == 0)
                         {
-                            game.currentPlayers[player].bullets.Add(new Vector4(game.currentPlayers[player].position.X + 5, game.currentPlayers[player].position.Y + 5, totalGameSeconds, angle));
+                            player.avatar.bullets.Add(new Vector4(player.avatar.position.X + 5, player.avatar.position.Y + 5, totalGameSeconds, angle));
                         }
                         else
                         {
-                            game.currentPlayers[player].bullets.Add(new Vector4(game.currentPlayers[player].position.X - 7, game.currentPlayers[player].position.Y + 5, totalGameSeconds, angle));
+                            player.avatar.bullets.Add(new Vector4(player.avatar.position.X - 7, player.avatar.position.Y + 5, totalGameSeconds, angle));
                         }
                     }
                 }
             }
             else if (angle < -1.9625f && angle > -2.7275f) //SOUTH-WEST
             {
-                if (game.currentPlayers[player].currentgun == GunType.flamethrower)
+                if (player.avatar.currentgun == GunType.flamethrower)
                 {
-                    if (game.currentPlayers[player].character == 0)
+                    if (player.avatar.character == 0)
                     {
-                        game.currentPlayers[player].SetFlameThrower(new Vector2(game.currentPlayers[player].position.X - 3, game.currentPlayers[player].position.Y + 19), angle);
+                        player.avatar.SetFlameThrower(new Vector2(player.avatar.position.X - 3, player.avatar.position.Y + 19), angle);
                     }
                     else
                     {
-                        game.currentPlayers[player].SetFlameThrower(new Vector2(game.currentPlayers[player].position.X, game.currentPlayers[player].position.Y + 19), angle);
+                        player.avatar.SetFlameThrower(new Vector2(player.avatar.position.X, player.avatar.position.Y + 19), angle);
                     }
                 }
-                else if (game.currentPlayers[player].currentgun == GunType.shotgun)
+                else if (player.avatar.currentgun == GunType.shotgun)
                 {
-                    game.currentPlayers[player].shotgunbullets.Add(new ShotgunShell(game.currentPlayers[player].position, direction, angle, totalGameSeconds));
+                    player.avatar.shotgunbullets.Add(new ShotgunShell(player.avatar.position, direction, angle, totalGameSeconds));
                 }
                 else
                 {
-                    if (game.currentPlayers[player].ammo[(int)GunType.machinegun] > 0)
+                    if (player.avatar.ammo[(int)GunType.machinegun] > 0)
                     {
-                        game.currentPlayers[player].bullets.Add(new Vector4(game.currentPlayers[player].position.X - 28, game.currentPlayers[player].position.Y, totalGameSeconds, angle));
+                        player.avatar.bullets.Add(new Vector4(player.avatar.position.X - 28, player.avatar.position.Y, totalGameSeconds, angle));
                     }
                     else
                     {
-                        game.currentPlayers[player].bullets.Add(new Vector4(game.currentPlayers[player].position.X - 35, game.currentPlayers[player].position.Y - 5, totalGameSeconds, angle));
+                        player.avatar.bullets.Add(new Vector4(player.avatar.position.X - 35, player.avatar.position.Y - 5, totalGameSeconds, angle));
                     }
                 }
             }
             else if (angle < -1.1775f && angle > -1.9625f) //WEST
             {
-                if (game.currentPlayers[player].currentgun == GunType.flamethrower)
+                if (player.avatar.currentgun == GunType.flamethrower)
                 {
-                    if (game.currentPlayers[player].character == 0)
+                    if (player.avatar.character == 0)
                     {
-                        game.currentPlayers[player].SetFlameThrower(new Vector2(game.currentPlayers[player].position.X - 30, game.currentPlayers[player].position.Y + 6), angle);
+                        player.avatar.SetFlameThrower(new Vector2(player.avatar.position.X - 30, player.avatar.position.Y + 6), angle);
                     }
                     else
                     {
-                        game.currentPlayers[player].SetFlameThrower(new Vector2(game.currentPlayers[player].position.X - 30, game.currentPlayers[player].position.Y + 6), angle);
+                        player.avatar.SetFlameThrower(new Vector2(player.avatar.position.X - 30, player.avatar.position.Y + 6), angle);
                     }
                 }
-                else if (game.currentPlayers[player].currentgun == GunType.shotgun)
+                else if (player.avatar.currentgun == GunType.shotgun)
                 {
-                    game.currentPlayers[player].shotgunbullets.Add(new ShotgunShell(game.currentPlayers[player].position, direction, angle, totalGameSeconds));
+                    player.avatar.shotgunbullets.Add(new ShotgunShell(player.avatar.position, direction, angle, totalGameSeconds));
                 }
                 else
                 {
-                    if (game.currentPlayers[player].ammo[(int)GunType.machinegun] > 0)
+                    if (player.avatar.ammo[(int)GunType.machinegun] > 0)
                     {
-                        game.currentPlayers[player].bullets.Add(new Vector4(new Vector2(game.currentPlayers[player].position.X - 35, game.currentPlayers[player].position.Y - 26), totalGameSeconds, angle));
+                        player.avatar.bullets.Add(new Vector4(new Vector2(player.avatar.position.X - 35, player.avatar.position.Y - 26), totalGameSeconds, angle));
                     }
                     else
                     {
-                        if (game.currentPlayers[player].character == 0)
+                        if (player.avatar.character == 0)
                         {
-                            game.currentPlayers[player].bullets.Add(new Vector4(game.currentPlayers[player].position.X - 37, game.currentPlayers[player].position.Y - 34, totalGameSeconds, angle));
+                            player.avatar.bullets.Add(new Vector4(player.avatar.position.X - 37, player.avatar.position.Y - 34, totalGameSeconds, angle));
                         }
                         else
                         {
-                            game.currentPlayers[player].bullets.Add(new Vector4(game.currentPlayers[player].position.X - 36, game.currentPlayers[player].position.Y - 38, totalGameSeconds, angle));
+                            player.avatar.bullets.Add(new Vector4(player.avatar.position.X - 36, player.avatar.position.Y - 38, totalGameSeconds, angle));
                         }
                     }
                 }
             }
             else if (angle < -0.3925f && angle > -1.1775f) //NORTH-WEST
             {
-                if (game.currentPlayers[player].currentgun == GunType.flamethrower)
+                if (player.avatar.currentgun == GunType.flamethrower)
                 {
-                    if (game.currentPlayers[player].character == 0)
+                    if (player.avatar.character == 0)
                     {
-                        game.currentPlayers[player].SetFlameThrower(new Vector2(game.currentPlayers[player].position.X - 46, game.currentPlayers[player].position.Y - 23), angle);
+                        player.avatar.SetFlameThrower(new Vector2(player.avatar.position.X - 46, player.avatar.position.Y - 23), angle);
                     }
                     else
                     {
-                        game.currentPlayers[player].SetFlameThrower(new Vector2(game.currentPlayers[player].position.X - 44, game.currentPlayers[player].position.Y - 22), angle);
+                        player.avatar.SetFlameThrower(new Vector2(player.avatar.position.X - 44, player.avatar.position.Y - 22), angle);
                     }
                 }
-                else if (game.currentPlayers[player].currentgun == GunType.shotgun)
+                else if (player.avatar.currentgun == GunType.shotgun)
                 {
-                    game.currentPlayers[player].shotgunbullets.Add(new ShotgunShell(game.currentPlayers[player].position, direction, angle, totalGameSeconds));
+                    player.avatar.shotgunbullets.Add(new ShotgunShell(player.avatar.position, direction, angle, totalGameSeconds));
                 }
                 else
                 {
-                    if (game.currentPlayers[player].ammo[(int)GunType.machinegun] > 0)
+                    if (player.avatar.ammo[(int)GunType.machinegun] > 0)
                     {
-                        game.currentPlayers[player].bullets.Add(new Vector4(game.currentPlayers[player].position.X - 36, game.currentPlayers[player].position.Y - 57, totalGameSeconds, angle));
+                        player.avatar.bullets.Add(new Vector4(player.avatar.position.X - 36, player.avatar.position.Y - 57, totalGameSeconds, angle));
                     }
                     else
                     {
-                        game.currentPlayers[player].bullets.Add(new Vector4(game.currentPlayers[player].position.X - 32, game.currentPlayers[player].position.Y - 60, totalGameSeconds, angle));
+                        player.avatar.bullets.Add(new Vector4(player.avatar.position.X - 32, player.avatar.position.Y - 60, totalGameSeconds, angle));
                     }
                 }
             }
 
-            if (game.currentPlayers[player].ammo[(int)game.currentPlayers[player].currentgun] > 0)
+            if (player.avatar.ammo[(int)player.avatar.currentgun] > 0)
             {
-                game.currentPlayers[player].ammo[(int)game.currentPlayers[player].currentgun] -= 1;
+                player.avatar.ammo[(int)player.avatar.currentgun] -= 1;
             }
 
-            switch (game.currentPlayers[player].currentgun)
+            switch (player.avatar.currentgun)
             {
                 case GunType.pistol:
                     game.audio.PlayShot();

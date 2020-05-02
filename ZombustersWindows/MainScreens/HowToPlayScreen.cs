@@ -177,9 +177,9 @@ namespace ZombustersWindows
 
             this.ScreenManager.SpriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, null, null, null, null, Resolution.getTransformationMatrix());
 
-            if (((MyGame)this.ScreenManager.Game).player1.inputMode != InputMode.Touch)
+            if (((MyGame)this.ScreenManager.Game).currentInputMode != InputMode.Touch)
             {
-                if (((MyGame)this.ScreenManager.Game).player1.inputMode == InputMode.Keyboard)
+                if (((MyGame)this.ScreenManager.Game).currentInputMode == InputMode.Keyboard)
                 {
                     spaceBetweenButtonAndText = Convert.ToInt32(kbEsc.Width * 0.7f) + 5;
                     this.ScreenManager.SpriteBatch.Draw(kbEsc, new Vector2(158 + distanceBetweenButtonsText, 613), null, Color.White, 0, Vector2.Zero, 0.7f, SpriteEffects.None, 1.0f);
@@ -202,7 +202,7 @@ namespace ZombustersWindows
                     new Vector2(position.X + submit_button.Width / 2 - MenuInfoFont.MeasureString(Strings.LeaveMenuString.ToUpper()).X / 2, position.Y + 7), Color.White, 0, Vector2.Zero, 1.0f, SpriteEffects.None, 1.0f);
             }
 
-            if (((MyGame)this.ScreenManager.Game).player1.inputMode == InputMode.GamePad)
+            if (((MyGame)this.ScreenManager.Game).currentInputMode == InputMode.GamePad)
             {
                 DrawController(this.ScreenManager.SpriteBatch, uiBounds);
                 DrawControllerSchemeDetails(this.ScreenManager.SpriteBatch);
@@ -304,7 +304,7 @@ namespace ZombustersWindows
             batch.Draw(lineaMenu, new Vector2(pos.X, pos.Y - 40), Color.White);
 
             contextMenuPosition = new Vector2(pos.X, pos.Y - 30);
-            if (((MyGame)this.ScreenManager.Game).player1.inputMode == InputMode.Keyboard)
+            if (((MyGame)this.ScreenManager.Game).currentInputMode == InputMode.Keyboard)
             {
                 lines = Regex.Split(Strings.PCExplanationString, "\r\n");
             }

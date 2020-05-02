@@ -21,14 +21,14 @@ namespace ZombustersWindows
         SpriteFont MenuInfoFont;
         SpriteFont MenuListFont;
 
-        OptionsState state;
         Rectangle uiBounds;
         InputMode displayMode;
+        Player player;
        
 
-        public OptionsScreen(MyGame game, OptionsState state)
+        public OptionsScreen(MyGame game, Player player)
         {
-            this.state = state;
+            this.player = player;
             this.game = game;
         }
 
@@ -73,7 +73,7 @@ namespace ZombustersWindows
             Rectangle tempExtent = menu.GetExtent(0);  // volume menu item
             volumeSlider.SliderArea = new Rectangle(menu.uiBounds.Right + 20, tempExtent.Top + 4, 120, tempExtent.Height - 10);
             volumeSlider.SliderUnits = 10;
-            volumeSlider.SliderSetting = (int) (state.FXLevel*volumeSlider.SliderUnits);
+            volumeSlider.SliderSetting = (int) (player.optionsState.FXLevel*volumeSlider.SliderUnits);
             volumeSlider.SetColor = Color.Cyan;
             volumeSlider.UnsetColor = Color.DodgerBlue;
 
@@ -82,7 +82,7 @@ namespace ZombustersWindows
             tempExtent = menu.GetExtent(1);
             musicSlider.SliderArea = new Rectangle(menu.uiBounds.Right + 20, tempExtent.Top + 4, 120, tempExtent.Height - 10);
             musicSlider.SliderUnits = 10;
-            musicSlider.SliderSetting = (int)(state.MusicLevel*musicSlider.SliderUnits);
+            musicSlider.SliderSetting = (int)(player.optionsState.MusicLevel*musicSlider.SliderUnits);
             musicSlider.SetColor = Color.Cyan;
             musicSlider.UnsetColor = Color.DodgerBlue;
 
@@ -106,7 +106,7 @@ namespace ZombustersWindows
         {
             if (menu.Selection == 2) 
             {
-                state.locale = languageComponent.SwitchLanguage();
+                player.optionsState.locale = languageComponent.SwitchLanguage();
             }
             else if (menu.Selection == 3)
             {
@@ -115,23 +115,7 @@ namespace ZombustersWindows
             else if (menu.Selection == 4)  // Save and Exit
             {
                 ExitScreen();
-                if (GamePad.GetState(PlayerIndex.One).IsButtonDown(Buttons.A))
-                {
-                    game.SetOptions(state, this.game.player1);
-                }
-                else if (GamePad.GetState(PlayerIndex.Two).IsButtonDown(Buttons.A))
-                {
-                    game.SetOptions(state, this.game.player2);
-                }
-                else if (GamePad.GetState(PlayerIndex.Three).IsButtonDown(Buttons.A))
-                {
-                    game.SetOptions(state, this.game.player3);
-                }
-                else if (GamePad.GetState(PlayerIndex.Four).IsButtonDown(Buttons.A))
-                {
-                    game.SetOptions(state, this.game.player4);
-                }
-                game.SetOptions(state, this.game.player1);
+                game.SetOptions(player.optionsState, player);
             }
         }
         
@@ -160,43 +144,11 @@ namespace ZombustersWindows
             switch (menu.Selection)
             {
                 case 0:
-                    HandleFXAudio(input, game.player1.Controller);
-                    if (GamePad.GetState(PlayerIndex.One).IsConnected)
-                    {
-                        HandleFXAudio(input, game.player1.Controller);
-                    }
-                    if (GamePad.GetState(PlayerIndex.Two).IsConnected)
-                    {
-                        HandleFXAudio(input, game.player2.Controller);
-                    }
-                    if (GamePad.GetState(PlayerIndex.Three).IsConnected)
-                    {
-                        HandleFXAudio(input, game.player3.Controller);
-                    }
-                    if (GamePad.GetState(PlayerIndex.Four).IsConnected)
-                    {
-                        HandleFXAudio(input, game.player4.Controller);
-                    }
+                    HandleFXAudio(input, player.playerIndex);
                     volumeSlider.UnsetColor = menu.SelectedColor;
                     break;
                 case 1:
-                    HandleMusic(input, game.player1.Controller);
-                    if (GamePad.GetState(PlayerIndex.One).IsConnected)
-                    {
-                        HandleMusic(input, game.player1.Controller);
-                    }
-                    if (GamePad.GetState(PlayerIndex.Two).IsConnected)
-                    {
-                        HandleMusic(input, game.player2.Controller);
-                    }
-                    if (GamePad.GetState(PlayerIndex.Three).IsConnected)
-                    {
-                        HandleMusic(input, game.player3.Controller);
-                    }
-                    if (GamePad.GetState(PlayerIndex.Four).IsConnected)
-                    {
-                        HandleMusic(input, game.player4.Controller);
-                    }
+                    HandleMusic(input, player.playerIndex);
                     musicSlider.UnsetColor = menu.SelectedColor;
                     break;
                 default:
@@ -205,7 +157,7 @@ namespace ZombustersWindows
 
             // Let the menu handle input regarding selection change
             // and the A/B/Back buttons:
-            if (this.game.player1.inputMode != InputMode.Touch)
+            if (player.inputMode != InputMode.Touch)
             {
                 menu.HandleInput(input);
             }
@@ -253,7 +205,7 @@ namespace ZombustersWindows
                         (gesture.Position.Y >= 614 && gesture.Position.Y <= 650))
                     {
                         ExitScreen();
-                        game.SetOptions(state, this.game.player1);
+                        game.SetOptions(player.optionsState, player);
                     }
 
                     // Exit without Saving
@@ -281,10 +233,10 @@ namespace ZombustersWindows
         private void ToggleFullScreen()
         {
             Resolution.SetVirtualResolution(game.VIRTUAL_RESOLUTION_WIDTH, game.VIRTUAL_RESOLUTION_HEIGHT);
-            if (state.FullScreenMode)
+            if (player.optionsState.FullScreenMode)
             {
                 Resolution.SetResolution(game.VIRTUAL_RESOLUTION_WIDTH, game.VIRTUAL_RESOLUTION_HEIGHT, false);
-                state.FullScreenMode = false;
+                player.optionsState.FullScreenMode = false;
                 game.graphics.IsFullScreen = true;
             }
             else
@@ -292,7 +244,7 @@ namespace ZombustersWindows
                 int screenWidth = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width;
                 int screenHeight = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height;
                 Resolution.SetResolution(screenWidth, screenHeight, true);
-                state.FullScreenMode = true;
+                player.optionsState.FullScreenMode = true;
                 game.graphics.IsFullScreen = false;
             }
             this.game.graphics.ToggleFullScreen();
@@ -303,18 +255,18 @@ namespace ZombustersWindows
             if (input.IsNewButtonPress(Buttons.LeftThumbstickRight, index) ||
                 input.IsNewButtonPress(Buttons.DPadRight, index))
             {
-                state.Player++;
-                if (state.Player > InputMode.GamePad)
-                    state.Player = InputMode.Keyboard;                
+                player.optionsState.Player++;
+                if (player.optionsState.Player > InputMode.GamePad)
+                    player.optionsState.Player = InputMode.Keyboard;                
             }
             else if (input.IsNewButtonPress(Buttons.LeftThumbstickLeft, index) ||
                 input.IsNewButtonPress(Buttons.DPadLeft, index))
             {
-                state.Player--;
-                if (state.Player < InputMode.Keyboard)
-                    state.Player = InputMode.GamePad;                    
+                player.optionsState.Player--;
+                if (player.optionsState.Player < InputMode.Keyboard)
+                    player.optionsState.Player = InputMode.GamePad;                    
             }
-            displayMode = state.Player;
+            displayMode = player.optionsState.Player;
         }
         private void HandleFXAudio(InputState input, PlayerIndex index)
         {
@@ -364,9 +316,9 @@ namespace ZombustersWindows
         public override void Update(GameTime gameTime, bool otherScreenHasFocus, 
             bool coveredByOtherScreen)
         {
-            state.FXLevel = volumeSlider.SliderSetting / 
+            player.optionsState.FXLevel = volumeSlider.SliderSetting / 
                 (float)musicSlider.SliderUnits;
-            state.MusicLevel = musicSlider.SliderSetting / 
+            player.optionsState.MusicLevel = musicSlider.SliderSetting / 
                 (float)musicSlider.SliderUnits;
             base.Update(gameTime, otherScreenHasFocus, coveredByOtherScreen);
         }

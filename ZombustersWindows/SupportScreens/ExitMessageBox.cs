@@ -269,7 +269,7 @@ namespace ZombustersWindows
             // Show Gamer Card Button
             buttonsPossition = new Vector2(textPosition.X, textPosition.Y + 10);
 
-            if (((MyGame)this.ScreenManager.Game).player1.inputMode != InputMode.Touch)
+            if (((MyGame)this.ScreenManager.Game).currentInputMode != InputMode.Touch)
             {
                 if (!InputManager.CheckIfGamePadIsConnected())
                 {

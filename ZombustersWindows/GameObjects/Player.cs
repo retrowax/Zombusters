@@ -11,29 +11,20 @@ namespace ZombustersWindows
         private static readonly string SAVE_GAME_FILENAME = "savegame.sav";
 
         public bool IsPlaying;
-        public PlayerIndex Controller;
+        public PlayerIndex playerIndex;
         public bool IsRemote;
         public InputMode inputMode = InputMode.NotExistent;
+        public NeutralInput neutralInput;
         public OptionsState optionsState;
         public AudioManager audioManager;
         public bool isReady;
         public int characterSelected;
         public int levelsUnlocked;
-        private MyGame game;
+        private readonly MyGame game;
         public Texture2D gamerPicture;
-        private string name;
+        public Avatar avatar;
 
-        public string Name
-        {
-            get
-            {
-                return name;
-            }
-            set
-            {
-                name = value;
-            }
-        }
+        public string Name { get; set; }
 
         public struct SaveGameData
         {
@@ -41,18 +32,14 @@ namespace ZombustersWindows
             public int Level;
         }
 
-        public Player(OptionsState options, AudioManager audio, MyGame game)
+        public Player(OptionsState options, AudioManager audio, MyGame game, Color color, string name, Viewport viewport)
         {
             this.optionsState = options;
             this.audioManager = audio;
             this.game = game;
-        }
-
-        public void InitLocal(PlayerIndex controller, string name, InputMode inputMode, MyGame game)
-        {
-            this.game = game;
-            this.inputMode = inputMode;
-            this.Controller = controller;
+            this.avatar = new Avatar(color);
+            this.avatar.Initialize(viewport);
+            this.inputMode = InputMode.NotExistent;
             this.Name = name;
         }
 
@@ -79,10 +66,10 @@ namespace ZombustersWindows
         {
             SaveGameData data = new SaveGameData
             {
-                PlayerName = game.currentPlayers[0].Player.Name,
+                PlayerName = this.Name,
                 Level = currentLevelNumber
             };
-            if (game.currentPlayers[0].Player.levelsUnlocked >= currentLevelNumber)
+            if (this.levelsUnlocked >= currentLevelNumber)
                 return;
             game.storageDataSource.SaveXMLFile(SAVE_GAME_FILENAME, data);
         }
@@ -91,7 +78,7 @@ namespace ZombustersWindows
         {
             SaveGameData data = new SaveGameData();
             data = (SaveGameData)game.storageDataSource.LoadXMLFile(SAVE_GAME_FILENAME, data);
-            game.currentPlayers[0].Player.levelsUnlocked = (byte)data.Level;
+            this.levelsUnlocked = (byte)data.Level;
         }
 
         public void SaveOptions()
@@ -132,9 +119,9 @@ namespace ZombustersWindows
             }
         }
 
-        public void SaveLeaderBoard(int score)
+        public void SaveLeaderBoard()
         {
-            TopScoreEntry entry = new TopScoreEntry(name, score);
+            TopScoreEntry entry = new TopScoreEntry(Name, avatar.score);
             game.topScoreListContainer.addEntry(0, entry);
             game.storageDataSource.SaveScoreListToFile(LEADERBOARD_FILENAME, game.topScoreListContainer.scoreList);
         }

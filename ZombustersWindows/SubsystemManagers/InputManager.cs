@@ -201,7 +201,7 @@ namespace ZombustersWindows
         /// <param name="frames">The number of frames to vibrate.</param>
         /// <param name="leftMotor">The amount of vibration to apply to the left motor.</param>
         /// <param name="rightMotor">The amount of vibration to apply to the right motor.</param>
-        private void AddVibration(PlayerIndex player, int frames, 
+        private void AddVibration(PlayerIndex player, int frames,
             float leftMotor, float rightMotor)
         {
             ControllerEvent vibe;
@@ -243,13 +243,9 @@ namespace ZombustersWindows
             bPaused = false;
         }
 
-        public void PlayShot(byte player)
+        public void PlayShot(Player player)
         {
-            // which controller?
-            PlayerIndex index = game.currentPlayers[player].Player.Controller;
-
-            // buzz it
-            AddVibration(index, 8, 0.2f, 0.4f);
+            AddVibration(player.playerIndex, 8, 0.2f, 0.4f);
         }
 
         /// <summary>
@@ -308,13 +304,13 @@ namespace ZombustersWindows
         /// <param name="playerOne">The index of player one.</param>
         /// <param name="playerTwo">The returned index of the lowest player who has pressed start.</param>
         /// <returns>True if player two pressed start, otherwise false.</returns>
-        public static bool CheckNewPlayersStart(PlayerIndex playerOne, 
+        public static bool CheckNewPlayersStart(PlayerIndex playerOne,
             out PlayerIndex playerTwo)
         {
             playerTwo = playerOne;
             if (IsSupported(
                 GamePad.GetCapabilities(PlayerIndex.One).GamePadType) &&
-                (GamePad.GetState(PlayerIndex.One).Buttons.Start 
+                (GamePad.GetState(PlayerIndex.One).Buttons.Start
                 == ButtonState.Pressed) &&
                 (playerOne != PlayerIndex.One))
             {
@@ -323,7 +319,7 @@ namespace ZombustersWindows
             }
             if (IsSupported(
                 GamePad.GetCapabilities(PlayerIndex.Two).GamePadType) &&
-                (GamePad.GetState(PlayerIndex.Two).Buttons.Start 
+                (GamePad.GetState(PlayerIndex.Two).Buttons.Start
                 == ButtonState.Pressed) &&
                 (playerOne != PlayerIndex.Two))
             {
@@ -332,7 +328,7 @@ namespace ZombustersWindows
             }
             if (IsSupported(
                 GamePad.GetCapabilities(PlayerIndex.Three).GamePadType) &&
-                (GamePad.GetState(PlayerIndex.Three).Buttons.Start 
+                (GamePad.GetState(PlayerIndex.Three).Buttons.Start
                 == ButtonState.Pressed) &&
                 (playerOne != PlayerIndex.Three))
             {
@@ -341,7 +337,7 @@ namespace ZombustersWindows
             }
             if (IsSupported(
                 GamePad.GetCapabilities(PlayerIndex.Four).GamePadType) &&
-                (GamePad.GetState(PlayerIndex.Four).Buttons.Start 
+                (GamePad.GetState(PlayerIndex.Four).Buttons.Start
                 == ButtonState.Pressed) &&
                 (playerOne != PlayerIndex.Four))
             {
@@ -367,7 +363,7 @@ namespace ZombustersWindows
 
         /// <summary>
         /// This method takes a raw thumbstick value and returns values
-        /// within the largest square inside the thumbstick range.  
+        /// within the largest square inside the thumbstick range.
         /// This gives diagonal movement the
         /// same maximum value as horizontal or vertical movement.
         /// </summary>
@@ -386,7 +382,7 @@ namespace ZombustersWindows
         /// <summary>
         /// This method takes a raw thumbstick value and returns a value
         /// expanded from a circle (the normal thumbstick range) into
-        /// a square containing that circle.  
+        /// a square containing that circle.
         /// This gives diagonal movement the same maximum value as horizontal
         /// and vertical movements, and provides an alternative to the
         /// ClampStick method.
@@ -397,17 +393,17 @@ namespace ZombustersWindows
         {
             // Project a point on a circle onto the square that bounds the circle.
             Vector2 abs = new Vector2(Math.Abs(stick.X), Math.Abs(stick.Y));
-            double theta = abs.X > abs.Y ? Math.Atan2(abs.Y, abs.X) : 
+            double theta = abs.X > abs.Y ? Math.Atan2(abs.Y, abs.X) :
                 Math.Atan2(abs.X, abs.Y);
             stick.X /= (float)Math.Cos(theta);
             stick.Y /= (float)Math.Cos(theta);
             return stick;
-        }        
-        
+        }
+
         /// <summary>
         /// Rather than reading input as linear between 0 and 1.0, we can apply
         /// a gentle curve so that values near 1.0 (the edge) are more distinct
-        /// than values near the center.  This makes the input feel a little 
+        /// than values near the center.  This makes the input feel a little
         /// more responsive.
         /// </summary>
         /// <param name="input">The raw thumbstick input.</param>
@@ -439,7 +435,7 @@ namespace ZombustersWindows
             return ((type == GamePadType.GamePad) ||
                     (type == GamePadType.ArcadeStick) ||
                     (type == GamePadType.FlightStick));
-        }        
+        }
     }
 
     /// <summary>
@@ -448,7 +444,7 @@ namespace ZombustersWindows
     /// </summary>
     public class ControllerDisconnectScreen : ErrorScreen
     {
-        PlayerIndex player;        
+        PlayerIndex player;
         public ControllerDisconnectScreen(PlayerIndex player)
             : base(Strings.ReconnectControllerString)
         {
