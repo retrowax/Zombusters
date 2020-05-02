@@ -112,13 +112,14 @@ namespace ZombustersWindows
             }
 #endif
 
-            position = new Vector2(position.X, position.Y + 32);
+            //position = new Vector2(position.X, position.Y + 32);
 #if DEMO
-            spriteBatch.DrawString(smallspriteFont, "Demo On", position, Color.White);
+            spriteBatch.DrawString(smallspriteFont, "Demo: ON", position, Color.White);
 #else
-            spriteBatch.DrawString(smallspriteFont, "Demo Off", position, Color.White);
+            spriteBatch.DrawString(smallspriteFont, "Demo: OFF", position, Color.White);
 #endif
             count = 0;
+            position = new Vector2(position.X, position.Y + 22);
             foreach (Player player in game.players)
             {
                 position = new Vector2(position.X, position.Y + 22);

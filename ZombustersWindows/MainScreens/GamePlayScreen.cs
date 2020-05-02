@@ -433,49 +433,19 @@ namespace ZombustersWindows
             cursorPos = new Vector2(mouseState.X, mouseState.Y);
             input.Update();
 
-            // If the user activates the menu...
             for (i = 0; i < game.players.Length; i++)
             {
                 if ((GamePad.GetState(game.players[i].playerIndex).Buttons.Start == ButtonState.Pressed)
-                    || (input.IsNewKeyPress(Keys.Escape) && i == 0) || (input.IsNewKeyPress(Keys.Back) && i == 0))
+                    || input.IsNewKeyPress(Keys.Escape) || input.IsNewKeyPress(Keys.Back))
                 {
-                    if (game.players[i].avatar.status == ObjectStatus.Active)
+                    if (!bPaused && (GamePlayStatus != GameplayState.StartLevel && GamePlayStatus != GameplayState.StageCleared))
                     {
-                        if (!bPaused && (GamePlayStatus != GameplayState.StartLevel && GamePlayStatus != GameplayState.StageCleared))
-                        {
-                            this.ScreenManager.AddScreen(menu);
-
-                            // Use this to keep from adding more than one menu to the stack
-                            bPaused = game.BeginPause();
-                            GamePlayStatus = GameplayState.Pause;
-                            return;
-                        }
-                    }
-                    else
-                    {
-                        if (game.players[i].avatar.lives > 0)
-                        {
-                            game.players[i].avatar.status = ObjectStatus.Active;
-
-                            for (j = 0; j < game.players.Length; j++)
-                            {
-                                if (game.players[j].avatar.character == 0)
-                                {
-                                    game.players[i].avatar.character = 1;
-                                }
-                                else if (game.players[j].avatar.character == 1)
-                                {
-                                    game.players[i].avatar.character = 2;
-                                }
-                                else
-                                {
-                                    game.players[i].avatar.character = 3;
-                                }
-                            }
-                        }
+                        this.ScreenManager.AddScreen(menu);
+                        bPaused = game.BeginPause();
+                        GamePlayStatus = GameplayState.Pause;
+                        return;
                     }
                 }
-
             }
             bool hidden = coveredByOtherScreen || otherScreenHasFocus;
 
@@ -691,23 +661,26 @@ namespace ZombustersWindows
         public void ProcessInput(int player, float totalGameSeconds,
             float elapsedGameSeconds, NeutralInput input)
         {
-            if (input.StickLeftMovement.X > 0)
-                accumMove.X += GameplayHelper.Move(input.StickLeftMovement.X, elapsedGameSeconds);
-            if (input.StickLeftMovement.X < 0)
-                accumMove.X -= GameplayHelper.Move(-input.StickLeftMovement.X, elapsedGameSeconds);
-            if (input.StickLeftMovement.Y > 0)
-                accumMove.Y -= GameplayHelper.Move(input.StickLeftMovement.Y, elapsedGameSeconds);
-            if (input.StickLeftMovement.Y < 0)
-                accumMove.Y += GameplayHelper.Move(-input.StickLeftMovement.Y, elapsedGameSeconds);
+            if (game.players[player].inputMode == InputMode.GamePad)
+            {
+                if (input.StickLeftMovement.X > 0)
+                    accumMove.X += GameplayHelper.Move(input.StickLeftMovement.X, elapsedGameSeconds);
+                if (input.StickLeftMovement.X < 0)
+                    accumMove.X -= GameplayHelper.Move(-input.StickLeftMovement.X, elapsedGameSeconds);
+                if (input.StickLeftMovement.Y > 0)
+                    accumMove.Y -= GameplayHelper.Move(input.StickLeftMovement.Y, elapsedGameSeconds);
+                if (input.StickLeftMovement.Y < 0)
+                    accumMove.Y += GameplayHelper.Move(-input.StickLeftMovement.Y, elapsedGameSeconds);
 
-            if (input.StickRightMovement.X > 0)
-                accumFire.X += GameplayHelper.Move(input.StickRightMovement.X, elapsedGameSeconds);
-            if (input.StickRightMovement.X < 0)
-                accumFire.X -= GameplayHelper.Move(-input.StickRightMovement.X, elapsedGameSeconds);
-            if (input.StickRightMovement.Y > 0)
-                accumFire.Y -= GameplayHelper.Move(input.StickRightMovement.Y, elapsedGameSeconds);
-            if (input.StickRightMovement.Y < 0)
-                accumFire.Y += GameplayHelper.Move(-input.StickRightMovement.Y, elapsedGameSeconds);
+                if (input.StickRightMovement.X > 0)
+                    accumFire.X += GameplayHelper.Move(input.StickRightMovement.X, elapsedGameSeconds);
+                if (input.StickRightMovement.X < 0)
+                    accumFire.X -= GameplayHelper.Move(-input.StickRightMovement.X, elapsedGameSeconds);
+                if (input.StickRightMovement.Y > 0)
+                    accumFire.Y -= GameplayHelper.Move(input.StickRightMovement.Y, elapsedGameSeconds);
+                if (input.StickRightMovement.Y < 0)
+                    accumFire.Y += GameplayHelper.Move(-input.StickRightMovement.Y, elapsedGameSeconds);
+            }
 
             if (game.players[player].inputMode == InputMode.Keyboard)
             {
