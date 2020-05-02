@@ -184,6 +184,11 @@ namespace ZombustersWindows
 
         public void QuitToMenu()
         {
+            foreach (Player player in game.players)
+            {
+                player.avatar.Reset();
+                player.isReady = false;
+            }
             GameScreen[] screenList = ScreenManager.GetScreens();
             for (int i = screenList.Length -1; i > 0; i--)
             {
