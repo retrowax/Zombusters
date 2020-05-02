@@ -245,9 +245,9 @@ namespace ZombustersWindows
             this.ScreenManager.SpriteBatch.Draw(lineaMenu, pos, Color.White);
 
             // Leave Button
-            if (((MyGame)this.ScreenManager.Game).player1.inputMode != InputMode.Touch)
+            if (((MyGame)this.ScreenManager.Game).currentInputMode != InputMode.Touch)
             {
-                if (((MyGame)this.ScreenManager.Game).player1.inputMode == InputMode.Keyboard)
+                if (((MyGame)this.ScreenManager.Game).currentInputMode == InputMode.Keyboard)
                 {
                     spaceBetweenButtonAndText = Convert.ToInt32(kbEsc.Width * 0.7f) + 5;
                     this.ScreenManager.SpriteBatch.Draw(kbEsc, new Vector2(158 + distanceBetweenButtonsText, 613), null, Color.White, 0, Vector2.Zero, 0.7f, SpriteEffects.None, 1.0f);
