@@ -65,7 +65,7 @@ namespace ZombustersWindows
         Texture2D pause_icon;
         Texture2D left_thumbstick;
         Texture2D right_thumbstick;
-        
+
         public Random random;
         private float timer, timerplayer;
         private int subLevelIndex;
@@ -193,7 +193,7 @@ namespace ZombustersWindows
             for (int i = screenList.Length -1; i > 0; i--)
             {
                 screenList[i].ExitScreen();
-            }  
+            }
         }
 
         public override void Initialize()
@@ -372,7 +372,7 @@ namespace ZombustersWindows
                 if (input.GetCurrentMouseState().LeftButton == ButtonState.Pressed)
                 {
                     MouseState mouseState = input.GetCurrentMouseState();
-                    
+
                     if (mouseState.X > player.avatar.position.X && (mouseState.X - player.avatar.position.X >=100))
                     {
                         state.MouseFire += new Vector2(1, 0); // Right
@@ -987,7 +987,7 @@ namespace ZombustersWindows
             if (player.avatar.lives <= 1 && player.avatar.status == ObjectStatus.Inactive)
             {
                 GameOver(player);
-            } 
+            }
             else
             {
                 PlayerDestroyed(player);
@@ -1096,8 +1096,8 @@ namespace ZombustersWindows
                 RateOfFire = player.avatar.RateOfFire;
             }
 
-            if (player.avatar.currentgun == GunType.pistol 
-                || (player.avatar.currentgun != GunType.pistol 
+            if (player.avatar.currentgun == GunType.pistol
+                || (player.avatar.currentgun != GunType.pistol
                 && player.avatar.ammo[(int)player.avatar.currentgun] > 0))
             {
                 if (player.avatar.VerifyFire(TotalGameSeconds, RateOfFire))
@@ -1757,7 +1757,7 @@ namespace ZombustersWindows
                                     {
                                         PistolShotNorthAnimation[player.avatar.character].Draw(this.ScreenManager.SpriteBatch, new Vector2(player.avatar.position.X + 7 + offsetPosition.X, player.avatar.position.Y + offsetPosition.Y - 30), SpriteEffects.None, layerIndex, 0f, color);
                                     }
-                                    else 
+                                    else
                                     {
                                         PistolShotNorthAnimation[player.avatar.character].Draw(this.ScreenManager.SpriteBatch, new Vector2(player.avatar.position.X + 12 + offsetPosition.X, player.avatar.position.Y + offsetPosition.Y - 30), SpriteEffects.None, layerIndex, 0f, color);
                                     }
