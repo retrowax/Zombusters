@@ -243,13 +243,9 @@ namespace ZombustersWindows
             bPaused = false;
         }
 
-        public void PlayShot(byte player)
+        public void PlayShot(Player player)
         {
-            // which controller?
-            PlayerIndex index = game.players[player].playerIndex;
-
-            // buzz it
-            AddVibration(index, 8, 0.2f, 0.4f);
+            AddVibration(player.playerIndex, 8, 0.2f, 0.4f);
         }
 
         /// <summary>
