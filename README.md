@@ -4,9 +4,9 @@ Zombusters
 <img src="media/zombusters_logo.png" align="left" width="168px" height="168px"/>
 <img align="left" width="0" height="168px" hspace="10"/>
 
-*An action-packed 3rd person game for Windows, MacOS and Linux available for download on itch.io*
+*An action-packed 3rd person game for Windows, MacOS and Linux available for download soon on Steam*
 
-<a href="https://retrowax.itch.io/zombusters"><img src="https://img.shields.io/badge/zombusters-v1.1.0-green.svg" /></a>
+<a href="https://store.steampowered.com/app/1272300/Zombusters/"><img src="https://img.shields.io/badge/zombusters-v1.1.0-green.svg" /></a>
 
 It will let you sticked on your seat until the end. Its 2D graphics and isometric view make it a different specie in its genre. You will have to face a horde of Zombies that try to get you down with the help of various weapons/power ups and different moving styles.
 
@@ -29,9 +29,6 @@ It will let you sticked on your seat until the end. Its 2D graphics and isometri
 </p>
 <br/>
 
-<a href="https://retrowax.itch.io/zombusters"><img align="center" src="https://github.com/retrowax/Zombusters-Enhanced-Edition/raw/master/media/github_banner.png" /></a>
-<br/>
-
 ### Features
 
 <img align="right" width="0" height="328px" hspace="20"/>
@@ -49,7 +46,9 @@ It will let you sticked on your seat until the end. Its 2D graphics and isometri
 
 ### Download
 
-You can download it on **itch.io** here: [https://retrowax.itch.io/zombusters](https://retrowax.itch.io/zombusters)
+It will be published on **Steam October 2020**. Meanwhile you can add it to your <a href="https://store.steampowered.com/app/1272300/Zombusters/">wishlist.</a>
+
+You can download the Beta on **itch.io** here: [https://retrowax.itch.io/zombusters](https://retrowax.itch.io/zombusters)
 
 **NOTE:** If you want to play the original version that was published to the Windows Store you can download the **commercial version** released (v1.0.0) for PC Windows **for free** [here](https://github.com/retrowax/Zombusters-Enhanced-Edition/raw/master/releases/ZombustersInstaller-v1.0.0.msi).
 
