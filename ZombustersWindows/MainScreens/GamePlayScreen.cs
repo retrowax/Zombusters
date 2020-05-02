@@ -966,13 +966,13 @@ namespace ZombustersWindows
                             }
                         }
 
-                        for (int bulletCount = 0; bulletCount < player.shotgunbullets.Count; bulletCount++)
+                        for (int bulletCount = 0; bulletCount < player.avatar.shotgunbullets.Count; bulletCount++)
                         {
-                            for (int pelletCount = 0; pelletCount < player.shotgunbullets[bulletCount].Pellet.Count; pelletCount++)
+                            for (int pelletCount = 0; pelletCount < player.avatar.shotgunbullets[bulletCount].Pellet.Count; pelletCount++)
                             {
-                                if (GameplayHelper.DetectCollision(player.shotgunbullets[bulletCount].Pellet[pelletCount], zombie.entity.Position, totalGameSeconds))
+                                if (GameplayHelper.DetectCollision(player.avatar.shotgunbullets[bulletCount].Pellet[pelletCount], zombie.entity.Position, totalGameSeconds))
                                 {
-                                    player.shotgunbullets[bulletCount].Pellet.RemoveAt(pelletCount);
+                                    player.avatar.shotgunbullets[bulletCount].Pellet.RemoveAt(pelletCount);
                                     if (zombie.lifecounter > 1.0f)
                                     {
                                         zombie.lifecounter -= 1.0f;
@@ -980,7 +980,7 @@ namespace ZombustersWindows
                                     }
                                     else
                                     {
-                                        ZombieDestroyed(zombie, (byte)playerId, player.currentgun);
+                                        ZombieDestroyed(zombie, player);
 
                                         if (PowerUpIsInRange(zombie))
                                         {
