@@ -678,4 +678,10 @@ Raccogli le ricariche per ottenere vite extra o nuove Armi.</value>
   <data name="FullScreenMenuString" xml:space="preserve">
     <value>Attiva la modalità a schermo intero</value>
   </data>
+  <data name="WishListGameMenu" xml:space="preserve">
+    <value>AGGIUNGI ZOMBUSTER ALLA MIA LISTA DEI DESIDERI</value>
+  </data>
+  <data name="WishListGameMenuHelp" xml:space="preserve">
+    <value>Se desideri supportarci, ti saremmo grati se aggiungi Zombusters alla tua lista dei desideri.</value>
+  </data>
 </root>

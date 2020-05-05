@@ -773,4 +773,10 @@ or a new Weapon.</value>
   <data name="ChangeLanguageOption" xml:space="preserve">
     <value>Change Language</value>
   </data>
+  <data name="WishListGameMenu" xml:space="preserve">
+    <value>ADD ZOMBUSTERS TO MY WISHLIST</value>
+  </data>
+  <data name="WishListGameMenuHelp" xml:space="preserve">
+    <value>If you want to support us we would appreciate if you add Zombusters to your wishlist.</value>
+  </data>
 </root>
