@@ -37,7 +37,7 @@ namespace ZombustersWindows
             menu.AddText("ExtrasMenuString", "ExtrasMMString");
             menu.AddText("SettingsMenuString", "ConfigurationString");
 #if DEMO
-            menu.AddText("ReviewMenuString", "ReviewMMString");
+            menu.AddText("WishListGameMenu", "WishListGameMenuHelp");
 #endif
             //menu.AddText(Strings.ReviewMenuString, Strings.ReviewMMString);
             /*if (licenseInformation.IsTrial)
@@ -97,8 +97,7 @@ namespace ZombustersWindows
                     break;
 #if DEMO
                 case 3:
-                    //await Windows.System.Launcher.LaunchUriAsync(new Uri("ms-windows-store:REVIEW?PFN=44468RetrowaxGames.Zombusters_rhyy9bbdeb2be"));
-                    System.Diagnostics.Process.Start("http://google.com");
+                    System.Diagnostics.Process.Start("https://store.steampowered.com/app/1272300/Zombusters/");
                     break;
 
                 case 4:
