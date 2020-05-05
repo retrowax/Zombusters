@@ -76,11 +76,11 @@ namespace ZombustersWindows
             }
             else if (angle > Angles.WEST[0] && angle < Angles.WEST[1])
             {
-                return new Vector2(position.X, position.Y - 5);
+                return new Vector2(position.X, position.Y + 5);
             }
             else if (angle > Angles.NORTH_WEST[0] && angle < Angles.NORTH_WEST[1])
             {
-                return new Vector2(position.X, position.Y - 5);
+                return new Vector2(position.X - 5, position.Y - 5);
             }
             return position;
         }
@@ -101,7 +101,7 @@ namespace ZombustersWindows
             }
             else if (angle > Angles.SOUTH_EAST[0] && angle < Angles.SOUTH_EAST[1])
             {
-                return new Vector2(position.X + 5, position.Y + 5);
+                return new Vector2(position.X, position.Y + 8);
             }
             else if (angle > Angles.SOUTH[0] && angle < Angles.SOUTH[1])
             {
@@ -113,11 +113,11 @@ namespace ZombustersWindows
             }
             else if (angle > Angles.WEST[0] && angle < Angles.WEST[1])
             {
-                return new Vector2(position.X - 5, position.Y - 5);
+                return new Vector2(position.X, position.Y + 5);
             }
             else if (angle > Angles.NORTH_WEST[0] && angle < Angles.NORTH_WEST[1])
             {
-                return new Vector2(position.X, position.Y - 5);
+                return new Vector2(position.X + 5, position.Y + 5);
             }
             return position;
         }
