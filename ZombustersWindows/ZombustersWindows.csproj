@@ -106,6 +106,7 @@
     <Compile Include="ContentManager\PowerUp.cs" />
     <Compile Include="GameObjects\AvatarState.cs" />
     <Compile Include="GameObjects\Enemies\Enemies.cs" />
+    <Compile Include="GameObjects\Enemies\Rat.cs" />
     <Compile Include="GameObjects\Explosion.cs" />
     <Compile Include="GameObjects\Enemies\EnemyType.cs" />
     <Compile Include="GameObjects\GunType.cs" />
@@ -269,6 +270,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\AnimationDef.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\InGame\rat\RatAnimationDef.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Content\LevelsDef.xml">
