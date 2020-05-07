@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
+using ZombustersWindows.Subsystem_Managers;
 
 namespace ZombustersWindows
 {
     public class ShotgunShell
     {
-        public List<Vector3> Pellet;
+        public List<Vector4> Pellet;
         public Vector2 Position, Direction, Velocity;
         public float Angle;
 
@@ -39,10 +40,86 @@ namespace ZombustersWindows
                  (float)Math.Sin(rotation + pelletsSpreadRadians),
                 -(float)Math.Cos(rotation + pelletsSpreadRadians));
 
-            Pellet = new List<Vector3>();
-            Pellet.Add(new Vector3(this.Position, totalgameseconds));
-            Pellet.Add(new Vector3(this.Position, totalgameseconds));
-            Pellet.Add(new Vector3(this.Position, totalgameseconds));
+            Pellet = new List<Vector4>
+            {
+                new Vector4(GetLeftPellet(Position, angle), totalgameseconds, angle),
+                new Vector4(this.Position, totalgameseconds, angle),
+                new Vector4(GetRightPellet(Position, angle), totalgameseconds, angle)
+            };
+        }
+
+        private Vector2 GetLeftPellet(Vector2 position, float angle)
+        {
+            if (angle > Angles.NORTH[0] && angle < Angles.NORTH[1])
+            {
+                return new Vector2(position.X - 5, position.Y);
+            }
+            else if (angle > Angles.NORTH_EAST[0] && angle < Angles.NORTH_EAST[1])
+            {
+                return new Vector2(position.X, position.Y - 5);
+            }
+            else if (angle > Angles.EAST[0] && angle < Angles.EAST[1])
+            {
+                return new Vector2(position.X , position.Y -5);
+            }
+            else if (angle > Angles.SOUTH_EAST[0] && angle < Angles.SOUTH_EAST[1])
+            {
+                return new Vector2(position.X + 5, position.Y -5);
+            }
+            else if (angle > Angles.SOUTH[0] && angle < Angles.SOUTH[1])
+            {
+                return new Vector2(position.X + 5, position.Y);
+            }
+            else if (angle > Angles.SOUTH_WEST[0] && angle < Angles.SOUTH_WEST[1])
+            {
+                return new Vector2(position.X, position.Y + 5);
+            }
+            else if (angle > Angles.WEST[0] && angle < Angles.WEST[1])
+            {
+                return new Vector2(position.X, position.Y + 5);
+            }
+            else if (angle > Angles.NORTH_WEST[0] && angle < Angles.NORTH_WEST[1])
+            {
+                return new Vector2(position.X - 5, position.Y - 5);
+            }
+            return position;
+        }
+
+        private Vector2 GetRightPellet(Vector2 position, float angle)
+        {
+            if (angle > Angles.NORTH[0] && angle < Angles.NORTH[1])
+            {
+                return new Vector2(position.X + 5, position.Y);
+            }
+            else if (angle > Angles.NORTH_EAST[0] && angle < Angles.NORTH_EAST[1])
+            {
+                return new Vector2(position.X + 5, position.Y + 5);
+            }
+            else if (angle > Angles.EAST[0] && angle < Angles.EAST[1])
+            {
+                return new Vector2(position.X, position.Y + 5);
+            }
+            else if (angle > Angles.SOUTH_EAST[0] && angle < Angles.SOUTH_EAST[1])
+            {
+                return new Vector2(position.X, position.Y + 8);
+            }
+            else if (angle > Angles.SOUTH[0] && angle < Angles.SOUTH[1])
+            {
+                return new Vector2(position.X - 5, position.Y);
+            }
+            else if (angle > Angles.SOUTH_WEST[0] && angle < Angles.SOUTH_WEST[1])
+            {
+                return new Vector2(position.X - 5, position.Y - 5);
+            }
+            else if (angle > Angles.WEST[0] && angle < Angles.WEST[1])
+            {
+                return new Vector2(position.X, position.Y + 5);
+            }
+            else if (angle > Angles.NORTH_WEST[0] && angle < Angles.NORTH_WEST[1])
+            {
+                return new Vector2(position.X + 5, position.Y + 5);
+            }
+            return position;
         }
     }
 }

@@ -7,78 +7,77 @@ namespace ZombustersWindows.Subsystem_Managers
 
     public class PowerUp
     {
+        private const int EXTRA_LIFE = 1;
+        private const int LIVE_TO_SUM = 30;
+        private const int SHOTGUN_AMMO = 25;
+        private const int MACHINEGUN_AMMO = 50;
+        private const int FLAMETHROWER_AMMO = 25;
+        private const int GRENADES = 5;
+        private const float SPEED_BUFF = 20.0f;
+        private const float IMMUNE_BUFF = 20.0f;
+
+        private const float TIME_TO_DIE = 1.5f;
+
         public Texture2D Texture, UITexture;
         public Vector2 Position;
         public int Value;
         public ObjectStatus status;
-        public Type PUType;
+        public PowerUpType powerUpType;
         public float buffTimer;
 
         private float timer;
         private float dyingtimer;
         private Color color;
 
-        public enum Type
-        {
-            live = 0, 
-            extralife = 1, 
-            shotgun_ammo = 2, 
-            machinegun_ammo = 3, 
-            flamethrower_ammo = 4, 
-            grenadelauncher_ammo = 5, 
-            speedbuff = 6, 
-            immunebuff = 7
-        }
-
-        public PowerUp(Texture2D texture, Texture2D uitexture, Vector2 position, Type type)
+        public PowerUp(Texture2D texture, Texture2D uitexture, Vector2 position, PowerUpType type)
         {
             this.Texture = texture;
             this.UITexture = uitexture;
             this.Position = position;
             this.status = ObjectStatus.Active;
             this.color = Color.White;
-            this.PUType = type;
+            this.powerUpType = type;
 
-            if (this.PUType == Type.extralife)
+            if (this.powerUpType == PowerUpType.extralife)
             {
-                Value = 1;
+                Value = EXTRA_LIFE;
             }
 
-            if (this.PUType == Type.live)
+            if (this.powerUpType == PowerUpType.live)
             {
-                Value = 30;
+                Value = LIVE_TO_SUM;
             }
 
-            if (this.PUType == Type.shotgun_ammo)
+            if (this.powerUpType == PowerUpType.shotgun)
             {
-                Value = 50;
+                Value = SHOTGUN_AMMO;
             }
 
-            if (this.PUType == Type.machinegun_ammo)
+            if (this.powerUpType == PowerUpType.machinegun)
             {
-                Value = 50;
+                Value = MACHINEGUN_AMMO;
             }
 
-            if (this.PUType == Type.flamethrower_ammo)
+            if (this.powerUpType == PowerUpType.flamethrower)
             {
-                Value = 50;
+                Value = FLAMETHROWER_AMMO;
             }
 
-            if (this.PUType == Type.grenadelauncher_ammo)
+            if (this.powerUpType == PowerUpType.grenade)
             {
-                Value = 10;
+                Value = GRENADES;
             }
 
-            if (this.PUType == Type.speedbuff)
+            if (this.powerUpType == PowerUpType.speedbuff)
             {
                 // Timer
-                buffTimer = 20.0f;
+                buffTimer = SPEED_BUFF;
             }
 
-            if (this.PUType == Type.immunebuff)
+            if (this.powerUpType == PowerUpType.immunebuff)
             {
                 // Timer
-                buffTimer = 20.0f;
+                buffTimer = IMMUNE_BUFF;
             }
         }
 
@@ -97,7 +96,7 @@ namespace ZombustersWindows.Subsystem_Managers
             if (this.status == ObjectStatus.Dying)
             {
                 dyingtimer += (float)gameTime.ElapsedGameTime.TotalSeconds;
-                if (dyingtimer >= 1.5f)
+                if (dyingtimer >= TIME_TO_DIE)
                 {
                     this.status = ObjectStatus.Inactive;
                     dyingtimer = 0;
@@ -134,42 +133,42 @@ namespace ZombustersWindows.Subsystem_Managers
 
             if (this.status == ObjectStatus.Dying)
             {
-                if (this.PUType == Type.live)
+                if (this.powerUpType == PowerUpType.live)
                 {
                     this.color = Color.Red;
                 }
 
-                if (this.PUType == Type.shotgun_ammo)
+                if (this.powerUpType == PowerUpType.shotgun)
                 {
                     this.color = Color.LightYellow;
                 }
 
-                if (this.PUType == Type.machinegun_ammo)
+                if (this.powerUpType == PowerUpType.machinegun)
                 {
                     this.color = Color.LightYellow;
                 }
 
-                if (this.PUType == Type.flamethrower_ammo)
+                if (this.powerUpType == PowerUpType.flamethrower)
                 {
                     this.color = Color.LightYellow;
                 }
 
-                if (this.PUType == Type.grenadelauncher_ammo)
+                if (this.powerUpType == PowerUpType.grenade)
                 {
                     this.color = Color.LightYellow;
                 }
 
-                if (this.PUType == Type.speedbuff)
+                if (this.powerUpType == PowerUpType.speedbuff)
                 {
                     this.color = new Color(95, 172, 226, 255);
                 }
 
-                if (this.PUType == Type.immunebuff)
+                if (this.powerUpType == PowerUpType.immunebuff)
                 {
                     this.color = Color.BlueViolet;
                 }
 
-                if (this.PUType == Type.immunebuff || this.PUType == Type.speedbuff)
+                if (this.powerUpType == PowerUpType.immunebuff || this.powerUpType == PowerUpType.speedbuff)
                 {
                     textToShow = "+ " + Convert.ToInt32(this.buffTimer).ToString() + "s";
                 }
