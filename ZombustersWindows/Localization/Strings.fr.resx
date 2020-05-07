@@ -678,4 +678,10 @@ vie ou de nouvelles armes.</value>
   <data name="FullScreenMenuString" xml:space="preserve">
     <value>Basculer en mode plein écran</value>
   </data>
+  <data name="WishListGameMenu" xml:space="preserve">
+    <value>AJOUTER DES ZOMBUSTERS À MA LISTE DE SOUHAITS</value>
+  </data>
+  <data name="WishListGameMenuHelp" xml:space="preserve">
+    <value>Si vous souhaitez nous soutenir, nous vous serions reconnaissants d'ajouter Zombusters à votre liste de souhaits.</value>
+  </data>
 </root>

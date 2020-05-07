@@ -1106,7 +1106,29 @@ namespace ZombustersWindows.Localization {
                 return ResourceManager.GetString("PCExplanationString", resourceCulture);
             }
         }
-        
+
+        /// <summary>
+        ///   Looks up a localized string similar to ADD ZOMBUSTERS TO MY WISHLIST.
+        /// </summary>
+        internal static string WishListGameMenu
+        {
+            get
+            {
+                return ResourceManager.GetString("WishListGameMenu", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to If you want to support us we would appreciate if you add Zombusters to your wishlist..
+        /// </summary>
+        internal static string WishListGameMenuHelp
+        {
+            get
+            {
+                return ResourceManager.GetString("WishListGameMenuHelp", resourceCulture);
+            }
+        }
+
         internal static string ReviewMenuString {
             get {
                 return ResourceManager.GetString("ReviewMenuString", resourceCulture);

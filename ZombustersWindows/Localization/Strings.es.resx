@@ -766,4 +766,10 @@ conseguir vidas extras o nuevas armas.</value>
   <data name="ChangeLanguageOption" xml:space="preserve">
     <value>Idioma</value>
   </data>
+  <data name="WishListGameMenu" xml:space="preserve">
+    <value>AÑADIR ZOMBUSTERS A MI LISTA DE DESEADOS</value>
+  </data>
+  <data name="WishListGameMenuHelp" xml:space="preserve">
+    <value>Si quieres apoyarnos, te agradeceríamos que añadieras Zombusters a tu lista de deseados.</value>
+  </data>
 </root>

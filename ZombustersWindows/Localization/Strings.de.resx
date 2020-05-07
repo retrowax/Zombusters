@@ -677,4 +677,10 @@ Sammle Powerups um Extraleben und neue Waffen zu erhalten.</value>
   <data name="FullScreenModeString" xml:space="preserve">
     <value>Vollbildmodus umschalten</value>
   </data>
+  <data name="WishListGameMenu" xml:space="preserve">
+    <value>ZOMBUSTER ZU MEINER WISLISTE HINZUFÜGEN</value>
+  </data>
+  <data name="WishListGameMenuHelp" xml:space="preserve">
+    <value>Wenn Sie uns unterstützen möchten, würden wir uns freuen, wenn Sie Zombusters zu Ihrer Wunschliste hinzufügen.</value>
+  </data>
 </root>

@@ -15,6 +15,7 @@ namespace ZombustersWindows
     {
         private const int LINE_X_OFFSET = 40;
         private const int MENU_TITLE_Y_OFFSET = 400;
+        private const int TEXT_WIDTH = 300;
 
         private SpriteBatch batch;
         private List<string> MenuItems;
@@ -102,7 +103,7 @@ namespace ZombustersWindows
             HelpText.Add(help);
             Vector2 result = Font.MeasureString(menu);
             ItemHeights.Add(RoundUp(result.Y));
-            ItemWidths.Add(RoundUp(result.X + 250));
+            ItemWidths.Add(RoundUp(result.X + TEXT_WIDTH));
         }
 
         public void UpdateText(string menu, string help, int position) {
@@ -110,7 +111,7 @@ namespace ZombustersWindows
             HelpText[position] = help;
             Vector2 result = Font.MeasureString(menu);
             ItemHeights[position] = RoundUp(result.Y);
-            ItemWidths[position] = RoundUp(result.X + 250);
+            ItemWidths[position] = RoundUp(result.X + TEXT_WIDTH);
         }
 
         public void AddText(string menu) {
