@@ -4,6 +4,8 @@
     {
         Zombie,
         Tank,
-        Rat
+        Rat,
+        Wolf,
+        Minotaur
     }
 }

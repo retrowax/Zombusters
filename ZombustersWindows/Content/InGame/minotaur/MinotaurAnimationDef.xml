@@ -1,0 +1,27 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Animations>
+  <MinotaurAttackDef FrameWidth="48" FrameHeight="48"
+              SheetRows="1" SheetColumns="7"
+              Speed="10"
+              SheetName="ratattack"/>
+
+  <MinotaurDeathDef FrameWidth="48" FrameHeight="48"
+              SheetRows="1" SheetColumns="5"
+              Speed="10"
+              SheetName="ratdeath"/>
+
+  <MinotaurHitDef FrameWidth="48" FrameHeight="48"
+              SheetRows="1" SheetColumns="1"
+              Speed="15"
+              SheetName="rathit"/>
+
+  <MinotaurIdleDef FrameWidth="48" FrameHeight="48"
+              SheetRows="1" SheetColumns="8"
+              Speed="15"
+              SheetName="ratidle"/>
+
+  <MinotaurWalkDef FrameWidth="48" FrameHeight="48"
+              SheetRows="1" SheetColumns="6"
+              Speed="15"
+              SheetName="ratrun"/>
+</Animations>

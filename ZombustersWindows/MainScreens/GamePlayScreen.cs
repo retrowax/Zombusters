@@ -715,10 +715,7 @@ namespace ZombustersWindows
             if (player.avatar.status == ObjectStatus.Inactive)
                 return;
 
-            enemies.HandleZombieCollisions(player, totalGameSeconds);
-            enemies.HandleTankCollisions(player, totalGameSeconds);
-            enemies.HandleRatCollisions(player, totalGameSeconds);
-            enemies.HandlePowerUpCollisions(player);
+            enemies.HandleCollisions(player, totalGameSeconds);
 
             if (player.avatar.lives == 0) {
                 GamePlayStatus = GameplayState.GameOver;

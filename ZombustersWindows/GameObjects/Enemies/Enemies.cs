@@ -14,12 +14,13 @@ namespace ZombustersWindows
         public List<TankState> Tanks = new List<TankState>();
         public List<ZombieState> Zombies = new List<ZombieState>();
         public List<Rat> Rats = new List<Rat>();
+        public List<Wolf> Wolfs = new List<Wolf>();
+        public List<Minotaur> Minotaurs = new List<Minotaur>();
         public List<PowerUp> PowerUpList = new List<PowerUp>();
         public Texture2D livePowerUp, extraLivePowerUp, shotgunAmmoPowerUp, machinegunAmmoPowerUp, flamethrowerAmmoPowerUp, immunePowerUp, heart, shotgunammoUI, pistolammoUI, grenadeammoUI, flamethrowerammoUI;
 
         private readonly MyGame game;
-
-        private Random random = new Random(16);
+        private readonly Random random = new Random(16);
 
         public Enemies(ref MyGame myGame)
         {
@@ -41,6 +42,16 @@ namespace ZombustersWindows
             foreach (Rat rat in Rats)
             {
                 rat.LoadContent(content);
+            }
+
+            foreach (Wolf wolf in Wolfs)
+            {
+                wolf.LoadContent(content);
+            }
+
+            foreach (Minotaur minotaur in Minotaurs)
+            {
+                minotaur.LoadContent(content);
             }
 
             PowerUpsLoad();
@@ -95,12 +106,36 @@ namespace ZombustersWindows
                         rat.playerChased = numplayersIngame[this.random.Next(numplayersIngame.Count)];
                         Rats.Add(rat);
                         break;
+                    case EnemyType.Wolf:
+                        Wolf wolf = new Wolf(new Vector2(RandomX, RandomY), 5.0f, 1);
+                        wolf.behaviors.AddBehavior(new Pursuit(Arrive.Deceleration.fast, 50.0f));
+                        wolf.behaviors.AddBehavior(new ObstacleAvoidance(ref level.gameWorld, 15.0f));
+                        wolf.playerChased = numplayersIngame[this.random.Next(numplayersIngame.Count)];
+                        Wolfs.Add(wolf);
+                        break;
+                    case EnemyType.Minotaur:
+                        Minotaur minotaur = new Minotaur(new Vector2(RandomX, RandomY), 5.0f, 1);
+                        minotaur.behaviors.AddBehavior(new Pursuit(Arrive.Deceleration.fast, 50.0f));
+                        minotaur.behaviors.AddBehavior(new ObstacleAvoidance(ref level.gameWorld, 15.0f));
+                        minotaur.playerChased = numplayersIngame[this.random.Next(numplayersIngame.Count)];
+                        Minotaurs.Add(minotaur);
+                        break;
                 }
                 
             }
         }
 
-        public void HandleTankCollisions(Player player, float totalGameSeconds)
+        public void HandleCollisions(Player player, float totalGameSeconds)
+        {
+            HandleZombieCollisions(player, totalGameSeconds);
+            HandleTankCollisions(player, totalGameSeconds);
+            HandleRatCollisions(player, totalGameSeconds);
+            HandleWolfCollisions(player, totalGameSeconds);
+            HandleMinotaurCollisions(player, totalGameSeconds);
+            HandlePowerUpCollisions(player);
+        }
+
+        private void HandleTankCollisions(Player player, float totalGameSeconds)
         {
             for (int i = 0; i < Tanks.Count; i++)
             {
@@ -126,7 +161,7 @@ namespace ZombustersWindows
             }
         }
 
-        public void HandleRatCollisions(Player player, float totalGameSeconds)
+        private void HandleRatCollisions(Player player, float totalGameSeconds)
         {
             foreach (Rat rat in Rats)
             {
@@ -151,7 +186,57 @@ namespace ZombustersWindows
             }
         }
 
-        public void HandleZombieCollisions(Player player, float totalGameSeconds)
+        private void HandleWolfCollisions(Player player, float totalGameSeconds)
+        {
+            foreach (Wolf wolf in Wolfs)
+            {
+                if (wolf.status == ObjectStatus.Active)
+                {
+                    for (int l = 0; l < player.avatar.bullets.Count; l++)
+                    {
+                        if (GameplayHelper.DetectCollision(player.avatar.bullets[l], wolf.entity.Position, totalGameSeconds))
+                        {
+                            wolf.Destroy(game.totalGameSeconds, player.avatar.currentgun);
+                            player.avatar.score += 10;
+                            game.audio.PlayZombieDying();
+
+                            if (player.avatar.score % 8000 == 0)
+                            {
+                                player.avatar.lives += 1;
+                            }
+                            player.avatar.bullets.RemoveAt(l);
+                        }
+                    }
+                }
+            }
+        }
+
+        private void HandleMinotaurCollisions(Player player, float totalGameSeconds)
+        {
+            foreach (Minotaur minotaur in Minotaurs)
+            {
+                if (minotaur.status == ObjectStatus.Active)
+                {
+                    for (int l = 0; l < player.avatar.bullets.Count; l++)
+                    {
+                        if (GameplayHelper.DetectCollision(player.avatar.bullets[l], minotaur.entity.Position, totalGameSeconds))
+                        {
+                            minotaur.Destroy(game.totalGameSeconds, player.avatar.currentgun);
+                            player.avatar.score += 10;
+                            game.audio.PlayZombieDying();
+
+                            if (player.avatar.score % 8000 == 0)
+                            {
+                                player.avatar.lives += 1;
+                            }
+                            player.avatar.bullets.RemoveAt(l);
+                        }
+                    }
+                }
+            }
+        }
+
+        private void HandleZombieCollisions(Player player, float totalGameSeconds)
         {
             for (int i = 0; i < Zombies.Count; i++)
             {
@@ -272,7 +357,7 @@ namespace ZombustersWindows
             }
         }
 
-        public void HandlePowerUpCollisions(Player player)
+        private void HandlePowerUpCollisions(Player player)
         {
             foreach (PowerUp powerUp in PowerUpList)
             {
@@ -371,6 +456,16 @@ namespace ZombustersWindows
                 rat.Update(gameTime, game, Rats);
             }
 
+            foreach (Wolf wolf in Wolfs)
+            {
+                wolf.Update(gameTime, game, Wolfs);
+            }
+
+            foreach (Minotaur minotaur in Minotaurs)
+            {
+                minotaur.Update(gameTime, game, Minotaurs);
+            }
+
             foreach (PowerUp powerup in PowerUpList)
             {
                 powerup.Update(gameTime);
@@ -392,6 +487,16 @@ namespace ZombustersWindows
             foreach (Rat rat in Rats)
             {
                 rat.Draw(spriteBatch, totalGameSeconds, furnitureList, gameTime);
+            }
+
+            foreach (Wolf wolf in Wolfs)
+            {
+                wolf.Draw(spriteBatch, totalGameSeconds, furnitureList, gameTime);
+            }
+
+            foreach (Minotaur minotaur in Minotaurs)
+            {
+                minotaur.Draw(spriteBatch, totalGameSeconds, furnitureList, gameTime);
             }
 
             foreach (PowerUp powerup in PowerUpList)
