@@ -260,11 +260,11 @@ namespace ZombustersWindows
 
                 if (this.entity.Velocity.X > 0)
                 {
-                    runAnimation.Draw(batch, new Vector2(this.entity.Position.X, this.entity.Position.Y - 50), SpriteEffects.FlipHorizontally, layerIndex, 0f, color);
+                    runAnimation.Draw(batch, new Vector2(this.entity.Position.X, this.entity.Position.Y - 50), 1.5f, SpriteEffects.FlipHorizontally, layerIndex, 0f, color);
                 }
                 else
                 {
-                    idleAnimation.Draw(batch, new Vector2(this.entity.Position.X - 21, this.entity.Position.Y - 50), SpriteEffects.None, layerIndex, 0f, color);
+                    idleAnimation.Draw(batch, new Vector2(this.entity.Position.X - 21, this.entity.Position.Y - 50), 1.5f, SpriteEffects.None, layerIndex, 0f, color);
                 }
 
                 batch.Draw(this.shadowTexture, new Vector2(this.entity.Position.X - 10, this.entity.Position.Y - 58 + this.idleTexture.Height), null, new Color(255, 255, 255, 50), 0.0f, 
@@ -281,11 +281,11 @@ namespace ZombustersWindows
                     {
                         if (this.entity.Velocity.X > 0)
                         {
-                            deathAnimation.Draw(batch, new Vector2(this.entity.Position.X, this.entity.Position.Y - 50), SpriteEffects.FlipHorizontally, layerIndex, 0f, Color.White);
+                            deathAnimation.Draw(batch, new Vector2(this.entity.Position.X, this.entity.Position.Y - 50), 1.5f, SpriteEffects.FlipHorizontally, layerIndex, 0f, Color.White);
                         }
                         else
                         {
-                            deathAnimation.Draw(batch, new Vector2(this.entity.Position.X - 21, this.entity.Position.Y - 50), SpriteEffects.None, layerIndex, 0f, Color.White);
+                            deathAnimation.Draw(batch, new Vector2(this.entity.Position.X - 21, this.entity.Position.Y - 50), 1.5f, SpriteEffects.None, layerIndex, 0f, Color.White);
                         }
                     }
                 }
@@ -296,11 +296,11 @@ namespace ZombustersWindows
                     {
                         if (this.entity.Velocity.X > 0)
                         {
-                            deathAnimation.Draw(batch, new Vector2(this.entity.Position.X, this.entity.Position.Y - 50), SpriteEffects.FlipHorizontally, layerIndex, 0f, Color.White);
+                            deathAnimation.Draw(batch, new Vector2(this.entity.Position.X, this.entity.Position.Y - 50), 1.5f, SpriteEffects.FlipHorizontally, layerIndex, 0f, Color.White);
                         }
                         else
                         {
-                            deathAnimation.Draw(batch, new Vector2(this.entity.Position.X - 21, this.entity.Position.Y - 50), SpriteEffects.None, layerIndex, 0f, Color.White);
+                            deathAnimation.Draw(batch, new Vector2(this.entity.Position.X - 21, this.entity.Position.Y - 50), 1.5f, SpriteEffects.None, layerIndex, 0f, Color.White);
                         }
                     }
                 }
