@@ -78,6 +78,11 @@ namespace ZombustersWindows
             }
         }
 
+        public int Count()
+        {
+            return Zombies.Count + Tanks.Count + Rats.Count;
+        }
+
         public void Clear()
         {
             Zombies.Clear();

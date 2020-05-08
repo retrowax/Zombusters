@@ -100,27 +100,6 @@ namespace ZombustersWindows
             set { activeSeekers = value; }
         }
 
-        private int activeZombies;
-        public int ActiveZombies
-        {
-            get { return activeZombies; }
-            set { activeZombies = value; }
-        }
-
-        private int activeTanks;
-        public int ActiveTanks
-        {
-            get { return activeTanks; }
-            set { activeTanks = value; }
-        }
-
-        private int activeRats;
-        public int ActiveRats
-        {
-            get { return activeRats; }
-            set { activeRats = value; }
-        }
-
         void GameplayMenuCanceled(Object sender, MenuSelection selection)
         {
             // Do nothing, game will resume on its own
@@ -736,11 +715,11 @@ namespace ZombustersWindows
             accumFire = Vector2.Zero;
         }
 
-        private bool PowerUpIsInRange(ZombieState zombie)
+        private bool PowerUpIsInRange(Vector2 position, int width, int height)
         {
             Rectangle ScreenBounds;
             ScreenBounds = new Rectangle(game.GraphicsDevice.Viewport.X + 60, 60, game.GraphicsDevice.Viewport.Width - 60, game.GraphicsDevice.Viewport.Height - 55);
-            if (ScreenBounds.Intersects(new Rectangle(Convert.ToInt32(zombie.entity.Position.X), Convert.ToInt32(zombie.entity.Position.Y), zombie.ZombieTexture.Width, zombie.ZombieTexture.Height)))
+            if (ScreenBounds.Intersects(new Rectangle(Convert.ToInt32(position.X), Convert.ToInt32(position.Y), width, height)))
             {
                 return true;
             }
@@ -885,7 +864,14 @@ namespace ZombustersWindows
                     {
                         if (GameplayHelper.DetectCollision(player.avatar.bullets[l], tank.entity.Position, totalGameSeconds))
                         {
-                            TankDestroyed(tank, player);
+                            tank.DestroyTank(game.totalGameSeconds);
+                            player.avatar.score += 10;
+                            game.audio.PlayZombieDying();
+
+                            if (player.avatar.score % 8000 == 0)
+                            {
+                                player.avatar.lives += 1;
+                            }
                             player.avatar.bullets.RemoveAt(l);
                         }
                     }
@@ -903,7 +889,14 @@ namespace ZombustersWindows
                     {
                         if (GameplayHelper.DetectCollision(player.avatar.bullets[l], rat.entity.Position, totalGameSeconds))
                         {
-                            RatDestroyed(rat, player);
+                            rat.Destroy(game.totalGameSeconds, player.avatar.currentgun);
+                            player.avatar.score += 10;
+                            game.audio.PlayZombieDying();
+
+                            if (player.avatar.score % 8000 == 0)
+                            {
+                                player.avatar.lives += 1;
+                            }
                             player.avatar.bullets.RemoveAt(l);
                         }
                     }
@@ -931,8 +924,16 @@ namespace ZombustersWindows
                                 }
                                 else
                                 {
-                                    ZombieDestroyed(zombie, player);
-                                    if (PowerUpIsInRange(zombie))
+                                    zombie.DestroyZombie(game.totalGameSeconds, player.avatar.currentgun);
+                                    player.avatar.score += 10;
+                                    game.audio.PlayZombieDying();
+
+                                    if (player.avatar.score % 8000 == 0)
+                                    {
+                                        player.avatar.lives += 1;
+                                    }
+
+                                    if (PowerUpIsInRange(zombie.entity.Position, zombie.ZombieTexture.Width, zombie.ZombieTexture.Height))
                                     {
                                         SpawnPowerUp(zombie);
                                     }
@@ -954,9 +955,16 @@ namespace ZombustersWindows
                                 }
                                 else
                                 {
-                                    ZombieDestroyed(zombie, player);
+                                    zombie.DestroyZombie(game.totalGameSeconds, player.avatar.currentgun);
+                                    player.avatar.score += 10;
+                                    game.audio.PlayZombieDying();
+
+                                    if (player.avatar.score % 8000 == 0)
+                                    {
+                                        player.avatar.lives += 1;
+                                    }
                                     player.avatar.bullets.RemoveAt(l);
-                                    if (PowerUpIsInRange(zombie))
+                                    if (PowerUpIsInRange(zombie.entity.Position, zombie.ZombieTexture.Width, zombie.ZombieTexture.Height))
                                     {
                                         SpawnPowerUp(zombie);
                                     }
@@ -978,9 +986,16 @@ namespace ZombustersWindows
                                     }
                                     else
                                     {
-                                        ZombieDestroyed(zombie, player);
+                                        zombie.DestroyZombie(game.totalGameSeconds, player.avatar.currentgun);
+                                        player.avatar.score += 10;
+                                        game.audio.PlayZombieDying();
 
-                                        if (PowerUpIsInRange(zombie))
+                                        if (player.avatar.score % 8000 == 0)
+                                        {
+                                            player.avatar.lives += 1;
+                                        }
+
+                                        if (PowerUpIsInRange(zombie.entity.Position, zombie.ZombieTexture.Width, zombie.ZombieTexture.Height))
                                         {
                                             SpawnPowerUp(zombie);
                                         }
@@ -1141,7 +1156,7 @@ namespace ZombustersWindows
 
         public Boolean CheckIfStageCleared()
         {
-            int enemiesLeft = ActiveZombies + ActiveTanks;
+            int enemiesLeft = enemies.Count();
 
             if (enemiesLeft <= 0)
             {
@@ -1155,8 +1170,6 @@ namespace ZombustersWindows
 
         public void StartNewLevel(bool restartLevel, bool restartWave)
         {
-            int i, RandomX, RandomY;
-            int RandomSpawnZone;
             int howManySpawnZones = 4;
             List<int> numplayersIngame = new List<int>();
             float zombielife, speed;
@@ -1195,7 +1208,7 @@ namespace ZombustersWindows
                             lIndex -= 0.004f;
                         }
 
-                        for (i = 0; i < game.players.Length - 1; i++)
+                        for (int i = 0; i < game.players.Length - 1; i++)
                         {
                             game.players[i].avatar.position = Level.PlayerSpawnPosition[i];
                             game.players[i].avatar.entity.Position = Level.PlayerSpawnPosition[i];
@@ -1222,7 +1235,7 @@ namespace ZombustersWindows
                     subLevelIndex = 0;
                 }
 
-                for (i = 0; i < game.players.Length; i++)
+                for (int i = 0; i < game.players.Length; i++)
                 {
                     game.players[i].avatar.position = Level.PlayerSpawnPosition[i];
                     game.players[i].avatar.entity.Position = Level.PlayerSpawnPosition[i];
@@ -1234,7 +1247,7 @@ namespace ZombustersWindows
             if (currentLevel != LevelType.EndGame && currentLevel != LevelType.EndDemo)
             {
 
-                for (i = 0; i < game.players.Length; i++)
+                for (int i = 0; i < game.players.Length; i++)
                 {
                     game.players[i].avatar.behaviors.AddBehavior(new ObstacleAvoidance(ref Level.gameWorld, 15.0f));
                     if (game.players[i].avatar.status == ObjectStatus.Active || game.players[i].avatar.status == ObjectStatus.Immune)
@@ -1280,10 +1293,7 @@ namespace ZombustersWindows
                         break;
                 }
 
-                ActiveZombies = 0;
-                ActiveTanks = 0;
-
-                for (i = 0; i < Level.ZombieSpawnZones.Count - 1; i++)
+                for (int i = 0; i < Level.ZombieSpawnZones.Count - 1; i++)
                 {
                     if (Level.ZombieSpawnZones[i].X == 0 && Level.ZombieSpawnZones[i].Y == 0 && Level.ZombieSpawnZones[i].Z == 0 && Level.ZombieSpawnZones[i].W == 0)
                     {
@@ -1348,7 +1358,6 @@ namespace ZombustersWindows
                     speed,
                     numplayersIngame
                 );
-                ActiveZombies = Level.subLevelList[subLevelIndex].enemies.Zombies;
 
                 enemies.InitializeEnemy(
                     Level.subLevelList[subLevelIndex].enemies.Tanks,
@@ -1359,7 +1368,6 @@ namespace ZombustersWindows
                     speed,
                     numplayersIngame
                 );
-                ActiveTanks = Level.subLevelList[subLevelIndex].enemies.Tanks;
 
                 enemies.InitializeEnemy(
                     Level.subLevelList[subLevelIndex].enemies.Rats,
@@ -1370,7 +1378,6 @@ namespace ZombustersWindows
                     speed,
                     numplayersIngame
                 );
-                ActiveRats = Level.subLevelList[subLevelIndex].enemies.Rats;
 
                 enemies.LoadContent(game.Content);
             }
@@ -3088,62 +3095,11 @@ namespace ZombustersWindows
             PlayerDestroyed(player);
         }
 
-        public void TankCrashed(TankState tank)
-        {
-            tank.CrashTank(game.totalGameSeconds);
-            ActiveTanks--;
-        }
-
-        public void ZombieCrashed(ZombieState zombie)
-        {
-            zombie.CrashZombie(game.totalGameSeconds);
-            ActiveZombies--;
-        }
-
         public void IncreaseLife(Player player)
         {
             if (player.avatar.lives < 9)
             {
                 player.avatar.lives++;
-            }
-        }
-
-        public void ZombieDestroyed(ZombieState zombie, Player player)
-        {
-            zombie.DestroyZombie(game.totalGameSeconds, player.avatar.currentgun);
-            ActiveZombies--;
-            player.avatar.score += 10;
-            game.audio.PlayZombieDying();
-
-            if (player.avatar.score % 8000 == 0)
-            {
-                player.avatar.lives += 1;
-            }
-        }
-
-        public void TankDestroyed(TankState tank, Player player)
-        {
-            tank.DestroyTank(game.totalGameSeconds);
-            ActiveTanks--;
-            player.avatar.score += 10;
-            game.audio.PlayZombieDying();
-
-            if (player.avatar.score % 8000 == 0)
-            {
-                player.avatar.lives += 1;
-            }
-        }
-
-        public void RatDestroyed(Rat rat, Player player)
-        {
-            rat.Destroy(game.totalGameSeconds, player.avatar.currentgun);
-            ActiveTanks--;
-            player.avatar.score += 10;
-            game.audio.PlayZombieDying();
-
-            if (player.avatar.score % 8000 == 0)
-            {
-                player.avatar.lives += 1;
             }
         }
 
