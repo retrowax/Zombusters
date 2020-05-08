@@ -1040,6 +1040,26 @@ namespace ZombustersWindows
                     numplayersIngame
                 );
 
+                enemies.InitializeEnemy(
+                    Level.subLevelList[subLevelIndex].enemies.Wolfs,
+                    EnemyType.Wolf,
+                    Level,
+                    subLevelIndex,
+                    zombielife,
+                    speed,
+                    numplayersIngame
+                );
+
+                enemies.InitializeEnemy(
+                    Level.subLevelList[subLevelIndex].enemies.Minotaurs,
+                    EnemyType.Minotaur,
+                    Level,
+                    subLevelIndex,
+                    zombielife,
+                    speed,
+                    numplayersIngame
+                );
+
                 enemies.LoadContent(game.Content);
             }
         }

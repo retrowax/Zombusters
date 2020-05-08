@@ -91,11 +91,11 @@ namespace ZombustersWindows
 
         private void LoadTextures(ref ContentManager content)
         {
-            attackTexture = content.Load<Texture2D>(@"InGame/rat/48x48Rat_Attack");
-            deathTexture = content.Load<Texture2D>(@"InGame/rat/48x48Rat_Death");
-            hitTexture = content.Load<Texture2D>(@"InGame/rat/48x48Rat_Hit");
-            idleTexture = content.Load<Texture2D>(@"InGame/rat/48x48Rat_Idle");
-            runTexture = content.Load<Texture2D>(@"InGame/rat/48x48Rat_Run");
+            attackTexture = content.Load<Texture2D>(@"InGame/wolf/80x48Wolf_JumpAttackMove");
+            deathTexture = content.Load<Texture2D>(@"InGame/wolf/80x48Wolf_Death");
+            hitTexture = content.Load<Texture2D>(@"InGame/wolf/80x48Wolf_hit");
+            idleTexture = content.Load<Texture2D>(@"InGame/wolf/80x48Wolf_Idle");
+            runTexture = content.Load<Texture2D>(@"InGame/wolf/80x48Wolf_Run");
             shadowTexture = content.Load<Texture2D>(@"InGame/character_shadow");
         }
 
@@ -106,9 +106,9 @@ namespace ZombustersWindows
             Point frameSize = new Point();
             Point sheetSize = new Point();
             
-            XDocument doc = XDocument.Load("Content/InGame/rat/RatAnimationDef.xml");
+            XDocument doc = XDocument.Load("Content/InGame/wolf/WolfAnimationDef.xml");
 
-            definition = doc.Root.Element("RatAttackDef");
+            definition = doc.Root.Element("WolfJumpAttackMoveDef");
             frameSize.X = int.Parse(definition.Attribute("FrameWidth").Value, NumberStyles.Integer);
             frameSize.Y = int.Parse(definition.Attribute("FrameHeight").Value, NumberStyles.Integer);
             sheetSize.X = int.Parse(definition.Attribute("SheetColumns").Value, NumberStyles.Integer);
@@ -116,7 +116,7 @@ namespace ZombustersWindows
             frameInterval = TimeSpan.FromSeconds(1.0f / int.Parse(definition.Attribute("Speed").Value, NumberStyles.Integer));
             attackAnimation = new Animation(attackTexture, frameSize, sheetSize, frameInterval);
 
-            definition = doc.Root.Element("RatDeathDef");
+            definition = doc.Root.Element("WolfDeathDef");
             frameSize.X = int.Parse(definition.Attribute("FrameWidth").Value, NumberStyles.Integer);
             frameSize.Y = int.Parse(definition.Attribute("FrameHeight").Value, NumberStyles.Integer);
             sheetSize.X = int.Parse(definition.Attribute("SheetColumns").Value, NumberStyles.Integer);
@@ -124,7 +124,7 @@ namespace ZombustersWindows
             frameInterval = TimeSpan.FromSeconds(1.0f / int.Parse(definition.Attribute("Speed").Value, NumberStyles.Integer));
             deathAnimation = new Animation(deathTexture, frameSize, sheetSize, frameInterval);
 
-            definition = doc.Root.Element("RatHitDef");
+            definition = doc.Root.Element("WolfHitDef");
             frameSize.X = int.Parse(definition.Attribute("FrameWidth").Value, NumberStyles.Integer);
             frameSize.Y = int.Parse(definition.Attribute("FrameHeight").Value, NumberStyles.Integer);
             sheetSize.X = int.Parse(definition.Attribute("SheetColumns").Value, NumberStyles.Integer);
@@ -132,7 +132,7 @@ namespace ZombustersWindows
             frameInterval = TimeSpan.FromSeconds(1.0f / int.Parse(definition.Attribute("Speed").Value, NumberStyles.Integer));
             hitAnimation = new Animation(hitTexture, frameSize, sheetSize, frameInterval);
 
-            definition = doc.Root.Element("RatIdleDef");
+            definition = doc.Root.Element("WolfIdleDef");
             frameSize.X = int.Parse(definition.Attribute("FrameWidth").Value, NumberStyles.Integer);
             frameSize.Y = int.Parse(definition.Attribute("FrameHeight").Value, NumberStyles.Integer);
             sheetSize.X = int.Parse(definition.Attribute("SheetColumns").Value, NumberStyles.Integer);
@@ -140,7 +140,7 @@ namespace ZombustersWindows
             frameInterval = TimeSpan.FromSeconds(1.0f / int.Parse(definition.Attribute("Speed").Value, NumberStyles.Integer));
             idleAnimation = new Animation(idleTexture, frameSize, sheetSize, frameInterval);
 
-            definition = doc.Root.Element("RatRunDef");
+            definition = doc.Root.Element("WolfRunDef");
             frameSize.X = int.Parse(definition.Attribute("FrameWidth").Value, NumberStyles.Integer);
             frameSize.Y = int.Parse(definition.Attribute("FrameHeight").Value, NumberStyles.Integer);
             sheetSize.X = int.Parse(definition.Attribute("SheetColumns").Value, NumberStyles.Integer);

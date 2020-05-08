@@ -429,7 +429,7 @@ namespace ZombustersWindows
 
         public int Count()
         {
-            return Zombies.Count + Tanks.Count + Rats.Count;
+            return Zombies.Count + Tanks.Count + Rats.Count + Wolfs.Count + Minotaurs.Count;
         }
 
         public void Clear()
@@ -437,6 +437,8 @@ namespace ZombustersWindows
             Zombies.Clear();
             Tanks.Clear();
             Rats.Clear();
+            Wolfs.Clear();
+            Minotaurs.Clear();
         }
 
         public void Update(ref GameTime gameTime, MyGame game)

@@ -1,27 +1,27 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <Animations>
-  <MinotaurAttackDef FrameWidth="48" FrameHeight="48"
-              SheetRows="1" SheetColumns="7"
+  <MinotaurAttackDef FrameWidth="128" FrameHeight="80"
+              SheetRows="2" SheetColumns="8"
               Speed="10"
-              SheetName="ratattack"/>
+              SheetName="minotaurattack"/>
 
-  <MinotaurDeathDef FrameWidth="48" FrameHeight="48"
-              SheetRows="1" SheetColumns="5"
+  <MinotaurDeathDef FrameWidth="128" FrameHeight="80"
+              SheetRows="1" SheetColumns="11"
               Speed="10"
-              SheetName="ratdeath"/>
+              SheetName="minotaurdeath"/>
 
-  <MinotaurHitDef FrameWidth="48" FrameHeight="48"
+  <MinotaurHitDef FrameWidth="128" FrameHeight="80"
               SheetRows="1" SheetColumns="1"
               Speed="15"
-              SheetName="rathit"/>
+              SheetName="minotaurhit"/>
 
-  <MinotaurIdleDef FrameWidth="48" FrameHeight="48"
+  <MinotaurIdleDef FrameWidth="128" FrameHeight="80"
               SheetRows="1" SheetColumns="8"
               Speed="15"
-              SheetName="ratidle"/>
+              SheetName="minotauridle"/>
 
-  <MinotaurWalkDef FrameWidth="48" FrameHeight="48"
-              SheetRows="1" SheetColumns="6"
+  <MinotaurWalkDef FrameWidth="128" FrameHeight="80"
+              SheetRows="1" SheetColumns="8"
               Speed="15"
-              SheetName="ratrun"/>
+              SheetName="minotaurwalk"/>
 </Animations>
