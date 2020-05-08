@@ -104,7 +104,7 @@ namespace ZombustersWindows.Subsystem_Managers
             }
         }
 
-        public void Draw(SpriteBatch spriteBatch, GameTime gameTime, SpriteFont font)
+        public void Draw(SpriteBatch spriteBatch, GameTime gameTime)
         {
             String textToShow;
             Vector2 texturePosition;
@@ -177,12 +177,12 @@ namespace ZombustersWindows.Subsystem_Managers
                     textToShow = "+ " + this.Value.ToString();
                 }
 
-                startPosition = new Vector2(this.Position.X - (font.MeasureString(textToShow).X / 2), this.Position.Y);
-                texturePosition = new Vector2(startPosition.X + font.MeasureString(textToShow).X + 2, startPosition.Y);
+                //startPosition = new Vector2(this.Position.X - (font.MeasureString(textToShow).X / 2), this.Position.Y);
+                //texturePosition = new Vector2(startPosition.X + font.MeasureString(textToShow).X + 2, startPosition.Y);
 
-                batch.DrawString(font, textToShow, new Vector2(startPosition.X + 1, startPosition.Y + 1), Color.Black);
-                batch.DrawString(font, textToShow, startPosition, color);
-                batch.Draw(this.UITexture, texturePosition, Color.White);
+                //batch.DrawString(font, textToShow, new Vector2(startPosition.X + 1, startPosition.Y + 1), Color.Black);
+                //batch.DrawString(font, textToShow, startPosition, color);
+                //batch.Draw(this.UITexture, texturePosition, Color.White);
             }
 
             batch.End();
