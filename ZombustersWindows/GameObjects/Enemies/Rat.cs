@@ -151,7 +151,7 @@ namespace ZombustersWindows
             runAnimation = new Animation(runTexture, frameSize, sheetSize, frameInterval);
         }
 
-        public void Update(GameTime gameTime, MyGame game, List<ZombieState> zombies)
+        public void Update(GameTime gameTime, MyGame game, List<Rat> rats)
         {
             if (this.status != ObjectStatus.Dying)
             {
@@ -162,9 +162,9 @@ namespace ZombustersWindows
                 this.entity.Velocity = VectorHelper.TruncateVector(this.entity.Velocity, this.entity.MaxSpeed / 1.5f);
                 this.entity.Position += this.entity.Velocity;
 
-                for (int i = 0; i < zombies.Count; i++)
+                for (int i = 0; i < rats.Count; i++)
                 {
-                    SteeringEntity zombieEntity = zombies[i].entity;
+                    SteeringEntity zombieEntity = rats[i].entity;
                     if (entity.Position != zombieEntity.Position && status == ObjectStatus.Active)
                     {
                         //calculate the distance between the positions of the entities

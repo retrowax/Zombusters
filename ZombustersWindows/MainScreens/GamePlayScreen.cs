@@ -69,13 +69,14 @@ namespace ZombustersWindows
         Texture2D left_thumbstick;
         Texture2D right_thumbstick;
 
-        public Random random;
+        public Random random = new Random(16);
         private float timer, timerplayer;
         private int subLevelIndex;
 
-        public List<TankState> Tanks;
-        public List<ZombieState> Zombies;
-        public List<PowerUp> PowerUpList;
+        public List<TankState> Tanks = new List<TankState>();
+        public List<ZombieState> Zombies = new List<ZombieState>();
+        public List<Rat> Rats = new List<Rat>();
+        public List<PowerUp> PowerUpList = new List<PowerUp>();
         public GameplayState GamePlayStatus = GameplayState.NotPlaying;
 
         public GamePlayScreen(MyGame game, LevelType startingLevel, SubLevel.SubLevelType startingSublevel)
@@ -201,11 +202,6 @@ namespace ZombustersWindows
 
         public override void Initialize()
         {
-            Zombies = new List<ZombieState>();
-            Tanks = new List<TankState>();
-            this.random = new Random(16);
-
-            PowerUpList = new List<PowerUp>();
             GamePlayStatus = GameplayState.StartLevel;
             uiBounds = GetTitleSafeArea();
             Level = new Level(currentLevel);
@@ -483,6 +479,11 @@ namespace ZombustersWindows
                     foreach (TankState tank in Tanks)
                     {
                         tank.Update(gameTime, game);
+                    }
+
+                    foreach (Rat rat in Rats)
+                    {
+                        rat.Update(gameTime, game, Rats);
                     }
 
                     foreach (Player player in game.players)
@@ -4393,6 +4394,11 @@ namespace ZombustersWindows
             foreach (TankState tank in Tanks)
             {
                 tank.LoadContent(game.Content);
+            }
+
+            foreach (Rat rat in Rats)
+            {
+                rat.LoadContent(game.Content);
             }
         }
 
