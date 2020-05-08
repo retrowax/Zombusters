@@ -169,6 +169,60 @@
         <Content Include="Content\InGame\coffin_meme.xnb">
           <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </Content>
+        <Content Include="Content\InGame\minotaur\128x80Minotaur_Attack.xnb">
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\InGame\minotaur\128x80Minotaur_Death.xnb">
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\InGame\minotaur\128x80Minotaur_Hit.xnb">
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\InGame\minotaur\128x80Minotaur_Idle.xnb">
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\InGame\minotaur\128x80Minotaur_Walk.xnb">
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\InGame\rat\48x48Rat_Attack.xnb">
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\InGame\rat\48x48Rat_Death.xnb">
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\InGame\rat\48x48Rat_Hit.xnb">
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\InGame\rat\48x48Rat_Idle.xnb">
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\InGame\rat\48x48Rat_Run.xnb">
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\InGame\rat\RatAnimationDef.xml">
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\InGame\wolf\80x48Wolf_Death.xnb">
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\InGame\wolf\80x48Wolf_Growl.xnb">
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\InGame\wolf\80x48Wolf_hit.xnb">
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\InGame\wolf\80x48Wolf_Idle.xnb">
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\InGame\wolf\80x48Wolf_JumpAttackMove.xnb">
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\InGame\wolf\80x48Wolf_JumpAttackNoMove.xnb">
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\InGame\wolf\80x48Wolf_Run.xnb">
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
     </ItemGroup>
     <ItemGroup>
         <MonoGameContentReference Include="Content\Content.mgcb" />
@@ -184,6 +238,24 @@
       <None Remove="steam_api64.dll" />
       <None Remove="steam_api.dll" />
       <None Remove="Content\InGame\coffin_meme.xnb" />
+      <None Remove="Content\InGame\minotaur\128x80Minotaur_Attack.xnb" />
+      <None Remove="Content\InGame\minotaur\128x80Minotaur_Death.xnb" />
+      <None Remove="Content\InGame\minotaur\128x80Minotaur_Hit.xnb" />
+      <None Remove="Content\InGame\minotaur\128x80Minotaur_Idle.xnb" />
+      <None Remove="Content\InGame\minotaur\128x80Minotaur_Walk.xnb" />
+      <None Remove="Content\InGame\rat\48x48Rat_Attack.xnb" />
+      <None Remove="Content\InGame\rat\48x48Rat_Death.xnb" />
+      <None Remove="Content\InGame\rat\48x48Rat_Hit.xnb" />
+      <None Remove="Content\InGame\rat\48x48Rat_Idle.xnb" />
+      <None Remove="Content\InGame\rat\48x48Rat_Run.xnb" />
+      <None Remove="Content\InGame\rat\RatAnimationDef.xml" />
+      <None Remove="Content\InGame\wolf\80x48Wolf_Death.xnb" />
+      <None Remove="Content\InGame\wolf\80x48Wolf_Growl.xnb" />
+      <None Remove="Content\InGame\wolf\80x48Wolf_hit.xnb" />
+      <None Remove="Content\InGame\wolf\80x48Wolf_Idle.xnb" />
+      <None Remove="Content\InGame\wolf\80x48Wolf_JumpAttackMove.xnb" />
+      <None Remove="Content\InGame\wolf\80x48Wolf_JumpAttackNoMove.xnb" />
+      <None Remove="Content\InGame\wolf\80x48Wolf_Run.xnb" />
     </ItemGroup>
     <ItemGroup>
         <Content Include="Content\Achievements\achieve_1.xnb">

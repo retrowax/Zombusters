@@ -936,12 +936,12 @@ namespace ZombustersWindows
             {
                 if (rat.status == ObjectStatus.Active)
                 {
-                    foreach (Vector4 bullet in player.avatar.bullets) 
+                    for (int l = 0; l < player.avatar.bullets.Count; l++)
                     {
-                        if (GameplayHelper.DetectCollision(bullet, rat.entity.Position, totalGameSeconds))
+                        if (GameplayHelper.DetectCollision(player.avatar.bullets[l], rat.entity.Position, totalGameSeconds))
                         {
                             RatDestroyed(rat, player);
-                            player.avatar.bullets.Remove(bullet);
+                            player.avatar.bullets.RemoveAt(l);
                         }
                     }
                 }
