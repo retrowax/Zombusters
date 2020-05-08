@@ -4,5 +4,6 @@
     {
         public int Zombies;
         public int Tanks;
+        public int Rats;
     }
 }

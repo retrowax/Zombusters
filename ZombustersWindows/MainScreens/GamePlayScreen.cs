@@ -116,6 +116,13 @@ namespace ZombustersWindows
             set { activeTanks = value; }
         }
 
+        private int activeRats;
+        public int ActiveRats
+        {
+            get { return activeRats; }
+            set { activeRats = value; }
+        }
+
         void GameplayMenuCanceled(Object sender, MenuSelection selection)
         {
             // Do nothing, game will resume on its own
@@ -528,6 +535,14 @@ namespace ZombustersWindows
                         }
                     }
 
+                    foreach (Rat rat in Rats)
+                    {
+                        if (rat.status == ObjectStatus.Dying)
+                        {
+                            rat.Update(gameTime, game, Rats);
+                        }
+                    }
+
                     ChangeGamplayStatusAfterSomeTimeTo(gameTime, GameplayState.StartLevel);
                 }
                 else if (GamePlayStatus == GameplayState.StartLevel)
@@ -825,6 +840,7 @@ namespace ZombustersWindows
 
             HandleZombieCollisions(player, totalGameSeconds);
             HandleTankCollisions(player, totalGameSeconds);
+            HandleRatCollisions(player, totalGameSeconds);
             HandlePowerUpCollisions(player);
         }
 
@@ -908,6 +924,24 @@ namespace ZombustersWindows
                         {
                             TankDestroyed(tank, player);
                             player.avatar.bullets.RemoveAt(l);
+                        }
+                    }
+                }
+            }
+        }
+
+        private void HandleRatCollisions(Player player, float totalGameSeconds)
+        {
+            foreach(Rat rat in Rats)
+            {
+                if (rat.status == ObjectStatus.Active)
+                {
+                    foreach (Vector4 bullet in player.avatar.bullets) 
+                    {
+                        if (GameplayHelper.DetectCollision(bullet, rat.entity.Position, totalGameSeconds))
+                        {
+                            RatDestroyed(rat, player);
+                            player.avatar.bullets.Remove(bullet);
                         }
                     }
                 }
@@ -1234,6 +1268,7 @@ namespace ZombustersWindows
 
             Zombies.Clear();
             Tanks.Clear();
+            Rats.Clear();
 
             if (currentLevel != LevelType.EndGame && currentLevel != LevelType.EndDemo)
             {
@@ -1370,15 +1405,20 @@ namespace ZombustersWindows
                     ActiveTanks++;
                 }
 
-                foreach (ZombieState zombie in Zombies)
+                for (i = 0; i < Level.subLevelList[subLevelIndex].enemies.Rats; i++)
                 {
-                    zombie.LoadContent(game.Content);
+                    RandomSpawnZone = this.random.Next(0, howManySpawnZones - 1);
+                    RandomX = this.random.Next(Convert.ToInt32(Level.ZombieSpawnZones[RandomSpawnZone].X), Convert.ToInt32(Level.ZombieSpawnZones[RandomSpawnZone].Y));
+                    RandomY = this.random.Next(Convert.ToInt32(Level.ZombieSpawnZones[RandomSpawnZone].Z), Convert.ToInt32(Level.ZombieSpawnZones[RandomSpawnZone].W));
+                    Rats.Add(new Rat(new Vector2(0, 0), new Vector2(RandomX, RandomY), 5.0f, 1, 1f));
+                    Rats[i].behaviors.AddBehavior(new Pursuit(Arrive.Deceleration.fast, 50.0f));
+                    Rats[i].behaviors.AddBehavior(new ObstacleAvoidance(ref Level.gameWorld, 15.0f));
+
+                    Rats[i].playerChased = numplayersIngame[this.random.Next(numplayersIngame.Count)];
+                    ActiveRats++;
                 }
 
-                foreach (TankState tank in Tanks)
-                {
-                    tank.LoadContent(game.Content);
-                }
+                EnemiesLoad();
             }
         }
 
@@ -1419,6 +1459,11 @@ namespace ZombustersWindows
                     {
                         tank.Draw(this.ScreenManager.SpriteBatch, game.totalGameSeconds, MenuInfoFont, Level.furnitureList);
                     }
+
+                    foreach (Rat rat in Rats)
+                    {
+                        rat.Draw(this.ScreenManager.SpriteBatch, game.totalGameSeconds, MenuInfoFont, Level.furnitureList, gameTime);
+                    }
                 }
 
                 if (GamePlayStatus == GameplayState.StageCleared)
@@ -1436,6 +1481,14 @@ namespace ZombustersWindows
                         if (tank.status == ObjectStatus.Dying)
                         {
                             tank.Draw(this.ScreenManager.SpriteBatch, game.totalGameSeconds, MenuInfoFont, Level.furnitureList);
+                        }
+                    }
+
+                    foreach (Rat rat in Rats)
+                    {
+                        if (rat.status == ObjectStatus.Dying)
+                        {
+                            rat.Draw(this.ScreenManager.SpriteBatch, game.totalGameSeconds, MenuInfoFont, Level.furnitureList, gameTime);
                         }
                     }
                 }
@@ -3152,6 +3205,19 @@ namespace ZombustersWindows
         public void TankDestroyed(TankState tank, Player player)
         {
             tank.DestroyTank(game.totalGameSeconds);
+            ActiveTanks--;
+            player.avatar.score += 10;
+            game.audio.PlayZombieDying();
+
+            if (player.avatar.score % 8000 == 0)
+            {
+                player.avatar.lives += 1;
+            }
+        }
+
+        public void RatDestroyed(Rat rat, Player player)
+        {
+            rat.Destroy(game.totalGameSeconds, player.avatar.currentgun);
             ActiveTanks--;
             player.avatar.score += 10;
             game.audio.PlayZombieDying();

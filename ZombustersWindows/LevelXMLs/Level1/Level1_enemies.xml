@@ -2,6 +2,7 @@
 <ArrayOfEnemiesCount>
   <EnemiesCount>
     <Zombies>10</Zombies>
+    <Rats>10</Rats>
   </EnemiesCount>
   
   <EnemiesCount>

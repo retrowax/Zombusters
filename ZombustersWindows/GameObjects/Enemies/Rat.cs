@@ -56,8 +56,6 @@ namespace ZombustersWindows
         {
             this.entity = new SteeringEntity
             {
-                Width = idleTexture.Width,
-                Height = idleTexture.Height,
                 Velocity = velocidad,
                 Position = posicion,
                 BoundingRadius = boundingRadius
