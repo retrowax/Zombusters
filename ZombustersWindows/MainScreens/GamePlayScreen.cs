@@ -73,9 +73,7 @@ namespace ZombustersWindows
         private float timer, timerplayer;
         private int subLevelIndex;
 
-        public List<TankState> Tanks = new List<TankState>();
-        public List<ZombieState> Zombies = new List<ZombieState>();
-        public List<Rat> Rats = new List<Rat>();
+        public Enemies enemies = new Enemies();
         public List<PowerUp> PowerUpList = new List<PowerUp>();
         public GameplayState GamePlayStatus = GameplayState.NotPlaying;
 
@@ -288,7 +286,7 @@ namespace ZombustersWindows
             UIStatsLoad();
             PowerUpsLoad();
             UIComponentsLoad();
-            EnemiesLoad();
+            enemies.LoadContent(game.Content);
             FurnitureLoad();
 
             base.LoadContent();
@@ -478,20 +476,7 @@ namespace ZombustersWindows
                     UpdatePlayersAnimations(gameTime);
                     flamethrowerAnimation.Update(gameTime);
 
-                    foreach (ZombieState zombie in Zombies)
-                    {
-                        zombie.Update(gameTime, game, Zombies);
-                    }
-
-                    foreach (TankState tank in Tanks)
-                    {
-                        tank.Update(gameTime, game);
-                    }
-
-                    foreach (Rat rat in Rats)
-                    {
-                        rat.Update(gameTime, game, Rats);
-                    }
+                    enemies.Update(ref gameTime, game);
 
                     foreach (Player player in game.players)
                     {
@@ -519,29 +504,7 @@ namespace ZombustersWindows
                         }
                     }
 
-                    foreach (ZombieState zombie in Zombies)
-                    {
-                        if (zombie.status == ObjectStatus.Dying)
-                        {
-                            zombie.Update(gameTime, game, Zombies);
-                        }
-                    }
-
-                    foreach (TankState tank in Tanks)
-                    {
-                        if (tank.status == ObjectStatus.Dying)
-                        {
-                            tank.Update(gameTime, game);
-                        }
-                    }
-
-                    foreach (Rat rat in Rats)
-                    {
-                        if (rat.status == ObjectStatus.Dying)
-                        {
-                            rat.Update(gameTime, game, Rats);
-                        }
-                    }
+                    enemies.Update(ref gameTime, game);
 
                     ChangeGamplayStatusAfterSomeTimeTo(gameTime, GameplayState.StartLevel);
                 }
@@ -913,9 +876,9 @@ namespace ZombustersWindows
 
         private void HandleTankCollisions(Player player, float totalGameSeconds)
         {
-            for (int i = 0; i < Tanks.Count; i++)
+            for (int i = 0; i < enemies.Tanks.Count; i++)
             {
-                TankState tank = Tanks[i];
+                TankState tank = enemies.Tanks[i];
                 if (tank.status == ObjectStatus.Active)
                 {
                     for (int l = 0; l < player.avatar.bullets.Count; l++)
@@ -932,7 +895,7 @@ namespace ZombustersWindows
 
         private void HandleRatCollisions(Player player, float totalGameSeconds)
         {
-            foreach(Rat rat in Rats)
+            foreach(Rat rat in enemies.Rats)
             {
                 if (rat.status == ObjectStatus.Active)
                 {
@@ -950,9 +913,9 @@ namespace ZombustersWindows
 
         private void HandleZombieCollisions(Player player, float totalGameSeconds)
         {
-            for (int i = 0; i < Zombies.Count; i++)
+            for (int i = 0; i < enemies.Zombies.Count; i++)
             {
-                ZombieState zombie = Zombies[i];
+                ZombieState zombie = enemies.Zombies[i];
                 if (zombie.status == ObjectStatus.Active)
                 {
                     if (player.avatar.currentgun == GunType.flamethrower && player.avatar.ammo[(int)player.avatar.currentgun] > 0)
@@ -1266,9 +1229,7 @@ namespace ZombustersWindows
                 }
             }
 
-            Zombies.Clear();
-            Tanks.Clear();
-            Rats.Clear();
+            enemies.Clear();
 
             if (currentLevel != LevelType.EndGame && currentLevel != LevelType.EndDemo)
             {
@@ -1378,47 +1339,40 @@ namespace ZombustersWindows
                         break;
                 }
 
-                for (i = 0; i < Level.subLevelList[subLevelIndex].enemies.Zombies; i++)
-                {
-                    RandomSpawnZone = this.random.Next(0, howManySpawnZones - 1);
-                    RandomX = this.random.Next(Convert.ToInt32(Level.ZombieSpawnZones[RandomSpawnZone].X), Convert.ToInt32(Level.ZombieSpawnZones[RandomSpawnZone].Y));
-                    RandomY = this.random.Next(Convert.ToInt32(Level.ZombieSpawnZones[RandomSpawnZone].Z), Convert.ToInt32(Level.ZombieSpawnZones[RandomSpawnZone].W));
-                    float subspeed = subLevelIndex / 10;
-                    Zombies.Add(new ZombieState(game.Content.Load<Texture2D>(@"InGame/zombie" + this.random.Next(1, 6).ToString()), new Vector2(0, 0), new Vector2(RandomX, RandomY), 5.0f, zombielife, speed + subspeed));
-                    Zombies[i].behaviors.AddBehavior(new Pursuit(Arrive.Deceleration.fast, 50.0f));
-                    Zombies[i].behaviors.AddBehavior(new ObstacleAvoidance(ref Level.gameWorld, 15.0f));
+                enemies.InitializeEnemy(
+                    Level.subLevelList[subLevelIndex].enemies.Zombies,
+                    EnemyType.Zombie,
+                    Level,
+                    subLevelIndex,
+                    zombielife,
+                    speed,
+                    numplayersIngame
+                );
+                ActiveZombies = Level.subLevelList[subLevelIndex].enemies.Zombies;
 
-                    Zombies[i].playerChased = numplayersIngame[this.random.Next(numplayersIngame.Count)];
-                    ActiveZombies++;
-                }
+                enemies.InitializeEnemy(
+                    Level.subLevelList[subLevelIndex].enemies.Tanks,
+                    EnemyType.Tank,
+                    Level,
+                    subLevelIndex,
+                    zombielife,
+                    speed,
+                    numplayersIngame
+                );
+                ActiveTanks = Level.subLevelList[subLevelIndex].enemies.Tanks;
 
-                for (i = 0; i < Level.subLevelList[subLevelIndex].enemies.Tanks; i++)
-                {
-                    RandomSpawnZone = this.random.Next(0, howManySpawnZones - 1);
-                    RandomX = this.random.Next(Convert.ToInt32(Level.ZombieSpawnZones[RandomSpawnZone].X), Convert.ToInt32(Level.ZombieSpawnZones[RandomSpawnZone].Y));
-                    RandomY = this.random.Next(Convert.ToInt32(Level.ZombieSpawnZones[RandomSpawnZone].Z), Convert.ToInt32(Level.ZombieSpawnZones[RandomSpawnZone].W));
-                    Tanks.Add(new TankState(game.Content.Load<Texture2D>(@"InGame/tank"), new Vector2(0, 0), new Vector2(RandomX, RandomY), 5.0f));
-                    Tanks[i].behaviors.AddBehavior(new Pursuit(Arrive.Deceleration.fast, 50.0f));
-                    Tanks[i].behaviors.AddBehavior(new ObstacleAvoidance(ref Level.gameWorld, 15.0f));
+                enemies.InitializeEnemy(
+                    Level.subLevelList[subLevelIndex].enemies.Rats,
+                    EnemyType.Rat,
+                    Level,
+                    subLevelIndex,
+                    zombielife,
+                    speed,
+                    numplayersIngame
+                );
+                ActiveRats = Level.subLevelList[subLevelIndex].enemies.Rats;
 
-                    Zombies[i].playerChased = numplayersIngame[this.random.Next(numplayersIngame.Count)];
-                    ActiveTanks++;
-                }
-
-                for (i = 0; i < Level.subLevelList[subLevelIndex].enemies.Rats; i++)
-                {
-                    RandomSpawnZone = this.random.Next(0, howManySpawnZones - 1);
-                    RandomX = this.random.Next(Convert.ToInt32(Level.ZombieSpawnZones[RandomSpawnZone].X), Convert.ToInt32(Level.ZombieSpawnZones[RandomSpawnZone].Y));
-                    RandomY = this.random.Next(Convert.ToInt32(Level.ZombieSpawnZones[RandomSpawnZone].Z), Convert.ToInt32(Level.ZombieSpawnZones[RandomSpawnZone].W));
-                    Rats.Add(new Rat(new Vector2(0, 0), new Vector2(RandomX, RandomY), 5.0f, 1, 1f));
-                    Rats[i].behaviors.AddBehavior(new Pursuit(Arrive.Deceleration.fast, 50.0f));
-                    Rats[i].behaviors.AddBehavior(new ObstacleAvoidance(ref Level.gameWorld, 15.0f));
-
-                    Rats[i].playerChased = numplayersIngame[this.random.Next(numplayersIngame.Count)];
-                    ActiveRats++;
-                }
-
-                EnemiesLoad();
+                enemies.LoadContent(game.Content);
             }
         }
 
@@ -1450,47 +1404,12 @@ namespace ZombustersWindows
 
                 if (GamePlayStatus == GameplayState.StartLevel || GamePlayStatus == GameplayState.Playing || GamePlayStatus == GameplayState.Pause)
                 {
-                    foreach (ZombieState zombie in Zombies)
-                    {
-                        zombie.Draw(this.ScreenManager.SpriteBatch, game.totalGameSeconds, MenuInfoFont, Level.furnitureList, gameTime);
-                    }
-
-                    foreach (TankState tank in Tanks)
-                    {
-                        tank.Draw(this.ScreenManager.SpriteBatch, game.totalGameSeconds, MenuInfoFont, Level.furnitureList);
-                    }
-
-                    foreach (Rat rat in Rats)
-                    {
-                        rat.Draw(this.ScreenManager.SpriteBatch, game.totalGameSeconds, MenuInfoFont, Level.furnitureList, gameTime);
-                    }
+                    enemies.Draw(this.ScreenManager.SpriteBatch, game.totalGameSeconds, Level.furnitureList, gameTime);
                 }
 
                 if (GamePlayStatus == GameplayState.StageCleared)
                 {
-                    foreach (ZombieState zombie in Zombies)
-                    {
-                        if (zombie.status == ObjectStatus.Dying)
-                        {
-                            zombie.Draw(this.ScreenManager.SpriteBatch, game.totalGameSeconds, MenuInfoFont, Level.furnitureList, gameTime);
-                        }
-                    }
-
-                    foreach (TankState tank in Tanks)
-                    {
-                        if (tank.status == ObjectStatus.Dying)
-                        {
-                            tank.Draw(this.ScreenManager.SpriteBatch, game.totalGameSeconds, MenuInfoFont, Level.furnitureList);
-                        }
-                    }
-
-                    foreach (Rat rat in Rats)
-                    {
-                        if (rat.status == ObjectStatus.Dying)
-                        {
-                            rat.Draw(this.ScreenManager.SpriteBatch, game.totalGameSeconds, MenuInfoFont, Level.furnitureList, gameTime);
-                        }
-                    }
+                    enemies.Draw(this.ScreenManager.SpriteBatch, game.totalGameSeconds, Level.furnitureList, gameTime);
                 }
 
                 foreach (Furniture furniture in Level.furnitureList)
@@ -3154,14 +3073,14 @@ namespace ZombustersWindows
 
         public void ZombieMoved(Enemies enemies, byte zombie, Vector2 pos, float angle)
         {
-            enemies.zombies[zombie].entity.Position = pos;
-            enemies.zombies[zombie].angle = angle;
+            enemies.Zombies[zombie].entity.Position = pos;
+            enemies.Zombies[zombie].angle = angle;
         }
 
         public void TankMoved(Enemies enemies, byte tank, Vector2 pos, float angle)
         {
-            enemies.tanks[tank].position = pos;
-            enemies.tanks[tank].angle = angle;
+            enemies.Tanks[tank].position = pos;
+            enemies.Tanks[tank].angle = angle;
         }
 
         public void GameOver(Player player)
@@ -4448,24 +4367,6 @@ namespace ZombustersWindows
             MenuHeaderFont = this.ScreenManager.Game.Content.Load<SpriteFont>(@"menu\ArialMenuHeader");
             MenuInfoFont = this.ScreenManager.Game.Content.Load<SpriteFont>(@"menu\ArialMenuInfo");
             MenuListFont = this.ScreenManager.Game.Content.Load<SpriteFont>(@"menu\ArialMenuList");
-        }
-
-        private void EnemiesLoad()
-        {
-            foreach (ZombieState zombie in Zombies)
-            {
-                zombie.LoadContent(game.Content);
-            }
-
-            foreach (TankState tank in Tanks)
-            {
-                tank.LoadContent(game.Content);
-            }
-
-            foreach (Rat rat in Rats)
-            {
-                rat.LoadContent(game.Content);
-            }
         }
 
         private void FurnitureLoad()

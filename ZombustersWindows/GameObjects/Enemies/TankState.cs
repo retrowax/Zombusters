@@ -31,10 +31,8 @@ namespace ZombustersWindows
         private Vector2 TankOrigin;
         private Animation TankAnimation;
 
-        public TankState(Texture2D textura, Vector2 velocidad, Vector2 posicion, float boundingRadius)
+        public TankState(Vector2 velocidad, Vector2 posicion, float boundingRadius)
         {
-            this.TankTexture = textura;
-
             this.entity = new SteeringEntity();
 
             this.entity.Width = this.TankTexture.Width;
@@ -50,7 +48,6 @@ namespace ZombustersWindows
             this.speed = 0;
             this.angle = 1f;
 
-            this.TankTexture = textura;
             this.TankOrigin = new Vector2(0, 0);
             this.TankAnimation = new Animation(TankTexture, new Point(), new Point(), TimeSpan.FromSeconds(1.0f));
 
@@ -153,7 +150,7 @@ namespace ZombustersWindows
             return 0.1f;
         }
 
-        public void Draw(SpriteBatch batch, float TotalGameSeconds, SpriteFont font, List<Furniture> furniturelist)
+        public void Draw(SpriteBatch batch, float TotalGameSeconds, List<Furniture> furniturelist)
         {
             float layerIndex = GetLayerIndex(this.entity, furniturelist);
 
@@ -180,8 +177,8 @@ namespace ZombustersWindows
                 int score = 10;
                 if ((TotalGameSeconds < this.deathTimeTotalSeconds + .5) && (this.deathTimeTotalSeconds < TotalGameSeconds))
                 {
-                    batch.DrawString(font, score.ToString(), new Vector2(this.entity.Position.X + 1, this.entity.Position.Y + 1), Color.Black, 0.0f, Vector2.Zero, 1.0f, SpriteEffects.None, layerIndex + 0.1f);
-                    batch.DrawString(font, score.ToString(), this.entity.Position, Color.White, 0.0f, Vector2.Zero, 1.0f, SpriteEffects.None, layerIndex);
+                    //batch.DrawString(font, score.ToString(), new Vector2(this.entity.Position.X + 1, this.entity.Position.Y + 1), Color.Black, 0.0f, Vector2.Zero, 1.0f, SpriteEffects.None, layerIndex + 0.1f);
+                    //batch.DrawString(font, score.ToString(), this.entity.Position, Color.White, 0.0f, Vector2.Zero, 1.0f, SpriteEffects.None, layerIndex);
                 }
             }
         }

@@ -52,11 +52,11 @@ namespace ZombustersWindows
         SpriteFont DebugFont;
 #endif
 
-        public Rat(Vector2 velocidad, Vector2 posicion, float boundingRadius, float life, float speed)
+        public Rat(Vector2 posicion, float boundingRadius, float life)
         {
             this.entity = new SteeringEntity
             {
-                Velocity = velocidad,
+                Velocity = new Vector2(0, 0),
                 Position = posicion,
                 BoundingRadius = boundingRadius
             };
@@ -242,7 +242,7 @@ namespace ZombustersWindows
             return lindex + 0.002f;
         }
 
-        public void Draw(SpriteBatch batch, float TotalGameSeconds, SpriteFont font, List<Furniture> furniturelist, GameTime gameTime)
+        public void Draw(SpriteBatch batch, float TotalGameSeconds, List<Furniture> furniturelist, GameTime gameTime)
         {
             Color color = new Color();
             float layerIndex = GetLayerIndex(this.entity, furniturelist);
@@ -308,8 +308,8 @@ namespace ZombustersWindows
                 int score = 10;
                 if ((TotalGameSeconds < this.deathTimeTotalSeconds + .5) && (this.deathTimeTotalSeconds < TotalGameSeconds))
                 {
-                    batch.DrawString(font, score.ToString(), new Vector2(this.entity.Position.X - font.MeasureString(score.ToString()).X / 2 + 1, this.entity.Position.Y - 69), Color.Black, 0.0f, Vector2.Zero, 1.0f, SpriteEffects.None, layerIndex);
-                    batch.DrawString(font, score.ToString(), new Vector2(this.entity.Position.X - font.MeasureString(score.ToString()).X / 2, this.entity.Position.Y - 70), Color.White, 0.0f, Vector2.Zero, 1.0f, SpriteEffects.None, layerIndex - 0.1f);
+                    //batch.DrawString(font, score.ToString(), new Vector2(this.entity.Position.X - font.MeasureString(score.ToString()).X / 2 + 1, this.entity.Position.Y - 69), Color.Black, 0.0f, Vector2.Zero, 1.0f, SpriteEffects.None, layerIndex);
+                    //batch.DrawString(font, score.ToString(), new Vector2(this.entity.Position.X - font.MeasureString(score.ToString()).X / 2, this.entity.Position.Y - 70), Color.White, 0.0f, Vector2.Zero, 1.0f, SpriteEffects.None, layerIndex - 0.1f);
                 }
             }
         }
