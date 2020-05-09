@@ -214,8 +214,8 @@
     <Compile Include="SubsystemManagers\VirtualThumbsticks.cs" />
     <Compile Include="SupportScreens\ExitMessageBox.cs" />
     <Compile Include="SupportScreens\NetworkBusyScreen.cs" />
-    <Compile Include="GameObjects\Enemies\ZombieState.cs" />
-    <Compile Include="GameObjects\Enemies\TankState.cs" />
+    <Compile Include="GameObjects\Enemies\Zombie.cs" />
+    <Compile Include="GameObjects\Enemies\Tank.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Bugsnag, Version=2.2.0.0, Culture=neutral, processorArchitecture=MSIL">
