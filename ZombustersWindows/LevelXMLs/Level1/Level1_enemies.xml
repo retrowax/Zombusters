@@ -1,14 +1,13 @@
 ﻿<?xml version="1.0"?>
 <ArrayOfEnemiesCount>
   <EnemiesCount>
-    <Zombies>5</Zombies>
     <Rats>5</Rats>
-    <Wolfs>5</Wolfs>
-    <Minotaurs>5</Minotaurs>
   </EnemiesCount>
   
   <EnemiesCount>
     <Zombies>15</Zombies>
+    <Wolfs>5</Wolfs>
+    <Minotaurs>5</Minotaurs>
   </EnemiesCount>
   
   <EnemiesCount>
