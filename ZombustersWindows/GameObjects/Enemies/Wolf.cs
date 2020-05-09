@@ -13,6 +13,9 @@ namespace ZombustersWindows
 {
     public class Wolf
     {
+        private const int WOLF_X_OFFSET = 20;
+        private const int WOLF_Y_OFFSET = 48;
+
         public float MAX_VELOCITY = 1.5f;
         public const float MAX_STRENGTH = 0.15f;
 
@@ -37,6 +40,8 @@ namespace ZombustersWindows
         private Texture2D runTexture;
         private Texture2D shadowTexture;
 
+        private SpriteFont font;
+
         Animation attackAnimation;
         Animation deathAnimation;
         Animation hitAnimation;
@@ -46,6 +51,7 @@ namespace ZombustersWindows
         private readonly Random random = new Random();
         private GunType currentgun;
         private float timer;
+        private bool isInPlayerRange;
 
 #if DEBUG
         Texture2D PositionReference;
@@ -97,6 +103,8 @@ namespace ZombustersWindows
             idleTexture = content.Load<Texture2D>(@"InGame/wolf/80x48Wolf_Idle");
             runTexture = content.Load<Texture2D>(@"InGame/wolf/80x48Wolf_Run");
             shadowTexture = content.Load<Texture2D>(@"InGame/character_shadow");
+
+            font = content.Load<SpriteFont>(@"menu\ArialMenuInfo");
         }
 
         private void LoadAnimations()
@@ -165,28 +173,44 @@ namespace ZombustersWindows
                     SteeringEntity zombieEntity = wolfs[i].entity;
                     if (entity.Position != zombieEntity.Position && status == ObjectStatus.Active)
                     {
-                        //calculate the distance between the positions of the entities
                         Vector2 ToEntity = entity.Position - zombieEntity.Position;
-
                         float DistFromEachOther = ToEntity.Length();
-
-                        //if this distance is smaller than the sum of their radii then this
-                        //entity must be moved away in the direction parallel to the
-                        //ToEntity vector   
                         float AmountOfOverLap = entity.BoundingRadius + 20.0f - DistFromEachOther;
 
                         if (AmountOfOverLap >= 0)
                         {
-                            //move the entity a distance away equivalent to the amount of overlap.
                             entity.Position = (entity.Position + (ToEntity / DistFromEachOther) * AmountOfOverLap);
                         }
                     }
+                }
+
+                if (IsInRange(game.players))
+                {
+                    isInPlayerRange = true;
+                    attackAnimation.Update(gameTime);
+                }
+                else
+                {
+                    isInPlayerRange = false;
                 }
             }
             else
             {
                 deathAnimation.Update(gameTime);
             }
+        }
+
+        private bool IsInRange(Player[] players)
+        {
+            foreach (Player player in players)
+            {
+                float distance = Vector2.Distance(entity.Position, player.avatar.position);
+                if (distance < Avatar.CrashRadius + 20.0f)
+                {
+                    return true;
+                }
+            }
+            return false;
         }
 
         public void Destroy(float totalGameSeconds, GunType currentgun)
@@ -244,7 +268,7 @@ namespace ZombustersWindows
 
         public void Draw(SpriteBatch batch, float TotalGameSeconds, List<Furniture> furniturelist, GameTime gameTime)
         {
-            Color color = new Color();
+            Color color;
             float layerIndex = GetLayerIndex(this.entity, furniturelist);
 
             if (this.status == ObjectStatus.Active)
@@ -258,16 +282,37 @@ namespace ZombustersWindows
                     color = Color.White;
                 }
 
-                if (this.entity.Velocity.X > 0)
+                if (entity.Velocity.X == 0 && entity.Velocity.Y == 0)
                 {
-                    runAnimation.Draw(batch, new Vector2(this.entity.Position.X, this.entity.Position.Y - 50), 1.1f, SpriteEffects.FlipHorizontally, layerIndex, 0f, color);
+                    idleAnimation.Draw(batch, new Vector2(this.entity.Position.X, this.entity.Position.Y - WOLF_Y_OFFSET), SpriteEffects.None, layerIndex, 0f, color);
                 }
                 else
                 {
-                    idleAnimation.Draw(batch, new Vector2(this.entity.Position.X - 21, this.entity.Position.Y - 50), 1.1f, SpriteEffects.None, layerIndex, 0f, color);
+                    if (isInPlayerRange)
+                    {
+                        if (entity.Velocity.X > 0)
+                        {
+                            attackAnimation.Draw(batch, new Vector2(this.entity.Position.X - WOLF_X_OFFSET, this.entity.Position.Y - WOLF_Y_OFFSET), SpriteEffects.None, layerIndex, 0f, color);
+                        }
+                        else
+                        {
+                            attackAnimation.Draw(batch, new Vector2(this.entity.Position.X, this.entity.Position.Y - WOLF_Y_OFFSET), SpriteEffects.FlipHorizontally, layerIndex, 0f, color);
+                        }
+                    }
+                    else
+                    {
+                        if (entity.Velocity.X > 0)
+                        {
+                            runAnimation.Draw(batch, new Vector2(this.entity.Position.X - WOLF_X_OFFSET, this.entity.Position.Y - WOLF_Y_OFFSET), SpriteEffects.None, layerIndex, 0f, color);
+                        }
+                        else
+                        {
+                            runAnimation.Draw(batch, new Vector2(this.entity.Position.X, this.entity.Position.Y - WOLF_Y_OFFSET), SpriteEffects.FlipHorizontally, layerIndex, 0f, color);
+                        }
+                    }
                 }
 
-                batch.Draw(this.shadowTexture, new Vector2(this.entity.Position.X - 10, this.entity.Position.Y - 58 + this.idleTexture.Height), null, new Color(255, 255, 255, 50), 0.0f, 
+                batch.Draw(this.shadowTexture, new Vector2(this.entity.Position.X - 10, this.entity.Position.Y - 56 + this.idleTexture.Height), null, new Color(255, 255, 255, 50), 0.0f,
                     new Vector2(0, 0), 1.0f, SpriteEffects.None, layerIndex + 0.01f);
 
                 this.isLoosingLife = false;
@@ -281,11 +326,11 @@ namespace ZombustersWindows
                     {
                         if (this.entity.Velocity.X > 0)
                         {
-                            deathAnimation.Draw(batch, new Vector2(this.entity.Position.X, this.entity.Position.Y - 50), 1.1f, SpriteEffects.FlipHorizontally, layerIndex, 0f, Color.White);
+                            deathAnimation.Draw(batch, new Vector2(this.entity.Position.X - WOLF_X_OFFSET, this.entity.Position.Y - WOLF_Y_OFFSET), SpriteEffects.None, layerIndex, 0f, Color.White);
                         }
                         else
                         {
-                            deathAnimation.Draw(batch, new Vector2(this.entity.Position.X - 21, this.entity.Position.Y - 50), 1.1f, SpriteEffects.None, layerIndex, 0f, Color.White);
+                            deathAnimation.Draw(batch, new Vector2(this.entity.Position.X, this.entity.Position.Y - WOLF_Y_OFFSET), SpriteEffects.FlipHorizontally, layerIndex, 0f, Color.White);
                         }
                     }
                 }
@@ -296,11 +341,11 @@ namespace ZombustersWindows
                     {
                         if (this.entity.Velocity.X > 0)
                         {
-                            deathAnimation.Draw(batch, new Vector2(this.entity.Position.X, this.entity.Position.Y - 50), 1.1f, SpriteEffects.FlipHorizontally, layerIndex, 0f, Color.White);
+                            deathAnimation.Draw(batch, new Vector2(this.entity.Position.X - WOLF_X_OFFSET, this.entity.Position.Y - WOLF_Y_OFFSET), SpriteEffects.None, layerIndex, 0f, Color.White);
                         }
                         else
                         {
-                            deathAnimation.Draw(batch, new Vector2(this.entity.Position.X - 21, this.entity.Position.Y - 50), 1.1f, SpriteEffects.None, layerIndex, 0f, Color.White);
+                            deathAnimation.Draw(batch, new Vector2(this.entity.Position.X, this.entity.Position.Y - WOLF_Y_OFFSET), SpriteEffects.FlipHorizontally, layerIndex, 0f, Color.White);
                         }
                     }
                 }
@@ -308,8 +353,8 @@ namespace ZombustersWindows
                 int score = 10;
                 if ((TotalGameSeconds < this.deathTimeTotalSeconds + .5) && (this.deathTimeTotalSeconds < TotalGameSeconds))
                 {
-                    //batch.DrawString(font, score.ToString(), new Vector2(this.entity.Position.X - font.MeasureString(score.ToString()).X / 2 + 1, this.entity.Position.Y - 69), Color.Black, 0.0f, Vector2.Zero, 1.0f, SpriteEffects.None, layerIndex);
-                    //batch.DrawString(font, score.ToString(), new Vector2(this.entity.Position.X - font.MeasureString(score.ToString()).X / 2, this.entity.Position.Y - 70), Color.White, 0.0f, Vector2.Zero, 1.0f, SpriteEffects.None, layerIndex - 0.1f);
+                    batch.DrawString(font, score.ToString(), new Vector2(this.entity.Position.X - font.MeasureString(score.ToString()).X / 2 + 1, this.entity.Position.Y - WOLF_Y_OFFSET - 1), Color.Black, 0.0f, Vector2.Zero, 1.0f, SpriteEffects.None, layerIndex);
+                    batch.DrawString(font, score.ToString(), new Vector2(this.entity.Position.X - font.MeasureString(score.ToString()).X / 2, this.entity.Position.Y - WOLF_Y_OFFSET), Color.White, 0.0f, Vector2.Zero, 1.0f, SpriteEffects.None, layerIndex - 0.1f);
                 }
             }
         }

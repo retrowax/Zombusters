@@ -13,7 +13,7 @@ namespace ZombustersWindows
     /// Objeto que representa cualquier entidad en nuestro juego, en este caso le hemos llamado "Tank"... 
     /// pero obviamente podía ser cualquier cosa
     /// </summary>
-    public class TankState
+    public class Tank
     {
         public const float VELOCIDAD_MAXIMA = 1.0f;
         public const float FUERZA_MAXIMA = 0.15f;
@@ -31,7 +31,7 @@ namespace ZombustersWindows
         private Vector2 TankOrigin;
         private Animation TankAnimation;
 
-        public TankState(Vector2 velocidad, Vector2 posicion, float boundingRadius)
+        public Tank(Vector2 velocidad, Vector2 posicion, float boundingRadius)
         {
             this.entity = new SteeringEntity();
 

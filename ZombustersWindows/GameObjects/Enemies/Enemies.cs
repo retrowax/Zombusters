@@ -11,8 +11,8 @@ namespace ZombustersWindows
 {
     public class Enemies
     {
-        public List<TankState> Tanks = new List<TankState>();
-        public List<ZombieState> Zombies = new List<ZombieState>();
+        public List<Tank> Tanks = new List<Tank>();
+        public List<Zombie> Zombies = new List<Zombie>();
         public List<Rat> Rats = new List<Rat>();
         public List<Wolf> Wolfs = new List<Wolf>();
         public List<Minotaur> Minotaurs = new List<Minotaur>();
@@ -29,12 +29,12 @@ namespace ZombustersWindows
 
         public void LoadContent(ContentManager content)
         {
-            foreach (ZombieState zombie in Zombies)
+            foreach (Zombie zombie in Zombies)
             {
                 zombie.LoadContent(content);
             }
 
-            foreach (TankState tank in Tanks)
+            foreach (Tank tank in Tanks)
             {
                 tank.LoadContent(content);
             }
@@ -87,14 +87,14 @@ namespace ZombustersWindows
                 switch (enemyType)
                 {
                     case EnemyType.Zombie:
-                        ZombieState zombie = new ZombieState(new Vector2(0, 0), new Vector2(RandomX, RandomY), 5.0f, life, speed + subspeed);
+                        Zombie zombie = new Zombie(new Vector2(0, 0), new Vector2(RandomX, RandomY), 5.0f, life, speed + subspeed);
                         zombie.behaviors.AddBehavior(new Pursuit(Arrive.Deceleration.fast, 50.0f));
                         zombie.behaviors.AddBehavior(new ObstacleAvoidance(ref level.gameWorld, 15.0f));
                         zombie.playerChased = numplayersIngame[this.random.Next(numplayersIngame.Count)];
                         Zombies.Add(zombie);
                         break;
                     case EnemyType.Tank:
-                        TankState tank = new TankState(new Vector2(0, 0), new Vector2(RandomX, RandomY), 5.0f);
+                        Tank tank = new Tank(new Vector2(0, 0), new Vector2(RandomX, RandomY), 5.0f);
                         tank.behaviors.AddBehavior(new Pursuit(Arrive.Deceleration.fast, 50.0f));
                         tank.behaviors.AddBehavior(new ObstacleAvoidance(ref level.gameWorld, 15.0f));
                         Tanks.Add(tank);
@@ -139,7 +139,7 @@ namespace ZombustersWindows
         {
             for (int i = 0; i < Tanks.Count; i++)
             {
-                TankState tank = Tanks[i];
+                Tank tank = Tanks[i];
                 if (tank.status == ObjectStatus.Active)
                 {
                     for (int l = 0; l < player.avatar.bullets.Count; l++)
@@ -240,7 +240,7 @@ namespace ZombustersWindows
         {
             for (int i = 0; i < Zombies.Count; i++)
             {
-                ZombieState zombie = Zombies[i];
+                Zombie zombie = Zombies[i];
                 if (zombie.status == ObjectStatus.Active)
                 {
                     if (player.avatar.currentgun == GunType.flamethrower && player.avatar.ammo[(int)player.avatar.currentgun] > 0)
@@ -443,12 +443,12 @@ namespace ZombustersWindows
 
         public void Update(ref GameTime gameTime, MyGame game)
         {
-            foreach (ZombieState zombie in Zombies)
+            foreach (Zombie zombie in Zombies)
             {
                 zombie.Update(gameTime, game, Zombies);
             }
 
-            foreach (TankState tank in Tanks)
+            foreach (Tank tank in Tanks)
             {
                 tank.Update(gameTime, game);
             }
@@ -476,12 +476,12 @@ namespace ZombustersWindows
 
         public void Draw(SpriteBatch spriteBatch, float totalGameSeconds, List<Furniture> furnitureList, GameTime gameTime)
         {
-            foreach (ZombieState zombie in Zombies)
+            foreach (Zombie zombie in Zombies)
             {
                 zombie.Draw(spriteBatch, totalGameSeconds, furnitureList, gameTime);
             }
 
-            foreach (TankState tank in Tanks)
+            foreach (Tank tank in Tanks)
             {
                 tank.Draw(spriteBatch, totalGameSeconds, furnitureList);
             }
@@ -521,7 +521,7 @@ namespace ZombustersWindows
             }
         }
 
-        private void SpawnPowerUp(ZombieState zombie)
+        private void SpawnPowerUp(Zombie zombie)
         {
             if (this.random.Next(1, 16) == 8)
             {
