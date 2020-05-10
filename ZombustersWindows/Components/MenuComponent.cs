@@ -158,7 +158,7 @@ namespace ZombustersWindows
             buyNow = this.Game.Content.Load<Texture2D>(@"menu/buynow");
             menuTextLine = this.Game.Content.Load<Texture2D>(@"menu/linea_texto_menu");
             menuLine = this.Game.Content.Load<Texture2D>(@"menu/linea_menu");
-            logoRetrowaxMenu = this.Game.Content.Load<Texture2D>(@"menu/logo_retrowax_menu");
+            logoRetrowaxMenu = this.Game.Content.Load<Texture2D>(@"menu/retrowax-logo-menu");
             logoMenu = this.Game.Content.Load<Texture2D>(@"menu/logo_menu");
 
             MenuHeaderFont = this.Game.Content.Load<SpriteFont>(@"menu\ArialMenuHeader");
