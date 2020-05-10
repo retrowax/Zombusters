@@ -5,6 +5,7 @@ using GameStateManagement;
 using ZombustersWindows.Subsystem_Managers;
 using Microsoft.Xna.Framework.Input.Touch;
 using ZombustersWindows.Localization;
+using Microsoft.Xna.Framework.Input;
 
 namespace ZombustersWindows
 {
@@ -13,11 +14,13 @@ namespace ZombustersWindows
         Rectangle uiBounds;
         Rectangle titleBounds;
         Texture2D btnB;
+        Texture2D btnA;
         Texture2D Title;
         SpriteFont MenuInfoFont;
         SpriteFont MenuListFont;
         Texture2D submit_button;
         Texture2D kbEsc;
+        Texture2D kbEnter;
         private MenuComponent menu;
         //private BloomComponent bloom;
         ScrollingTextManager mText;
@@ -60,7 +63,9 @@ namespace ZombustersWindows
         {
             Title = this.ScreenManager.Game.Content.Load<Texture2D>("title");
             btnB = this.ScreenManager.Game.Content.Load<Texture2D>("xboxControllerButtonB");
+            btnA = this.ScreenManager.Game.Content.Load<Texture2D>("xboxControllerButtonA");
             kbEsc = this.ScreenManager.Game.Content.Load<Texture2D>(@"Keyboard/key_esc");
+            kbEnter = this.ScreenManager.Game.Content.Load<Texture2D>(@"Keyboard/key_enter");
             submit_button = this.ScreenManager.Game.Content.Load<Texture2D>(@"menu/submit_button_mobile");
             mText = new ScrollingTextManager(new Rectangle(0, 280, 1280, 440), MenuInfoFont, Texto);
             base.LoadContent();
@@ -78,6 +83,10 @@ namespace ZombustersWindows
                         ExitScreen();
                     }
                 }
+            }
+            if (input.IsNewKeyPress(Keys.Enter) || input.IsNewButtonPress(Buttons.A))
+            {
+                System.Diagnostics.Process.Start("https://store.steampowered.com/app/1272300/Zombusters/");
             }
             menu.HandleInput(input);
             base.HandleInput(input);
@@ -102,7 +111,13 @@ namespace ZombustersWindows
             base.Draw(gameTime);
             this.ScreenManager.SpriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, null, null, null, null, Resolution.getTransformationMatrix());
             this.ScreenManager.SpriteBatch.Draw(Title, titleBounds, Color.White);
-            mText.Draw(this.ScreenManager.SpriteBatch);
+
+            this.ScreenManager.SpriteBatch.DrawString(MenuListFont, Strings.CreditsThanksForPlayingString, new Vector2(uiBounds.Center.X - MenuListFont.MeasureString(Strings.CreditsThanksForPlayingString).X / 2 - 60, uiBounds.Center.Y - 50), Color.White, 0, Vector2.Zero, 1.5f, SpriteEffects.None, 1);
+
+            this.ScreenManager.SpriteBatch.DrawString(MenuListFont, "We hope you have enjoyed the Demo", new Vector2(uiBounds.Center.X - MenuListFont.MeasureString("We hope you have enjoyed the Demo").X / 2, uiBounds.Center.Y), Color.White);
+            this.ScreenManager.SpriteBatch.DrawString(MenuListFont, "Prepare for more kind of enemies, more weapons, more power-ups and more surprises!", new Vector2(uiBounds.Center.X - MenuListFont.MeasureString("Prepare for more kind of enemies, more weapons, more power-ups and more surprises!").X / 2, uiBounds.Center.Y + 25), Color.White);
+            this.ScreenManager.SpriteBatch.DrawString(MenuListFont, "Be sure to stop by the Steam page and add the game to your Wishlist", new Vector2(uiBounds.Center.X - MenuListFont.MeasureString("Be sure to stop by the Steam page and add the game to your Wishlist").X / 2, uiBounds.Center.Y + 75), Color.White);
+            this.ScreenManager.SpriteBatch.DrawString(MenuListFont, "Zombusters will be released fall 2020", new Vector2(uiBounds.Center.X - MenuListFont.MeasureString("Zombusters will be released fall 2020").X / 2, uiBounds.Center.Y + 125), Color.White);
 
             if (((MyGame)this.ScreenManager.Game).currentInputMode != InputMode.Touch)
             {
@@ -117,7 +132,20 @@ namespace ZombustersWindows
                     this.ScreenManager.SpriteBatch.Draw(btnB, new Vector2(158 + distanceBetweenButtonsText, 613), null, Color.White, 0, Vector2.Zero, 0.33f, SpriteEffects.None, 1.0f);
                 }
                 this.ScreenManager.SpriteBatch.DrawString(MenuInfoFont, Strings.LeaveMenuString, new Vector2(158 + spaceBetweenButtonAndText + distanceBetweenButtonsText, 613 + 4), Color.White);
+
                 distanceBetweenButtonsText = distanceBetweenButtonsText + Convert.ToInt32(MenuInfoFont.MeasureString(Strings.LeaveMenuString).X) + spaceBetweenButtonAndText + spaceBetweenButtons;
+
+                if (((MyGame)this.ScreenManager.Game).currentInputMode == InputMode.Keyboard)
+                {
+                    spaceBetweenButtonAndText = Convert.ToInt32(kbEnter.Width * 0.7f) + 5;
+                    this.ScreenManager.SpriteBatch.Draw(kbEnter, new Vector2(158 + distanceBetweenButtonsText, 613), null, Color.White, 0, Vector2.Zero, 0.7f, SpriteEffects.None, 1.0f);
+                }
+                else
+                {
+                    spaceBetweenButtonAndText = Convert.ToInt32(btnA.Width * 0.33f) + 5;
+                    this.ScreenManager.SpriteBatch.Draw(btnA, new Vector2(158 + distanceBetweenButtonsText, 613), null, Color.White, 0, Vector2.Zero, 0.33f, SpriteEffects.None, 1.0f);
+                }
+                this.ScreenManager.SpriteBatch.DrawString(MenuInfoFont, Strings.WishListGameMenu, new Vector2(158 + spaceBetweenButtonAndText + distanceBetweenButtonsText, 613 + 4), Color.White);
             }
             else
             {
@@ -127,11 +155,6 @@ namespace ZombustersWindows
                     new Vector2(position.X + 2 + submit_button.Width / 2 - MenuInfoFont.MeasureString(Strings.LeaveMenuString.ToUpper()).X / 2, position.Y + 9), Color.Black, 0, Vector2.Zero, 1.0f, SpriteEffects.None, 1.0f);
                 this.ScreenManager.SpriteBatch.DrawString(MenuInfoFont, Strings.LeaveMenuString.ToUpper(),
                     new Vector2(position.X + submit_button.Width / 2 - MenuInfoFont.MeasureString(Strings.LeaveMenuString.ToUpper()).X / 2, position.Y + 7), Color.White, 0, Vector2.Zero, 1.0f, SpriteEffects.None, 1.0f);
-            }
-
-            if (mText.endOfLines)
-            {
-                this.ScreenManager.SpriteBatch.DrawString(MenuListFont, Strings.CreditsThanksForPlayingString, new Vector2(uiBounds.Center.X - MenuListFont.MeasureString(Strings.CreditsThanksForPlayingString).X / 2, uiBounds.Center.Y + 50), Color.White);
             }
             this.ScreenManager.SpriteBatch.End();
             menu.DrawLogoRetrowaxMenu(this.ScreenManager.SpriteBatch, new Vector2(uiBounds.Width, uiBounds.Height), MenuInfoFont);

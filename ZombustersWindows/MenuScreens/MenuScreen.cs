@@ -97,7 +97,8 @@ namespace ZombustersWindows
                     break;
 #if DEMO
                 case 3:
-                    System.Diagnostics.Process.Start("https://store.steampowered.com/app/1272300/Zombusters/");
+                    ScreenManager.AddScreen(new DemoEndingScreen());
+                    //System.Diagnostics.Process.Start("https://store.steampowered.com/app/1272300/Zombusters/");
                     break;
 
                 case 4:
