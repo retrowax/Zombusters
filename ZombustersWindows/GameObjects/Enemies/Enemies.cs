@@ -440,7 +440,54 @@ namespace ZombustersWindows
 
         public int Count()
         {
-            return Zombies.Count + Tanks.Count + Rats.Count + Wolfs.Count + Minotaurs.Count;
+            int zombiesCount = 0;
+            int tanksCount = 0;
+            int ratsCount = 0;
+            int wolfsCount = 0;
+            int minotaursCount = 0;
+
+            foreach (Zombie zombie in Zombies)
+            {
+                if (zombie.status == ObjectStatus.Active)
+                {
+                    zombiesCount += 1;
+                }
+            }
+
+            foreach (Tank tank in Tanks)
+            {
+                if (tank.status == ObjectStatus.Active)
+                {
+                    tanksCount += 1;
+                }
+            }
+
+            foreach (Rat rat in Rats)
+            {
+                if (rat.status == ObjectStatus.Active)
+                {
+                    ratsCount += 1;
+                }
+            }
+
+            foreach (Wolf wolf in Wolfs)
+            {
+                if (wolf.status == ObjectStatus.Active)
+                {
+                    wolfsCount += 1;
+                }
+            }
+
+            foreach (Minotaur minotaur in Minotaurs)
+            {
+                if (minotaur.status == ObjectStatus.Active)
+                {
+                    minotaursCount += 1;
+                }
+            }
+
+
+            return zombiesCount + tanksCount + ratsCount + wolfsCount + minotaursCount;
         }
 
         public void Clear()

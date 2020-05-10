@@ -433,13 +433,11 @@ namespace ZombustersWindows
                 bPaused = game.BeginPause();
             }
 
-            // If we're now active again, unpause.
             if (!hidden && (game.IsPaused))
             {
                 bPaused = game.EndPause();
                 GamePlayStatus = GameplayState.Playing;
             }
-
 
             if (game.currentGameState == GameState.InGame)
             {
@@ -452,8 +450,6 @@ namespace ZombustersWindows
 
                     UpdatePlayersAnimations(gameTime);
                     flamethrowerAnimation.Update(gameTime);
-
-                    enemies.Update(ref gameTime, game);
 
                     foreach (Player player in game.players)
                     {
@@ -480,8 +476,6 @@ namespace ZombustersWindows
                             HandleCollisions(player, game.totalGameSeconds);
                         }
                     }
-
-                    enemies.Update(ref gameTime, game);
 
                     ChangeGamplayStatusAfterSomeTimeTo(gameTime, GameplayState.StartLevel);
                 }
