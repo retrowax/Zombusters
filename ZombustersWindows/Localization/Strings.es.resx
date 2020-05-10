@@ -772,4 +772,16 @@ conseguir vidas extras o nuevas armas.</value>
   <data name="WishListGameMenuHelp" xml:space="preserve">
     <value>Si quieres apoyarnos, te agradeceríamos que añadieras Zombusters a tu lista de deseados.</value>
   </data>
+  <data name="DemoEndScreenLine1" xml:space="preserve">
+    <value>Deseamos que hayas disfrutado de la Demo</value>
+  </data>
+  <data name="DemoEndScreenLine2" xml:space="preserve">
+    <value>¡Prepárate para más enemigos, más armas, mas power-ups y muchas más sorpresas!</value>
+  </data>
+  <data name="DemoEndScreenLine3" xml:space="preserve">
+    <value>Asegúrate de pasar por la página de Steam y añadir el juego a tu lista de deseados</value>
+  </data>
+  <data name="DemoEndScreenLine4" xml:space="preserve">
+    <value>Zombusters se lanzará en otoño de 2020</value>
+  </data>
 </root>

@@ -683,4 +683,16 @@ Sammle Powerups um Extraleben und neue Waffen zu erhalten.</value>
   <data name="WishListGameMenuHelp" xml:space="preserve">
     <value>Wenn Sie uns unterstützen möchten, würden wir uns freuen, wenn Sie Zombusters zu Ihrer Wunschliste hinzufügen.</value>
   </data>
+  <data name="DemoEndScreenLine1" xml:space="preserve">
+    <value>Wir hoffen, Ihnen hat die Demo gefallen</value>
+  </data>
+  <data name="DemoEndScreenLine2" xml:space="preserve">
+    <value>Bereite dich auf mehr Feinde, mehr Waffen, mehr Power-Ups und mehr Überraschungen vor!</value>
+  </data>
+  <data name="DemoEndScreenLine3" xml:space="preserve">
+    <value>Schauen Sie unbedingt auf der Steam-Seite vorbei und fügen Sie das Spiel Ihrer Wunschliste hinzu</value>
+  </data>
+  <data name="DemoEndScreenLine4" xml:space="preserve">
+    <value>Zombusters werden im Herbst 2020 veröffentlicht</value>
+  </data>
 </root>
