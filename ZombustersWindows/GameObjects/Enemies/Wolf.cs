@@ -15,6 +15,7 @@ namespace ZombustersWindows
     {
         private const int WOLF_X_OFFSET = 20;
         private const int WOLF_Y_OFFSET = 48;
+        private const float WOLF_SCALE = 1.1f;
 
         public float MAX_VELOCITY = 1.5f;
         public const float MAX_STRENGTH = 0.15f;
@@ -284,7 +285,7 @@ namespace ZombustersWindows
 
                 if (entity.Velocity.X == 0 && entity.Velocity.Y == 0)
                 {
-                    idleAnimation.Draw(batch, new Vector2(this.entity.Position.X, this.entity.Position.Y - WOLF_Y_OFFSET), SpriteEffects.None, layerIndex, 0f, color);
+                    idleAnimation.Draw(batch, new Vector2(this.entity.Position.X, this.entity.Position.Y - WOLF_Y_OFFSET), WOLF_SCALE, SpriteEffects.None, layerIndex, 0f, color);
                 }
                 else
                 {
@@ -292,22 +293,22 @@ namespace ZombustersWindows
                     {
                         if (entity.Velocity.X > 0)
                         {
-                            attackAnimation.Draw(batch, new Vector2(this.entity.Position.X - WOLF_X_OFFSET, this.entity.Position.Y - WOLF_Y_OFFSET), SpriteEffects.None, layerIndex, 0f, color);
+                            attackAnimation.Draw(batch, new Vector2(this.entity.Position.X - WOLF_X_OFFSET, this.entity.Position.Y - WOLF_Y_OFFSET), WOLF_SCALE, SpriteEffects.None, layerIndex, 0f, color);
                         }
                         else
                         {
-                            attackAnimation.Draw(batch, new Vector2(this.entity.Position.X, this.entity.Position.Y - WOLF_Y_OFFSET), SpriteEffects.FlipHorizontally, layerIndex, 0f, color);
+                            attackAnimation.Draw(batch, new Vector2(this.entity.Position.X, this.entity.Position.Y - WOLF_Y_OFFSET), WOLF_SCALE, SpriteEffects.FlipHorizontally, layerIndex, 0f, color);
                         }
                     }
                     else
                     {
                         if (entity.Velocity.X > 0)
                         {
-                            runAnimation.Draw(batch, new Vector2(this.entity.Position.X - WOLF_X_OFFSET, this.entity.Position.Y - WOLF_Y_OFFSET), SpriteEffects.None, layerIndex, 0f, color);
+                            runAnimation.Draw(batch, new Vector2(this.entity.Position.X - WOLF_X_OFFSET, this.entity.Position.Y - WOLF_Y_OFFSET), WOLF_SCALE, SpriteEffects.None, layerIndex, 0f, color);
                         }
                         else
                         {
-                            runAnimation.Draw(batch, new Vector2(this.entity.Position.X, this.entity.Position.Y - WOLF_Y_OFFSET), SpriteEffects.FlipHorizontally, layerIndex, 0f, color);
+                            runAnimation.Draw(batch, new Vector2(this.entity.Position.X, this.entity.Position.Y - WOLF_Y_OFFSET), WOLF_SCALE, SpriteEffects.FlipHorizontally, layerIndex, 0f, color);
                         }
                     }
                 }
@@ -326,11 +327,11 @@ namespace ZombustersWindows
                     {
                         if (this.entity.Velocity.X > 0)
                         {
-                            deathAnimation.Draw(batch, new Vector2(this.entity.Position.X - WOLF_X_OFFSET, this.entity.Position.Y - WOLF_Y_OFFSET), SpriteEffects.None, layerIndex, 0f, Color.White);
+                            deathAnimation.Draw(batch, new Vector2(this.entity.Position.X - WOLF_X_OFFSET, this.entity.Position.Y - WOLF_Y_OFFSET), WOLF_SCALE, SpriteEffects.None, layerIndex, 0f, Color.White);
                         }
                         else
                         {
-                            deathAnimation.Draw(batch, new Vector2(this.entity.Position.X, this.entity.Position.Y - WOLF_Y_OFFSET), SpriteEffects.FlipHorizontally, layerIndex, 0f, Color.White);
+                            deathAnimation.Draw(batch, new Vector2(this.entity.Position.X, this.entity.Position.Y - WOLF_Y_OFFSET), WOLF_SCALE, SpriteEffects.FlipHorizontally, layerIndex, 0f, Color.White);
                         }
                     }
                 }
@@ -341,11 +342,11 @@ namespace ZombustersWindows
                     {
                         if (this.entity.Velocity.X > 0)
                         {
-                            deathAnimation.Draw(batch, new Vector2(this.entity.Position.X - WOLF_X_OFFSET, this.entity.Position.Y - WOLF_Y_OFFSET), SpriteEffects.None, layerIndex, 0f, Color.White);
+                            deathAnimation.Draw(batch, new Vector2(this.entity.Position.X - WOLF_X_OFFSET, this.entity.Position.Y - WOLF_Y_OFFSET), WOLF_SCALE, SpriteEffects.None, layerIndex, 0f, Color.White);
                         }
                         else
                         {
-                            deathAnimation.Draw(batch, new Vector2(this.entity.Position.X, this.entity.Position.Y - WOLF_Y_OFFSET), SpriteEffects.FlipHorizontally, layerIndex, 0f, Color.White);
+                            deathAnimation.Draw(batch, new Vector2(this.entity.Position.X, this.entity.Position.Y - WOLF_Y_OFFSET), WOLF_SCALE, SpriteEffects.FlipHorizontally, layerIndex, 0f, Color.White);
                         }
                     }
                 }
