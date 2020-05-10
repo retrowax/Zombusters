@@ -120,6 +120,7 @@ namespace ZombustersWindows.Subsystem_Managers
             String textToShow;
             Vector2 texturePosition;
             Vector2 startPosition;
+            spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, null, null, null, null, Resolution.getTransformationMatrix());
 
             if (this.status == ObjectStatus.Active)
             {
@@ -193,6 +194,8 @@ namespace ZombustersWindows.Subsystem_Managers
                 spriteBatch.DrawString(font, textToShow, startPosition, color);
                 spriteBatch.Draw(this.UITexture, texturePosition, Color.White);
             }
+
+            spriteBatch.End();
         }
     }
 }

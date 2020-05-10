@@ -450,6 +450,7 @@ namespace ZombustersWindows
 
                     UpdatePlayersAnimations(gameTime);
                     flamethrowerAnimation.Update(gameTime);
+                    enemies.Update(ref gameTime, game);
 
                     foreach (Player player in game.players)
                     {
@@ -468,6 +469,7 @@ namespace ZombustersWindows
                 {
                     UpdatePlayerPlaying(gameTime);
                     UpdatePlayersAnimations(gameTime);
+                    enemies.Update(ref gameTime, game);
 
                     foreach (Player player in game.players)
                     {
@@ -535,7 +537,7 @@ namespace ZombustersWindows
                     }
                 }
 
-                enemies.Update(ref gameTime, game);
+                enemies.UpdatePowerUps(ref gameTime, game);
 
                 foreach (Furniture furniture in Level.furnitureList)
                 {
@@ -1069,7 +1071,7 @@ namespace ZombustersWindows
 
                 DrawMap(Map);
 
-                
+                enemies.DrawPowerUps(this.ScreenManager.SpriteBatch, gameTime);
 
                 this.ScreenManager.SpriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend);
 

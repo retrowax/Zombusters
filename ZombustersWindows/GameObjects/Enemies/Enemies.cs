@@ -525,7 +525,10 @@ namespace ZombustersWindows
             {
                 minotaur.Update(gameTime, game, Minotaurs);
             }
+        }
 
+        public void UpdatePowerUps(ref GameTime gameTime, MyGame game)
+        {
             foreach (PowerUp powerup in PowerUpList)
             {
                 powerup.Update(gameTime);
@@ -558,7 +561,10 @@ namespace ZombustersWindows
             {
                 minotaur.Draw(spriteBatch, totalGameSeconds, furnitureList, gameTime);
             }
+        }
 
+        public void DrawPowerUps(SpriteBatch spriteBatch, GameTime gameTime)
+        {
             foreach (PowerUp powerup in PowerUpList)
             {
                 powerup.Draw(spriteBatch, gameTime);
