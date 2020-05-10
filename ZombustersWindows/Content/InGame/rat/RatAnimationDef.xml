@@ -1,0 +1,27 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Animations>
+  <RatAttackDef FrameWidth="48" FrameHeight="48"
+              SheetRows="1" SheetColumns="7"
+              Speed="10"
+              SheetName="ratattack"/>
+
+  <RatDeathDef FrameWidth="48" FrameHeight="48"
+              SheetRows="1" SheetColumns="5"
+              Speed="10"
+              SheetName="ratdeath"/>
+
+  <RatHitDef FrameWidth="48" FrameHeight="48"
+              SheetRows="1" SheetColumns="1"
+              Speed="15"
+              SheetName="rathit"/>
+
+  <RatIdleDef FrameWidth="48" FrameHeight="48"
+              SheetRows="1" SheetColumns="8"
+              Speed="15"
+              SheetName="ratidle"/>
+
+  <RatRunDef FrameWidth="48" FrameHeight="48"
+              SheetRows="1" SheetColumns="6"
+              Speed="15"
+              SheetName="ratrun"/>
+</Animations>

@@ -1,447 +1,570 @@
 ﻿using System;
+using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 
 using Microsoft.Xna.Framework.Graphics;
+using ZombustersWindows.GameObjects;
+using ZombustersWindows.Subsystem_Managers;
 
 namespace ZombustersWindows
 {
     public class Enemies
     {
-        /*
-        public EnemyState[] waves;
-        public SeekerState[] seekers;
-        public SeekerState[] zombies;
-        public static EnemyInfo BasicInfo;
-        public static EnemyInfo LooperInfo;
-        public static EnemyInfo SeekerInfo;
-        public static EnemyInfo ZombieInfo;
-        public Random random;
-        */
+        public List<Tank> Tanks = new List<Tank>();
+        public List<Zombie> Zombies = new List<Zombie>();
+        public List<Rat> Rats = new List<Rat>();
+        public List<Wolf> Wolfs = new List<Wolf>();
+        public List<Minotaur> Minotaurs = new List<Minotaur>();
+        public List<PowerUp> PowerUpList = new List<PowerUp>();
+        public Texture2D livePowerUp, extraLivePowerUp, shotgunAmmoPowerUp, machinegunAmmoPowerUp, flamethrowerAmmoPowerUp, immunePowerUp, heart, shotgunammoUI, pistolammoUI, grenadeammoUI, flamethrowerammoUI;
 
-        // Zombies
-        public ZombieState[] zombies;
-        //public static EnemyInfo ZombieInfo;
+        private readonly MyGame game;
+        private readonly Random random = new Random(16);
 
-        // Tanks
-        public TankState[] tanks;
-        //public static EnemyInfo TankInfo;
-
-        public Random random;
-
-        public float RadiansPerSecond = MathHelper.Pi * 4;
-        public int ActiveEnemies;
-
-        public Enemies()
+        public Enemies(ref MyGame myGame)
         {
-            //waves = new EnemyState[20];
-            //seekers = new SeekerState[4];
-
-            zombies = new ZombieState[20];
-            tanks = new TankState[1];
-
-            random = new Random();
+            game = myGame;
         }
 
-        public static void Initialize(Viewport view, ContentManager content)
+        public void LoadContent(ContentManager content)
         {
-            /*
-            BasicInfo.ScreenBounds = new Rectangle(view.X, view.Y, view.Width, 
-                view.Height);
-            BasicInfo.TimeToDie = 1.5f;   // 1 1/2 secs
-            BasicInfo.CrashRadius = 20f;
+            foreach (Zombie zombie in Zombies)
+            {
+                zombie.LoadContent(content);
+            }
 
-            LooperInfo = BasicInfo;
+            foreach (Tank tank in Tanks)
+            {
+                tank.LoadContent(content);
+            }
 
-            SeekerInfo = BasicInfo;
-            SeekerInfo.TimeToDie = 10.0f;
+            foreach (Rat rat in Rats)
+            {
+                rat.LoadContent(content);
+            }
 
-            BasicInfo.XCurve = content.Load<Curve>("XCurve1");
-            BasicInfo.YCurve = content.Load<Curve>("YCurve1");
+            foreach (Wolf wolf in Wolfs)
+            {
+                wolf.LoadContent(content);
+            }
 
-            LooperInfo.XCurve = content.Load<Curve>("XCurve2");
-            LooperInfo.YCurve = content.Load<Curve>("YCurve2");
+            foreach (Minotaur minotaur in Minotaurs)
+            {
+                minotaur.LoadContent(content);
+            }
 
-            ZombieInfo = BasicInfo;
-            ZombieInfo.TimeToDie = 10.0f;
-            
-
-            ZombieInfo.ScreenBounds = new Rectangle(view.X, view.Y, view.Width, view.Height);
-            ZombieInfo.CrashRadius = 20f;
-            ZombieInfo.TimeToDie = 10.0f;
-
-            TankInfo.ScreenBounds = new Rectangle(view.X, view.Y, view.Width, view.Height);
-            TankInfo.CrashRadius = 20f;
-            TankInfo.TimeToDie = 10.0f;
-            */
+            PowerUpsLoad();
         }
 
-        public void Reset()
+        private void PowerUpsLoad()
         {
-            /*
-            for (int i = 0; i < waves.Length; i++)
-            {
-                waves[i].startTimeTotalSeconds = 0;
-                waves[i].deathTimeTotalSeconds = 0;
-                waves[i].status = ObjectStatus.Inactive;
-                waves[i].TimeOnScreen = 0;
-                waves[i].type = EnemyType.Looper;                
-            }
-            for (int j = 0; j < seekers.Length; j++)
-            {
-                seekers[j].deathTimeTotalSeconds = 0;
-                seekers[j].position = Vector2.One * -40;
-                seekers[j].speed = 0;
-                seekers[j].status = ObjectStatus.Inactive;
-            }
-
-            for (int j = 0; j < zombies.Length; j++)
-            {
-                zombies[j].deathTimeTotalSeconds = 0;
-                zombies[j].position = Vector2.One * -40;
-                zombies[j].speed = 0;
-                zombies[j].status = ObjectStatus.Inactive;
-            }
-             */
-/*
-            for (int j = 0; j < zombies.Length; j++)
-            {
-                zombies[j] = new ZombieState();
-                zombies[j].deathTimeTotalSeconds = 0;
-                zombies[j].entity = new SteeringEntity();
-                zombies[j].entity.Position = Vector2.One * -40;
-                zombies[j].speed = 0;
-                zombies[j].status = ObjectStatus.Inactive;
-            }
-*/
-            for (int j = 0; j < tanks.Length; j++)
-            {
-                tanks[j].deathTimeTotalSeconds = 0;
-                tanks[j].position = Vector2.One * -40;
-                tanks[j].speed = 0;
-                tanks[j].status = ObjectStatus.Inactive;
-            }
+            livePowerUp = game.Content.Load<Texture2D>(@"InGame/live_powerup");
+            extraLivePowerUp = game.Content.Load<Texture2D>(@"InGame/extralife_powerup");
+            shotgunAmmoPowerUp = game.Content.Load<Texture2D>(@"InGame/shotgun_ammo_powerup");
+            machinegunAmmoPowerUp = game.Content.Load<Texture2D>(@"InGame/machinegun_ammo_powerup");
+            flamethrowerAmmoPowerUp = game.Content.Load<Texture2D>(@"InGame/flamethrower_ammo_powerup");
+            immunePowerUp = game.Content.Load<Texture2D>(@"InGame/immune_ammo_powerup");
+            heart = game.Content.Load<Texture2D>(@"InGame/GUI/heart");
+            shotgunammoUI = game.Content.Load<Texture2D>(@"InGame/GUI/shotgunammo");
+            pistolammoUI = game.Content.Load<Texture2D>(@"InGame/GUI/pistolammo");
+            grenadeammoUI = game.Content.Load<Texture2D>(@"InGame/GUI/grenadeammo");
+            flamethrowerammoUI = game.Content.Load<Texture2D>(@"InGame/GUI/flamethrowerammo");
         }
-/*
-        private void SpawnBasicWave(float totalGameSeconds)
+
+        public void InitializeEnemy(int quantity, EnemyType enemyType, Level level, int subLevelIndex, float life, float speed, List<int> numplayersIngame)
         {
-            EnemyState spawn;
+            int i, RandomX, RandomY;
+            int RandomSpawnZone;
+            int howManySpawnZones = 4;
 
-            spawn.status = ObjectStatus.Active;
-            spawn.startTimeTotalSeconds = totalGameSeconds;
-            spawn.deathTimeTotalSeconds = 0;
-            spawn.type = EnemyType.Basic;
-            spawn.invert = false;
-
-
-            float BasicBaseTime = 4.5f; // 4 1/2 secs
-            float MinimumTimeOnScreen = 1.0f;
-            // every minute, we speed up the wave
-            spawn.TimeOnScreen = BasicBaseTime - (totalGameSeconds / 60) * 0.6f;
-            if (spawn.TimeOnScreen < MinimumTimeOnScreen)
-                spawn.TimeOnScreen = MinimumTimeOnScreen;
-
-            for (int i = 0; i < waves.Length; i++)
+            for (i = 0; i < quantity; i++)
             {
-                waves[i] = spawn;
-                spawn.invert = !spawn.invert;
-                spawn.startTimeTotalSeconds += 0.1f; // one-tenth of a second
+                RandomSpawnZone = this.random.Next(0, howManySpawnZones - 1);
+                RandomX = this.random.Next(Convert.ToInt32(level.ZombieSpawnZones[RandomSpawnZone].X), Convert.ToInt32(level.ZombieSpawnZones[RandomSpawnZone].Y));
+                RandomY = this.random.Next(Convert.ToInt32(level.ZombieSpawnZones[RandomSpawnZone].Z), Convert.ToInt32(level.ZombieSpawnZones[RandomSpawnZone].W));
+                float subspeed = subLevelIndex / 10;
+                switch (enemyType)
+                {
+                    case EnemyType.Zombie:
+                        Zombie zombie = new Zombie(new Vector2(0, 0), new Vector2(RandomX, RandomY), 5.0f, life, speed + subspeed);
+                        zombie.behaviors.AddBehavior(new Pursuit(Arrive.Deceleration.fast, 50.0f));
+                        zombie.behaviors.AddBehavior(new ObstacleAvoidance(ref level.gameWorld, 15.0f));
+                        zombie.playerChased = numplayersIngame[this.random.Next(numplayersIngame.Count)];
+                        Zombies.Add(zombie);
+                        break;
+                    case EnemyType.Tank:
+                        Tank tank = new Tank(new Vector2(0, 0), new Vector2(RandomX, RandomY), 5.0f);
+                        tank.behaviors.AddBehavior(new Pursuit(Arrive.Deceleration.fast, 50.0f));
+                        tank.behaviors.AddBehavior(new ObstacleAvoidance(ref level.gameWorld, 15.0f));
+                        Tanks.Add(tank);
+                        break;
+                    case EnemyType.Rat:
+                        Rat rat = new Rat(new Vector2(RandomX, RandomY), 5.0f, 1);
+                        rat.behaviors.AddBehavior(new Pursuit(Arrive.Deceleration.fast, 50.0f));
+                        rat.behaviors.AddBehavior(new ObstacleAvoidance(ref level.gameWorld, 15.0f));
+                        rat.playerChased = numplayersIngame[this.random.Next(numplayersIngame.Count)];
+                        Rats.Add(rat);
+                        break;
+                    case EnemyType.Wolf:
+                        Wolf wolf = new Wolf(new Vector2(RandomX, RandomY), 5.0f, 1);
+                        wolf.behaviors.AddBehavior(new Pursuit(Arrive.Deceleration.fast, 50.0f));
+                        wolf.behaviors.AddBehavior(new ObstacleAvoidance(ref level.gameWorld, 15.0f));
+                        wolf.playerChased = numplayersIngame[this.random.Next(numplayersIngame.Count)];
+                        Wolfs.Add(wolf);
+                        break;
+                    case EnemyType.Minotaur:
+                        Minotaur minotaur = new Minotaur(new Vector2(RandomX, RandomY), 5.0f, 1);
+                        minotaur.behaviors.AddBehavior(new Pursuit(Arrive.Deceleration.fast, 50.0f));
+                        minotaur.behaviors.AddBehavior(new ObstacleAvoidance(ref level.gameWorld, 15.0f));
+                        minotaur.playerChased = numplayersIngame[this.random.Next(numplayersIngame.Count)];
+                        Minotaurs.Add(minotaur);
+                        break;
+                }
+                
             }
         }
 
-        public void SpawnNextWave(float totalGameSeconds)
+        public void HandleCollisions(Player player, float totalGameSeconds)
         {
-            if (waves[0].type == EnemyType.Basic)
-                SpawnLooperWave(totalGameSeconds);
+            HandleZombieCollisions(player, totalGameSeconds);
+            HandleTankCollisions(player, totalGameSeconds);
+            HandleRatCollisions(player, totalGameSeconds);
+            HandleWolfCollisions(player, totalGameSeconds);
+            HandleMinotaurCollisions(player, totalGameSeconds);
+            HandlePowerUpCollisions(player);
+        }
+
+        private void HandleTankCollisions(Player player, float totalGameSeconds)
+        {
+            for (int i = 0; i < Tanks.Count; i++)
+            {
+                Tank tank = Tanks[i];
+                if (tank.status == ObjectStatus.Active)
+                {
+                    for (int l = 0; l < player.avatar.bullets.Count; l++)
+                    {
+                        if (GameplayHelper.DetectCollision(player.avatar.bullets[l], tank.entity.Position, totalGameSeconds))
+                        {
+                            tank.DestroyTank(totalGameSeconds);
+                            player.avatar.score += 10;
+                            game.audio.PlayZombieDying();
+
+                            if (player.avatar.score % 8000 == 0)
+                            {
+                                player.avatar.lives += 1;
+                            }
+                            player.avatar.bullets.RemoveAt(l);
+                        }
+                    }
+                }
+            }
+        }
+
+        private void HandleRatCollisions(Player player, float totalGameSeconds)
+        {
+            foreach (Rat rat in Rats)
+            {
+                if (rat.status == ObjectStatus.Active)
+                {
+                    for (int l = 0; l < player.avatar.bullets.Count; l++)
+                    {
+                        if (GameplayHelper.DetectCollision(player.avatar.bullets[l], rat.entity.Position, totalGameSeconds))
+                        {
+                            rat.Destroy(game.totalGameSeconds, player.avatar.currentgun);
+                            player.avatar.score += 10;
+                            game.audio.PlayZombieDying();
+
+                            if (player.avatar.score % 8000 == 0)
+                            {
+                                player.avatar.lives += 1;
+                            }
+                            player.avatar.bullets.RemoveAt(l);
+                        }
+                    }
+                }
+            }
+        }
+
+        private void HandleWolfCollisions(Player player, float totalGameSeconds)
+        {
+            foreach (Wolf wolf in Wolfs)
+            {
+                if (wolf.status == ObjectStatus.Active)
+                {
+                    for (int l = 0; l < player.avatar.bullets.Count; l++)
+                    {
+                        if (GameplayHelper.DetectCollision(player.avatar.bullets[l], wolf.entity.Position, totalGameSeconds))
+                        {
+                            wolf.Destroy(game.totalGameSeconds, player.avatar.currentgun);
+                            player.avatar.score += 10;
+                            game.audio.PlayZombieDying();
+
+                            if (player.avatar.score % 8000 == 0)
+                            {
+                                player.avatar.lives += 1;
+                            }
+                            player.avatar.bullets.RemoveAt(l);
+                        }
+                    }
+                }
+            }
+        }
+
+        private void HandleMinotaurCollisions(Player player, float totalGameSeconds)
+        {
+            foreach (Minotaur minotaur in Minotaurs)
+            {
+                if (minotaur.status == ObjectStatus.Active)
+                {
+                    for (int l = 0; l < player.avatar.bullets.Count; l++)
+                    {
+                        if (GameplayHelper.DetectCollision(player.avatar.bullets[l], minotaur.entity.Position, totalGameSeconds))
+                        {
+                            minotaur.Destroy(game.totalGameSeconds, player.avatar.currentgun);
+                            player.avatar.score += 10;
+                            game.audio.PlayZombieDying();
+
+                            if (player.avatar.score % 8000 == 0)
+                            {
+                                player.avatar.lives += 1;
+                            }
+                            player.avatar.bullets.RemoveAt(l);
+                        }
+                    }
+                }
+            }
+        }
+
+        private void HandleZombieCollisions(Player player, float totalGameSeconds)
+        {
+            for (int i = 0; i < Zombies.Count; i++)
+            {
+                Zombie zombie = Zombies[i];
+                if (zombie.status == ObjectStatus.Active)
+                {
+                    if (player.avatar.currentgun == GunType.flamethrower && player.avatar.ammo[(int)player.avatar.currentgun] > 0)
+                    {
+                        if (player.avatar.accumFire.Length() > .5)
+                        {
+                            if (player.avatar.FlameThrowerRectangle.Intersects(new Rectangle((int)zombie.entity.Position.X, (int)zombie.entity.Position.Y, 48, (int)zombie.entity.Height)))
+                            {
+                                if (zombie.lifecounter > 1.0f)
+                                {
+                                    zombie.lifecounter -= 0.2f;
+                                    zombie.isLoosingLife = true;
+                                }
+                                else
+                                {
+                                    zombie.DestroyZombie(game.totalGameSeconds, player.avatar.currentgun);
+                                    player.avatar.score += 10;
+                                    game.audio.PlayZombieDying();
+
+                                    if (player.avatar.score % 8000 == 0)
+                                    {
+                                        player.avatar.lives += 1;
+                                    }
+
+                                    if (PowerUpIsInRange(zombie.entity.Position, zombie.ZombieTexture.Width, zombie.ZombieTexture.Height))
+                                    {
+                                        SpawnPowerUp(zombie);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    else
+                    {
+                        for (int l = 0; l < player.avatar.bullets.Count; l++)
+                        {
+                            if (GameplayHelper.DetectCollision(player.avatar.bullets[l], zombie.entity.Position, totalGameSeconds))
+                            {
+                                if (zombie.lifecounter > 1.0f)
+                                {
+                                    zombie.lifecounter -= 1.0f;
+                                    zombie.isLoosingLife = true;
+                                    player.avatar.bullets.RemoveAt(l);
+                                }
+                                else
+                                {
+                                    zombie.DestroyZombie(game.totalGameSeconds, player.avatar.currentgun);
+                                    player.avatar.score += 10;
+                                    game.audio.PlayZombieDying();
+
+                                    if (player.avatar.score % 8000 == 0)
+                                    {
+                                        player.avatar.lives += 1;
+                                    }
+                                    player.avatar.bullets.RemoveAt(l);
+                                    if (PowerUpIsInRange(zombie.entity.Position, zombie.ZombieTexture.Width, zombie.ZombieTexture.Height))
+                                    {
+                                        SpawnPowerUp(zombie);
+                                    }
+                                }
+                            }
+                        }
+
+                        for (int bulletCount = 0; bulletCount < player.avatar.shotgunbullets.Count; bulletCount++)
+                        {
+                            for (int pelletCount = 0; pelletCount < player.avatar.shotgunbullets[bulletCount].Pellet.Count; pelletCount++)
+                            {
+                                if (GameplayHelper.DetectCollision(player.avatar.shotgunbullets[bulletCount].Pellet[pelletCount], zombie.entity.Position, totalGameSeconds))
+                                {
+                                    player.avatar.shotgunbullets[bulletCount].Pellet.RemoveAt(pelletCount);
+                                    if (zombie.lifecounter > 1.0f)
+                                    {
+                                        zombie.lifecounter -= 1.0f;
+                                        zombie.isLoosingLife = true;
+                                    }
+                                    else
+                                    {
+                                        zombie.DestroyZombie(game.totalGameSeconds, player.avatar.currentgun);
+                                        player.avatar.score += 10;
+                                        game.audio.PlayZombieDying();
+
+                                        if (player.avatar.score % 8000 == 0)
+                                        {
+                                            player.avatar.lives += 1;
+                                        }
+
+                                        if (PowerUpIsInRange(zombie.entity.Position, zombie.ZombieTexture.Width, zombie.ZombieTexture.Height))
+                                        {
+                                            SpawnPowerUp(zombie);
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+
+                if (GameplayHelper.DetectCrash(player.avatar, zombie.entity.Position))
+                {
+                    if (zombie.status == ObjectStatus.Active)
+                    {
+                        if (player.avatar.lifecounter <= 0)
+                        {
+                            player.Destroy();
+                            player.avatar.lifecounter = 100;
+                        }
+                        else
+                        {
+                            player.avatar.isLoosingLife = true;
+                            player.avatar.lifecounter -= 1;
+                        }
+                    }
+                }
+            }
+        }
+
+        private void HandlePowerUpCollisions(Player player)
+        {
+            foreach (PowerUp powerUp in PowerUpList)
+            {
+                if (powerUp.status == ObjectStatus.Active)
+                {
+                    if (GameplayHelper.DetectCrash(player.avatar, powerUp.Position))
+                    {
+                        if (powerUp.powerUpType == PowerUpType.extralife)
+                        {
+                            if (player.avatar.lives < 9)
+                            {
+                                player.avatar.lives++;
+                            }
+                            powerUp.status = ObjectStatus.Dying;
+                        }
+
+                        if (powerUp.powerUpType == PowerUpType.live)
+                        {
+                            if (player.avatar.lifecounter < 100)
+                            {
+                                player.avatar.lifecounter += powerUp.Value;
+
+                                if (player.avatar.lifecounter > 100)
+                                {
+                                    player.avatar.lifecounter = 100;
+                                }
+                            }
+
+                            powerUp.status = ObjectStatus.Dying;
+                        }
+
+                        if (powerUp.powerUpType == PowerUpType.machinegun)
+                        {
+                            player.avatar.ammo[(int)GunType.machinegun] += powerUp.Value;
+                            powerUp.status = ObjectStatus.Dying;
+
+                        }
+
+                        if (powerUp.powerUpType == PowerUpType.shotgun)
+                        {
+                            player.avatar.ammo[(int)GunType.shotgun] += powerUp.Value;
+                            powerUp.status = ObjectStatus.Dying;
+
+                        }
+
+                        if (powerUp.powerUpType == PowerUpType.grenade)
+                        {
+                            player.avatar.ammo[(int)GunType.grenade] += powerUp.Value;
+                            powerUp.status = ObjectStatus.Dying;
+
+                        }
+
+                        if (powerUp.powerUpType == PowerUpType.flamethrower)
+                        {
+                            player.avatar.ammo[(int)GunType.flamethrower] += powerUp.Value;
+                            powerUp.status = ObjectStatus.Dying;
+
+                        }
+
+                        if (powerUp.powerUpType == PowerUpType.speedbuff || powerUp.powerUpType == PowerUpType.immunebuff)
+                        {
+                            //player. += powerup.Value;
+                            powerUp.status = ObjectStatus.Dying;
+                        }
+                    }
+                }
+            }
+        }
+
+        public int Count()
+        {
+            return Zombies.Count + Tanks.Count + Rats.Count + Wolfs.Count + Minotaurs.Count;
+        }
+
+        public void Clear()
+        {
+            Zombies.Clear();
+            Tanks.Clear();
+            Rats.Clear();
+            Wolfs.Clear();
+            Minotaurs.Clear();
+        }
+
+        public void Update(ref GameTime gameTime, MyGame game)
+        {
+            foreach (Zombie zombie in Zombies)
+            {
+                zombie.Update(gameTime, game, Zombies);
+            }
+
+            foreach (Tank tank in Tanks)
+            {
+                tank.Update(gameTime, game);
+            }
+
+            foreach (Rat rat in Rats)
+            {
+                rat.Update(gameTime, game, Rats);
+            }
+
+            foreach (Wolf wolf in Wolfs)
+            {
+                wolf.Update(gameTime, game, Wolfs);
+            }
+
+            foreach (Minotaur minotaur in Minotaurs)
+            {
+                minotaur.Update(gameTime, game, Minotaurs);
+            }
+
+            foreach (PowerUp powerup in PowerUpList)
+            {
+                powerup.Update(gameTime);
+            }
+        }
+
+        public void Draw(SpriteBatch spriteBatch, float totalGameSeconds, List<Furniture> furnitureList, GameTime gameTime)
+        {
+            foreach (Zombie zombie in Zombies)
+            {
+                zombie.Draw(spriteBatch, totalGameSeconds, furnitureList, gameTime);
+            }
+
+            foreach (Tank tank in Tanks)
+            {
+                tank.Draw(spriteBatch, totalGameSeconds, furnitureList);
+            }
+
+            foreach (Rat rat in Rats)
+            {
+                rat.Draw(spriteBatch, totalGameSeconds, furnitureList, gameTime);
+            }
+
+            foreach (Wolf wolf in Wolfs)
+            {
+                wolf.Draw(spriteBatch, totalGameSeconds, furnitureList, gameTime);
+            }
+
+            foreach (Minotaur minotaur in Minotaurs)
+            {
+                minotaur.Draw(spriteBatch, totalGameSeconds, furnitureList, gameTime);
+            }
+
+            foreach (PowerUp powerup in PowerUpList)
+            {
+                powerup.Draw(spriteBatch, gameTime);
+            }
+        }
+
+        private bool PowerUpIsInRange(Vector2 position, int width, int height)
+        {
+            Rectangle ScreenBounds;
+            ScreenBounds = new Rectangle(game.GraphicsDevice.Viewport.X + 60, 60, game.GraphicsDevice.Viewport.Width - 60, game.GraphicsDevice.Viewport.Height - 55);
+            if (ScreenBounds.Intersects(new Rectangle(Convert.ToInt32(position.X), Convert.ToInt32(position.Y), width, height)))
+            {
+                return true;
+            }
             else
-                SpawnBasicWave(totalGameSeconds);
-        }
-
-        private void SpawnLooperWave(float totalGameSeconds)
-        {
-            EnemyState spawn;
-
-            spawn.status = ObjectStatus.Active;
-            spawn.startTimeTotalSeconds = totalGameSeconds;
-            spawn.deathTimeTotalSeconds = 0;
-            spawn.type = EnemyType.Looper;
-            spawn.invert = false;
-
-            float LooperBaseTime = 6.0f; // 6 secs
-            float MinimumTimeOnScreen = 1.0f;
-            // every minute, we speed up the wave
-            spawn.TimeOnScreen = LooperBaseTime - (totalGameSeconds / 60) * 0.6f;
-            if (spawn.TimeOnScreen < MinimumTimeOnScreen)
-                spawn.TimeOnScreen = MinimumTimeOnScreen;
-
-            for (int i = 0; i < waves.Length; i++)
             {
-                waves[i] = spawn;
-                spawn.invert = !spawn.invert;
-                spawn.startTimeTotalSeconds += 0.07f; // 7 one-hundreths of a second
+                return false;
             }
         }
 
-        public void SpawnSeeker()
+        private void SpawnPowerUp(Zombie zombie)
         {
-            SeekerState spawn;
-            spawn.position = Vector2.One * 100;
-            spawn.status = ObjectStatus.Active;
-            spawn.speed = 75.0f;
-            spawn.angle = MathHelper.PiOver2;
-            spawn.deathTimeTotalSeconds = 0;
-
-            for (int i = 0; i < seekers.Length; i++)
+            if (this.random.Next(1, 16) == 8)
             {
-                if (seekers[i].status == ObjectStatus.Inactive)
+                PowerUpType powerUpType = (PowerUpType)Enum.ToObject(typeof(PowerUpType), this.random.Next(0, Enum.GetNames(typeof(PowerUpType)).Length));
+                switch (powerUpType)
                 {
-                    seekers[i] = spawn;
-                    break;
-                }
-            }        
-        }
-*/
+                    case PowerUpType.live:
+                        PowerUpList.Add(new PowerUp(livePowerUp, heart, zombie.entity.Position, PowerUpType.live));
+                        break;
 
-        public void SpawnZombie()
-        {
-            /*
-            ZombieState spawn = new ZombieState();
-            float RandomX;
-            float RandomY;
-            //spawn.position = Vector2.One * 100;
-            spawn.status = ObjectStatus.Active;
-            spawn.speed = 35.0f;
-            spawn.angle = MathHelper.PiOver2;
-            spawn.deathTimeTotalSeconds = 0;
+                    case PowerUpType.machinegun:
+                        PowerUpList.Add(new PowerUp(machinegunAmmoPowerUp, pistolammoUI, zombie.entity.Position, PowerUpType.machinegun));
+                        break;
 
-            for (int i = 0; i < zombies.Length; i++)
-            {
-                if (zombies[i].status == ObjectStatus.Inactive)
-                {
-                    RandomX = random.Next(10,1270);
-                    RandomY = random.Next(10, 710);
-                    spawn.entity = new SteeringEntity();
-                    spawn.entity.Position = new Vector2(RandomX, RandomY);
-                    zombies[i] = spawn;
-                    break;
-                }
-            }*/
-        }
+                    case PowerUpType.flamethrower:
+                        PowerUpList.Add(new PowerUp(flamethrowerAmmoPowerUp, flamethrowerammoUI, zombie.entity.Position, PowerUpType.flamethrower));
+                        break;
 
-        public void SpawnTank()
-        {
-/*
-            TankState spawn = new TankState();
-            float RandomX;
-            float RandomY;
-            //spawn.position = Vector2.One * 100;
-            spawn.status = ObjectStatus.Active;
-            spawn.speed = 75.0f;
-            spawn.angle = MathHelper.PiOver2;
-            spawn.deathTimeTotalSeconds = 0;
+                    case PowerUpType.extralife:
+                        PowerUpList.Add(new PowerUp(extraLivePowerUp, extraLivePowerUp, zombie.entity.Position, PowerUpType.extralife));
+                        break;
 
-            for (int i = 0; i < tanks.Length; i++)
-            {
-                if (tanks[i].status == ObjectStatus.Inactive)
-                {
-                    RandomX = random.Next(10, 1270);
-                    RandomY = random.Next(10, 710);
-                    spawn.position = new Vector2(RandomX, RandomY);
-                    tanks[i] = spawn;
-                    break;
+                    case PowerUpType.shotgun:
+                        PowerUpList.Add(new PowerUp(shotgunAmmoPowerUp, shotgunammoUI, zombie.entity.Position, PowerUpType.shotgun));
+                        break;
+
+                    case PowerUpType.grenade:
+                        PowerUpList.Add(new PowerUp(grenadeammoUI, grenadeammoUI, zombie.entity.Position, PowerUpType.grenade));
+                        break;
+
+                    case PowerUpType.speedbuff:
+                        PowerUpList.Add(new PowerUp(livePowerUp, heart, zombie.entity.Position, PowerUpType.speedbuff));
+                        break;
+
+                    case PowerUpType.immunebuff:
+                        PowerUpList.Add(new PowerUp(immunePowerUp, immunePowerUp, zombie.entity.Position, PowerUpType.immunebuff));
+                        break;
+
+                    default:
+                        PowerUpList.Add(new PowerUp(livePowerUp, heart, zombie.entity.Position, PowerUpType.live));
+                        break;
                 }
             }
- */
         }
-
-        public void Update(float totalGameSeconds)
-        {
-            ActiveEnemies = 0;
-            /*
-            for (int i = 0; i < waves.Length; i++)
-            {
-                UpdateBasic(totalGameSeconds, ref waves[i]);
-                //if (waves[i].status == ObjectStatus.Active)
-                if (waves[i].status != ObjectStatus.Inactive)
-                    ActiveEnemies++;
-            } 
-             */
-
-            for (int i = 0; i < zombies.Length; i++)
-            {
-                UpdateZombies(totalGameSeconds, ref zombies[i]);
-                if (zombies[i].status != ObjectStatus.Inactive)
-                    ActiveEnemies++;
-            } 
-        }
-
-        private static void UpdateZombies(float totalGameSeconds, ref ZombieState enemy)
-        {
-            switch (enemy.status)
-            {
-                case ObjectStatus.Inactive:
-                    break;
-                case ObjectStatus.Active:
-                    // Reset enemies that went offscreen
-                    /*
-                    if ((enemy.startTimeTotalSeconds + enemy.TimeOnScreen) <
-                        totalGameSeconds)
-                    {
-                        enemy.startTimeTotalSeconds = totalGameSeconds;
-                    }*/
-                    break;
-                case ObjectStatus.Dying:
-                    /*
-                    if ((enemy.deathTimeTotalSeconds + ZombieInfo.TimeToDie) <
-                        totalGameSeconds)
-                    {
-                        enemy.status = ObjectStatus.Inactive;
-                    }*/
-                    break;
-                default:
-                    break;
-            }
-
-        }
-
-
-/*
-        private static void UpdateBasic(float totalGameSeconds, ref EnemyState enemy)
-        {
-            switch (enemy.status)
-            {
-                case ObjectStatus.Inactive:
-                    break;
-                case ObjectStatus.Active:
-                    // Reset enemies that went offscreen
-                    if ((enemy.startTimeTotalSeconds + enemy.TimeOnScreen) <
-                        totalGameSeconds)
-                    {
-                        enemy.startTimeTotalSeconds = totalGameSeconds;
-                    }
-                    break;
-                case ObjectStatus.Dying:
-                    if ((enemy.deathTimeTotalSeconds + ZombieInfo.TimeToDie) <
-                        totalGameSeconds)
-                    {
-                        enemy.status = ObjectStatus.Inactive;
-                    }
-                    break;
-                default:
-                    break;
-            }
-
-        }
-
-        public void DestroyEnemy(float totalGameSeconds, byte index)
-        {
-            waves[index].deathTimeTotalSeconds = totalGameSeconds;
-            waves[index].status = ObjectStatus.Dying;
-        }
-
-        public void DestroySeeker(float totalGameSeconds, byte index)
-        {
-            seekers[index].deathTimeTotalSeconds = totalGameSeconds;
-            seekers[index].status = ObjectStatus.Dying;
-        }
-
-        // Destroy the seeker without leaving a powerup
-        public void CrashSeeker(float totalGameSeconds, byte index)
-        {
-            seekers[index].deathTimeTotalSeconds = totalGameSeconds;
-            seekers[index].status = ObjectStatus.Inactive;
-        }
-*/
-        public void DestroyZombie(float totalGameSeconds, byte index)
-        {
-            zombies[index].deathTimeTotalSeconds = totalGameSeconds;
-            zombies[index].status = ObjectStatus.Dying;
-        }
-
-        // Destroy the seeker without leaving a powerup
-        public void CrashZombie(float totalGameSeconds, byte index)
-        {
-            zombies[index].deathTimeTotalSeconds = totalGameSeconds;
-            zombies[index].status = ObjectStatus.Inactive;
-        }
-
-        // Destroy the seeker without leaving a powerup
-        public void CrashTank(float totalGameSeconds, byte index)
-        {
-            tanks[index].deathTimeTotalSeconds = totalGameSeconds;
-            tanks[index].status = ObjectStatus.Inactive;
-        }
-/*
-        public static EnemyInfo GetInfoForType(EnemyType type)
-        {
-            switch (type)
-            {
-
-                case EnemyType.Basic:
-                    return BasicInfo;
-                case EnemyType.Looper:
-                    return LooperInfo;
-                case EnemyType.Seeker:
-                    return SeekerInfo;
-
-                case EnemyType.Zombie:
-                    return ZombieInfo;
-                case EnemyType.Tank:
-                    return TankInfo;
-            }
-            return ZombieInfo;
-        }
-
-        public static Vector2 GetPosition(float totalGameSeconds, ZombieState enemy)
-        {
-            float elapsed;
-            if (enemy.deathTimeTotalSeconds == 0)
-                elapsed = (totalGameSeconds - enemy.startTimeTotalSeconds);
-            else
-                elapsed = (enemy.deathTimeTotalSeconds - enemy.startTimeTotalSeconds);
-
-            Vector2 pos;
-
-            switch (enemy.type)
-            {
-
-                case EnemyType.Basic:
-                    pos = GetPosition(elapsed / enemy.TimeOnScreen, BasicInfo);
-                    if (enemy.invert)
-                    {
-
-                        pos.X = BasicInfo.ScreenBounds.Width - pos.X;
-                    }
-                    return pos;
-                case EnemyType.Looper:
-                    pos = GetPosition(elapsed / enemy.TimeOnScreen, LooperInfo);
-                    if (enemy.invert)
-                    {
-                        pos.X = LooperInfo.ScreenBounds.Width - pos.X;
-                    }
-                    return pos;
-                case EnemyType.Seeker:
-                    break;
-
-                case EnemyType.Zombie:
-                    break;
-                case EnemyType.Tank:
-                    break;
-                default:
-                    break;
-            }
-            return Vector2.Zero;
-        }
-
-        public static Vector2 GetPosition(float position, EnemyInfo info)
-        {
-            Vector2 pos = Vector2.Zero;
-            pos.Y = info.YCurve.Evaluate(position) * info.ScreenBounds.Height;
-            pos.X = info.XCurve.Evaluate(position) * info.ScreenBounds.Width;
-            return pos;
-        }
-*/
-
-
     }
 }

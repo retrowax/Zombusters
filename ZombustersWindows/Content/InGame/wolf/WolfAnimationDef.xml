@@ -1,0 +1,37 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Animations>
+  <WolfGrowlDef FrameWidth="80" FrameHeight="48"
+              SheetRows="1" SheetColumns="2"
+              Speed="10"
+              SheetName="wolfgrowl"/>
+
+  <WolfDeathDef FrameWidth="80" FrameHeight="48"
+              SheetRows="1" SheetColumns="6"
+              Speed="10"
+              SheetName="wolfdeath"/>
+
+  <WolfHitDef FrameWidth="80" FrameHeight="48"
+              SheetRows="1" SheetColumns="1"
+              Speed="15"
+              SheetName="wolfhit"/>
+              
+  <WolfJumpAttackMoveDef FrameWidth="80" FrameHeight="48"
+              SheetRows="1" SheetColumns="6"
+              Speed="15"
+              SheetName="woljumpattackmove"/>
+    
+  <WolfJumpAttackNoMoveDef FrameWidth="80" FrameHeight="48"
+              SheetRows="1" SheetColumns="6"
+              Speed="15"
+              SheetName="wolfjumpattacknomove"/>
+    
+  <WolfIdleDef FrameWidth="80" FrameHeight="48"
+              SheetRows="1" SheetColumns="8"
+              Speed="15"
+              SheetName="wolfidle"/>
+
+  <WolfRunDef FrameWidth="80" FrameHeight="48"
+              SheetRows="1" SheetColumns="6"
+              Speed="15"
+              SheetName="wolfrun"/>
+</Animations>

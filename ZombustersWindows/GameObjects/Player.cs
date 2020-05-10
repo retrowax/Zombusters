@@ -191,5 +191,31 @@ namespace ZombustersWindows
                 }
             }
         }
+
+        public void Destroy()
+        {
+            avatar.DestroyAvatar(game.totalGameSeconds);
+            avatar.lives--;
+            if (avatar.character == 0)
+            {
+                game.audio.PlayWomanScream();
+            }
+            else
+            {
+                game.audio.PlayManScream();
+            }
+
+            if (avatar.lives == 0)
+            {
+                if (avatar.IsPlayingTheGame)
+                {
+                    if (game.topScoreListContainer != null && avatar.score > 250)
+                    {
+                        SaveLeaderBoard();
+                        //SaveGame(Level.getLevelNumber(currentLevel));
+                    }
+                }
+            }
+        }
     }
 }

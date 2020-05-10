@@ -39,7 +39,6 @@ namespace ZombustersWindows
         private LevelType currentLevel;
         private SubLevel.SubLevelType currentSublevel;
 
-        public Texture2D livePowerUp, extraLivePowerUp, shotgunAmmoPowerUp, machinegunAmmoPowerUp, flamethrowerAmmoPowerUp, immunePowerUp, heart, shotgunammoUI, pistolammoUI, grenadeammoUI, flamethrowerammoUI;
         Texture2D bullet;
         Vector2 bulletorigin;
         Texture2D flamethrowerTexture;
@@ -69,19 +68,18 @@ namespace ZombustersWindows
         Texture2D left_thumbstick;
         Texture2D right_thumbstick;
 
-        public Random random;
+        public Random random = new Random(16);
         private float timer, timerplayer;
         private int subLevelIndex;
 
-        public List<TankState> Tanks;
-        public List<ZombieState> Zombies;
-        public List<PowerUp> PowerUpList;
+        public Enemies enemies;
         public GameplayState GamePlayStatus = GameplayState.NotPlaying;
 
         public GamePlayScreen(MyGame game, LevelType startingLevel, SubLevel.SubLevelType startingSublevel)
             : base()
         {
             this.game = game;
+            enemies = new Enemies(ref game);
             this.currentLevel = startingLevel;
             this.currentSublevel = startingSublevel;
 #if DEBUG
@@ -99,20 +97,6 @@ namespace ZombustersWindows
         {
             get { return activeSeekers; }
             set { activeSeekers = value; }
-        }
-
-        private int activeZombies;
-        public int ActiveZombies
-        {
-            get { return activeZombies; }
-            set { activeZombies = value; }
-        }
-
-        private int activeTanks;
-        public int ActiveTanks
-        {
-            get { return activeTanks; }
-            set { activeTanks = value; }
         }
 
         void GameplayMenuCanceled(Object sender, MenuSelection selection)
@@ -201,11 +185,6 @@ namespace ZombustersWindows
 
         public override void Initialize()
         {
-            Zombies = new List<ZombieState>();
-            Tanks = new List<TankState>();
-            this.random = new Random(16);
-
-            PowerUpList = new List<PowerUp>();
             GamePlayStatus = GameplayState.StartLevel;
             uiBounds = GetTitleSafeArea();
             Level = new Level(currentLevel);
@@ -283,9 +262,8 @@ namespace ZombustersWindows
 
             FontsLoad();
             UIStatsLoad();
-            PowerUpsLoad();
             UIComponentsLoad();
-            EnemiesLoad();
+            enemies.LoadContent(game.Content);
             FurnitureLoad();
 
             base.LoadContent();
@@ -475,15 +453,7 @@ namespace ZombustersWindows
                     UpdatePlayersAnimations(gameTime);
                     flamethrowerAnimation.Update(gameTime);
 
-                    foreach (ZombieState zombie in Zombies)
-                    {
-                        zombie.Update(gameTime, game, Zombies);
-                    }
-
-                    foreach (TankState tank in Tanks)
-                    {
-                        tank.Update(gameTime, game);
-                    }
+                    enemies.Update(ref gameTime, game);
 
                     foreach (Player player in game.players)
                     {
@@ -511,21 +481,7 @@ namespace ZombustersWindows
                         }
                     }
 
-                    foreach (ZombieState zombie in Zombies)
-                    {
-                        if (zombie.status == ObjectStatus.Dying)
-                        {
-                            zombie.Update(gameTime, game, Zombies);
-                        }
-                    }
-
-                    foreach (TankState tank in Tanks)
-                    {
-                        if (tank.status == ObjectStatus.Dying)
-                        {
-                            tank.Update(gameTime, game);
-                        }
-                    }
+                    enemies.Update(ref gameTime, game);
 
                     ChangeGamplayStatusAfterSomeTimeTo(gameTime, GameplayState.StartLevel);
                 }
@@ -585,10 +541,7 @@ namespace ZombustersWindows
                     }
                 }
 
-                foreach (PowerUp powerup in PowerUpList)
-                {
-                    powerup.Update(gameTime);
-                }
+                enemies.Update(ref gameTime, game);
 
                 foreach (Furniture furniture in Level.furnitureList)
                 {
@@ -757,298 +710,19 @@ namespace ZombustersWindows
             accumFire = Vector2.Zero;
         }
 
-        private bool PowerUpIsInRange(ZombieState zombie)
-        {
-            Rectangle ScreenBounds;
-            ScreenBounds = new Rectangle(game.GraphicsDevice.Viewport.X + 60, 60, game.GraphicsDevice.Viewport.Width - 60, game.GraphicsDevice.Viewport.Height - 55);
-            if (ScreenBounds.Intersects(new Rectangle(Convert.ToInt32(zombie.entity.Position.X), Convert.ToInt32(zombie.entity.Position.Y), zombie.ZombieTexture.Width, zombie.ZombieTexture.Height)))
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-        }
-
-        private void SpawnPowerUp(ZombieState zombie)
-        {
-            if (this.random.Next(1, 16) == 8)
-            {
-                PowerUpType powerUpType = (PowerUpType)Enum.ToObject(typeof(PowerUpType), this.random.Next(0, Enum.GetNames(typeof(PowerUpType)).Length));
-                switch (powerUpType)
-                {
-                    case PowerUpType.live:
-                        PowerUpList.Add(new PowerUp(livePowerUp, heart, zombie.entity.Position, PowerUpType.live));
-                        break;
-
-                    case PowerUpType.machinegun:
-                        PowerUpList.Add(new PowerUp(machinegunAmmoPowerUp, pistolammoUI, zombie.entity.Position, PowerUpType.machinegun));
-                        break;
-
-                    case PowerUpType.flamethrower:
-                        PowerUpList.Add(new PowerUp(flamethrowerAmmoPowerUp, flamethrowerammoUI, zombie.entity.Position, PowerUpType.flamethrower));
-                        break;
-
-                    case PowerUpType.extralife:
-                        PowerUpList.Add(new PowerUp(extraLivePowerUp, extraLivePowerUp, zombie.entity.Position, PowerUpType.extralife));
-                        break;
-
-                    case PowerUpType.shotgun:
-                        PowerUpList.Add(new PowerUp(shotgunAmmoPowerUp, shotgunammoUI, zombie.entity.Position, PowerUpType.shotgun));
-                        break;
-
-                    case PowerUpType.grenade:
-                        PowerUpList.Add(new PowerUp(grenadeammoUI, grenadeammoUI, zombie.entity.Position, PowerUpType.grenade));
-                        break;
-
-                    case PowerUpType.speedbuff:
-                        PowerUpList.Add(new PowerUp(livePowerUp, heart, zombie.entity.Position, PowerUpType.speedbuff));
-                        break;
-
-                    case PowerUpType.immunebuff:
-                        PowerUpList.Add(new PowerUp(immunePowerUp, immunePowerUp, zombie.entity.Position, PowerUpType.immunebuff));
-                        break;
-
-                    default:
-                        PowerUpList.Add(new PowerUp(livePowerUp, heart, zombie.entity.Position, PowerUpType.live));
-                        break;
-                }
-            }
-        }
-
         public void HandleCollisions(Player player, float totalGameSeconds)
         {
             if (player.avatar.status == ObjectStatus.Inactive)
                 return;
 
-            HandleZombieCollisions(player, totalGameSeconds);
-            HandleTankCollisions(player, totalGameSeconds);
-            HandlePowerUpCollisions(player);
-        }
+            enemies.HandleCollisions(player, totalGameSeconds);
 
-        private void HandlePowerUpCollisions(Player player)
-        {
-            foreach (PowerUp powerUp in PowerUpList)
-            {
-                if (powerUp.status == ObjectStatus.Active)
-                {
-                    if (GameplayHelper.DetectCrash(player.avatar, powerUp.Position))
-                    {
-                        if (powerUp.powerUpType == PowerUpType.extralife)
-                        {
-                            IncreaseLife(player);
-                            powerUp.status = ObjectStatus.Dying;
-                        }
-
-                        if (powerUp.powerUpType == PowerUpType.live)
-                        {
-                            if (player.avatar.lifecounter < 100)
-                            {
-                                player.avatar.lifecounter += powerUp.Value;
-
-                                if (player.avatar.lifecounter > 100)
-                                {
-                                    player.avatar.lifecounter = 100;
-                                }
-                            }
-
-                            powerUp.status = ObjectStatus.Dying;
-                        }
-
-                        if (powerUp.powerUpType == PowerUpType.machinegun)
-                        {
-                            player.avatar.ammo[(int)GunType.machinegun] += powerUp.Value;
-                            powerUp.status = ObjectStatus.Dying;
-
-                        }
-
-                        if (powerUp.powerUpType == PowerUpType.shotgun)
-                        {
-                            player.avatar.ammo[(int)GunType.shotgun] += powerUp.Value;
-                            powerUp.status = ObjectStatus.Dying;
-
-                        }
-
-                        if (powerUp.powerUpType == PowerUpType.grenade)
-                        {
-                            player.avatar.ammo[(int)GunType.grenade] += powerUp.Value;
-                            powerUp.status = ObjectStatus.Dying;
-
-                        }
-
-                        if (powerUp.powerUpType == PowerUpType.flamethrower)
-                        {
-                            player.avatar.ammo[(int)GunType.flamethrower] += powerUp.Value;
-                            powerUp.status = ObjectStatus.Dying;
-
-                        }
-
-                        if (powerUp.powerUpType == PowerUpType.speedbuff || powerUp.powerUpType == PowerUpType.immunebuff)
-                        {
-                            //player. += powerup.Value;
-                            powerUp.status = ObjectStatus.Dying;
-                        }
-                    }
-                }
-            }
-        }
-
-        private void HandleTankCollisions(Player player, float totalGameSeconds)
-        {
-            for (int i = 0; i < Tanks.Count; i++)
-            {
-                TankState tank = Tanks[i];
-                if (tank.status == ObjectStatus.Active)
-                {
-                    for (int l = 0; l < player.avatar.bullets.Count; l++)
-                    {
-                        if (GameplayHelper.DetectCollision(player.avatar.bullets[l], tank.entity.Position, totalGameSeconds))
-                        {
-                            TankDestroyed(tank, player);
-                            player.avatar.bullets.RemoveAt(l);
-                        }
-                    }
-                }
-            }
-        }
-
-        private void HandleZombieCollisions(Player player, float totalGameSeconds)
-        {
-            for (int i = 0; i < Zombies.Count; i++)
-            {
-                ZombieState zombie = Zombies[i];
-                if (zombie.status == ObjectStatus.Active)
-                {
-                    if (player.avatar.currentgun == GunType.flamethrower && player.avatar.ammo[(int)player.avatar.currentgun] > 0)
-                    {
-                        if (player.avatar.accumFire.Length() > .5)
-                        {
-                            if (player.avatar.FlameThrowerRectangle.Intersects(new Rectangle((int)zombie.entity.Position.X, (int)zombie.entity.Position.Y, 48, (int)zombie.entity.Height)))
-                            {
-                                if (zombie.lifecounter > 1.0f)
-                                {
-                                    zombie.lifecounter -= 0.2f;
-                                    zombie.isLoosingLife = true;
-                                }
-                                else
-                                {
-                                    ZombieDestroyed(zombie, player);
-                                    if (PowerUpIsInRange(zombie))
-                                    {
-                                        SpawnPowerUp(zombie);
-                                    }
-                                }
-                            }
-                        }
-                    }
-                    else
-                    {
-                        for (int l = 0; l < player.avatar.bullets.Count; l++)
-                        {
-                            if (GameplayHelper.DetectCollision(player.avatar.bullets[l], zombie.entity.Position, totalGameSeconds))
-                            {
-                                if (zombie.lifecounter > 1.0f)
-                                {
-                                    zombie.lifecounter -= 1.0f;
-                                    zombie.isLoosingLife = true;
-                                    player.avatar.bullets.RemoveAt(l);
-                                }
-                                else
-                                {
-                                    ZombieDestroyed(zombie, player);
-                                    player.avatar.bullets.RemoveAt(l);
-                                    if (PowerUpIsInRange(zombie))
-                                    {
-                                        SpawnPowerUp(zombie);
-                                    }
-                                }
-                            }
-                        }
-
-                        for (int bulletCount = 0; bulletCount < player.avatar.shotgunbullets.Count; bulletCount++)
-                        {
-                            for (int pelletCount = 0; pelletCount < player.avatar.shotgunbullets[bulletCount].Pellet.Count; pelletCount++)
-                            {
-                                if (GameplayHelper.DetectCollision(player.avatar.shotgunbullets[bulletCount].Pellet[pelletCount], zombie.entity.Position, totalGameSeconds))
-                                {
-                                    player.avatar.shotgunbullets[bulletCount].Pellet.RemoveAt(pelletCount);
-                                    if (zombie.lifecounter > 1.0f)
-                                    {
-                                        zombie.lifecounter -= 1.0f;
-                                        zombie.isLoosingLife = true;
-                                    }
-                                    else
-                                    {
-                                        ZombieDestroyed(zombie, player);
-
-                                        if (PowerUpIsInRange(zombie))
-                                        {
-                                            SpawnPowerUp(zombie);
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-
-                if (GameplayHelper.DetectCrash(player.avatar, zombie.entity.Position))
-                {
-                    if (zombie.status == ObjectStatus.Active)
-                    {
-                        if (player.avatar.lifecounter <= 0)
-                        {
-                            DestroyPlayer(player);
-                            player.avatar.lifecounter = 100;
-                        }
-                        else
-                        {
-                            player.avatar.isLoosingLife = true;
-                            player.avatar.lifecounter -= 1;
-                        }
-                    }
-                }
-            }
-        }
-
-        private void DestroyPlayer(Player player)
-        {
-            int i;
-            int livesleft = 0;
-            if (player.avatar.lives <= 1 && player.avatar.status == ObjectStatus.Inactive)
-            {
-                GameOver(player);
-            }
-            else
-            {
-                PlayerDestroyed(player);
-            }
-
-            for (i = 0; i < game.players.Length; i++)
-            {
-                if (game.players[i].avatar.lives > 0 && (game.players[i].avatar.status != ObjectStatus.Inactive))
-                {
-                    livesleft++;
-                }
-            }
-
-            if (livesleft == 0)
-            {
+            if (player.avatar.lives == 0) {
                 GamePlayStatus = GameplayState.GameOver;
                 this.ScreenManager.AddScreen(gomenu);
-
-                if (player.avatar.IsPlayingTheGame)
-                {
-                    if (game.topScoreListContainer != null && player.avatar.score > 250)
-                    {
-                        player.SaveLeaderBoard();
-                        player.SaveGame(Level.getLevelNumber(currentLevel));
-                    }
-                }
             }
         }
-
+        
         private void TryMove(Player player)
         {
             bool collision = false;
@@ -1143,7 +817,7 @@ namespace ZombustersWindows
 
         public Boolean CheckIfStageCleared()
         {
-            int enemiesLeft = ActiveZombies + ActiveTanks;
+            int enemiesLeft = enemies.Count();
 
             if (enemiesLeft <= 0)
             {
@@ -1157,8 +831,6 @@ namespace ZombustersWindows
 
         public void StartNewLevel(bool restartLevel, bool restartWave)
         {
-            int i, RandomX, RandomY;
-            int RandomSpawnZone;
             int howManySpawnZones = 4;
             List<int> numplayersIngame = new List<int>();
             float zombielife, speed;
@@ -1197,7 +869,7 @@ namespace ZombustersWindows
                             lIndex -= 0.004f;
                         }
 
-                        for (i = 0; i < game.players.Length - 1; i++)
+                        for (int i = 0; i < game.players.Length - 1; i++)
                         {
                             game.players[i].avatar.position = Level.PlayerSpawnPosition[i];
                             game.players[i].avatar.entity.Position = Level.PlayerSpawnPosition[i];
@@ -1224,20 +896,19 @@ namespace ZombustersWindows
                     subLevelIndex = 0;
                 }
 
-                for (i = 0; i < game.players.Length; i++)
+                for (int i = 0; i < game.players.Length; i++)
                 {
                     game.players[i].avatar.position = Level.PlayerSpawnPosition[i];
                     game.players[i].avatar.entity.Position = Level.PlayerSpawnPosition[i];
                 }
             }
 
-            Zombies.Clear();
-            Tanks.Clear();
+            enemies.Clear();
 
             if (currentLevel != LevelType.EndGame && currentLevel != LevelType.EndDemo)
             {
 
-                for (i = 0; i < game.players.Length; i++)
+                for (int i = 0; i < game.players.Length; i++)
                 {
                     game.players[i].avatar.behaviors.AddBehavior(new ObstacleAvoidance(ref Level.gameWorld, 15.0f));
                     if (game.players[i].avatar.status == ObjectStatus.Active || game.players[i].avatar.status == ObjectStatus.Immune)
@@ -1283,10 +954,7 @@ namespace ZombustersWindows
                         break;
                 }
 
-                ActiveZombies = 0;
-                ActiveTanks = 0;
-
-                for (i = 0; i < Level.ZombieSpawnZones.Count - 1; i++)
+                for (int i = 0; i < Level.ZombieSpawnZones.Count - 1; i++)
                 {
                     if (Level.ZombieSpawnZones[i].X == 0 && Level.ZombieSpawnZones[i].Y == 0 && Level.ZombieSpawnZones[i].Z == 0 && Level.ZombieSpawnZones[i].W == 0)
                     {
@@ -1342,42 +1010,57 @@ namespace ZombustersWindows
                         break;
                 }
 
-                for (i = 0; i < Level.subLevelList[subLevelIndex].enemies.Zombies; i++)
-                {
-                    RandomSpawnZone = this.random.Next(0, howManySpawnZones - 1);
-                    RandomX = this.random.Next(Convert.ToInt32(Level.ZombieSpawnZones[RandomSpawnZone].X), Convert.ToInt32(Level.ZombieSpawnZones[RandomSpawnZone].Y));
-                    RandomY = this.random.Next(Convert.ToInt32(Level.ZombieSpawnZones[RandomSpawnZone].Z), Convert.ToInt32(Level.ZombieSpawnZones[RandomSpawnZone].W));
-                    float subspeed = subLevelIndex / 10;
-                    Zombies.Add(new ZombieState(game.Content.Load<Texture2D>(@"InGame/zombie" + this.random.Next(1, 6).ToString()), new Vector2(0, 0), new Vector2(RandomX, RandomY), 5.0f, zombielife, speed + subspeed));
-                    Zombies[i].behaviors.AddBehavior(new Pursuit(Arrive.Deceleration.fast, 50.0f));
-                    Zombies[i].behaviors.AddBehavior(new ObstacleAvoidance(ref Level.gameWorld, 15.0f));
+                enemies.InitializeEnemy(
+                    Level.subLevelList[subLevelIndex].enemies.Zombies,
+                    EnemyType.Zombie,
+                    Level,
+                    subLevelIndex,
+                    zombielife,
+                    speed,
+                    numplayersIngame
+                );
 
-                    Zombies[i].playerChased = numplayersIngame[this.random.Next(numplayersIngame.Count)];
-                    ActiveZombies++;
-                }
+                enemies.InitializeEnemy(
+                    Level.subLevelList[subLevelIndex].enemies.Tanks,
+                    EnemyType.Tank,
+                    Level,
+                    subLevelIndex,
+                    zombielife,
+                    speed,
+                    numplayersIngame
+                );
 
-                for (i = 0; i < Level.subLevelList[subLevelIndex].enemies.Tanks; i++)
-                {
-                    RandomSpawnZone = this.random.Next(0, howManySpawnZones - 1);
-                    RandomX = this.random.Next(Convert.ToInt32(Level.ZombieSpawnZones[RandomSpawnZone].X), Convert.ToInt32(Level.ZombieSpawnZones[RandomSpawnZone].Y));
-                    RandomY = this.random.Next(Convert.ToInt32(Level.ZombieSpawnZones[RandomSpawnZone].Z), Convert.ToInt32(Level.ZombieSpawnZones[RandomSpawnZone].W));
-                    Tanks.Add(new TankState(game.Content.Load<Texture2D>(@"InGame/tank"), new Vector2(0, 0), new Vector2(RandomX, RandomY), 5.0f));
-                    Tanks[i].behaviors.AddBehavior(new Pursuit(Arrive.Deceleration.fast, 50.0f));
-                    Tanks[i].behaviors.AddBehavior(new ObstacleAvoidance(ref Level.gameWorld, 15.0f));
+                enemies.InitializeEnemy(
+                    Level.subLevelList[subLevelIndex].enemies.Rats,
+                    EnemyType.Rat,
+                    Level,
+                    subLevelIndex,
+                    zombielife,
+                    speed,
+                    numplayersIngame
+                );
 
-                    Zombies[i].playerChased = numplayersIngame[this.random.Next(numplayersIngame.Count)];
-                    ActiveTanks++;
-                }
+                enemies.InitializeEnemy(
+                    Level.subLevelList[subLevelIndex].enemies.Wolfs,
+                    EnemyType.Wolf,
+                    Level,
+                    subLevelIndex,
+                    zombielife,
+                    speed,
+                    numplayersIngame
+                );
 
-                foreach (ZombieState zombie in Zombies)
-                {
-                    zombie.LoadContent(game.Content);
-                }
+                enemies.InitializeEnemy(
+                    Level.subLevelList[subLevelIndex].enemies.Minotaurs,
+                    EnemyType.Minotaur,
+                    Level,
+                    subLevelIndex,
+                    zombielife,
+                    speed,
+                    numplayersIngame
+                );
 
-                foreach (TankState tank in Tanks)
-                {
-                    tank.LoadContent(game.Content);
-                }
+                enemies.LoadContent(game.Content);
             }
         }
 
@@ -1392,10 +1075,7 @@ namespace ZombustersWindows
 
                 DrawMap(Map);
 
-                foreach (PowerUp powerup in PowerUpList)
-                {
-                    powerup.Draw(this.ScreenManager.SpriteBatch, gameTime, MenuInfoFont);
-                }
+                
 
                 this.ScreenManager.SpriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend);
 
@@ -1409,34 +1089,12 @@ namespace ZombustersWindows
 
                 if (GamePlayStatus == GameplayState.StartLevel || GamePlayStatus == GameplayState.Playing || GamePlayStatus == GameplayState.Pause)
                 {
-                    foreach (ZombieState zombie in Zombies)
-                    {
-                        zombie.Draw(this.ScreenManager.SpriteBatch, game.totalGameSeconds, MenuInfoFont, Level.furnitureList, gameTime);
-                    }
-
-                    foreach (TankState tank in Tanks)
-                    {
-                        tank.Draw(this.ScreenManager.SpriteBatch, game.totalGameSeconds, MenuInfoFont, Level.furnitureList);
-                    }
+                    enemies.Draw(this.ScreenManager.SpriteBatch, game.totalGameSeconds, Level.furnitureList, gameTime);
                 }
 
                 if (GamePlayStatus == GameplayState.StageCleared)
                 {
-                    foreach (ZombieState zombie in Zombies)
-                    {
-                        if (zombie.status == ObjectStatus.Dying)
-                        {
-                            zombie.Draw(this.ScreenManager.SpriteBatch, game.totalGameSeconds, MenuInfoFont, Level.furnitureList, gameTime);
-                        }
-                    }
-
-                    foreach (TankState tank in Tanks)
-                    {
-                        if (tank.status == ObjectStatus.Dying)
-                        {
-                            tank.Draw(this.ScreenManager.SpriteBatch, game.totalGameSeconds, MenuInfoFont, Level.furnitureList);
-                        }
-                    }
+                    enemies.Draw(this.ScreenManager.SpriteBatch, game.totalGameSeconds, Level.furnitureList, gameTime);
                 }
 
                 foreach (Furniture furniture in Level.furnitureList)
@@ -2923,30 +2581,30 @@ namespace ZombustersWindows
                             batch.DrawString(arcade28, player.avatar.lives.ToString(), new Vector2(Pos.X + 60, Pos.Y), Color.White);
 
                             // Draw Player Life Counter
-                            batch.Draw(heart, new Vector2(Pos.X + 120, Pos.Y + 3), Color.White);
-                            batch.DrawString(arcade14, player.avatar.lifecounter.ToString("000"), new Vector2(Pos.X + heart.Width + 125, Pos.Y), Color.White);
+                            batch.Draw(enemies.heart, new Vector2(Pos.X + 120, Pos.Y + 3), Color.White);
+                            batch.DrawString(arcade14, player.avatar.lifecounter.ToString("000"), new Vector2(Pos.X + enemies.heart.Width + 125, Pos.Y), Color.White);
 
                             switch (player.avatar.currentgun)
                             {
                                 case GunType.machinegun:
-                                    batch.Draw(pistolammoUI, new Vector2(Pos.X + 124, Pos.Y + 23), Color.White);
-                                    batch.DrawString(arcade14, player.avatar.ammo[(int)GunType.machinegun].ToString("000"), new Vector2(Pos.X + heart.Width + 125, Pos.Y + 20), Color.White);
+                                    batch.Draw(enemies.pistolammoUI, new Vector2(Pos.X + 124, Pos.Y + 23), Color.White);
+                                    batch.DrawString(arcade14, player.avatar.ammo[(int)GunType.machinegun].ToString("000"), new Vector2(Pos.X + enemies.heart.Width + 125, Pos.Y + 20), Color.White);
                                     break;
                                 case GunType.shotgun:
-                                    batch.Draw(shotgunammoUI, new Vector2(Pos.X + 123, Pos.Y + 22), Color.White);
-                                    batch.DrawString(arcade14, player.avatar.ammo[(int)GunType.shotgun].ToString("000"), new Vector2(Pos.X + heart.Width + 125, Pos.Y + 20), Color.White);
+                                    batch.Draw(enemies.shotgunammoUI, new Vector2(Pos.X + 123, Pos.Y + 22), Color.White);
+                                    batch.DrawString(arcade14, player.avatar.ammo[(int)GunType.shotgun].ToString("000"), new Vector2(Pos.X + enemies.heart.Width + 125, Pos.Y + 20), Color.White);
                                     break;
                                 case GunType.grenade:
-                                    batch.Draw(grenadeammoUI, new Vector2(Pos.X + 122, Pos.Y + 21), Color.White);
-                                    batch.DrawString(arcade14, player.avatar.ammo[(int)GunType.grenade].ToString("000"), new Vector2(Pos.X + heart.Width + 125, Pos.Y + 20), Color.White);
+                                    batch.Draw(enemies.grenadeammoUI, new Vector2(Pos.X + 122, Pos.Y + 21), Color.White);
+                                    batch.DrawString(arcade14, player.avatar.ammo[(int)GunType.grenade].ToString("000"), new Vector2(Pos.X + enemies.heart.Width + 125, Pos.Y + 20), Color.White);
                                     break;
                                 case GunType.flamethrower:
-                                    batch.Draw(flamethrowerammoUI, new Vector2(Pos.X + 124, Pos.Y + 23), Color.White);
-                                    batch.DrawString(arcade14, player.avatar.ammo[(int)GunType.flamethrower].ToString("000"), new Vector2(Pos.X + heart.Width + 125, Pos.Y + 20), Color.White);
+                                    batch.Draw(enemies.flamethrowerammoUI, new Vector2(Pos.X + 124, Pos.Y + 23), Color.White);
+                                    batch.DrawString(arcade14, player.avatar.ammo[(int)GunType.flamethrower].ToString("000"), new Vector2(Pos.X + enemies.heart.Width + 125, Pos.Y + 20), Color.White);
                                     break;
                                 case GunType.pistol:
                                 default:
-                                    batch.DrawString(arcade14, "000", new Vector2(Pos.X + heart.Width + 125, Pos.Y + 20), Color.White);
+                                    batch.DrawString(arcade14, "000", new Vector2(Pos.X + enemies.heart.Width + 125, Pos.Y + 20), Color.White);
                                     break;
                             }
 
@@ -3100,79 +2758,14 @@ namespace ZombustersWindows
 
         public void ZombieMoved(Enemies enemies, byte zombie, Vector2 pos, float angle)
         {
-            enemies.zombies[zombie].entity.Position = pos;
-            enemies.zombies[zombie].angle = angle;
+            enemies.Zombies[zombie].entity.Position = pos;
+            enemies.Zombies[zombie].angle = angle;
         }
 
         public void TankMoved(Enemies enemies, byte tank, Vector2 pos, float angle)
         {
-            enemies.tanks[tank].position = pos;
-            enemies.tanks[tank].angle = angle;
-        }
-
-        public void GameOver(Player player)
-        {
-            PlayerDestroyed(player);
-        }
-
-        public void TankCrashed(TankState tank)
-        {
-            tank.CrashTank(game.totalGameSeconds);
-            ActiveTanks--;
-        }
-
-        public void ZombieCrashed(ZombieState zombie)
-        {
-            zombie.CrashZombie(game.totalGameSeconds);
-            ActiveZombies--;
-        }
-
-        public void IncreaseLife(Player player)
-        {
-            if (player.avatar.lives < 9)
-            {
-                player.avatar.lives++;
-            }
-        }
-
-        public void ZombieDestroyed(ZombieState zombie, Player player)
-        {
-            zombie.DestroyZombie(game.totalGameSeconds, player.avatar.currentgun);
-            ActiveZombies--;
-            player.avatar.score += 10;
-            game.audio.PlayZombieDying();
-
-            if (player.avatar.score % 8000 == 0)
-            {
-                player.avatar.lives += 1;
-            }
-        }
-
-        public void TankDestroyed(TankState tank, Player player)
-        {
-            tank.DestroyTank(game.totalGameSeconds);
-            ActiveTanks--;
-            player.avatar.score += 10;
-            game.audio.PlayZombieDying();
-
-            if (player.avatar.score % 8000 == 0)
-            {
-                player.avatar.lives += 1;
-            }
-        }
-
-        public void PlayerDestroyed(Player player)
-        {
-            player.avatar.DestroyAvatar(game.totalGameSeconds);
-            player.avatar.lives--;
-            if (player.avatar.character == 0)
-            {
-                game.audio.PlayWomanScream();
-            }
-            else
-            {
-                game.audio.PlayManScream();
-            }
+            enemies.Tanks[tank].position = pos;
+            enemies.Tanks[tank].angle = angle;
         }
 
         public void IncreaseScore(byte player, short amount)
@@ -4335,16 +3928,6 @@ namespace ZombustersWindows
             UIPlayerYellow = game.Content.Load<Texture2D>(@"UI\gui_player_yellow");
         }
 
-        private void PowerUpsLoad()
-        {
-            livePowerUp = game.Content.Load<Texture2D>(@"InGame/live_powerup");
-            extraLivePowerUp = game.Content.Load<Texture2D>(@"InGame/extralife_powerup");
-            shotgunAmmoPowerUp = game.Content.Load<Texture2D>(@"InGame/shotgun_ammo_powerup");
-            machinegunAmmoPowerUp = game.Content.Load<Texture2D>(@"InGame/machinegun_ammo_powerup");
-            flamethrowerAmmoPowerUp = game.Content.Load<Texture2D>(@"InGame/flamethrower_ammo_powerup");
-            immunePowerUp = game.Content.Load<Texture2D>(@"InGame/immune_ammo_powerup");
-        }
-
         private void UIComponentsLoad()
         {
             Map = game.Content.Load<Texture2D>(Level.mapTextureFileName);
@@ -4353,16 +3936,10 @@ namespace ZombustersWindows
 #if DEBUG
             PositionReference = game.Content.Load<Texture2D>(@"InGame/position_reference_temporal");
 #endif
-
             CharacterShadow = game.Content.Load<Texture2D>(@"InGame/character_shadow");
             Explosion.Texture = game.Content.Load<Texture2D>(@"InGame/Explosion");
             cursorTexture = game.Content.Load<Texture2D>(@"InGame/GUI/aimcursor");
 
-            heart = game.Content.Load<Texture2D>(@"InGame/GUI/heart");
-            shotgunammoUI = game.Content.Load<Texture2D>(@"InGame/GUI/shotgunammo");
-            pistolammoUI = game.Content.Load<Texture2D>(@"InGame/GUI/pistolammo");
-            grenadeammoUI = game.Content.Load<Texture2D>(@"InGame/GUI/grenadeammo");
-            flamethrowerammoUI = game.Content.Load<Texture2D>(@"InGame/GUI/flamethrowerammo");
             jadeUI = game.Content.Load<Texture2D>(@"InGame/GUI/jade_gui");
             rayUI = game.Content.Load<Texture2D>(@"InGame/GUI/ray_gui");
             peterUI = game.Content.Load<Texture2D>(@"InGame/GUI/peter_gui");
@@ -4381,19 +3958,6 @@ namespace ZombustersWindows
             MenuHeaderFont = this.ScreenManager.Game.Content.Load<SpriteFont>(@"menu\ArialMenuHeader");
             MenuInfoFont = this.ScreenManager.Game.Content.Load<SpriteFont>(@"menu\ArialMenuInfo");
             MenuListFont = this.ScreenManager.Game.Content.Load<SpriteFont>(@"menu\ArialMenuList");
-        }
-
-        private void EnemiesLoad()
-        {
-            foreach (ZombieState zombie in Zombies)
-            {
-                zombie.LoadContent(game.Content);
-            }
-
-            foreach (TankState tank in Tanks)
-            {
-                tank.LoadContent(game.Content);
-            }
         }
 
         private void FurnitureLoad()

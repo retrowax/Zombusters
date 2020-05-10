@@ -1,0 +1,27 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Animations>
+  <MinotaurAttackDef FrameWidth="128" FrameHeight="80"
+              SheetRows="2" SheetColumns="8"
+              Speed="10"
+              SheetName="minotaurattack"/>
+
+  <MinotaurDeathDef FrameWidth="128" FrameHeight="80"
+              SheetRows="1" SheetColumns="11"
+              Speed="10"
+              SheetName="minotaurdeath"/>
+
+  <MinotaurHitDef FrameWidth="128" FrameHeight="80"
+              SheetRows="1" SheetColumns="1"
+              Speed="15"
+              SheetName="minotaurhit"/>
+
+  <MinotaurIdleDef FrameWidth="128" FrameHeight="80"
+              SheetRows="1" SheetColumns="8"
+              Speed="15"
+              SheetName="minotauridle"/>
+
+  <MinotaurWalkDef FrameWidth="128" FrameHeight="80"
+              SheetRows="1" SheetColumns="8"
+              Speed="15"
+              SheetName="minotaurwalk"/>
+</Animations>
