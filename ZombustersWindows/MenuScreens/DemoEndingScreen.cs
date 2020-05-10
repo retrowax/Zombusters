@@ -114,10 +114,10 @@ namespace ZombustersWindows
 
             this.ScreenManager.SpriteBatch.DrawString(MenuListFont, Strings.CreditsThanksForPlayingString, new Vector2(uiBounds.Center.X - MenuListFont.MeasureString(Strings.CreditsThanksForPlayingString).X / 2 - 60, uiBounds.Center.Y - 50), Color.White, 0, Vector2.Zero, 1.5f, SpriteEffects.None, 1);
 
-            this.ScreenManager.SpriteBatch.DrawString(MenuListFont, "We hope you have enjoyed the Demo", new Vector2(uiBounds.Center.X - MenuListFont.MeasureString("We hope you have enjoyed the Demo").X / 2, uiBounds.Center.Y), Color.White);
-            this.ScreenManager.SpriteBatch.DrawString(MenuListFont, "Prepare for more kind of enemies, more weapons, more power-ups and more surprises!", new Vector2(uiBounds.Center.X - MenuListFont.MeasureString("Prepare for more kind of enemies, more weapons, more power-ups and more surprises!").X / 2, uiBounds.Center.Y + 25), Color.White);
-            this.ScreenManager.SpriteBatch.DrawString(MenuListFont, "Be sure to stop by the Steam page and add the game to your Wishlist", new Vector2(uiBounds.Center.X - MenuListFont.MeasureString("Be sure to stop by the Steam page and add the game to your Wishlist").X / 2, uiBounds.Center.Y + 75), Color.White);
-            this.ScreenManager.SpriteBatch.DrawString(MenuListFont, "Zombusters will be released fall 2020", new Vector2(uiBounds.Center.X - MenuListFont.MeasureString("Zombusters will be released fall 2020").X / 2, uiBounds.Center.Y + 125), Color.White);
+            this.ScreenManager.SpriteBatch.DrawString(MenuListFont, Strings.DemoEndScreenLine1, new Vector2(uiBounds.Center.X - MenuListFont.MeasureString(Strings.DemoEndScreenLine1).X / 2, uiBounds.Center.Y), Color.White);
+            this.ScreenManager.SpriteBatch.DrawString(MenuListFont, Strings.DemoEndScreenLine2, new Vector2(uiBounds.Center.X - MenuListFont.MeasureString(Strings.DemoEndScreenLine2).X / 2, uiBounds.Center.Y + 25), Color.White);
+            this.ScreenManager.SpriteBatch.DrawString(MenuListFont, Strings.DemoEndScreenLine3, new Vector2(uiBounds.Center.X - MenuListFont.MeasureString(Strings.DemoEndScreenLine3).X / 2, uiBounds.Center.Y + 75), Color.White);
+            this.ScreenManager.SpriteBatch.DrawString(MenuListFont, Strings.DemoEndScreenLine4, new Vector2(uiBounds.Center.X - MenuListFont.MeasureString(Strings.DemoEndScreenLine4).X / 2, uiBounds.Center.Y + 125), Color.White);
 
             if (((MyGame)this.ScreenManager.Game).currentInputMode != InputMode.Touch)
             {
