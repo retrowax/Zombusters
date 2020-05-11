@@ -13,8 +13,9 @@ namespace ZombustersWindows
 {
     public class Minotaur : BaseEnemy
     {
-        private const int MINOTAUR_X_OFFSET = 20;
-        private const int MINOTAUR_Y_OFFSET = 48;
+        private const int MINOTAUR_X_RIGHT_OFFSET = 64;
+        private const int MINOTAUR_X_LEFT_OFFSET = 34;
+        private const int MINOTAUR_Y_OFFSET = 100;
         private const float MINOTAUR_SCALE = 1.3f;
 
         public float MAX_VELOCITY = 1.5f;
@@ -127,7 +128,7 @@ namespace ZombustersWindows
             runAnimation = new Animation(runTexture, frameSize, sheetSize, frameInterval);
         }
 
-        public void Update(GameTime gameTime, MyGame game, List<Minotaur> enemyList)
+        override public void Update(GameTime gameTime, MyGame game, List<BaseEnemy> enemyList)
         {
             if (this.status != ObjectStatus.Dying)
             {
@@ -195,27 +196,27 @@ namespace ZombustersWindows
                     {
                         if (entity.Velocity.X > 0)
                         {
-                            attackAnimation.Draw(batch, new Vector2(this.entity.Position.X - MINOTAUR_X_OFFSET, this.entity.Position.Y - MINOTAUR_Y_OFFSET), MINOTAUR_SCALE, SpriteEffects.None, layerIndex, 0f, color);
+                            attackAnimation.Draw(batch, new Vector2(this.entity.Position.X - MINOTAUR_X_RIGHT_OFFSET, this.entity.Position.Y - MINOTAUR_Y_OFFSET), MINOTAUR_SCALE, SpriteEffects.None, layerIndex, 0f, color);
                         }
                         else
                         {
-                            attackAnimation.Draw(batch, new Vector2(this.entity.Position.X, this.entity.Position.Y - MINOTAUR_Y_OFFSET), MINOTAUR_SCALE, SpriteEffects.FlipHorizontally, layerIndex, 0f, color);
+                            attackAnimation.Draw(batch, new Vector2(this.entity.Position.X - MINOTAUR_X_LEFT_OFFSET, this.entity.Position.Y - MINOTAUR_Y_OFFSET), MINOTAUR_SCALE, SpriteEffects.FlipHorizontally, layerIndex, 0f, color);
                         }
                     }
                     else
                     {
                         if (entity.Velocity.X > 0)
                         {
-                            runAnimation.Draw(batch, new Vector2(this.entity.Position.X - MINOTAUR_X_OFFSET, this.entity.Position.Y - MINOTAUR_Y_OFFSET), MINOTAUR_SCALE, SpriteEffects.None, layerIndex, 0f, color);
+                            runAnimation.Draw(batch, new Vector2(this.entity.Position.X - MINOTAUR_X_RIGHT_OFFSET, this.entity.Position.Y - MINOTAUR_Y_OFFSET), MINOTAUR_SCALE, SpriteEffects.None, layerIndex, 0f, color);
                         }
                         else
                         {
-                            runAnimation.Draw(batch, new Vector2(this.entity.Position.X, this.entity.Position.Y - MINOTAUR_Y_OFFSET), MINOTAUR_SCALE, SpriteEffects.FlipHorizontally, layerIndex, 0f, color);
+                            runAnimation.Draw(batch, new Vector2(this.entity.Position.X - MINOTAUR_X_LEFT_OFFSET, this.entity.Position.Y - MINOTAUR_Y_OFFSET), MINOTAUR_SCALE, SpriteEffects.FlipHorizontally, layerIndex, 0f, color);
                         }
                     }
                 }
 
-                batch.Draw(this.shadowTexture, new Vector2(this.entity.Position.X - 10, this.entity.Position.Y - 56 + this.idleTexture.Height), null, new Color(255, 255, 255, 50), 0.0f,
+                batch.Draw(this.shadowTexture, new Vector2(this.entity.Position.X - 10, this.entity.Position.Y - 80 + this.idleTexture.Height), null, new Color(255, 255, 255, 50), 0.0f,
                     new Vector2(0, 0), 1.0f, SpriteEffects.None, layerIndex + 0.01f);
 
                 this.isLoosingLife = false;
@@ -229,11 +230,11 @@ namespace ZombustersWindows
                     {
                         if (this.entity.Velocity.X > 0)
                         {
-                            deathAnimation.Draw(batch, new Vector2(this.entity.Position.X - MINOTAUR_X_OFFSET, this.entity.Position.Y - MINOTAUR_Y_OFFSET), MINOTAUR_SCALE, SpriteEffects.None, layerIndex, 0f, Color.White);
+                            deathAnimation.Draw(batch, new Vector2(this.entity.Position.X - MINOTAUR_X_RIGHT_OFFSET, this.entity.Position.Y - MINOTAUR_Y_OFFSET), MINOTAUR_SCALE, SpriteEffects.None, layerIndex, 0f, Color.White);
                         }
                         else
                         {
-                            deathAnimation.Draw(batch, new Vector2(this.entity.Position.X, this.entity.Position.Y - MINOTAUR_Y_OFFSET), MINOTAUR_SCALE, SpriteEffects.FlipHorizontally, layerIndex, 0f, Color.White);
+                            deathAnimation.Draw(batch, new Vector2(this.entity.Position.X - MINOTAUR_X_LEFT_OFFSET, this.entity.Position.Y - MINOTAUR_Y_OFFSET), MINOTAUR_SCALE, SpriteEffects.FlipHorizontally, layerIndex, 0f, Color.White);
                         }
                     }
                 }
@@ -244,11 +245,11 @@ namespace ZombustersWindows
                     {
                         if (this.entity.Velocity.X > 0)
                         {
-                            deathAnimation.Draw(batch, new Vector2(this.entity.Position.X - MINOTAUR_X_OFFSET, this.entity.Position.Y - MINOTAUR_Y_OFFSET), MINOTAUR_SCALE, SpriteEffects.None, layerIndex, 0f, Color.White);
+                            deathAnimation.Draw(batch, new Vector2(this.entity.Position.X - MINOTAUR_X_RIGHT_OFFSET, this.entity.Position.Y - MINOTAUR_Y_OFFSET), MINOTAUR_SCALE, SpriteEffects.None, layerIndex, 0f, Color.White);
                         }
                         else
                         {
-                            deathAnimation.Draw(batch, new Vector2(this.entity.Position.X, this.entity.Position.Y - MINOTAUR_Y_OFFSET), MINOTAUR_SCALE, SpriteEffects.FlipHorizontally, layerIndex, 0f, Color.White);
+                            deathAnimation.Draw(batch, new Vector2(this.entity.Position.X - MINOTAUR_X_LEFT_OFFSET, this.entity.Position.Y - MINOTAUR_Y_OFFSET), MINOTAUR_SCALE, SpriteEffects.FlipHorizontally, layerIndex, 0f, Color.White);
                         }
                     }
                 }

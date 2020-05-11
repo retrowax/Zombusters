@@ -973,7 +973,7 @@ namespace ZombustersWindows
                 float wolfLife;
                 float wolfSpeed;
                 float minotaurLife = 100.0f;
-                float minotaurSpeed = 1.0f;
+                float minotaurSpeed = 3.0f;
                 switch (currentLevel)
                 {
                     case LevelType.One:
