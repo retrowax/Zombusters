@@ -563,7 +563,7 @@ namespace ZombustersWindows
         private void ChangeGamplayStatusAfterSomeTimeTo(GameTime gameTime, GameplayState gameplayState)
         {
             timer += (float)gameTime.ElapsedGameTime.TotalSeconds;
-            if (timer >= 3.0f)
+            if (timer >= 2.0f)
             {
                 GamePlayStatus = gameplayState;
                 timer = 0;
