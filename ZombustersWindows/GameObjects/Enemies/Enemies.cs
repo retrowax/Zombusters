@@ -31,11 +31,12 @@ namespace ZombustersWindows
         public Texture2D flamethrowerammoUI;
 
         private readonly MyGame game;
-        private readonly Random random = new Random(16);
+        private Random random;
 
-        public Enemies(ref MyGame myGame)
+        public Enemies(ref MyGame myGame, ref Random gameRandom)
         {
             game = myGame;
+            random = gameRandom;
         }
 
         public void LoadContent(ContentManager content)
@@ -98,7 +99,7 @@ namespace ZombustersWindows
                 switch (enemyType)
                 {
                     case EnemyType.Zombie:
-                        Zombie zombie = new Zombie(new Vector2(0, 0), new Vector2(RandomX, RandomY), 5.0f, life, speed + subspeed);
+                        Zombie zombie = new Zombie(new Vector2(0, 0), new Vector2(RandomX, RandomY), 5.0f, life, speed + subspeed, ref random);
                         zombie.behaviors.AddBehavior(new Pursuit(Arrive.Deceleration.fast, 50.0f));
                         zombie.behaviors.AddBehavior(new ObstacleAvoidance(ref level.gameWorld, 15.0f));
                         zombie.playerChased = numplayersIngame[this.random.Next(numplayersIngame.Count)];
@@ -587,9 +588,11 @@ namespace ZombustersWindows
 
         private void SpawnPowerUp(Zombie zombie)
         {
-            if (this.random.Next(1, 16) == 8)
+            bool isPowerUpAdded = false;
+            if (this.random.Next(1, 14) == 8)
             {
-                PowerUpType powerUpType = (PowerUpType)Enum.ToObject(typeof(PowerUpType), this.random.Next(0, Enum.GetNames(typeof(PowerUpType)).Length));
+                isPowerUpAdded = true;
+                PowerUpType powerUpType = (PowerUpType)Enum.ToObject(typeof(PowerUpType), this.random.Next(0, Enum.GetNames(typeof(PowerUpType)).Length - 4));
                 switch (powerUpType)
                 {
                     case PowerUpType.live:
@@ -602,10 +605,6 @@ namespace ZombustersWindows
 
                     case PowerUpType.flamethrower:
                         PowerUpList.Add(new PowerUp(flamethrowerAmmoPowerUpTexture, flamethrowerammoUI, zombie.entity.Position, PowerUpType.flamethrower, game.Content));
-                        break;
-
-                    case PowerUpType.extralife:
-                        PowerUpList.Add(new PowerUp(extraLivePowerUpTexture, extraLivePowerUpTexture, zombie.entity.Position, PowerUpType.extralife, game.Content));
                         break;
 
                     case PowerUpType.shotgun:
@@ -624,9 +623,21 @@ namespace ZombustersWindows
                         PowerUpList.Add(new PowerUp(immunePowerUpTexture, immunePowerUpTexture, zombie.entity.Position, PowerUpType.immunebuff, game.Content));
                         break;
 
+                    case PowerUpType.extralife:
+                        PowerUpList.Add(new PowerUp(extraLivePowerUpTexture, extraLivePowerUpTexture, zombie.entity.Position, PowerUpType.extralife, game.Content));
+                        break;
+
                     default:
                         PowerUpList.Add(new PowerUp(livePowerUpTexture, heart, zombie.entity.Position, PowerUpType.live, game.Content));
                         break;
+                }
+            }
+
+            if (!isPowerUpAdded)
+            {
+                if (this.random.Next(1, 128) == 12)
+                {
+                    PowerUpList.Add(new PowerUp(extraLivePowerUpTexture, extraLivePowerUpTexture, zombie.entity.Position, PowerUpType.extralife, game.Content));
                 }
             }
         }

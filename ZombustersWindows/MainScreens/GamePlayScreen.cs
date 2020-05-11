@@ -79,7 +79,7 @@ namespace ZombustersWindows
             : base()
         {
             this.game = game;
-            enemies = new Enemies(ref game);
+            enemies = new Enemies(ref game, ref random);
             this.currentLevel = startingLevel;
             this.currentSublevel = startingSublevel;
 #if DEBUG
