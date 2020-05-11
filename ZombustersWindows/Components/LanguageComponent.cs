@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using GameAnalyticsSDK.Net;
+using Microsoft.Xna.Framework;
 
 using Microsoft.Xna.Framework.Graphics;
 using System.Collections.Generic;
@@ -57,6 +58,7 @@ namespace ZombustersWindows
             }
             string locale = languages[currentLanguage];
             Thread.CurrentThread.CurrentUICulture = CultureInfo.GetCultureInfo(locale);
+            GameAnalytics.AddDesignEvent("ScreenView:Options:ChangedLanguage", currentLanguage);
             return locale;
         }
 

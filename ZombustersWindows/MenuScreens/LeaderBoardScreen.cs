@@ -5,6 +5,7 @@ using GameStateManagement;
 using Microsoft.Xna.Framework.Input.Touch;
 using ZombustersWindows.Localization;
 using ZombustersWindows.Subsystem_Managers;
+using GameAnalyticsSDK.Net;
 
 namespace ZombustersWindows
 {
@@ -82,6 +83,8 @@ namespace ZombustersWindows
             base.Initialize();
 
             this.isBackgroundOn = true;
+
+            GameAnalytics.AddDesignEvent("ScreenView:Extras:Leaderboards:View");
         }
 
 

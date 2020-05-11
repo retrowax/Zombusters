@@ -307,9 +307,13 @@ namespace ZombustersWindows
             GameAnalytics.SetEnabledInfoLog(true);
             GameAnalytics.SetEnabledVerboseLog(true);
 #endif
+#if DEMO
+            GameAnalytics.ConfigureBuild("windows 1.1.0 DEMO");
+#else
             GameAnalytics.ConfigureBuild("windows 1.1.0");
+#endif
             GameAnalytics.Initialize(ANALYTICS_GAME_KEY, ANALYTICS_SEC_KEY);
-            GameAnalytics.AddDesignEvent("GameStart", 1);
+            GameAnalytics.StartSession();
         }
     }
 }

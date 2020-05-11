@@ -6,6 +6,7 @@ using GameStateManagement;
 using ZombustersWindows.Localization;
 using ZombustersWindows.Subsystem_Managers;
 using Steamworks;
+using GameAnalyticsSDK.Net;
 
 namespace ZombustersWindows
 {
@@ -72,6 +73,7 @@ namespace ZombustersWindows
         }
 
         void ConfirmExitMessageBoxAccepted(object sender, PlayerIndexEventArgs e) {
+            GameAnalytics.EndSession();
             try
             {
                 SteamClient.Shutdown();

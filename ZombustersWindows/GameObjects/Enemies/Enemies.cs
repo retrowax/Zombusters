@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using GameAnalyticsSDK.Net;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 
@@ -597,38 +598,47 @@ namespace ZombustersWindows
                 {
                     case PowerUpType.live:
                         PowerUpList.Add(new PowerUp(livePowerUpTexture, heart, zombie.entity.Position, PowerUpType.live, game.Content));
+                        GameAnalytics.AddDesignEvent("PowerUps:Dropped", (int)PowerUpType.live);
                         break;
 
                     case PowerUpType.machinegun:
                         PowerUpList.Add(new PowerUp(machinegunAmmoPowerUpTexture, pistolammoUI, zombie.entity.Position, PowerUpType.machinegun, game.Content));
+                        GameAnalytics.AddDesignEvent("PowerUps:Dropped", (int)PowerUpType.machinegun);
                         break;
 
                     case PowerUpType.flamethrower:
                         PowerUpList.Add(new PowerUp(flamethrowerAmmoPowerUpTexture, flamethrowerammoUI, zombie.entity.Position, PowerUpType.flamethrower, game.Content));
+                        GameAnalytics.AddDesignEvent("PowerUps:Dropped", (int)PowerUpType.flamethrower);
                         break;
 
                     case PowerUpType.shotgun:
                         PowerUpList.Add(new PowerUp(shotgunAmmoPowerUpTexture, shotgunammoUI, zombie.entity.Position, PowerUpType.shotgun, game.Content));
+                        GameAnalytics.AddDesignEvent("PowerUps:Dropped", (int)PowerUpType.shotgun);
                         break;
 
                     case PowerUpType.grenade:
                         PowerUpList.Add(new PowerUp(grenadeammoUI, grenadeammoUI, zombie.entity.Position, PowerUpType.grenade, game.Content));
+                        GameAnalytics.AddDesignEvent("PowerUps:Dropped", (int)PowerUpType.grenade);
                         break;
 
                     case PowerUpType.speedbuff:
                         PowerUpList.Add(new PowerUp(livePowerUpTexture, heart, zombie.entity.Position, PowerUpType.speedbuff, game.Content));
+                        GameAnalytics.AddDesignEvent("PowerUps:Dropped", (int)PowerUpType.speedbuff);
                         break;
 
                     case PowerUpType.immunebuff:
                         PowerUpList.Add(new PowerUp(immunePowerUpTexture, immunePowerUpTexture, zombie.entity.Position, PowerUpType.immunebuff, game.Content));
+                        GameAnalytics.AddDesignEvent("PowerUps:Dropped", (int)PowerUpType.immunebuff);
                         break;
 
                     case PowerUpType.extralife:
                         PowerUpList.Add(new PowerUp(extraLivePowerUpTexture, extraLivePowerUpTexture, zombie.entity.Position, PowerUpType.extralife, game.Content));
+                        GameAnalytics.AddDesignEvent("PowerUps:Dropped", (int)PowerUpType.extralife);
                         break;
 
                     default:
                         PowerUpList.Add(new PowerUp(livePowerUpTexture, heart, zombie.entity.Position, PowerUpType.live, game.Content));
+                        GameAnalytics.AddDesignEvent("PowerUps:Dropped", (int)PowerUpType.live);
                         break;
                 }
             }
@@ -637,6 +647,7 @@ namespace ZombustersWindows
             {
                 if (this.random.Next(1, 128) == 12)
                 {
+                    GameAnalytics.AddDesignEvent("PowerUps:Dropped", (int)PowerUpType.extralife);
                     PowerUpList.Add(new PowerUp(extraLivePowerUpTexture, extraLivePowerUpTexture, zombie.entity.Position, PowerUpType.extralife, game.Content));
                 }
             }

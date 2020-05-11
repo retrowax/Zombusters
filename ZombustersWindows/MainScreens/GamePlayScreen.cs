@@ -11,6 +11,7 @@ using ZombustersWindows.MainScreens;
 using ZombustersWindows.Localization;
 using System.Xml.Linq;
 using ZombustersWindows.GameObjects;
+using GameAnalyticsSDK.Net;
 
 namespace ZombustersWindows
 {
@@ -116,14 +117,17 @@ namespace ZombustersWindows
                 case 0: // Resume
                     break;
                 case 1: // Help
+                    GameAnalytics.AddDesignEvent("Gameplay:Menu:HowToPlay");
                     ScreenManager.AddScreen(new HowToPlayScreen());
                     break;
 
                 case 2: // Options
+                    GameAnalytics.AddDesignEvent("Gameplay:Menu:Options");
                     game.DisplayOptions(0);
                     break;
 
                 case 3: // Restart
+                    GameAnalytics.AddDesignEvent("Gameplay:Menu:RestartGame");
                     game.Restart();
                     timer = 0;
                     bPaused = game.EndPause();
@@ -132,6 +136,7 @@ namespace ZombustersWindows
                     break;
 
                 case 4: // Quit
+                    GameAnalytics.AddDesignEvent("Gameplay:Menu:QuitGame");
                     MessageBoxScreen confirmExitMessageBox = new MessageBoxScreen(Strings.GPReturnToMainMenuString, Strings.ConfirmReturnMainMenuString);
                     confirmExitMessageBox.Accepted += ConfirmExitMessageBoxAccepted;
                     ScreenManager.AddScreen(confirmExitMessageBox);
@@ -146,6 +151,7 @@ namespace ZombustersWindows
             switch (selection.Selection)
             {
                 case 0: // Restart WAVE
+                    GameAnalytics.AddDesignEvent("Gameplay:GameOverMenu:RestartWave");
                     game.Restart();
                     timer = 0;
                     bPaused = game.EndPause();
@@ -153,6 +159,7 @@ namespace ZombustersWindows
                     StartNewLevel(true, true);
                     break;
                 case 1: // Restart LEVEL
+                    GameAnalytics.AddDesignEvent("Gameplay:GameOverMenu:RestartLevel");
                     game.Restart();
                     timer = 0;
                     bPaused = game.EndPause();
@@ -160,6 +167,7 @@ namespace ZombustersWindows
                     StartNewLevel(true, false);
                     break;
                 case 2: // Quit
+                    GameAnalytics.AddDesignEvent("Gameplay:GameOverMenu:QuitGame");
                     MessageBoxScreen confirmExitMessageBox = new MessageBoxScreen(Strings.GPReturnToMainMenuString, Strings.ConfirmReturnMainMenuString);
                     confirmExitMessageBox.Accepted += ConfirmExitMessageBoxAccepted;
                     ScreenManager.AddScreen(confirmExitMessageBox);
@@ -462,7 +470,8 @@ namespace ZombustersWindows
 
                     if (CheckIfStageCleared() == true)
                     {
-                         GamePlayStatus = GameplayState.StageCleared;
+                        GamePlayStatus = GameplayState.StageCleared;
+                        GameAnalytics.AddProgressionEvent(EGAProgressionStatus.Complete, currentLevel.ToString(), currentSublevel.ToString());
                     }
                 }
                 else if (GamePlayStatus == GameplayState.StageCleared)
@@ -715,6 +724,7 @@ namespace ZombustersWindows
 
             if (player.avatar.lives == 0) {
                 GamePlayStatus = GameplayState.GameOver;
+                GameAnalytics.AddProgressionEvent(EGAProgressionStatus.Fail, currentLevel.ToString(), currentSublevel.ToString());
                 this.ScreenManager.AddScreen(gomenu);
             }
         }
@@ -841,9 +851,8 @@ namespace ZombustersWindows
                     currentLevel = Level.GetNextLevel(currentLevel);
                     if (currentLevel == LevelType.EndGame || currentLevel == LevelType.EndDemo)
                     {
-                        {
-                            GamePlayStatus = GameplayState.GameOver;
-                        }
+                        GamePlayStatus = GameplayState.GameOver;
+                        GameAnalytics.AddProgressionEvent(EGAProgressionStatus.Undefined, currentLevel.ToString(), currentSublevel.ToString());
                     }
                     else
                     {
@@ -1058,6 +1067,8 @@ namespace ZombustersWindows
 
                 enemies.LoadContent(game.Content);
             }
+
+            GameAnalytics.AddProgressionEvent(EGAProgressionStatus.Start, currentLevel.ToString(), currentSublevel.ToString());
         }
 
         public override void Draw(GameTime gameTime)

@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework.Graphics;
 using GameStateManagement;
 using ZombustersWindows.Localization;
 using Microsoft.Xna.Framework.Input;
+using GameAnalyticsSDK.Net;
 
 namespace ZombustersWindows
 {
@@ -88,6 +89,7 @@ namespace ZombustersWindows
                     game.players[gamePadIndex].avatar.Activate();
                     game.players[gamePadIndex].IsPlaying = true;
                     game.players[gamePadIndex].inputMode = inputMode;
+                    GameAnalytics.AddDesignEvent("StartGame:InputMode:Gamepad", gamePadIndex);
                 }
             }
 
@@ -96,6 +98,7 @@ namespace ZombustersWindows
                 game.players[(int)PlayerIndex.One].avatar.Activate();
                 game.players[(int)PlayerIndex.One].IsPlaying = true;
                 game.players[(int)PlayerIndex.One].inputMode = inputMode;
+                GameAnalytics.AddDesignEvent("StartGame:InputMode:Keyboard");
             }
 
             game.currentInputMode = inputMode;
