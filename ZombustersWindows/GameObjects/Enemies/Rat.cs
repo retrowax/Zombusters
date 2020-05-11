@@ -11,27 +11,13 @@ using System.Xml.Linq;
 
 namespace ZombustersWindows
 {
-    public class Rat
+    public class Rat : BaseEnemy
     {
         private const int RAT_X_OFFSET = 20;
         private const int RAT_Y_OFFSET = 48;
 
         public float MAX_VELOCITY = 1.5f;
         public const float MAX_STRENGTH = 0.15f;
-
-        public SteeringBehaviors behaviors;
-        public SteeringEntity entity;
-
-        public ObjectStatus status;
-        public float deathTimeTotalSeconds;
-        public float TimeOnScreen;
-        public bool invert;
-        public float speed;
-        public float angle;
-        public int playerChased;
-
-        public float lifecounter = 0.5f;
-        public bool isLoosingLife;
 
         private Texture2D attackTexture;
         private Texture2D deathTexture;
@@ -40,25 +26,13 @@ namespace ZombustersWindows
         private Texture2D runTexture;
         private Texture2D shadowTexture;
 
-        private SpriteFont font;
-
         Animation attackAnimation;
         Animation deathAnimation;
         Animation hitAnimation;
         Animation idleAnimation;
         Animation runAnimation;
 
-        private readonly Random random = new Random();
-        private GunType currentgun;
-        private float timer;
-        private bool isInPlayerRange;
-
-#if DEBUG
-        Texture2D PositionReference;
-        SpriteFont DebugFont;
-#endif
-
-        public Rat(Vector2 posicion, float boundingRadius, float life)
+        public Rat(Vector2 posicion, float boundingRadius, float life, ref Random gameRandom)
         {
             this.entity = new SteeringEntity
             {
@@ -66,6 +40,8 @@ namespace ZombustersWindows
                 Position = posicion,
                 BoundingRadius = boundingRadius
             };
+
+            this.random = gameRandom;
             if (random.Next(0, 2) == 0)
             {
                 speed = 0.0f;
@@ -81,18 +57,17 @@ namespace ZombustersWindows
             this.playerChased = 0;
             this.lifecounter = life;
             this.isLoosingLife = false;
+            this.entityYOffset = RAT_Y_OFFSET;
 
             behaviors = new SteeringBehaviors(MAX_STRENGTH, CombinationType.prioritized);
         }
 
-        public void LoadContent(ContentManager content)
+        override public void LoadContent(ContentManager content)
         {
+            base.LoadContent(content);
+
             LoadTextures(ref content);
             LoadAnimations();
-#if DEBUG
-            PositionReference = content.Load<Texture2D>(@"InGame/position_reference_temporal");
-            DebugFont = content.Load<SpriteFont>(@"menu/ArialMenuInfo");
-#endif
         }
 
         private void LoadTextures(ref ContentManager content)
@@ -103,8 +78,6 @@ namespace ZombustersWindows
             idleTexture = content.Load<Texture2D>(@"InGame/rat/48x48Rat_Idle");
             runTexture = content.Load<Texture2D>(@"InGame/rat/48x48Rat_Run");
             shadowTexture = content.Load<Texture2D>(@"InGame/character_shadow");
-
-            font = content.Load<SpriteFont>(@"menu\ArialMenuInfo");
         }
 
         private void LoadAnimations()
@@ -157,7 +130,7 @@ namespace ZombustersWindows
             runAnimation = new Animation(runTexture, frameSize, sheetSize, frameInterval);
         }
 
-        public void Update(GameTime gameTime, MyGame game, List<Rat> rats)
+        override public void Update(GameTime gameTime, MyGame game, List<BaseEnemy> rats)
         {
             if (this.status != ObjectStatus.Dying)
             {
@@ -200,62 +173,7 @@ namespace ZombustersWindows
             }
         }
 
-        private bool IsInRange(Player[] players)
-        {
-            foreach (Player player in players)
-            {
-                float distance = Vector2.Distance(entity.Position, player.avatar.position);
-                if (distance < Avatar.CrashRadius + 20.0f)
-                {
-                    return true;
-                }
-            }
-            return false;
-        }
-
-        public void Destroy(float totalGameSeconds, GunType currentgun)
-        {
-            this.deathTimeTotalSeconds = totalGameSeconds;
-            this.status = ObjectStatus.Dying;
-            this.currentgun = currentgun;
-        }
-
-        // Destroy the seeker without leaving a powerup
-        public void Crash(float totalGameSeconds)
-        {
-            this.deathTimeTotalSeconds = totalGameSeconds;
-            this.status = ObjectStatus.Inactive;
-        }
-
-        public float GetLayerIndex(SteeringEntity entity, List<Furniture> furniturelist)
-        {
-            float furnitureInferior, playerBasePosition, lindex;
-            int n = 0;
-
-            playerBasePosition = entity.Position.Y;
-            furnitureInferior = 0.0f;
-            lindex = 0.0f;
-
-
-            while (playerBasePosition > furnitureInferior)
-            {
-                if (n < furniturelist.Count)
-                {
-                    furnitureInferior = furniturelist[n].Position.Y + furniturelist[n].Texture.Height;
-                    lindex = furniturelist[n].layerIndex;
-                }
-                else
-                {
-                    return lindex + 0.002f;
-                }
-
-                n++;
-            }
-
-            return lindex + 0.002f;
-        }
-
-        public void Draw(SpriteBatch batch, float TotalGameSeconds, List<Furniture> furniturelist, GameTime gameTime)
+        override public void Draw(SpriteBatch batch, float TotalGameSeconds, List<Furniture> furniturelist, GameTime gameTime)
         {
             Color color;
             float layerIndex = GetLayerIndex(this.entity, furniturelist);
@@ -346,6 +264,8 @@ namespace ZombustersWindows
                     batch.DrawString(font, score.ToString(), new Vector2(this.entity.Position.X - font.MeasureString(score.ToString()).X / 2, this.entity.Position.Y - RAT_Y_OFFSET), Color.White, 0.0f, Vector2.Zero, 1.0f, SpriteEffects.None, layerIndex - 0.1f);
                 }
             }
+
+            base.Draw(batch, TotalGameSeconds, furniturelist, gameTime);
         }
     }
 }

@@ -10,24 +10,11 @@ using ZombustersWindows.GameObjects;
 
 namespace ZombustersWindows
 {
-    public class Zombie
+    public class Zombie : BaseEnemy
     {
         public float MAX_VELOCITY = 1.5f;
         public const float MAX_STRENGTH = 0.15f;
-
-        public SteeringBehaviors behaviors;
-        public SteeringEntity entity;
-
-        public ObjectStatus status;
-        public float deathTimeTotalSeconds;
-        public float TimeOnScreen;
-        public bool invert;
-        public float speed;
-        public float angle;
-        public int playerChased;
-
-        public float lifecounter = 0.5f;
-        public bool isLoosingLife;
+        private const int ZOMBIE_Y_OFFSET = 70;
 
         private Vector2 ZombieOrigin;
         public Vector2 BurningZombieOrigin;
@@ -41,17 +28,6 @@ namespace ZombustersWindows
         Animation ZombieAnimation;
         Animation BurningZombieAnimation;
         Animation ZombieDeathAnimation;
-
-        private SpriteFont font;
-
-        private Random random;
-        private GunType currentgun;
-        private float timer;
-
-#if DEBUG
-        Texture2D PositionReference;
-        SpriteFont DebugFont;
-#endif
 
         public Zombie(Vector2 velocidad, Vector2 posicion, float boundingRadius, float life, float speed, ref Random gameRandom)
         {
@@ -78,13 +54,16 @@ namespace ZombustersWindows
             this.playerChased = 0;
             this.lifecounter = life;
             this.isLoosingLife = false;
+            this.entityYOffset = ZOMBIE_Y_OFFSET;
 
             this.ZombieOrigin = new Vector2(0, 0);
             behaviors = new SteeringBehaviors(MAX_STRENGTH, CombinationType.prioritized);
         }
 
-        public void LoadContent(ContentManager content)
+        override public void LoadContent(ContentManager content)
         {
+            base.LoadContent(content);
+
             // Load multiple animations form XML definition
             System.Xml.Linq.XDocument doc = System.Xml.Linq.XDocument.Load("Content/AnimationDef.xml");
 
@@ -133,15 +112,9 @@ namespace ZombustersWindows
             sheetSize.Y = int.Parse(definition.Attribute("SheetRows").Value, NumberStyles.Integer);
             frameInterval = TimeSpan.FromSeconds(1.0f / int.Parse(definition.Attribute("Speed").Value, NumberStyles.Integer));
             ZombieDeathAnimation = new Animation(ZombieDeathTexture, frameSize, sheetSize, frameInterval);
-
-            font = content.Load<SpriteFont>(@"menu\ArialMenuInfo");
-#if DEBUG
-            PositionReference = content.Load<Texture2D>(@"InGame/position_reference_temporal");
-            DebugFont = content.Load<SpriteFont>(@"menu/ArialMenuInfo");
-#endif
         }
 
-        public void Update(GameTime gameTime, MyGame game, List<Zombie> zombies)
+        override public void Update(GameTime gameTime, MyGame game, List<BaseEnemy> enemyList)
         {
             if (this.status != ObjectStatus.Dying)
             {
@@ -152,7 +125,7 @@ namespace ZombustersWindows
                 this.entity.Velocity = VectorHelper.TruncateVector(this.entity.Velocity, this.entity.MaxSpeed / 1.5f);
                 this.entity.Position += this.entity.Velocity;
 
-                foreach (Zombie zombie in zombies)
+                foreach (Zombie zombie in enemyList)
                 {
                     if (entity.Position != zombie.entity.Position && zombie.status == ObjectStatus.Active)
                     {
@@ -181,48 +154,7 @@ namespace ZombustersWindows
             }
         }
 
-        public void DestroyZombie(float totalGameSeconds, GunType currentgun)
-        {
-            this.deathTimeTotalSeconds = totalGameSeconds;
-            this.status = ObjectStatus.Dying;
-            this.currentgun = currentgun;
-        }
-
-        public void CrashZombie(float totalGameSeconds)
-        {
-            this.deathTimeTotalSeconds = totalGameSeconds;
-            this.status = ObjectStatus.Inactive;
-        }
-
-        public float GetLayerIndex(SteeringEntity entity, List<Furniture> furniturelist)
-        {
-            float furnitureInferior, playerBasePosition, lindex;
-            int n = 0;
-
-            playerBasePosition = entity.Position.Y;
-            furnitureInferior = 0.0f;
-            lindex = 0.0f;
-
-
-            while (playerBasePosition > furnitureInferior)
-            {
-                if (n < furniturelist.Count)
-                {
-                    furnitureInferior = furniturelist[n].Position.Y + furniturelist[n].Texture.Height;
-                    lindex = furniturelist[n].layerIndex;
-                }
-                else
-                {
-                    return lindex + 0.002f;
-                }
-
-                n++;
-            }
-
-            return lindex + 0.002f;
-        }
-
-        public void Draw(SpriteBatch batch, float TotalGameSeconds, List<Furniture> furniturelist, GameTime gameTime)
+        override public void Draw(SpriteBatch batch, float TotalGameSeconds, List<Furniture> furniturelist, GameTime gameTime)
         {
             Color color = new Color();
             float layerIndex = GetLayerIndex(this.entity, furniturelist);
@@ -247,15 +179,6 @@ namespace ZombustersWindows
                     ZombieAnimation.Draw(batch, new Vector2(this.entity.Position.X - 21, this.entity.Position.Y - 50), SpriteEffects.None, layerIndex, 0f, color);
                 }
 
-#if DEBUG
-                // Position Reference TEMPORAL
-                //batch.Draw(PositionReference, new Rectangle(Convert.ToInt32(this.entity.Position.X), Convert.ToInt32(this.entity.Position.Y), PositionReference.Width, PositionReference.Height),
-                    //new Rectangle(0, 0, PositionReference.Width, PositionReference.Height), Color.White, 0.0f, Vector2.Zero, SpriteEffects.None, 0.1f);
-
-
-                //batch.DrawString(DebugFont, collision.ToString(), this.entity.Position, Color.White, 0.0f, Vector2.Zero, 1.0f, SpriteEffects.None, 0.1f);
-                //collision = false;
-#endif
                 batch.Draw(this.ZombieShadow, new Vector2(this.entity.Position.X - 10, this.entity.Position.Y - 58 + this.ZombieTexture.Height), null, new Color(255, 255, 255, 50), 0.0f, 
                     new Vector2(0, 0), 1.0f, SpriteEffects.None, layerIndex + 0.01f);
 
@@ -294,15 +217,9 @@ namespace ZombustersWindows
                         }
                     }
                 }
-
-                // Draw Score Bonus
-                int score = 10;
-                if ((TotalGameSeconds < this.deathTimeTotalSeconds + .5) && (this.deathTimeTotalSeconds < TotalGameSeconds))
-                {
-                    batch.DrawString(font, score.ToString(), new Vector2(this.entity.Position.X - font.MeasureString(score.ToString()).X / 2 + 1, this.entity.Position.Y - 69), Color.Black, 0.0f, Vector2.Zero, 1.0f, SpriteEffects.None, layerIndex);
-                    batch.DrawString(font, score.ToString(), new Vector2(this.entity.Position.X - font.MeasureString(score.ToString()).X / 2, this.entity.Position.Y - 70), Color.White, 0.0f, Vector2.Zero, 1.0f, SpriteEffects.None, layerIndex - 0.1f);
-                }
             }
+
+            base.Draw(batch, TotalGameSeconds, furniturelist, gameTime);
         }
     }
 }

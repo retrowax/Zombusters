@@ -106,6 +106,7 @@
     <Compile Include="ContentManager\PowerUp.cs" />
     <Compile Include="GameObjects\AvatarState.cs" />
     <Compile Include="GameObjects\Enemies\Enemies.cs" />
+    <Compile Include="GameObjects\Enemies\BaseEnemy.cs" />
     <Compile Include="GameObjects\Enemies\Minotaur.cs" />
     <Compile Include="GameObjects\Enemies\Rat.cs" />
     <Compile Include="GameObjects\Enemies\Wolf.cs" />

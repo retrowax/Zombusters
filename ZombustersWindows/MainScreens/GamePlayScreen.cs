@@ -2762,19 +2762,6 @@ namespace ZombustersWindows
 
         #endregion
 
-
-        public void ZombieMoved(Enemies enemies, byte zombie, Vector2 pos, float angle)
-        {
-            enemies.Zombies[zombie].entity.Position = pos;
-            enemies.Zombies[zombie].angle = angle;
-        }
-
-        public void TankMoved(Enemies enemies, byte tank, Vector2 pos, float angle)
-        {
-            enemies.Tanks[tank].position = pos;
-            enemies.Tanks[tank].angle = angle;
-        }
-
         public void IncreaseScore(byte player, short amount)
         {
             game.players[player].avatar.score += amount;
