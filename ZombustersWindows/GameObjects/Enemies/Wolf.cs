@@ -11,7 +11,7 @@ using System.Xml.Linq;
 
 namespace ZombustersWindows
 {
-    public class Wolf
+    public class Wolf : BaseEnemy
     {
         private const int WOLF_X_OFFSET = 20;
         private const int WOLF_Y_OFFSET = 48;
@@ -20,20 +20,6 @@ namespace ZombustersWindows
         public float MAX_VELOCITY = 1.5f;
         public const float MAX_STRENGTH = 0.15f;
 
-        public SteeringBehaviors behaviors;
-        public SteeringEntity entity;
-
-        public ObjectStatus status;
-        public float deathTimeTotalSeconds;
-        public float TimeOnScreen;
-        public bool invert;
-        public float speed;
-        public float angle;
-        public int playerChased;
-
-        public float lifecounter = 0.5f;
-        public bool isLoosingLife;
-
         private Texture2D attackTexture;
         private Texture2D deathTexture;
         private Texture2D hitTexture;
@@ -41,25 +27,13 @@ namespace ZombustersWindows
         private Texture2D runTexture;
         private Texture2D shadowTexture;
 
-        private SpriteFont font;
-
         Animation attackAnimation;
         Animation deathAnimation;
         Animation hitAnimation;
         Animation idleAnimation;
         Animation runAnimation;
 
-        private readonly Random random = new Random();
-        private GunType currentgun;
-        private float timer;
-        private bool isInPlayerRange;
-
-#if DEBUG
-        Texture2D PositionReference;
-        SpriteFont DebugFont;
-#endif
-
-        public Wolf(Vector2 posicion, float boundingRadius, float life)
+        public Wolf(Vector2 posicion, float boundingRadius, float life, float speed, ref Random gameRandom)
         {
             this.entity = new SteeringEntity
             {
@@ -67,45 +41,40 @@ namespace ZombustersWindows
                 Position = posicion,
                 BoundingRadius = boundingRadius
             };
-            if (random.Next(0, 2) == 0)
-            {
-                speed = 0.0f;
-            }
+
+            random = gameRandom;
             this.entity.MaxSpeed = MAX_VELOCITY + speed;
 
             this.status = ObjectStatus.Active;
             this.invert = true;
             this.deathTimeTotalSeconds = 0;
             this.TimeOnScreen = 4.5f;
-            this.speed = 0;
+            this.speed = speed;
             this.angle = 1f;
             this.playerChased = 0;
             this.lifecounter = life;
             this.isLoosingLife = false;
+            this.entityYOffset = WOLF_Y_OFFSET;
 
             behaviors = new SteeringBehaviors(MAX_STRENGTH, CombinationType.prioritized);
         }
 
-        public void LoadContent(ContentManager content)
+        override public void LoadContent(ContentManager content)
         {
+            base.LoadContent(content);
+
             LoadTextures(ref content);
             LoadAnimations();
-#if DEBUG
-            PositionReference = content.Load<Texture2D>(@"InGame/position_reference_temporal");
-            DebugFont = content.Load<SpriteFont>(@"menu/ArialMenuInfo");
-#endif
         }
 
         private void LoadTextures(ref ContentManager content)
         {
-            attackTexture = content.Load<Texture2D>(@"InGame/wolf/80x48Wolf_JumpAttackMove");
+            attackTexture = content.Load<Texture2D>(@"InGame/wolf/80x48Wolf_JumpAttackNoMove");
             deathTexture = content.Load<Texture2D>(@"InGame/wolf/80x48Wolf_Death");
             hitTexture = content.Load<Texture2D>(@"InGame/wolf/80x48Wolf_hit");
             idleTexture = content.Load<Texture2D>(@"InGame/wolf/80x48Wolf_Idle");
             runTexture = content.Load<Texture2D>(@"InGame/wolf/80x48Wolf_Run");
             shadowTexture = content.Load<Texture2D>(@"InGame/character_shadow");
-
-            font = content.Load<SpriteFont>(@"menu\ArialMenuInfo");
         }
 
         private void LoadAnimations()
@@ -158,7 +127,7 @@ namespace ZombustersWindows
             runAnimation = new Animation(runTexture, frameSize, sheetSize, frameInterval);
         }
 
-        public void Update(GameTime gameTime, MyGame game, List<Wolf> wolfs)
+        override public void Update(GameTime gameTime, MyGame game, List<BaseEnemy> enemyList)
         {
             if (this.status != ObjectStatus.Dying)
             {
@@ -169,11 +138,11 @@ namespace ZombustersWindows
                 this.entity.Velocity = VectorHelper.TruncateVector(this.entity.Velocity, this.entity.MaxSpeed / 1.5f);
                 this.entity.Position += this.entity.Velocity;
 
-                foreach (Wolf wolf in wolfs)
+                foreach (BaseEnemy enemy in enemyList)
                 {
-                    if (entity.Position != wolf.entity.Position && wolf.status == ObjectStatus.Active)
+                    if (entity.Position != enemy.entity.Position && enemy.status == ObjectStatus.Active)
                     {
-                        Vector2 ToEntity = entity.Position - wolf.entity.Position;
+                        Vector2 ToEntity = entity.Position - enemy.entity.Position;
                         float DistFromEachOther = ToEntity.Length();
                         float AmountOfOverLap = entity.BoundingRadius + 20.0f - DistFromEachOther;
 
@@ -200,73 +169,7 @@ namespace ZombustersWindows
             }
         }
 
-        private bool IsInRange(Player[] players)
-        {
-            foreach (Player player in players)
-            {
-                float distance = Vector2.Distance(entity.Position, player.avatar.position);
-                if (distance < Avatar.CrashRadius + 20.0f)
-                {
-                    return true;
-                }
-            }
-            return false;
-        }
-
-        public void Destroy(float totalGameSeconds, GunType currentgun)
-        {
-            this.deathTimeTotalSeconds = totalGameSeconds;
-            this.status = ObjectStatus.Dying;
-            this.currentgun = currentgun;
-        }
-
-        // Destroy the seeker without leaving a powerup
-        public void Crash(float totalGameSeconds)
-        {
-            this.deathTimeTotalSeconds = totalGameSeconds;
-            this.status = ObjectStatus.Inactive;
-        }
-
-        public bool IsInRange(SteeringEntity entity, Furniture furniture)
-        {
-            float distance = Vector2.Distance(new Vector2(this.entity.Position.X - 10, this.entity.Position.Y - 30), furniture.ObstaclePosition);
-            if (distance < Avatar.CrashRadius + 10.0f)
-            {
-                return true;
-            }
-
-            return false;
-        }
-
-        public float GetLayerIndex(SteeringEntity entity, List<Furniture> furniturelist)
-        {
-            float furnitureInferior, playerBasePosition, lindex;
-            int n = 0;
-
-            playerBasePosition = entity.Position.Y;
-            furnitureInferior = 0.0f;
-            lindex = 0.0f;
-
-
-            while (playerBasePosition > furnitureInferior)
-            {
-                if (n < furniturelist.Count)
-                {
-                    furnitureInferior = furniturelist[n].Position.Y + furniturelist[n].Texture.Height;
-                    lindex = furniturelist[n].layerIndex;
-                }
-                else
-                {
-                    return lindex + 0.002f;
-                }
-
-                n++;
-            }
-
-            return lindex + 0.002f;
-        }
-
-        public void Draw(SpriteBatch batch, float TotalGameSeconds, List<Furniture> furniturelist, GameTime gameTime)
+        override public void Draw(SpriteBatch batch, float TotalGameSeconds, List<Furniture> furniturelist, GameTime gameTime)
         {
             Color color;
             float layerIndex = GetLayerIndex(this.entity, furniturelist);
@@ -349,14 +252,9 @@ namespace ZombustersWindows
                         }
                     }
                 }
-
-                int score = 10;
-                if ((TotalGameSeconds < this.deathTimeTotalSeconds + .5) && (this.deathTimeTotalSeconds < TotalGameSeconds))
-                {
-                    batch.DrawString(font, score.ToString(), new Vector2(this.entity.Position.X - font.MeasureString(score.ToString()).X / 2 + 1, this.entity.Position.Y - WOLF_Y_OFFSET - 1), Color.Black, 0.0f, Vector2.Zero, 1.0f, SpriteEffects.None, layerIndex);
-                    batch.DrawString(font, score.ToString(), new Vector2(this.entity.Position.X - font.MeasureString(score.ToString()).X / 2, this.entity.Position.Y - WOLF_Y_OFFSET), Color.White, 0.0f, Vector2.Zero, 1.0f, SpriteEffects.None, layerIndex - 0.1f);
-                }
             }
+
+            base.Draw(batch, TotalGameSeconds, furniturelist, gameTime);
         }
     }
 }

@@ -7,7 +7,7 @@
 
   <WolfDeathDef FrameWidth="80" FrameHeight="48"
               SheetRows="1" SheetColumns="6"
-              Speed="10"
+              Speed="5"
               SheetName="wolfdeath"/>
 
   <WolfHitDef FrameWidth="80" FrameHeight="48"
@@ -22,7 +22,7 @@
     
   <WolfJumpAttackNoMoveDef FrameWidth="80" FrameHeight="48"
               SheetRows="1" SheetColumns="6"
-              Speed="15"
+              Speed="18"
               SheetName="wolfjumpattacknomove"/>
     
   <WolfIdleDef FrameWidth="80" FrameHeight="48"
@@ -32,6 +32,6 @@
 
   <WolfRunDef FrameWidth="80" FrameHeight="48"
               SheetRows="1" SheetColumns="6"
-              Speed="15"
+              Speed="18"
               SheetName="wolfrun"/>
 </Animations>

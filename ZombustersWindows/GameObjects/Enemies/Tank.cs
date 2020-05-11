@@ -9,23 +9,10 @@ using ZombustersWindows.Subsystem_Managers;
 
 namespace ZombustersWindows
 {
-    /// <summary>
-    /// Objeto que representa cualquier entidad en nuestro juego, en este caso le hemos llamado "Tank"... 
-    /// pero obviamente podía ser cualquier cosa
-    /// </summary>
-    public class Tank
+    public class Tank : BaseEnemy
     {
         public const float VELOCIDAD_MAXIMA = 1.0f;
         public const float FUERZA_MAXIMA = 0.15f;
-
-        public SteeringBehaviors behaviors;
-        public SteeringEntity entity;
-
-        public float angle;
-        public ObjectStatus status;
-        public Vector2 position;
-        public float deathTimeTotalSeconds;
-        public float speed;
 
         public Texture2D TankTexture, TankShadow;
         private Vector2 TankOrigin;
@@ -33,18 +20,18 @@ namespace ZombustersWindows
 
         public Tank(Vector2 velocidad, Vector2 posicion, float boundingRadius)
         {
-            this.entity = new SteeringEntity();
-
-            this.entity.Width = this.TankTexture.Width;
-            this.entity.Height = this.TankTexture.Height;
-            this.entity.Velocity = velocidad;
-            this.entity.Position = posicion;
-            this.entity.BoundingRadius = boundingRadius;
-            this.entity.MaxSpeed = VELOCIDAD_MAXIMA;
+            this.entity = new SteeringEntity
+            {
+                Width = this.TankTexture.Width,
+                Height = this.TankTexture.Height,
+                Velocity = velocidad,
+                Position = posicion,
+                BoundingRadius = boundingRadius,
+                MaxSpeed = VELOCIDAD_MAXIMA
+            };
 
             this.status = ObjectStatus.Active;
             this.deathTimeTotalSeconds = 0;
-            this.position = posicion;
             this.speed = 0;
             this.angle = 1f;
 
@@ -54,8 +41,10 @@ namespace ZombustersWindows
             behaviors = new SteeringBehaviors(FUERZA_MAXIMA, CombinationType.prioritized);
         }
 
-        public void LoadContent(ContentManager content)
+        override public void LoadContent(ContentManager content)
         {
+            base.LoadContent(content);
+
             // Load multiple animations form XML definition
             System.Xml.Linq.XDocument doc = System.Xml.Linq.XDocument.Load("Content/AnimationDef.xml");
 
@@ -82,20 +71,7 @@ namespace ZombustersWindows
             //END ZOMBIE ANIMATION
         }
 
-        public void DestroyTank(float totalGameSeconds)
-        {
-            this.deathTimeTotalSeconds = totalGameSeconds;
-            this.status = ObjectStatus.Dying;
-        }
-
-        // Destroy the seeker without leaving a powerup
-        public void CrashTank(float totalGameSeconds)
-        {
-            this.deathTimeTotalSeconds = totalGameSeconds;
-            this.status = ObjectStatus.Inactive;
-        }
-
-        public void Update(GameTime gameTime, MyGame game)
+        override public void Update(GameTime gameTime, MyGame game, List<BaseEnemy> enemyList)
         {
             // Progress the Zombie animation
             bool isProgressed = TankAnimation.Update(gameTime);
@@ -107,50 +83,7 @@ namespace ZombustersWindows
             this.entity.Position += this.entity.Velocity;
         }
 
-        public bool IsInRange(SteeringEntity entity, Furniture furniture)
-        {
-            float distance = Vector2.Distance(entity.Position, furniture.ObstaclePosition);
-            if (distance < Avatar.CrashRadius + 10.0f)
-            {
-                return true;
-            }
-
-            return false;
-        }
-
-        public float GetLayerIndex(SteeringEntity entity, List<Furniture> furniturelist)
-        {
-            float furnitureBasePosition, playerBasePosition;
-
-            foreach (Furniture furniture in furniturelist)
-            {
-                playerBasePosition = entity.Position.Y + entity.Height;
-                furnitureBasePosition = furniture.Position.Y + furniture.Texture.Height;
-
-                if (IsInRange(entity, furniture))
-                {
-                    if (playerBasePosition < furnitureBasePosition)
-                    {
-                        return furniture.layerIndex + 0.01f;
-                    }
-                    else if (playerBasePosition > furnitureBasePosition)
-                    {
-                        return furniture.layerIndex - 0.01f;
-                    }
-                }
-                else
-                {
-                    if (playerBasePosition < furnitureBasePosition && entity.Position.X < furniture.ObstaclePosition.X)
-                    {
-                        return furniture.layerIndex + 0.01f;
-                    }
-                }
-            }
-
-            return 0.1f;
-        }
-
-        public void Draw(SpriteBatch batch, float TotalGameSeconds, List<Furniture> furniturelist)
+        override public void Draw(SpriteBatch batch, float TotalGameSeconds, List<Furniture> furniturelist, GameTime gameTime)
         {
             float layerIndex = GetLayerIndex(this.entity, furniturelist);
 
@@ -170,16 +103,6 @@ namespace ZombustersWindows
                 batch.Draw(this.TankShadow, new Vector2(this.entity.Position.X + 5, this.entity.Position.Y + this.TankTexture.Height), null, 
                     new Color(255, 255, 255, 50), 0.0f, new Vector2(0, 0), 1.0f, SpriteEffects.None, layerIndex + 0.1f);
 
-            }
-            else if (this.status == ObjectStatus.Dying)
-            {
-                // Draw Score Bonus
-                int score = 10;
-                if ((TotalGameSeconds < this.deathTimeTotalSeconds + .5) && (this.deathTimeTotalSeconds < TotalGameSeconds))
-                {
-                    //batch.DrawString(font, score.ToString(), new Vector2(this.entity.Position.X + 1, this.entity.Position.Y + 1), Color.Black, 0.0f, Vector2.Zero, 1.0f, SpriteEffects.None, layerIndex + 0.1f);
-                    //batch.DrawString(font, score.ToString(), this.entity.Position, Color.White, 0.0f, Vector2.Zero, 1.0f, SpriteEffects.None, layerIndex);
-                }
             }
         }
     }

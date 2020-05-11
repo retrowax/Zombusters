@@ -563,7 +563,7 @@ namespace ZombustersWindows
         private void ChangeGamplayStatusAfterSomeTimeTo(GameTime gameTime, GameplayState gameplayState)
         {
             timer += (float)gameTime.ElapsedGameTime.TotalSeconds;
-            if (timer >= 3.0f)
+            if (timer >= 2.0f)
             {
                 GamePlayStatus = gameplayState;
                 timer = 0;
@@ -839,7 +839,6 @@ namespace ZombustersWindows
         {
             int howManySpawnZones = 4;
             List<int> numplayersIngame = new List<int>();
-            float zombielife, speed;
             float lIndex = 0.8f;
             FurnitureComparer furnitureComparer = new FurnitureComparer();
             this.random = new Random(16);
@@ -967,51 +966,103 @@ namespace ZombustersWindows
                     }
                 }
 
+                float zombieLife;
+                float zombieSpeed;
+                float ratLife;
+                float ratSpeed;
+                float wolfLife;
+                float wolfSpeed;
+                float minotaurLife = 100.0f;
+                float minotaurSpeed = 3.0f;
                 switch (currentLevel)
                 {
                     case LevelType.One:
-                        zombielife = 1.0f;
-                        speed = 0.0f;
+                        zombieLife = 1.0f;
+                        zombieSpeed = 0.0f;
+                        ratLife = 1.0f;
+                        ratSpeed = 0.8f;
+                        wolfLife = 1.0f;
+                        wolfSpeed = 3.0f;
                         break;
                     case LevelType.Two:
-                        zombielife = 1.5f;
-                        speed = 0.2f;
+                        zombieLife = 1.5f;
+                        zombieSpeed = 0.2f;
+                        ratLife = 1.0f;
+                        ratSpeed = 0.9f;
+                        wolfLife = 1.0f;
+                        wolfSpeed = 3.0f;
                         break;
                     case LevelType.Three:
-                        zombielife = 2.0f;
-                        speed = 0.3f;
+                        zombieLife = 2.0f;
+                        zombieSpeed = 0.3f;
+                        ratLife = 1.5f;
+                        ratSpeed = 1.0f;
+                        wolfLife = 1.0f;
+                        wolfSpeed = 3.1f;
                         break;
                     case LevelType.Four:
-                        zombielife = 2.5f;
-                        speed = 0.4f;
+                        zombieLife = 2.5f;
+                        zombieSpeed = 0.4f;
+                        ratLife = 2.0f;
+                        ratSpeed = 1.1f;
+                        wolfLife = 1.0f;
+                        wolfSpeed = 3.1f;
                         break;
                     case LevelType.Five:
-                        zombielife = 3.0f;
-                        speed = 0.5f;
+                        zombieLife = 3.0f;
+                        zombieSpeed = 0.5f;
+                        ratLife = 2.5f;
+                        ratSpeed = 1.1f;
+                        wolfLife = 1.0f;
+                        wolfSpeed = 3.2f;
                         break;
                     case LevelType.Six:
-                        zombielife = 3.5f;
-                        speed = 0.6f;
+                        zombieLife = 3.5f;
+                        zombieSpeed = 0.6f;
+                        ratLife = 3.0f;
+                        ratSpeed = 1.2f;
+                        wolfLife = 1.0f;
+                        wolfSpeed = 3.2f;
                         break;
                     case LevelType.Seven:
-                        zombielife = 4.0f;
-                        speed = 0.7f;
+                        zombieLife = 4.0f;
+                        zombieSpeed = 0.7f;
+                        ratLife = 3.5f;
+                        ratSpeed = 1.2f;
+                        wolfLife = 1.0f;
+                        wolfSpeed = 3.3f;
                         break;
                     case LevelType.Eight:
-                        zombielife = 4.5f;
-                        speed = 0.8f;
+                        zombieLife = 4.5f;
+                        zombieSpeed = 0.8f;
+                        ratLife = 4.0f;
+                        ratSpeed = 1.3f;
+                        wolfLife = 1.0f;
+                        wolfSpeed = 3.3f;
                         break;
                     case LevelType.Nine:
-                        zombielife = 5.0f;
-                        speed = 0.9f;
+                        zombieLife = 5.0f;
+                        zombieSpeed = 0.9f;
+                        ratLife = 4.5f;
+                        ratSpeed = 1.3f;
+                        wolfLife = 1.0f;
+                        wolfSpeed = 3.4f;
                         break;
                     case LevelType.Ten:
-                        zombielife = 5.5f;
-                        speed = 1.0f;
+                        zombieLife = 5.5f;
+                        zombieSpeed = 1.0f;
+                        ratLife = 5.0f;
+                        ratSpeed = 1.4f;
+                        wolfLife = 1.0f;
+                        wolfSpeed = 3.4f;
                         break;
                     default:
-                        zombielife = 1.0f;
-                        speed = 0.0f;
+                        zombieLife = 1.0f;
+                        zombieSpeed = 0.0f;
+                        ratLife = 1.0f;
+                        ratSpeed = 0.8f;
+                        wolfLife = 1.0f;
+                        wolfSpeed = 3.0f;
                         break;
                 }
 
@@ -1020,8 +1071,8 @@ namespace ZombustersWindows
                     EnemyType.Zombie,
                     Level,
                     subLevelIndex,
-                    zombielife,
-                    speed,
+                    zombieLife,
+                    zombieSpeed,
                     numplayersIngame
                 );
 
@@ -1030,8 +1081,8 @@ namespace ZombustersWindows
                     EnemyType.Tank,
                     Level,
                     subLevelIndex,
-                    zombielife,
-                    speed,
+                    zombieLife,
+                    zombieSpeed,
                     numplayersIngame
                 );
 
@@ -1040,8 +1091,8 @@ namespace ZombustersWindows
                     EnemyType.Rat,
                     Level,
                     subLevelIndex,
-                    zombielife,
-                    speed,
+                    ratLife,
+                    ratSpeed,
                     numplayersIngame
                 );
 
@@ -1050,8 +1101,8 @@ namespace ZombustersWindows
                     EnemyType.Wolf,
                     Level,
                     subLevelIndex,
-                    zombielife,
-                    speed,
+                    wolfLife,
+                    wolfSpeed,
                     numplayersIngame
                 );
 
@@ -1060,8 +1111,8 @@ namespace ZombustersWindows
                     EnemyType.Minotaur,
                     Level,
                     subLevelIndex,
-                    zombielife,
-                    speed,
+                    minotaurLife,
+                    minotaurSpeed,
                     numplayersIngame
                 );
 
@@ -2761,19 +2812,6 @@ namespace ZombustersWindows
         }
 
         #endregion
-
-
-        public void ZombieMoved(Enemies enemies, byte zombie, Vector2 pos, float angle)
-        {
-            enemies.Zombies[zombie].entity.Position = pos;
-            enemies.Zombies[zombie].angle = angle;
-        }
-
-        public void TankMoved(Enemies enemies, byte tank, Vector2 pos, float angle)
-        {
-            enemies.Tanks[tank].position = pos;
-            enemies.Tanks[tank].angle = angle;
-        }
 
         public void IncreaseScore(byte player, short amount)
         {

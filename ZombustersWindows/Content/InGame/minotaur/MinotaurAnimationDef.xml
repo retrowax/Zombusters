@@ -2,7 +2,7 @@
 <Animations>
   <MinotaurAttackDef FrameWidth="128" FrameHeight="80"
               SheetRows="2" SheetColumns="8"
-              Speed="10"
+              Speed="24"
               SheetName="minotaurattack"/>
 
   <MinotaurDeathDef FrameWidth="128" FrameHeight="80"
@@ -22,6 +22,6 @@
 
   <MinotaurWalkDef FrameWidth="128" FrameHeight="80"
               SheetRows="1" SheetColumns="8"
-              Speed="15"
+              Speed="30"
               SheetName="minotaurwalk"/>
 </Animations>

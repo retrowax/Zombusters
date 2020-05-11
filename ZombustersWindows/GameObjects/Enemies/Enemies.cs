@@ -12,11 +12,7 @@ namespace ZombustersWindows
 {
     public class Enemies
     {
-        public List<Tank> Tanks = new List<Tank>();
-        public List<Zombie> Zombies = new List<Zombie>();
-        public List<Rat> Rats = new List<Rat>();
-        public List<Wolf> Wolfs = new List<Wolf>();
-        public List<Minotaur> Minotaurs = new List<Minotaur>();
+        public List<BaseEnemy> EnemiesList = new List<BaseEnemy>();
         public List<PowerUp> PowerUpList = new List<PowerUp>();
 
         public Texture2D livePowerUpTexture;
@@ -42,29 +38,9 @@ namespace ZombustersWindows
 
         public void LoadContent(ContentManager content)
         {
-            foreach (Zombie zombie in Zombies)
+            foreach (BaseEnemy enemy in EnemiesList)
             {
-                zombie.LoadContent(content);
-            }
-
-            foreach (Tank tank in Tanks)
-            {
-                tank.LoadContent(content);
-            }
-
-            foreach (Rat rat in Rats)
-            {
-                rat.LoadContent(content);
-            }
-
-            foreach (Wolf wolf in Wolfs)
-            {
-                wolf.LoadContent(content);
-            }
-
-            foreach (Minotaur minotaur in Minotaurs)
-            {
-                minotaur.LoadContent(content);
+                enemy.LoadContent(content);
             }
 
             PowerUpsLoad();
@@ -104,34 +80,34 @@ namespace ZombustersWindows
                         zombie.behaviors.AddBehavior(new Pursuit(Arrive.Deceleration.fast, 50.0f));
                         zombie.behaviors.AddBehavior(new ObstacleAvoidance(ref level.gameWorld, 15.0f));
                         zombie.playerChased = numplayersIngame[this.random.Next(numplayersIngame.Count)];
-                        Zombies.Add(zombie);
+                        EnemiesList.Add(zombie);
                         break;
                     case EnemyType.Tank:
                         Tank tank = new Tank(new Vector2(0, 0), new Vector2(RandomX, RandomY), 5.0f);
                         tank.behaviors.AddBehavior(new Pursuit(Arrive.Deceleration.fast, 50.0f));
                         tank.behaviors.AddBehavior(new ObstacleAvoidance(ref level.gameWorld, 15.0f));
-                        Tanks.Add(tank);
+                        EnemiesList.Add(tank);
                         break;
                     case EnemyType.Rat:
-                        Rat rat = new Rat(new Vector2(RandomX, RandomY), 5.0f, 1);
+                        Rat rat = new Rat(new Vector2(RandomX, RandomY), 5.0f, life, speed, ref random);
                         rat.behaviors.AddBehavior(new Pursuit(Arrive.Deceleration.fast, 50.0f));
                         rat.behaviors.AddBehavior(new ObstacleAvoidance(ref level.gameWorld, 15.0f));
                         rat.playerChased = numplayersIngame[this.random.Next(numplayersIngame.Count)];
-                        Rats.Add(rat);
+                        EnemiesList.Add(rat);
                         break;
                     case EnemyType.Wolf:
-                        Wolf wolf = new Wolf(new Vector2(RandomX, RandomY), 5.0f, 1);
+                        Wolf wolf = new Wolf(new Vector2(RandomX, RandomY), 5.0f, life, speed, ref random);
                         wolf.behaviors.AddBehavior(new Pursuit(Arrive.Deceleration.fast, 50.0f));
                         wolf.behaviors.AddBehavior(new ObstacleAvoidance(ref level.gameWorld, 15.0f));
                         wolf.playerChased = numplayersIngame[this.random.Next(numplayersIngame.Count)];
-                        Wolfs.Add(wolf);
+                        EnemiesList.Add(wolf);
                         break;
                     case EnemyType.Minotaur:
-                        Minotaur minotaur = new Minotaur(new Vector2(RandomX, RandomY), 5.0f, 1);
+                        Minotaur minotaur = new Minotaur(new Vector2(RandomX, RandomY), 5.0f, life, speed, ref random);
                         minotaur.behaviors.AddBehavior(new Pursuit(Arrive.Deceleration.fast, 50.0f));
                         minotaur.behaviors.AddBehavior(new ObstacleAvoidance(ref level.gameWorld, 15.0f));
                         minotaur.playerChased = numplayersIngame[this.random.Next(numplayersIngame.Count)];
-                        Minotaurs.Add(minotaur);
+                        EnemiesList.Add(minotaur);
                         break;
                 }
                 
@@ -140,136 +116,31 @@ namespace ZombustersWindows
 
         public void HandleCollisions(Player player, float totalGameSeconds)
         {
-            HandleZombieCollisions(player, totalGameSeconds);
-            HandleTankCollisions(player, totalGameSeconds);
-            HandleRatCollisions(player, totalGameSeconds);
-            HandleWolfCollisions(player, totalGameSeconds);
-            HandleMinotaurCollisions(player, totalGameSeconds);
+            HandleEnemiesCollisions(player, totalGameSeconds);
             HandlePowerUpCollisions(player);
         }
 
-        private void HandleTankCollisions(Player player, float totalGameSeconds)
+        private void HandleEnemiesCollisions(Player player, float totalGameSeconds)
         {
-            for (int i = 0; i < Tanks.Count; i++)
+            for (int i = 0; i < EnemiesList.Count; i++)
             {
-                Tank tank = Tanks[i];
-                if (tank.status == ObjectStatus.Active)
-                {
-                    for (int l = 0; l < player.avatar.bullets.Count; l++)
-                    {
-                        if (GameplayHelper.DetectCollision(player.avatar.bullets[l], tank.entity.Position, totalGameSeconds))
-                        {
-                            tank.DestroyTank(totalGameSeconds);
-                            player.avatar.score += 10;
-                            game.audio.PlayZombieDying();
-
-                            if (player.avatar.score % 8000 == 0)
-                            {
-                                player.avatar.lives += 1;
-                            }
-                            player.avatar.bullets.RemoveAt(l);
-                        }
-                    }
-                }
-            }
-        }
-
-        private void HandleRatCollisions(Player player, float totalGameSeconds)
-        {
-            foreach (Rat rat in Rats)
-            {
-                if (rat.status == ObjectStatus.Active)
-                {
-                    for (int l = 0; l < player.avatar.bullets.Count; l++)
-                    {
-                        if (GameplayHelper.DetectCollision(player.avatar.bullets[l], rat.entity.Position, totalGameSeconds))
-                        {
-                            rat.Destroy(game.totalGameSeconds, player.avatar.currentgun);
-                            player.avatar.score += 10;
-                            game.audio.PlayZombieDying();
-
-                            if (player.avatar.score % 8000 == 0)
-                            {
-                                player.avatar.lives += 1;
-                            }
-                            player.avatar.bullets.RemoveAt(l);
-                        }
-                    }
-                }
-            }
-        }
-
-        private void HandleWolfCollisions(Player player, float totalGameSeconds)
-        {
-            foreach (Wolf wolf in Wolfs)
-            {
-                if (wolf.status == ObjectStatus.Active)
-                {
-                    for (int l = 0; l < player.avatar.bullets.Count; l++)
-                    {
-                        if (GameplayHelper.DetectCollision(player.avatar.bullets[l], wolf.entity.Position, totalGameSeconds))
-                        {
-                            wolf.Destroy(game.totalGameSeconds, player.avatar.currentgun);
-                            player.avatar.score += 10;
-                            game.audio.PlayZombieDying();
-
-                            if (player.avatar.score % 8000 == 0)
-                            {
-                                player.avatar.lives += 1;
-                            }
-                            player.avatar.bullets.RemoveAt(l);
-                        }
-                    }
-                }
-            }
-        }
-
-        private void HandleMinotaurCollisions(Player player, float totalGameSeconds)
-        {
-            foreach (Minotaur minotaur in Minotaurs)
-            {
-                if (minotaur.status == ObjectStatus.Active)
-                {
-                    for (int l = 0; l < player.avatar.bullets.Count; l++)
-                    {
-                        if (GameplayHelper.DetectCollision(player.avatar.bullets[l], minotaur.entity.Position, totalGameSeconds))
-                        {
-                            minotaur.Destroy(game.totalGameSeconds, player.avatar.currentgun);
-                            player.avatar.score += 10;
-                            game.audio.PlayZombieDying();
-
-                            if (player.avatar.score % 8000 == 0)
-                            {
-                                player.avatar.lives += 1;
-                            }
-                            player.avatar.bullets.RemoveAt(l);
-                        }
-                    }
-                }
-            }
-        }
-
-        private void HandleZombieCollisions(Player player, float totalGameSeconds)
-        {
-            for (int i = 0; i < Zombies.Count; i++)
-            {
-                Zombie zombie = Zombies[i];
-                if (zombie.status == ObjectStatus.Active)
+                BaseEnemy enemy = EnemiesList[i];
+                if (enemy.status == ObjectStatus.Active)
                 {
                     if (player.avatar.currentgun == GunType.flamethrower && player.avatar.ammo[(int)player.avatar.currentgun] > 0)
                     {
                         if (player.avatar.accumFire.Length() > .5)
                         {
-                            if (player.avatar.FlameThrowerRectangle.Intersects(new Rectangle((int)zombie.entity.Position.X, (int)zombie.entity.Position.Y, 48, (int)zombie.entity.Height)))
+                            if (player.avatar.FlameThrowerRectangle.Intersects(new Rectangle((int)enemy.entity.Position.X, (int)enemy.entity.Position.Y, 48, (int)enemy.entity.Height)))
                             {
-                                if (zombie.lifecounter > 1.0f)
+                                if (enemy.lifecounter > 1.0f)
                                 {
-                                    zombie.lifecounter -= 0.2f;
-                                    zombie.isLoosingLife = true;
+                                    enemy.lifecounter -= 0.2f;
+                                    enemy.isLoosingLife = true;
                                 }
                                 else
                                 {
-                                    zombie.DestroyZombie(game.totalGameSeconds, player.avatar.currentgun);
+                                    enemy.Destroy(game.totalGameSeconds, player.avatar.currentgun);
                                     player.avatar.score += 10;
                                     game.audio.PlayZombieDying();
 
@@ -278,9 +149,9 @@ namespace ZombustersWindows
                                         player.avatar.lives += 1;
                                     }
 
-                                    if (PowerUpIsInRange(zombie.entity.Position, zombie.ZombieTexture.Width, zombie.ZombieTexture.Height))
+                                    if (PowerUpIsInRange(enemy.entity.Position, (int)enemy.entity.Width, (int)enemy.entity.Height))
                                     {
-                                        SpawnPowerUp(zombie);
+                                        SpawnPowerUp(enemy);
                                     }
                                 }
                             }
@@ -290,17 +161,17 @@ namespace ZombustersWindows
                     {
                         for (int l = 0; l < player.avatar.bullets.Count; l++)
                         {
-                            if (GameplayHelper.DetectCollision(player.avatar.bullets[l], zombie.entity.Position, totalGameSeconds))
+                            if (GameplayHelper.DetectCollision(player.avatar.bullets[l], enemy.entity.Position, totalGameSeconds))
                             {
-                                if (zombie.lifecounter > 1.0f)
+                                if (enemy.lifecounter > 1.0f)
                                 {
-                                    zombie.lifecounter -= 1.0f;
-                                    zombie.isLoosingLife = true;
+                                    enemy.lifecounter -= 1.0f;
+                                    enemy.isLoosingLife = true;
                                     player.avatar.bullets.RemoveAt(l);
                                 }
                                 else
                                 {
-                                    zombie.DestroyZombie(game.totalGameSeconds, player.avatar.currentgun);
+                                    enemy.Destroy(game.totalGameSeconds, player.avatar.currentgun);
                                     player.avatar.score += 10;
                                     game.audio.PlayZombieDying();
 
@@ -309,9 +180,9 @@ namespace ZombustersWindows
                                         player.avatar.lives += 1;
                                     }
                                     player.avatar.bullets.RemoveAt(l);
-                                    if (PowerUpIsInRange(zombie.entity.Position, zombie.ZombieTexture.Width, zombie.ZombieTexture.Height))
+                                    if (PowerUpIsInRange(enemy.entity.Position, (int)enemy.entity.Width, (int)enemy.entity.Height))
                                     {
-                                        SpawnPowerUp(zombie);
+                                        SpawnPowerUp(enemy);
                                     }
                                 }
                             }
@@ -321,17 +192,17 @@ namespace ZombustersWindows
                         {
                             for (int pelletCount = 0; pelletCount < player.avatar.shotgunbullets[bulletCount].Pellet.Count; pelletCount++)
                             {
-                                if (GameplayHelper.DetectCollision(player.avatar.shotgunbullets[bulletCount].Pellet[pelletCount], zombie.entity.Position, totalGameSeconds))
+                                if (GameplayHelper.DetectCollision(player.avatar.shotgunbullets[bulletCount].Pellet[pelletCount], enemy.entity.Position, totalGameSeconds))
                                 {
                                     player.avatar.shotgunbullets[bulletCount].Pellet.RemoveAt(pelletCount);
-                                    if (zombie.lifecounter > 1.0f)
+                                    if (enemy.lifecounter > 1.0f)
                                     {
-                                        zombie.lifecounter -= 1.0f;
-                                        zombie.isLoosingLife = true;
+                                        enemy.lifecounter -= 1.0f;
+                                        enemy.isLoosingLife = true;
                                     }
                                     else
                                     {
-                                        zombie.DestroyZombie(game.totalGameSeconds, player.avatar.currentgun);
+                                        enemy.Destroy(game.totalGameSeconds, player.avatar.currentgun);
                                         player.avatar.score += 10;
                                         game.audio.PlayZombieDying();
 
@@ -340,9 +211,9 @@ namespace ZombustersWindows
                                             player.avatar.lives += 1;
                                         }
 
-                                        if (PowerUpIsInRange(zombie.entity.Position, zombie.ZombieTexture.Width, zombie.ZombieTexture.Height))
+                                        if (PowerUpIsInRange(enemy.entity.Position, (int)enemy.entity.Width, (int)enemy.entity.Height))
                                         {
-                                            SpawnPowerUp(zombie);
+                                            SpawnPowerUp(enemy);
                                         }
                                     }
                                 }
@@ -351,9 +222,9 @@ namespace ZombustersWindows
                     }
                 }
 
-                if (GameplayHelper.DetectCrash(player.avatar, zombie.entity.Position))
+                if (GameplayHelper.DetectCrash(player.avatar, enemy.entity.Position))
                 {
-                    if (zombie.status == ObjectStatus.Active)
+                    if (enemy.status == ObjectStatus.Active)
                     {
                         if (player.avatar.lifecounter <= 0)
                         {
@@ -442,90 +313,29 @@ namespace ZombustersWindows
 
         public int Count()
         {
-            int zombiesCount = 0;
-            int tanksCount = 0;
-            int ratsCount = 0;
-            int wolfsCount = 0;
-            int minotaursCount = 0;
+            int enemiesCount = 0;
 
-            foreach (Zombie zombie in Zombies)
+            foreach (BaseEnemy enemy in EnemiesList)
             {
-                if (zombie.status == ObjectStatus.Active)
+                if (enemy.status == ObjectStatus.Active)
                 {
-                    zombiesCount += 1;
+                    enemiesCount++;
                 }
             }
 
-            foreach (Tank tank in Tanks)
-            {
-                if (tank.status == ObjectStatus.Active)
-                {
-                    tanksCount += 1;
-                }
-            }
-
-            foreach (Rat rat in Rats)
-            {
-                if (rat.status == ObjectStatus.Active)
-                {
-                    ratsCount += 1;
-                }
-            }
-
-            foreach (Wolf wolf in Wolfs)
-            {
-                if (wolf.status == ObjectStatus.Active)
-                {
-                    wolfsCount += 1;
-                }
-            }
-
-            foreach (Minotaur minotaur in Minotaurs)
-            {
-                if (minotaur.status == ObjectStatus.Active)
-                {
-                    minotaursCount += 1;
-                }
-            }
-
-
-            return zombiesCount + tanksCount + ratsCount + wolfsCount + minotaursCount;
+            return enemiesCount;
         }
 
         public void Clear()
         {
-            Zombies.Clear();
-            Tanks.Clear();
-            Rats.Clear();
-            Wolfs.Clear();
-            Minotaurs.Clear();
+            EnemiesList.Clear();
         }
 
         public void Update(ref GameTime gameTime, MyGame game)
         {
-            foreach (Zombie zombie in Zombies)
+            foreach (BaseEnemy enemy in EnemiesList)
             {
-                zombie.Update(gameTime, game, Zombies);
-            }
-
-            foreach (Tank tank in Tanks)
-            {
-                tank.Update(gameTime, game);
-            }
-
-            foreach (Rat rat in Rats)
-            {
-                rat.Update(gameTime, game, Rats);
-            }
-
-            foreach (Wolf wolf in Wolfs)
-            {
-                wolf.Update(gameTime, game, Wolfs);
-            }
-
-            foreach (Minotaur minotaur in Minotaurs)
-            {
-                minotaur.Update(gameTime, game, Minotaurs);
+                enemy.Update(gameTime, game, EnemiesList);
             }
         }
 
@@ -539,29 +349,9 @@ namespace ZombustersWindows
 
         public void Draw(SpriteBatch spriteBatch, float totalGameSeconds, List<Furniture> furnitureList, GameTime gameTime)
         {
-            foreach (Zombie zombie in Zombies)
+            foreach (BaseEnemy enemy in EnemiesList)
             {
-                zombie.Draw(spriteBatch, totalGameSeconds, furnitureList, gameTime);
-            }
-
-            foreach (Tank tank in Tanks)
-            {
-                tank.Draw(spriteBatch, totalGameSeconds, furnitureList);
-            }
-
-            foreach (Rat rat in Rats)
-            {
-                rat.Draw(spriteBatch, totalGameSeconds, furnitureList, gameTime);
-            }
-
-            foreach (Wolf wolf in Wolfs)
-            {
-                wolf.Draw(spriteBatch, totalGameSeconds, furnitureList, gameTime);
-            }
-
-            foreach (Minotaur minotaur in Minotaurs)
-            {
-                minotaur.Draw(spriteBatch, totalGameSeconds, furnitureList, gameTime);
+                enemy.Draw(spriteBatch, totalGameSeconds, furnitureList, gameTime);
             }
         }
 
@@ -587,7 +377,7 @@ namespace ZombustersWindows
             }
         }
 
-        private void SpawnPowerUp(Zombie zombie)
+        private void SpawnPowerUp(BaseEnemy enemy)
         {
             bool isPowerUpAdded = false;
             if (this.random.Next(1, 14) == 8)
@@ -597,47 +387,47 @@ namespace ZombustersWindows
                 switch (powerUpType)
                 {
                     case PowerUpType.live:
-                        PowerUpList.Add(new PowerUp(livePowerUpTexture, heart, zombie.entity.Position, PowerUpType.live, game.Content));
+                        PowerUpList.Add(new PowerUp(livePowerUpTexture, heart, enemy.entity.Position, PowerUpType.live, game.Content));
                         GameAnalytics.AddDesignEvent("PowerUps:Dropped", (int)PowerUpType.live);
                         break;
 
                     case PowerUpType.machinegun:
-                        PowerUpList.Add(new PowerUp(machinegunAmmoPowerUpTexture, pistolammoUI, zombie.entity.Position, PowerUpType.machinegun, game.Content));
+                        PowerUpList.Add(new PowerUp(machinegunAmmoPowerUpTexture, pistolammoUI, enemy.entity.Position, PowerUpType.machinegun, game.Content));
                         GameAnalytics.AddDesignEvent("PowerUps:Dropped", (int)PowerUpType.machinegun);
                         break;
 
                     case PowerUpType.flamethrower:
-                        PowerUpList.Add(new PowerUp(flamethrowerAmmoPowerUpTexture, flamethrowerammoUI, zombie.entity.Position, PowerUpType.flamethrower, game.Content));
+                        PowerUpList.Add(new PowerUp(flamethrowerAmmoPowerUpTexture, flamethrowerammoUI, enemy.entity.Position, PowerUpType.flamethrower, game.Content));
                         GameAnalytics.AddDesignEvent("PowerUps:Dropped", (int)PowerUpType.flamethrower);
                         break;
 
                     case PowerUpType.shotgun:
-                        PowerUpList.Add(new PowerUp(shotgunAmmoPowerUpTexture, shotgunammoUI, zombie.entity.Position, PowerUpType.shotgun, game.Content));
+                        PowerUpList.Add(new PowerUp(shotgunAmmoPowerUpTexture, shotgunammoUI, enemy.entity.Position, PowerUpType.shotgun, game.Content));
                         GameAnalytics.AddDesignEvent("PowerUps:Dropped", (int)PowerUpType.shotgun);
                         break;
 
                     case PowerUpType.grenade:
-                        PowerUpList.Add(new PowerUp(grenadeammoUI, grenadeammoUI, zombie.entity.Position, PowerUpType.grenade, game.Content));
+                        PowerUpList.Add(new PowerUp(grenadeammoUI, grenadeammoUI, enemy.entity.Position, PowerUpType.grenade, game.Content));
                         GameAnalytics.AddDesignEvent("PowerUps:Dropped", (int)PowerUpType.grenade);
                         break;
 
                     case PowerUpType.speedbuff:
-                        PowerUpList.Add(new PowerUp(livePowerUpTexture, heart, zombie.entity.Position, PowerUpType.speedbuff, game.Content));
+                        PowerUpList.Add(new PowerUp(livePowerUpTexture, heart, enemy.entity.Position, PowerUpType.speedbuff, game.Content));
                         GameAnalytics.AddDesignEvent("PowerUps:Dropped", (int)PowerUpType.speedbuff);
                         break;
 
                     case PowerUpType.immunebuff:
-                        PowerUpList.Add(new PowerUp(immunePowerUpTexture, immunePowerUpTexture, zombie.entity.Position, PowerUpType.immunebuff, game.Content));
+                        PowerUpList.Add(new PowerUp(immunePowerUpTexture, immunePowerUpTexture, enemy.entity.Position, PowerUpType.immunebuff, game.Content));
                         GameAnalytics.AddDesignEvent("PowerUps:Dropped", (int)PowerUpType.immunebuff);
                         break;
 
                     case PowerUpType.extralife:
-                        PowerUpList.Add(new PowerUp(extraLivePowerUpTexture, extraLivePowerUpTexture, zombie.entity.Position, PowerUpType.extralife, game.Content));
+                        PowerUpList.Add(new PowerUp(extraLivePowerUpTexture, extraLivePowerUpTexture, enemy.entity.Position, PowerUpType.extralife, game.Content));
                         GameAnalytics.AddDesignEvent("PowerUps:Dropped", (int)PowerUpType.extralife);
                         break;
 
                     default:
-                        PowerUpList.Add(new PowerUp(livePowerUpTexture, heart, zombie.entity.Position, PowerUpType.live, game.Content));
+                        PowerUpList.Add(new PowerUp(livePowerUpTexture, heart, enemy.entity.Position, PowerUpType.live, game.Content));
                         GameAnalytics.AddDesignEvent("PowerUps:Dropped", (int)PowerUpType.live);
                         break;
                 }
@@ -648,7 +438,7 @@ namespace ZombustersWindows
                 if (this.random.Next(1, 128) == 12)
                 {
                     GameAnalytics.AddDesignEvent("PowerUps:Dropped", (int)PowerUpType.extralife);
-                    PowerUpList.Add(new PowerUp(extraLivePowerUpTexture, extraLivePowerUpTexture, zombie.entity.Position, PowerUpType.extralife, game.Content));
+                    PowerUpList.Add(new PowerUp(extraLivePowerUpTexture, extraLivePowerUpTexture, enemy.entity.Position, PowerUpType.extralife, game.Content));
                 }
             }
         }
