@@ -14,33 +14,41 @@
   
   <EnemiesCount>
     <Zombies>20</Zombies>
+    <Rats>2</Rats>
   </EnemiesCount>
   
   <EnemiesCount>
     <Zombies>25</Zombies>
+    <Rats>4</Rats>
   </EnemiesCount>
   
   <EnemiesCount>
     <Zombies>30</Zombies>
+    <Rats>4</Rats>
   </EnemiesCount>
   
   <EnemiesCount>
     <Zombies>35</Zombies>
+    <Rats>6</Rats>
   </EnemiesCount>
   
   <EnemiesCount>
     <Zombies>40</Zombies>
+    <Rats>6</Rats>
   </EnemiesCount>
   
   <EnemiesCount>
     <Zombies>45</Zombies>
+    <Rats>6</Rats>
   </EnemiesCount>
   
   <EnemiesCount>
     <Zombies>50</Zombies>
+    <Rats>8</Rats>
   </EnemiesCount>
   
   <EnemiesCount>
     <Zombies>55</Zombies>
+    <Rats>8</Rats>
   </EnemiesCount>
 </ArrayOfEnemiesCount>

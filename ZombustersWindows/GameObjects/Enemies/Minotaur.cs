@@ -75,8 +75,6 @@ namespace ZombustersWindows
             idleTexture = content.Load<Texture2D>(@"InGame/minotaur/128x80Minotaur_Idle");
             runTexture = content.Load<Texture2D>(@"InGame/minotaur/128x80Minotaur_Walk");
             shadowTexture = content.Load<Texture2D>(@"InGame/character_shadow");
-
-            font = content.Load<SpriteFont>(@"menu\ArialMenuInfo");
         }
 
         private void LoadAnimations()
