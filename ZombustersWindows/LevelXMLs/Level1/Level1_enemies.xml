@@ -10,11 +10,12 @@
   
   <EnemiesCount>
     <Zombies>15</Zombies>
+    <Rats>2</Rats>
   </EnemiesCount>
   
   <EnemiesCount>
     <Zombies>20</Zombies>
-    <Rats>2</Rats>
+    <Rats>4</Rats>
   </EnemiesCount>
   
   <EnemiesCount>
@@ -24,7 +25,7 @@
   
   <EnemiesCount>
     <Zombies>30</Zombies>
-    <Rats>4</Rats>
+    <Rats>6</Rats>
   </EnemiesCount>
   
   <EnemiesCount>
@@ -39,7 +40,7 @@
   
   <EnemiesCount>
     <Zombies>45</Zombies>
-    <Rats>6</Rats>
+    <Rats>8</Rats>
   </EnemiesCount>
   
   <EnemiesCount>
