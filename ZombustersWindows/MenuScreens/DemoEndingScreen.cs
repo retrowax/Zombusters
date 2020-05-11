@@ -89,6 +89,7 @@ namespace ZombustersWindows
             }
             if (input.IsNewKeyPress(Keys.Enter) || input.IsNewButtonPress(Buttons.A))
             {
+                GameAnalytics.AddDesignEvent("Demo:EndingScreen:AddToWishlist");
                 System.Diagnostics.Process.Start("https://store.steampowered.com/app/1272300/Zombusters/");
             }
             menu.HandleInput(input);

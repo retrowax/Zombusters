@@ -99,6 +99,7 @@ namespace ZombustersWindows
                     break;
 #if DEMO
                 case 3:
+                    GameAnalytics.AddDesignEvent("Demo:MainMenu:AddToWishlist");
                     System.Diagnostics.Process.Start("https://store.steampowered.com/app/1272300/Zombusters/");
                     break;
 
