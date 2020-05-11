@@ -33,7 +33,7 @@ namespace ZombustersWindows
         Animation idleAnimation;
         Animation runAnimation;
 
-        public Wolf(Vector2 posicion, float boundingRadius, float life, ref Random gameRandom)
+        public Wolf(Vector2 posicion, float boundingRadius, float life, float speed, ref Random gameRandom)
         {
             this.entity = new SteeringEntity
             {
@@ -43,17 +43,13 @@ namespace ZombustersWindows
             };
 
             random = gameRandom;
-            if (random.Next(0, 2) == 0)
-            {
-                speed = 0.0f;
-            }
             this.entity.MaxSpeed = MAX_VELOCITY + speed;
 
             this.status = ObjectStatus.Active;
             this.invert = true;
             this.deathTimeTotalSeconds = 0;
             this.TimeOnScreen = 4.5f;
-            this.speed = 0;
+            this.speed = speed;
             this.angle = 1f;
             this.playerChased = 0;
             this.lifecounter = life;
@@ -73,7 +69,7 @@ namespace ZombustersWindows
 
         private void LoadTextures(ref ContentManager content)
         {
-            attackTexture = content.Load<Texture2D>(@"InGame/wolf/80x48Wolf_JumpAttackMove");
+            attackTexture = content.Load<Texture2D>(@"InGame/wolf/80x48Wolf_JumpAttackNoMove");
             deathTexture = content.Load<Texture2D>(@"InGame/wolf/80x48Wolf_Death");
             hitTexture = content.Load<Texture2D>(@"InGame/wolf/80x48Wolf_hit");
             idleTexture = content.Load<Texture2D>(@"InGame/wolf/80x48Wolf_Idle");
@@ -142,11 +138,11 @@ namespace ZombustersWindows
                 this.entity.Velocity = VectorHelper.TruncateVector(this.entity.Velocity, this.entity.MaxSpeed / 1.5f);
                 this.entity.Position += this.entity.Velocity;
 
-                foreach (Wolf wolf in enemyList)
+                foreach (BaseEnemy enemy in enemyList)
                 {
-                    if (entity.Position != wolf.entity.Position && wolf.status == ObjectStatus.Active)
+                    if (entity.Position != enemy.entity.Position && enemy.status == ObjectStatus.Active)
                     {
-                        Vector2 ToEntity = entity.Position - wolf.entity.Position;
+                        Vector2 ToEntity = entity.Position - enemy.entity.Position;
                         float DistFromEachOther = ToEntity.Length();
                         float AmountOfOverLap = entity.BoundingRadius + 20.0f - DistFromEachOther;
 

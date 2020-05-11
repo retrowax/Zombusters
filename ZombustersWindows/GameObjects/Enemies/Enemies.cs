@@ -89,21 +89,21 @@ namespace ZombustersWindows
                         EnemiesList.Add(tank);
                         break;
                     case EnemyType.Rat:
-                        Rat rat = new Rat(new Vector2(RandomX, RandomY), 5.0f, 1, ref random);
+                        Rat rat = new Rat(new Vector2(RandomX, RandomY), 5.0f, life, speed, ref random);
                         rat.behaviors.AddBehavior(new Pursuit(Arrive.Deceleration.fast, 50.0f));
                         rat.behaviors.AddBehavior(new ObstacleAvoidance(ref level.gameWorld, 15.0f));
                         rat.playerChased = numplayersIngame[this.random.Next(numplayersIngame.Count)];
                         EnemiesList.Add(rat);
                         break;
                     case EnemyType.Wolf:
-                        Wolf wolf = new Wolf(new Vector2(RandomX, RandomY), 5.0f, 1, ref random);
+                        Wolf wolf = new Wolf(new Vector2(RandomX, RandomY), 5.0f, life, speed, ref random);
                         wolf.behaviors.AddBehavior(new Pursuit(Arrive.Deceleration.fast, 50.0f));
                         wolf.behaviors.AddBehavior(new ObstacleAvoidance(ref level.gameWorld, 15.0f));
                         wolf.playerChased = numplayersIngame[this.random.Next(numplayersIngame.Count)];
                         EnemiesList.Add(wolf);
                         break;
                     case EnemyType.Minotaur:
-                        Minotaur minotaur = new Minotaur(new Vector2(RandomX, RandomY), 5.0f, 1, ref random);
+                        Minotaur minotaur = new Minotaur(new Vector2(RandomX, RandomY), 5.0f, life, speed, ref random);
                         minotaur.behaviors.AddBehavior(new Pursuit(Arrive.Deceleration.fast, 50.0f));
                         minotaur.behaviors.AddBehavior(new ObstacleAvoidance(ref level.gameWorld, 15.0f));
                         minotaur.playerChased = numplayersIngame[this.random.Next(numplayersIngame.Count)];

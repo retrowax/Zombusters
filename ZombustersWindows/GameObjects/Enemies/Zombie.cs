@@ -125,12 +125,12 @@ namespace ZombustersWindows
                 this.entity.Velocity = VectorHelper.TruncateVector(this.entity.Velocity, this.entity.MaxSpeed / 1.5f);
                 this.entity.Position += this.entity.Velocity;
 
-                foreach (Zombie zombie in enemyList)
+                foreach (BaseEnemy enemy in enemyList)
                 {
-                    if (entity.Position != zombie.entity.Position && zombie.status == ObjectStatus.Active)
+                    if (entity.Position != enemy.entity.Position && enemy.status == ObjectStatus.Active)
                     {
                         //calculate the distance between the positions of the entities
-                        Vector2 ToEntity = entity.Position - zombie.entity.Position;
+                        Vector2 ToEntity = entity.Position - enemy.entity.Position;
 
                         float DistFromEachOther = ToEntity.Length();
 

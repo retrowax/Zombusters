@@ -33,7 +33,7 @@ namespace ZombustersWindows
         Animation idleAnimation;
         Animation runAnimation;
 
-        public Minotaur(Vector2 posicion, float boundingRadius, float life, ref Random gameRandom)
+        public Minotaur(Vector2 posicion, float boundingRadius, float life, float speed, ref Random gameRandom)
         {
             this.entity = new SteeringEntity
             {
@@ -43,17 +43,13 @@ namespace ZombustersWindows
             };
 
             random = gameRandom;
-            if (random.Next(0, 2) == 0)
-            {
-                speed = 0.0f;
-            }
             this.entity.MaxSpeed = MAX_VELOCITY + speed;
 
             this.status = ObjectStatus.Active;
             this.invert = true;
             this.deathTimeTotalSeconds = 0;
             this.TimeOnScreen = 4.5f;
-            this.speed = 0;
+            this.speed = speed;
             this.angle = 1f;
             this.playerChased = 0;
             this.lifecounter = life;
@@ -133,7 +129,7 @@ namespace ZombustersWindows
             runAnimation = new Animation(runTexture, frameSize, sheetSize, frameInterval);
         }
 
-        public void Update(GameTime gameTime, MyGame game, List<Minotaur> minotaurs)
+        public void Update(GameTime gameTime, MyGame game, List<Minotaur> enemyList)
         {
             if (this.status != ObjectStatus.Dying)
             {
@@ -144,11 +140,11 @@ namespace ZombustersWindows
                 this.entity.Velocity = VectorHelper.TruncateVector(this.entity.Velocity, this.entity.MaxSpeed / 1.5f);
                 this.entity.Position += this.entity.Velocity;
 
-                foreach (Minotaur minotaur in minotaurs)
+                foreach (BaseEnemy enemy in enemyList)
                 {
-                    if (entity.Position != minotaur.entity.Position && minotaur.status == ObjectStatus.Active)
+                    if (entity.Position != enemy.entity.Position && enemy.status == ObjectStatus.Active)
                     {
-                        Vector2 ToEntity = entity.Position - minotaur.entity.Position;
+                        Vector2 ToEntity = entity.Position - enemy.entity.Position;
                         float DistFromEachOther = ToEntity.Length();
                         float AmountOfOverLap = entity.BoundingRadius + 20.0f - DistFromEachOther;
 

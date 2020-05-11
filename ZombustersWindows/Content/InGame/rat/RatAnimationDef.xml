@@ -7,7 +7,7 @@
 
   <RatDeathDef FrameWidth="48" FrameHeight="48"
               SheetRows="1" SheetColumns="5"
-              Speed="10"
+              Speed="4"
               SheetName="ratdeath"/>
 
   <RatHitDef FrameWidth="48" FrameHeight="48"
