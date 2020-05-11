@@ -44,7 +44,7 @@ namespace ZombustersWindows
 
         private SpriteFont font;
 
-        private readonly Random random = new Random();
+        private Random random;
         private GunType currentgun;
         private float timer;
 
@@ -53,7 +53,7 @@ namespace ZombustersWindows
         SpriteFont DebugFont;
 #endif
 
-        public Zombie(Vector2 velocidad, Vector2 posicion, float boundingRadius, float life, float speed)
+        public Zombie(Vector2 velocidad, Vector2 posicion, float boundingRadius, float life, float speed, ref Random gameRandom)
         {
             this.entity = new SteeringEntity
             {
@@ -61,7 +61,9 @@ namespace ZombustersWindows
                 Position = posicion,
                 BoundingRadius = boundingRadius
             };
-            if (random.Next(0, 2) == 0)
+
+            this.random = gameRandom;
+            if (this.random.Next(0, 2) == 0)
             {
                 speed = 0.0f;
             }
@@ -150,13 +152,12 @@ namespace ZombustersWindows
                 this.entity.Velocity = VectorHelper.TruncateVector(this.entity.Velocity, this.entity.MaxSpeed / 1.5f);
                 this.entity.Position += this.entity.Velocity;
 
-                for (int i = 0; i < zombies.Count; i++)
+                foreach (Zombie zombie in zombies)
                 {
-                    SteeringEntity zombieEntity = zombies[i].entity;
-                    if (entity.Position != zombieEntity.Position && status == ObjectStatus.Active)
+                    if (entity.Position != zombie.entity.Position && zombie.status == ObjectStatus.Active)
                     {
                         //calculate the distance between the positions of the entities
-                        Vector2 ToEntity = entity.Position - zombieEntity.Position;
+                        Vector2 ToEntity = entity.Position - zombie.entity.Position;
 
                         float DistFromEachOther = ToEntity.Length();
 

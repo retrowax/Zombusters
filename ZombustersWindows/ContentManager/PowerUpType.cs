@@ -5,10 +5,10 @@
         live = 0,
         machinegun = 1,
         flamethrower = 2,
-        extralife = 3,
-        shotgun = 4,
-        grenade = 5,
-        speedbuff = 6,
-        immunebuff = 7
+        shotgun = 3,
+        grenade = 4,
+        speedbuff = 5,
+        immunebuff = 6,
+        extralife = 7
     }
 }

@@ -1170,5 +1170,37 @@ namespace ZombustersWindows.Localization {
                 return ResourceManager.GetString("ChangeLanguageOption", resourceCulture);
             }
         }
+
+        internal static string DemoEndScreenLine1
+        {
+            get
+            {
+                return ResourceManager.GetString("DemoEndScreenLine1", resourceCulture);
+            }
+        }
+
+        internal static string DemoEndScreenLine2
+        {
+            get
+            {
+                return ResourceManager.GetString("DemoEndScreenLine2", resourceCulture);
+            }
+        }
+
+        internal static string DemoEndScreenLine3
+        {
+            get
+            {
+                return ResourceManager.GetString("DemoEndScreenLine3", resourceCulture);
+            }
+        }
+
+        internal static string DemoEndScreenLine4
+        {
+            get
+            {
+                return ResourceManager.GetString("DemoEndScreenLine4", resourceCulture);
+            }
+        }
     }
 }

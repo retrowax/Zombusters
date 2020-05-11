@@ -16,6 +16,7 @@ namespace ZombustersWindows
         private const int LINE_X_OFFSET = 40;
         private const int MENU_TITLE_Y_OFFSET = 400;
         private const int TEXT_WIDTH = 300;
+        private const int EXTRA_WIDTH_NEEDED_FOR_TEXT = 100;
 
         private SpriteBatch batch;
         private List<string> MenuItems;
@@ -158,7 +159,7 @@ namespace ZombustersWindows
             buyNow = this.Game.Content.Load<Texture2D>(@"menu/buynow");
             menuTextLine = this.Game.Content.Load<Texture2D>(@"menu/linea_texto_menu");
             menuLine = this.Game.Content.Load<Texture2D>(@"menu/linea_menu");
-            logoRetrowaxMenu = this.Game.Content.Load<Texture2D>(@"menu/logo_retrowax_menu");
+            logoRetrowaxMenu = this.Game.Content.Load<Texture2D>(@"menu/retrowax-logo-menu");
             logoMenu = this.Game.Content.Load<Texture2D>(@"menu/logo_menu");
 
             MenuHeaderFont = this.Game.Content.Load<SpriteFont>(@"menu\ArialMenuHeader");
@@ -297,7 +298,7 @@ namespace ZombustersWindows
             Viewport view = new Viewport(); // create a new viewport
             view.X = uiBounds.X + (uiBounds.Width / 2);       // using our UIBounds
             view.Y = uiBounds.Y;
-            view.Width = uiBounds.Width;
+            view.Width = uiBounds.Width + EXTRA_WIDTH_NEEDED_FOR_TEXT;
             view.Height = uiBounds.Height;
             return view;
         }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using GameAnalyticsSDK.Net;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 
@@ -17,14 +18,26 @@ namespace ZombustersWindows
         public List<Wolf> Wolfs = new List<Wolf>();
         public List<Minotaur> Minotaurs = new List<Minotaur>();
         public List<PowerUp> PowerUpList = new List<PowerUp>();
-        public Texture2D livePowerUp, extraLivePowerUp, shotgunAmmoPowerUp, machinegunAmmoPowerUp, flamethrowerAmmoPowerUp, immunePowerUp, heart, shotgunammoUI, pistolammoUI, grenadeammoUI, flamethrowerammoUI;
+
+        public Texture2D livePowerUpTexture;
+        private Texture2D extraLivePowerUpTexture;
+        private Texture2D shotgunAmmoPowerUpTexture;
+        private Texture2D machinegunAmmoPowerUpTexture;
+        private Texture2D flamethrowerAmmoPowerUpTexture;
+        private Texture2D immunePowerUpTexture;
+        public Texture2D heart;
+        public Texture2D shotgunammoUI;
+        public Texture2D pistolammoUI;
+        public Texture2D grenadeammoUI;
+        public Texture2D flamethrowerammoUI;
 
         private readonly MyGame game;
-        private readonly Random random = new Random(16);
+        private Random random;
 
-        public Enemies(ref MyGame myGame)
+        public Enemies(ref MyGame myGame, ref Random gameRandom)
         {
             game = myGame;
+            random = gameRandom;
         }
 
         public void LoadContent(ContentManager content)
@@ -59,12 +72,12 @@ namespace ZombustersWindows
 
         private void PowerUpsLoad()
         {
-            livePowerUp = game.Content.Load<Texture2D>(@"InGame/live_powerup");
-            extraLivePowerUp = game.Content.Load<Texture2D>(@"InGame/extralife_powerup");
-            shotgunAmmoPowerUp = game.Content.Load<Texture2D>(@"InGame/shotgun_ammo_powerup");
-            machinegunAmmoPowerUp = game.Content.Load<Texture2D>(@"InGame/machinegun_ammo_powerup");
-            flamethrowerAmmoPowerUp = game.Content.Load<Texture2D>(@"InGame/flamethrower_ammo_powerup");
-            immunePowerUp = game.Content.Load<Texture2D>(@"InGame/immune_ammo_powerup");
+            livePowerUpTexture = game.Content.Load<Texture2D>(@"InGame/live_powerup");
+            extraLivePowerUpTexture = game.Content.Load<Texture2D>(@"InGame/extralife_powerup");
+            shotgunAmmoPowerUpTexture = game.Content.Load<Texture2D>(@"InGame/shotgun_ammo_powerup");
+            machinegunAmmoPowerUpTexture = game.Content.Load<Texture2D>(@"InGame/machinegun_ammo_powerup");
+            flamethrowerAmmoPowerUpTexture = game.Content.Load<Texture2D>(@"InGame/flamethrower_ammo_powerup");
+            immunePowerUpTexture = game.Content.Load<Texture2D>(@"InGame/immune_ammo_powerup");
             heart = game.Content.Load<Texture2D>(@"InGame/GUI/heart");
             shotgunammoUI = game.Content.Load<Texture2D>(@"InGame/GUI/shotgunammo");
             pistolammoUI = game.Content.Load<Texture2D>(@"InGame/GUI/pistolammo");
@@ -87,7 +100,7 @@ namespace ZombustersWindows
                 switch (enemyType)
                 {
                     case EnemyType.Zombie:
-                        Zombie zombie = new Zombie(new Vector2(0, 0), new Vector2(RandomX, RandomY), 5.0f, life, speed + subspeed);
+                        Zombie zombie = new Zombie(new Vector2(0, 0), new Vector2(RandomX, RandomY), 5.0f, life, speed + subspeed, ref random);
                         zombie.behaviors.AddBehavior(new Pursuit(Arrive.Deceleration.fast, 50.0f));
                         zombie.behaviors.AddBehavior(new ObstacleAvoidance(ref level.gameWorld, 15.0f));
                         zombie.playerChased = numplayersIngame[this.random.Next(numplayersIngame.Count)];
@@ -429,7 +442,54 @@ namespace ZombustersWindows
 
         public int Count()
         {
-            return Zombies.Count + Tanks.Count + Rats.Count + Wolfs.Count + Minotaurs.Count;
+            int zombiesCount = 0;
+            int tanksCount = 0;
+            int ratsCount = 0;
+            int wolfsCount = 0;
+            int minotaursCount = 0;
+
+            foreach (Zombie zombie in Zombies)
+            {
+                if (zombie.status == ObjectStatus.Active)
+                {
+                    zombiesCount += 1;
+                }
+            }
+
+            foreach (Tank tank in Tanks)
+            {
+                if (tank.status == ObjectStatus.Active)
+                {
+                    tanksCount += 1;
+                }
+            }
+
+            foreach (Rat rat in Rats)
+            {
+                if (rat.status == ObjectStatus.Active)
+                {
+                    ratsCount += 1;
+                }
+            }
+
+            foreach (Wolf wolf in Wolfs)
+            {
+                if (wolf.status == ObjectStatus.Active)
+                {
+                    wolfsCount += 1;
+                }
+            }
+
+            foreach (Minotaur minotaur in Minotaurs)
+            {
+                if (minotaur.status == ObjectStatus.Active)
+                {
+                    minotaursCount += 1;
+                }
+            }
+
+
+            return zombiesCount + tanksCount + ratsCount + wolfsCount + minotaursCount;
         }
 
         public void Clear()
@@ -467,7 +527,10 @@ namespace ZombustersWindows
             {
                 minotaur.Update(gameTime, game, Minotaurs);
             }
+        }
 
+        public void UpdatePowerUps(ref GameTime gameTime, MyGame game)
+        {
             foreach (PowerUp powerup in PowerUpList)
             {
                 powerup.Update(gameTime);
@@ -500,7 +563,10 @@ namespace ZombustersWindows
             {
                 minotaur.Draw(spriteBatch, totalGameSeconds, furnitureList, gameTime);
             }
+        }
 
+        public void DrawPowerUps(SpriteBatch spriteBatch, GameTime gameTime)
+        {
             foreach (PowerUp powerup in PowerUpList)
             {
                 powerup.Draw(spriteBatch, gameTime);
@@ -523,46 +589,66 @@ namespace ZombustersWindows
 
         private void SpawnPowerUp(Zombie zombie)
         {
-            if (this.random.Next(1, 16) == 8)
+            bool isPowerUpAdded = false;
+            if (this.random.Next(1, 14) == 8)
             {
-                PowerUpType powerUpType = (PowerUpType)Enum.ToObject(typeof(PowerUpType), this.random.Next(0, Enum.GetNames(typeof(PowerUpType)).Length));
+                isPowerUpAdded = true;
+                PowerUpType powerUpType = (PowerUpType)Enum.ToObject(typeof(PowerUpType), this.random.Next(0, Enum.GetNames(typeof(PowerUpType)).Length - 4));
                 switch (powerUpType)
                 {
                     case PowerUpType.live:
-                        PowerUpList.Add(new PowerUp(livePowerUp, heart, zombie.entity.Position, PowerUpType.live));
+                        PowerUpList.Add(new PowerUp(livePowerUpTexture, heart, zombie.entity.Position, PowerUpType.live, game.Content));
+                        GameAnalytics.AddDesignEvent("PowerUps:Dropped", (int)PowerUpType.live);
                         break;
 
                     case PowerUpType.machinegun:
-                        PowerUpList.Add(new PowerUp(machinegunAmmoPowerUp, pistolammoUI, zombie.entity.Position, PowerUpType.machinegun));
+                        PowerUpList.Add(new PowerUp(machinegunAmmoPowerUpTexture, pistolammoUI, zombie.entity.Position, PowerUpType.machinegun, game.Content));
+                        GameAnalytics.AddDesignEvent("PowerUps:Dropped", (int)PowerUpType.machinegun);
                         break;
 
                     case PowerUpType.flamethrower:
-                        PowerUpList.Add(new PowerUp(flamethrowerAmmoPowerUp, flamethrowerammoUI, zombie.entity.Position, PowerUpType.flamethrower));
-                        break;
-
-                    case PowerUpType.extralife:
-                        PowerUpList.Add(new PowerUp(extraLivePowerUp, extraLivePowerUp, zombie.entity.Position, PowerUpType.extralife));
+                        PowerUpList.Add(new PowerUp(flamethrowerAmmoPowerUpTexture, flamethrowerammoUI, zombie.entity.Position, PowerUpType.flamethrower, game.Content));
+                        GameAnalytics.AddDesignEvent("PowerUps:Dropped", (int)PowerUpType.flamethrower);
                         break;
 
                     case PowerUpType.shotgun:
-                        PowerUpList.Add(new PowerUp(shotgunAmmoPowerUp, shotgunammoUI, zombie.entity.Position, PowerUpType.shotgun));
+                        PowerUpList.Add(new PowerUp(shotgunAmmoPowerUpTexture, shotgunammoUI, zombie.entity.Position, PowerUpType.shotgun, game.Content));
+                        GameAnalytics.AddDesignEvent("PowerUps:Dropped", (int)PowerUpType.shotgun);
                         break;
 
                     case PowerUpType.grenade:
-                        PowerUpList.Add(new PowerUp(grenadeammoUI, grenadeammoUI, zombie.entity.Position, PowerUpType.grenade));
+                        PowerUpList.Add(new PowerUp(grenadeammoUI, grenadeammoUI, zombie.entity.Position, PowerUpType.grenade, game.Content));
+                        GameAnalytics.AddDesignEvent("PowerUps:Dropped", (int)PowerUpType.grenade);
                         break;
 
                     case PowerUpType.speedbuff:
-                        PowerUpList.Add(new PowerUp(livePowerUp, heart, zombie.entity.Position, PowerUpType.speedbuff));
+                        PowerUpList.Add(new PowerUp(livePowerUpTexture, heart, zombie.entity.Position, PowerUpType.speedbuff, game.Content));
+                        GameAnalytics.AddDesignEvent("PowerUps:Dropped", (int)PowerUpType.speedbuff);
                         break;
 
                     case PowerUpType.immunebuff:
-                        PowerUpList.Add(new PowerUp(immunePowerUp, immunePowerUp, zombie.entity.Position, PowerUpType.immunebuff));
+                        PowerUpList.Add(new PowerUp(immunePowerUpTexture, immunePowerUpTexture, zombie.entity.Position, PowerUpType.immunebuff, game.Content));
+                        GameAnalytics.AddDesignEvent("PowerUps:Dropped", (int)PowerUpType.immunebuff);
+                        break;
+
+                    case PowerUpType.extralife:
+                        PowerUpList.Add(new PowerUp(extraLivePowerUpTexture, extraLivePowerUpTexture, zombie.entity.Position, PowerUpType.extralife, game.Content));
+                        GameAnalytics.AddDesignEvent("PowerUps:Dropped", (int)PowerUpType.extralife);
                         break;
 
                     default:
-                        PowerUpList.Add(new PowerUp(livePowerUp, heart, zombie.entity.Position, PowerUpType.live));
+                        PowerUpList.Add(new PowerUp(livePowerUpTexture, heart, zombie.entity.Position, PowerUpType.live, game.Content));
+                        GameAnalytics.AddDesignEvent("PowerUps:Dropped", (int)PowerUpType.live);
                         break;
+                }
+            }
+
+            if (!isPowerUpAdded)
+            {
+                if (this.random.Next(1, 128) == 12)
+                {
+                    GameAnalytics.AddDesignEvent("PowerUps:Dropped", (int)PowerUpType.extralife);
+                    PowerUpList.Add(new PowerUp(extraLivePowerUpTexture, extraLivePowerUpTexture, zombie.entity.Position, PowerUpType.extralife, game.Content));
                 }
             }
         }

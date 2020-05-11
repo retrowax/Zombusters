@@ -1,5 +1,6 @@
 using System;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 
 namespace ZombustersWindows.Subsystem_Managers
@@ -18,7 +19,10 @@ namespace ZombustersWindows.Subsystem_Managers
 
         private const float TIME_TO_DIE = 1.5f;
 
-        public Texture2D Texture, UITexture;
+        public Texture2D Texture;
+        public Texture2D UITexture;
+        private SpriteFont font;
+
         public Vector2 Position;
         public int Value;
         public ObjectStatus status;
@@ -29,7 +33,7 @@ namespace ZombustersWindows.Subsystem_Managers
         private float dyingtimer;
         private Color color;
 
-        public PowerUp(Texture2D texture, Texture2D uitexture, Vector2 position, PowerUpType type)
+        public PowerUp(Texture2D texture, Texture2D uitexture, Vector2 position, PowerUpType type, ContentManager content)
         {
             this.Texture = texture;
             this.UITexture = uitexture;
@@ -79,6 +83,13 @@ namespace ZombustersWindows.Subsystem_Managers
                 // Timer
                 buffTimer = IMMUNE_BUFF;
             }
+
+            LoadTextures(ref content);
+        }
+
+        private void LoadTextures(ref ContentManager content)
+        {
+            font = content.Load<SpriteFont>(@"menu\ArialMenuInfo");
         }
 
         public void Update(GameTime gameTime)
@@ -109,8 +120,7 @@ namespace ZombustersWindows.Subsystem_Managers
             String textToShow;
             Vector2 texturePosition;
             Vector2 startPosition;
-            SpriteBatch batch = spriteBatch;
-            batch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, null, null, null, null, Resolution.getTransformationMatrix());
+            spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, null, null, null, null, Resolution.getTransformationMatrix());
 
             if (this.status == ObjectStatus.Active)
             {
@@ -128,7 +138,7 @@ namespace ZombustersWindows.Subsystem_Managers
                     this.color = Color.White;
                 }
 
-                batch.Draw(this.Texture, this.Position, this.color);
+                spriteBatch.Draw(this.Texture, this.Position, this.color);
             }
 
             if (this.status == ObjectStatus.Dying)
@@ -177,15 +187,15 @@ namespace ZombustersWindows.Subsystem_Managers
                     textToShow = "+ " + this.Value.ToString();
                 }
 
-                //startPosition = new Vector2(this.Position.X - (font.MeasureString(textToShow).X / 2), this.Position.Y);
-                //texturePosition = new Vector2(startPosition.X + font.MeasureString(textToShow).X + 2, startPosition.Y);
+                startPosition = new Vector2(this.Position.X - (font.MeasureString(textToShow).X / 2), this.Position.Y);
+                texturePosition = new Vector2(startPosition.X + font.MeasureString(textToShow).X + 2, startPosition.Y);
 
-                //batch.DrawString(font, textToShow, new Vector2(startPosition.X + 1, startPosition.Y + 1), Color.Black);
-                //batch.DrawString(font, textToShow, startPosition, color);
-                //batch.Draw(this.UITexture, texturePosition, Color.White);
+                spriteBatch.DrawString(font, textToShow, new Vector2(startPosition.X + 1, startPosition.Y + 1), Color.Black);
+                spriteBatch.DrawString(font, textToShow, startPosition, color);
+                spriteBatch.Draw(this.UITexture, texturePosition, Color.White);
             }
 
-            batch.End();
+            spriteBatch.End();
         }
     }
 }

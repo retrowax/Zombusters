@@ -6,6 +6,7 @@ using GameStateManagement;
 using ZombustersWindows.Localization;
 using ZombustersWindows.Subsystem_Managers;
 using Steamworks;
+using GameAnalyticsSDK.Net;
 
 namespace ZombustersWindows
 {
@@ -72,6 +73,7 @@ namespace ZombustersWindows
         }
 
         void ConfirmExitMessageBoxAccepted(object sender, PlayerIndexEventArgs e) {
+            GameAnalytics.EndSession();
             try
             {
                 SteamClient.Shutdown();
@@ -97,6 +99,7 @@ namespace ZombustersWindows
                     break;
 #if DEMO
                 case 3:
+                    GameAnalytics.AddDesignEvent("Demo:MainMenu:AddToWishlist");
                     System.Diagnostics.Process.Start("https://store.steampowered.com/app/1272300/Zombusters/");
                     break;
 

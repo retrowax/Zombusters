@@ -5,6 +5,7 @@ using GameStateManagement;
 using ZombustersWindows.Subsystem_Managers;
 using Microsoft.Xna.Framework.Input.Touch;
 using ZombustersWindows.Localization;
+using GameAnalyticsSDK.Net;
 
 namespace ZombustersWindows
 {
@@ -55,6 +56,8 @@ namespace ZombustersWindows
             //bloom.Visible = !bloom.Visible;
             base.Initialize();
             this.isBackgroundOn = true;
+
+            GameAnalytics.AddDesignEvent("ScreenView:Extras:Credits:View");
         }
 
         void menu_MenuCanceled(Object sender, MenuSelection selection)

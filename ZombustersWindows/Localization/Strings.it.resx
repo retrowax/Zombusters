@@ -684,4 +684,16 @@ Raccogli le ricariche per ottenere vite extra o nuove Armi.</value>
   <data name="WishListGameMenuHelp" xml:space="preserve">
     <value>Se desideri supportarci, ti saremmo grati se aggiungi Zombusters alla tua lista dei desideri.</value>
   </data>
+  <data name="DemoEndScreenLine1" xml:space="preserve">
+    <value>Speriamo che la Demo ti sia piaciuta</value>
+  </data>
+  <data name="DemoEndScreenLine2" xml:space="preserve">
+    <value>Preparati a più tipi di nemici, più armi, più potenziamenti e più sorprese!</value>
+  </data>
+  <data name="DemoEndScreenLine3" xml:space="preserve">
+    <value>Assicurati di fermarti alla pagina di Steam e aggiungi il gioco alla tua lista dei desideri</value>
+  </data>
+  <data name="DemoEndScreenLine4" xml:space="preserve">
+    <value>Zombusters uscirà nell'autunno 2020</value>
+  </data>
 </root>

@@ -168,12 +168,11 @@ namespace ZombustersWindows
                 this.entity.Velocity = VectorHelper.TruncateVector(this.entity.Velocity, this.entity.MaxSpeed / 1.5f);
                 this.entity.Position += this.entity.Velocity;
 
-                for (int i = 0; i < rats.Count; i++)
+                foreach (Rat rat in rats)
                 {
-                    SteeringEntity zombieEntity = rats[i].entity;
-                    if (entity.Position != zombieEntity.Position && status == ObjectStatus.Active)
+                    if (entity.Position != rat.entity.Position && rat.status == ObjectStatus.Active)
                     {
-                        Vector2 ToEntity = entity.Position - zombieEntity.Position;
+                        Vector2 ToEntity = entity.Position - rat.entity.Position;
 
                         float DistFromEachOther = ToEntity.Length();
                         float AmountOfOverLap = entity.BoundingRadius + 20.0f - DistFromEachOther;

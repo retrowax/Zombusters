@@ -5,6 +5,7 @@ using Microsoft.Xna.Framework.Input;
 using GameStateManagement;
 using Microsoft.Xna.Framework.Input.Touch;
 using ZombustersWindows.Subsystem_Managers;
+using GameAnalyticsSDK.Net;
 
 namespace ZombustersWindows
 {
@@ -25,7 +26,6 @@ namespace ZombustersWindows
         InputMode displayMode;
         Player player;
        
-
         public OptionsScreen(MyGame game, Player player)
         {
             this.player = player;
@@ -238,6 +238,7 @@ namespace ZombustersWindows
                 Resolution.SetResolution(game.VIRTUAL_RESOLUTION_WIDTH, game.VIRTUAL_RESOLUTION_HEIGHT, false);
                 player.optionsState.FullScreenMode = false;
                 game.graphics.IsFullScreen = true;
+                GameAnalytics.AddDesignEvent("ScreenView:Options:FullScreen:false");
             }
             else
             {
@@ -246,6 +247,7 @@ namespace ZombustersWindows
                 Resolution.SetResolution(screenWidth, screenHeight, true);
                 player.optionsState.FullScreenMode = true;
                 game.graphics.IsFullScreen = false;
+                GameAnalytics.AddDesignEvent("ScreenView:Options:FullScreen:true");
             }
             this.game.graphics.ToggleFullScreen();
         }
@@ -289,6 +291,8 @@ namespace ZombustersWindows
             {
                 volumeSlider.SliderSetting--;
             }
+
+            GameAnalytics.AddDesignEvent("ScreenView:Options:VolumeSFX", volumeSlider.SliderSetting);
         }
         private void HandleMusic(InputState input, PlayerIndex index)
         {
@@ -311,6 +315,8 @@ namespace ZombustersWindows
             {
                 musicSlider.SliderSetting--;
             }
+
+            GameAnalytics.AddDesignEvent("ScreenView:Options:VolumeMusic", musicSlider.SliderSetting);
         }
 
         public override void Update(GameTime gameTime, bool otherScreenHasFocus, 

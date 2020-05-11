@@ -54,10 +54,10 @@ deploy:
 
   - provider: script
     script:
-      ./travis/beta.sh
+      ./travis/demo.sh
     on:
       branch: master
     skip_cleanup: true
 
-after_deploy:
-  - ./travis/tweetAfterDeploy.sh
+#after_deploy:
+#  - ./travis/tweetAfterDeploy.sh

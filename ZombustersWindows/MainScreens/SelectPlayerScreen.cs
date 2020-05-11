@@ -8,6 +8,7 @@ using Microsoft.Xna.Framework.Input.Touch;
 using GameStateManagement;
 using ZombustersWindows.Subsystem_Managers;
 using ZombustersWindows.Localization;
+using GameAnalyticsSDK.Net;
 
 namespace ZombustersWindows
 {
@@ -103,6 +104,8 @@ namespace ZombustersWindows
             base.Initialize();
 
             this.isBackgroundOn = true;
+
+            GameAnalytics.AddDesignEvent("ScreenView:SelectPlayer:View");
         }
 
         public override void LoadContent()
@@ -140,6 +143,7 @@ namespace ZombustersWindows
             }
             else
             {
+                GameAnalytics.AddDesignEvent("ScreenView:SelectPlayer:CharacterSelected", player.avatar.character);
                 player.isReady = true;
             }
         }
@@ -307,6 +311,7 @@ namespace ZombustersWindows
                     player.avatar.Activate();
                     player.IsPlaying = true;
                     player.isReady = false;
+                    GameAnalytics.AddDesignEvent("SelectPlayer:NewPlayer:InputMode:Gamepad", (int)player.playerIndex);
                 }
                 if (input.IsNewKeyPress(Keys.Enter, player.playerIndex))
                 {
@@ -316,6 +321,7 @@ namespace ZombustersWindows
                         player.avatar.Activate();
                         player.IsPlaying = true;
                         player.isReady = false;
+                        GameAnalytics.AddDesignEvent("SelectPlayer:NewPlayer:InputMode:Keyboard");
                     }                    
                 }
             }

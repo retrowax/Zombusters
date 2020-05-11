@@ -28,7 +28,7 @@ namespace ZombustersWindows
         }
 
         public override void LoadContent() {
-            logo = this.ScreenManager.Game.Content.Load<Texture2D>("LogoRetroWax");
+            logo = this.ScreenManager.Game.Content.Load<Texture2D>("retrowax-logo-splash");
             logoCentre = new Vector2(logo.Width / 2, logo.Height / 2);
             base.LoadContent();
         }
