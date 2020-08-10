@@ -38,6 +38,7 @@ namespace ZombustersWindows
         public static float CrashRadius = 20f;
         public static float RespawnTime = 2.0f;
         public static float ImmuneTime = 8.0f;
+        public static float AmmoDisplayTime = 2.0f;
         public static float PixelsPerSecond = 200;
         public static int bulletmax = 20;
         public static int pelletmax = 50;

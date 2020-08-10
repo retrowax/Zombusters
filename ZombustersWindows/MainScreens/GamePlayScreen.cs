@@ -703,6 +703,8 @@ namespace ZombustersWindows
                 {
                     player.avatar.currentgun = GunType.pistol;
                 }
+
+                timerplayer = 0;
             }
 
             if (input.ButtonRB == true)
@@ -788,9 +790,10 @@ namespace ZombustersWindows
                 return;
 
             // Check if we have ammo; if not we change the current gun to pistol
-            if (player.avatar.ammo[(int)player.avatar.currentgun] == 0)
+            if (player.avatar.ammo[(int)player.avatar.currentgun] == 0 && player.avatar.currentgun != GunType.pistol)
             {
                 player.avatar.currentgun = GunType.pistol;
+                timerplayer = 0;
             }
 
             if (player.avatar.currentgun == GunType.machinegun && player.avatar.ammo[(int)GunType.machinegun] > 0)
@@ -1451,6 +1454,32 @@ namespace ZombustersWindows
                 timerplayer += (float)gameTime.ElapsedGameTime.TotalSeconds;
                 if (player.avatar.IsPlayingTheGame)
                 {
+                    if (timerplayer < Avatar.AmmoDisplayTime)
+                    {
+                        switch (player.avatar.currentgun)
+                        {
+                            case GunType.pistol:
+                                this.ScreenManager.SpriteBatch.Draw(enemies.pistolammoUI, new Vector2(player.avatar.position.X + IdleTrunkAnimation[0].frameSize.X / 2 - UIPlayerYellow.Width / 2 + offsetPosition.X + 5, player.avatar.position.Y - 20 + offsetPosition.Y), Color.White);
+                                break;
+                            case GunType.machinegun:
+                                this.ScreenManager.SpriteBatch.Draw(enemies.pistolammoUI, new Vector2(player.avatar.position.X + IdleTrunkAnimation[0].frameSize.X / 2 - UIPlayerYellow.Width / 2 + offsetPosition.X - 3, player.avatar.position.Y - 20 + offsetPosition.Y), Color.White);
+                                this.ScreenManager.SpriteBatch.Draw(enemies.pistolammoUI, new Vector2(player.avatar.position.X + IdleTrunkAnimation[0].frameSize.X / 2 - UIPlayerYellow.Width / 2 + offsetPosition.X + 5, player.avatar.position.Y - 20 + offsetPosition.Y), Color.White);
+                                this.ScreenManager.SpriteBatch.Draw(enemies.pistolammoUI, new Vector2(player.avatar.position.X + IdleTrunkAnimation[0].frameSize.X / 2 - UIPlayerYellow.Width / 2 + offsetPosition.X + 13, player.avatar.position.Y - 20 + offsetPosition.Y), Color.White);
+                                break;
+                            case GunType.shotgun:
+                                this.ScreenManager.SpriteBatch.Draw(enemies.shotgunammoUI, new Vector2(player.avatar.position.X + IdleTrunkAnimation[0].frameSize.X / 2 - UIPlayerYellow.Width / 2 + offsetPosition.X + 3, player.avatar.position.Y - 20 + offsetPosition.Y), Color.White);
+                                break;
+                            case GunType.grenade:
+                                this.ScreenManager.SpriteBatch.Draw(enemies.grenadeammoUI, new Vector2(player.avatar.position.X + IdleTrunkAnimation[0].frameSize.X / 2 - UIPlayerYellow.Width / 2 + offsetPosition.X + 5, player.avatar.position.Y - 20 + offsetPosition.Y), Color.White);
+                                break;
+                            case GunType.flamethrower:
+                                this.ScreenManager.SpriteBatch.Draw(enemies.flamethrowerammoUI, new Vector2(player.avatar.position.X + IdleTrunkAnimation[0].frameSize.X / 2 - UIPlayerYellow.Width / 2 + offsetPosition.X + 5, player.avatar.position.Y - 20 + offsetPosition.Y), Color.White);
+                                break;
+                            default:
+                                break;
+                        }
+                    }
+
                     if (player.avatar.color == Color.Blue)
                     {
                         this.ScreenManager.SpriteBatch.Draw(UIPlayerBlue, new Vector2(player.avatar.position.X + IdleTrunkAnimation[0].frameSize.X / 2 - UIPlayerBlue.Width / 2 + offsetPosition.X, player.avatar.position.Y - 20 + offsetPosition.Y), Color.White);
