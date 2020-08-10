@@ -1,60 +1,40 @@
 using Microsoft.Xna.Framework;
 using System;
-using ZombustersWindows.GameObjects;
 using ZombustersWindows.Subsystem_Managers;
 
 namespace ZombustersWindows
 {
     public class GameplayHelper
     {
-        public static float BULLET_SPEED = 400;
-        public static float PELLET_SPEED = 700;
-        public static float PELLET_SPREAD_ANGLE_90 = 0.09f;
-        public static float PELLET_SPREAD_ANGLE_45 = 1.2f;
+        private static readonly float BULLET_SPEED = 400;
+        private static readonly float PELLET_SPEED = 700;
+        private static readonly float PELLET_SPREAD_ANGLE_90 = 0.09f;
+        private static readonly float PELLET_SPREAD_ANGLE_45 = 1.2f;
+        private static readonly int COLLISION_DISTANCE = 30;
 
-        /// <summary>
-        /// Call this method to determine if a bullet hit an enemy
-        /// </summary>
-        /// <param name="bullet"></param>
-        /// <param name="enemy"></param>
-        /// <param name="gameTime"></param>
-        /// <returns></returns>
         public static bool DetectBulletCollision(Vector4 bullet, Vector2 enemy, double totalGameSeconds)
         {
-
             Vector2 pos = FindBulletPosition(bullet, totalGameSeconds);
-            if (Vector2.Distance(pos, enemy) < 30)
+            if (Vector2.Distance(pos, enemy) < COLLISION_DISTANCE)
                 return true;
 
             return false;
         }
-        /// <summary>
-        /// Call this method to determine if a pellet hit an enemy
-        /// </summary>
-        /// <param name="bullet"></param>
-        /// <param name="enemy"></param>
-        /// <param name="gameTime"></param>
-        /// <returns></returns>
+
         public static bool DetectPelletCollision(Vector4 bullet, Vector2 enemy, float angle, int pelletcount, double totalGameSeconds)
         {
             Vector2 pos = FindShotgunBulletPosition(bullet, angle, pelletcount, totalGameSeconds);
-            if (Vector2.Distance(pos, enemy) < 30)
+            if (Vector2.Distance(pos, enemy) < COLLISION_DISTANCE)
                 return true;
             return false;
         }
-        /// <summary>
-        /// Call this method to determine if the enemy crashed into the player
-        /// </summary>
-        /// <param name="enemy"></param>
-        /// <param name="gameTime"></param>
-        /// <returns></returns>
+
         public static bool DetectCrash(Avatar player, Vector2 enemy)
-        //EnemyInfo enemyType)
         {
             if (player.status == ObjectStatus.Active)
             {
                 float distance = Vector2.Distance(player.position, enemy);
-                return (distance < Avatar.CrashRadius + 20.0f);// + enemyType.CrashRadius);
+                return (distance < Avatar.CrashRadius + 20.0f);
             }
             return false;
         }
