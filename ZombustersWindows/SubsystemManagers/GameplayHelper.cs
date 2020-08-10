@@ -1,6 +1,7 @@
 using Microsoft.Xna.Framework;
 using System;
 using ZombustersWindows.GameObjects;
+using ZombustersWindows.Subsystem_Managers;
 
 namespace ZombustersWindows
 {
@@ -63,43 +64,43 @@ namespace ZombustersWindows
                     break;
             }
 
-            if (angle > -0.3925f && angle < 0.3925f) //NORTH
+            if (Angles.IsNorth(angle))
             {
                 pos.X = bullet.X;
                 pos.Y = bullet.Y - (BULLET_SPEED * ((float)totalGameSeconds - bullet.Z));
             }
-            else if (angle > 0.3925f && angle < 1.1775f) //NORTH-EAST
+            else if (Angles.IsNorthEast(angle))
             {
                 pos.X = bullet.X + (float)Math.Sin(angle) + overAngle + (BULLET_SPEED * ((float)totalGameSeconds - bullet.Z));
                 pos.Y = bullet.Y - (float)Math.Cos(angle) + overAngle - (BULLET_SPEED * ((float)totalGameSeconds - bullet.Z));
             }
-            else if (angle > 1.1775f && angle < 1.9625f) //EAST
+            else if (Angles.IsEast(angle))
             {
                 pos.X = bullet.X + (BULLET_SPEED * ((float)totalGameSeconds - bullet.Z));
                 pos.Y = bullet.Y;
             }
-            else if (angle > 1.19625f && angle < 2.7275f) //SOUTH-EAST
+            else if (Angles.IsSouthEast(angle))
             {
                 pos.X = bullet.X + (float)Math.Sin(angle) + overAngle + (BULLET_SPEED * ((float)totalGameSeconds - bullet.Z));
                 pos.Y = bullet.Y + (float)Math.Cos(angle) + overAngle + (BULLET_SPEED * ((float)totalGameSeconds - bullet.Z));
             }
-            else if (angle > 2.7275f || angle < -2.7275f) //SOUTH
+            else if (Angles.IsSouth(angle))
             {
                 pos.X = bullet.X;
                 pos.Y = bullet.Y + (BULLET_SPEED * ((float)totalGameSeconds - bullet.Z));
             }
-            else if (angle < -1.9625f && angle > -2.7275f) //SOUTH-WEST
+            else if (Angles.IsSouthWest(angle))
             {
                 pos.X = bullet.X - (float)Math.Sin(angle) + overAngle - (BULLET_SPEED * ((float)totalGameSeconds - bullet.Z));
                 pos.Y = bullet.Y + (float)Math.Cos(angle) + overAngle + (BULLET_SPEED * ((float)totalGameSeconds - bullet.Z));
             }
-            else if (angle < -1.1775f && angle > -1.9625f) //WEST
+            else if (Angles.IsWest(angle))
             {
                 pos.X = bullet.X - (BULLET_SPEED * ((float)totalGameSeconds - bullet.Z));
                 pos.Y = bullet.Y;
             }
 
-            else if (angle < -0.3925f && angle > -1.1775f) //NORTH-WEST
+            else if (Angles.IsNorthWest(angle))
             {
                 pos.X = bullet.X - (float)Math.Sin(angle) + overAngle - (BULLET_SPEED * ((float)totalGameSeconds - bullet.Z));
                 pos.Y = bullet.Y - (float)Math.Cos(angle) + overAngle - (BULLET_SPEED * ((float)totalGameSeconds - bullet.Z));
@@ -112,45 +113,42 @@ namespace ZombustersWindows
         {
             Vector2 pos = Vector2.Zero;
 
-            //pos.X = bullet.X;
-            //pos.Y = bullet.Y - (bulletspeed * ((float)totalGameSeconds - bullet.Z));
-
-            if (bullet.W > -0.3925f && bullet.W < 0.3925f) //NORTH
+            if (Angles.IsNorth(bullet.W))
             {
                 pos.X = bullet.X;
                 pos.Y = bullet.Y - (BULLET_SPEED * ((float)totalGameSeconds - bullet.Z));
             }
-            else if (bullet.W > 0.3925f && bullet.W < 1.1775f) //NORTH-EAST
+            else if (Angles.IsNorthEast(bullet.W))
             {
                 pos.X = bullet.X + (float)Math.Sin(bullet.W) + (BULLET_SPEED * ((float)totalGameSeconds - bullet.Z));
                 pos.Y = bullet.Y - (float)Math.Cos(bullet.W) - (BULLET_SPEED * ((float)totalGameSeconds - bullet.Z));
             }
-            else if (bullet.W > 1.1775f && bullet.W < 1.9625f) //EAST
+            else if (Angles.IsEast(bullet.W))
             {
                 pos.X = bullet.X + (BULLET_SPEED * ((float)totalGameSeconds - bullet.Z));
                 pos.Y = bullet.Y;
             }
-            else if (bullet.W > 1.19625f && bullet.W < 2.7275f) //SOUTH-EAST
+            else if (Angles.IsSouthEast(bullet.W))
             {
                 pos.X = bullet.X + (float)Math.Sin(bullet.W) + (BULLET_SPEED * ((float)totalGameSeconds - bullet.Z));
                 pos.Y = bullet.Y + (float)Math.Cos(bullet.W) + (BULLET_SPEED * ((float)totalGameSeconds - bullet.Z));
             }
-            else if (bullet.W > 2.7275f || bullet.W < -2.7275f) //SOUTH
+            else if (Angles.IsSouth(bullet.W))
             {
                 pos.X = bullet.X;
                 pos.Y = bullet.Y + (BULLET_SPEED * ((float)totalGameSeconds - bullet.Z));
             }
-            else if (bullet.W < -1.9625f && bullet.W > -2.7275f) //SOUTH-WEST
+            else if (Angles.IsSouthWest(bullet.W))
             {
                 pos.X = bullet.X - (float)Math.Sin(bullet.W) - (BULLET_SPEED * ((float)totalGameSeconds - bullet.Z));
                 pos.Y = bullet.Y + (float)Math.Cos(bullet.W) + (BULLET_SPEED * ((float)totalGameSeconds - bullet.Z));
             }
-            else if (bullet.W < -1.1775f && bullet.W > -1.9625f) //WEST
+            else if (Angles.IsWest(bullet.W))
             {
                 pos.X = bullet.X - (BULLET_SPEED * ((float)totalGameSeconds - bullet.Z));
                 pos.Y = bullet.Y;
             }
-            else if (bullet.W < -0.3925f && bullet.W > -1.1775f) //NORTH-WEST
+            else if (Angles.IsNorthWest(bullet.W))
             {
                 pos.X = bullet.X - (float)Math.Sin(bullet.W) - (BULLET_SPEED * ((float)totalGameSeconds - bullet.Z));
                 pos.Y = bullet.Y - (float)Math.Cos(bullet.W) - (BULLET_SPEED * ((float)totalGameSeconds - bullet.Z));

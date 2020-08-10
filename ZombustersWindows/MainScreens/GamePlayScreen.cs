@@ -2858,8 +2858,7 @@ namespace ZombustersWindows
 
         public void PlayerFire(Player player, float totalGameSeconds, float angle, Vector2 direction)
         {
-            //NORTH
-            if (angle > -0.3925f && angle < 0.3925f)
+            if (Angles.IsNorth(angle))
             {
                 if (player.avatar.currentgun == GunType.flamethrower)
                 {
@@ -2902,7 +2901,7 @@ namespace ZombustersWindows
                     }
                 }
             }
-            else if (angle > 0.3925f && angle < 1.1775f) //NORTH-EAST
+            else if (Angles.IsNorthEast(angle))
             {
                 if (player.avatar.currentgun == GunType.flamethrower)
                 {
@@ -2931,7 +2930,7 @@ namespace ZombustersWindows
                     }
                 }
             }
-            else if (angle > 1.1775f && angle < 1.9625f) //EAST
+            else if (Angles.IsEast(angle))
             {
                 if (player.avatar.currentgun == GunType.flamethrower)
                 {
@@ -2974,7 +2973,7 @@ namespace ZombustersWindows
                     }
                 }
             }
-            else if (angle > 1.19625f && angle < 2.7275f) //SOUTH-EAST
+            else if (Angles.IsSouthEast(angle))
             {
                 if (player.avatar.currentgun == GunType.flamethrower)
                 {
@@ -3003,7 +3002,7 @@ namespace ZombustersWindows
                     }
                 }
             }
-            else if (angle > 2.7275f || angle < -2.7275f) //SOUTH
+            else if (Angles.IsSouth(angle))
             {
                 if (player.avatar.currentgun == GunType.flamethrower)
                 {
@@ -3046,7 +3045,7 @@ namespace ZombustersWindows
                     }
                 }
             }
-            else if (angle < -1.9625f && angle > -2.7275f) //SOUTH-WEST
+            else if (Angles.IsSouthWest(angle))
             {
                 if (player.avatar.currentgun == GunType.flamethrower)
                 {
@@ -3075,7 +3074,7 @@ namespace ZombustersWindows
                     }
                 }
             }
-            else if (angle < -1.1775f && angle > -1.9625f) //WEST
+            else if (Angles.IsWest(angle))
             {
                 if (player.avatar.currentgun == GunType.flamethrower)
                 {
@@ -3111,7 +3110,7 @@ namespace ZombustersWindows
                     }
                 }
             }
-            else if (angle < -0.3925f && angle > -1.1775f) //NORTH-WEST
+            else if (Angles.IsNorthWest(angle))
             {
                 if (player.avatar.currentgun == GunType.flamethrower)
                 {
