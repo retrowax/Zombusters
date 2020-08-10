@@ -385,9 +385,8 @@ namespace ZombustersWindows
             }
 
             if (input.IsNewButtonPress(Buttons.Y, player.playerIndex)
-                || input.IsNewKeyPress(Keys.LeftControl)
-                || input.IsNewKeyPress(Keys.E)
-                || input.GetCurrentMouseState().RightButton == ButtonState.Pressed)
+                || (player.inputMode == InputMode.Keyboard && input.IsNewKeyPress(Keys.LeftControl))
+                || (player.inputMode == InputMode.Keyboard && input.IsNewKeyPress(Keys.E)))
             {
                 state.ButtonY = true;
             }
@@ -397,8 +396,7 @@ namespace ZombustersWindows
             }
 
             if (input.IsNewButtonPress(Buttons.RightShoulder, player.playerIndex)
-                || input.IsNewKeyPress(Keys.Tab)
-                || input.GetCurrentMouseState().MiddleButton == ButtonState.Pressed)
+                || input.IsNewKeyPress(Keys.Tab))
             {
                 state.ButtonRB = true;
             }
