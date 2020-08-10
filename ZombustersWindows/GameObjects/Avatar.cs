@@ -123,10 +123,17 @@ namespace ZombustersWindows
             lifecounter = 100;
             currentgun = GunType.pistol;
             ammo = new List<int>(Enum.GetNames(typeof(GunType)).Length);
+#if DEBUG
+            for (i = 0; i < Enum.GetNames(typeof(GunType)).Length; i++)
+            {
+                ammo.Add(100);
+            }
+#else
             for (i = 0; i < Enum.GetNames(typeof(GunType)).Length; i++)
             {
                 ammo.Add(0);
             }
+#endif
             bullets.Clear();
             shotgunbullets.Clear();
             LastShot = 0;

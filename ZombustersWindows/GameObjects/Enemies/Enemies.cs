@@ -161,7 +161,7 @@ namespace ZombustersWindows
                     {
                         for (int l = 0; l < player.avatar.bullets.Count; l++)
                         {
-                            if (GameplayHelper.DetectCollision(player.avatar.bullets[l], enemy.entity.Position, totalGameSeconds))
+                            if (GameplayHelper.DetectBulletCollision(player.avatar.bullets[l], enemy.entity.Position, totalGameSeconds))
                             {
                                 if (enemy.lifecounter > 1.0f)
                                 {
@@ -192,7 +192,7 @@ namespace ZombustersWindows
                         {
                             for (int pelletCount = 0; pelletCount < player.avatar.shotgunbullets[bulletCount].Pellet.Count; pelletCount++)
                             {
-                                if (GameplayHelper.DetectCollision(player.avatar.shotgunbullets[bulletCount].Pellet[pelletCount], enemy.entity.Position, totalGameSeconds))
+                                if (GameplayHelper.DetectPelletCollision(player.avatar.shotgunbullets[bulletCount].Pellet[pelletCount], enemy.entity.Position, player.avatar.shotgunbullets[bulletCount].Angle, pelletCount, totalGameSeconds))
                                 {
                                     player.avatar.shotgunbullets[bulletCount].Pellet.RemoveAt(pelletCount);
                                     if (enemy.lifecounter > 1.0f)

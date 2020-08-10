@@ -8,6 +8,8 @@ namespace ZombustersWindows
     public class GameplayHelper
     {
         public static float BULLET_SPEED = 400;
+        public static float PELLET_SPEED = 700;
+        public static float PELLET_SPREAD_ANGLE = 0.09f;
 
         /// <summary>
         /// Call this method to determine if a bullet hit an enemy
@@ -16,13 +18,27 @@ namespace ZombustersWindows
         /// <param name="enemy"></param>
         /// <param name="gameTime"></param>
         /// <returns></returns>
-        public static bool DetectCollision(Vector4 bullet, Vector2 enemy, double totalGameSeconds)
+        public static bool DetectBulletCollision(Vector4 bullet, Vector2 enemy, double totalGameSeconds)
         {
 
             Vector2 pos = FindBulletPosition(bullet, totalGameSeconds);
             if (Vector2.Distance(pos, enemy) < 30)
                 return true;
 
+            return false;
+        }
+        /// <summary>
+        /// Call this method to determine if a pellet hit an enemy
+        /// </summary>
+        /// <param name="bullet"></param>
+        /// <param name="enemy"></param>
+        /// <param name="gameTime"></param>
+        /// <returns></returns>
+        public static bool DetectPelletCollision(Vector4 bullet, Vector2 enemy, float angle, int pelletcount, double totalGameSeconds)
+        {
+            Vector2 pos = FindShotgunBulletPosition(bullet, angle, pelletcount, totalGameSeconds);
+            if (Vector2.Distance(pos, enemy) < 30)
+                return true;
             return false;
         }
         /// <summary>
@@ -45,65 +61,104 @@ namespace ZombustersWindows
         public static Vector2 FindShotgunBulletPosition(Vector4 bullet, float angle, int pelletcount, double totalGameSeconds)
         {
             Vector2 pos = Vector2.Zero;
-            float overAngle = 0;
-            float pelletsSpreadRadians = MathHelper.ToRadians(2.5f);
-
-            switch (pelletcount)
-            {
-                case 0:
-                    overAngle = 0;
-                    break;
-                case 1:
-                    overAngle += 0.25f;
-                    break;
-                case 2:
-                    overAngle -= 0.25f;
-                    break;
-                default:
-                    overAngle = 0;
-                    break;
-            }
 
             if (Angles.IsNorth(angle))
             {
-                pos.X = bullet.X;
-                pos.Y = bullet.Y - (BULLET_SPEED * ((float)totalGameSeconds - bullet.Z));
+                switch (pelletcount)
+                {
+                    case 0:
+                        pos.X = bullet.X - (PELLET_SPEED * ((float)totalGameSeconds - bullet.Z)) * PELLET_SPREAD_ANGLE;
+                        break;
+                    case 1:
+                        pos.X = bullet.X;
+                        break;
+                    case 2:
+                        pos.X = bullet.X + (PELLET_SPEED * ((float)totalGameSeconds - bullet.Z)) * PELLET_SPREAD_ANGLE;
+                        break;
+                    default:
+                        pos.X = bullet.X;
+                        break;
+                }
+                
+                pos.Y = bullet.Y - (PELLET_SPEED * ((float)totalGameSeconds - bullet.Z));
             }
             else if (Angles.IsNorthEast(angle))
             {
-                pos.X = bullet.X + (float)Math.Sin(angle) + overAngle + (BULLET_SPEED * ((float)totalGameSeconds - bullet.Z));
-                pos.Y = bullet.Y - (float)Math.Cos(angle) + overAngle - (BULLET_SPEED * ((float)totalGameSeconds - bullet.Z));
+                pos.X = bullet.X + (float)Math.Sin(angle) + (PELLET_SPEED * ((float)totalGameSeconds - bullet.Z));
+                pos.Y = bullet.Y - (float)Math.Cos(angle) - (PELLET_SPEED * ((float)totalGameSeconds - bullet.Z));
             }
             else if (Angles.IsEast(angle))
             {
-                pos.X = bullet.X + (BULLET_SPEED * ((float)totalGameSeconds - bullet.Z));
-                pos.Y = bullet.Y;
+                pos.X = bullet.X + (PELLET_SPEED * ((float)totalGameSeconds - bullet.Z));
+                switch (pelletcount)
+                {
+                    case 0:
+                        pos.Y = bullet.Y - (PELLET_SPEED * ((float)totalGameSeconds - bullet.Z)) * PELLET_SPREAD_ANGLE;
+                        break;
+                    case 1:
+                        pos.Y = bullet.Y;
+                        break;
+                    case 2:
+                        pos.Y = bullet.Y + (PELLET_SPEED * ((float)totalGameSeconds - bullet.Z)) * PELLET_SPREAD_ANGLE;
+                        break;
+                    default:
+                        pos.Y = bullet.Y;
+                        break;
+                }
             }
             else if (Angles.IsSouthEast(angle))
             {
-                pos.X = bullet.X + (float)Math.Sin(angle) + overAngle + (BULLET_SPEED * ((float)totalGameSeconds - bullet.Z));
-                pos.Y = bullet.Y + (float)Math.Cos(angle) + overAngle + (BULLET_SPEED * ((float)totalGameSeconds - bullet.Z));
+                pos.X = bullet.X + (float)Math.Sin(angle) + (PELLET_SPEED * ((float)totalGameSeconds - bullet.Z));
+                pos.Y = bullet.Y + (float)Math.Cos(angle) + (PELLET_SPEED * ((float)totalGameSeconds - bullet.Z));
             }
             else if (Angles.IsSouth(angle))
             {
-                pos.X = bullet.X;
-                pos.Y = bullet.Y + (BULLET_SPEED * ((float)totalGameSeconds - bullet.Z));
+                switch (pelletcount)
+                {
+                    case 0:
+                        pos.X = bullet.X - (PELLET_SPEED * ((float)totalGameSeconds - bullet.Z)) * PELLET_SPREAD_ANGLE;
+                        break;
+                    case 1:
+                        pos.X = bullet.X;
+                        break;
+                    case 2:
+                        pos.X = bullet.X + (PELLET_SPEED * ((float)totalGameSeconds - bullet.Z)) * PELLET_SPREAD_ANGLE;
+                        break;
+                    default:
+                        pos.X = bullet.X;
+                        break;
+                }
+                pos.Y = bullet.Y + (PELLET_SPEED * ((float)totalGameSeconds - bullet.Z));
             }
             else if (Angles.IsSouthWest(angle))
             {
-                pos.X = bullet.X - (float)Math.Sin(angle) + overAngle - (BULLET_SPEED * ((float)totalGameSeconds - bullet.Z));
-                pos.Y = bullet.Y + (float)Math.Cos(angle) + overAngle + (BULLET_SPEED * ((float)totalGameSeconds - bullet.Z));
+                pos.X = bullet.X - (float)Math.Sin(angle) - (PELLET_SPEED * ((float)totalGameSeconds - bullet.Z));
+                pos.Y = bullet.Y + (float)Math.Cos(angle) + (PELLET_SPEED * ((float)totalGameSeconds - bullet.Z));
             }
             else if (Angles.IsWest(angle))
             {
-                pos.X = bullet.X - (BULLET_SPEED * ((float)totalGameSeconds - bullet.Z));
-                pos.Y = bullet.Y;
+                pos.X = bullet.X - (PELLET_SPEED * ((float)totalGameSeconds - bullet.Z));
+                switch (pelletcount)
+                {
+                    case 0:
+                        pos.Y = bullet.Y - (PELLET_SPEED * ((float)totalGameSeconds - bullet.Z)) * PELLET_SPREAD_ANGLE;
+                        break;
+                    case 1:
+                        pos.Y = bullet.Y;
+                        break;
+                    case 2:
+                        pos.Y = bullet.Y + (PELLET_SPEED * ((float)totalGameSeconds - bullet.Z)) * PELLET_SPREAD_ANGLE;
+                        break;
+                    default:
+                        pos.Y = bullet.Y;
+                        break;
+                }
             }
 
             else if (Angles.IsNorthWest(angle))
             {
-                pos.X = bullet.X - (float)Math.Sin(angle) + overAngle - (BULLET_SPEED * ((float)totalGameSeconds - bullet.Z));
-                pos.Y = bullet.Y - (float)Math.Cos(angle) + overAngle - (BULLET_SPEED * ((float)totalGameSeconds - bullet.Z));
+                pos.X = bullet.X - (float)Math.Sin(angle) - (PELLET_SPEED * ((float)totalGameSeconds - bullet.Z));
+                pos.Y = bullet.Y - (float)Math.Cos(angle) - (PELLET_SPEED * ((float)totalGameSeconds - bullet.Z));
             }
 
             return pos;
