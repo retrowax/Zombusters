@@ -229,6 +229,12 @@
         <Content Include="Content\InGame\wolf\WolfAnimationDef.xml">
           <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </Content>
+        <Content Include="Content\retrowax-logo-splash.xnb">
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\Menu\retrowax-logo-menu.xnb">
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
     </ItemGroup>
     <ItemGroup>
         <MonoGameContentReference Include="Content\Content.mgcb" />
@@ -264,6 +270,8 @@
       <None Remove="Content\InGame\wolf\80x48Wolf_Run.xnb" />
       <None Remove="Content\InGame\minotaur\RatAnimationDef.xml" />
       <None Remove="Content\InGame\wolf\RatAnimationDef.xml" />
+      <None Remove="Content\retrowax-logo-splash.xnb" />
+      <None Remove="Content\Menu\retrowax-logo-menu.xnb" />
     </ItemGroup>
     <ItemGroup>
         <Content Include="Content\Achievements\achieve_1.xnb">
