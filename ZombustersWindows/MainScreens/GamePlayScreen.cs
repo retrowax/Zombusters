@@ -1523,7 +1523,7 @@ namespace ZombustersWindows
 
                     if (player.avatar.accumFire.Length() > .5)
                     {
-                        if (player.avatar.shotAngle > -0.3925f && player.avatar.shotAngle < 0.3925f) //NORTH
+                        if (Angles.IsNorth(player.avatar.shotAngle))
                         {
                             switch (player.avatar.currentgun)
                             {
@@ -1567,7 +1567,7 @@ namespace ZombustersWindows
                                     break;
                             }
                         }
-                        else if (player.avatar.shotAngle > 0.3925f && player.avatar.shotAngle < 1.1775f) //NORTH-EAST
+                        else if (Angles.IsNorthEast(player.avatar.shotAngle))
                         {
                             switch (player.avatar.currentgun)
                             {
@@ -1610,7 +1610,7 @@ namespace ZombustersWindows
                                     break;
                             }
                         }
-                        else if (player.avatar.shotAngle > 1.1775f && player.avatar.shotAngle < 1.9625f) //EAST
+                        else if (Angles.IsEast(player.avatar.shotAngle))
                         {
                             switch (player.avatar.currentgun)
                             {
@@ -1654,7 +1654,7 @@ namespace ZombustersWindows
                                     break;
                             }
                         }
-                        else if (player.avatar.shotAngle > 1.19625f && player.avatar.shotAngle < 2.7275f) //SOUTH-EAST
+                        else if (Angles.IsSouthEast(player.avatar.shotAngle))
                         {
                             switch (player.avatar.currentgun)
                             {
@@ -1698,7 +1698,7 @@ namespace ZombustersWindows
                                     break;
                             }
                         }
-                        else if (player.avatar.shotAngle > 2.7275f || player.avatar.shotAngle < -2.7275f) //SOUTH
+                        else if (Angles.IsSouth(player.avatar.shotAngle))
                         {
                             switch (player.avatar.currentgun)
                             {
@@ -1742,7 +1742,7 @@ namespace ZombustersWindows
                                     break;
                             }
                         }
-                        else if (player.avatar.shotAngle < -1.9625f && player.avatar.shotAngle > -2.7275f) //SOUTH-WEST
+                        else if (Angles.IsSouthWest(player.avatar.shotAngle))
                         {
                             switch (player.avatar.currentgun)
                             {
@@ -1786,7 +1786,7 @@ namespace ZombustersWindows
                                     break;
                             }
                         }
-                        else if (player.avatar.shotAngle < -1.1775f && player.avatar.shotAngle > -1.9625f) //WEST
+                        else if (Angles.IsWest(player.avatar.shotAngle))
                         {
                             switch (player.avatar.currentgun)
                             {
@@ -1830,7 +1830,7 @@ namespace ZombustersWindows
                                     break;
                             }
                         }
-                        else if (player.avatar.shotAngle < -0.3925f && player.avatar.shotAngle > -1.1775f) //NORTH-WEST
+                        else if (Angles.IsNorthWest(player.avatar.shotAngle))
                         {
                             switch (player.avatar.currentgun)
                             {
@@ -2038,7 +2038,7 @@ namespace ZombustersWindows
                         // Draws our avatar at the current position with no tinting
                         if (player.avatar.accumFire.Length() > .5)
                         {
-                            if (player.avatar.shotAngle > -0.3925f && player.avatar.shotAngle < 0.3925f) //NORTH
+                            if (Angles.IsNorth(player.avatar.shotAngle))
                             {
                                 switch (player.avatar.currentgun)
                                 {
@@ -2086,7 +2086,7 @@ namespace ZombustersWindows
                                         break;
                                 }
                             }
-                            else if (player.avatar.shotAngle > 0.3925f && player.avatar.shotAngle < 1.1775f) //NORTH-EAST
+                            else if (Angles.IsNorthEast(player.avatar.shotAngle))
                             {
                                 switch (player.avatar.currentgun)
                                 {
@@ -2133,7 +2133,7 @@ namespace ZombustersWindows
                                         break;
                                 }
                             }
-                            else if (player.avatar.shotAngle > 1.1775f && player.avatar.shotAngle < 1.9625f) //EAST
+                            else if (Angles.IsEast(player.avatar.shotAngle))
                             {
                                 switch (player.avatar.currentgun)
                                 {
@@ -2181,7 +2181,7 @@ namespace ZombustersWindows
                                         break;
                                 }
                             }
-                            else if (player.avatar.shotAngle > 1.19625f && player.avatar.shotAngle < 2.7275f) //SOUTH-EAST
+                            else if (Angles.IsSouthEast(player.avatar.shotAngle))
                             {
                                 switch (player.avatar.currentgun)
                                 {
@@ -2229,7 +2229,7 @@ namespace ZombustersWindows
                                         break;
                                 }
                             }
-                            else if (player.avatar.shotAngle > 2.7275f || player.avatar.shotAngle < -2.7275f) //SOUTH
+                            else if (Angles.IsSouth(player.avatar.shotAngle))
                             {
                                 switch (player.avatar.currentgun)
                                 {
@@ -2277,7 +2277,7 @@ namespace ZombustersWindows
                                         break;
                                 }
                             }
-                            else if (player.avatar.shotAngle < -1.9625f && player.avatar.shotAngle > -2.7275f) //SOUTH-WEST
+                            else if (Angles.IsSouthWest(player.avatar.shotAngle))
                             {
                                 switch (player.avatar.currentgun)
                                 {
@@ -2325,7 +2325,7 @@ namespace ZombustersWindows
                                         break;
                                 }
                             }
-                            else if (player.avatar.shotAngle < -1.1775f && player.avatar.shotAngle > -1.9625f) //WEST
+                            else if (Angles.IsWest(player.avatar.shotAngle))
                             {
                                 switch (player.avatar.currentgun)
                                 {
@@ -2373,7 +2373,7 @@ namespace ZombustersWindows
                                         break;
                                 }
                             }
-                            else if (player.avatar.shotAngle < -0.3925f && player.avatar.shotAngle > -1.1775f) //NORTH-WEST
+                            else if (Angles.IsNorthWest(player.avatar.shotAngle))
                             {
                                 switch (player.avatar.currentgun)
                                 {
