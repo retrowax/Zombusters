@@ -2642,8 +2642,14 @@ namespace ZombustersWindows
 
                             switch (player.avatar.currentgun)
                             {
-                                case GunType.machinegun:
+                                case GunType.pistol:
                                     batch.Draw(enemies.pistolammoUI, new Vector2(Pos.X + 124, Pos.Y + 23), Color.White);
+                                    batch.DrawString(arcade14, "- - -", new Vector2(Pos.X + enemies.heart.Width + 130, Pos.Y + 22), Color.Black);
+                                    break;
+                                case GunType.machinegun:
+                                    batch.Draw(enemies.pistolammoUI, new Vector2(Pos.X + 116, Pos.Y + 23), Color.White);
+                                    batch.Draw(enemies.pistolammoUI, new Vector2(Pos.X + 124, Pos.Y + 23), Color.White);
+                                    batch.Draw(enemies.pistolammoUI, new Vector2(Pos.X + 132, Pos.Y + 23), Color.White);
                                     batch.DrawString(arcade14, player.avatar.ammo[(int)GunType.machinegun].ToString("000"), new Vector2(Pos.X + enemies.heart.Width + 125, Pos.Y + 20), Color.White);
                                     break;
                                 case GunType.shotgun:
@@ -2658,7 +2664,6 @@ namespace ZombustersWindows
                                     batch.Draw(enemies.flamethrowerammoUI, new Vector2(Pos.X + 124, Pos.Y + 23), Color.White);
                                     batch.DrawString(arcade14, player.avatar.ammo[(int)GunType.flamethrower].ToString("000"), new Vector2(Pos.X + enemies.heart.Width + 125, Pos.Y + 20), Color.White);
                                     break;
-                                case GunType.pistol:
                                 default:
                                     batch.DrawString(arcade14, "000", new Vector2(Pos.X + enemies.heart.Width + 125, Pos.Y + 20), Color.White);
                                     break;
