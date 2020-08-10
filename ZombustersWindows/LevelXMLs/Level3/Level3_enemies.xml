@@ -2,41 +2,62 @@
 <ArrayOfEnemiesCount>
   <EnemiesCount>
     <Zombies>17</Zombies>
+    <Rats>5</Rats>
+    <Wolfs>2</Wolfs>
   </EnemiesCount>
   
   <EnemiesCount>
     <Zombies>23</Zombies>
+    <Rats>5</Rats>
+    <Wolfs>2</Wolfs>
   </EnemiesCount>
   
   <EnemiesCount>
     <Zombies>27</Zombies>
+    <Rats>6</Rats>
+    <Wolfs>4</Wolfs>
   </EnemiesCount>
   
   <EnemiesCount>
     <Zombies>33</Zombies>
+    <Rats>6</Rats>
+    <Wolfs>4</Wolfs>
   </EnemiesCount>
   
   <EnemiesCount>
     <Zombies>37</Zombies>
+    <Rats>6</Rats>
+    <Wolfs>5</Wolfs>
   </EnemiesCount>
   
   <EnemiesCount>
     <Zombies>43</Zombies>
+    <Rats>6</Rats>
+    <Wolfs>5</Wolfs>
   </EnemiesCount>
   
   <EnemiesCount>
     <Zombies>47</Zombies>
+    <Rats>8</Rats>
+    <Wolfs>6</Wolfs>
   </EnemiesCount>
   
   <EnemiesCount>
     <Zombies>53</Zombies>
+    <Rats>8</Rats>
+    <Wolfs>6</Wolfs>
   </EnemiesCount>
   
   <EnemiesCount>
     <Zombies>57</Zombies>
+    <Rats>10</Rats>
+    <Wolfs>8</Wolfs>
   </EnemiesCount>
   
   <EnemiesCount>
     <Zombies>63</Zombies>
+    <Rats>12</Rats>
+    <Wolfs>10</Wolfs>
+    <Minotaurs>2</Minotaurs>
   </EnemiesCount>
 </ArrayOfEnemiesCount>

@@ -38,6 +38,7 @@ namespace ZombustersWindows
         public static float CrashRadius = 20f;
         public static float RespawnTime = 2.0f;
         public static float ImmuneTime = 8.0f;
+        public static float AmmoDisplayTime = 2.0f;
         public static float PixelsPerSecond = 200;
         public static int bulletmax = 20;
         public static int pelletmax = 50;
@@ -122,10 +123,17 @@ namespace ZombustersWindows
             lifecounter = 100;
             currentgun = GunType.pistol;
             ammo = new List<int>(Enum.GetNames(typeof(GunType)).Length);
+#if DEBUG
+            for (i = 0; i < Enum.GetNames(typeof(GunType)).Length; i++)
+            {
+                ammo.Add(100);
+            }
+#else
             for (i = 0; i < Enum.GetNames(typeof(GunType)).Length; i++)
             {
                 ammo.Add(0);
             }
+#endif
             bullets.Clear();
             shotgunbullets.Clear();
             LastShot = 0;

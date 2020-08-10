@@ -385,9 +385,8 @@ namespace ZombustersWindows
             }
 
             if (input.IsNewButtonPress(Buttons.Y, player.playerIndex)
-                || input.IsNewKeyPress(Keys.LeftControl)
-                || input.IsNewKeyPress(Keys.E)
-                || input.GetCurrentMouseState().RightButton == ButtonState.Pressed)
+                || (player.inputMode == InputMode.Keyboard && input.IsNewKeyPress(Keys.LeftControl))
+                || (player.inputMode == InputMode.Keyboard && input.IsNewKeyPress(Keys.E)))
             {
                 state.ButtonY = true;
             }
@@ -397,8 +396,7 @@ namespace ZombustersWindows
             }
 
             if (input.IsNewButtonPress(Buttons.RightShoulder, player.playerIndex)
-                || input.IsNewKeyPress(Keys.Tab)
-                || input.GetCurrentMouseState().MiddleButton == ButtonState.Pressed)
+                || input.IsNewKeyPress(Keys.Tab))
             {
                 state.ButtonRB = true;
             }
@@ -705,6 +703,8 @@ namespace ZombustersWindows
                 {
                     player.avatar.currentgun = GunType.pistol;
                 }
+
+                timerplayer = 0;
             }
 
             if (input.ButtonRB == true)
@@ -790,9 +790,10 @@ namespace ZombustersWindows
                 return;
 
             // Check if we have ammo; if not we change the current gun to pistol
-            if (player.avatar.ammo[(int)player.avatar.currentgun] == 0)
+            if (player.avatar.ammo[(int)player.avatar.currentgun] == 0 && player.avatar.currentgun != GunType.pistol)
             {
                 player.avatar.currentgun = GunType.pistol;
+                timerplayer = 0;
             }
 
             if (player.avatar.currentgun == GunType.machinegun && player.avatar.ammo[(int)GunType.machinegun] > 0)
@@ -1453,6 +1454,32 @@ namespace ZombustersWindows
                 timerplayer += (float)gameTime.ElapsedGameTime.TotalSeconds;
                 if (player.avatar.IsPlayingTheGame)
                 {
+                    if (timerplayer < Avatar.AmmoDisplayTime)
+                    {
+                        switch (player.avatar.currentgun)
+                        {
+                            case GunType.pistol:
+                                this.ScreenManager.SpriteBatch.Draw(enemies.pistolammoUI, new Vector2(player.avatar.position.X + IdleTrunkAnimation[0].frameSize.X / 2 - UIPlayerYellow.Width / 2 + offsetPosition.X + 5, player.avatar.position.Y - 20 + offsetPosition.Y), Color.White);
+                                break;
+                            case GunType.machinegun:
+                                this.ScreenManager.SpriteBatch.Draw(enemies.pistolammoUI, new Vector2(player.avatar.position.X + IdleTrunkAnimation[0].frameSize.X / 2 - UIPlayerYellow.Width / 2 + offsetPosition.X - 3, player.avatar.position.Y - 20 + offsetPosition.Y), Color.White);
+                                this.ScreenManager.SpriteBatch.Draw(enemies.pistolammoUI, new Vector2(player.avatar.position.X + IdleTrunkAnimation[0].frameSize.X / 2 - UIPlayerYellow.Width / 2 + offsetPosition.X + 5, player.avatar.position.Y - 20 + offsetPosition.Y), Color.White);
+                                this.ScreenManager.SpriteBatch.Draw(enemies.pistolammoUI, new Vector2(player.avatar.position.X + IdleTrunkAnimation[0].frameSize.X / 2 - UIPlayerYellow.Width / 2 + offsetPosition.X + 13, player.avatar.position.Y - 20 + offsetPosition.Y), Color.White);
+                                break;
+                            case GunType.shotgun:
+                                this.ScreenManager.SpriteBatch.Draw(enemies.shotgunammoUI, new Vector2(player.avatar.position.X + IdleTrunkAnimation[0].frameSize.X / 2 - UIPlayerYellow.Width / 2 + offsetPosition.X + 3, player.avatar.position.Y - 20 + offsetPosition.Y), Color.White);
+                                break;
+                            case GunType.grenade:
+                                this.ScreenManager.SpriteBatch.Draw(enemies.grenadeammoUI, new Vector2(player.avatar.position.X + IdleTrunkAnimation[0].frameSize.X / 2 - UIPlayerYellow.Width / 2 + offsetPosition.X + 5, player.avatar.position.Y - 20 + offsetPosition.Y), Color.White);
+                                break;
+                            case GunType.flamethrower:
+                                this.ScreenManager.SpriteBatch.Draw(enemies.flamethrowerammoUI, new Vector2(player.avatar.position.X + IdleTrunkAnimation[0].frameSize.X / 2 - UIPlayerYellow.Width / 2 + offsetPosition.X + 5, player.avatar.position.Y - 20 + offsetPosition.Y), Color.White);
+                                break;
+                            default:
+                                break;
+                        }
+                    }
+
                     if (player.avatar.color == Color.Blue)
                     {
                         this.ScreenManager.SpriteBatch.Draw(UIPlayerBlue, new Vector2(player.avatar.position.X + IdleTrunkAnimation[0].frameSize.X / 2 - UIPlayerBlue.Width / 2 + offsetPosition.X, player.avatar.position.Y - 20 + offsetPosition.Y), Color.White);
@@ -1496,7 +1523,7 @@ namespace ZombustersWindows
 
                     if (player.avatar.accumFire.Length() > .5)
                     {
-                        if (player.avatar.shotAngle > -0.3925f && player.avatar.shotAngle < 0.3925f) //NORTH
+                        if (Angles.IsNorth(player.avatar.shotAngle))
                         {
                             switch (player.avatar.currentgun)
                             {
@@ -1540,7 +1567,7 @@ namespace ZombustersWindows
                                     break;
                             }
                         }
-                        else if (player.avatar.shotAngle > 0.3925f && player.avatar.shotAngle < 1.1775f) //NORTH-EAST
+                        else if (Angles.IsNorthEast(player.avatar.shotAngle))
                         {
                             switch (player.avatar.currentgun)
                             {
@@ -1583,7 +1610,7 @@ namespace ZombustersWindows
                                     break;
                             }
                         }
-                        else if (player.avatar.shotAngle > 1.1775f && player.avatar.shotAngle < 1.9625f) //EAST
+                        else if (Angles.IsEast(player.avatar.shotAngle))
                         {
                             switch (player.avatar.currentgun)
                             {
@@ -1627,7 +1654,7 @@ namespace ZombustersWindows
                                     break;
                             }
                         }
-                        else if (player.avatar.shotAngle > 1.19625f && player.avatar.shotAngle < 2.7275f) //SOUTH-EAST
+                        else if (Angles.IsSouthEast(player.avatar.shotAngle))
                         {
                             switch (player.avatar.currentgun)
                             {
@@ -1671,7 +1698,7 @@ namespace ZombustersWindows
                                     break;
                             }
                         }
-                        else if (player.avatar.shotAngle > 2.7275f || player.avatar.shotAngle < -2.7275f) //SOUTH
+                        else if (Angles.IsSouth(player.avatar.shotAngle))
                         {
                             switch (player.avatar.currentgun)
                             {
@@ -1715,7 +1742,7 @@ namespace ZombustersWindows
                                     break;
                             }
                         }
-                        else if (player.avatar.shotAngle < -1.9625f && player.avatar.shotAngle > -2.7275f) //SOUTH-WEST
+                        else if (Angles.IsSouthWest(player.avatar.shotAngle))
                         {
                             switch (player.avatar.currentgun)
                             {
@@ -1759,7 +1786,7 @@ namespace ZombustersWindows
                                     break;
                             }
                         }
-                        else if (player.avatar.shotAngle < -1.1775f && player.avatar.shotAngle > -1.9625f) //WEST
+                        else if (Angles.IsWest(player.avatar.shotAngle))
                         {
                             switch (player.avatar.currentgun)
                             {
@@ -1803,7 +1830,7 @@ namespace ZombustersWindows
                                     break;
                             }
                         }
-                        else if (player.avatar.shotAngle < -0.3925f && player.avatar.shotAngle > -1.1775f) //NORTH-WEST
+                        else if (Angles.IsNorthWest(player.avatar.shotAngle))
                         {
                             switch (player.avatar.currentgun)
                             {
@@ -2011,7 +2038,7 @@ namespace ZombustersWindows
                         // Draws our avatar at the current position with no tinting
                         if (player.avatar.accumFire.Length() > .5)
                         {
-                            if (player.avatar.shotAngle > -0.3925f && player.avatar.shotAngle < 0.3925f) //NORTH
+                            if (Angles.IsNorth(player.avatar.shotAngle))
                             {
                                 switch (player.avatar.currentgun)
                                 {
@@ -2059,7 +2086,7 @@ namespace ZombustersWindows
                                         break;
                                 }
                             }
-                            else if (player.avatar.shotAngle > 0.3925f && player.avatar.shotAngle < 1.1775f) //NORTH-EAST
+                            else if (Angles.IsNorthEast(player.avatar.shotAngle))
                             {
                                 switch (player.avatar.currentgun)
                                 {
@@ -2106,7 +2133,7 @@ namespace ZombustersWindows
                                         break;
                                 }
                             }
-                            else if (player.avatar.shotAngle > 1.1775f && player.avatar.shotAngle < 1.9625f) //EAST
+                            else if (Angles.IsEast(player.avatar.shotAngle))
                             {
                                 switch (player.avatar.currentgun)
                                 {
@@ -2154,7 +2181,7 @@ namespace ZombustersWindows
                                         break;
                                 }
                             }
-                            else if (player.avatar.shotAngle > 1.19625f && player.avatar.shotAngle < 2.7275f) //SOUTH-EAST
+                            else if (Angles.IsSouthEast(player.avatar.shotAngle))
                             {
                                 switch (player.avatar.currentgun)
                                 {
@@ -2202,7 +2229,7 @@ namespace ZombustersWindows
                                         break;
                                 }
                             }
-                            else if (player.avatar.shotAngle > 2.7275f || player.avatar.shotAngle < -2.7275f) //SOUTH
+                            else if (Angles.IsSouth(player.avatar.shotAngle))
                             {
                                 switch (player.avatar.currentgun)
                                 {
@@ -2250,7 +2277,7 @@ namespace ZombustersWindows
                                         break;
                                 }
                             }
-                            else if (player.avatar.shotAngle < -1.9625f && player.avatar.shotAngle > -2.7275f) //SOUTH-WEST
+                            else if (Angles.IsSouthWest(player.avatar.shotAngle))
                             {
                                 switch (player.avatar.currentgun)
                                 {
@@ -2298,7 +2325,7 @@ namespace ZombustersWindows
                                         break;
                                 }
                             }
-                            else if (player.avatar.shotAngle < -1.1775f && player.avatar.shotAngle > -1.9625f) //WEST
+                            else if (Angles.IsWest(player.avatar.shotAngle))
                             {
                                 switch (player.avatar.currentgun)
                                 {
@@ -2346,7 +2373,7 @@ namespace ZombustersWindows
                                         break;
                                 }
                             }
-                            else if (player.avatar.shotAngle < -0.3925f && player.avatar.shotAngle > -1.1775f) //NORTH-WEST
+                            else if (Angles.IsNorthWest(player.avatar.shotAngle))
                             {
                                 switch (player.avatar.currentgun)
                                 {
@@ -2644,8 +2671,14 @@ namespace ZombustersWindows
 
                             switch (player.avatar.currentgun)
                             {
-                                case GunType.machinegun:
+                                case GunType.pistol:
                                     batch.Draw(enemies.pistolammoUI, new Vector2(Pos.X + 124, Pos.Y + 23), Color.White);
+                                    batch.DrawString(arcade14, "- - -", new Vector2(Pos.X + enemies.heart.Width + 130, Pos.Y + 22), Color.Black);
+                                    break;
+                                case GunType.machinegun:
+                                    batch.Draw(enemies.pistolammoUI, new Vector2(Pos.X + 116, Pos.Y + 23), Color.White);
+                                    batch.Draw(enemies.pistolammoUI, new Vector2(Pos.X + 124, Pos.Y + 23), Color.White);
+                                    batch.Draw(enemies.pistolammoUI, new Vector2(Pos.X + 132, Pos.Y + 23), Color.White);
                                     batch.DrawString(arcade14, player.avatar.ammo[(int)GunType.machinegun].ToString("000"), new Vector2(Pos.X + enemies.heart.Width + 125, Pos.Y + 20), Color.White);
                                     break;
                                 case GunType.shotgun:
@@ -2660,7 +2693,6 @@ namespace ZombustersWindows
                                     batch.Draw(enemies.flamethrowerammoUI, new Vector2(Pos.X + 124, Pos.Y + 23), Color.White);
                                     batch.DrawString(arcade14, player.avatar.ammo[(int)GunType.flamethrower].ToString("000"), new Vector2(Pos.X + enemies.heart.Width + 125, Pos.Y + 20), Color.White);
                                     break;
-                                case GunType.pistol:
                                 default:
                                     batch.DrawString(arcade14, "000", new Vector2(Pos.X + enemies.heart.Width + 125, Pos.Y + 20), Color.White);
                                     break;
@@ -2826,8 +2858,7 @@ namespace ZombustersWindows
 
         public void PlayerFire(Player player, float totalGameSeconds, float angle, Vector2 direction)
         {
-            //NORTH
-            if (angle > -0.3925f && angle < 0.3925f)
+            if (Angles.IsNorth(angle))
             {
                 if (player.avatar.currentgun == GunType.flamethrower)
                 {
@@ -2870,7 +2901,7 @@ namespace ZombustersWindows
                     }
                 }
             }
-            else if (angle > 0.3925f && angle < 1.1775f) //NORTH-EAST
+            else if (Angles.IsNorthEast(angle))
             {
                 if (player.avatar.currentgun == GunType.flamethrower)
                 {
@@ -2899,7 +2930,7 @@ namespace ZombustersWindows
                     }
                 }
             }
-            else if (angle > 1.1775f && angle < 1.9625f) //EAST
+            else if (Angles.IsEast(angle))
             {
                 if (player.avatar.currentgun == GunType.flamethrower)
                 {
@@ -2942,7 +2973,7 @@ namespace ZombustersWindows
                     }
                 }
             }
-            else if (angle > 1.19625f && angle < 2.7275f) //SOUTH-EAST
+            else if (Angles.IsSouthEast(angle))
             {
                 if (player.avatar.currentgun == GunType.flamethrower)
                 {
@@ -2971,7 +3002,7 @@ namespace ZombustersWindows
                     }
                 }
             }
-            else if (angle > 2.7275f || angle < -2.7275f) //SOUTH
+            else if (Angles.IsSouth(angle))
             {
                 if (player.avatar.currentgun == GunType.flamethrower)
                 {
@@ -3014,7 +3045,7 @@ namespace ZombustersWindows
                     }
                 }
             }
-            else if (angle < -1.9625f && angle > -2.7275f) //SOUTH-WEST
+            else if (Angles.IsSouthWest(angle))
             {
                 if (player.avatar.currentgun == GunType.flamethrower)
                 {
@@ -3043,7 +3074,7 @@ namespace ZombustersWindows
                     }
                 }
             }
-            else if (angle < -1.1775f && angle > -1.9625f) //WEST
+            else if (Angles.IsWest(angle))
             {
                 if (player.avatar.currentgun == GunType.flamethrower)
                 {
@@ -3079,7 +3110,7 @@ namespace ZombustersWindows
                     }
                 }
             }
-            else if (angle < -0.3925f && angle > -1.1775f) //NORTH-WEST
+            else if (Angles.IsNorthWest(angle))
             {
                 if (player.avatar.currentgun == GunType.flamethrower)
                 {

@@ -236,6 +236,8 @@ namespace ZombustersWindows
                         {
                             deathAnimation.Draw(batch, new Vector2(this.entity.Position.X - MINOTAUR_X_LEFT_OFFSET, this.entity.Position.Y - MINOTAUR_Y_OFFSET), MINOTAUR_SCALE, SpriteEffects.FlipHorizontally, layerIndex, 0f, Color.White);
                         }
+
+                        batch.Draw(this.shadowTexture, new Vector2(this.entity.Position.X - 10, this.entity.Position.Y - 80 + this.idleTexture.Height), null, new Color(255, 255, 255, 50), 0.0f, new Vector2(0, 0), 1.0f, SpriteEffects.None, layerIndex + 0.01f);
                     }
                 }
                 else
@@ -251,6 +253,8 @@ namespace ZombustersWindows
                         {
                             deathAnimation.Draw(batch, new Vector2(this.entity.Position.X - MINOTAUR_X_LEFT_OFFSET, this.entity.Position.Y - MINOTAUR_Y_OFFSET), MINOTAUR_SCALE, SpriteEffects.FlipHorizontally, layerIndex, 0f, Color.White);
                         }
+
+                        batch.Draw(this.shadowTexture, new Vector2(this.entity.Position.X - 10, this.entity.Position.Y - 80 + this.idleTexture.Height), null, new Color(255, 255, 255, 50), 0.0f, new Vector2(0, 0), 1.0f, SpriteEffects.None, layerIndex + 0.01f);
                     }
                 }
             }

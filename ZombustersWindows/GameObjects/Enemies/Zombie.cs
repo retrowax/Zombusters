@@ -200,6 +200,8 @@ namespace ZombustersWindows
                         {
                             ZombieDeathAnimation.Draw(batch, new Vector2(this.entity.Position.X - 21, this.entity.Position.Y - 50), SpriteEffects.None, layerIndex, 0f, Color.White);
                         }
+
+                        batch.Draw(this.ZombieShadow, new Vector2(this.entity.Position.X - 10, this.entity.Position.Y - 58 + this.ZombieTexture.Height), null, new Color(255, 255, 255, 50), 0.0f, new Vector2(0, 0), 1.0f, SpriteEffects.None, layerIndex + 0.01f);
                     }
                 }
                 else
@@ -215,6 +217,8 @@ namespace ZombustersWindows
                         {
                             BurningZombieAnimation.Draw(batch, new Vector2(this.entity.Position.X - 21, this.entity.Position.Y - 50), SpriteEffects.None, layerIndex, 0f, Color.White);
                         }
+
+                        batch.Draw(this.ZombieShadow, new Vector2(this.entity.Position.X - 10, this.entity.Position.Y - 58 + this.ZombieTexture.Height), null, new Color(255, 255, 255, 50), 0.0f, new Vector2(0, 0), 1.0f, SpriteEffects.None, layerIndex + 0.01f);
                     }
                 }
             }
