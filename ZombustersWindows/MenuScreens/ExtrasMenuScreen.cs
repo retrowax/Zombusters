@@ -131,15 +131,19 @@ namespace ZombustersWindows
             
             switch (selection.Selection)
             {
-                case 0: // How to Play
+                case 0:
                     ((MyGame)this.ScreenManager.Game).DisplayHowToPlay();
                     break;
 
-                case 1: // Leaderboards
+                case 1:
                     ((MyGame)this.ScreenManager.Game).DisplayLeaderBoard();
                     break;
 
                 case 2:
+                    ((MyGame)this.ScreenManager.Game).DisplayCredits();
+                    break;
+
+                case 3:
                     ShowMarketPlace();
                     break;
 

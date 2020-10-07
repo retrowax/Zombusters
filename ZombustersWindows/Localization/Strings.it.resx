@@ -696,4 +696,11 @@ Raccogli le ricariche per ottenere vite extra o nuove Armi.</value>
   <data name="DemoEndScreenLine4" xml:space="preserve">
     <value>Zombusters uscirà nell'autunno 2020</value>
   </data>
+  <data name="StoreMenuString" xml:space="preserve">
+    <value>NEGOZIO</value>
+    <comment>Store Link</comment>
+  </data>
+  <data name="StoreMMString" xml:space="preserve">
+    <value>Dai un'occhiata al nostro merchandising sul nostro negozio ufficiale su Redbubble</value>
+  </data>
 </root>

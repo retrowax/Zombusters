@@ -784,4 +784,11 @@ conseguir vidas extras o nuevas armas.</value>
   <data name="DemoEndScreenLine4" xml:space="preserve">
     <value>Zombusters se lanzará en otoño de 2020</value>
   </data>
+  <data name="StoreMenuString" xml:space="preserve">
+    <value>TIENDA</value>
+    <comment>Store Link</comment>
+  </data>
+  <data name="StoreMMString" xml:space="preserve">
+    <value>Echa un vistazo a nuestro merchandising en nuestra tienda oficial en Redbubble.</value>
+  </data>
 </root>
