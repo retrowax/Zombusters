@@ -10,6 +10,11 @@ namespace ZombustersWindows
 {
     public class BaseEnemy
     {
+        private const int ZOMBIE_SCORE = 10;
+        private const int RAT_SCORE = 15;
+        private const int WOLF_SCORE = 30;
+        private const int MINOTAUR_SCORE = 80;
+
         public SteeringBehaviors behaviors;
         public SteeringEntity entity;
 
@@ -126,13 +131,37 @@ namespace ZombustersWindows
 #endif
             if (this.status == ObjectStatus.Dying)
             {
-                int score = 10;
+                int score = GetScore();
                 float layerIndex = GetLayerIndex(this.entity, furniturelist);
                 if ((TotalGameSeconds < this.deathTimeTotalSeconds + .5) && (this.deathTimeTotalSeconds < TotalGameSeconds))
                 {
                     batch.DrawString(font, score.ToString(), new Vector2(this.entity.Position.X - font.MeasureString(score.ToString()).X / 2 + 1, this.entity.Position.Y - entityYOffset - 1), Color.Black, 0.0f, Vector2.Zero, 1.0f, SpriteEffects.None, layerIndex);
                     batch.DrawString(font, score.ToString(), new Vector2(this.entity.Position.X - font.MeasureString(score.ToString()).X / 2, this.entity.Position.Y - entityYOffset), Color.White, 0.0f, Vector2.Zero, 1.0f, SpriteEffects.None, layerIndex - 0.1f);
                 }
+            }
+        }
+
+        private int GetScore()
+        {
+            if (GetType().Name == EnemyType.Zombie.ToString())
+            {
+                return ZOMBIE_SCORE;
+            }
+            else if (GetType().Name == EnemyType.Minotaur.ToString())
+            {
+                return MINOTAUR_SCORE;
+            }
+            else if (GetType().Name == EnemyType.Rat.ToString())
+            {
+                return RAT_SCORE;
+            }
+            else if (GetType().Name == EnemyType.Wolf.ToString())
+            {
+                return WOLF_SCORE;
+            }
+            else
+            {
+                return ZOMBIE_SCORE;
             }
         }
     }

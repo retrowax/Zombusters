@@ -173,7 +173,7 @@ namespace ZombustersWindows
         }
 
 
-        public bool VerifyFire(float currentSec, int rateoffire)
+        public bool VerifyFire(float currentSec, float rateoffire)
         {
             if (VerifyFire(currentSec, LastShot, rateoffire))
             {
@@ -183,7 +183,7 @@ namespace ZombustersWindows
             return false;
         }
 
-        private static bool VerifyFire(float currentSec, float lastShot, int RateOfFire)
+        private static bool VerifyFire(float currentSec, float lastShot, float RateOfFire)
         {
             if ((currentSec - lastShot) > (1f / RateOfFire))
                 return true;

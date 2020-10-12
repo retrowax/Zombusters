@@ -12,6 +12,11 @@ namespace ZombustersWindows
 {
     public class Enemies
     {
+        private const int ZOMBIE_SCORE = 10;
+        private const int RAT_SCORE = 15;
+        private const int WOLF_SCORE = 30;
+        private const int MINOTAUR_SCORE = 80;
+
         public List<BaseEnemy> EnemiesList = new List<BaseEnemy>();
         public List<PowerUp> PowerUpList = new List<PowerUp>();
 
@@ -141,8 +146,8 @@ namespace ZombustersWindows
                                 else
                                 {
                                     enemy.Destroy(game.totalGameSeconds, player.avatar.currentgun);
-                                    player.avatar.score += 10;
-                                    game.audio.PlayZombieDying();
+                                    SumScore(player, ref enemy);
+                                    PlayDeathSound(ref enemy);
 
                                     if (player.avatar.score % 8000 == 0)
                                     {
@@ -172,8 +177,8 @@ namespace ZombustersWindows
                                 else
                                 {
                                     enemy.Destroy(game.totalGameSeconds, player.avatar.currentgun);
-                                    player.avatar.score += 10;
-                                    game.audio.PlayZombieDying();
+                                    SumScore(player, ref enemy);
+                                    PlayDeathSound(ref enemy);
 
                                     if (player.avatar.score % 8000 == 0)
                                     {
@@ -203,8 +208,8 @@ namespace ZombustersWindows
                                     else
                                     {
                                         enemy.Destroy(game.totalGameSeconds, player.avatar.currentgun);
-                                        player.avatar.score += 10;
-                                        game.audio.PlayZombieDying();
+                                        SumScore(player, ref enemy);
+                                        PlayDeathSound(ref enemy);
 
                                         if (player.avatar.score % 8000 == 0)
                                         {
@@ -238,6 +243,50 @@ namespace ZombustersWindows
                         }
                     }
                 }
+            }
+        }
+
+        private void SumScore(Player player, ref BaseEnemy enemy)
+        {
+            if (enemy.GetType().Name == EnemyType.Zombie.ToString())
+            {
+                player.avatar.score += ZOMBIE_SCORE;
+            }
+            else if (enemy.GetType().Name == EnemyType.Minotaur.ToString())
+            {
+                player.avatar.score += MINOTAUR_SCORE;
+            }
+            else if (enemy.GetType().Name == EnemyType.Rat.ToString())
+            {
+                player.avatar.score += RAT_SCORE;
+            }
+            else if (enemy.GetType().Name == EnemyType.Wolf.ToString())
+            {
+                player.avatar.score += WOLF_SCORE;
+            }
+            else
+            {
+                player.avatar.score += ZOMBIE_SCORE;
+            }
+        }
+
+        private void PlayDeathSound(ref BaseEnemy enemy)
+        {
+            if (enemy.GetType().Name == EnemyType.Zombie.ToString())
+            {
+                game.audio.PlayZombieDying();
+            }
+            else if (enemy.GetType().Name == EnemyType.Minotaur.ToString())
+            {
+                game.audio.PlayMinotaurDeath();
+            }
+            else if (enemy.GetType().Name == EnemyType.Rat.ToString())
+            {
+                game.audio.PlayRatDeath();
+            }
+            else if (enemy.GetType().Name == EnemyType.Wolf.ToString())
+            {
+                game.audio.PlayWolfDeath();
             }
         }
 
