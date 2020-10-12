@@ -1548,6 +1548,15 @@ namespace ZombustersWindows
                                     }
                                     break;
                                 case GunType.shotgun:
+                                    if (player.avatar.character == 0)
+                                    {
+                                        ShotgunNorthAnimation[player.avatar.character].Draw(this.ScreenManager.SpriteBatch, new Vector2(player.avatar.position.X + 6 + offsetPosition.X, player.avatar.position.Y + offsetPosition.Y - 34), SpriteEffects.None, layerIndex, 0f, color);
+                                    }
+                                    else
+                                    {
+                                        ShotgunNorthAnimation[player.avatar.character].Draw(this.ScreenManager.SpriteBatch, new Vector2(player.avatar.position.X + 12 + offsetPosition.X, player.avatar.position.Y + offsetPosition.Y - 36), SpriteEffects.None, layerIndex, 0f, color);
+                                    }
+                                    break;
                                 case GunType.machinegun:
                                     if (player.avatar.character == 0)
                                     {
@@ -1592,6 +1601,15 @@ namespace ZombustersWindows
                                     }
                                     break;
                                 case GunType.shotgun:
+                                    if (player.avatar.character == 0)
+                                    {
+                                        ShotgunNEAnimation[player.avatar.character].Draw(this.ScreenManager.SpriteBatch, new Vector2(player.avatar.position.X + 7 + offsetPosition.X, player.avatar.position.Y + offsetPosition.Y - 14), SpriteEffects.None, layerIndex, 0f, color);
+                                    }
+                                    else
+                                    {
+                                        ShotgunNEAnimation[player.avatar.character].Draw(this.ScreenManager.SpriteBatch, new Vector2(player.avatar.position.X + 10 + offsetPosition.X, player.avatar.position.Y + offsetPosition.Y - 14), SpriteEffects.None, layerIndex, 0f, color);
+                                    }
+                                    break;
                                 case GunType.machinegun:
                                     if (player.avatar.character == 0)
                                     {
@@ -1635,6 +1653,16 @@ namespace ZombustersWindows
                                     }
                                     break;
                                 case GunType.shotgun:
+                                    if (player.avatar.character == 0)
+                                    {
+                                        ShotgunShotEastAnimation[player.avatar.character].Draw(this.ScreenManager.SpriteBatch, new Vector2(player.avatar.position.X + 7 + offsetPosition.X, player.avatar.position.Y + offsetPosition.Y + 4), SpriteEffects.None, layerIndex, 0f, color);
+                                    }
+                                    else
+                                    {
+                                        ShotgunShotEastAnimation[player.avatar.character].Draw(this.ScreenManager.SpriteBatch, new Vector2(player.avatar.position.X + 10 + offsetPosition.X, player.avatar.position.Y + offsetPosition.Y + 1), SpriteEffects.None, layerIndex, 0f, color);
+                                    }
+                                    break;
+
                                 case GunType.machinegun:
                                     if (player.avatar.character == 0)
                                     {
@@ -1679,6 +1707,15 @@ namespace ZombustersWindows
                                     }
                                     break;
                                 case GunType.shotgun:
+                                    if (player.avatar.character == 0)
+                                    {
+                                        ShotgunSEAnimation[player.avatar.character].Draw(this.ScreenManager.SpriteBatch, new Vector2(player.avatar.position.X + 7 + offsetPosition.X, player.avatar.position.Y + offsetPosition.Y + 4), SpriteEffects.None, layerIndex, 0f, color);
+                                    }
+                                    else
+                                    {
+                                        ShotgunSEAnimation[player.avatar.character].Draw(this.ScreenManager.SpriteBatch, new Vector2(player.avatar.position.X + 10 + offsetPosition.X, player.avatar.position.Y + offsetPosition.Y + 1), SpriteEffects.None, layerIndex, 0f, color);
+                                    }
+                                    break;
                                 case GunType.machinegun:
                                     if (player.avatar.character == 0)
                                     {
@@ -1723,6 +1760,15 @@ namespace ZombustersWindows
                                     }
                                     break;
                                 case GunType.shotgun:
+                                    if (player.avatar.character == 0)
+                                    {
+                                        ShotgunSouthAnimation[player.avatar.character].Draw(this.ScreenManager.SpriteBatch, new Vector2(player.avatar.position.X + 7 + offsetPosition.X, player.avatar.position.Y + offsetPosition.Y + 4), SpriteEffects.None, layerIndex, 0f, color);
+                                    }
+                                    else
+                                    {
+                                        ShotgunSouthAnimation[player.avatar.character].Draw(this.ScreenManager.SpriteBatch, new Vector2(player.avatar.position.X + 10 + offsetPosition.X, player.avatar.position.Y + offsetPosition.Y + 1), SpriteEffects.None, layerIndex, 0f, color);
+                                    }
+                                    break;
                                 case GunType.machinegun:
                                     if (player.avatar.character == 0)
                                     {
@@ -1767,6 +1813,15 @@ namespace ZombustersWindows
                                     }
                                     break;
                                 case GunType.shotgun:
+                                    if (player.avatar.character == 0)
+                                    {
+                                        ShotgunSEAnimation[player.avatar.character].Draw(this.ScreenManager.SpriteBatch, new Vector2(player.avatar.position.X + 1 + offsetPosition.X, player.avatar.position.Y + offsetPosition.Y + 4), SpriteEffects.FlipHorizontally, layerIndex, 0f, color);
+                                    }
+                                    else
+                                    {
+                                        ShotgunSEAnimation[player.avatar.character].Draw(this.ScreenManager.SpriteBatch, new Vector2(player.avatar.position.X + 4 + offsetPosition.X, player.avatar.position.Y + offsetPosition.Y + 2), SpriteEffects.FlipHorizontally, layerIndex, 0f, color);
+                                    }
+                                    break;
                                 case GunType.machinegun:
                                     if (player.avatar.character == 0)
                                     {
@@ -1811,6 +1866,15 @@ namespace ZombustersWindows
                                     }
                                     break;
                                 case GunType.shotgun:
+                                    if (player.avatar.character == 0)
+                                    {
+                                        ShotgunShotEastAnimation[player.avatar.character].Draw(this.ScreenManager.SpriteBatch, new Vector2(player.avatar.position.X - 6 + offsetPosition.X, player.avatar.position.Y + offsetPosition.Y + 4), SpriteEffects.FlipHorizontally, layerIndex, 0f, color);
+                                    }
+                                    else
+                                    {
+                                        ShotgunShotEastAnimation[player.avatar.character].Draw(this.ScreenManager.SpriteBatch, new Vector2(player.avatar.position.X - 4 + offsetPosition.X, player.avatar.position.Y + offsetPosition.Y + 2), SpriteEffects.FlipHorizontally, layerIndex, 0f, color);
+                                    }
+                                    break;
                                 case GunType.machinegun:
                                     if (player.avatar.character == 0)
                                     {
@@ -1855,6 +1919,15 @@ namespace ZombustersWindows
                                     }
                                     break;
                                 case GunType.shotgun:
+                                    if (player.avatar.character == 0)
+                                    {
+                                        ShotgunNEAnimation[player.avatar.character].Draw(this.ScreenManager.SpriteBatch, new Vector2(player.avatar.position.X + offsetPosition.X, player.avatar.position.Y + offsetPosition.Y - 14), SpriteEffects.FlipHorizontally, layerIndex, 0f, color);
+                                    }
+                                    else
+                                    {
+                                        ShotgunNEAnimation[player.avatar.character].Draw(this.ScreenManager.SpriteBatch, new Vector2(player.avatar.position.X + offsetPosition.X + 4, player.avatar.position.Y + offsetPosition.Y - 13), SpriteEffects.FlipHorizontally, layerIndex, 0f, color);
+                                    }
+                                    break;
                                 case GunType.machinegun:
                                     if (player.avatar.character == 0)
                                     {
@@ -2053,6 +2126,7 @@ namespace ZombustersWindows
                                 switch (player.avatar.currentgun)
                                 {
                                     case GunType.pistol:
+                                    case GunType.shotgun:
                                     case GunType.machinegun:
                                         if (player.avatar.character == 0)
                                         {
@@ -2101,6 +2175,7 @@ namespace ZombustersWindows
                                 switch (player.avatar.currentgun)
                                 {
                                     case GunType.pistol:
+                                    case GunType.shotgun:
                                     case GunType.machinegun:
                                         if (player.avatar.character == 0)
                                         {
@@ -2148,6 +2223,7 @@ namespace ZombustersWindows
                                 switch (player.avatar.currentgun)
                                 {
                                     case GunType.pistol:
+                                    case GunType.shotgun:
                                     case GunType.machinegun:
                                         if (player.avatar.character == 0)
                                         {
@@ -2196,6 +2272,7 @@ namespace ZombustersWindows
                                 switch (player.avatar.currentgun)
                                 {
                                     case GunType.pistol:
+                                    case GunType.shotgun:
                                     case GunType.machinegun:
                                         if (player.avatar.character == 0)
                                         {
@@ -2244,6 +2321,7 @@ namespace ZombustersWindows
                                 switch (player.avatar.currentgun)
                                 {
                                     case GunType.pistol:
+                                    case GunType.shotgun:
                                     case GunType.machinegun:
                                         if (player.avatar.character == 0)
                                         {
@@ -2292,6 +2370,7 @@ namespace ZombustersWindows
                                 switch (player.avatar.currentgun)
                                 {
                                     case GunType.pistol:
+                                    case GunType.shotgun:
                                     case GunType.machinegun:
                                         if (player.avatar.character == 0)
                                         {
@@ -2340,6 +2419,7 @@ namespace ZombustersWindows
                                 switch (player.avatar.currentgun)
                                 {
                                     case GunType.pistol:
+                                    case GunType.shotgun:
                                     case GunType.machinegun:
                                         if (player.avatar.character == 0)
                                         {
@@ -2388,6 +2468,7 @@ namespace ZombustersWindows
                                 switch (player.avatar.currentgun)
                                 {
                                     case GunType.pistol:
+                                    case GunType.shotgun:
                                     case GunType.machinegun:
                                         if (player.avatar.character == 0)
                                         {
@@ -3332,7 +3413,7 @@ namespace ZombustersWindows
             MachinegunEastAnimation = new List<Animation>();
             MachinegunEastAnimation.Add(new Animation(ShotgunEastTexture[0], frameSize, sheetSize, frameInterval));
             ShotgunShotEastAnimation = new List<Animation>();
-            ShotgunShotEastAnimation.Add(new Animation(ShotgunEastTexture[0], frameSize, sheetSize, frameInterval));
+            ShotgunShotEastAnimation.Add(new Animation(ShotgunEastTexture[0], frameSize, sheetSize, TimeSpan.FromSeconds(0.4f)));
         }
 
         private void JadeShotgunShotNorthEastAnimationLoad(XDocument doc)
@@ -3353,7 +3434,7 @@ namespace ZombustersWindows
             MachinegunNEAnimation = new List<Animation>();
             MachinegunNEAnimation.Add(new Animation(ShotgunNETexture[0], frameSize, sheetSize, frameInterval));
             ShotgunNEAnimation = new List<Animation>();
-            ShotgunNEAnimation.Add(new Animation(ShotgunNETexture[0], frameSize, sheetSize, frameInterval));
+            ShotgunNEAnimation.Add(new Animation(ShotgunNETexture[0], frameSize, sheetSize, TimeSpan.FromSeconds(0.4f)));
         }
 
         private void JadeShotgunShotSouthEastAnimationLoad(XDocument doc)
@@ -3374,7 +3455,7 @@ namespace ZombustersWindows
             MachinegunSEAnimation = new List<Animation>();
             MachinegunSEAnimation.Add(new Animation(ShotgunSETexture[0], frameSize, sheetSize, frameInterval));
             ShotgunSEAnimation = new List<Animation>();
-            ShotgunSEAnimation.Add(new Animation(ShotgunSETexture[0], frameSize, sheetSize, frameInterval));
+            ShotgunSEAnimation.Add(new Animation(ShotgunSETexture[0], frameSize, sheetSize, TimeSpan.FromSeconds(0.4f)));
         }
 
         private void JadeShotgunShotSouthAnimationLoad(XDocument doc)
@@ -3395,7 +3476,7 @@ namespace ZombustersWindows
             MachinegunSouthAnimation = new List<Animation>();
             MachinegunSouthAnimation.Add(new Animation(ShotgunSouthTexture[0], frameSize, sheetSize, frameInterval));
             ShotgunSouthAnimation = new List<Animation>();
-            ShotgunSouthAnimation.Add(new Animation(ShotgunSouthTexture[0], frameSize, sheetSize, frameInterval));
+            ShotgunSouthAnimation.Add(new Animation(ShotgunSouthTexture[0], frameSize, sheetSize, TimeSpan.FromSeconds(0.4f)));
         }
 
         private void JadeShotgunShotNorthAnimationLoad(XDocument doc)
@@ -3416,7 +3497,7 @@ namespace ZombustersWindows
             MachinegunNorthAnimation = new List<Animation>();
             MachinegunNorthAnimation.Add(new Animation(ShotgunNorthTexture[0], frameSize, sheetSize, frameInterval));
             ShotgunNorthAnimation = new List<Animation>();
-            ShotgunNorthAnimation.Add(new Animation(ShotgunNorthTexture[0], frameSize, sheetSize, frameInterval));
+            ShotgunNorthAnimation.Add(new Animation(ShotgunNorthTexture[0], frameSize, sheetSize, TimeSpan.FromSeconds(0.4f)));
         }
 
         private void EgonIdleTrunkAnimationLoad(XDocument doc)
@@ -3539,7 +3620,7 @@ namespace ZombustersWindows
             sheetSize.Y = int.Parse(definition.Attribute(SHEET_ROWS).Value, NumberStyles.Integer);
             frameInterval = TimeSpan.FromSeconds(1.0f / int.Parse(definition.Attribute(SPEED).Value, NumberStyles.Integer));
             MachinegunEastAnimation.Add(new Animation(ShotgunEastTexture[1], frameSize, sheetSize, frameInterval));
-            ShotgunShotEastAnimation.Add(new Animation(ShotgunEastTexture[1], frameSize, sheetSize, frameInterval));
+            ShotgunShotEastAnimation.Add(new Animation(ShotgunEastTexture[1], frameSize, sheetSize, TimeSpan.FromSeconds(0.4f)));
         }
         private void EgonShotgunShotNorthEastAnimationLoad(XDocument doc)
         {
@@ -3555,7 +3636,7 @@ namespace ZombustersWindows
             sheetSize.Y = int.Parse(definition.Attribute(SHEET_ROWS).Value, NumberStyles.Integer);
             frameInterval = TimeSpan.FromSeconds(1.0f / int.Parse(definition.Attribute(SPEED).Value, NumberStyles.Integer));
             MachinegunNEAnimation.Add(new Animation(ShotgunNETexture[1], frameSize, sheetSize, frameInterval));
-            ShotgunNEAnimation.Add(new Animation(ShotgunNETexture[1], frameSize, sheetSize, frameInterval));
+            ShotgunNEAnimation.Add(new Animation(ShotgunNETexture[1], frameSize, sheetSize, TimeSpan.FromSeconds(0.4f)));
         }
         private void EgonShotgunShotSouthEastAnimationLoad(XDocument doc)
         {
@@ -3571,7 +3652,7 @@ namespace ZombustersWindows
             sheetSize.Y = int.Parse(definition.Attribute(SHEET_ROWS).Value, NumberStyles.Integer);
             frameInterval = TimeSpan.FromSeconds(1.0f / int.Parse(definition.Attribute(SPEED).Value, NumberStyles.Integer));
             MachinegunSEAnimation.Add(new Animation(ShotgunSETexture[1], frameSize, sheetSize, frameInterval));
-            ShotgunSEAnimation.Add(new Animation(ShotgunSETexture[1], frameSize, sheetSize, frameInterval));
+            ShotgunSEAnimation.Add(new Animation(ShotgunSETexture[1], frameSize, sheetSize, TimeSpan.FromSeconds(0.4f)));
         }
         private void EgonShotgunShotSouthAnimationLoad(XDocument doc)
         {
@@ -3587,7 +3668,7 @@ namespace ZombustersWindows
             sheetSize.Y = int.Parse(definition.Attribute(SHEET_ROWS).Value, NumberStyles.Integer);
             frameInterval = TimeSpan.FromSeconds(1.0f / int.Parse(definition.Attribute(SPEED).Value, NumberStyles.Integer));
             MachinegunSouthAnimation.Add(new Animation(ShotgunSouthTexture[1], frameSize, sheetSize, frameInterval));
-            ShotgunSouthAnimation.Add(new Animation(ShotgunSouthTexture[1], frameSize, sheetSize, frameInterval));
+            ShotgunSouthAnimation.Add(new Animation(ShotgunSouthTexture[1], frameSize, sheetSize, TimeSpan.FromSeconds(0.4f)));
         }
         private void EgonShotgunShotNorthAnimationLoad(XDocument doc)
         {
@@ -3603,7 +3684,7 @@ namespace ZombustersWindows
             sheetSize.Y = int.Parse(definition.Attribute(SHEET_ROWS).Value, NumberStyles.Integer);
             frameInterval = TimeSpan.FromSeconds(1.0f / int.Parse(definition.Attribute(SPEED).Value, NumberStyles.Integer));
             MachinegunNorthAnimation.Add(new Animation(ShotgunNorthTexture[1], frameSize, sheetSize, frameInterval));
-            ShotgunNorthAnimation.Add(new Animation(ShotgunNorthTexture[1], frameSize, sheetSize, frameInterval));
+            ShotgunNorthAnimation.Add(new Animation(ShotgunNorthTexture[1], frameSize, sheetSize, TimeSpan.FromSeconds(0.4f)));
         }
 
         private void RayIdleTrunkAnimationLoad(XDocument doc)
@@ -3726,7 +3807,7 @@ namespace ZombustersWindows
             sheetSize.Y = int.Parse(definition.Attribute(SHEET_ROWS).Value, NumberStyles.Integer);
             frameInterval = TimeSpan.FromSeconds(1.0f / int.Parse(definition.Attribute(SPEED).Value, NumberStyles.Integer));
             MachinegunEastAnimation.Add(new Animation(ShotgunEastTexture[2], frameSize, sheetSize, frameInterval));
-            ShotgunShotEastAnimation.Add(new Animation(ShotgunEastTexture[2], frameSize, sheetSize, frameInterval));
+            ShotgunShotEastAnimation.Add(new Animation(ShotgunEastTexture[2], frameSize, sheetSize, TimeSpan.FromSeconds(0.4f)));
         }
         private void RayShotgunShotNorthEastAnimationLoad(XDocument doc)
         {
@@ -3742,7 +3823,7 @@ namespace ZombustersWindows
             sheetSize.Y = int.Parse(definition.Attribute(SHEET_ROWS).Value, NumberStyles.Integer);
             frameInterval = TimeSpan.FromSeconds(1.0f / int.Parse(definition.Attribute(SPEED).Value, NumberStyles.Integer));
             MachinegunNEAnimation.Add(new Animation(ShotgunNETexture[2], frameSize, sheetSize, frameInterval));
-            ShotgunNEAnimation.Add(new Animation(ShotgunNETexture[2], frameSize, sheetSize, frameInterval));
+            ShotgunNEAnimation.Add(new Animation(ShotgunNETexture[2], frameSize, sheetSize, TimeSpan.FromSeconds(0.4f)));
         }
         private void RayShotgunShotSouthEastAnimationLoad(XDocument doc)
         {
@@ -3758,7 +3839,7 @@ namespace ZombustersWindows
             sheetSize.Y = int.Parse(definition.Attribute(SHEET_ROWS).Value, NumberStyles.Integer);
             frameInterval = TimeSpan.FromSeconds(1.0f / int.Parse(definition.Attribute(SPEED).Value, NumberStyles.Integer));
             MachinegunSEAnimation.Add(new Animation(ShotgunSETexture[2], frameSize, sheetSize, frameInterval));
-            ShotgunSEAnimation.Add(new Animation(ShotgunSETexture[2], frameSize, sheetSize, frameInterval));
+            ShotgunSEAnimation.Add(new Animation(ShotgunSETexture[2], frameSize, sheetSize, TimeSpan.FromSeconds(0.4f)));
         }
         private void RayShotgunShotSouthAnimationLoad(XDocument doc)
         {
@@ -3774,7 +3855,7 @@ namespace ZombustersWindows
             sheetSize.Y = int.Parse(definition.Attribute(SHEET_ROWS).Value, NumberStyles.Integer);
             frameInterval = TimeSpan.FromSeconds(1.0f / int.Parse(definition.Attribute(SPEED).Value, NumberStyles.Integer));
             MachinegunSouthAnimation.Add(new Animation(ShotgunSouthTexture[2], frameSize, sheetSize, frameInterval));
-            ShotgunSouthAnimation.Add(new Animation(ShotgunSouthTexture[2], frameSize, sheetSize, frameInterval));
+            ShotgunSouthAnimation.Add(new Animation(ShotgunSouthTexture[2], frameSize, sheetSize, TimeSpan.FromSeconds(0.4f)));
         }
         private void RayShotgunShotNorthAnimationLoad(XDocument doc)
         {
@@ -3790,7 +3871,7 @@ namespace ZombustersWindows
             sheetSize.Y = int.Parse(definition.Attribute(SHEET_ROWS).Value, NumberStyles.Integer);
             frameInterval = TimeSpan.FromSeconds(1.0f / int.Parse(definition.Attribute(SPEED).Value, NumberStyles.Integer));
             MachinegunNorthAnimation.Add(new Animation(ShotgunNorthTexture[2], frameSize, sheetSize, frameInterval));
-            ShotgunNorthAnimation.Add(new Animation(ShotgunNorthTexture[2], frameSize, sheetSize, frameInterval));
+            ShotgunNorthAnimation.Add(new Animation(ShotgunNorthTexture[2], frameSize, sheetSize, TimeSpan.FromSeconds(0.4f)));
         }
 
         private void PeterIdleTrunkAnimationLoad(XDocument doc)
@@ -3913,7 +3994,7 @@ namespace ZombustersWindows
             sheetSize.Y = int.Parse(definition.Attribute(SHEET_ROWS).Value, NumberStyles.Integer);
             frameInterval = TimeSpan.FromSeconds(1.0f / int.Parse(definition.Attribute(SPEED).Value, NumberStyles.Integer));
             MachinegunEastAnimation.Add(new Animation(ShotgunEastTexture[3], frameSize, sheetSize, frameInterval));
-            ShotgunShotEastAnimation.Add(new Animation(ShotgunEastTexture[3], frameSize, sheetSize, frameInterval));
+            ShotgunShotEastAnimation.Add(new Animation(ShotgunEastTexture[3], frameSize, sheetSize, TimeSpan.FromSeconds(0.4f)));
         }
         private void PeterShotgunShotNorthEastAnimationLoad(XDocument doc)
         {
@@ -3929,7 +4010,7 @@ namespace ZombustersWindows
             sheetSize.Y = int.Parse(definition.Attribute(SHEET_ROWS).Value, NumberStyles.Integer);
             frameInterval = TimeSpan.FromSeconds(1.0f / int.Parse(definition.Attribute(SPEED).Value, NumberStyles.Integer));
             MachinegunNEAnimation.Add(new Animation(ShotgunNETexture[3], frameSize, sheetSize, frameInterval));
-            ShotgunNEAnimation.Add(new Animation(ShotgunNETexture[3], frameSize, sheetSize, frameInterval));
+            ShotgunNEAnimation.Add(new Animation(ShotgunNETexture[3], frameSize, sheetSize, TimeSpan.FromSeconds(0.4f)));
         }
         private void PeterShotgunShotSouthEastAnimationLoad(XDocument doc)
         {
@@ -3945,7 +4026,7 @@ namespace ZombustersWindows
             sheetSize.Y = int.Parse(definition.Attribute(SHEET_ROWS).Value, NumberStyles.Integer);
             frameInterval = TimeSpan.FromSeconds(1.0f / int.Parse(definition.Attribute(SPEED).Value, NumberStyles.Integer));
             MachinegunSEAnimation.Add(new Animation(ShotgunSETexture[3], frameSize, sheetSize, frameInterval));
-            ShotgunSEAnimation.Add(new Animation(ShotgunSETexture[3], frameSize, sheetSize, frameInterval));
+            ShotgunSEAnimation.Add(new Animation(ShotgunSETexture[3], frameSize, sheetSize, TimeSpan.FromSeconds(0.4f)));
         }
         private void PeterShotgunShotSouthAnimationLoad(XDocument doc)
         {
@@ -3961,7 +4042,7 @@ namespace ZombustersWindows
             sheetSize.Y = int.Parse(definition.Attribute(SHEET_ROWS).Value, NumberStyles.Integer);
             frameInterval = TimeSpan.FromSeconds(1.0f / int.Parse(definition.Attribute(SPEED).Value, NumberStyles.Integer));
             MachinegunSouthAnimation.Add(new Animation(ShotgunSouthTexture[3], frameSize, sheetSize, frameInterval));
-            ShotgunSouthAnimation.Add(new Animation(ShotgunSouthTexture[3], frameSize, sheetSize, frameInterval));
+            ShotgunSouthAnimation.Add(new Animation(ShotgunSouthTexture[3], frameSize, sheetSize, TimeSpan.FromSeconds(0.4f)));
         }
         private void PeterShotgunShotNorthAnimationLoad(XDocument doc)
         {
@@ -3977,7 +4058,7 @@ namespace ZombustersWindows
             sheetSize.Y = int.Parse(definition.Attribute(SHEET_ROWS).Value, NumberStyles.Integer);
             frameInterval = TimeSpan.FromSeconds(1.0f / int.Parse(definition.Attribute(SPEED).Value, NumberStyles.Integer));
             MachinegunNorthAnimation.Add(new Animation(ShotgunNorthTexture[3], frameSize, sheetSize, frameInterval));
-            ShotgunNorthAnimation.Add(new Animation(ShotgunNorthTexture[3], frameSize, sheetSize, frameInterval));
+            ShotgunNorthAnimation.Add(new Animation(ShotgunNorthTexture[3], frameSize, sheetSize, TimeSpan.FromSeconds(0.4f)));
         }
 
         private void FlamethrowerAnimationLoad(XDocument doc)
