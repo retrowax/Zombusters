@@ -2432,7 +2432,7 @@ namespace ZombustersWindows
                                 {
                                     if (player.avatar.accumFire.Length() < .5)
                                     {
-                                        if (player.avatar.currentgun == GunType.pistol && player.avatar.ammo[(int)GunType.pistol] == 0)
+                                        if (player.avatar.currentgun == GunType.pistol)
                                         {
                                             IdleTrunkAnimation[player.avatar.character].Draw(this.ScreenManager.SpriteBatch, new Vector2(player.avatar.position.X + offsetPosition.X, player.avatar.position.Y + offsetPosition.Y), SpriteEffects.None, layerIndex, 0f, Color.White);
                                         }
@@ -2450,7 +2450,7 @@ namespace ZombustersWindows
                                 {
                                     if (player.avatar.accumFire.Length() < .5)
                                     {
-                                        if (player.avatar.currentgun == GunType.pistol && player.avatar.ammo[(int)GunType.pistol] == 0)
+                                        if (player.avatar.currentgun == GunType.pistol)
                                         {
                                             IdleTrunkAnimation[player.avatar.character].Draw(this.ScreenManager.SpriteBatch, new Vector2(player.avatar.position.X + offsetPosition.X + 16, player.avatar.position.Y + offsetPosition.Y), SpriteEffects.FlipHorizontally, layerIndex, 0f, Color.White);
                                         }
@@ -2471,7 +2471,7 @@ namespace ZombustersWindows
                                 {
                                     if (player.avatar.accumFire.Length() < .5)
                                     {
-                                        if (player.avatar.currentgun == GunType.pistol && player.avatar.ammo[(int)GunType.pistol] == 0)
+                                        if (player.avatar.currentgun == GunType.pistol)
                                         {
                                             IdleTrunkAnimation[player.avatar.character].Draw(this.ScreenManager.SpriteBatch, new Vector2(player.avatar.position.X + offsetPosition.X + 10, player.avatar.position.Y + offsetPosition.Y + 1), SpriteEffects.None, layerIndex, 0f, Color.White);
                                         }
@@ -2489,7 +2489,7 @@ namespace ZombustersWindows
                                 {
                                     if (player.avatar.accumFire.Length() < .5)
                                     {
-                                        if (player.avatar.currentgun == GunType.pistol && player.avatar.ammo[(int)GunType.pistol] == 0)
+                                        if (player.avatar.currentgun == GunType.pistol)
                                         {
                                             IdleTrunkAnimation[player.avatar.character].Draw(this.ScreenManager.SpriteBatch, new Vector2(player.avatar.position.X + offsetPosition.X + 19, player.avatar.position.Y + offsetPosition.Y + 1), SpriteEffects.FlipHorizontally, layerIndex, 0f, Color.White);
                                         }
@@ -2511,7 +2511,7 @@ namespace ZombustersWindows
                             {
                                 if (player.avatar.character == 0)
                                 {
-                                    if (player.avatar.currentgun == GunType.pistol && player.avatar.ammo[(int)GunType.pistol] == 0)
+                                    if (player.avatar.currentgun == GunType.pistol)
                                     {
                                         IdleTrunkAnimation[player.avatar.character].Draw(this.ScreenManager.SpriteBatch, new Vector2(player.avatar.position.X + offsetPosition.X, player.avatar.position.Y + offsetPosition.Y), SpriteEffects.None, layerIndex, 0f, Color.White);
                                     }
@@ -2523,7 +2523,7 @@ namespace ZombustersWindows
                                 }
                                 else
                                 {
-                                    if (player.avatar.currentgun == GunType.pistol && player.avatar.ammo[(int)GunType.pistol] == 0)
+                                    if (player.avatar.currentgun == GunType.pistol)
                                     {
                                         IdleTrunkAnimation[player.avatar.character].Draw(this.ScreenManager.SpriteBatch, new Vector2(player.avatar.position.X + offsetPosition.X + 10, player.avatar.position.Y + offsetPosition.Y + 1), SpriteEffects.None, layerIndex, 0f, Color.White);
                                     }
