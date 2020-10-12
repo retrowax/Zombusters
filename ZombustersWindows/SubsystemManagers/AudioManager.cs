@@ -19,6 +19,7 @@ namespace ZombustersWindows
             random = new Random();
         }
         private SoundEffect Shot;
+        private SoundEffect Shotgun;
         private SoundEffect Explosion;
         private SoundEffect ZombieDying;
         private SoundEffect WomanScream;
@@ -31,6 +32,7 @@ namespace ZombustersWindows
         private SoundEffectInstance MachineGunInstance;
 
         private SoundEffectInstance ShotInstance;
+        private SoundEffectInstance ShotGunInstance;
         private SoundEffectInstance ZombieDyingInstance;
         private SoundEffectInstance WomanScreamInstance;
         private SoundEffectInstance ManScreamInstance;
@@ -50,7 +52,7 @@ namespace ZombustersWindows
             MediaPlayer.IsRepeating = true;
 
             Shot = Game.Content.Load<SoundEffect>("SoundFX/pistol_shot");
-
+            Shotgun = Game.Content.Load<SoundEffect>("SoundFX/shotgun");
 
             Explosion = Game.Content.Load<SoundEffect>("SoundFX/explosion1");
             ZombieDying = Game.Content.Load<SoundEffect>("SoundFX/zombiedying");
@@ -72,6 +74,10 @@ namespace ZombustersWindows
             ShotInstance = Shot.CreateInstance();
             ShotInstance.Volume = FXVolume;
             ShotInstance.IsLooped = false;
+
+            ShotGunInstance = Shotgun.CreateInstance();
+            ShotGunInstance.Volume = FXVolume;
+            ShotGunInstance.IsLooped = false;
 
             ZombieDyingInstance = ZombieDying.CreateInstance();
             ZombieDyingInstance.Volume = FXVolume;
@@ -125,6 +131,16 @@ namespace ZombustersWindows
                     ShotInstance.Play();
             }
         }
+
+        public void PlayShotgun()
+        {
+            if (!bPaused)
+            {
+                if ((!bPaused) && (ShotGunInstance.State != SoundState.Playing))
+                    ShotGunInstance.Play();
+            }
+        }
+
         public void PlayZombieDying()
         {
             if (!bPaused)
