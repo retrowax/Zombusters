@@ -24,6 +24,7 @@ namespace ZombustersWindows
         private const string SPEED = "Speed";
         private const int MACHINEGUN_RATE_OF_FIRE = 10;
         private const int FLAMETHROWER_RATE_OF_FIRE = 15;
+        private const float SHOTGUN_RATE_OF_FIRE = 0.8f;
 
 
         readonly MyGame game;
@@ -785,7 +786,7 @@ namespace ZombustersWindows
 
         private void TryFire(Player player, float TotalGameSeconds, float angle, Vector2 direction)
         {
-            int RateOfFire;
+            float RateOfFire;
             if (player.avatar.status != ObjectStatus.Active && player.avatar.status != ObjectStatus.Immune)
                 return;
 
@@ -803,6 +804,10 @@ namespace ZombustersWindows
             else if (player.avatar.currentgun == GunType.flamethrower && player.avatar.ammo[(int)GunType.flamethrower] > 0)
             {
                 RateOfFire = FLAMETHROWER_RATE_OF_FIRE;
+            }
+            else if (player.avatar.currentgun == GunType.shotgun && player.avatar.ammo[(int)GunType.shotgun] > 0)
+            {
+                RateOfFire = SHOTGUN_RATE_OF_FIRE;
             }
             else
             {
