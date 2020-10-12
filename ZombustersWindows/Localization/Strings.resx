@@ -791,4 +791,11 @@ or a new Weapon.</value>
   <data name="DemoEndScreenLine4" xml:space="preserve">
     <value>Zombusters will be released fall 2020</value>
   </data>
+  <data name="StoreMenuString" xml:space="preserve">
+    <value>MARKETPLACE</value>
+    <comment>Store Link</comment>
+  </data>
+  <data name="StoreMMString" xml:space="preserve">
+    <value>Check out our merchandise on our Official Store at Redbubble</value>
+  </data>
 </root>

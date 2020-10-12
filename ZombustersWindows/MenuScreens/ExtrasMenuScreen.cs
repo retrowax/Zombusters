@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using GameStateManagement;
+using GameAnalyticsSDK.Net;
 
 namespace ZombustersWindows
 {
@@ -47,6 +48,7 @@ namespace ZombustersWindows
             menu.AddText("HowToPlayInGameString", "HTPMenuSupportString");  // How To Play
             menu.AddText("LeaderboardMenuString", "LeaderboardMMString");    // Leaderboard
             menu.AddText("CreditsMenuString", "CreditsMMString");            // Credits
+            menu.AddText("StoreMenuString", "StoreMMString");
 
             menu.uiBounds = menu.Extents;
             menu.uiBounds.Offset(uiBounds.X, 300);
@@ -54,7 +56,6 @@ namespace ZombustersWindows
             menu.MenuOptionSelected += new EventHandler<MenuSelection>(Menu_MenuOptionSelected);
             menu.MenuCanceled += new EventHandler<MenuSelection>(Menu_MenuCanceled);
             menu.MenuConfigSelected += new EventHandler<MenuSelection>(Menu_MenuConfigSelected);
-            //menu.MenuShowMarketplace += new EventHandler<MenuSelection>(menu_ShowMarketPlace);
 
             menu.CenterInXLeftMenu(view);
 #if !WINDOWS_PHONE && !WINDOWS && !NETCOREAPP
@@ -130,22 +131,32 @@ namespace ZombustersWindows
             
             switch (selection.Selection)
             {
-                case 0: // How to Play
+                case 0:
                     ((MyGame)this.ScreenManager.Game).DisplayHowToPlay();
                     break;
 
-                case 1: // Leaderboards
+                case 1:
                     ((MyGame)this.ScreenManager.Game).DisplayLeaderBoard();
                     break;
 
-                case 2: // Credits
+                case 2:
                     ((MyGame)this.ScreenManager.Game).DisplayCredits();
+                    break;
+
+                case 3:
+                    ShowMarketPlace();
                     break;
 
                 default:
                     break;
             }
 
+        }
+
+        void ShowMarketPlace()
+        {
+            GameAnalytics.AddDesignEvent("ScreenView:Extras:Marketplace:View");
+            System.Diagnostics.Process.Start("https://www.redbubble.com/es/people/retrowax/shop");
         }
 
         public override void LoadContent()

@@ -695,4 +695,11 @@ Sammle Powerups um Extraleben und neue Waffen zu erhalten.</value>
   <data name="DemoEndScreenLine4" xml:space="preserve">
     <value>Zombusters werden im Herbst 2020 veröffentlicht</value>
   </data>
+  <data name="StoreMenuString" xml:space="preserve">
+    <value>KAUFLADEN</value>
+    <comment>Store Link</comment>
+  </data>
+  <data name="StoreMMString" xml:space="preserve">
+    <value>Schauen Sie sich unseren Merch in unserem offiziellen Shop bei Redbubble an</value>
+  </data>
 </root>

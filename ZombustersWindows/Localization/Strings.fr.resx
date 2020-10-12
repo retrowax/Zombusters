@@ -696,4 +696,11 @@ vie ou de nouvelles armes.</value>
   <data name="DemoEndScreenLine4" xml:space="preserve">
     <value>Zombusters sortira à l'automne 2020</value>
   </data>
+  <data name="StoreMenuString" xml:space="preserve">
+    <value>BOUTIQUE</value>
+    <comment>Store Link</comment>
+  </data>
+  <data name="StoreMMString" xml:space="preserve">
+    <value>Découvrez nos produits dérivés sur notre boutique officielle sur Redbubble</value>
+  </data>
 </root>
