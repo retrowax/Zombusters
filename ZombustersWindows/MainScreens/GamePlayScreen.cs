@@ -2878,7 +2878,7 @@ namespace ZombustersWindows
                 }
                 else if (player.avatar.currentgun == GunType.shotgun)
                 {
-                    player.avatar.shotgunbullets.Add(new ShotgunShell(player.avatar.position, direction, angle, totalGameSeconds));
+                    player.avatar.shotgunbullets.Add(new ShotgunShell(new Vector2(player.avatar.position.X + 4, player.avatar.position.Y - 60), direction, angle, totalGameSeconds));
                 }
                 else
                 {
@@ -2921,7 +2921,7 @@ namespace ZombustersWindows
                 }
                 else if (player.avatar.currentgun == GunType.shotgun)
                 {
-                    player.avatar.shotgunbullets.Add(new ShotgunShell(player.avatar.position, direction, angle, totalGameSeconds));
+                    player.avatar.shotgunbullets.Add(new ShotgunShell(new Vector2(player.avatar.position.X + 27, player.avatar.position.Y - 60), direction, angle, totalGameSeconds));
                 }
                 else
                 {
@@ -2950,7 +2950,7 @@ namespace ZombustersWindows
                 }
                 else if (player.avatar.currentgun == GunType.shotgun)
                 {
-                    player.avatar.shotgunbullets.Add(new ShotgunShell(player.avatar.position, direction, angle, totalGameSeconds));
+                    player.avatar.shotgunbullets.Add(new ShotgunShell(new Vector2(player.avatar.position.X + 37, player.avatar.position.Y - 29), direction, angle, totalGameSeconds));
                 }
                 else
                 {
@@ -2993,7 +2993,7 @@ namespace ZombustersWindows
                 }
                 else if (player.avatar.currentgun == GunType.shotgun)
                 {
-                    player.avatar.shotgunbullets.Add(new ShotgunShell(player.avatar.position, direction, angle, totalGameSeconds));
+                    player.avatar.shotgunbullets.Add(new ShotgunShell(new Vector2(player.avatar.position.X + 32, player.avatar.position.Y), direction, angle, totalGameSeconds));
                 }
                 else
                 {
@@ -3022,7 +3022,7 @@ namespace ZombustersWindows
                 }
                 else if (player.avatar.currentgun == GunType.shotgun)
                 {
-                    player.avatar.shotgunbullets.Add(new ShotgunShell(player.avatar.position, direction, angle, totalGameSeconds));
+                    player.avatar.shotgunbullets.Add(new ShotgunShell(new Vector2(player.avatar.position.X + 4, player.avatar.position.Y + 7), direction, angle, totalGameSeconds));
                 }
                 else
                 {
@@ -3065,7 +3065,7 @@ namespace ZombustersWindows
                 }
                 else if (player.avatar.currentgun == GunType.shotgun)
                 {
-                    player.avatar.shotgunbullets.Add(new ShotgunShell(player.avatar.position, direction, angle, totalGameSeconds));
+                    player.avatar.shotgunbullets.Add(new ShotgunShell(new Vector2(player.avatar.position.X - 28, player.avatar.position.Y), direction, angle, totalGameSeconds));
                 }
                 else
                 {
@@ -3094,7 +3094,7 @@ namespace ZombustersWindows
                 }
                 else if (player.avatar.currentgun == GunType.shotgun)
                 {
-                    player.avatar.shotgunbullets.Add(new ShotgunShell(player.avatar.position, direction, angle, totalGameSeconds));
+                    player.avatar.shotgunbullets.Add(new ShotgunShell(new Vector2(player.avatar.position.X - 35, player.avatar.position.Y - 26), direction, angle, totalGameSeconds));
                 }
                 else
                 {
@@ -3130,7 +3130,7 @@ namespace ZombustersWindows
                 }
                 else if (player.avatar.currentgun == GunType.shotgun)
                 {
-                    player.avatar.shotgunbullets.Add(new ShotgunShell(player.avatar.position, direction, angle, totalGameSeconds));
+                    player.avatar.shotgunbullets.Add(new ShotgunShell(new Vector2(player.avatar.position.X - 36, player.avatar.position.Y - 57), direction, angle, totalGameSeconds));
                 }
                 else
                 {
