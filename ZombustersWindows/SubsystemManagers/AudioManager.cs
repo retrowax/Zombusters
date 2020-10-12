@@ -25,6 +25,13 @@ namespace ZombustersWindows
         private SoundEffect WomanScream;
         private SoundEffect ManScream;
 
+        private SoundEffect MinotaurDeath;
+        private SoundEffectInstance MinotaurDeathInstance;
+        private SoundEffect RatDeath;
+        private SoundEffectInstance RatDeathInstance;
+        private SoundEffect WolfDeath;
+        private SoundEffectInstance WolfDeathInstance;
+
         private SoundEffect FlameThrower;
         private SoundEffectInstance FlameThrowerInstance;
 
@@ -53,11 +60,14 @@ namespace ZombustersWindows
 
             Shot = Game.Content.Load<SoundEffect>("SoundFX/pistol_shot");
             Shotgun = Game.Content.Load<SoundEffect>("SoundFX/shotgun");
-
             Explosion = Game.Content.Load<SoundEffect>("SoundFX/explosion1");
             ZombieDying = Game.Content.Load<SoundEffect>("SoundFX/zombiedying");
             WomanScream = Game.Content.Load<SoundEffect>("SoundFX/womanscream");
             ManScream = Game.Content.Load<SoundEffect>("SoundFX/critedu");
+
+            MinotaurDeath = Game.Content.Load<SoundEffect>("SoundFX/minotaurdeath");
+            RatDeath = Game.Content.Load<SoundEffect>("SoundFX/ratdeath");
+            WolfDeath = Game.Content.Load<SoundEffect>("SoundFX/wolfdeath");
 
             FlameThrower = Game.Content.Load<SoundEffect>("SoundFX/flamethrower");
             FlameThrowerInstance = FlameThrower.CreateInstance();
@@ -90,6 +100,18 @@ namespace ZombustersWindows
             ManScreamInstance = ManScream.CreateInstance();
             ManScreamInstance.Volume = FXVolume;
             ManScreamInstance.IsLooped = false;
+
+            MinotaurDeathInstance = MinotaurDeath.CreateInstance();
+            MinotaurDeathInstance.Volume = FXVolume;
+            MinotaurDeathInstance.IsLooped = false;
+
+            RatDeathInstance = RatDeath.CreateInstance();
+            RatDeathInstance.Volume = FXVolume;
+            RatDeathInstance.IsLooped = false;
+
+            WolfDeathInstance = WolfDeath.CreateInstance();
+            WolfDeathInstance.Volume = FXVolume;
+            WolfDeathInstance.IsLooped = false;
 
             base.LoadContent();
         }
@@ -152,6 +174,34 @@ namespace ZombustersWindows
                 }
             }
         }
+
+        public void PlayMinotaurDeath()
+        {
+            if (!bPaused)
+            {
+                if ((!bPaused) && (MinotaurDeathInstance.State != SoundState.Playing))
+                    MinotaurDeathInstance.Play();
+            }
+        }
+
+        public void PlayRatDeath()
+        {
+            if (!bPaused)
+            {
+                if ((!bPaused) && (RatDeathInstance.State != SoundState.Playing))
+                    RatDeathInstance.Play();
+            }
+        }
+
+        public void PlayWolfDeath()
+        {
+            if (!bPaused)
+            {
+                if ((!bPaused) && (WolfDeathInstance.State != SoundState.Playing))
+                    WolfDeathInstance.Play();
+            }
+        }
+
         public void PlayWomanScream()
         {
             if (!bPaused)

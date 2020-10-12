@@ -142,7 +142,7 @@ namespace ZombustersWindows
                                 {
                                     enemy.Destroy(game.totalGameSeconds, player.avatar.currentgun);
                                     player.avatar.score += 10;
-                                    game.audio.PlayZombieDying();
+                                    PlayDeathSound(ref enemy);
 
                                     if (player.avatar.score % 8000 == 0)
                                     {
@@ -173,7 +173,7 @@ namespace ZombustersWindows
                                 {
                                     enemy.Destroy(game.totalGameSeconds, player.avatar.currentgun);
                                     player.avatar.score += 10;
-                                    game.audio.PlayZombieDying();
+                                    PlayDeathSound(ref enemy);
 
                                     if (player.avatar.score % 8000 == 0)
                                     {
@@ -204,7 +204,7 @@ namespace ZombustersWindows
                                     {
                                         enemy.Destroy(game.totalGameSeconds, player.avatar.currentgun);
                                         player.avatar.score += 10;
-                                        game.audio.PlayZombieDying();
+                                        PlayDeathSound(ref enemy);
 
                                         if (player.avatar.score % 8000 == 0)
                                         {
@@ -238,6 +238,26 @@ namespace ZombustersWindows
                         }
                     }
                 }
+            }
+        }
+
+        private void PlayDeathSound(ref BaseEnemy enemy)
+        {
+            if (enemy.GetType().Name == EnemyType.Zombie.ToString())
+            {
+                game.audio.PlayZombieDying();
+            }
+            else if (enemy.GetType().Name == EnemyType.Minotaur.ToString())
+            {
+                game.audio.PlayMinotaurDeath();
+            }
+            else if (enemy.GetType().Name == EnemyType.Rat.ToString())
+            {
+                game.audio.PlayRatDeath();
+            }
+            else if (enemy.GetType().Name == EnemyType.Wolf.ToString())
+            {
+                game.audio.PlayWolfDeath();
             }
         }
 
