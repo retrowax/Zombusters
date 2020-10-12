@@ -235,6 +235,18 @@
         <Content Include="Content\Menu\retrowax-logo-menu.xnb">
           <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </Content>
+        <Content Include="Content\SoundFX\minotaurdeath.xnb">
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\SoundFX\ratdeath.xnb">
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\SoundFX\shotgun.xnb">
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\SoundFX\wolfdeath.xnb">
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
     </ItemGroup>
     <ItemGroup>
         <MonoGameContentReference Include="Content\Content.mgcb" />
@@ -272,6 +284,10 @@
       <None Remove="Content\InGame\wolf\RatAnimationDef.xml" />
       <None Remove="Content\retrowax-logo-splash.xnb" />
       <None Remove="Content\Menu\retrowax-logo-menu.xnb" />
+      <None Remove="Content\SoundFX\minotaurdeath.xnb" />
+      <None Remove="Content\SoundFX\ratdeath.xnb" />
+      <None Remove="Content\SoundFX\shotgun.xnb" />
+      <None Remove="Content\SoundFX\wolfdeath.xnb" />
     </ItemGroup>
     <ItemGroup>
         <Content Include="Content\Achievements\achieve_1.xnb">
