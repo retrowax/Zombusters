@@ -8,9 +8,9 @@ using System.Runtime.InteropServices;
 //[assembly: AssemblyTitle("ZombustersWindows")]
 //[assembly: AssemblyProduct("ZombustersWindows")]
 //[assembly: AssemblyConfiguration("")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyDescription("An action-packed 3rd person game")]
 //[assembly: AssemblyCompany("Retrowax")]
-[assembly: AssemblyCopyright("Copyright © Ferran Pons 2016")]
+[assembly: AssemblyCopyright("Copyright © Ferran Pons 2011 - 2020")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -21,6 +21,11 @@ using System.Runtime.InteropServices;
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
 [assembly: Guid("8ffed5b5-66c9-4ba1-be05-16e651fb1bf1")]
+[assembly: AssemblyTitle("Zombusters")]
+[assembly: AssemblyCompany("Retrowax Games")]
+[assembly: AssemblyProduct("Videogame")]
+[assembly: AssemblyVersion("1.2.0.0")]
+[assembly: AssemblyFileVersion("1.2.0.0")]
 
 // Version information for an assembly consists of the following four values:
 //
