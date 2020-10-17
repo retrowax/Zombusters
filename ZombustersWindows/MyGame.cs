@@ -194,6 +194,7 @@ namespace ZombustersWindows
                 if (players[playerIndex].IsPlaying)
                 {
                     players[playerIndex].avatar.Restart();
+                    players[playerIndex].avatar.Activate();
                 }
             }
             totalGameSeconds = 0;
