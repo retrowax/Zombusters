@@ -403,8 +403,8 @@ namespace ZombustersWindows
         public void DrawDemoWIPDisclaimer(SpriteBatch batch)
         {
             batch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend, null, null, null, null, Resolution.getTransformationMatrix());
-            string build = "'Demo' Build v1.0";
-            string disclaimer = "This demo does not represent the final features or quality of the software.";
+            string build = "'Demo' Build v1.2";
+            string disclaimer = "";
             batch.DrawString(fontItalic, build,
                     new Vector2(65, 65), Color.White);
             batch.DrawString(fontSmallItalic, disclaimer,
