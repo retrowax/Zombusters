@@ -6,7 +6,7 @@ Zombusters
 
 *An action-packed 3rd person game for Windows, MacOS and Linux available for download soon on Steam*
 
-<a href="https://store.steampowered.com/app/1272300/Zombusters/"><img src="https://img.shields.io/badge/zombusters-v1.1.0-green.svg" /></a>
+<a href="https://store.steampowered.com/app/1272300/Zombusters/"><img src="https://img.shields.io/badge/zombusters-v1.2.0-green.svg" /></a>
 
 It will let you sticked on your seat until the end. Its 2D graphics and isometric view make it a different specie in its genre. You will have to face a horde of Zombies that try to get you down with the help of various weapons/power ups and different moving styles.
 

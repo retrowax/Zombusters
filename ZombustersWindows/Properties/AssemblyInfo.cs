@@ -8,9 +8,9 @@ using System.Runtime.InteropServices;
 //[assembly: AssemblyTitle("ZombustersWindows")]
 //[assembly: AssemblyProduct("ZombustersWindows")]
 //[assembly: AssemblyConfiguration("")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyDescription("An action-packed 3rd person game")]
 //[assembly: AssemblyCompany("Retrowax")]
-[assembly: AssemblyCopyright("Copyright © Ferran Pons 2016")]
+[assembly: AssemblyCopyright("Copyright © Ferran Pons 2011 - 2020")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
