@@ -48,7 +48,7 @@ namespace ZombustersWindows
             menu.AddText("HowToPlayInGameString", "HTPMenuSupportString");  // How To Play
             menu.AddText("LeaderboardMenuString", "LeaderboardMMString");    // Leaderboard
             menu.AddText("CreditsMenuString", "CreditsMMString");            // Credits
-            menu.AddText("StoreMenuString", "StoreMMString");
+            //menu.AddText("StoreMenuString", "StoreMMString");
 
             menu.uiBounds = menu.Extents;
             menu.uiBounds.Offset(uiBounds.X, 300);
@@ -144,7 +144,7 @@ namespace ZombustersWindows
                     break;
 
                 case 3:
-                    ShowMarketPlace();
+                    //ShowMarketPlace();
                     break;
 
                 default:
