@@ -43,7 +43,7 @@
         <PackageReference Include="Bugsnag" Version="2.2.1" />
         <PackageReference Include="Facepunch.Steamworks" Version="2.3.3" />
         <PackageReference Include="MonoGame.Content.Builder" Version="3.7.0.9" />
-        <PackageReference Include="MonoGame.Framework.DesktopGL" Version="3.7.1.189" />
+        <PackageReference Include="MonoGame.Framework.DesktopGL" Version="3.8.0.1641" />
         <PackageReference Include="MonoGame.Framework.DesktopGL.Core" Version="3.8.0.2" />
         <PackageReference Include="Dotnet.Bundle" Version="0.9.13" />
         <PackageReference Include="GameAnalytics.Net.Core.SDK" Version="3.1.0" />
