@@ -8,17 +8,17 @@ EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
-		Demo|Any CPU = Demo|Any CPU
 		DemoDebug|Any CPU = DemoDebug|Any CPU
+		DemoRelease|Any CPU = DemoRelease|Any CPU
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{29A4CB64-5FC5-4E7B-9599-1E763B602360}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{29A4CB64-5FC5-4E7B-9599-1E763B602360}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{29A4CB64-5FC5-4E7B-9599-1E763B602360}.Demo|Any CPU.ActiveCfg = Release|Any CPU
-		{29A4CB64-5FC5-4E7B-9599-1E763B602360}.Demo|Any CPU.Build.0 = Release|Any CPU
-		{29A4CB64-5FC5-4E7B-9599-1E763B602360}.DemoDebug|Any CPU.ActiveCfg = Debug|Any CPU
-		{29A4CB64-5FC5-4E7B-9599-1E763B602360}.DemoDebug|Any CPU.Build.0 = Debug|Any CPU
+		{29A4CB64-5FC5-4E7B-9599-1E763B602360}.DemoDebug|Any CPU.ActiveCfg = DemoDebug|Any CPU
+		{29A4CB64-5FC5-4E7B-9599-1E763B602360}.DemoDebug|Any CPU.Build.0 = DemoDebug|Any CPU
+		{29A4CB64-5FC5-4E7B-9599-1E763B602360}.DemoRelease|Any CPU.ActiveCfg = DemoRelease|Any CPU
+		{29A4CB64-5FC5-4E7B-9599-1E763B602360}.DemoRelease|Any CPU.Build.0 = DemoRelease|Any CPU
 		{29A4CB64-5FC5-4E7B-9599-1E763B602360}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{29A4CB64-5FC5-4E7B-9599-1E763B602360}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection

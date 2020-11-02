@@ -1,13 +1,23 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
         <OutputType>Exe</OutputType>
         <TargetFramework>netcoreapp3</TargetFramework>
         <ReleaseVersion>1.2.0</ReleaseVersion>
         <ApplicationIcon>Game.ico</ApplicationIcon>
+        <Configurations>Debug;Release;DemoRelease;DemoDebug</Configurations>
     </PropertyGroup>
 
     <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+      <IntermediateOutputPath>obj\Debug</IntermediateOutputPath>
+      <DebugSymbols>true</DebugSymbols>
+      <Optimize>false</Optimize>
+      <OutputPath>bin\Debug</OutputPath>
+      <DefineConstants>TRACE;WINDOWS</DefineConstants>
+      <NoStdLib>true</NoStdLib>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='DemoDebug|AnyCPU'">
       <IntermediateOutputPath>obj\Debug</IntermediateOutputPath>
       <DebugSymbols>true</DebugSymbols>
       <Optimize>false</Optimize>
@@ -23,6 +33,14 @@
       <DefineConstants>TRACE;WINDOWS</DefineConstants>
       <NoWarn>1701;1702</NoWarn>
     </PropertyGroup>
+    <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='DemoRelease|AnyCPU'">
+      <IntermediateOutputPath>obj\Release</IntermediateOutputPath>
+      <DebugType />
+      <Optimize>true</Optimize>
+      <OutputPath>bin\Release</OutputPath>
+      <DefineConstants>TRACE;WINDOWS;DEMO</DefineConstants>
+      <NoWarn>1701;1702</NoWarn>
+    </PropertyGroup>
     <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Demo|AnyCPU' ">
       <IntermediateOutputPath>obj\Demo</IntermediateOutputPath>
       <DebugType></DebugType>
@@ -36,7 +54,7 @@
       <DebugSymbols>true</DebugSymbols>
       <Optimize>false</Optimize>
       <OutputPath>bin\DemoDebug</OutputPath>
-      <DefineConstants>TRACE;DEMO;WINDOWS</DefineConstants>
+      <DefineConstants>DEBUG;TRACE;DEMO;WINDOWS</DefineConstants>
       <NoStdLib>true</NoStdLib>
     </PropertyGroup>
 
