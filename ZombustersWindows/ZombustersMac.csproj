@@ -1,8 +1,10 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <OutputType>WinExe</OutputType>
+        <OutputType>Exe</OutputType>
         <TargetFramework>netcoreapp2.2</TargetFramework>
+        <ReleaseVersion>1.2.0</ReleaseVersion>
+        <ApplicationIcon>Game.ico</ApplicationIcon>
     </PropertyGroup>
 
     <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -32,13 +34,13 @@
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="GameAnalytics.Mono.SDK" Version="3.0.8" />
+        <PackageReference Include="GameAnalytics.Mono.SDK" Version="3.1.0" />
+        <PackageReference Include="NLog" Version="4.7.5" />
+        <PackageReference Include="Bugsnag" Version="2.2.1" />
+        <PackageReference Include="Facepunch.Steamworks" Version="2.3.3" />
         <PackageReference Include="MonoGame.Content.Builder" Version="3.7.0.9" />
         <PackageReference Include="MonoGame.Framework.DesktopGL" Version="3.7.1.189" />
-        <PackageReference Include="MonoGame.Framework.DesktopGL.Core" Version="3.8.0.2" />
-        <PackageReference Include="NLog" Version="4.6.8" />
-        <PackageReference Include="Bugsnag" Version="2.2.0" />
-        <PackageReference Include="Facepunch.Steamworks" Version="2.3.3" />
+        <PackageReference Include="MonoGame.Framework.DesktopGL.Core" Version="3.7.1.189" />
     </ItemGroup>
 
     <ItemGroup>
