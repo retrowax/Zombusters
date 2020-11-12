@@ -1,4 +1,4 @@
-#region Using Statements
+﻿#region Using Statements
 using System;
 using System.Text.RegularExpressions;
 using Microsoft.Xna.Framework;
@@ -97,12 +97,12 @@ namespace ZombustersWindows
             btnB = ((MyGame)this.ScreenManager.Game).Content.Load<Texture2D>("xboxControllerButtonB");
 
             //Linea blanca separatoria
-            lineaMenu = ((MyGame)this.ScreenManager.Game).Content.Load<Texture2D>(@"menu/linea_menu");
+            lineaMenu = ((MyGame)this.ScreenManager.Game).Content.Load<Texture2D>(@"Menu/linea_menu");
 
             // Save Texture
-            SaveTexture = ((MyGame)this.ScreenManager.Game).Content.Load<Texture2D>(@"menu/SaveAnimation");
+            SaveTexture = ((MyGame)this.ScreenManager.Game).Content.Load<Texture2D>(@"Menu/saveAnimation");
 
-            submit_button = this.ScreenManager.Game.Content.Load<Texture2D>(@"menu/submit_button_mobile");
+            submit_button = this.ScreenManager.Game.Content.Load<Texture2D>(@"Menu/submit_button_mobile");
         }
 
 

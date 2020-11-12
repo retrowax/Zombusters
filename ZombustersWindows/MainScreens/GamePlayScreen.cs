@@ -205,7 +205,7 @@ namespace ZombustersWindows
 
         public override void LoadContent()
         {
-            XDocument animationDefinitionDocument = XDocument.Load("Content/AnimationDef.xml");
+            XDocument animationDefinitionDocument = XDocument.Load("ZombustersWindows/Content/AnimationDef.xml");
 
             DiedTexture = new List<Texture2D>
             {
@@ -4105,7 +4105,7 @@ namespace ZombustersWindows
             rayUI = game.Content.Load<Texture2D>(@"InGame/GUI/ray_gui");
             peterUI = game.Content.Load<Texture2D>(@"InGame/GUI/peter_gui");
             richardUI = game.Content.Load<Texture2D>(@"InGame/GUI/richard_gui");
-            whiteLine = game.Content.Load<Texture2D>(@"menu/linea_menu");
+            whiteLine = game.Content.Load<Texture2D>(@"Menu/linea_menu");
 
             pause_icon = game.Content.Load<Texture2D>(@"UI/pause_iconWP");
             left_thumbstick = game.Content.Load<Texture2D>(@"UI/left_thumbstick");
@@ -4116,9 +4116,9 @@ namespace ZombustersWindows
         {
             arcade14 = game.Content.Load<SpriteFont>(@"InGame/GUI/ArcadeFont14");
             arcade28 = game.Content.Load<SpriteFont>(@"InGame/GUI/ArcadeFont28");
-            MenuHeaderFont = this.ScreenManager.Game.Content.Load<SpriteFont>(@"menu\ArialMenuHeader");
-            MenuInfoFont = this.ScreenManager.Game.Content.Load<SpriteFont>(@"menu\ArialMenuInfo");
-            MenuListFont = this.ScreenManager.Game.Content.Load<SpriteFont>(@"menu\ArialMenuList");
+            MenuHeaderFont = this.ScreenManager.Game.Content.Load<SpriteFont>(@"Menu\ArialMenuHeader");
+            MenuInfoFont = this.ScreenManager.Game.Content.Load<SpriteFont>(@"Menu\ArialMenuInfo");
+            MenuListFont = this.ScreenManager.Game.Content.Load<SpriteFont>(@"Menu\ArialMenuList");
         }
 
         private void FurnitureLoad()

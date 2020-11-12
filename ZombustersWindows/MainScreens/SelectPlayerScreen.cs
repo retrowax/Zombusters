@@ -66,13 +66,13 @@ namespace ZombustersWindows
             //"Select" text position
             selectPos = new Vector2(uiBounds.X + 60, uiBounds.Bottom - 30);
 
-            DigitBigFont = game.Content.Load<SpriteFont>(@"menu\DigitBig");
-            DigitLowFont = game.Content.Load<SpriteFont>(@"menu\DigitLow");
-            MenuHeaderFont = game.Content.Load<SpriteFont>(@"menu\ArialMenuHeader");
-            MenuInfoFont = game.Content.Load<SpriteFont>(@"menu\ArialMenuInfo");
-            MenuListFont = game.Content.Load<SpriteFont>(@"menu\ArialMenuList");
+            DigitBigFont = game.Content.Load<SpriteFont>(@"Menu\DigitBig");
+            DigitLowFont = game.Content.Load<SpriteFont>(@"Menu\DigitLow");
+            MenuHeaderFont = game.Content.Load<SpriteFont>(@"Menu\ArialMenuHeader");
+            MenuInfoFont = game.Content.Load<SpriteFont>(@"Menu\ArialMenuInfo");
+            MenuListFont = game.Content.Load<SpriteFont>(@"Menu\ArialMenuList");
 
-            HTPHeaderImage = this.ScreenManager.Game.Content.Load<Texture2D>(@"menu/lobby_header_image");
+            HTPHeaderImage = this.ScreenManager.Game.Content.Load<Texture2D>(@"Menu/lobby_header_image");
 
             menu = new MenuComponent(game, MenuListFont);
             menu.Initialize();
@@ -116,10 +116,10 @@ namespace ZombustersWindows
             kbDown = game.Content.Load<Texture2D>(@"Keyboard/key_down");
             btnLT = game.Content.Load<Texture2D>("xboxControllerLeftTrigger");
             btnRT = game.Content.Load<Texture2D>("xboxControllerRightTrigger");
-            lineaMenu = game.Content.Load<Texture2D>(@"menu/linea_menu");
-            logoMenu = game.Content.Load<Texture2D>(@"menu/logo_menu");
+            lineaMenu = game.Content.Load<Texture2D>(@"Menu/linea_menu");
+            logoMenu = game.Content.Load<Texture2D>(@"Menu/logo_menu");
             arrow = game.Content.Load<Texture2D>(@"InGame/SelectPlayer/arrowLeft");
-            myGroupBKG = game.Content.Load<Texture2D>(@"menu/mygroup_bkg");
+            myGroupBKG = game.Content.Load<Texture2D>(@"Menu/mygroup_bkg");
 
             for (i=1; i <= game.players.Length; i++)
             {

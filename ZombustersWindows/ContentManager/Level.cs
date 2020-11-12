@@ -35,7 +35,7 @@ namespace ZombustersWindows.Subsystem_Managers
             int X, Y, W, Z;
             //float lIndex = 0.8f; //layer index
             CFurnitureComparer furnitureComparer = new CFurnitureComparer();
-            System.Xml.Linq.XDocument doc = System.Xml.Linq.XDocument.Load("Content/LevelsDef.xml");
+            System.Xml.Linq.XDocument doc = System.Xml.Linq.XDocument.Load("ZombustersWindows/Content/LevelsDef.xml");
             var levelparameters = doc.Root.Element("Level1");
 
             switch (level)

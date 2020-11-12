@@ -49,7 +49,7 @@ namespace ZombustersWindows
         {
             blank = game.Content.Load<Texture2D>("whitepixel");
             origin = new Vector2(0, blank.Height);
-            MenuInfoFont = game.Content.Load<SpriteFont>(@"menu\ArialMenuInfo");
+            MenuInfoFont = game.Content.Load<SpriteFont>(@"Menu\ArialMenuInfo");
             if (batch == null)
                 batch = new SpriteBatch(game.GraphicsDevice);
             base.LoadContent();

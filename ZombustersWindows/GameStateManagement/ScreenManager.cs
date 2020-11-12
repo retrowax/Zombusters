@@ -100,7 +100,7 @@ namespace GameStateManagement
         {
             // Load content belonging to the screen manager.
             spriteBatch = new SpriteBatch(GraphicsDevice);
-            font = Game.Content.Load<SpriteFont>(@"menu\ArialMenuInfo");
+            font = Game.Content.Load<SpriteFont>(@"Menu/ArialMenuInfo");
             blankTexture = Game.Content.Load<Texture2D>("blank");
 
             // Tell each of the screens to load their content.

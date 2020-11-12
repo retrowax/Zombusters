@@ -150,22 +150,22 @@ namespace ZombustersWindows
             btnLB = this.Game.Content.Load<Texture2D>("xboxControllerLeftShoulder");
             btnRB = this.Game.Content.Load<Texture2D>("xboxControllerRightShoulder");
             btnDPad = this.Game.Content.Load<Texture2D>("xboxControllerDPad");
-            submit_button = this.Game.Content.Load<Texture2D>(@"menu/submit_button_mobile");
+            submit_button = this.Game.Content.Load<Texture2D>(@"Menu/submit_button_mobile");
             arrow = this.Game.Content.Load<Texture2D>(@"InGame/SelectPlayer/arrowLeft");
-            facebookLogo = this.Game.Content.Load<Texture2D>(@"menu/facebook-64x64");
-            twitterLogo = this.Game.Content.Load<Texture2D>(@"menu/twitter-64x64");
-            googleLogo = this.Game.Content.Load<Texture2D>(@"menu/google-64x64");
-            goBackButton = this.Game.Content.Load<Texture2D>(@"menu/goBackButton");
-            buyNow = this.Game.Content.Load<Texture2D>(@"menu/buynow");
-            menuTextLine = this.Game.Content.Load<Texture2D>(@"menu/linea_texto_menu");
-            menuLine = this.Game.Content.Load<Texture2D>(@"menu/linea_menu");
-            logoRetrowaxMenu = this.Game.Content.Load<Texture2D>(@"menu/retrowax-logo-menu");
-            logoMenu = this.Game.Content.Load<Texture2D>(@"menu/logo_menu");
+            facebookLogo = this.Game.Content.Load<Texture2D>(@"Menu/facebook-64x64");
+            twitterLogo = this.Game.Content.Load<Texture2D>(@"Menu/twitter-64x64");
+            googleLogo = this.Game.Content.Load<Texture2D>(@"Menu/google-64x64");
+            goBackButton = this.Game.Content.Load<Texture2D>(@"Menu/goBackButton");
+            buyNow = this.Game.Content.Load<Texture2D>(@"Menu/buynow");
+            menuTextLine = this.Game.Content.Load<Texture2D>(@"Menu/linea_texto_menu");
+            menuLine = this.Game.Content.Load<Texture2D>(@"Menu/linea_menu");
+            logoRetrowaxMenu = this.Game.Content.Load<Texture2D>(@"Menu/retrowax-logo-menu");
+            logoMenu = this.Game.Content.Load<Texture2D>(@"Menu/logo_menu");
 
-            MenuHeaderFont = this.Game.Content.Load<SpriteFont>(@"menu\ArialMenuHeader");
-            MenuInfoFont = this.Game.Content.Load<SpriteFont>(@"menu\ArialMenuInfo");
-            fontItalic = this.Game.Content.Load<SpriteFont>(@"menu\ArialMusic");
-            fontSmallItalic = this.Game.Content.Load<SpriteFont>(@"menu\ArialMusicItalic");
+            MenuHeaderFont = this.Game.Content.Load<SpriteFont>(@"Menu\ArialMenuHeader");
+            MenuInfoFont = this.Game.Content.Load<SpriteFont>(@"Menu\ArialMenuInfo");
+            fontItalic = this.Game.Content.Load<SpriteFont>(@"Menu\ArialMusic");
+            fontSmallItalic = this.Game.Content.Load<SpriteFont>(@"Menu\ArialMusicItalic");
             base.LoadContent();            
         }
 

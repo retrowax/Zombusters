@@ -39,9 +39,9 @@ namespace ZombustersWindows
             uiBounds = GetTitleSafeArea();
             titleBounds = new Rectangle(115, 65, 1000, 323);
             selectPos = new Vector2(uiBounds.X + 60, uiBounds.Bottom - 30);
-            MenuHeaderFont = this.ScreenManager.Game.Content.Load<SpriteFont>(@"menu\ArialMenuHeader");
-            MenuInfoFont = this.ScreenManager.Game.Content.Load<SpriteFont>(@"menu\ArialMenuInfo");
-            MenuListFont = this.ScreenManager.Game.Content.Load<SpriteFont>(@"menu\ArialMenuList");
+            MenuHeaderFont = this.ScreenManager.Game.Content.Load<SpriteFont>(@"Menu\ArialMenuHeader");
+            MenuInfoFont = this.ScreenManager.Game.Content.Load<SpriteFont>(@"Menu\ArialMenuInfo");
+            MenuListFont = this.ScreenManager.Game.Content.Load<SpriteFont>(@"Menu\ArialMenuList");
             menu = new MenuComponent(this.ScreenManager.Game, MenuListFont);
             menu.Initialize();
             menu.uiBounds = menu.Extents;
@@ -73,7 +73,7 @@ namespace ZombustersWindows
             Title = this.ScreenManager.Game.Content.Load<Texture2D>("title");
             btnB = this.ScreenManager.Game.Content.Load<Texture2D>("xboxControllerButtonB");
             kbEsc = this.ScreenManager.Game.Content.Load<Texture2D>(@"Keyboard/key_esc");
-            submit_button = this.ScreenManager.Game.Content.Load<Texture2D>(@"menu/submit_button_mobile");
+            submit_button = this.ScreenManager.Game.Content.Load<Texture2D>(@"Menu/submit_button_mobile");
             mText = new ScrollingTextManager(new Rectangle(0, 280, 1280, 440), MenuInfoFont, Texto);
             base.LoadContent();
         }

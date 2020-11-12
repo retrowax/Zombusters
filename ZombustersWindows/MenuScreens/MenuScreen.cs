@@ -28,8 +28,8 @@ namespace ZombustersWindows
             int borderheight = (int)(view.Height * .05);
             uiBounds = GetTitleSafeArea();
             selectPos = new Vector2(uiBounds.X + 60, uiBounds.Bottom - 30);
-            MenuInfoFont = game.Content.Load<SpriteFont>(@"menu\ArialMenuInfo");
-            MenuListFont = game.Content.Load<SpriteFont>(@"menu\ArialMenuList");
+            MenuInfoFont = game.Content.Load<SpriteFont>(@"Menu\ArialMenuInfo");
+            MenuListFont = game.Content.Load<SpriteFont>(@"Menu\ArialMenuList");
 
             menu = new MenuComponent(game, MenuListFont);
             //bloom = new BloomComponent(game);

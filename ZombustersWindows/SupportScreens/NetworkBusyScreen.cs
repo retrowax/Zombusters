@@ -1,4 +1,4 @@
-#region Using Statements
+﻿#region Using Statements
 using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
@@ -66,8 +66,8 @@ namespace ZombustersWindows
         {
             ContentManager content = ScreenManager.Game.Content;
 
-            gradientTexture = content.Load<Texture2D>(@"menu/loading_bkg");
-            spinningTexture = content.Load<Texture2D>(@"menu/loadingSpiral");
+            gradientTexture = content.Load<Texture2D>(@"Menu/loading_bkg");
+            spinningTexture = content.Load<Texture2D>(@"Menu/loadingSpiral");
         }
 
 

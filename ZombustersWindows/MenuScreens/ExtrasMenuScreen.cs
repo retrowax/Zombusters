@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -34,8 +34,8 @@ namespace ZombustersWindows
 #else
             selectPos = new Vector2(uiBounds.X + 60, uiBounds.Bottom - 30);
 #endif
-            MenuInfoFont = this.ScreenManager.Game.Content.Load<SpriteFont>(@"menu\ArialMenuInfo");
-            MenuListFont = this.ScreenManager.Game.Content.Load<SpriteFont>(@"menu\ArialMenuList");
+            MenuInfoFont = this.ScreenManager.Game.Content.Load<SpriteFont>(@"Menu\ArialMenuInfo");
+            MenuListFont = this.ScreenManager.Game.Content.Load<SpriteFont>(@"Menu\ArialMenuList");
 
 #if WINDOWS_PHONE
             menu = new MenuComponent(this.ScreenManager.Game, MenuHeaderFont);

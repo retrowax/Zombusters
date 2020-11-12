@@ -52,11 +52,11 @@ namespace ZombustersWindows
             corner = this.ScreenManager.Game.Content.Load<Texture2D>("corner");
             border = this.ScreenManager.Game.Content.Load<Texture2D>("border");
             background_title = this.ScreenManager.Game.Content.Load<Texture2D>("background_title");
-            background_title_shadow = this.ScreenManager.Game.Content.Load<Texture2D>(@"menu/background_title_shadow");
-            background_title_scrolling0 = this.ScreenManager.Game.Content.Load<Texture2D>(@"menu/background_title_scrolling0");
-            background_title_scrolling1 = this.ScreenManager.Game.Content.Load<Texture2D>(@"menu/background_title_scrolling1");
-            background_title_scrolling2 = this.ScreenManager.Game.Content.Load<Texture2D>(@"menu/background_title_scrolling2");
-            background_title_scrolling3 = this.ScreenManager.Game.Content.Load<Texture2D>(@"menu/background_title_scrolling3");
+            background_title_shadow = this.ScreenManager.Game.Content.Load<Texture2D>(@"Menu/background_title_shadow");
+            background_title_scrolling0 = this.ScreenManager.Game.Content.Load<Texture2D>(@"Menu/background_title_scrolling0");
+            background_title_scrolling1 = this.ScreenManager.Game.Content.Load<Texture2D>(@"Menu/background_title_scrolling1");
+            background_title_scrolling2 = this.ScreenManager.Game.Content.Load<Texture2D>(@"Menu/background_title_scrolling2");
+            background_title_scrolling3 = this.ScreenManager.Game.Content.Load<Texture2D>(@"Menu/background_title_scrolling3");
 
             for (int i = 0; i < 4; i++)
             {
