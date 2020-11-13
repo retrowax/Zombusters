@@ -1,0 +1,1214 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <OutputType>Exe</OutputType>
+        <TargetFramework>netcoreapp3.1</TargetFramework>
+        <ReleaseVersion>1.2.0</ReleaseVersion>
+        <ApplicationIcon>Game.ico</ApplicationIcon>
+    </PropertyGroup>
+
+    <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+      <IntermediateOutputPath>obj\Debug\netcoreapp3</IntermediateOutputPath>
+      <DefineConstants>TRACE;DEBUG;NETCOREAPP;NETCOREAPP3_1;LINUX;</DefineConstants>
+    </PropertyGroup>
+    <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+      <DebugType></DebugType>
+      <DefineConstants>TRACE;RELEASE;NETCOREAPP;NETCOREAPP3_1;LINUX;</DefineConstants>
+    </PropertyGroup>
+    <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Demo|AnyCPU' ">
+      <IntermediateOutputPath>obj\Demo</IntermediateOutputPath>
+      <DebugType></DebugType>
+      <Optimize>true</Optimize>
+      <OutputPath>bin\Demo\netcoreapp3</OutputPath>
+      <DefineConstants>TRACE;NETCOREAPP3;LINUX;DEMO;NETCOREAPP;NETCOREAPP3_1</DefineConstants>
+      <NoWarn>1701;1702</NoWarn>
+    </PropertyGroup>
+    <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'DemoDebug|AnyCPU' ">
+      <IntermediateOutputPath>obj\DemoDebug\netcoreapp3</IntermediateOutputPath>
+      <DebugSymbols>true</DebugSymbols>
+      <Optimize>false</Optimize>
+      <OutputPath>bin\DemoDebug\netcoreapp3</OutputPath>
+      <DefineConstants>TRACE;DEMO;NETCOREAPP3;LINUX;DEMODEBUG;NETCOREAPP;NETCOREAPP3_1</DefineConstants>
+      <NoStdLib>true</NoStdLib>
+    </PropertyGroup>
+    
+    <PropertyGroup>
+        <CFBundleShortVersionString>1.2.0</CFBundleShortVersionString>
+    </PropertyGroup>
+    
+    <ItemGroup>
+        <PackageReference Include="NLog" Version="4.7.5" />
+        <PackageReference Include="Bugsnag" Version="2.2.1" />
+        <PackageReference Include="Facepunch.Steamworks" Version="2.3.3" />
+        <PackageReference Include="MonoGame.Content.Builder" Version="3.7.0.9" />
+        <PackageReference Include="MonoGame.Framework.DesktopGL" Version="3.8.0.1641" />
+        <PackageReference Include="MonoGame.Framework.DesktopGL.Core" Version="3.8.0.2" />
+        <PackageReference Include="Dotnet.Bundle" Version="0.9.13" />
+        <PackageReference Include="GameAnalytics.Net.Core.SDK" Version="3.1.1" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <Content Include="Content\AnimationDef.xml">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\LevelsDef.xml">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\WPLevelsDef.xml">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Game.ico" />
+        <Content Include="LevelXMLs\Credits.txt">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="LevelXMLs\Level10\Level10_enemies.xml">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="LevelXMLs\Level10\Level10_furnitures.xml">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="LevelXMLs\Level10\Level10_walls.xml">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="LevelXMLs\Level1\Level1_enemies.xml">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="LevelXMLs\Level1\Level1_furnitures.xml">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="LevelXMLs\Level1\Level1_walls.xml">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="LevelXMLs\Level2\Level2_enemies.xml">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="LevelXMLs\Level2\Level2_furnitures.xml">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="LevelXMLs\Level2\Level2_walls.xml">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="LevelXMLs\Level3\Level3WP_walls.xml">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="LevelXMLs\Level3\Level3_enemies.xml">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="LevelXMLs\Level3\Level3_furnitures.xml">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="LevelXMLs\Level3\Level3_walls.xml">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="LevelXMLs\Level4\Level4_enemies.xml">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="LevelXMLs\Level4\Level4_furnitures.xml">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="LevelXMLs\Level4\Level4_walls.xml">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="LevelXMLs\Level5\Level5WP_furnitures.xml">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="LevelXMLs\Level5\Level5WP_walls.xml">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="LevelXMLs\Level5\Level5_enemies.xml">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="LevelXMLs\Level5\Level5_furnitures.xml">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="LevelXMLs\Level5\Level5_walls.xml">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="LevelXMLs\Level6\Level6_enemies.xml">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="LevelXMLs\Level6\Level6_furnitures.xml">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="LevelXMLs\Level6\Level6_walls.xml">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="LevelXMLs\Level7\Level7WP_walls.xml">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="LevelXMLs\Level7\Level7_enemies.xml">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="LevelXMLs\Level7\Level7_furnitures.xml">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="LevelXMLs\Level7\Level7_walls.xml">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="LevelXMLs\Level8\Level8_enemies.xml">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="LevelXMLs\Level8\Level8_furnitures.xml">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="LevelXMLs\Level8\Level8_walls.xml">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="LevelXMLs\Level9\Level9_enemies.xml">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="LevelXMLs\Level9\Level9_furnitures.xml">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="LevelXMLs\Level9\Level9_walls.xml">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="libsteam_api64.dylib">
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="steam_api64.dll">
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="steam_api.dll">
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\InGame\coffin_meme.xnb">
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\InGame\minotaur\128x80Minotaur_Attack.xnb">
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\InGame\minotaur\128x80Minotaur_Death.xnb">
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\InGame\minotaur\128x80Minotaur_Hit.xnb">
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\InGame\minotaur\128x80Minotaur_Idle.xnb">
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\InGame\minotaur\128x80Minotaur_Walk.xnb">
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\InGame\rat\48x48Rat_Attack.xnb">
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\InGame\rat\48x48Rat_Death.xnb">
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\InGame\rat\48x48Rat_Hit.xnb">
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\InGame\rat\48x48Rat_Idle.xnb">
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\InGame\rat\48x48Rat_Run.xnb">
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\InGame\rat\RatAnimationDef.xml">
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\InGame\wolf\80x48Wolf_Death.xnb">
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\InGame\wolf\80x48Wolf_Growl.xnb">
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\InGame\wolf\80x48Wolf_hit.xnb">
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\InGame\wolf\80x48Wolf_Idle.xnb">
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\InGame\wolf\80x48Wolf_JumpAttackMove.xnb">
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\InGame\wolf\80x48Wolf_JumpAttackNoMove.xnb">
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\InGame\wolf\80x48Wolf_Run.xnb">
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\InGame\minotaur\MinotaurAnimationDef.xml">
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\InGame\wolf\WolfAnimationDef.xml">
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\retrowax-logo-splash.xnb">
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\Menu\retrowax-logo-menu.xnb">
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\SoundFX\minotaurdeath.xnb">
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\SoundFX\ratdeath.xnb">
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\SoundFX\shotgun.xnb">
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\SoundFX\wolfdeath.xnb">
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+    </ItemGroup>
+    <ItemGroup>
+        <WCFMetadata Include="Service References\" />
+    </ItemGroup>
+    <ItemGroup>
+      <None Remove="LevelXMLs\Level1\Level1_enemies.xml" />
+      <None Remove="LevelXMLs\Level1\Level1_furnitures.xml" />
+      <None Remove="LevelXMLs\Level1\Level1_walls.xml" />
+      <None Remove="libsteam_api.dylib" />
+      <None Remove="steam_api64.dll" />
+      <None Remove="steam_api.dll" />
+      <None Remove="Content\InGame\coffin_meme.xnb" />
+      <None Remove="Content\InGame\minotaur\128x80Minotaur_Attack.xnb" />
+      <None Remove="Content\InGame\minotaur\128x80Minotaur_Death.xnb" />
+      <None Remove="Content\InGame\minotaur\128x80Minotaur_Hit.xnb" />
+      <None Remove="Content\InGame\minotaur\128x80Minotaur_Idle.xnb" />
+      <None Remove="Content\InGame\minotaur\128x80Minotaur_Walk.xnb" />
+      <None Remove="Content\InGame\rat\48x48Rat_Attack.xnb" />
+      <None Remove="Content\InGame\rat\48x48Rat_Death.xnb" />
+      <None Remove="Content\InGame\rat\48x48Rat_Hit.xnb" />
+      <None Remove="Content\InGame\rat\48x48Rat_Idle.xnb" />
+      <None Remove="Content\InGame\rat\48x48Rat_Run.xnb" />
+      <None Remove="Content\InGame\rat\RatAnimationDef.xml" />
+      <None Remove="Content\InGame\wolf\80x48Wolf_Death.xnb" />
+      <None Remove="Content\InGame\wolf\80x48Wolf_Growl.xnb" />
+      <None Remove="Content\InGame\wolf\80x48Wolf_hit.xnb" />
+      <None Remove="Content\InGame\wolf\80x48Wolf_Idle.xnb" />
+      <None Remove="Content\InGame\wolf\80x48Wolf_JumpAttackMove.xnb" />
+      <None Remove="Content\InGame\wolf\80x48Wolf_JumpAttackNoMove.xnb" />
+      <None Remove="Content\InGame\wolf\80x48Wolf_Run.xnb" />
+      <None Remove="Content\InGame\minotaur\RatAnimationDef.xml" />
+      <None Remove="Content\InGame\wolf\RatAnimationDef.xml" />
+      <None Remove="Content\retrowax-logo-splash.xnb" />
+      <None Remove="Content\Menu\retrowax-logo-menu.xnb" />
+      <None Remove="Content\SoundFX\minotaurdeath.xnb" />
+      <None Remove="Content\SoundFX\ratdeath.xnb" />
+      <None Remove="Content\SoundFX\shotgun.xnb" />
+      <None Remove="Content\SoundFX\wolfdeath.xnb" />
+      <None Remove="Content\Music\BareWires_DancingOnADime.ogg" />
+      <None Remove="Content\Music\BlackMath_HighDive.ogg" />
+      <None Remove="Content\Music\BlackMath_SuckCity.ogg" />
+      <None Remove="Content\Music\BradSucks_BadAttraction.ogg" />
+      <None Remove="Content\Music\BradSucks_UnderstoodByYourDad.ogg" />
+      <None Remove="Content\Music\LondonToTokyo_HighGround.ogg" />
+      <None Remove="Content\Music\NuitNoire_OpeningThePortal.ogg" />
+      <None Remove="Content\Music\TheBlackBug_IDontLikeYou.ogg" />
+      <None Remove="Content\Music\TheItchyCreeps_ITHOTM.ogg" />
+      <None Remove="Content\Music\ThisCo_AsYouKnow.ogg" />
+      <None Remove="Content\Music\ThisCo_TakeItAway.ogg" />
+      <None Remove="Content\Music\BlackMath_HighDive.mp3" />
+      <None Remove="Content\Music\BareWires_DancingOnADime.mp3" />
+      <None Remove="Content\Content.mgcb" />
+    </ItemGroup>
+    <ItemGroup>
+        <Content Include="Content\Achievements\achieve_1.xnb">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\Achievements\achieve_2.xnb">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\Achievements\achieve_3.xnb">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\Achievements\achieve_4.xnb">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\background_title.xnb">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\blank.xnb">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\border.xnb">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\Cloud001.xnb">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\clouds3.xnb">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\controller.xnb">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\corner.xnb">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\default.xgs">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\Flame.xnb">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\Flame2.xnb">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\fx\BloomCombine.xnb">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\fx\BloomExtract.xnb">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\fx\GaussianBlur.xnb">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\InGame\burningzombie.xnb">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\InGame\character_shadow.xnb">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\InGame\Egon\egon_died.xnb">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\InGame\Egon\egon_idle.xnb">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\InGame\Egon\egon_legs_idle.xnb">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\InGame\Egon\egon_pistol_E.xnb">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\InGame\Egon\egon_pistol_N.xnb">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\InGame\Egon\egon_pistol_NE.xnb">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\InGame\Egon\egon_pistol_S.xnb">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\InGame\Egon\egon_pistol_SE.xnb">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\InGame\Egon\egon_run_E.xnb">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\InGame\Egon\egon_shotgun_E.xnb">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\InGame\Egon\egon_shotgun_N.xnb">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\InGame\Egon\egon_shotgun_NE.xnb">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\InGame\Egon\egon_shotgun_S.xnb">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\InGame\Egon\egon_shotgun_SE.xnb">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\InGame\Explosion.xnb">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\InGame\extralife_powerup.xnb">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\InGame\flamethrower.xnb">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\InGame\flamethrower_ammo_powerup.xnb">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\InGame\FT_CollisionTexture.xnb">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\InGame\gameover.xnb">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\InGame\GUI\aimcursor.xnb">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\InGame\GUI\ArcadeFont14.xnb">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\InGame\GUI\ArcadeFont28.xnb">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\InGame\GUI\CourierNew.xnb">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\InGame\GUI\Fixedv03.xnb">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\InGame\GUI\flamethrowerammo.xnb">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\InGame\GUI\grenadeammo.xnb">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\InGame\GUI\heart.xnb">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\InGame\GUI\jade_gui.xnb">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\InGame\GUI\peter_gui.xnb">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\InGame\GUI\pistolammo.xnb">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\InGame\GUI\ray_gui.xnb">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\InGame\GUI\retrotrax_anim.xnb">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\InGame\GUI\retrotrax_anim_bkg.xnb">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\InGame\GUI\richard_gui.xnb">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\InGame\GUI\shotgunammo.xnb">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\InGame\immune_ammo_powerup.xnb">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\InGame\Jade\girl_anim_idle.xnb">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\InGame\Jade\girl_anim_run_E.xnb">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\InGame\Jade\girl_anim_shotgun.xnb">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\InGame\Jade\girl_anim_shotgun_N.xnb">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\InGame\Jade\girl_anim_shotgun_NE.xnb">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\InGame\Jade\girl_anim_shotgun_S.xnb">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\InGame\Jade\girl_anim_shotgun_SE.xnb">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\InGame\Jade\girl_anim_shot_E.xnb">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\InGame\Jade\girl_anim_shot_N.xnb">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\InGame\Jade\girl_anim_shot_NE.xnb">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\InGame\Jade\girl_anim_shot_S.xnb">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\InGame\Jade\girl_anim_shot_SE.xnb">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\InGame\Jade\girl_died.xnb">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\InGame\Jade\girl_legs_idle.xnb">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\InGame\live_powerup.xnb">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\InGame\machinegun_ammo_powerup.xnb">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\InGame\nikkigriffin_iddle.xnb">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\InGame\Peter\peter_died.xnb">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\InGame\Peter\peter_idle.xnb">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\InGame\Peter\peter_legs_idle.xnb">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\InGame\Peter\peter_pistol_E.xnb">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\InGame\Peter\peter_pistol_N.xnb">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\InGame\Peter\peter_pistol_NE.xnb">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\InGame\Peter\peter_pistol_S.xnb">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\InGame\Peter\peter_pistol_SE.xnb">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\InGame\Peter\peter_run_E.xnb">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\InGame\Peter\peter_shotgun_E.xnb">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\InGame\Peter\peter_shotgun_N.xnb">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\InGame\Peter\peter_shotgun_NE.xnb">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\InGame\Peter\peter_shotgun_S.xnb">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\InGame\Peter\peter_shotgun_SE.xnb">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\InGame\Photon.xnb">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\InGame\Playership.xnb">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\InGame\position_reference_temporal.xnb">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\InGame\Ray\ray_died.xnb">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\InGame\Ray\ray_idle.xnb">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\InGame\Ray\ray_legs_idle.xnb">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\InGame\Ray\ray_pistol_E.xnb">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\InGame\Ray\ray_pistol_N.xnb">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\InGame\Ray\ray_pistol_NE.xnb">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\InGame\Ray\ray_pistol_S.xnb">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\InGame\Ray\ray_pistol_SE.xnb">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\InGame\Ray\ray_run_E.xnb">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\InGame\Ray\ray_shotgun_E.xnb">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\InGame\Ray\ray_shotgun_N.xnb">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\InGame\Ray\ray_shotgun_NE.xnb">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\InGame\Ray\ray_shotgun_S.xnb">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\InGame\Ray\ray_shotgun_SE.xnb">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\InGame\SelectPlayer\arrowLeft.xnb">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\InGame\SelectPlayer\p1Avatar.xnb">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\InGame\SelectPlayer\p1Avatar_pixel.xnb">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\InGame\SelectPlayer\p2Avatar.xnb">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\InGame\SelectPlayer\p2Avatar_pixel.xnb">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\InGame\SelectPlayer\p3Avatar.xnb">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\InGame\SelectPlayer\p3Avatar_pixel.xnb">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\InGame\SelectPlayer\p4Avatar.xnb">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\InGame\SelectPlayer\p4Avatar_pixel.xnb">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\InGame\SelectPlayer\selpla_bkg.xnb">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\InGame\SelectPlayer\selpla_border.xnb">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\InGame\SelectPlayer\selpla_gradient.xnb">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\InGame\SelectPlayer\selpla_ready.xnb">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\InGame\shotgun_ammo_powerup.xnb">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\InGame\tank.xnb">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\InGame\zombie1.xnb">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\InGame\zombie2.xnb">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\InGame\zombie3.xnb">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\InGame\zombie4.xnb">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\InGame\zombie5.xnb">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\InGame\zombiedeath1.xnb">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\InGame\zombiedeath2.xnb">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\InGame\zombiedeath3.xnb">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\InGame\zombiedeath4.xnb">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\InGame\zombiedeath5.xnb">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\InputText.xnb">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\InputText2.xnb">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\Keyboard\key_down.xnb">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\Keyboard\key_enter.xnb">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\Keyboard\key_esc.xnb">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\Keyboard\key_left.xnb">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\Keyboard\key_right.xnb">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\Keyboard\key_space.xnb">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\Keyboard\key_up.xnb">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\LargeArcade.xnb">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\LogoRetroWax.xnb">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\LogoRetroWaxWP.xnb">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\Maps\Furniture\Arbol.xnb">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\Maps\Furniture\Arbol_shadow.xnb">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\Maps\Furniture\BancoSE.xnb">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\Maps\Furniture\BancoSE_shadow.xnb">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\Maps\Furniture\BancoSW.xnb">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\Maps\Furniture\BancoSW_shadow.xnb">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\Maps\Furniture\Basura.xnb">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\Maps\Furniture\Basura_shadow.xnb">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\Maps\Furniture\CocheArdiendo.xnb">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\Maps\Furniture\FarolaNE.xnb">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\Maps\Furniture\FarolaNE_shadow.xnb">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\Maps\Furniture\FarolaNW.xnb">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\Maps\Furniture\FarolaNW_shadow.xnb">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\Maps\Furniture\FarolaSE.xnb">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\Maps\Furniture\FarolaSE_shadow.xnb">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\Maps\Furniture\FarolaSW.xnb">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\Maps\Furniture\FarolaSW_shadow.xnb">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\Maps\Furniture\Puente.xnb">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\Maps\map1.xnb">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\Maps\map10.xnb">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\Maps\map2.xnb">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\Maps\map3.xnb">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\Maps\map3WP.xnb">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\Maps\map4.xnb">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\Maps\map5.xnb">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\Maps\map6.xnb">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\Maps\map7.xnb">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\Maps\map7WP.xnb">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\Maps\map8.xnb">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\Maps\map9.xnb">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\Menu\ArialMenuHeader.xnb">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\Menu\ArialMenuInfo.xnb">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\Menu\ArialMenuList.xnb">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\Menu\ArialMusic.xnb">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\Menu\ArialMusicItalic.xnb">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\Menu\background_title_scrolling0.xnb">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\Menu\background_title_scrolling0WP.xnb">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\Menu\background_title_scrolling1.xnb">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\Menu\background_title_scrolling1WP.xnb">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\Menu\background_title_scrolling2.xnb">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\Menu\background_title_scrolling2WP.xnb">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\Menu\background_title_scrolling3.xnb">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\Menu\background_title_scrolling3WP.xnb">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\Menu\background_title_shadow.xnb">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\Menu\buynow.xnb">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\Menu\colorBlockBigBlue.xnb">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\Menu\colorBlockBigGreen.xnb">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\Menu\colorBlockBigRed.xnb">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\Menu\colorBlockBigYellow.xnb">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\Menu\colorBlockBlue.xnb">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\Menu\colorBlockGreen.xnb">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\Menu\colorBlockRed.xnb">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\Menu\colorBlockYellow.xnb">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\Menu\connected_icon.xnb">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\Menu\controllerInd_menu_P1.xnb">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\Menu\controllerInd_menu_P2.xnb">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\Menu\controllerInd_menu_P3.xnb">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\Menu\controllerInd_menu_P4.xnb">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\Menu\DigitBig.xnb">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\Menu\DigitLow.xnb">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\Menu\facebook-64x64.xnb">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\Menu\goBackButton.xnb">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\Menu\google-64x64.xnb">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\Menu\grayBlock.xnb">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\Menu\grayBlockShort.xnb">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\Menu\HTP_WP_header_image.xnb">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\Menu\linea_lobby_players_selected.xnb">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\Menu\linea_menu.xnb">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\Menu\linea_texto_menu.xnb">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\Menu\loadingSpiral.xnb">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\Menu\loading_bkg.xnb">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\Menu\lobby_header_image.xnb">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\Menu\logo_menu.xnb">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\Menu\logo_retrowax_menu.xnb">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\Menu\menufont.xnb">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\Menu\menufont2.xnb">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\Menu\mygroup_bkg.xnb">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\Menu\notLoggedInGamerPicture.xnb">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\Menu\saveAnimation.xnb">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\Menu\speechbubbleWP.xnb">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\Menu\square_empty.xnb">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\Menu\square_filled.xnb">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\Menu\submit_button_mobile.xnb">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\Menu\twitter-64x64.xnb">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\Sound Bank.xsb">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\SoundFX\critedu.xnb">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\SoundFX\engine_2.xnb">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\SoundFX\explosion1.xnb">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\SoundFX\explosion3.xnb">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\SoundFX\flamethrower.xnb">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\SoundFX\LogoSplashSound.xnb">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\SoundFX\machinegun.xnb">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\SoundFX\pistol_shot.xnb">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\SoundFX\tx0_fire1.xnb">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\SoundFX\womanscream.xnb">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\SoundFX\zombiedying.xnb">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\starfield.xnb">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\title.xnb">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\UI\gameplay_gui_stats.xnb">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\UI\gamerpicture_border.xnb">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\UI\gui_player_blue.xnb">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\UI\gui_player_green.xnb">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\UI\gui_player_red.xnb">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\UI\gui_player_yellow.xnb">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\UI\gui_stats_bkg_blue.xnb">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\UI\gui_stats_bkg_green.xnb">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\UI\gui_stats_bkg_red.xnb">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\UI\gui_stats_bkg_yellow.xnb">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\UI\left_thumbstick.xnb">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\UI\pause_iconWP.xnb">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\UI\right_thumbstick.xnb">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\Wave Bank.xwb">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\whitepixel.xnb">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\xboxControllerButtonA.xnb">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\xboxControllerButtonB.xnb">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\xboxControllerButtonX.xnb">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\xboxControllerButtonY.xnb">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\xboxControllerDPad.xnb">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\xboxControllerLeftShoulder.xnb">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\xboxControllerLeftThumbstick.xnb">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\xboxControllerLeftTrigger.xnb">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\xboxControllerRightShoulder.xnb">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\xboxControllerRightThumbstick.xnb">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\xboxControllerRightTrigger.xnb">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\xboxControllerStart.xnb">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\XCurve1.xnb">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\XCurve2.xnb">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\YCurve1.xnb">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\YCurve2.xnb">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\Music\BareWires_DancingOnADime.ogg">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\Music\BlackMath_HighDive.ogg">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\Music\BlackMath_SuckCity.ogg">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\Music\BradSucks_BadAttraction.ogg">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\Music\BradSucks_UnderstoodByYourDad.ogg">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\Music\Kraus_Wolfram.ogg">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\Music\LondonToTokyo_HighGround.ogg">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\Music\NuitNoire_OpeningThePortal.ogg">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\Music\TheBlackBug_IDontLikeYou.ogg">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\Music\TheItchyCreeps_ITHOTM.ogg">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\Music\ThisCo_AsYouKnow.ogg">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\Music\ThisCo_TakeItAway.ogg">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <None Include="packages.config" />
+    </ItemGroup>
+    <ItemGroup>
+        <Folder Include="Steam\" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <EmbeddedResource Condition=" '$(EnableDefaultEmbeddedResourceItems)' == 'true' " Update="Localization\Strings.resx">
+        <Generator>PublicResXFileCodeGenerator</Generator>
+        <LastGenOutput>Strings.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
+      <EmbeddedResource Condition=" '$(EnableDefaultEmbeddedResourceItems)' == 'true' " Update="Localization\Strings.resx">
+        <Generator>ResXFileCodeGenerator</Generator>
+        <LastGenOutput>Strings.Designer.cs</LastGenOutput>
+        <CustomToolNamespace>Resources</CustomToolNamespace>
+      </EmbeddedResource>
+      <EmbeddedResource Condition=" '$(EnableDefaultEmbeddedResourceItems)' == 'true' " Update="Localization\Strings.de.resx">
+        <Generator>ResXFileCodeGenerator</Generator>
+        <LastGenOutput>Strings.de.Designer.cs</LastGenOutput>
+        <CustomToolNamespace>Resources</CustomToolNamespace>
+      </EmbeddedResource>
+      <EmbeddedResource Condition=" '$(EnableDefaultEmbeddedResourceItems)' == 'true' " Update="Localization\Strings.es.resx">
+        <Generator>ResXFileCodeGenerator</Generator>
+        <LastGenOutput>Strings.es.Designer.cs</LastGenOutput>
+        <CustomToolNamespace>Resources</CustomToolNamespace>
+      </EmbeddedResource>
+      <EmbeddedResource Condition=" '$(EnableDefaultEmbeddedResourceItems)' == 'true' " Update="Localization\Strings.fr.resx">
+        <Generator>ResXFileCodeGenerator</Generator>
+        <LastGenOutput>Strings.fr.Designer.cs</LastGenOutput>
+        <CustomToolNamespace>Resources</CustomToolNamespace>
+      </EmbeddedResource>
+      <EmbeddedResource Condition=" '$(EnableDefaultEmbeddedResourceItems)' == 'true' " Update="Localization\Strings.it.resx">
+        <Generator>ResXFileCodeGenerator</Generator>
+        <LastGenOutput>Strings.it.Designer.cs</LastGenOutput>
+        <CustomToolNamespace>Resources</CustomToolNamespace>
+      </EmbeddedResource>
+      <EmbeddedResource Condition=" '$(EnableDefaultEmbeddedResourceItems)' == 'true' " Update="Localization\Strings.resx">
+        <Generator>ResXFileCodeGenerator</Generator>
+        <LastGenOutput>Strings.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
+    </ItemGroup>
+    <ItemGroup>
+      <Compile Condition=" '$(EnableDefaultCompileItems)' == 'true' " Update="Localization\Strings.Designer.cs">
+        <DependentUpon>Strings.resx</DependentUpon>
+      </Compile>
+      <Compile Condition=" '$(EnableDefaultCompileItems)' == 'true' " Update="Localization\Strings.de.Designer.cs">
+        <DependentUpon>Strings.de.resx</DependentUpon>
+      </Compile>
+      <Compile Condition=" '$(EnableDefaultCompileItems)' == 'true' " Update="Localization\Strings.es.Designer.cs">
+        <DependentUpon>Strings.es.resx</DependentUpon>
+      </Compile>
+      <Compile Condition=" '$(EnableDefaultCompileItems)' == 'true' " Update="Localization\Strings.fr.Designer.cs">
+        <DependentUpon>Strings.fr.resx</DependentUpon>
+      </Compile>
+      <Compile Condition=" '$(EnableDefaultCompileItems)' == 'true' " Update="Localization\Strings.it.Designer.cs">
+        <DependentUpon>Strings.it.resx</DependentUpon>
+      </Compile>
+    </ItemGroup>
+</Project>

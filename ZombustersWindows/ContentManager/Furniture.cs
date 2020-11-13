@@ -44,7 +44,11 @@ namespace ZombustersWindows.Subsystem_Managers
             if (Type == FurnitureType.CocheArdiendo)
             {
                 // Load multiple animations form XML definition
+#if LINUX
                 System.Xml.Linq.XDocument doc = System.Xml.Linq.XDocument.Load("ZombustersWindows/Content/AnimationDef.xml");
+#else
+                System.Xml.Linq.XDocument doc = System.Xml.Linq.XDocument.Load("Content/AnimationDef.xml");
+#endif
 
                 //ZOMBIE ANIMATION
                 // Get the Zombie animation from the XML definition

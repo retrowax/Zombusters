@@ -41,6 +41,8 @@ namespace ZombustersWindows.Localization {
                 if (object.ReferenceEquals(resourceMan, null)) {
 #if WINDOWS
                     global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("ZombustersWindows.Localization.Strings", typeof(Strings).Assembly);
+#elif LINUX
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("ZombustersLinux.Localization.Strings", typeof(Strings).Assembly);
 #elif NETCOREAPP
                     global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("ZombustersMac.Localization.Strings", typeof(Strings).Assembly);
 #endif

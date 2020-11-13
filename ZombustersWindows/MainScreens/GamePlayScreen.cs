@@ -205,7 +205,11 @@ namespace ZombustersWindows
 
         public override void LoadContent()
         {
+#if LINUX
             XDocument animationDefinitionDocument = XDocument.Load("ZombustersWindows/Content/AnimationDef.xml");
+#else
+            XDocument animationDefinitionDocument = XDocument.Load("Content/AnimationDef.xml");
+#endif
 
             DiedTexture = new List<Texture2D>
             {
@@ -278,7 +282,7 @@ namespace ZombustersWindows
             base.LoadContent();
         }
 
-        #region Input Processing
+#region Input Processing
         public override void HandleInput(InputState input)
         {
             foreach (Player player in game.players)
@@ -410,7 +414,7 @@ namespace ZombustersWindows
             state.StickRightMovement = stickRight;
             return state;
         }
-        #endregion
+#endregion
 
         public override void Update(GameTime gameTime, bool otherScreenHasFocus,
             bool coveredByOtherScreen)
@@ -605,7 +609,7 @@ namespace ZombustersWindows
             }
         }
 
-        #region Player-centric code
+#region Player-centric code
         public void UpdatePlayer(Player player, float totalGameSeconds,
             float elapsedGameSeconds, NeutralInput input)
         {
@@ -1238,7 +1242,7 @@ namespace ZombustersWindows
             }
         }
 
-        #region Drawing Code
+#region Drawing Code
 
         private void DrawMap(Texture2D map)
         {
@@ -2934,7 +2938,7 @@ namespace ZombustersWindows
             batch.End();
         }
 
-        #endregion
+#endregion
 
         public void IncreaseScore(byte player, short amount)
         {

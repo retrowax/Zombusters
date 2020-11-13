@@ -84,8 +84,12 @@ namespace ZombustersWindows
             TimeSpan frameInterval;
             Point frameSize = new Point();
             Point sheetSize = new Point();
-            
+
+#if LINUX
             XDocument doc = XDocument.Load("ZombustersWindows/Content/InGame/minotaur/MinotaurAnimationDef.xml");
+#else
+            XDocument doc = XDocument.Load("Content/InGame/minotaur/MinotaurAnimationDef.xml");
+#endif
 
             definition = doc.Root.Element("MinotaurAttackDef");
             frameSize.X = int.Parse(definition.Attribute("FrameWidth").Value, NumberStyles.Integer);
