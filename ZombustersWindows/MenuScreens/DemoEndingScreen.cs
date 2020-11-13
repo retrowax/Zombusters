@@ -37,8 +37,8 @@ namespace ZombustersWindows
             int borderheight = (int)(view.Height * .05);
             uiBounds = GetTitleSafeArea();
             titleBounds = new Rectangle(115, 65, 1000, 323);
-            MenuInfoFont = this.ScreenManager.Game.Content.Load<SpriteFont>(@"menu\ArialMenuInfo");
-            MenuListFont = this.ScreenManager.Game.Content.Load<SpriteFont>(@"menu\ArialMenuList");
+            MenuInfoFont = this.ScreenManager.Game.Content.Load<SpriteFont>(@"Menu\ArialMenuInfo");
+            MenuListFont = this.ScreenManager.Game.Content.Load<SpriteFont>(@"Menu\ArialMenuList");
             menu = new MenuComponent(this.ScreenManager.Game, MenuListFont);
             menu.Initialize();
             menu.uiBounds = menu.Extents;
@@ -69,7 +69,7 @@ namespace ZombustersWindows
             btnA = this.ScreenManager.Game.Content.Load<Texture2D>("xboxControllerButtonA");
             kbEsc = this.ScreenManager.Game.Content.Load<Texture2D>(@"Keyboard/key_esc");
             kbEnter = this.ScreenManager.Game.Content.Load<Texture2D>(@"Keyboard/key_enter");
-            submit_button = this.ScreenManager.Game.Content.Load<Texture2D>(@"menu/submit_button_mobile");
+            submit_button = this.ScreenManager.Game.Content.Load<Texture2D>(@"Menu/submit_button_mobile");
             mText = new ScrollingTextManager(new Rectangle(0, 280, 1280, 440), MenuInfoFont, Texto);
             base.LoadContent();
         }

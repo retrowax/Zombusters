@@ -31,7 +31,7 @@ namespace ZombustersWindows
         protected override void LoadContent()
         {
             spriteBatch = new SpriteBatch(GraphicsDevice);
-            spriteFont = content.Load<SpriteFont>(@"menu\ArialMenuInfo"); //content.Load<SpriteFont>(@"menu/ArialMenuInfo");
+            spriteFont = content.Load<SpriteFont>(@"Menu\ArialMenuInfo"); //content.Load<SpriteFont>(@"Menu/ArialMenuInfo");
         }
 
 

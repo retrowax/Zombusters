@@ -49,9 +49,9 @@ namespace ZombustersWindows
             //"Select" text position
             selectPos = new Vector2(uiBounds.X + 60, uiBounds.Bottom - 30);
 
-            MenuHeaderFont = this.ScreenManager.Game.Content.Load<SpriteFont>(@"menu\ArialMenuHeader");
-            MenuInfoFont = this.ScreenManager.Game.Content.Load<SpriteFont>(@"menu\ArialMenuInfo");
-            MenuListFont = this.ScreenManager.Game.Content.Load<SpriteFont>(@"menu\ArialMenuList");
+            MenuHeaderFont = this.ScreenManager.Game.Content.Load<SpriteFont>(@"Menu\ArialMenuHeader");
+            MenuInfoFont = this.ScreenManager.Game.Content.Load<SpriteFont>(@"Menu\ArialMenuInfo");
+            MenuListFont = this.ScreenManager.Game.Content.Load<SpriteFont>(@"Menu\ArialMenuList");
 
             menu = new MenuComponent(this.ScreenManager.Game, MenuListFont);
 
@@ -104,12 +104,12 @@ namespace ZombustersWindows
             btnB = this.ScreenManager.Game.Content.Load<Texture2D>("xboxControllerButtonB");
 
             //Linea blanca separatoria
-            lineaMenu = this.ScreenManager.Game.Content.Load<Texture2D>(@"menu/linea_menu");
+            lineaMenu = this.ScreenManager.Game.Content.Load<Texture2D>(@"Menu/linea_menu");
 
             //Logo Menu
-            logoMenu = this.ScreenManager.Game.Content.Load<Texture2D>(@"menu/logo_menu");
+            logoMenu = this.ScreenManager.Game.Content.Load<Texture2D>(@"Menu/logo_menu");
 
-            submit_button = this.ScreenManager.Game.Content.Load<Texture2D>(@"menu/submit_button_mobile");
+            submit_button = this.ScreenManager.Game.Content.Load<Texture2D>(@"Menu/submit_button_mobile");
 
 #if XBOX
             ((Game1)this.ScreenManager.Game).gamerManager.Load();

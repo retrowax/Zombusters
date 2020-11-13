@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
@@ -122,9 +122,9 @@ namespace ZombustersWindows
             LoadSong("As You Know", @"Music/ThisCo_AsYouKnow");
             LoadSong("Take It Away", @"Music/ThisCo_TakeItAway");
 
-            font = contentManager.Load<SpriteFont>(@"menu\ArialMenuInfo");
-            fontItalic = contentManager.Load<SpriteFont>(@"menu\ArialMusic");
-            fontSmallItalic = contentManager.Load<SpriteFont>(@"menu\ArialMusicItalic");
+            font = contentManager.Load<SpriteFont>(@"Menu\ArialMenuInfo");
+            fontItalic = contentManager.Load<SpriteFont>(@"Menu\ArialMusic");
+            fontSmallItalic = contentManager.Load<SpriteFont>(@"Menu\ArialMusicItalic");
 
             base.LoadContent();
         }

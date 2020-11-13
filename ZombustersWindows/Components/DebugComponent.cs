@@ -33,8 +33,8 @@ namespace ZombustersWindows
         protected override void LoadContent()
         {
             spriteBatch = new SpriteBatch(GraphicsDevice);
-            spriteFont = game.Content.Load<SpriteFont>(@"menu\ArialMenuInfo"); //content.Load<SpriteFont>(@"menu/ArialMenuInfo");
-            smallspriteFont = game.Content.Load<SpriteFont>(@"menu\ArialMusicItalic");
+            spriteFont = game.Content.Load<SpriteFont>(@"Menu\ArialMenuInfo"); //content.Load<SpriteFont>(@"Menu/ArialMenuInfo");
+            smallspriteFont = game.Content.Load<SpriteFont>(@"Menu\ArialMusicItalic");
 
             //Create a Textblock object. This object will calculate the line wraps needs for the 
             //block of text and position the lines of text for scrolling through the display area

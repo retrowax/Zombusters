@@ -111,10 +111,10 @@ namespace ZombustersWindows
 
         virtual public void LoadContent(ContentManager content)
         {
-            font = content.Load<SpriteFont>(@"menu\ArialMenuInfo");
+            font = content.Load<SpriteFont>(@"Menu\ArialMenuInfo");
 #if DEBUG
             PositionReference = content.Load<Texture2D>(@"InGame/position_reference_temporal");
-            DebugFont = content.Load<SpriteFont>(@"menu/ArialMenuInfo");
+            DebugFont = content.Load<SpriteFont>(@"Menu/ArialMenuInfo");
 #endif
         }
 

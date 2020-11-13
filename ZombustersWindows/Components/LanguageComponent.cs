@@ -43,7 +43,7 @@ namespace ZombustersWindows
 
         public new void LoadContent()
         {
-            MenuInfoFont = game.Content.Load<SpriteFont>(@"menu\ArialMenuInfo");
+            MenuInfoFont = game.Content.Load<SpriteFont>(@"Menu\ArialMenuInfo");
             if (batch == null)
                 batch = new SpriteBatch(game.GraphicsDevice);
             base.LoadContent();

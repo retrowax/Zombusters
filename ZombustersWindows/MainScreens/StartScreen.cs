@@ -41,7 +41,7 @@ namespace ZombustersWindows
 
         public override void LoadContent() {
             title = game.Content.Load<Texture2D>("title");
-            font = game.Content.Load<SpriteFont>(@"menu\ArialMenuInfo");
+            font = game.Content.Load<SpriteFont>(@"Menu\ArialMenuInfo");
             if (InputManager.CheckIfGamePadIsConnected())
             {
                 startOrigin = font.MeasureString(Strings.PressStartString) / 2;

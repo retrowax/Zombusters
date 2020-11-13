@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
@@ -89,7 +89,7 @@ namespace ZombustersWindows.Subsystem_Managers
 
         private void LoadTextures(ref ContentManager content)
         {
-            font = content.Load<SpriteFont>(@"menu\ArialMenuInfo");
+            font = content.Load<SpriteFont>(@"Menu\ArialMenuInfo");
         }
 
         public void Update(GameTime gameTime)

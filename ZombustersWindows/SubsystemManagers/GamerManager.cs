@@ -82,51 +82,51 @@
 //            int i;
 
 //            //Color Block
-//            //colorBlock = game.Content.Load<Texture2D>(@"menu/colorBlock");
-//            colorBlock.Add(game.Content.Load<Texture2D>(@"menu/colorBlockBlue"));
-//            colorBlock.Add(game.Content.Load<Texture2D>(@"menu/colorBlockRed"));
-//            colorBlock.Add(game.Content.Load<Texture2D>(@"menu/colorBlockGreen"));
-//            colorBlock.Add(game.Content.Load<Texture2D>(@"menu/colorBlockYellow"));
+//            //colorBlock = game.Content.Load<Texture2D>(@"Menu/colorBlock");
+//            colorBlock.Add(game.Content.Load<Texture2D>(@"Menu/colorBlockBlue"));
+//            colorBlock.Add(game.Content.Load<Texture2D>(@"Menu/colorBlockRed"));
+//            colorBlock.Add(game.Content.Load<Texture2D>(@"Menu/colorBlockGreen"));
+//            colorBlock.Add(game.Content.Load<Texture2D>(@"Menu/colorBlockYellow"));
 
 //            //Color Block Big
-//            colorBlockBig.Add(game.Content.Load<Texture2D>(@"menu/colorBlockBigBlue"));
-//            colorBlockBig.Add(game.Content.Load<Texture2D>(@"menu/colorBlockBigRed"));
-//            colorBlockBig.Add(game.Content.Load<Texture2D>(@"menu/colorBlockBigGreen"));
-//            colorBlockBig.Add(game.Content.Load<Texture2D>(@"menu/colorBlockBigYellow"));
+//            colorBlockBig.Add(game.Content.Load<Texture2D>(@"Menu/colorBlockBigBlue"));
+//            colorBlockBig.Add(game.Content.Load<Texture2D>(@"Menu/colorBlockBigRed"));
+//            colorBlockBig.Add(game.Content.Load<Texture2D>(@"Menu/colorBlockBigGreen"));
+//            colorBlockBig.Add(game.Content.Load<Texture2D>(@"Menu/colorBlockBigYellow"));
 
 //            //Gray Block
-//            grayBlock = game.Content.Load<Texture2D>(@"menu/grayBlock");
+//            grayBlock = game.Content.Load<Texture2D>(@"Menu/grayBlock");
 
 //            //Gray Block Short
-//            grayBlockShort = game.Content.Load<Texture2D>(@"menu/grayBlockShort");
+//            grayBlockShort = game.Content.Load<Texture2D>(@"Menu/grayBlockShort");
 
 //            //Fondo negro fade menu
-//            myGroupBKG = game.Content.Load<Texture2D>(@"menu/mygroup_bkg");
+//            myGroupBKG = game.Content.Load<Texture2D>(@"Menu/mygroup_bkg");
 
 //            //Square Filled
-//            squareFilled = game.Content.Load<Texture2D>(@"menu/square_filled");
+//            squareFilled = game.Content.Load<Texture2D>(@"Menu/square_filled");
 
 //            //Square Empty
-//            squareEmpty = game.Content.Load<Texture2D>(@"menu/square_empty");
+//            squareEmpty = game.Content.Load<Texture2D>(@"Menu/square_empty");
 
 //            //Not Logged In Gamer Picture
-//            notLoggedInGamerPic = game.Content.Load<Texture2D>(@"menu/notLoggedInGamerPicture");
+//            notLoggedInGamerPic = game.Content.Load<Texture2D>(@"Menu/notLoggedInGamerPicture");
 
 //            //Linea blanca lobby player
-//            lineaLobbyPlayers = game.Content.Load<Texture2D>(@"menu/linea_lobby_players_selected");
+//            lineaLobbyPlayers = game.Content.Load<Texture2D>(@"Menu/linea_lobby_players_selected");
 
 //            //Player Connected Icon
-//            connectedIcon = game.Content.Load<Texture2D>(@"menu/connected_icon");
+//            connectedIcon = game.Content.Load<Texture2D>(@"Menu/connected_icon");
 
 //            // Host Icon
 //            hostIcon = game.Content.Load<Texture2D>(@"InGame/immune_ammo_powerup");
 
 //            for (i = 0; i < 4; i++)
 //            {
-//                ControllerIdImg.Add(game.Content.Load<Texture2D>(@"menu\controllerInd_menu_P" + (i + 1)));
+//                ControllerIdImg.Add(game.Content.Load<Texture2D>(@"Menu\controllerInd_menu_P" + (i + 1)));
 //            }
 
-//            germanFont = game.Content.Load<SpriteFont>(@"menu/ArialMusicItalic");
+//            germanFont = game.Content.Load<SpriteFont>(@"Menu/ArialMusicItalic");
 //        }
 
 //        public Boolean GamerListHasChanged()
@@ -261,7 +261,7 @@
 //                        }
 //                        else
 //                        {
-//                            OnlinePlayerIcons.Add(game.Content.Load<Texture2D>(@"menu\notLoggedInGamerPicture"));   //Add Picture of the player to the list.
+//                            OnlinePlayerIcons.Add(game.Content.Load<Texture2D>(@"Menu\notLoggedInGamerPicture"));   //Add Picture of the player to the list.
 //                            OnlinePlayerGamertag.Add(player.Gamertag);                 //Add Gamertag to the list.
 //                            OnlinePlayerSignedIn.Add(true);
 //                            isLocalGamer.Add(true);
@@ -315,7 +315,7 @@
 //                        }
 //                        else
 //                        {
-//                            OnlinePlayerIcons.Add(game.Content.Load<Texture2D>(@"menu\notLoggedInGamerPicture"));   //Add Picture of the player to the list.
+//                            OnlinePlayerIcons.Add(game.Content.Load<Texture2D>(@"Menu\notLoggedInGamerPicture"));   //Add Picture of the player to the list.
 //                            OnlinePlayerGamertag.Add(networkGamer.Gamertag);                 //Add Gamertag to the list.
 //                            OnlinePlayerSignedIn.Add(true);
 //                            if (networkGamer.IsLocal)
@@ -373,14 +373,14 @@
 //                        }
 //                        catch
 //                        {
-//                            PlayerIcons.Add(game.Content.Load<Texture2D>(@"menu\notLoggedInGamerPicture"));   //Add Picture of the player to the list.
+//                            PlayerIcons.Add(game.Content.Load<Texture2D>(@"Menu\notLoggedInGamerPicture"));   //Add Picture of the player to the list.
 //                            PlayerGamertag.Add(signedInGamer.Gamertag);                 //Add Gamertag to the list.
 //                            PlayerSignedIn.Add(true);
 //                        }
 //                    }
 //                    else
 //                    {
-//                        PlayerIcons.Add(game.Content.Load<Texture2D>(@"menu\notLoggedInGamerPicture"));   //Add Picture of the player to the list.
+//                        PlayerIcons.Add(game.Content.Load<Texture2D>(@"Menu\notLoggedInGamerPicture"));   //Add Picture of the player to the list.
 //                        PlayerGamertag.Add(signedInGamer.Gamertag);                 //Add Gamertag to the list.
 //                        PlayerSignedIn.Add(true);
 //                    }
@@ -394,7 +394,7 @@
 //                {
 //                    if (GamePad.GetState(PlayerIndex.One).IsConnected)
 //                    {
-//                        PlayerIcons.Add(game.Content.Load<Texture2D>(@"menu\notLoggedInGamerPicture"));   //Add Picture of the player to the list.
+//                        PlayerIcons.Add(game.Content.Load<Texture2D>(@"Menu\notLoggedInGamerPicture"));   //Add Picture of the player to the list.
 //                        PlayerGamertag.Add("P1 " + Strings.PlayerSignInString);                 //Add Gamertag to the list.
 //                        PlayerSignedIn.Add(false);
 //                    }
@@ -404,7 +404,7 @@
 //                {
 //                    if (GamePad.GetState(PlayerIndex.Two).IsConnected)
 //                    {
-//                        PlayerIcons.Add(game.Content.Load<Texture2D>(@"menu\notLoggedInGamerPicture"));   //Add Picture of the player to the list.
+//                        PlayerIcons.Add(game.Content.Load<Texture2D>(@"Menu\notLoggedInGamerPicture"));   //Add Picture of the player to the list.
 //                        PlayerGamertag.Add("P2 " + Strings.PlayerSignInString);                 //Add Gamertag to the list.
 //                        PlayerSignedIn.Add(false);
 //                    }
@@ -414,7 +414,7 @@
 //                {
 //                    if (GamePad.GetState(PlayerIndex.Three).IsConnected)
 //                    {
-//                        PlayerIcons.Add(game.Content.Load<Texture2D>(@"menu\notLoggedInGamerPicture"));   //Add Picture of the player to the list.
+//                        PlayerIcons.Add(game.Content.Load<Texture2D>(@"Menu\notLoggedInGamerPicture"));   //Add Picture of the player to the list.
 //                        PlayerGamertag.Add("P3 " + Strings.PlayerSignInString);                 //Add Gamertag to the list.
 //                        PlayerSignedIn.Add(false);
 //                    }
@@ -424,7 +424,7 @@
 //                {
 //                    if (GamePad.GetState(PlayerIndex.Four).IsConnected)
 //                    {
-//                        PlayerIcons.Add(game.Content.Load<Texture2D>(@"menu\notLoggedInGamerPicture"));   //Add Picture of the player to the list.
+//                        PlayerIcons.Add(game.Content.Load<Texture2D>(@"Menu\notLoggedInGamerPicture"));   //Add Picture of the player to the list.
 //                        PlayerGamertag.Add("P4 " + Strings.PlayerSignInString);                 //Add Gamertag to the list.
 //                        PlayerSignedIn.Add(false);
 //                    }

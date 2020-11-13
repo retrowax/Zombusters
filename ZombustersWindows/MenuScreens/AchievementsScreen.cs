@@ -67,8 +67,8 @@ namespace ZombustersWindows
 
         public override void LoadContent()
         {
-            _titleFont = this.ScreenManager.Game.Content.Load<SpriteFont>(@"menu\ArialMenuHeader");
-            _textFont = this.ScreenManager.Game.Content.Load<SpriteFont>(@"menu\ArialMenuInfo");
+            _titleFont = this.ScreenManager.Game.Content.Load<SpriteFont>(@"Menu\ArialMenuHeader");
+            _textFont = this.ScreenManager.Game.Content.Load<SpriteFont>(@"Menu\ArialMenuInfo");
             _buttonB = this.ScreenManager.Game.Content.Load<Texture2D>("xboxControllerButtonB");
 
             base.LoadContent();
