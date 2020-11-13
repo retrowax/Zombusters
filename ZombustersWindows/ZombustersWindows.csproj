@@ -3,6 +3,7 @@
     <PropertyGroup>
         <OutputType>Exe</OutputType>
         <TargetFramework>netcoreapp3</TargetFramework>
+        <ReleaseVersion>1.2.0</ReleaseVersion>
         <ApplicationIcon>Game.ico</ApplicationIcon>
         <Configurations>Debug;Release;DemoRelease;DemoDebug</Configurations>
     </PropertyGroup>
@@ -323,59 +324,6 @@
       <None Remove="Content\SoundFX\ratdeath.xnb" />
       <None Remove="Content\SoundFX\shotgun.xnb" />
       <None Remove="Content\SoundFX\wolfdeath.xnb" />
-      <None Remove="Content\Menu\background_title_scrolling0WP.xnb" />
-      <None Remove="Content\Menu\background_title_scrolling1WP.xnb" />
-      <None Remove="Content\Menu\background_title_scrolling2WP.xnb" />
-      <None Remove="Content\Menu\background_title_scrolling3WP.xnb" />
-      <None Remove="Content\Menu\loading_bkg.xnb" />
-      <None Remove="Content\Menu\linea_lobby_players_selected.xnb" />
-      <None Remove="Content\Menu\colorBlockRed.xnb" />
-      <None Remove="Content\Menu\ArialMenuHeader.xnb" />
-      <None Remove="Content\Menu\background_title_shadow.xnb" />
-      <None Remove="Content\Menu\google-64x64.xnb" />
-      <None Remove="Content\Menu\ArialMusicItalic.xnb" />
-      <None Remove="Content\Menu\connected_icon.xnb" />
-      <None Remove="Content\Menu\background_title_scrolling1.xnb" />
-      <None Remove="Content\Menu\goBackButton.xnb" />
-      <None Remove="Content\Menu\controllerInd_menu_P2.xnb" />
-      <None Remove="Content\Menu\DigitBig.xnb" />
-      <None Remove="Content\Menu\background_title_scrolling0.xnb" />
-      <None Remove="Content\Menu\buynow.xnb" />
-      <None Remove="Content\Menu\DigitLow.xnb" />
-      <None Remove="Content\Menu\grayBlock.xnb" />
-      <None Remove="Content\Menu\colorBlockBigRed.xnb" />
-      <None Remove="Content\Menu\ArialMenuInfo.xnb" />
-      <None Remove="Content\Menu\background_title_scrolling2.xnb" />
-      <None Remove="Content\Menu\controllerInd_menu_P3.xnb" />
-      <None Remove="Content\Menu\colorBlockYellow.xnb" />
-      <None Remove="Content\Menu\grayBlockShort.xnb" />
-      <None Remove="Content\Menu\controllerInd_menu_P4.xnb" />
-      <None Remove="Content\Menu\colorBlockBigBlue.xnb" />
-      <None Remove="Content\Menu\colorBlockBigGreen.xnb" />
-      <None Remove="Content\Menu\colorBlockBlue.xnb" />
-      <None Remove="Content\Menu\background_title_scrolling3.xnb" />
-      <None Remove="Content\Menu\colorBlockGreen.xnb" />
-      <None Remove="Content\Menu\controllerInd_menu_P1.xnb" />
-      <None Remove="Content\Menu\facebook-64x64.xnb" />
-      <None Remove="Content\Menu\HTP_WP_header_image.xnb" />
-      <None Remove="Content\Menu\colorBlockBigYellow.xnb" />
-      <None Remove="Content\Menu\linea_menu.xnb" />
-      <None Remove="Content\Menu\linea_texto_menu.xnb" />
-      <None Remove="Content\Menu\ArialMenuList.xnb" />
-      <None Remove="Content\Menu\ArialMusic.xnb" />
-      <None Remove="Content\LevelsDef.xml" />
-      <None Remove="Content\Maps\map10.xnb" />
-      <None Remove="Content\Maps\map2.xnb" />
-      <None Remove="Content\Maps\map1.xnb" />
-      <None Remove="Content\Maps\Furniture\Arbol.xnb" />
-      <None Remove="Content\Maps\Furniture\Arbol_shadow.xnb" />
-      <None Remove="Content\Achievements\achieve_2.xnb" />
-      <None Remove="Content\Achievements\achieve_3.xnb" />
-      <None Remove="Content\Achievements\achieve_1.xnb" />
-      <None Remove="Content\fx\BloomExtract.xnb" />
-      <None Remove="Content\fx\BloomCombine.xnb" />
-      <None Remove="Content\fx\GaussianBlur.xnb" />
-      <None Remove="Content\Keyboard\key_down.xnb" />
     </ItemGroup>
     <ItemGroup>
         <Content Include="Content\Achievements\achieve_1.xnb">
