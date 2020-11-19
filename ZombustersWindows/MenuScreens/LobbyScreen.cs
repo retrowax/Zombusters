@@ -13,7 +13,7 @@ using Microsoft.Xna.Framework.Input;
 using GameStateManagement;
 using ZombustersWindows.Subsystem_Managers;
 
-#if !WINDOWS_PHONE && !WINDOWS && !NETCOREAPP
+#if !WINDOWS_PHONE && !WINDOWS && !NETCOREAPP && !WINDOWS_UAP
 namespace ZombustersWindows
 {
     public class LobbyScreen : BackgroundScreen

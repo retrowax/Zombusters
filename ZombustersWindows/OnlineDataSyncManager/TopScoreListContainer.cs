@@ -129,7 +129,7 @@ namespace ZombustersWindows
         //    return mScoreLists[listIndex].fillPageThatContainsGamertagFromFilteredList(page, gamer);
         //}
 
-#if WINDOWS_PHONE || WINDOWS || NETCOREAPP
+#if WINDOWS_PHONE || WINDOWS || NETCOREAPP || WINDOWS_UAP
         /* Saves the TopScoreListContainer, and all lists and entries in it, into the given BinaryWriter.
          * Usually you would first open a FileStream on which you then construct the BinaryWriter, so
          * that the TopScoreListContainer is written to a file. The resulting file can then be used
@@ -201,7 +201,7 @@ namespace ZombustersWindows
 
         public void endSynchronization(Player player, TopScoreListContainer mScores)
         {
-#if !WINDOWS_PHONE && !WINDOWS && !NETCOREAPP
+#if !WINDOWS_PHONE && !WINDOWS && !NETCOREAPP && !WINDOWS_UAP
             if (mChanged) {
                 // TODO: Trigger saving of container here
                 if (player.Device != null)
@@ -224,7 +224,7 @@ namespace ZombustersWindows
             transferCurrentEntryIndex = 0;
         }
 
-#if !WINDOWS_PHONE && !WINDOWS && !NETCOREAPP
+#if !WINDOWS_PHONE && !WINDOWS && !NETCOREAPP && !WINDOWS_UAP
         public bool readTransferRecord(PacketReader reader)
         {
             byte marker = reader.ReadByte();

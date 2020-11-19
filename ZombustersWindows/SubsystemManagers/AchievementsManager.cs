@@ -48,7 +48,7 @@ namespace ZombustersWindows.Subsystem_Managers
 
         public AchievementManager(Game game, Player player)
         {
-#if !WINDOWS_PHONE && !WINDOWS && !NETCOREAPP
+#if !WINDOWS_PHONE && !WINDOWS && !NETCOREAPP && !WINDOWS_UAP
             //load achievements
             _achievements = new List<Achievement>();
             StorageContainer container;
@@ -129,7 +129,7 @@ namespace ZombustersWindows.Subsystem_Managers
 
         public void Save(Player player)
         {
-#if !WINDOWS_PHONE && !WINDOWS && !NETCOREAPP
+#if !WINDOWS_PHONE && !WINDOWS && !NETCOREAPP && !WINDOWS_UAP
             // Open a storage container.
             IAsyncResult result = player.Device.BeginOpenContainer("Zombusters", null, null);
             if (result.IsCompleted)

@@ -14,7 +14,7 @@ using System.Xml;
 using System.IO;
 using ZombustersWindows.Subsystem_Managers;
 
-#if !WINDOWS_PHONE && !WINDOWS && !NETCOREAPP
+#if !WINDOWS_PHONE && !WINDOWS && !NETCOREAPP && !WINDOWS_UAP
 namespace ZombustersWindows
 {
     /// <summary>

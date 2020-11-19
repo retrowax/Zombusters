@@ -98,7 +98,7 @@ namespace ZombustersWindows
             }
 #endif
 
-#if !WINDOWS_PHONE && !WINDOWS && !NETCOREAPP
+#if !WINDOWS_PHONE && !WINDOWS && !NETCOREAPP && !WINDOWS_UAP
             if (mygame.networkSessionManager.networkSession != null)
             {
                 position = new Vector2(position.X, position.Y + 32);
@@ -145,7 +145,7 @@ namespace ZombustersWindows
                 position = new Vector2(position.X, position.Y + 22);
 
 
-#if !WINDOWS_PHONE && !WINDOWS && !NETCOREAPP
+#if !WINDOWS_PHONE && !WINDOWS && !NETCOREAPP && !WINDOWS_UAP
                 if (avatar.Player.Container != null)
                 {
                     position = new Vector2(position.X, position.Y + 32);
