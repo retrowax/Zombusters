@@ -37,6 +37,10 @@
     </PropertyGroup>
     
     <ItemGroup>
+      <Compile Remove="Localization\Strings1.Designer.cs" />
+    </ItemGroup>
+    
+    <ItemGroup>
         <PackageReference Include="NLog" Version="4.7.5" />
         <PackageReference Include="Bugsnag" Version="2.2.1" />
         <PackageReference Include="Facepunch.Steamworks" Version="2.3.3" />
