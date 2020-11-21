@@ -39,6 +39,8 @@
     </ItemGroup>
 
     <ItemGroup>
+      <Compile Remove="App.xaml.cs" />
+      <Compile Remove="GamePage.xaml.cs" />
       <Compile Remove="Localization\Strings1.Designer.cs" />
     </ItemGroup>
 
@@ -267,10 +269,13 @@
         <WCFMetadata Include="Service References\" />
     </ItemGroup>
     <ItemGroup>
+      <None Remove="App.xaml" />
+      <None Remove="GamePage.xaml" />
       <None Remove="LevelXMLs\Level1\Level1_enemies.xml" />
       <None Remove="LevelXMLs\Level1\Level1_furnitures.xml" />
       <None Remove="LevelXMLs\Level1\Level1_walls.xml" />
       <None Remove="libsteam_api.dylib" />
+      <None Remove="Package.appxmanifest" />
       <None Remove="steam_api64.dll" />
       <None Remove="steam_api.dll" />
       <None Remove="Content\InGame\coffin_meme.xnb" />
