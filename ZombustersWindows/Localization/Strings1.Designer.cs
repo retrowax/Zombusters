@@ -11,6 +11,7 @@
 namespace ZombustersWindows.Localization
 {
     using System;
+    using System.Reflection;
 
 
     /// <summary>
@@ -36,7 +37,7 @@ namespace ZombustersWindows.Localization
         }
 
         /// <summary>
-        ///   Devuelve la instancia de ResourceManager almacenada en caché utilizada por esta clase.
+        ///   Devuelve la instancia de ResourceLoader almacenada en caché utilizada por esta clase.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
         internal static global::System.Resources.ResourceManager ResourceManager
@@ -45,18 +46,19 @@ namespace ZombustersWindows.Localization
             {
                 if (object.ReferenceEquals(resourceMan, null))
                 {
-#if WINDOWS
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("ZombustersWindows.Localization.Strings", typeof(Strings).Assembly);
-#elif LINUX
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("ZombustersLinux.Localization.Strings", typeof(Strings).Assembly);
-#elif NETCOREAPP
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("ZombustersMac.Localization.Strings", typeof(Strings).Assembly);
-#elif WINDOWS_UAP
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("ZombustersWindows.Localization.Strings", typeof(Strings).Assembly);
-#endif
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("ZombustersWindows.Localization.Strings", typeof(Strings).GetTypeInfo().Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
+            }
+        }
+
+        internal static global::Windows.ApplicationModel.Resources.ResourceLoader ResourceLoader
+        {
+            get
+            {
+                var resourceLoader = Windows.ApplicationModel.Resources.ResourceLoader.GetForCurrentView();
+                return resourceLoader;
             }
         }
 
@@ -84,7 +86,7 @@ namespace ZombustersWindows.Localization
         {
             get
             {
-                return ResourceManager.GetString("AchievementsMenuString", resourceCulture);
+                return ResourceLoader.GetString("AchievementsMenuString");
             }
         }
 
@@ -95,7 +97,7 @@ namespace ZombustersWindows.Localization
         {
             get
             {
-                return ResourceManager.GetString("AchievementsMMString", resourceCulture);
+                return ResourceLoader.GetString("AchievementsMMString");
             }
         }
 
@@ -109,7 +111,7 @@ namespace ZombustersWindows.Localization
         {
             get
             {
-                return ResourceManager.GetString("AutosaveStartMenuString", resourceCulture);
+                return ResourceLoader.GetString("AutosaveStartMenuString");
             }
         }
 
@@ -120,7 +122,7 @@ namespace ZombustersWindows.Localization
         {
             get
             {
-                return ResourceManager.GetString("AutosaveTitleMenuString", resourceCulture);
+                return ResourceLoader.GetString("AutosaveTitleMenuString");
             }
         }
 
@@ -131,7 +133,7 @@ namespace ZombustersWindows.Localization
         {
             get
             {
-                return ResourceManager.GetString("BackString", resourceCulture);
+                return ResourceLoader.GetString("BackString");
             }
         }
 
@@ -142,7 +144,7 @@ namespace ZombustersWindows.Localization
         {
             get
             {
-                return ResourceManager.GetString("BackWithoutSavingString", resourceCulture);
+                return ResourceLoader.GetString("BackWithoutSavingString");
             }
         }
 
@@ -153,7 +155,7 @@ namespace ZombustersWindows.Localization
         {
             get
             {
-                return ResourceManager.GetString("CancelString", resourceCulture);
+                return ResourceLoader.GetString("CancelString");
             }
         }
 
@@ -164,7 +166,7 @@ namespace ZombustersWindows.Localization
         {
             get
             {
-                return ResourceManager.GetString("ChangeCharacterMenuString", resourceCulture);
+                return ResourceLoader.GetString("ChangeCharacterMenuString");
             }
         }
 
@@ -175,7 +177,7 @@ namespace ZombustersWindows.Localization
         {
             get
             {
-                return ResourceManager.GetString("ChangeLanguageOption", resourceCulture);
+                return ResourceLoader.GetString("ChangeLanguageOption");
             }
         }
 
@@ -186,7 +188,7 @@ namespace ZombustersWindows.Localization
         {
             get
             {
-                return ResourceManager.GetString("ChangeSoundVolumeMenuString", resourceCulture);
+                return ResourceLoader.GetString("ChangeSoundVolumeMenuString");
             }
         }
 
@@ -197,7 +199,7 @@ namespace ZombustersWindows.Localization
         {
             get
             {
-                return ResourceManager.GetString("CharacterSelectString", resourceCulture);
+                return ResourceLoader.GetString("CharacterSelectString");
             }
         }
 
@@ -208,7 +210,7 @@ namespace ZombustersWindows.Localization
         {
             get
             {
-                return ResourceManager.GetString("ClearedGameplayString", resourceCulture);
+                return ResourceLoader.GetString("ClearedGameplayString");
             }
         }
 
@@ -219,7 +221,7 @@ namespace ZombustersWindows.Localization
         {
             get
             {
-                return ResourceManager.GetString("ConfigurationString", resourceCulture);
+                return ResourceLoader.GetString("ConfigurationString");
             }
         }
 
@@ -230,7 +232,7 @@ namespace ZombustersWindows.Localization
         {
             get
             {
-                return ResourceManager.GetString("ConfirmEndSession", resourceCulture);
+                return ResourceLoader.GetString("ConfirmEndSession");
             }
         }
 
@@ -241,7 +243,7 @@ namespace ZombustersWindows.Localization
         {
             get
             {
-                return ResourceManager.GetString("ConfirmExitSample", resourceCulture);
+                return ResourceLoader.GetString("ConfirmExitSample");
             }
         }
 
@@ -252,7 +254,7 @@ namespace ZombustersWindows.Localization
         {
             get
             {
-                return ResourceManager.GetString("ConfirmForceStartGame", resourceCulture);
+                return ResourceLoader.GetString("ConfirmForceStartGame");
             }
         }
 
@@ -263,7 +265,7 @@ namespace ZombustersWindows.Localization
         {
             get
             {
-                return ResourceManager.GetString("ConfirmLeaveSession", resourceCulture);
+                return ResourceLoader.GetString("ConfirmLeaveSession");
             }
         }
 
@@ -274,7 +276,7 @@ namespace ZombustersWindows.Localization
         {
             get
             {
-                return ResourceManager.GetString("ConfirmMarketplace", resourceCulture);
+                return ResourceLoader.GetString("ConfirmMarketplace");
             }
         }
 
@@ -285,7 +287,7 @@ namespace ZombustersWindows.Localization
         {
             get
             {
-                return ResourceManager.GetString("ConfirmQuitGame", resourceCulture);
+                return ResourceLoader.GetString("ConfirmQuitGame");
             }
         }
 
@@ -296,7 +298,7 @@ namespace ZombustersWindows.Localization
         {
             get
             {
-                return ResourceManager.GetString("ConfirmReturnMainMenuMMString", resourceCulture);
+                return ResourceLoader.GetString("ConfirmReturnMainMenuMMString");
             }
         }
 
@@ -307,7 +309,7 @@ namespace ZombustersWindows.Localization
         {
             get
             {
-                return ResourceManager.GetString("ConfirmReturnMainMenuString", resourceCulture);
+                return ResourceLoader.GetString("ConfirmReturnMainMenuString");
             }
         }
 
@@ -318,7 +320,7 @@ namespace ZombustersWindows.Localization
         {
             get
             {
-                return ResourceManager.GetString("CongratssEndGameString", resourceCulture);
+                return ResourceLoader.GetString("CongratssEndGameString");
             }
         }
 
@@ -329,7 +331,7 @@ namespace ZombustersWindows.Localization
         {
             get
             {
-                return ResourceManager.GetString("ConnectControllerToJoinString", resourceCulture);
+                return ResourceLoader.GetString("ConnectControllerToJoinString");
             }
         }
 
@@ -340,7 +342,7 @@ namespace ZombustersWindows.Localization
         {
             get
             {
-                return ResourceManager.GetString("CopyRightString", resourceCulture);
+                return ResourceLoader.GetString("CopyRightString");
             }
         }
 
@@ -351,7 +353,7 @@ namespace ZombustersWindows.Localization
         {
             get
             {
-                return ResourceManager.GetString("CreateGameMenuString", resourceCulture);
+                return ResourceLoader.GetString("CreateGameMenuString");
             }
         }
 
@@ -362,7 +364,7 @@ namespace ZombustersWindows.Localization
         {
             get
             {
-                return ResourceManager.GetString("CreateGameMMString", resourceCulture);
+                return ResourceLoader.GetString("CreateGameMMString");
             }
         }
 
@@ -373,7 +375,7 @@ namespace ZombustersWindows.Localization
         {
             get
             {
-                return ResourceManager.GetString("CreateSession", resourceCulture);
+                return ResourceLoader.GetString("CreateSession");
             }
         }
 
@@ -384,7 +386,7 @@ namespace ZombustersWindows.Localization
         {
             get
             {
-                return ResourceManager.GetString("CreditsMenuString", resourceCulture);
+                return ResourceLoader.GetString("CreditsMenuString");
             }
         }
 
@@ -395,7 +397,7 @@ namespace ZombustersWindows.Localization
         {
             get
             {
-                return ResourceManager.GetString("CreditsMMString", resourceCulture);
+                return ResourceLoader.GetString("CreditsMMString");
             }
         }
 
@@ -406,7 +408,7 @@ namespace ZombustersWindows.Localization
         {
             get
             {
-                return ResourceManager.GetString("CreditsThanksForPlayingString", resourceCulture);
+                return ResourceLoader.GetString("CreditsThanksForPlayingString");
             }
         }
 
@@ -417,7 +419,7 @@ namespace ZombustersWindows.Localization
         {
             get
             {
-                return ResourceManager.GetString("CustomMatchMenuString", resourceCulture);
+                return ResourceLoader.GetString("CustomMatchMenuString");
             }
         }
 
@@ -429,7 +431,7 @@ namespace ZombustersWindows.Localization
         {
             get
             {
-                return ResourceManager.GetString("CustomMatchMMString", resourceCulture);
+                return ResourceLoader.GetString("CustomMatchMMString");
             }
         }
 
@@ -440,7 +442,7 @@ namespace ZombustersWindows.Localization
         {
             get
             {
-                return ResourceManager.GetString("DemoEndScreenLine1", resourceCulture);
+                return ResourceLoader.GetString("DemoEndScreenLine1");
             }
         }
 
@@ -451,7 +453,7 @@ namespace ZombustersWindows.Localization
         {
             get
             {
-                return ResourceManager.GetString("DemoEndScreenLine2", resourceCulture);
+                return ResourceLoader.GetString("DemoEndScreenLine2");
             }
         }
 
@@ -462,7 +464,7 @@ namespace ZombustersWindows.Localization
         {
             get
             {
-                return ResourceManager.GetString("DemoEndScreenLine3", resourceCulture);
+                return ResourceLoader.GetString("DemoEndScreenLine3");
             }
         }
 
@@ -473,7 +475,7 @@ namespace ZombustersWindows.Localization
         {
             get
             {
-                return ResourceManager.GetString("DemoEndScreenLine4", resourceCulture);
+                return ResourceLoader.GetString("DemoEndScreenLine4");
             }
         }
 
@@ -484,7 +486,7 @@ namespace ZombustersWindows.Localization
         {
             get
             {
-                return ResourceManager.GetString("EndSession", resourceCulture);
+                return ResourceLoader.GetString("EndSession");
             }
         }
 
@@ -495,7 +497,7 @@ namespace ZombustersWindows.Localization
         {
             get
             {
-                return ResourceManager.GetString("ErrorDisconnected", resourceCulture);
+                return ResourceLoader.GetString("ErrorDisconnected");
             }
         }
 
@@ -506,7 +508,7 @@ namespace ZombustersWindows.Localization
         {
             get
             {
-                return ResourceManager.GetString("ErrorGamerPrivilege", resourceCulture);
+                return ResourceLoader.GetString("ErrorGamerPrivilege");
             }
         }
 
@@ -517,7 +519,7 @@ namespace ZombustersWindows.Localization
         {
             get
             {
-                return ResourceManager.GetString("ErrorHostEndedSession", resourceCulture);
+                return ResourceLoader.GetString("ErrorHostEndedSession");
             }
         }
 
@@ -528,7 +530,7 @@ namespace ZombustersWindows.Localization
         {
             get
             {
-                return ResourceManager.GetString("ErrorNetwork", resourceCulture);
+                return ResourceLoader.GetString("ErrorNetwork");
             }
         }
 
@@ -539,7 +541,7 @@ namespace ZombustersWindows.Localization
         {
             get
             {
-                return ResourceManager.GetString("ErrorNetworkNotAvailable", resourceCulture);
+                return ResourceLoader.GetString("ErrorNetworkNotAvailable");
             }
         }
 
@@ -550,7 +552,7 @@ namespace ZombustersWindows.Localization
         {
             get
             {
-                return ResourceManager.GetString("ErrorRemovedByHost", resourceCulture);
+                return ResourceLoader.GetString("ErrorRemovedByHost");
             }
         }
 
@@ -561,7 +563,7 @@ namespace ZombustersWindows.Localization
         {
             get
             {
-                return ResourceManager.GetString("ErrorSessionFull", resourceCulture);
+                return ResourceLoader.GetString("ErrorSessionFull");
             }
         }
 
@@ -572,7 +574,7 @@ namespace ZombustersWindows.Localization
         {
             get
             {
-                return ResourceManager.GetString("ErrorSessionNotFound", resourceCulture);
+                return ResourceLoader.GetString("ErrorSessionNotFound");
             }
         }
 
@@ -583,7 +585,7 @@ namespace ZombustersWindows.Localization
         {
             get
             {
-                return ResourceManager.GetString("ErrorSessionNotJoinable", resourceCulture);
+                return ResourceLoader.GetString("ErrorSessionNotJoinable");
             }
         }
 
@@ -594,7 +596,7 @@ namespace ZombustersWindows.Localization
         {
             get
             {
-                return ResourceManager.GetString("ErrorTrialMode", resourceCulture);
+                return ResourceLoader.GetString("ErrorTrialMode");
             }
         }
 
@@ -605,7 +607,7 @@ namespace ZombustersWindows.Localization
         {
             get
             {
-                return ResourceManager.GetString("ErrorUnknown", resourceCulture);
+                return ResourceLoader.GetString("ErrorUnknown");
             }
         }
 
@@ -616,7 +618,7 @@ namespace ZombustersWindows.Localization
         {
             get
             {
-                return ResourceManager.GetString("Exit", resourceCulture);
+                return ResourceLoader.GetString("Exit");
             }
         }
 
@@ -627,7 +629,7 @@ namespace ZombustersWindows.Localization
         {
             get
             {
-                return ResourceManager.GetString("ExtrasMenuString", resourceCulture);
+                return ResourceLoader.GetString("ExtrasMenuString");
             }
         }
 
@@ -639,7 +641,7 @@ namespace ZombustersWindows.Localization
         {
             get
             {
-                return ResourceManager.GetString("ExtrasMMString", resourceCulture);
+                return ResourceLoader.GetString("ExtrasMMString");
             }
         }
 
@@ -650,7 +652,7 @@ namespace ZombustersWindows.Localization
         {
             get
             {
-                return ResourceManager.GetString("FindSessionMenuString", resourceCulture);
+                return ResourceLoader.GetString("FindSessionMenuString");
             }
         }
 
@@ -661,7 +663,7 @@ namespace ZombustersWindows.Localization
         {
             get
             {
-                return ResourceManager.GetString("FindSessionMMString", resourceCulture);
+                return ResourceLoader.GetString("FindSessionMMString");
             }
         }
 
@@ -672,7 +674,7 @@ namespace ZombustersWindows.Localization
         {
             get
             {
-                return ResourceManager.GetString("FindSessions", resourceCulture);
+                return ResourceLoader.GetString("FindSessions");
             }
         }
 
@@ -683,7 +685,7 @@ namespace ZombustersWindows.Localization
         {
             get
             {
-                return ResourceManager.GetString("FriendOpenGroupString", resourceCulture);
+                return ResourceLoader.GetString("FriendOpenGroupString");
             }
         }
 
@@ -694,7 +696,7 @@ namespace ZombustersWindows.Localization
         {
             get
             {
-                return ResourceManager.GetString("FullScreenMenuString", resourceCulture);
+                return ResourceLoader.GetString("FullScreenMenuString");
             }
         }
 
@@ -705,7 +707,7 @@ namespace ZombustersWindows.Localization
         {
             get
             {
-                return ResourceManager.GetString("GameOverString", resourceCulture);
+                return ResourceLoader.GetString("GameOverString");
             }
         }
 
@@ -716,7 +718,7 @@ namespace ZombustersWindows.Localization
         {
             get
             {
-                return ResourceManager.GetString("GPRestartCurrentWaveString", resourceCulture);
+                return ResourceLoader.GetString("GPRestartCurrentWaveString");
             }
         }
 
@@ -727,7 +729,7 @@ namespace ZombustersWindows.Localization
         {
             get
             {
-                return ResourceManager.GetString("GPRestartFromBeginningString", resourceCulture);
+                return ResourceLoader.GetString("GPRestartFromBeginningString");
             }
         }
 
@@ -738,7 +740,7 @@ namespace ZombustersWindows.Localization
         {
             get
             {
-                return ResourceManager.GetString("GPReturnLobbySupportString", resourceCulture);
+                return ResourceLoader.GetString("GPReturnLobbySupportString");
             }
         }
 
@@ -749,7 +751,7 @@ namespace ZombustersWindows.Localization
         {
             get
             {
-                return ResourceManager.GetString("GPReturnMMSupportString", resourceCulture);
+                return ResourceLoader.GetString("GPReturnMMSupportString");
             }
         }
 
@@ -760,7 +762,7 @@ namespace ZombustersWindows.Localization
         {
             get
             {
-                return ResourceManager.GetString("GPReturnToMainMenuString", resourceCulture);
+                return ResourceLoader.GetString("GPReturnToMainMenuString");
             }
         }
 
@@ -771,7 +773,7 @@ namespace ZombustersWindows.Localization
         {
             get
             {
-                return ResourceManager.GetString("HostSuffix", resourceCulture);
+                return ResourceLoader.GetString("HostSuffix");
             }
         }
 
@@ -782,7 +784,7 @@ namespace ZombustersWindows.Localization
         {
             get
             {
-                return ResourceManager.GetString("HowToPlayInGameString", resourceCulture);
+                return ResourceLoader.GetString("HowToPlayInGameString");
             }
         }
 
@@ -793,7 +795,7 @@ namespace ZombustersWindows.Localization
         {
             get
             {
-                return ResourceManager.GetString("HTPAimShootString", resourceCulture);
+                return ResourceLoader.GetString("HTPAimShootString");
             }
         }
 
@@ -804,7 +806,7 @@ namespace ZombustersWindows.Localization
         {
             get
             {
-                return ResourceManager.GetString("HTPChangeSongString", resourceCulture);
+                return ResourceLoader.GetString("HTPChangeSongString");
             }
         }
 
@@ -815,7 +817,7 @@ namespace ZombustersWindows.Localization
         {
             get
             {
-                return ResourceManager.GetString("HTPChangeWeaponString", resourceCulture);
+                return ResourceLoader.GetString("HTPChangeWeaponString");
             }
         }
 
@@ -830,7 +832,7 @@ namespace ZombustersWindows.Localization
         {
             get
             {
-                return ResourceManager.GetString("HTPExplanationString", resourceCulture);
+                return ResourceLoader.GetString("HTPExplanationString");
             }
         }
 
@@ -841,7 +843,7 @@ namespace ZombustersWindows.Localization
         {
             get
             {
-                return ResourceManager.GetString("HTPGrenadeString", resourceCulture);
+                return ResourceLoader.GetString("HTPGrenadeString");
             }
         }
 
@@ -852,7 +854,7 @@ namespace ZombustersWindows.Localization
         {
             get
             {
-                return ResourceManager.GetString("HTPMenuSupportString", resourceCulture);
+                return ResourceLoader.GetString("HTPMenuSupportString");
             }
         }
 
@@ -863,7 +865,7 @@ namespace ZombustersWindows.Localization
         {
             get
             {
-                return ResourceManager.GetString("HTPMoveString", resourceCulture);
+                return ResourceLoader.GetString("HTPMoveString");
             }
         }
 
@@ -874,7 +876,7 @@ namespace ZombustersWindows.Localization
         {
             get
             {
-                return ResourceManager.GetString("HTPPauseString", resourceCulture);
+                return ResourceLoader.GetString("HTPPauseString");
             }
         }
 
@@ -885,7 +887,7 @@ namespace ZombustersWindows.Localization
         {
             get
             {
-                return ResourceManager.GetString("HTPReviveTeammateString", resourceCulture);
+                return ResourceLoader.GetString("HTPReviveTeammateString");
             }
         }
 
@@ -896,7 +898,7 @@ namespace ZombustersWindows.Localization
         {
             get
             {
-                return ResourceManager.GetString("HTPTauntString", resourceCulture);
+                return ResourceLoader.GetString("HTPTauntString");
             }
         }
 
@@ -907,7 +909,7 @@ namespace ZombustersWindows.Localization
         {
             get
             {
-                return ResourceManager.GetString("InviteMenuString", resourceCulture);
+                return ResourceLoader.GetString("InviteMenuString");
             }
         }
 
@@ -918,7 +920,7 @@ namespace ZombustersWindows.Localization
         {
             get
             {
-                return ResourceManager.GetString("JoinSession", resourceCulture);
+                return ResourceLoader.GetString("JoinSession");
             }
         }
 
@@ -929,7 +931,7 @@ namespace ZombustersWindows.Localization
         {
             get
             {
-                return ResourceManager.GetString("LeaderboardMenuString", resourceCulture);
+                return ResourceLoader.GetString("LeaderboardMenuString");
             }
         }
 
@@ -940,7 +942,7 @@ namespace ZombustersWindows.Localization
         {
             get
             {
-                return ResourceManager.GetString("LeaderboardMMString", resourceCulture);
+                return ResourceLoader.GetString("LeaderboardMMString");
             }
         }
 
@@ -951,7 +953,7 @@ namespace ZombustersWindows.Localization
         {
             get
             {
-                return ResourceManager.GetString("LeaderboardScoreString", resourceCulture);
+                return ResourceLoader.GetString("LeaderboardScoreString");
             }
         }
 
@@ -962,7 +964,7 @@ namespace ZombustersWindows.Localization
         {
             get
             {
-                return ResourceManager.GetString("LeaveMenuString", resourceCulture);
+                return ResourceLoader.GetString("LeaveMenuString");
             }
         }
 
@@ -973,7 +975,7 @@ namespace ZombustersWindows.Localization
         {
             get
             {
-                return ResourceManager.GetString("LeaveSession", resourceCulture);
+                return ResourceLoader.GetString("LeaveSession");
             }
         }
 
@@ -984,7 +986,7 @@ namespace ZombustersWindows.Localization
         {
             get
             {
-                return ResourceManager.GetString("LevelSelectionString", resourceCulture);
+                return ResourceLoader.GetString("LevelSelectionString");
             }
         }
 
@@ -995,7 +997,7 @@ namespace ZombustersWindows.Localization
         {
             get
             {
-                return ResourceManager.GetString("LevelSelectMenuString", resourceCulture);
+                return ResourceLoader.GetString("LevelSelectMenuString");
             }
         }
 
@@ -1006,7 +1008,7 @@ namespace ZombustersWindows.Localization
         {
             get
             {
-                return ResourceManager.GetString("LevelSelectMMString", resourceCulture);
+                return ResourceLoader.GetString("LevelSelectMMString");
             }
         }
 
@@ -1017,7 +1019,7 @@ namespace ZombustersWindows.Localization
         {
             get
             {
-                return ResourceManager.GetString("Loading", resourceCulture);
+                return ResourceLoader.GetString("Loading");
             }
         }
 
@@ -1028,7 +1030,7 @@ namespace ZombustersWindows.Localization
         {
             get
             {
-                return ResourceManager.GetString("Lobby", resourceCulture);
+                return ResourceLoader.GetString("Lobby");
             }
         }
 
@@ -1039,7 +1041,7 @@ namespace ZombustersWindows.Localization
         {
             get
             {
-                return ResourceManager.GetString("LobbyMenuString", resourceCulture);
+                return ResourceLoader.GetString("LobbyMenuString");
             }
         }
 
@@ -1051,7 +1053,7 @@ namespace ZombustersWindows.Localization
         {
             get
             {
-                return ResourceManager.GetString("LocalGameMMString", resourceCulture);
+                return ResourceLoader.GetString("LocalGameMMString");
             }
         }
 
@@ -1062,7 +1064,7 @@ namespace ZombustersWindows.Localization
         {
             get
             {
-                return ResourceManager.GetString("LocalGameString", resourceCulture);
+                return ResourceLoader.GetString("LocalGameString");
             }
         }
 
@@ -1073,7 +1075,7 @@ namespace ZombustersWindows.Localization
         {
             get
             {
-                return ResourceManager.GetString("MainMenu", resourceCulture);
+                return ResourceLoader.GetString("MainMenu");
             }
         }
 
@@ -1084,7 +1086,7 @@ namespace ZombustersWindows.Localization
         {
             get
             {
-                return ResourceManager.GetString("MainMenuLobbyString", resourceCulture);
+                return ResourceLoader.GetString("MainMenuLobbyString");
             }
         }
 
@@ -1095,7 +1097,7 @@ namespace ZombustersWindows.Localization
         {
             get
             {
-                return ResourceManager.GetString("MainMenuString", resourceCulture);
+                return ResourceLoader.GetString("MainMenuString");
             }
         }
 
@@ -1106,7 +1108,7 @@ namespace ZombustersWindows.Localization
         {
             get
             {
-                return ResourceManager.GetString("MatchmakingHostOwnGameString", resourceCulture);
+                return ResourceLoader.GetString("MatchmakingHostOwnGameString");
             }
         }
 
@@ -1117,7 +1119,7 @@ namespace ZombustersWindows.Localization
         {
             get
             {
-                return ResourceManager.GetString("MatchmakingLobbyString", resourceCulture);
+                return ResourceLoader.GetString("MatchmakingLobbyString");
             }
         }
 
@@ -1128,7 +1130,7 @@ namespace ZombustersWindows.Localization
         {
             get
             {
-                return ResourceManager.GetString("MatchmakingMenuString", resourceCulture);
+                return ResourceLoader.GetString("MatchmakingMenuString");
             }
         }
 
@@ -1141,7 +1143,7 @@ namespace ZombustersWindows.Localization
         {
             get
             {
-                return ResourceManager.GetString("MatchmakingMMString", resourceCulture);
+                return ResourceLoader.GetString("MatchmakingMMString");
             }
         }
 
@@ -1152,7 +1154,7 @@ namespace ZombustersWindows.Localization
         {
             get
             {
-                return ResourceManager.GetString("MaxPlayersMenuString", resourceCulture);
+                return ResourceLoader.GetString("MaxPlayersMenuString");
             }
         }
 
@@ -1163,7 +1165,7 @@ namespace ZombustersWindows.Localization
         {
             get
             {
-                return ResourceManager.GetString("MaxPlayersMMString", resourceCulture);
+                return ResourceLoader.GetString("MaxPlayersMMString");
             }
         }
 
@@ -1174,7 +1176,7 @@ namespace ZombustersWindows.Localization
         {
             get
             {
-                return ResourceManager.GetString("MessageBoxUsage", resourceCulture);
+                return ResourceLoader.GetString("MessageBoxUsage");
             }
         }
 
@@ -1185,7 +1187,7 @@ namespace ZombustersWindows.Localization
         {
             get
             {
-                return ResourceManager.GetString("MessageGamerJoined", resourceCulture);
+                return ResourceLoader.GetString("MessageGamerJoined");
             }
         }
 
@@ -1196,7 +1198,7 @@ namespace ZombustersWindows.Localization
         {
             get
             {
-                return ResourceManager.GetString("MessageGamerLeft", resourceCulture);
+                return ResourceLoader.GetString("MessageGamerLeft");
             }
         }
 
@@ -1207,7 +1209,7 @@ namespace ZombustersWindows.Localization
         {
             get
             {
-                return ResourceManager.GetString("MusicVolumeString", resourceCulture);
+                return ResourceLoader.GetString("MusicVolumeString");
             }
         }
 
@@ -1218,7 +1220,7 @@ namespace ZombustersWindows.Localization
         {
             get
             {
-                return ResourceManager.GetString("MyGroupString", resourceCulture);
+                return ResourceLoader.GetString("MyGroupString");
             }
         }
 
@@ -1229,7 +1231,7 @@ namespace ZombustersWindows.Localization
         {
             get
             {
-                return ResourceManager.GetString("NetworkBusy", resourceCulture);
+                return ResourceLoader.GetString("NetworkBusy");
             }
         }
 
@@ -1241,7 +1243,7 @@ namespace ZombustersWindows.Localization
         {
             get
             {
-                return ResourceManager.GetString("NetworkMatchmakingMMString", resourceCulture);
+                return ResourceLoader.GetString("NetworkMatchmakingMMString");
             }
         }
 
@@ -1252,7 +1254,7 @@ namespace ZombustersWindows.Localization
         {
             get
             {
-                return ResourceManager.GetString("NetworkMatchmakingString", resourceCulture);
+                return ResourceLoader.GetString("NetworkMatchmakingString");
             }
         }
 
@@ -1263,7 +1265,7 @@ namespace ZombustersWindows.Localization
         {
             get
             {
-                return ResourceManager.GetString("NoSessionsFound", resourceCulture);
+                return ResourceLoader.GetString("NoSessionsFound");
             }
         }
 
@@ -1274,7 +1276,7 @@ namespace ZombustersWindows.Localization
         {
             get
             {
-                return ResourceManager.GetString("NumberEight", resourceCulture);
+                return ResourceLoader.GetString("NumberEight");
             }
         }
 
@@ -1285,7 +1287,7 @@ namespace ZombustersWindows.Localization
         {
             get
             {
-                return ResourceManager.GetString("NumberFive", resourceCulture);
+                return ResourceLoader.GetString("NumberFive");
             }
         }
 
@@ -1296,7 +1298,7 @@ namespace ZombustersWindows.Localization
         {
             get
             {
-                return ResourceManager.GetString("NumberFour", resourceCulture);
+                return ResourceLoader.GetString("NumberFour");
             }
         }
 
@@ -1307,7 +1309,7 @@ namespace ZombustersWindows.Localization
         {
             get
             {
-                return ResourceManager.GetString("NumberNine", resourceCulture);
+                return ResourceLoader.GetString("NumberNine");
             }
         }
 
@@ -1318,7 +1320,7 @@ namespace ZombustersWindows.Localization
         {
             get
             {
-                return ResourceManager.GetString("NumberOne", resourceCulture);
+                return ResourceLoader.GetString("NumberOne");
             }
         }
 
@@ -1329,7 +1331,7 @@ namespace ZombustersWindows.Localization
         {
             get
             {
-                return ResourceManager.GetString("NumberSeven", resourceCulture);
+                return ResourceLoader.GetString("NumberSeven");
             }
         }
 
@@ -1340,7 +1342,7 @@ namespace ZombustersWindows.Localization
         {
             get
             {
-                return ResourceManager.GetString("NumberSix", resourceCulture);
+                return ResourceLoader.GetString("NumberSix");
             }
         }
 
@@ -1351,7 +1353,7 @@ namespace ZombustersWindows.Localization
         {
             get
             {
-                return ResourceManager.GetString("NumberTen", resourceCulture);
+                return ResourceLoader.GetString("NumberTen");
             }
         }
 
@@ -1362,7 +1364,7 @@ namespace ZombustersWindows.Localization
         {
             get
             {
-                return ResourceManager.GetString("NumberThree", resourceCulture);
+                return ResourceLoader.GetString("NumberThree");
             }
         }
 
@@ -1373,7 +1375,7 @@ namespace ZombustersWindows.Localization
         {
             get
             {
-                return ResourceManager.GetString("NumberTwo", resourceCulture);
+                return ResourceLoader.GetString("NumberTwo");
             }
         }
 
@@ -1384,7 +1386,7 @@ namespace ZombustersWindows.Localization
         {
             get
             {
-                return ResourceManager.GetString("P1PressStartString", resourceCulture);
+                return ResourceLoader.GetString("P1PressStartString");
             }
         }
 
@@ -1395,7 +1397,7 @@ namespace ZombustersWindows.Localization
         {
             get
             {
-                return ResourceManager.GetString("P2PressStartString", resourceCulture);
+                return ResourceLoader.GetString("P2PressStartString");
             }
         }
 
@@ -1406,7 +1408,7 @@ namespace ZombustersWindows.Localization
         {
             get
             {
-                return ResourceManager.GetString("P3PressStartString", resourceCulture);
+                return ResourceLoader.GetString("P3PressStartString");
             }
         }
 
@@ -1417,7 +1419,7 @@ namespace ZombustersWindows.Localization
         {
             get
             {
-                return ResourceManager.GetString("P4PressStartString", resourceCulture);
+                return ResourceLoader.GetString("P4PressStartString");
             }
         }
 
@@ -1428,7 +1430,7 @@ namespace ZombustersWindows.Localization
         {
             get
             {
-                return ResourceManager.GetString("PartyMenuString", resourceCulture);
+                return ResourceLoader.GetString("PartyMenuString");
             }
         }
 
@@ -1439,7 +1441,7 @@ namespace ZombustersWindows.Localization
         {
             get
             {
-                return ResourceManager.GetString("Paused", resourceCulture);
+                return ResourceLoader.GetString("Paused");
             }
         }
 
@@ -1454,7 +1456,7 @@ namespace ZombustersWindows.Localization
         {
             get
             {
-                return ResourceManager.GetString("PCExplanationString", resourceCulture);
+                return ResourceLoader.GetString("PCExplanationString");
             }
         }
 
@@ -1465,7 +1467,7 @@ namespace ZombustersWindows.Localization
         {
             get
             {
-                return ResourceManager.GetString("PCPressAnyKeyString", resourceCulture);
+                return ResourceLoader.GetString("PCPressAnyKeyString");
             }
         }
 
@@ -1476,7 +1478,7 @@ namespace ZombustersWindows.Localization
         {
             get
             {
-                return ResourceManager.GetString("PlayerFourString", resourceCulture);
+                return ResourceLoader.GetString("PlayerFourString");
             }
         }
 
@@ -1487,7 +1489,7 @@ namespace ZombustersWindows.Localization
         {
             get
             {
-                return ResourceManager.GetString("PlayerMatch", resourceCulture);
+                return ResourceLoader.GetString("PlayerMatch");
             }
         }
 
@@ -1498,7 +1500,7 @@ namespace ZombustersWindows.Localization
         {
             get
             {
-                return ResourceManager.GetString("PlayerOneString", resourceCulture);
+                return ResourceLoader.GetString("PlayerOneString");
             }
         }
 
@@ -1509,7 +1511,7 @@ namespace ZombustersWindows.Localization
         {
             get
             {
-                return ResourceManager.GetString("PlayerSignInString", resourceCulture);
+                return ResourceLoader.GetString("PlayerSignInString");
             }
         }
 
@@ -1520,7 +1522,7 @@ namespace ZombustersWindows.Localization
         {
             get
             {
-                return ResourceManager.GetString("PlayerThreeString", resourceCulture);
+                return ResourceLoader.GetString("PlayerThreeString");
             }
         }
 
@@ -1531,7 +1533,7 @@ namespace ZombustersWindows.Localization
         {
             get
             {
-                return ResourceManager.GetString("PlayerTwoString", resourceCulture);
+                return ResourceLoader.GetString("PlayerTwoString");
             }
         }
 
@@ -1542,7 +1544,7 @@ namespace ZombustersWindows.Localization
         {
             get
             {
-                return ResourceManager.GetString("PlaylistMatchmakingMMString", resourceCulture);
+                return ResourceLoader.GetString("PlaylistMatchmakingMMString");
             }
         }
 
@@ -1553,7 +1555,7 @@ namespace ZombustersWindows.Localization
         {
             get
             {
-                return ResourceManager.GetString("PlaylistMatchmakingString", resourceCulture);
+                return ResourceLoader.GetString("PlaylistMatchmakingString");
             }
         }
 
@@ -1564,7 +1566,7 @@ namespace ZombustersWindows.Localization
         {
             get
             {
-                return ResourceManager.GetString("PrepareNextWaveGameplayString", resourceCulture);
+                return ResourceLoader.GetString("PrepareNextWaveGameplayString");
             }
         }
 
@@ -1575,7 +1577,7 @@ namespace ZombustersWindows.Localization
         {
             get
             {
-                return ResourceManager.GetString("PressStartString", resourceCulture);
+                return ResourceLoader.GetString("PressStartString");
             }
         }
 
@@ -1586,7 +1588,7 @@ namespace ZombustersWindows.Localization
         {
             get
             {
-                return ResourceManager.GetString("PrivateSlotsMenuString", resourceCulture);
+                return ResourceLoader.GetString("PrivateSlotsMenuString");
             }
         }
 
@@ -1597,7 +1599,7 @@ namespace ZombustersWindows.Localization
         {
             get
             {
-                return ResourceManager.GetString("PrivateSlotsMMString", resourceCulture);
+                return ResourceLoader.GetString("PrivateSlotsMMString");
             }
         }
 
@@ -1608,7 +1610,7 @@ namespace ZombustersWindows.Localization
         {
             get
             {
-                return ResourceManager.GetString("QuickMatchMenuString", resourceCulture);
+                return ResourceLoader.GetString("QuickMatchMenuString");
             }
         }
 
@@ -1619,7 +1621,7 @@ namespace ZombustersWindows.Localization
         {
             get
             {
-                return ResourceManager.GetString("QuickMatchMMString", resourceCulture);
+                return ResourceLoader.GetString("QuickMatchMMString");
             }
         }
 
@@ -1630,7 +1632,7 @@ namespace ZombustersWindows.Localization
         {
             get
             {
-                return ResourceManager.GetString("QuitGame", resourceCulture);
+                return ResourceLoader.GetString("QuitGame");
             }
         }
 
@@ -1641,7 +1643,7 @@ namespace ZombustersWindows.Localization
         {
             get
             {
-                return ResourceManager.GetString("QuitToMainMenuInGameString", resourceCulture);
+                return ResourceLoader.GetString("QuitToMainMenuInGameString");
             }
         }
 
@@ -1652,7 +1654,7 @@ namespace ZombustersWindows.Localization
         {
             get
             {
-                return ResourceManager.GetString("RateThisAppCancel", resourceCulture);
+                return ResourceLoader.GetString("RateThisAppCancel");
             }
         }
 
@@ -1663,7 +1665,7 @@ namespace ZombustersWindows.Localization
         {
             get
             {
-                return ResourceManager.GetString("RateThisAppOK", resourceCulture);
+                return ResourceLoader.GetString("RateThisAppOK");
             }
         }
 
@@ -1674,7 +1676,7 @@ namespace ZombustersWindows.Localization
         {
             get
             {
-                return ResourceManager.GetString("RateThisAppText", resourceCulture);
+                return ResourceLoader.GetString("RateThisAppText");
             }
         }
 
@@ -1685,7 +1687,7 @@ namespace ZombustersWindows.Localization
         {
             get
             {
-                return ResourceManager.GetString("RateThisAppTitle", resourceCulture);
+                return ResourceLoader.GetString("RateThisAppTitle");
             }
         }
 
@@ -1696,7 +1698,7 @@ namespace ZombustersWindows.Localization
         {
             get
             {
-                return ResourceManager.GetString("ReadySelPlayerString", resourceCulture);
+                return ResourceLoader.GetString("ReadySelPlayerString");
             }
         }
 
@@ -1707,7 +1709,7 @@ namespace ZombustersWindows.Localization
         {
             get
             {
-                return ResourceManager.GetString("ReconnectControllerString", resourceCulture);
+                return ResourceLoader.GetString("ReconnectControllerString");
             }
         }
 
@@ -1718,7 +1720,7 @@ namespace ZombustersWindows.Localization
         {
             get
             {
-                return ResourceManager.GetString("RestartLevelInGameString", resourceCulture);
+                return ResourceLoader.GetString("RestartLevelInGameString");
             }
         }
 
@@ -1729,7 +1731,7 @@ namespace ZombustersWindows.Localization
         {
             get
             {
-                return ResourceManager.GetString("ResumeGame", resourceCulture);
+                return ResourceLoader.GetString("ResumeGame");
             }
         }
 
@@ -1740,7 +1742,7 @@ namespace ZombustersWindows.Localization
         {
             get
             {
-                return ResourceManager.GetString("ReturnToDashboardMMString", resourceCulture);
+                return ResourceLoader.GetString("ReturnToDashboardMMString");
             }
         }
 
@@ -1751,7 +1753,7 @@ namespace ZombustersWindows.Localization
         {
             get
             {
-                return ResourceManager.GetString("ReturnToDashboardString", resourceCulture);
+                return ResourceLoader.GetString("ReturnToDashboardString");
             }
         }
 
@@ -1762,7 +1764,7 @@ namespace ZombustersWindows.Localization
         {
             get
             {
-                return ResourceManager.GetString("ReturnToLobby", resourceCulture);
+                return ResourceLoader.GetString("ReturnToLobby");
             }
         }
 
@@ -1773,7 +1775,7 @@ namespace ZombustersWindows.Localization
         {
             get
             {
-                return ResourceManager.GetString("ReviewMenuString", resourceCulture);
+                return ResourceLoader.GetString("ReviewMenuString");
             }
         }
 
@@ -1784,7 +1786,7 @@ namespace ZombustersWindows.Localization
         {
             get
             {
-                return ResourceManager.GetString("ReviewMMString", resourceCulture);
+                return ResourceLoader.GetString("ReviewMMString");
             }
         }
 
@@ -1795,7 +1797,7 @@ namespace ZombustersWindows.Localization
         {
             get
             {
-                return ResourceManager.GetString("SaveAndExitString", resourceCulture);
+                return ResourceLoader.GetString("SaveAndExitString");
             }
         }
 
@@ -1806,7 +1808,7 @@ namespace ZombustersWindows.Localization
         {
             get
             {
-                return ResourceManager.GetString("SelectString", resourceCulture);
+                return ResourceLoader.GetString("SelectString");
             }
         }
 
@@ -1817,7 +1819,7 @@ namespace ZombustersWindows.Localization
         {
             get
             {
-                return ResourceManager.GetString("SettingsMenuString", resourceCulture);
+                return ResourceLoader.GetString("SettingsMenuString");
             }
         }
 
@@ -1828,7 +1830,7 @@ namespace ZombustersWindows.Localization
         {
             get
             {
-                return ResourceManager.GetString("ShowGamerCardMenuString", resourceCulture);
+                return ResourceLoader.GetString("ShowGamerCardMenuString");
             }
         }
 
@@ -1839,7 +1841,7 @@ namespace ZombustersWindows.Localization
         {
             get
             {
-                return ResourceManager.GetString("SinglePlayer", resourceCulture);
+                return ResourceLoader.GetString("SinglePlayer");
             }
         }
 
@@ -1850,7 +1852,7 @@ namespace ZombustersWindows.Localization
         {
             get
             {
-                return ResourceManager.GetString("SoundEffectVolumeString", resourceCulture);
+                return ResourceLoader.GetString("SoundEffectVolumeString");
             }
         }
 
@@ -1861,7 +1863,7 @@ namespace ZombustersWindows.Localization
         {
             get
             {
-                return ResourceManager.GetString("StartGameMenuString", resourceCulture);
+                return ResourceLoader.GetString("StartGameMenuString");
             }
         }
 
@@ -1872,7 +1874,7 @@ namespace ZombustersWindows.Localization
         {
             get
             {
-                return ResourceManager.GetString("StartMatchmakingMenuString", resourceCulture);
+                return ResourceLoader.GetString("StartMatchmakingMenuString");
             }
         }
 
@@ -1883,7 +1885,7 @@ namespace ZombustersWindows.Localization
         {
             get
             {
-                return ResourceManager.GetString("StartMatchmakingMMString", resourceCulture);
+                return ResourceLoader.GetString("StartMatchmakingMMString");
             }
         }
 
@@ -1894,7 +1896,7 @@ namespace ZombustersWindows.Localization
         {
             get
             {
-                return ResourceManager.GetString("StoreMenuString", resourceCulture);
+                return ResourceLoader.GetString("StoreMenuString");
             }
         }
 
@@ -1905,7 +1907,7 @@ namespace ZombustersWindows.Localization
         {
             get
             {
-                return ResourceManager.GetString("StoreMMString", resourceCulture);
+                return ResourceLoader.GetString("StoreMMString");
             }
         }
 
@@ -1916,7 +1918,7 @@ namespace ZombustersWindows.Localization
         {
             get
             {
-                return ResourceManager.GetString("String", resourceCulture);
+                return ResourceLoader.GetString("String");
             }
         }
 
@@ -1927,7 +1929,7 @@ namespace ZombustersWindows.Localization
         {
             get
             {
-                return ResourceManager.GetString("String1", resourceCulture);
+                return ResourceLoader.GetString("String1");
             }
         }
 
@@ -1938,7 +1940,7 @@ namespace ZombustersWindows.Localization
         {
             get
             {
-                return ResourceManager.GetString("String2", resourceCulture);
+                return ResourceLoader.GetString("String2");
             }
         }
 
@@ -1949,7 +1951,7 @@ namespace ZombustersWindows.Localization
         {
             get
             {
-                return ResourceManager.GetString("String3", resourceCulture);
+                return ResourceLoader.GetString("String3");
             }
         }
 
@@ -1960,7 +1962,7 @@ namespace ZombustersWindows.Localization
         {
             get
             {
-                return ResourceManager.GetString("String4", resourceCulture);
+                return ResourceLoader.GetString("String4");
             }
         }
 
@@ -1971,7 +1973,7 @@ namespace ZombustersWindows.Localization
         {
             get
             {
-                return ResourceManager.GetString("String5", resourceCulture);
+                return ResourceLoader.GetString("String5");
             }
         }
 
@@ -1982,7 +1984,7 @@ namespace ZombustersWindows.Localization
         {
             get
             {
-                return ResourceManager.GetString("String6", resourceCulture);
+                return ResourceLoader.GetString("String6");
             }
         }
 
@@ -1993,7 +1995,7 @@ namespace ZombustersWindows.Localization
         {
             get
             {
-                return ResourceManager.GetString("String7", resourceCulture);
+                return ResourceLoader.GetString("String7");
             }
         }
 
@@ -2004,7 +2006,7 @@ namespace ZombustersWindows.Localization
         {
             get
             {
-                return ResourceManager.GetString("String8", resourceCulture);
+                return ResourceLoader.GetString("String8");
             }
         }
 
@@ -2015,7 +2017,7 @@ namespace ZombustersWindows.Localization
         {
             get
             {
-                return ResourceManager.GetString("String9", resourceCulture);
+                return ResourceLoader.GetString("String9");
             }
         }
 
@@ -2026,7 +2028,7 @@ namespace ZombustersWindows.Localization
         {
             get
             {
-                return ResourceManager.GetString("SwitchReadyMenuString", resourceCulture);
+                return ResourceLoader.GetString("SwitchReadyMenuString");
             }
         }
 
@@ -2037,7 +2039,7 @@ namespace ZombustersWindows.Localization
         {
             get
             {
-                return ResourceManager.GetString("SystemLink", resourceCulture);
+                return ResourceLoader.GetString("SystemLink");
             }
         }
 
@@ -2048,7 +2050,7 @@ namespace ZombustersWindows.Localization
         {
             get
             {
-                return ResourceManager.GetString("ToggleReadyMenuString", resourceCulture);
+                return ResourceLoader.GetString("ToggleReadyMenuString");
             }
         }
 
@@ -2059,7 +2061,7 @@ namespace ZombustersWindows.Localization
         {
             get
             {
-                return ResourceManager.GetString("TrialModeMenuString", resourceCulture);
+                return ResourceLoader.GetString("TrialModeMenuString");
             }
         }
 
@@ -2070,7 +2072,7 @@ namespace ZombustersWindows.Localization
         {
             get
             {
-                return ResourceManager.GetString("UnlockFullGameMenuString", resourceCulture);
+                return ResourceLoader.GetString("UnlockFullGameMenuString");
             }
         }
 
@@ -2081,7 +2083,7 @@ namespace ZombustersWindows.Localization
         {
             get
             {
-                return ResourceManager.GetString("VisitRetrowaxMenuStringWP", resourceCulture);
+                return ResourceLoader.GetString("VisitRetrowaxMenuStringWP");
             }
         }
 
@@ -2092,7 +2094,7 @@ namespace ZombustersWindows.Localization
         {
             get
             {
-                return ResourceManager.GetString("WaitingForPlayersMenuString", resourceCulture);
+                return ResourceLoader.GetString("WaitingForPlayersMenuString");
             }
         }
 
@@ -2103,7 +2105,7 @@ namespace ZombustersWindows.Localization
         {
             get
             {
-                return ResourceManager.GetString("WaveGameplayString", resourceCulture);
+                return ResourceLoader.GetString("WaveGameplayString");
             }
         }
 
@@ -2114,7 +2116,7 @@ namespace ZombustersWindows.Localization
         {
             get
             {
-                return ResourceManager.GetString("WishListGameMenu", resourceCulture);
+                return ResourceLoader.GetString("WishListGameMenu");
             }
         }
 
@@ -2125,7 +2127,7 @@ namespace ZombustersWindows.Localization
         {
             get
             {
-                return ResourceManager.GetString("WishListGameMenuHelp", resourceCulture);
+                return ResourceLoader.GetString("WishListGameMenuHelp");
             }
         }
 
@@ -2136,7 +2138,7 @@ namespace ZombustersWindows.Localization
         {
             get
             {
-                return ResourceManager.GetString("WPPlayNewGame", resourceCulture);
+                return ResourceLoader.GetString("WPPlayNewGame");
             }
         }
 
@@ -2147,7 +2149,7 @@ namespace ZombustersWindows.Localization
         {
             get
             {
-                return ResourceManager.GetString("WPPlayNewGameMMString", resourceCulture);
+                return ResourceLoader.GetString("WPPlayNewGameMMString");
             }
         }
 
@@ -2158,7 +2160,7 @@ namespace ZombustersWindows.Localization
         {
             get
             {
-                return ResourceManager.GetString("WPShakeToChangeSong", resourceCulture);
+                return ResourceLoader.GetString("WPShakeToChangeSong");
             }
         }
 
@@ -2169,7 +2171,7 @@ namespace ZombustersWindows.Localization
         {
             get
             {
-                return ResourceManager.GetString("WPTapScreen", resourceCulture);
+                return ResourceLoader.GetString("WPTapScreen");
             }
         }
 
@@ -2180,7 +2182,7 @@ namespace ZombustersWindows.Localization
         {
             get
             {
-                return ResourceManager.GetString("WPTip", resourceCulture);
+                return ResourceLoader.GetString("WPTip");
             }
         }
 
@@ -2191,7 +2193,7 @@ namespace ZombustersWindows.Localization
         {
             get
             {
-                return ResourceManager.GetString("YouSavedCityEndGameString", resourceCulture);
+                return ResourceLoader.GetString("YouSavedCityEndGameString");
             }
         }
     }
