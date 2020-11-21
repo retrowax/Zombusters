@@ -95,7 +95,7 @@ namespace ZombustersWindows
         
         public override void LoadContent()
         {
-#if WINDOWS || NETCOREAPP
+#if WINDOWS || NETCOREAPP || WINDOWS_UAP
             //Key "Scape"
             kbEsc = this.ScreenManager.Game.Content.Load<Texture2D>(@"Keyboard/key_esc");
 #endif
