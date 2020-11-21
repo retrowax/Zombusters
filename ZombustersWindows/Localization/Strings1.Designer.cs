@@ -28,7 +28,7 @@ namespace ZombustersWindows.Localization
     {
 
         private static global::System.Resources.ResourceManager resourceMan;
-
+        private static global::Windows.ApplicationModel.Resources.ResourceLoader resourceLoad;
         private static global::System.Globalization.CultureInfo resourceCulture;
 
         [global::System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
@@ -53,12 +53,17 @@ namespace ZombustersWindows.Localization
             }
         }
 
+        [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
         internal static global::Windows.ApplicationModel.Resources.ResourceLoader ResourceLoader
         {
             get
             {
-                var resourceLoader = Windows.ApplicationModel.Resources.ResourceLoader.GetForCurrentView();
-                return resourceLoader;
+                if (object.ReferenceEquals(resourceLoad, null))
+                {
+                    global::Windows.ApplicationModel.Resources.ResourceLoader temp = Windows.ApplicationModel.Resources.ResourceLoader.GetForCurrentView();
+                    resourceLoad = temp;
+                }
+                return resourceLoad;
             }
         }
 

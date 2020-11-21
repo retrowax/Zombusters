@@ -21,7 +21,9 @@ namespace ZombustersWindows.Subsystem_Managers
             height = device.PreferredBackBufferHeight;
             graphicsDeviceManager = device;
             isDirtyMatrix = true;
+#if !WINDOWS_UAP
             ApplyResolutionSettings();
+#endif
         }
 
 
