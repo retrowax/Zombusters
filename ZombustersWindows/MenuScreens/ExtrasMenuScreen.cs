@@ -58,7 +58,7 @@ namespace ZombustersWindows
             menu.MenuConfigSelected += new EventHandler<MenuSelection>(Menu_MenuConfigSelected);
 
             menu.CenterInXLeftMenu(view);
-#if !WINDOWS_PHONE && !WINDOWS && !NETCOREAPP
+#if !WINDOWS_PHONE && !WINDOWS && !NETCOREAPP && !WINDOWS_UAP
             this.PresenceMode = GamerPresenceMode.AtMenu;
 #endif
 
@@ -83,7 +83,7 @@ namespace ZombustersWindows
             //SignedInGamer gamer;
             if (GamePad.GetState(PlayerIndex.One).IsButtonDown(Buttons.Start))
             {
-#if !WINDOWS_PHONE && !WINDOWS && !NETCOREAPP
+#if !WINDOWS_PHONE && !WINDOWS && !NETCOREAPP && !WINDOWS_UAP
                 gamer = NetworkSessionManager.FindGamer(PlayerIndex.One);
                 if (gamer != null)
                 {
@@ -93,7 +93,7 @@ namespace ZombustersWindows
             }
             else if (GamePad.GetState(PlayerIndex.Two).IsButtonDown(Buttons.Start))
             {
-#if !WINDOWS_PHONE && !WINDOWS && !NETCOREAPP
+#if !WINDOWS_PHONE && !WINDOWS && !NETCOREAPP && !WINDOWS_UAP
                 gamer = NetworkSessionManager.FindGamer(PlayerIndex.Two);
                 if (gamer != null)
                 {
@@ -103,7 +103,7 @@ namespace ZombustersWindows
             }
             else if (GamePad.GetState(PlayerIndex.Three).IsButtonDown(Buttons.Start))
             {
-#if !WINDOWS_PHONE && !WINDOWS && !NETCOREAPP
+#if !WINDOWS_PHONE && !WINDOWS && !NETCOREAPP && !WINDOWS_UAP
                 gamer = NetworkSessionManager.FindGamer(PlayerIndex.Three);
                 if (gamer != null)
                 {
@@ -113,7 +113,7 @@ namespace ZombustersWindows
             }
             else if (GamePad.GetState(PlayerIndex.Four).IsButtonDown(Buttons.Start))
             {
-#if !WINDOWS_PHONE && !WINDOWS && !NETCOREAPP
+#if !WINDOWS_PHONE && !WINDOWS && !NETCOREAPP && !WINDOWS_UAP
                 gamer = NetworkSessionManager.FindGamer(PlayerIndex.Four);
                 if (gamer != null)
                 {
@@ -175,7 +175,7 @@ namespace ZombustersWindows
         {
             // Menu update
             if (!coveredByOtherScreen
-#if !WINDOWS && !NETCOREAPP
+#if !WINDOWS && !NETCOREAPP && !WINDOWS_UAP
                 && !Guide.IsVisible
 #endif
                 )

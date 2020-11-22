@@ -44,20 +44,20 @@ script:
   #- mono ./testrunner/NUnit.Runners.2.6.4/tools/nunit-console.exe ./MonoGameSample.UnitTests/bin/Debug/MonoGameSample.UnitTests.dll
   #- (cd ZombustersWindows/Content && mono /opt/monogame-pipeline/MGCB.exe /rebuild /@:"Content.mgcb" /outputDir:"../bin/Release/Content")
 
-deploy:
-  - provider: script
-    script:
-      ./travis/release.sh
-    on:
-      tags: true
-    skip_cleanup: true
+#deploy:
+#  - provider: script
+#    script:
+#      ./travis/release.sh
+#    on:
+#      tags: true
+#    skip_cleanup: true
 
-  - provider: script
-    script:
-      ./travis/demo.sh
-    on:
-      branch: master
-    skip_cleanup: true
+#  - provider: script
+#    script:
+#      ./travis/demo.sh
+#    on:
+#      branch: master
+#    skip_cleanup: true
 
 #after_deploy:
 #  - ./travis/tweetAfterDeploy.sh

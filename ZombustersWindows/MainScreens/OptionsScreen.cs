@@ -233,9 +233,12 @@ namespace ZombustersWindows
         private void ToggleFullScreen()
         {
             Resolution.SetVirtualResolution(game.VIRTUAL_RESOLUTION_WIDTH, game.VIRTUAL_RESOLUTION_HEIGHT);
+            
             if (player.optionsState.FullScreenMode)
             {
+#if !WINDOWS_UAP
                 Resolution.SetResolution(game.VIRTUAL_RESOLUTION_WIDTH, game.VIRTUAL_RESOLUTION_HEIGHT, false);
+#endif
                 player.optionsState.FullScreenMode = false;
                 game.graphics.IsFullScreen = true;
                 GameAnalytics.AddDesignEvent("ScreenView:Options:FullScreen:false");
@@ -244,7 +247,9 @@ namespace ZombustersWindows
             {
                 int screenWidth = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width;
                 int screenHeight = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height;
+#if !WINDOWS_UAP
                 Resolution.SetResolution(screenWidth, screenHeight, true);
+#endif
                 player.optionsState.FullScreenMode = true;
                 game.graphics.IsFullScreen = false;
                 GameAnalytics.AddDesignEvent("ScreenView:Options:FullScreen:true");

@@ -367,6 +367,26 @@ namespace ZombustersWindows
             value = (value + 1) / 2;
             Color color = new Color(value, value, value, value);
             for (int i = 0; i < MenuItems.Count; i++) {
+#if WINDOWS_UAP
+                if (Selection == i) {
+                    if (((MyGame)this.Game).currentInputMode != InputMode.Touch) {
+                        batch.DrawString(Font, Strings.ResourceLoader.GetString(MenuItems[i]), new Vector2(current.X + 5, current.Y + 1), SelectedColor);
+                        batch.Draw(menuTextLine, current, color);
+                    } else {
+                        if (Strings.ResourceLoader.GetString(MenuItems[i]) != Strings.SaveAndExitString) {
+                            batch.DrawString(Font, Strings.ResourceLoader.GetString(MenuItems[i]), new Vector2(current.X + 5, current.Y + 1), SelectedColor);
+                        }
+                    }
+                } else {
+                    if (((MyGame)this.Game).currentInputMode != InputMode.Touch) {
+                        batch.DrawString(Font, Strings.ResourceLoader.GetString(MenuItems[i]), new Vector2(current.X + 5, current.Y + 1), UnselectedColor);
+                    } else {
+                        if (Strings.ResourceLoader.GetString(MenuItems[i]) != Strings.SaveAndExitString) {
+                            batch.DrawString(Font, Strings.ResourceLoader.GetString(MenuItems[i]), new Vector2(current.X + 5, current.Y + 1), UnselectedColor);
+                        }
+                    }
+                }
+#else
                 if (Selection == i) {
                     if (((MyGame)this.Game).currentInputMode != InputMode.Touch) {
                         batch.DrawString(Font, Strings.ResourceManager.GetString(MenuItems[i]), new Vector2(current.X + 5, current.Y + 1), SelectedColor);
@@ -385,6 +405,7 @@ namespace ZombustersWindows
                         }
                     }
                 }
+#endif
                 current.Y += ItemHeights[i];
             }
             batch.End();
@@ -655,7 +676,11 @@ namespace ZombustersWindows
             {
                 string[] lines;
                 Vector2 contextMenuPosition = new Vector2(position.X - 32, position.Y - 100);
+#if WINDOWS_UAP
+                lines = Regex.Split(Strings.ResourceLoader.GetString(this.HelpText[this.Selection]), "\r\n");
+#else
                 lines = Regex.Split(Strings.ResourceManager.GetString(this.HelpText[this.Selection]), "\r\n");
+#endif
                 foreach (string line in lines)
                 {
                     batch.DrawString(MenuInfoFont, line.Replace("	", ""), contextMenuPosition, Color.White);

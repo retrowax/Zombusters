@@ -63,10 +63,10 @@ namespace ZombustersWindows
             };
             Resolution.Init(ref graphics);
             Content.RootDirectory = "Content";
-
+#if !WINDOWS_UAP
             Resolution.SetVirtualResolution(VIRTUAL_RESOLUTION_WIDTH, VIRTUAL_RESOLUTION_HEIGHT);
             Resolution.SetResolution(VIRTUAL_RESOLUTION_WIDTH, VIRTUAL_RESOLUTION_HEIGHT, graphics.IsFullScreen);
-
+#endif
             options = new OptionsState();
             screenManager = new ScreenManager(this);
             Components.Add(screenManager);
