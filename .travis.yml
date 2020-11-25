@@ -1,7 +1,5 @@
 sudo: required
 language: csharp
-#services:
-#  - docker
 
 before_install:
   - wget https://dl.itch.ovh/butler/linux-amd64/head/butler
@@ -11,8 +9,6 @@ before_install:
   - source version.properties
   - export MAJOR MINOR PATCH
   - export SNAPSHOT_NOW=$(date +"%Y%m%d%H%M")
-
-  #- docker pull suchja/wix WIX Not needed for now
 
 install:
   - sudo pip install tweepy
@@ -27,22 +23,20 @@ install:
   - cp ./butler ~/bin
   - export PATH="$PATH:~/bin"
 
-  # Install NUnit for Tests
-  #- nuget install NUnit.Runners -Version 2.6.4 -OutputDirectory testrunner
-
-  # Intall Wine
-  #- ./travis/install_wine.sh
-  #- sudo apt-get install wine
 script:
   - find * -type f -exec chmod 777 {} \;
+  
   - nuget restore ZombustersWindows.sln
   - msbuild /t:ZombustersWindows /p:Configuration=Release ZombustersWindows.sln
+
   - nuget restore ZombustersMac.sln
   - msbuild /p:Configuration=Release ZombustersMac.sln
 
-  # Tests
-  #- mono ./testrunner/NUnit.Runners.2.6.4/tools/nunit-console.exe ./MonoGameSample.UnitTests/bin/Debug/MonoGameSample.UnitTests.dll
-  #- (cd ZombustersWindows/Content && mono /opt/monogame-pipeline/MGCB.exe /rebuild /@:"Content.mgcb" /outputDir:"../bin/Release/Content")
+  - nuget restore ZombustersLinux.sln
+  - msbuild /p:Configuration=Release ZombustersLinux.sln
+
+  - nuget restore ZombustersUWP.sln
+  - msbuild /p:Configuration=Release ZombustersUWP.sln
 
 #deploy:
 #  - provider: script
