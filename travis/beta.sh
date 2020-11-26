@@ -1,15 +1,15 @@
 #!/bin/bash
-echo "Beta Deploy"
+echo "Beta Deploy to Itch.io"
 ~/bin/butler -V
 ~/bin/butler upgrade --assume-yes
 ~/bin/butler login
 
-~/bin/butler wipe zombusters-windows-beta.zip
+~/bin/butler wipe zombusters_windows_beta.zip
 rm -fr ZombustersPCWindowsBETA
 mkdir ZombustersPCWindowsBETA
 mv /home/travis/build/retrowax/Zombusters-Enhanced-Edition/ZombustersWindows/bin/Windows/Release/* ZombustersPCWindowsBETA
-zip -r -v zombusters-windows-beta.zip ./ZombustersPCWindowsBETA
-~/bin/butler push zombusters-windows-beta.zip retrowax/zombusters:windows-beta --userversion $MAJOR.$MINOR.$PATCH-$SNAPSHOT_NOW
+zip -r -v zombusters_windows_beta.zip ./ZombustersPCWindowsBETA
+~/bin/butler push zombusters_windows_beta.zip retrowax/zombusters:windows-beta --userversion $MAJOR.$MINOR.$PATCH-$SNAPSHOT_NOW
 
 ~/bin/butler wipe zombusters-mac-beta.zip
 rm -fr ZombustersMacBETA
