@@ -25,7 +25,7 @@ install:
 
 script:
   - find * -type f -exec chmod 777 {} \;
-  
+
   - nuget restore ZombustersWindows.sln
   - msbuild /t:ZombustersWindows /p:Configuration=Release ZombustersWindows.sln
 
@@ -35,8 +35,8 @@ script:
   - nuget restore ZombustersLinux.sln
   - msbuild /p:Configuration=Release ZombustersLinux.sln
 
-  - nuget restore ZombustersUWP.sln
-  - msbuild /p:Configuration=Release ZombustersUWP.sln
+#  - nuget restore ZombustersUWP.sln
+#  - msbuild /p:Configuration=Release ZombustersUWP.sln
 
 #deploy:
 #  - provider: script
