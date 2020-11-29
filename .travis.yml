@@ -36,6 +36,14 @@ script:
 #  - nuget restore ZombustersUWP.sln
 #  - msbuild /p:Configuration=Release ZombustersUWP.sln
 
+deploy:
+  - provider: script
+    script:
+      ./travis/beta.sh
+    on:
+      tags: true
+    skip_cleanup: true
+
 #deploy:
 #  - provider: script
 #    script:
