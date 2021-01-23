@@ -5,6 +5,7 @@
         <TargetFramework>netcoreapp3.1</TargetFramework>
         <ReleaseVersion>1.2.0</ReleaseVersion>
         <ApplicationIcon>Game.ico</ApplicationIcon>
+        <RuntimeIdentifier>linux-arm</RuntimeIdentifier>
     </PropertyGroup>
 
     <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
