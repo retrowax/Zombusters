@@ -84,11 +84,7 @@ namespace ZombustersWindows
             Point frameSize = new Point();
             Point sheetSize = new Point();
 
-#if LINUX
-            XDocument doc = XDocument.Load("ZombustersWindows/Content/InGame/wolf/WolfAnimationDef.xml");
-#else
-            XDocument doc = XDocument.Load("Content/InGame/wolf/WolfAnimationDef.xml");
-#endif
+            XDocument doc = XDocument.Load(AppContext.BaseDirectory + "/Content/InGame/wolf/WolfAnimationDef.xml");
 
             definition = doc.Root.Element("WolfJumpAttackMoveDef");
             frameSize.X = int.Parse(definition.Attribute("FrameWidth").Value, NumberStyles.Integer);
