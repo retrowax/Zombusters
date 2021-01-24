@@ -5,6 +5,7 @@
         <TargetFramework>netcoreapp3</TargetFramework>
         <ReleaseVersion>1.2.0</ReleaseVersion>
         <ApplicationIcon>Game.ico</ApplicationIcon>
+        <RuntimeIdentifier>osx-x64</RuntimeIdentifier>
     </PropertyGroup>
 
     <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
