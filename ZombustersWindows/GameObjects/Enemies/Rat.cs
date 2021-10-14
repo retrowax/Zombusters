@@ -83,11 +83,7 @@ namespace ZombustersWindows
             Point frameSize = new Point();
             Point sheetSize = new Point();
 
-#if LINUX
-            XDocument doc = XDocument.Load("ZombustersWindows/Content/InGame/rat/RatAnimationDef.xml");
-#else
-            XDocument doc = XDocument.Load("Content/InGame/rat/RatAnimationDef.xml");
-#endif
+            XDocument doc = XDocument.Load(AppContext.BaseDirectory + "/Content/InGame/rat/RatAnimationDef.xml");
 
             definition = doc.Root.Element("RatAttackDef");
             frameSize.X = int.Parse(definition.Attribute("FrameWidth").Value, NumberStyles.Integer);

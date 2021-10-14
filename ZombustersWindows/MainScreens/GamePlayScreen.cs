@@ -205,11 +205,7 @@ namespace ZombustersWindows
 
         public override void LoadContent()
         {
-#if LINUX
-            XDocument animationDefinitionDocument = XDocument.Load("ZombustersWindows/Content/AnimationDef.xml");
-#else
-            XDocument animationDefinitionDocument = XDocument.Load("Content/AnimationDef.xml");
-#endif
+            XDocument animationDefinitionDocument = XDocument.Load(AppContext.BaseDirectory + "/Content/AnimationDef.xml");
 
             DiedTexture = new List<Texture2D>
             {
