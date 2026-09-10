@@ -1,7 +1,7 @@
 -printconfiguration build/tmp/full-r8-config.txt
 -verbose
 
--keep class com.steelvectors.app.** { *; }
+-keep class com.retrowax.zombusters.** { *; }
 -keep public class * extends java.lang.Exception
 
 -keep @androidx.annotation.Keep public class *
