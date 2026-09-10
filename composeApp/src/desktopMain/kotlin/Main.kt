@@ -1,8 +1,8 @@
 import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.application
-import com.steelvectors.app.MainApp
-import com.steelvectors.app.di.commonModule
-import com.steelvectors.app.ui.theme.SkyVectorTheme
+import com.retrowax.zombusters.MainApp
+import com.retrowax.zombusters.di.commonModule
+import com.retrowax.zombusters.ui.theme.ZombustersTheme
 import org.koin.core.context.startKoin
 
 fun main() = application {
@@ -10,7 +10,7 @@ fun main() = application {
         modules(commonModule)
     }
     Window(onCloseRequest = ::exitApplication) {
-        SkyVectorTheme {
+        ZombustersTheme {
             MainApp()
         }
     }

@@ -63,6 +63,6 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "SteelVectors"
+rootProject.name = "Zombusters"
 include(":composeApp")
 include(":shared")

@@ -103,7 +103,7 @@ kotlin {
 }
 
 android {
-    namespace = "com.steelvectors.app"
+    namespace = "com.retrowax.zombusters"
     compileSdk = libs.versions.android.compileSdk.get().toInt()
     defaultConfig {
         minSdk = libs.versions.android.minSdk.get().toInt()
@@ -119,6 +119,6 @@ android {
 
 compose.resources {
     publicResClass = true
-    packageOfResClass = "com.steelvectors.app.resources"
+    packageOfResClass = "com.retrowax.zombusters.resources"
     generateResClass = always
 }

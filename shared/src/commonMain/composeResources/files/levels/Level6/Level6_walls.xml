@@ -1,0 +1,163 @@
+﻿<?xml version="1.0"?>
+<ArrayOfWall>
+  <!-- Superior Izquierda -->
+  <Wall>
+    <From>
+      <X>332</X>
+      <Y>0</Y>
+    </From>
+    <To>
+      <X>332</X>
+      <Y>-250</Y>
+    </To>
+  </Wall>
+
+  <Wall>
+    <From>
+      <X>332</X>
+      <Y>0</Y>
+    </From>
+    <To>
+      <X>332</X>
+      <Y>14</Y>
+    </To>
+  </Wall>
+
+  <Wall>
+    <From>
+      <X>332</X>
+      <Y>14</Y>
+    </From>
+    <To>
+      <X>0</X>
+      <Y>177</Y>
+    </To>
+  </Wall>
+
+  <Wall>
+    <From>
+      <X>0</X>
+      <Y>177</Y>
+    </From>
+    <To>
+      <X>-250</X>
+      <Y>177</Y>
+    </To>
+  </Wall>
+  <!-- END Superior Izquierda -->
+
+  <!-- Superior Derecha -->
+  <Wall>
+    <From>
+      <X>964</X>
+      <Y>0</Y>
+    </From>
+    <To>
+      <X>964</X>
+      <Y>-250</Y>
+    </To>
+  </Wall>
+
+  <Wall>
+    <From>
+      <X>964</X>
+      <Y>0</Y>
+    </From>
+    <To>
+      <X>964</X>
+      <Y>13</Y>
+    </To>
+  </Wall>
+
+  <Wall>
+    <From>
+      <X>964</X>
+      <Y>13</Y>
+    </From>
+    <To>
+      <X>1280</X>
+      <Y>169</Y>
+    </To>
+  </Wall>
+
+  <Wall>
+    <From>
+      <X>1280</X>
+      <Y>169</Y>
+    </From>
+    <To>
+      <X>1500</X>
+      <Y>169</Y>
+    </To>
+  </Wall>
+  <!-- END Superior Derecha -->
+
+  <!-- Centro -->
+  <Wall>
+    <From>
+      <X>752</X>
+      <Y>423</Y>
+    </From>
+    <To>
+      <X>630</X>
+      <Y>483</Y>
+    </To>
+  </Wall>
+
+  <Wall>
+    <From>
+      <X>630</X>
+      <Y>483</Y>
+    </From>
+    <To>
+      <X>497</X>
+      <Y>417</Y>
+    </To>
+  </Wall>
+
+  <Wall>
+    <From>
+      <X>497</X>
+      <Y>417</Y>
+    </From>
+    <To>
+      <X>497</X>
+      <Y>405</Y>
+    </To>
+  </Wall>
+
+  <Wall>
+    <From>
+      <X>497</X>
+      <Y>405</Y>
+    </From>
+    <To>
+      <X>619</X>
+      <Y>345</Y>
+    </To>
+  </Wall>
+
+  <Wall>
+    <From>
+      <X>619</X>
+      <Y>345</Y>
+    </From>
+    <To>
+      <X>752</X>
+      <Y>411</Y>
+    </To>
+  </Wall>
+
+  <Wall>
+    <From>
+      <X>752</X>
+      <Y>411</Y>
+    </From>
+    <To>
+      <X>752</X>
+      <Y>423</Y>
+    </To>
+  </Wall>
+  <!-- END Centro -->
+  
+</ArrayOfWall>
