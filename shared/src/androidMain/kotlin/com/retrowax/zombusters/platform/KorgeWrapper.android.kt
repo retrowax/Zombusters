@@ -22,8 +22,8 @@ private const val FILES_RESOURCES_MAIN_PATH = "composeResources/com.retrowax.zom
 @Composable
 actual fun KorgeView(modifier: Modifier, exit: () -> Unit) {
     val configuration = LocalConfiguration.current
-    val windowHeight = configuration.windowHeightDp.dp
-    val windowWidth = configuration.windowWidthDp.dp
+    val windowHeight = configuration.screenHeightDp.dp
+    val windowWidth = configuration.screenWidthDp.dp
     val buttonBackgroundColor = MaterialTheme.colorScheme.secondary.toKorgeColor()
     val korge = KorgeWrapper(
         windowWidth = windowWidth,
