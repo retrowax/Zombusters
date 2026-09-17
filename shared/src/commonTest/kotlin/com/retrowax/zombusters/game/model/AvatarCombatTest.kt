@@ -1,5 +1,6 @@
 package com.retrowax.zombusters.game.model
 
+import korlibs.math.geom.Point
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
@@ -83,8 +84,53 @@ class AvatarCombatTest {
             status = ObjectStatus.IMMUNE
             deathTimeTotalSeconds = 0f
         }
-        // Advance past RESPAWN + IMMUNE time
-        avatar.update(AVATAR_RESPAWN_TIME + AVATAR_IMMUNE_TIME + 0.1f)
+        // Legacy: expires at deathTimeTotalSeconds + IMMUNE_TIME (8s from death)
+        avatar.update(AVATAR_IMMUNE_TIME + 0.1f)
         assertEquals(ObjectStatus.ACTIVE, avatar.status)
+    }
+
+    @Test
+    fun update_speedBuff_expiresAfterDuration() {
+        val avatar = Avatar().apply {
+            speedBuff = true
+            speedBuffEndTime = 10f
+        }
+        avatar.update(10.1f)
+        assertFalse(avatar.speedBuff)
+    }
+
+    @Test
+    fun update_immuneBuff_expiresAfterDuration() {
+        val avatar = Avatar().apply {
+            immuneBuff = true
+            immuneBuffEndTime = 20f
+        }
+        avatar.update(20.1f)
+        assertFalse(avatar.immuneBuff)
+    }
+
+    @Test
+    fun update_immuneBuff_doesNotExpireBeforeDuration() {
+        val avatar = Avatar().apply {
+            immuneBuff = true
+            immuneBuffEndTime = 20f
+        }
+        avatar.update(19.9f)
+        assertTrue(avatar.immuneBuff)
+    }
+
+    @Test
+    fun respawn_positionResetsToSpawnPoint() {
+        val spawn = Point(955.0, 260.0)
+        val avatar = Avatar().apply {
+            spawnPosition = spawn
+            position = Point(100.0, 100.0)
+            status = ObjectStatus.DYING
+            deathTimeTotalSeconds = 0f
+            lives = 1
+        }
+        avatar.update(AVATAR_RESPAWN_TIME + 0.1f)
+        assertEquals(ObjectStatus.IMMUNE, avatar.status)
+        assertEquals(spawn, avatar.position)
     }
 }

@@ -21,13 +21,24 @@ class EnemySystem {
     val activeCount: Int get() = enemies.count { it.status == ObjectStatus.ACTIVE }
 
     // dt in seconds; dtFactor = dt * 60 scales per-frame physics to match 60fps original
-    fun update(dtSecs: Float, playerPos: Vec2, playerEntity: SteeringEntity) {
+    fun update(dtSecs: Float, playerPos: Vec2, playerEntity: SteeringEntity, totalSec: Float = 0f) {
         val dtFactor = (dtSecs * 60f).coerceAtMost(3f)
         for (enemy in enemies) {
-            if (enemy.status == ObjectStatus.ACTIVE) {
-                enemy.update(dtFactor, playerPos, playerEntity, enemies)
+            when (enemy.status) {
+                ObjectStatus.ACTIVE -> enemy.update(dtFactor, playerPos, playerEntity, enemies)
+                ObjectStatus.DYING -> {
+                    // Legacy: death animation lasts 1.2s then enemy is removed
+                    if (totalSec > 0f && totalSec > enemy.deathTimeTotalSeconds + ENEMY_DEATH_TIME) {
+                        enemy.status = ObjectStatus.INACTIVE
+                    }
+                }
+                else -> Unit
             }
         }
+    }
+
+    companion object {
+        const val ENEMY_DEATH_TIME = 1.2f
     }
 
     // Returns enemies within contact range of playerPos

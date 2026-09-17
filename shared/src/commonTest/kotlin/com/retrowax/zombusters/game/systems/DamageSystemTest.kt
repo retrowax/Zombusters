@@ -5,8 +5,11 @@ import com.retrowax.zombusters.game.combat.FacingDirection
 import com.retrowax.zombusters.game.combat.Projectile
 import com.retrowax.zombusters.game.enemy.Vec2
 import com.retrowax.zombusters.game.enemy.Zombie
+import com.retrowax.zombusters.game.model.AVATAR_HP
+import com.retrowax.zombusters.game.model.AVATAR_LIVES
 import com.retrowax.zombusters.game.model.Avatar
 import com.retrowax.zombusters.game.model.BULLET_SPEED
+import com.retrowax.zombusters.game.model.EXTRA_LIFE_SCORE_THRESHOLD
 import com.retrowax.zombusters.game.model.ObjectStatus
 import com.retrowax.zombusters.game.model.ZOMBIE_SCORE
 import korlibs.math.geom.Point
@@ -90,5 +93,62 @@ class DamageSystemTest {
 
         assertFalse(damaged)
         assertEquals(initialHp, avatar.lifecounter)
+    }
+
+    @Test
+    fun processBulletCollisions_kill_goesThroughDyingNotInactive() {
+        val avatar = makeAvatar()
+        val zombie = makeZombieAt(400f, 300f)
+        val state = CombatState()
+        state.bullets.add(Projectile(400f, 300f, 1f, 0f, FacingDirection.N, BULLET_SPEED))
+
+        DamageSystem.processBulletCollisions(state, listOf(zombie), avatar, 1f)
+
+        assertEquals(ObjectStatus.DYING, zombie.status)
+    }
+
+    @Test
+    fun awardScore_exactlyAt8000_grantsExtraLife() {
+        val avatar = makeAvatar()
+        avatar.lives = AVATAR_LIVES
+        // Need exactly 800 zombies worth of score (10 pts each) = 8000
+        // Start at 7990 then kill one zombie for 10 pts
+        avatar.score = EXTRA_LIFE_SCORE_THRESHOLD - ZOMBIE_SCORE
+        val zombie = makeZombieAt(400f, 300f)
+        val state = CombatState()
+        state.bullets.add(Projectile(400f, 300f, 1f, 0f, FacingDirection.N, BULLET_SPEED))
+
+        DamageSystem.processBulletCollisions(state, listOf(zombie), avatar, 1f)
+
+        assertEquals(EXTRA_LIFE_SCORE_THRESHOLD, avatar.score)
+        assertEquals(AVATAR_LIVES + 1, avatar.lives)
+    }
+
+    @Test
+    fun awardScore_notAtThreshold_noExtraLife() {
+        val avatar = makeAvatar()
+        avatar.lives = AVATAR_LIVES
+        avatar.score = 0
+        val zombie = makeZombieAt(400f, 300f)
+        val state = CombatState()
+        state.bullets.add(Projectile(400f, 300f, 1f, 0f, FacingDirection.N, BULLET_SPEED))
+
+        DamageSystem.processBulletCollisions(state, listOf(zombie), avatar, 1f)
+
+        assertEquals(ZOMBIE_SCORE, avatar.score)
+        assertEquals(AVATAR_LIVES, avatar.lives)  // unchanged
+    }
+
+    @Test
+    fun processEnemyContact_atZeroHP_kills_and_resetsHP() {
+        // Legacy: death triggers when lifecounter is ALREADY <= 0 on contact
+        val avatar = makeAvatar(500f, 300f).apply { lifecounter = 0 }
+        val zombie = makeZombieAt(500f, 300f)
+
+        DamageSystem.processEnemyContact(listOf(zombie), avatar, 1f)
+
+        // HP reset immediately and status = DYING
+        assertEquals(AVATAR_HP, avatar.lifecounter)
+        assertEquals(ObjectStatus.DYING, avatar.status)
     }
 }

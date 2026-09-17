@@ -2,18 +2,25 @@ package com.retrowax.zombusters.game.systems
 
 import com.retrowax.zombusters.game.model.Avatar
 import com.retrowax.zombusters.game.model.ObjectStatus
-import com.retrowax.zombusters.game.model.POWERUP_SPEED_BUFF_DURATION
 import com.retrowax.zombusters.game.model.PowerUp
 import com.retrowax.zombusters.game.model.PowerUpType
 import kotlin.random.Random
 
-class PowerUpSystem {
+// Droppable types from enemy kills (legacy: indices 0–3 of PowerUpType)
+private val DROPPABLE_TYPES = listOf(
+    PowerUpType.LIVE, PowerUpType.MACHINEGUN, PowerUpType.FLAMETHROWER, PowerUpType.SHOTGUN
+)
+
+class PowerUpSystem(private val random: Random = Random.Default) {
     val powerUps: MutableList<PowerUp> = mutableListOf()
 
+    // Legacy: 1/13 chance of a power-up drop, 1/127 separate chance of extra life
     fun trySpawnOnKill(x: Float, y: Float, totalSec: Float) {
-        if (Random.nextInt(14) == 0) {
-            val type = PowerUpType.entries[Random.nextInt(PowerUpType.entries.size)]
+        if (random.nextInt(1, 14) == 8) {
+            val type = DROPPABLE_TYPES[random.nextInt(DROPPABLE_TYPES.size)]
             powerUps.add(PowerUp(type, x, y, ObjectStatus.ACTIVE, totalSec))
+        } else if (random.nextInt(1, 128) == 12) {
+            powerUps.add(PowerUp(PowerUpType.EXTRA_LIFE, x, y, ObjectStatus.ACTIVE, totalSec))
         }
     }
 
@@ -27,11 +34,7 @@ class PowerUpSystem {
             val dx = px - pu.x
             val dy = py - pu.y
             if (dx * dx + dy * dy < 30f * 30f) {
-                if (pu.type == PowerUpType.SPEED_BUFF) {
-                    avatar.speedBuff = true
-                    avatar.speedBuffEndTime = totalSec + POWERUP_SPEED_BUFF_DURATION
-                }
-                pu.applyTo(avatar)
+                pu.applyTo(avatar, totalSec)
             }
         }
 

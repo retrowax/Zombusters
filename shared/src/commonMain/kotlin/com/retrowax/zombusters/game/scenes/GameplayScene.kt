@@ -191,9 +191,9 @@ class GameplayScene(
             x = GAME_WIDTH.toDouble() / 2 - 140.0; y = GAME_HEIGHT.toDouble() / 2 - 40.0
             zIndex = 1201.0; visible = false
         }
-        val gameOverSub = text("Press ESC to return to menu") {
+        val gameOverSub = text("R - Restart Level   ESC - Main Menu") {
             textSize = 20.0; color = Colors.WHITE
-            x = GAME_WIDTH.toDouble() / 2 - 170.0; y = GAME_HEIGHT.toDouble() / 2 + 40.0
+            x = GAME_WIDTH.toDouble() / 2 - 180.0; y = GAME_HEIGHT.toDouble() / 2 + 40.0
             zIndex = 1201.0; visible = false
         }
 
@@ -293,7 +293,7 @@ class GameplayScene(
         addUpdater { dt: Duration ->
             val ks = capturedViews.input.keys
 
-            // ESC: pause toggle or exit game-over
+            // ESC: pause toggle or exit game-over → main menu
             if (ks.justPressed(Key.ESCAPE)) {
                 if (gameOver) {
                     sceneScope.launch {
@@ -308,6 +308,16 @@ class GameplayScene(
                 pauseLabel.visible = isPaused
             }
 
+            // R: restart Level 1 after game over
+            if (gameOver && ks.justPressed(Key.R)) {
+                sceneScope.launch {
+                    sceneContainer.changeTo {
+                        GameplayScene(exit, drawableResourcesPath, fontResourcesPath, filesResourcesPath)
+                    }
+                }
+                return@addUpdater
+            }
+
             if (isPaused || gameOver) return@addUpdater
 
             val dtSec = dt.inWholeMilliseconds / 1000f
@@ -318,8 +328,24 @@ class GameplayScene(
                 debugMode = !debugMode
                 debugOverlay.visible = debugMode
             }
-            if (ks.justPressed(Key.K)) {
-                world.enemySystem.enemies.forEach { if (it.isActive) it.status = ObjectStatus.INACTIVE }
+            if (debugMode) {
+                if (ks.justPressed(Key.K)) {
+                    world.enemySystem.enemies.forEach { if (it.isActive) it.crash(totalSeconds) }
+                }
+                if (ks.justPressed(Key.G)) {
+                    world.player1.ammo[GunType.MACHINEGUN.id] = 50
+                    world.player1.ammo[GunType.SHOTGUN.id] = 25
+                    world.player1.ammo[GunType.FLAMETHROWER.id] = 25
+                    world.player1.ammo[GunType.GRENADE.id] = 5
+                }
+                if (ks.justPressed(Key.H)) {
+                    world.player1.lifecounter -= 20
+                    if (world.player1.lifecounter <= 0) {
+                        world.player1.lives--
+                        world.player1.lifecounter = 100
+                        world.player1.destroy(totalSeconds)
+                    }
+                }
             }
 
             // Weapon cycle (TAB)
@@ -400,7 +426,7 @@ class GameplayScene(
                     lastMoveDx * AVATAR_PIXELS_PER_SECOND / 60f,
                     lastMoveDy * AVATAR_PIXELS_PER_SECOND / 60f
                 )
-                world.enemySystem.update(dtSec, playerPos, playerSteering)
+                world.enemySystem.update(dtSec, playerPos, playerSteering, totalSeconds)
 
                 if (waveSystem.spawned && world.enemySystem.activeCount == 0) {
                     waveSystem.advanceWave()
@@ -425,9 +451,16 @@ class GameplayScene(
 
             // Sync enemy views
             for ((enemy, view) in enemyViews) {
-                if (enemy.status != ObjectStatus.ACTIVE) {
+                if (enemy.status == ObjectStatus.INACTIVE) {
                     view.visible = false
                     continue
+                }
+                if (enemy.status == ObjectStatus.DYING) {
+                    // Show death briefly (tint red), then hide once INACTIVE
+                    view.visible = true
+                    view.colorMul = korlibs.image.color.Colors.RED
+                } else {
+                    view.colorMul = korlibs.image.color.Colors.WHITE
                 }
                 view.visible = true
                 val ex = enemy.entity.position.x.toDouble()

@@ -4,6 +4,7 @@ import korlibs.math.geom.Point
 
 class Avatar {
     var position: Point = Point(0.0, 0.0)
+    var spawnPosition: Point = Point(0.0, 0.0)
     var status: ObjectStatus = ObjectStatus.INACTIVE
     var lives: Int = AVATAR_LIVES
     var lifecounter: Int = AVATAR_HP
@@ -16,6 +17,9 @@ class Avatar {
     var speedBuff: Boolean = false
     var speedBuffEndTime: Float = 0f
     var immuneBuff: Boolean = false
+    var immuneBuffEndTime: Float = 0f
+    // Last validated score multiple of EXTRA_LIFE_SCORE_THRESHOLD to prevent duplicate lives
+    var lastExtraLifeScore: Int = 0
 
     val ammo: IntArray = IntArray(GunType.entries.size) { 0 }
 
@@ -43,6 +47,7 @@ class Avatar {
         lastShot = 0f
         speedBuff = false
         immuneBuff = false
+        lastExtraLifeScore = 0
         for (i in ammo.indices) ammo[i] = 0
     }
 
@@ -72,17 +77,22 @@ class Avatar {
         if (speedBuff && totalGameSeconds > speedBuffEndTime) {
             speedBuff = false
         }
+        if (immuneBuff && totalGameSeconds > immuneBuffEndTime) {
+            immuneBuff = false
+        }
         when (status) {
             ObjectStatus.DYING -> {
                 if (totalGameSeconds > deathTimeTotalSeconds + AVATAR_RESPAWN_TIME) {
                     status = if (lives > 0) ObjectStatus.IMMUNE else ObjectStatus.INACTIVE
                     if (status == ObjectStatus.IMMUNE) {
                         lifecounter = AVATAR_HP
+                        position = spawnPosition
                     }
                 }
             }
             ObjectStatus.IMMUNE -> {
-                if (totalGameSeconds > deathTimeTotalSeconds + AVATAR_RESPAWN_TIME + AVATAR_IMMUNE_TIME) {
+                // Legacy: checks deathTimeTotalSeconds + ImmuneTime (8s from death, not from immune start)
+                if (totalGameSeconds > deathTimeTotalSeconds + AVATAR_IMMUNE_TIME) {
                     status = ObjectStatus.ACTIVE
                 }
             }

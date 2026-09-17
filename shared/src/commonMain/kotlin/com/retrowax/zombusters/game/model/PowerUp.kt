@@ -25,7 +25,7 @@ data class PowerUp(
         }
     }
 
-    fun applyTo(avatar: Avatar): Boolean {
+    fun applyTo(avatar: Avatar, totalSec: Float = 0f): Boolean {
         when (type) {
             PowerUpType.LIVE -> {
                 avatar.lifecounter = minOf(AVATAR_HP, avatar.lifecounter + POWERUP_HEALTH_RESTORE)
@@ -47,13 +47,14 @@ data class PowerUp(
             }
             PowerUpType.SPEED_BUFF -> {
                 avatar.speedBuff = true
-                avatar.speedBuffEndTime = Float.MAX_VALUE
+                avatar.speedBuffEndTime = totalSec + POWERUP_SPEED_BUFF_DURATION
             }
             PowerUpType.IMMUNE_BUFF -> {
                 avatar.immuneBuff = true
+                avatar.immuneBuffEndTime = totalSec + POWERUP_IMMUNE_BUFF_DURATION
             }
             PowerUpType.EXTRA_LIFE -> {
-                avatar.lives++
+                if (avatar.lives < 9) avatar.lives++
             }
         }
         status = ObjectStatus.INACTIVE

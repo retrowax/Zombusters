@@ -12,7 +12,9 @@ import korlibs.math.geom.Point
 class GameplayWorld(val levelDef: LevelDef) {
 
     val player1: Avatar = Avatar().apply {
-        position = Point(levelDef.p1SpawnX.toDouble(), levelDef.p1SpawnY.toDouble())
+        val spawn = Point(levelDef.p1SpawnX.toDouble(), levelDef.p1SpawnY.toDouble())
+        position = spawn
+        spawnPosition = spawn
         status = ObjectStatus.ACTIVE
     }
 
