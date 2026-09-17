@@ -1,5 +1,6 @@
 package com.retrowax.zombusters.game.scenes
 
+import com.retrowax.zombusters.game.combat.FacingDirection
 import com.retrowax.zombusters.game.enemy.BaseEnemy
 import com.retrowax.zombusters.game.enemy.Rat
 import com.retrowax.zombusters.game.enemy.SteeringEntity
@@ -12,7 +13,10 @@ import com.retrowax.zombusters.game.model.GAME_WIDTH
 import com.retrowax.zombusters.game.model.FurnitureOrientation
 import com.retrowax.zombusters.game.model.FurnitureType
 import com.retrowax.zombusters.game.model.EnemyType
+import com.retrowax.zombusters.game.model.GunType
 import com.retrowax.zombusters.game.model.ObjectStatus
+import com.retrowax.zombusters.game.systems.CombatSystem
+import com.retrowax.zombusters.game.systems.DamageSystem
 import com.retrowax.zombusters.game.world.Furniture
 import com.retrowax.zombusters.game.world.GameplayWorld
 import com.retrowax.zombusters.game.world.LevelParser
@@ -144,12 +148,63 @@ class GameplayScene(
             playerContainer.solidRect(20.0, 20.0, Colors.CYAN).also { it.x = -10.0; it.y = -10.0 }
         }
 
-        // HUD overlay
-        val hudText = text("Level 1  [ESC=Menu  F1=Debug  K=Kill wave]") {
-            textSize = 14.0; color = Colors.LIGHTGRAY; x = 8.0; y = 8.0; zIndex = 1000.0
+        // Bullet rendering layer — updated each frame
+        val bulletGraphics = cpuGraphics { }
+        bulletGraphics.zIndex = 900.0
+
+        // HUD
+        val hudHealth = text("HP: 100") {
+            textSize = 14.0; color = Colors.LIME; x = 8.0; y = 4.0; zIndex = 1000.0
+        }
+        val hudLives = text("Lives: 3") {
+            textSize = 14.0; color = Colors.WHITE; x = 90.0; y = 4.0; zIndex = 1000.0
+        }
+        val hudScore = text("Score: 0") {
+            textSize = 14.0; color = Colors.YELLOW; x = 170.0; y = 4.0; zIndex = 1000.0
+        }
+        val hudWeapon = text("PISTOL (INF)") {
+            textSize = 14.0; color = Colors.ORANGE; x = 270.0; y = 4.0; zIndex = 1000.0
+        }
+        val hudWave = text("Wave 1") {
+            textSize = 14.0; color = Colors.LIGHTGRAY; x = 430.0; y = 4.0; zIndex = 1000.0
+        }
+        val hudEnemies = text("Enemies: 0") {
+            textSize = 14.0; color = Colors.LIGHTGRAY; x = 530.0; y = 4.0; zIndex = 1000.0
         }
 
-        // Enemy view pool — container per enemy, populated as enemies are spawned
+        // Pause overlay
+        val pauseOverlay = solidRect(GAME_WIDTH.toDouble(), GAME_HEIGHT.toDouble(), RGBA(0, 0, 0, 160)).apply {
+            zIndex = 1100.0; visible = false
+        }
+        val pauseLabel = text("PAUSED") {
+            textSize = 48.0; color = Colors.WHITE
+            x = GAME_WIDTH.toDouble() / 2 - 80.0; y = GAME_HEIGHT.toDouble() / 2 - 30.0
+            zIndex = 1101.0; visible = false
+        }
+
+        // Game over overlay
+        val gameOverOverlay = solidRect(GAME_WIDTH.toDouble(), GAME_HEIGHT.toDouble(), RGBA(0, 0, 0, 200)).apply {
+            zIndex = 1200.0; visible = false
+        }
+        val gameOverLabel = text("GAME OVER") {
+            textSize = 64.0; color = Colors.RED
+            x = GAME_WIDTH.toDouble() / 2 - 140.0; y = GAME_HEIGHT.toDouble() / 2 - 40.0
+            zIndex = 1201.0; visible = false
+        }
+        val gameOverSub = text("Press ESC to return to menu") {
+            textSize = 20.0; color = Colors.WHITE
+            x = GAME_WIDTH.toDouble() / 2 - 170.0; y = GAME_HEIGHT.toDouble() / 2 + 40.0
+            zIndex = 1201.0; visible = false
+        }
+
+        // Stage cleared overlay
+        val stageClearedLabel = text("STAGE CLEARED!") {
+            textSize = 56.0; color = Colors.YELLOW
+            x = GAME_WIDTH.toDouble() / 2 - 200.0; y = GAME_HEIGHT.toDouble() / 2 - 40.0
+            zIndex = 1200.0; visible = false
+        }
+
+        // Enemy view pool
         val enemyViews = mutableListOf<Pair<BaseEnemy, korlibs.korge.view.Container>>()
 
         fun spawnEnemyViews(newEnemies: List<BaseEnemy>) {
@@ -191,7 +246,7 @@ class GameplayScene(
             }
         }
 
-        // Debug overlay (F1 — off by default)
+        // Debug overlay (F1)
         var debugMode = false
         val debugOverlay = cpuGraphics {
             for (wall in world.walls) {
@@ -216,9 +271,6 @@ class GameplayScene(
         debugOverlay.zIndex = 999.0
         debugOverlay.visible = false
 
-        // AI debug overlay (rebuilt each frame when active)
-        var aiDebugMode = false
-
         // Music
         if (filesResourcesPath.isNotEmpty()) {
             try {
@@ -228,58 +280,103 @@ class GameplayScene(
         }
 
         var totalSeconds = 0f
+        var isPaused = false
+        var gameOver = false
+        // Default facing North; updated whenever the player moves
+        var lastFireAngle = FacingDirection.angleFrom(0f, -1f)
+        var lastMoveDx = 0f
+        var lastMoveDy = -1f
+
         val capturedViews = views
         val sceneScope = this@GameplayScene
 
         addUpdater { dt: Duration ->
+            val ks = capturedViews.input.keys
+
+            // ESC: pause toggle or exit game-over
+            if (ks.justPressed(Key.ESCAPE)) {
+                if (gameOver) {
+                    sceneScope.launch {
+                        sceneContainer.changeTo {
+                            MainMenuScene(exit, drawableResourcesPath, fontResourcesPath, filesResourcesPath)
+                        }
+                    }
+                    return@addUpdater
+                }
+                isPaused = !isPaused
+                pauseOverlay.visible = isPaused
+                pauseLabel.visible = isPaused
+            }
+
+            if (isPaused || gameOver) return@addUpdater
+
             val dtSec = dt.inWholeMilliseconds / 1000f
             totalSeconds += dtSec
 
-            val ks = capturedViews.input.keys
-
-            if (ks.justPressed(Key.ESCAPE)) {
-                sceneScope.launch {
-                    sceneContainer.changeTo {
-                        MainMenuScene(exit, drawableResourcesPath, fontResourcesPath, filesResourcesPath)
-                    }
-                }
-                return@addUpdater
-            }
-
+            // Debug + cheat keys
             if (ks.justPressed(Key.F1)) {
                 debugMode = !debugMode
                 debugOverlay.visible = debugMode
-                aiDebugMode = debugMode
             }
-
-            // K = kill all active enemies (skip wave for testing)
             if (ks.justPressed(Key.K)) {
                 world.enemySystem.enemies.forEach { if (it.isActive) it.status = ObjectStatus.INACTIVE }
             }
 
-            // Player movement
+            // Weapon cycle (TAB)
+            if (ks.justPressed(Key.TAB)) world.player1.cycleWeapon()
+
+            // Player movement (only when alive/immune)
+            val playerCanAct = world.player1.status == ObjectStatus.ACTIVE ||
+                               world.player1.status == ObjectStatus.IMMUNE
             var dx = 0f; var dy = 0f
             if (ks[Key.W] || ks[Key.UP]) dy -= 1f
             if (ks[Key.S] || ks[Key.DOWN]) dy += 1f
             if (ks[Key.A] || ks[Key.LEFT]) dx -= 1f
             if (ks[Key.D] || ks[Key.RIGHT]) dx += 1f
 
-            if (dx != 0f || dy != 0f) {
+            if (playerCanAct && (dx != 0f || dy != 0f)) {
                 val len = sqrt(dx * dx + dy * dy)
                 dx /= len; dy /= len
-                val speed = AVATAR_PIXELS_PER_SECOND * dtSec
+                lastMoveDx = dx; lastMoveDy = dy
+                lastFireAngle = FacingDirection.angleFrom(dx, dy)
+                val speed = world.player1.pixelsPerSecond * dtSec
                 val delta = Point(dx.toDouble() * speed, dy.toDouble() * speed)
                 world.player1.position = CollisionSystem.resolveMovement(
                     world.player1.position, delta, world.walls, world.furnitures
                 )
             }
 
-            // Player container position + zIndex
-            playerContainer.x = world.player1.position.x + PLAYER_RENDER_OFFSET_X
-            playerContainer.y = world.player1.position.y + PLAYER_RENDER_OFFSET_Y
-            playerContainer.zIndex = world.player1.position.y
+            // Fire (SPACE) — only when ACTIVE, not IMMUNE
+            if (world.player1.status == ObjectStatus.ACTIVE && ks[Key.SPACE]) {
+                CombatSystem.tryFire(world.player1, world.combatState, totalSeconds, lastFireAngle)
+            }
 
-            // Wave/spawn logic
+            // Prune out-of-bounds projectiles
+            CombatSystem.pruneOutOfBounds(world.combatState, totalSeconds)
+
+            // Bullet-enemy collision + scoring
+            val kills = DamageSystem.processBulletCollisions(
+                world.combatState, world.enemySystem.enemies, world.player1, totalSeconds
+            )
+
+            // Power-up spawn on kills
+            repeat(kills) {
+                world.powerUpSystem.trySpawnOnKill(
+                    world.player1.position.x.toFloat(),
+                    world.player1.position.y.toFloat(),
+                    totalSeconds
+                )
+            }
+
+            // Enemy contact damage (only when ACTIVE — IMMUNE players are safe)
+            if (world.player1.status == ObjectStatus.ACTIVE) {
+                DamageSystem.processEnemyContact(world.enemySystem.enemies, world.player1, totalSeconds)
+            }
+
+            // Power-up update + pickup
+            world.powerUpSystem.update(totalSeconds, world.player1)
+
+            // Wave / spawn logic
             val waveSystem = world.waveSystem
             if (!waveSystem.isLevelComplete) {
                 if (!waveSystem.spawned) {
@@ -297,24 +394,36 @@ class GameplayScene(
                     }
                 }
 
-                // Build player SteeringEntity snapshot for enemy AI
                 val playerPos = Vec2(world.player1.position.x.toFloat(), world.player1.position.y.toFloat())
                 val playerSteering = SteeringEntity(playerPos)
-                // approximate player velocity from last frame movement
                 playerSteering.velocity = Vec2(
-                    (dx * AVATAR_PIXELS_PER_SECOND / 60f),
-                    (dy * AVATAR_PIXELS_PER_SECOND / 60f)
+                    lastMoveDx * AVATAR_PIXELS_PER_SECOND / 60f,
+                    lastMoveDy * AVATAR_PIXELS_PER_SECOND / 60f
                 )
-
                 world.enemySystem.update(dtSec, playerPos, playerSteering)
 
-                // Advance wave when all active enemies gone
                 if (waveSystem.spawned && world.enemySystem.activeCount == 0) {
                     waveSystem.advanceWave()
                 }
             }
 
-            // Sync enemy views to domain positions
+            // Avatar lifecycle transitions (DYING→IMMUNE→ACTIVE)
+            world.player1.update(totalSeconds)
+
+            // Check game over
+            if (world.player1.status == ObjectStatus.INACTIVE && world.player1.lives <= 0) {
+                gameOver = true
+                gameOverOverlay.visible = true
+                gameOverLabel.visible = true
+                gameOverSub.visible = true
+            }
+
+            // Stage cleared
+            if (waveSystem.isLevelComplete) {
+                stageClearedLabel.visible = true
+            }
+
+            // Sync enemy views
             for ((enemy, view) in enemyViews) {
                 if (enemy.status != ObjectStatus.ACTIVE) {
                     view.visible = false
@@ -325,36 +434,71 @@ class GameplayScene(
                 val ey = enemy.entity.position.y.toDouble()
                 val yOffset = when (enemy.type) {
                     EnemyType.ZOMBIE -> 50.0
-                    EnemyType.RAT -> Rat.Y_OFFSET.toDouble()
-                    EnemyType.WOLF -> Wolf.Y_OFFSET.toDouble()
-                    else -> 50.0
+                    EnemyType.RAT    -> Rat.Y_OFFSET.toDouble()
+                    EnemyType.WOLF   -> Wolf.Y_OFFSET.toDouble()
+                    else             -> 50.0
                 }
                 view.x = ex
                 view.y = ey - yOffset
                 view.zIndex = ey
-
-                // Flip sprite based on horizontal velocity
                 if (enemy.entity.velocity.x != 0f) {
                     view.scaleX = if (enemy.entity.velocity.x > 0) 1.0 else -1.0
                 }
             }
 
-            // HUD
-            val contactCount = world.enemySystem.enemiesInContactRange(
-                Vec2(world.player1.position.x.toFloat(), world.player1.position.y.toFloat())
-            ).size
-            val waveInfo = if (waveSystem.isLevelComplete) "CLEARED" else "Wave ${waveSystem.waveNumber}/${waveSystem.totalWaves}"
-            if (debugMode) {
-                hudText.text = "$waveInfo  Enemies:${world.enemySystem.activeCount}  Contact:$contactCount  " +
-                    "P:(${world.player1.position.x.toInt()},${world.player1.position.y.toInt()})  [F1=Debug OFF  K=Kill]"
-            } else {
-                hudText.text = "$waveInfo  Enemies:${world.enemySystem.activeCount}  [ESC=Menu  F1=Debug  K=Kill]"
+            // Player position + IMMUNE blink (10 Hz toggle)
+            val blinkVisible = (totalSeconds * 10).toInt() % 2 == 0
+            playerContainer.visible = when (world.player1.status) {
+                ObjectStatus.IMMUNE   -> blinkVisible
+                ObjectStatus.DYING    -> false
+                ObjectStatus.INACTIVE -> false
+                else                  -> true
+            }
+            playerContainer.x = world.player1.position.x + PLAYER_RENDER_OFFSET_X
+            playerContainer.y = world.player1.position.y + PLAYER_RENDER_OFFSET_Y
+            playerContainer.zIndex = world.player1.position.y
+
+            // Bullet rendering
+            bulletGraphics.updateShape {
+                for (bullet in world.combatState.bullets) {
+                    val (bx, by) = bullet.positionAt(totalSeconds)
+                    fill(Colors.YELLOW) {
+                        circle(Point(bx.toDouble(), by.toDouble()), 3.0)
+                    }
+                }
+                for (shell in world.combatState.shotgunShells) {
+                    for (pi in 0..2) {
+                        val (px, py) = shell.pelletPositionAt(pi, totalSeconds)
+                        fill(Colors.ORANGE) {
+                            circle(Point(px.toDouble(), py.toDouble()), 2.5)
+                        }
+                    }
+                }
             }
 
-            world.player1.update(totalSeconds)
+            // HUD updates
+            val gunLabel = when (world.player1.currentGun) {
+                GunType.PISTOL       -> "PISTOL (INF)"
+                GunType.SHOTGUN      -> "SHOTGUN (${world.player1.ammo[GunType.SHOTGUN.id]})"
+                GunType.MACHINEGUN   -> "MG (${world.player1.ammo[GunType.MACHINEGUN.id]})"
+                GunType.FLAMETHROWER -> "FLAME (${world.player1.ammo[GunType.FLAMETHROWER.id]})"
+                GunType.GRENADE      -> "GRENADE (${world.player1.ammo[GunType.GRENADE.id]})"
+            }
+            hudHealth.text = "HP: ${world.player1.lifecounter}"
+            hudHealth.color = when {
+                world.player1.lifecounter > 60 -> Colors.LIME
+                world.player1.lifecounter > 30 -> Colors.YELLOW
+                else                           -> Colors.RED
+            }
+            hudLives.text = "Lives: ${world.player1.lives}"
+            hudScore.text = "Score: ${world.player1.score}"
+            hudWeapon.text = gunLabel
+            hudWave.text = if (waveSystem.isLevelComplete) "CLEARED"
+                           else "Wave ${waveSystem.waveNumber}/${waveSystem.totalWaves}"
+            hudEnemies.text = "Enemies: ${world.enemySystem.activeCount}"
         }
 
-        // Initial player position
+        // Initial position
         playerContainer.x = world.player1.position.x + PLAYER_RENDER_OFFSET_X
         playerContainer.y = world.player1.position.y + PLAYER_RENDER_OFFSET_Y
     }
@@ -366,10 +510,10 @@ class GameplayScene(
     private suspend fun loadFurnitureBitmaps(): Map<Pair<FurnitureType, FurnitureOrientation?>, Bitmap?> {
         val base = "$assetBase/furniture"
         return mapOf(
-            Pair(FurnitureType.ARBOL, null) to tryLoadBitmap("$base/arbol.png"),
-            Pair(FurnitureType.BASURA, null) to tryLoadBitmap("$base/basura.png"),
-            Pair(FurnitureType.COCHE_ARDIENDO, null) to tryLoadBitmap("$base/coche_ardiendo.png"),
-            Pair(FurnitureType.PUENTE, null) to tryLoadBitmap("$base/puente.png"),
+            Pair(FurnitureType.ARBOL, null)                         to tryLoadBitmap("$base/arbol.png"),
+            Pair(FurnitureType.BASURA, null)                        to tryLoadBitmap("$base/basura.png"),
+            Pair(FurnitureType.COCHE_ARDIENDO, null)                to tryLoadBitmap("$base/coche_ardiendo.png"),
+            Pair(FurnitureType.PUENTE, null)                        to tryLoadBitmap("$base/puente.png"),
             Pair(FurnitureType.BANCO, FurnitureOrientation.SOUTH_EAST) to tryLoadBitmap("$base/banco_se.png"),
             Pair(FurnitureType.BANCO, FurnitureOrientation.SOUTH_WEST) to tryLoadBitmap("$base/banco_sw.png"),
             Pair(FurnitureType.BANCO, FurnitureOrientation.NORTH_EAST) to tryLoadBitmap("$base/banco_se.png"),

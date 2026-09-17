@@ -37,7 +37,7 @@ abstract class BaseEnemy(
     }
 
     // Returns true if this enemy is within contact range of playerPos
-    fun isInRange(playerPos: Vec2, crashRadius: Float = 10f): Boolean {
+    fun isInRange(playerPos: Vec2, crashRadius: Float = 20f): Boolean {
         return entity.position.distanceTo(playerPos) < crashRadius + 20f
     }
 
