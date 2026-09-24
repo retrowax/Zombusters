@@ -109,6 +109,46 @@ class GameSessionTest {
     }
 
     @Test
+    fun numPlayers_defaultsTo1() {
+        val s = GameSession.newGame()
+        assertEquals(1, s.numPlayers)
+    }
+
+    @Test
+    fun characterIndices_matchesCharacterIndexInSinglePlayer() {
+        val s = GameSession.newGame(2)
+        assertEquals(listOf(2), s.characterIndices)
+        assertEquals(2, s.characterIndex)
+    }
+
+    @Test
+    fun newMultiGame_setsCorrectPlayerCount() {
+        val s = GameSession.newMultiGame(listOf(0, 1, 2))
+        assertEquals(3, s.numPlayers)
+        assertEquals(3, s.characterIndices.size)
+    }
+
+    @Test
+    fun newMultiGame_clampsCharacterIndices() {
+        val s = GameSession.newMultiGame(listOf(0, 99, -1))
+        assertEquals(listOf(0, 3, 0), s.characterIndices)
+    }
+
+    @Test
+    fun newMultiGame_p1IndexBackwardCompat() {
+        val s = GameSession.newMultiGame(listOf(2, 0, 1))
+        assertEquals(2, s.characterIndex)  // P1 character
+    }
+
+    @Test
+    fun characterSpritePathFor_alwaysReturnsJade() {
+        val s = GameSession.newMultiGame(listOf(0, 1, 2, 3))
+        for (i in 0..3) {
+            assertEquals("jade", s.characterSpritePathFor(i))
+        }
+    }
+
+    @Test
     fun levelRange_1to10AllLoadable() {
         // Verifies that GameSession correctly models levels 1-10 without overflow
         val sessions = (1..10).map { level ->

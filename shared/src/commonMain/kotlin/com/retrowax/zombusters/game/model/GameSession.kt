@@ -1,7 +1,7 @@
 package com.retrowax.zombusters.game.model
 
 /**
- * Domain model representing a single-player campaign session.
+ * Domain model representing a campaign session (single or multi-player).
  * Immutable — produce new copies with withXxx() helpers.
  * Lives outside KorGE views; pass as constructor arg to scenes.
  *
@@ -13,6 +13,8 @@ package com.retrowax.zombusters.game.model
  */
 data class GameSession(
     val characterIndex: Int = 0,
+    /** Per-player character indices (multi-player). P1 = characterIndices[0]. */
+    val characterIndices: List<Int> = listOf(characterIndex),
     val currentLevel: Int = 1,
     val score: Int = 0,
     val lives: Int = AVATAR_LIVES,
@@ -21,15 +23,21 @@ data class GameSession(
     val debugLevelJump: Boolean = false
 ) {
 
+    /** Number of human players in this session (1-4). */
+    val numPlayers: Int get() = characterIndices.size.coerceIn(1, MAX_PLAYERS)
+
     val characterName: String
         get() = CHARACTER_NAMES.getOrElse(characterIndex) { "Tracy" }
 
-    /** Asset sprite folder for this character. Only index 0 (Tracy/jade) has extracted sprites. */
+    /** Asset sprite folder for P1. Only index 0 (Tracy/jade) has extracted sprites. */
     val characterSpritePath: String
-        get() = when (characterIndex) {
-            0 -> "jade"
-            else -> "jade"   // fallback — sprites for chars 1-3 not yet extracted
-        }
+        get() = characterSpritePathFor(0)
+
+    /** Asset sprite folder for player at given index. Falls back to jade until sprites extracted. */
+    fun characterSpritePathFor(idx: Int): String = when (characterIndices.getOrElse(idx) { 0 }) {
+        0 -> "jade"
+        else -> "jade"
+    }
 
     /** Whether this character index has extracted gameplay sprites. */
     val characterSpritesAvailable: Boolean
@@ -58,12 +66,35 @@ data class GameSession(
         /** Character indices that have extracted gameplay sprites (Step 6). */
         val AVAILABLE_CHARACTER_INDICES = setOf(0)
 
-        fun newGame(characterIndex: Int = 0): GameSession = GameSession(
-            characterIndex = characterIndex.coerceIn(0, CHARACTER_NAMES.size - 1),
-            currentLevel = 1,
-            score = 0,
-            lives = AVATAR_LIVES,
-            levelsUnlocked = 1
-        )
+        fun newGame(characterIndex: Int = 0): GameSession {
+            val ci = characterIndex.coerceIn(0, CHARACTER_NAMES.size - 1)
+            return GameSession(
+                characterIndex = ci,
+                characterIndices = listOf(ci),
+                currentLevel = 1,
+                score = 0,
+                lives = AVATAR_LIVES,
+                levelsUnlocked = 1
+            )
+        }
+
+        /** Factory for multi-player sessions from SelectPlayerScene joining flow. */
+        fun newMultiGame(
+            characterIndices: List<Int>,
+            currentLevel: Int = 1,
+            levelsUnlocked: Int = 1
+        ): GameSession {
+            val clamped = characterIndices
+                .map { it.coerceIn(0, CHARACTER_NAMES.size - 1) }
+                .ifEmpty { listOf(0) }
+            return GameSession(
+                characterIndex = clamped[0],
+                characterIndices = clamped,
+                currentLevel = currentLevel,
+                score = 0,
+                lives = AVATAR_LIVES,
+                levelsUnlocked = levelsUnlocked
+            )
+        }
     }
 }
