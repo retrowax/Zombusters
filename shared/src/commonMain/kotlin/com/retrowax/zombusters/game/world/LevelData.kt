@@ -55,12 +55,13 @@ data class SubLevel(
     val enemiesCount: EnemiesCount
 )
 
-// Spawn zone — rectangular area defined by two corners
+// Spawn zone — off-screen rectangular spawn band.
+// Legacy XML format: Origin="xMin,xMax"  End="yMin,yMax"
 data class SpawnZone(
-    val originX: Float,
-    val originY: Float,
-    val endX: Float,
-    val endY: Float
+    val xMin: Float,
+    val xMax: Float,
+    val yMin: Float,
+    val yMax: Float
 )
 
 // From legacy Level.cs — full level definition loaded from LevelsDef.xml

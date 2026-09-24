@@ -19,8 +19,8 @@ object EnemyFactory {
         playerCount: Int = 1
     ): BaseEnemy {
         val zone = spawnZones[random.nextInt(spawnZones.size)]
-        val x = random.nextFloat() * (zone.endX - zone.originX) + zone.originX
-        val y = random.nextFloat() * (zone.endY - zone.originY) + zone.originY
+        val x = random.nextFloat() * (zone.xMax - zone.xMin) + zone.xMin
+        val y = random.nextFloat() * (zone.yMax - zone.yMin) + zone.yMin
         val pos = Vec2(x, y)
         val subspeed = subLevelIndex / 10f
         val speed = baseSpeed + subspeed

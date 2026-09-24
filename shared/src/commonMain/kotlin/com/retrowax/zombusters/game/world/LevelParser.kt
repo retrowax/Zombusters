@@ -52,9 +52,9 @@ class LevelParser(private val filesResourcesPath: String) {
         val (p4x, p4y) = attr("P4SpawnPos")
 
         val zones = (1..4).map { i ->
-            val (ox, oy) = attr("ZSpawnZone${i}Origin")
-            val (ex, ey) = attr("ZSpawnZone${i}End")
-            SpawnZone(ox, oy, ex, ey)
+            val (xMin, xMax) = attr("ZSpawnZone${i}Origin")  // Origin="xMin,xMax"
+            val (yMin, yMax) = attr("ZSpawnZone${i}End")    // End="yMin,yMax"
+            SpawnZone(xMin, xMax, yMin, yMax)
         }
 
         return LevelDef(

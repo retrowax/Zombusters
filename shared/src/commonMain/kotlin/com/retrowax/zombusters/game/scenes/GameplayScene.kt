@@ -63,6 +63,38 @@ private const val JADE_IDLE_FRAME_H = 55
 private const val JADE_IDLE_COLS = 11
 private const val JADE_IDLE_FPS = 15
 
+// Jade directional shot animations (legacy AnimationDef.xml JadePistolShot*Def)
+private const val JADE_SHOT_E_W  = 71;  private const val JADE_SHOT_E_H  = 51;  private const val JADE_SHOT_E_COLS  = 8
+private const val JADE_SHOT_NE_W = 71;  private const val JADE_SHOT_NE_H = 73;  private const val JADE_SHOT_NE_COLS = 8
+private const val JADE_SHOT_N_W  = 32;  private const val JADE_SHOT_N_H  = 85;  private const val JADE_SHOT_N_COLS  = 8
+private const val JADE_SHOT_SE_W = 71;  private const val JADE_SHOT_SE_H = 51;  private const val JADE_SHOT_SE_COLS = 8
+private const val JADE_SHOT_S_W  = 31;  private const val JADE_SHOT_S_H  = 70;  private const val JADE_SHOT_S_COLS  = 8
+private const val JADE_SHOT_FPS  = 21
+
+// Trunk local offsets inside player container (relative to container origin = position + (-20,-55))
+// Legacy positions: all shot anims at screen (position.X + 7 + offsetX, position.Y + offsetY + dy)
+private const val JADE_TRUNK_SHOT_LX = 7.0  // +7 relative to container origin
+private const val JADE_TRUNK_N_LY  = -30.0
+private const val JADE_TRUNK_NE_LY = -18.0
+private const val JADE_TRUNK_E_LY  =   4.0
+private const val JADE_TRUNK_SE_LY =   4.0
+private const val JADE_TRUNK_S_LY  =   4.0
+
+// Legs sprite offsets inside container (legacy: position.X+7, position.Y+3 → local +27, +58)
+private const val LEGS_LOCAL_X = 27.0
+private const val LEGS_LOCAL_Y = 58.0
+
+// Shadow offsets inside container (legacy: position.X + legsW/2 - 5, position.Y + legsH - 6)
+// legsW=26, legsH=52 → screen (position.X+8, position.Y+46) → local +28, +101
+private const val SHADOW_LOCAL_X   = 28.0
+private const val SHADOW_LOCAL_Y   = 101.0
+private const val SHADOW_ALPHA     = 0.20
+
+// Enemy shadow offsets relative to enemy container (at (ex, ey-50))
+// Legacy zombie: (entity.X-10, entity.Y-3) → local (-10, 47)
+private const val ENEMY_SHADOW_LX = -10.0
+private const val ENEMY_SHADOW_LY =  47.0
+
 // Zombie walk: ZombieDef — 48×55, 8 cols, Speed=10
 private const val ZOMBIE_FRAME_W = 48
 private const val ZOMBIE_FRAME_H = 55
@@ -136,6 +168,13 @@ class GameplayScene(
         val mapBitmap        = tryLoadBitmap("$assetBase/levels/level$levelPad/map.png")
         val charPath         = session.characterSpritePath
         val playerIdleBmp    = tryLoadBitmap("$assetBase/characters/$charPath/idle.png")
+        val playerLegsBmp    = tryLoadBitmap("$assetBase/characters/$charPath/legs_idle.png")
+        val shadowBmp        = tryLoadBitmap("$assetBase/characters/shadow.png")
+        val shotEBmp         = tryLoadBitmap("$assetBase/characters/$charPath/shot_e.png")
+        val shotNEBmp        = tryLoadBitmap("$assetBase/characters/$charPath/shot_ne.png")
+        val shotNBmp         = tryLoadBitmap("$assetBase/characters/$charPath/shot_n.png")
+        val shotSEBmp        = tryLoadBitmap("$assetBase/characters/$charPath/shot_se.png")
+        val shotSBmp         = tryLoadBitmap("$assetBase/characters/$charPath/shot_s.png")
         val furnitureBitmaps = loadFurnitureBitmaps()
         val zombieBitmap     = tryLoadBitmap("$assetBase/enemies/zombie/walk1.png")
         val ratIdleBitmap    = tryLoadBitmap("$assetBase/enemies/rat/idle.png")
@@ -143,6 +182,16 @@ class GameplayScene(
         val wolfIdleBitmap   = tryLoadBitmap("$assetBase/enemies/wolf/idle.png")
         val wolfRunBitmap    = tryLoadBitmap("$assetBase/enemies/wolf/run.png")
         val minotaurBitmap   = tryLoadBitmap("$assetBase/enemies/minotaur/walk.png")
+        val hudPortraitBmp   = tryLoadBitmap("$assetBase/hud/${charPath}_gui.png")
+        val hudHeartBmp      = tryLoadBitmap("$assetBase/hud/heart.png")
+        val hudAmmoBmp       = tryLoadBitmap("$assetBase/hud/pistol_ammo.png")
+
+        val idleAnim     = playerIdleBmp?.let { SpriteAnimation(it, JADE_IDLE_FRAME_W, JADE_IDLE_FRAME_H, JADE_IDLE_COLS, 1) }
+        val shotEAnim    = shotEBmp?.let  { SpriteAnimation(it, JADE_SHOT_E_W,  JADE_SHOT_E_H,  JADE_SHOT_E_COLS,  1) }
+        val shotNEAnim   = shotNEBmp?.let { SpriteAnimation(it, JADE_SHOT_NE_W, JADE_SHOT_NE_H, JADE_SHOT_NE_COLS, 1) }
+        val shotNAnim    = shotNBmp?.let  { SpriteAnimation(it, JADE_SHOT_N_W,  JADE_SHOT_N_H,  JADE_SHOT_N_COLS,  1) }
+        val shotSEAnim   = shotSEBmp?.let { SpriteAnimation(it, JADE_SHOT_SE_W, JADE_SHOT_SE_H, JADE_SHOT_SE_COLS, 1) }
+        val shotSAnim    = shotSBmp?.let  { SpriteAnimation(it, JADE_SHOT_S_W,  JADE_SHOT_S_H,  JADE_SHOT_S_COLS,  1) }
 
         val zombieAnim   = zombieBitmap?.let { SpriteAnimation(it, ZOMBIE_FRAME_W, ZOMBIE_FRAME_H, ZOMBIE_COLS, 1) }
         val ratIdleAnim  = ratIdleBitmap?.let { SpriteAnimation(it, RAT_FRAME_W, RAT_FRAME_H, RAT_IDLE_COLS, 1) }
@@ -163,17 +212,40 @@ class GameplayScene(
 
         buildFurnitureViews(world.furnitures, furnitureBitmaps)
 
+        // Per-player trunk sprite references (for animation swapping based on fire direction)
+        val playerTrunkSprites = mutableListOf<korlibs.korge.view.Sprite?>()
+        // Per-player last known facing direction (for animation dirty-check)
+        val playerLastFacing = MutableList(session.numPlayers) { FacingDirection.E }
+        val playerLastFiring = MutableList(session.numPlayers) { false }
+
         // Player containers — one per player
         val playerContainers = List(session.numPlayers) { playerIdx ->
             val c = container { zIndex = world.players[playerIdx].position.y }
-            if (playerIdleBmp != null) {
-                val idleAnim = SpriteAnimation(playerIdleBmp, JADE_IDLE_FRAME_W, JADE_IDLE_FRAME_H, JADE_IDLE_COLS, 1)
-                val s = c.sprite(idleAnim) { smoothing = false }
-                s.playAnimationLooped(idleAnim, (1.0 / JADE_IDLE_FPS).seconds)
+            // Shadow (lowest layer, semi-transparent ellipse under feet)
+            if (shadowBmp != null) {
+                c.image(shadowBmp) {
+                    x = SHADOW_LOCAL_X; y = SHADOW_LOCAL_Y
+                    alpha = SHADOW_ALPHA; smoothing = false; zIndex = -0.1
+                }
+            }
+            // Legs (static image, behind trunk)
+            if (playerLegsBmp != null) {
+                c.image(playerLegsBmp) {
+                    x = LEGS_LOCAL_X; y = LEGS_LOCAL_Y
+                    smoothing = false; zIndex = 0.0
+                }
+            }
+            // Trunk — start with idle animation
+            val trunkSprite: korlibs.korge.view.Sprite? = if (idleAnim != null) {
+                c.sprite(idleAnim) {
+                    smoothing = false; zIndex = 0.1; x = 0.0; y = 0.0
+                }.also { it.playAnimationLooped(idleAnim, (1.0 / JADE_IDLE_FPS).seconds) }
             } else {
                 val col = listOf(Colors.CYAN, Colors.LIME, Colors.YELLOW, Colors.ORANGE).getOrElse(playerIdx) { Colors.WHITE }
                 c.solidRect(20.0, 20.0, col).also { it.x = -10.0; it.y = -10.0 }
+                null
             }
+            playerTrunkSprites.add(trunkSprite)
             c
         }
         val playerContainer = playerContainers[0]  // backward-compat alias for single-player HUD/refs
@@ -185,14 +257,30 @@ class GameplayScene(
         val touchOverlayGraphics = cpuGraphics { }
         touchOverlayGraphics.zIndex = 1050.0
 
-        // HUD
-        val hudHealth  = text("HP: 100")           { textSize = 14.0; color = Colors.LIME;      x = 8.0;   y = 4.0;  zIndex = 1000.0; font = ZombustersFonts.menuInfo }
-        val hudLives   = text("Lives: ${session.lives}") { textSize = 14.0; color = Colors.WHITE;     x = 90.0;  y = 4.0;  zIndex = 1000.0; font = ZombustersFonts.menuInfo }
-        val hudScore   = text("Score: ${session.score}") { textSize = 14.0; color = Colors.YELLOW;    x = 170.0; y = 4.0;  zIndex = 1000.0; font = ZombustersFonts.menuInfo }
-        val hudWeapon  = text("PISTOL (INF)")       { textSize = 14.0; color = Colors.ORANGE;    x = 270.0; y = 4.0;  zIndex = 1000.0; font = ZombustersFonts.menuInfo }
+        // HUD — bitmap elements + text overlay (legacy style: character portrait, heart, ammo)
+        // Panel background
+        solidRect(210.0, 55.0, RGBA(0, 0, 0, 160)).apply { x = 2.0; y = 2.0; zIndex = 999.0 }
+        // Character portrait
+        if (hudPortraitBmp != null) {
+            image(hudPortraitBmp) { x = 0.0; y = -8.0; zIndex = 1000.0; smoothing = false }
+        }
+        // Heart icon
+        if (hudHeartBmp != null) {
+            image(hudHeartBmp) { x = 120.0; y = 8.0; zIndex = 1000.0; smoothing = false }
+        }
+        // Ammo icon
+        if (hudAmmoBmp != null) {
+            image(hudAmmoBmp) { x = 124.0; y = 28.0; zIndex = 1000.0; smoothing = false }
+        }
+        // Text overlays on HUD panel
+        val hudLives   = text("x${session.lives}") { textSize = 18.0; color = Colors.WHITE;     x = 50.0;  y = 6.0;  zIndex = 1001.0; font = ZombustersFonts.menuInfo }
+        val hudHealth  = text("100")              { textSize = 14.0; color = Colors.LIME;       x = 142.0; y = 6.0;  zIndex = 1001.0; font = ZombustersFonts.menuInfo }
+        val hudAmmo    = text("- - -")            { textSize = 12.0; color = Colors.WHITE;      x = 142.0; y = 24.0; zIndex = 1001.0; font = ZombustersFonts.menuInfo }
+        val hudScore   = text("SC${session.score.toString().padStart(7, '0')}") { textSize = 12.0; color = Colors.YELLOW; x = 4.0; y = 42.0; zIndex = 1001.0; font = ZombustersFonts.menuInfo }
+        // Wave / level / enemies info (center-top)
         val hudWave    = text("Wave 1")             { textSize = 14.0; color = Colors.LIGHTGRAY; x = 430.0; y = 4.0;  zIndex = 1000.0; font = ZombustersFonts.menuInfo }
-        val hudLevel   = text("LEVEL $levelNumber") { textSize = 14.0; color = Colors.WHITE;     x = 580.0; y = 4.0;  zIndex = 1000.0; font = ZombustersFonts.menuInfo }
-        val hudEnemies = text("Enemies: 0")         { textSize = 14.0; color = Colors.LIGHTGRAY; x = 680.0; y = 4.0;  zIndex = 1000.0; font = ZombustersFonts.menuInfo }
+        val hudLevel   = text("LEVEL $levelNumber") { textSize = 14.0; color = Colors.WHITE;     x = 590.0; y = 4.0;  zIndex = 1000.0; font = ZombustersFonts.menuInfo }
+        val hudEnemies = text("Enemies: 0")         { textSize = 14.0; color = Colors.LIGHTGRAY; x = 720.0; y = 4.0;  zIndex = 1000.0; font = ZombustersFonts.menuInfo }
 
         // Pause overlay (legacy GamePlayMenu entries)
         val pauseOverlay = solidRect(GAME_WIDTH.toDouble(), GAME_HEIGHT.toDouble(), RGBA(0, 0, 0, 160)).apply { zIndex = 1100.0; visible = false }
@@ -255,6 +343,13 @@ class GameplayScene(
         fun spawnEnemyViews(newEnemies: List<BaseEnemy>) {
             for (enemy in newEnemies) {
                 val c = container { zIndex = enemy.entity.position.y.toDouble() }
+                // Shadow under each enemy
+                if (shadowBmp != null) {
+                    c.image(shadowBmp) {
+                        x = ENEMY_SHADOW_LX; y = ENEMY_SHADOW_LY
+                        alpha = SHADOW_ALPHA; smoothing = false; zIndex = -0.1
+                    }
+                }
                 when (enemy.type) {
                     EnemyType.ZOMBIE -> {
                         val anim = zombieAnim
@@ -299,7 +394,7 @@ class GameplayScene(
             }
             for (z in world.spawnZones) {
                 stroke(Colors.GREEN, lineWidth = 1.0) {
-                    rect(z.originX.toDouble(), z.originY.toDouble(), (z.endX - z.originX).toDouble(), (z.endY - z.originY).toDouble())
+                    rect(z.xMin.toDouble(), z.yMin.toDouble(), (z.xMax - z.xMin).toDouble(), (z.yMax - z.yMin).toDouble())
                 }
             }
         }
@@ -732,6 +827,42 @@ class GameplayScene(
                 pc.x = p.position.x + PLAYER_RENDER_OFFSET_X
                 pc.y = p.position.y + PLAYER_RENDER_OFFSET_Y
                 pc.zIndex = p.position.y
+
+                // ── Directional trunk animation swap ─────────────────────────
+                val pInput0 = if (idx == 0) gameInput else GameInput.EMPTY
+                val isFiring = pInput0.firing && p.status == ObjectStatus.ACTIVE
+                val facing   = FacingDirection.classify(lastFireAngles[idx])
+                val trunkS   = playerTrunkSprites.getOrNull(idx) ?: continue
+                if (isFiring != playerLastFiring[idx] || facing != playerLastFacing[idx]) {
+                    playerLastFiring[idx] = isFiring
+                    playerLastFacing[idx] = facing
+                    if (!isFiring || idleAnim == null) {
+                        // Idle trunk
+                        trunkS.x = 0.0; trunkS.y = 0.0; trunkS.scaleX = 1.0
+                        if (idleAnim != null) trunkS.playAnimationLooped(idleAnim, (1.0 / JADE_IDLE_FPS).seconds)
+                    } else {
+                        // Directional shot animation — pick sheet + local offset + flip for W-facing dirs
+                        data class TrunkAnim(val anim: SpriteAnimation?, val lx: Double, val ly: Double, val flip: Boolean)
+                        val ta: TrunkAnim = when (facing) {
+                            FacingDirection.N  -> TrunkAnim(shotNAnim,  JADE_TRUNK_SHOT_LX, JADE_TRUNK_N_LY,  false)
+                            FacingDirection.NE -> TrunkAnim(shotNEAnim, JADE_TRUNK_SHOT_LX, JADE_TRUNK_NE_LY, false)
+                            FacingDirection.E  -> TrunkAnim(shotEAnim,  JADE_TRUNK_SHOT_LX, JADE_TRUNK_E_LY,  false)
+                            FacingDirection.SE -> TrunkAnim(shotSEAnim, JADE_TRUNK_SHOT_LX, JADE_TRUNK_SE_LY, false)
+                            FacingDirection.S  -> TrunkAnim(shotSAnim,  JADE_TRUNK_SHOT_LX, JADE_TRUNK_S_LY,  false)
+                            FacingDirection.SW -> TrunkAnim(shotSEAnim, JADE_TRUNK_SHOT_LX, JADE_TRUNK_SE_LY, true)
+                            FacingDirection.W  -> TrunkAnim(shotEAnim,  JADE_TRUNK_SHOT_LX, JADE_TRUNK_E_LY,  true)
+                            FacingDirection.NW -> TrunkAnim(shotNEAnim, JADE_TRUNK_SHOT_LX, JADE_TRUNK_NE_LY, true)
+                        }
+                        if (ta.anim != null) {
+                            trunkS.x = ta.lx; trunkS.y = ta.ly
+                            trunkS.scaleX = if (ta.flip) -1.0 else 1.0
+                            trunkS.playAnimationLooped(ta.anim, (1.0 / JADE_SHOT_FPS).seconds)
+                        } else if (idleAnim != null) {
+                            trunkS.x = 0.0; trunkS.y = 0.0; trunkS.scaleX = 1.0
+                            trunkS.playAnimationLooped(idleAnim, (1.0 / JADE_IDLE_FPS).seconds)
+                        }
+                    }
+                }
             }
 
             // ── Bullet rendering (all players' projectiles) ───────────────────
@@ -790,22 +921,23 @@ class GameplayScene(
             }
 
             // ── HUD update ────────────────────────────────────────────────────
-            val gunLabel = when (world.player1.currentGun) {
-                GunType.PISTOL       -> "PISTOL (INF)"
-                GunType.SHOTGUN      -> "SHOTGUN (${world.player1.ammo[GunType.SHOTGUN.id]})"
-                GunType.MACHINEGUN   -> "MG (${world.player1.ammo[GunType.MACHINEGUN.id]})"
-                GunType.FLAMETHROWER -> "FLAME (${world.player1.ammo[GunType.FLAMETHROWER.id]})"
-                GunType.GRENADE      -> "GRENADE (${world.player1.ammo[GunType.GRENADE.id]})"
+            val p1 = world.player1
+            val ammoLabel = when (p1.currentGun) {
+                GunType.PISTOL       -> "- - -"
+                GunType.SHOTGUN      -> p1.ammo[GunType.SHOTGUN.id].toString().padStart(3, '0')
+                GunType.MACHINEGUN   -> p1.ammo[GunType.MACHINEGUN.id].toString().padStart(3, '0')
+                GunType.FLAMETHROWER -> p1.ammo[GunType.FLAMETHROWER.id].toString().padStart(3, '0')
+                GunType.GRENADE      -> p1.ammo[GunType.GRENADE.id].toString().padStart(3, '0')
             }
-            hudHealth.text = "HP: ${world.player1.lifecounter}"
+            hudHealth.text  = p1.lifecounter.toString().padStart(3, '0')
             hudHealth.color = when {
-                world.player1.lifecounter > 60 -> Colors.LIME
-                world.player1.lifecounter > 30 -> Colors.YELLOW
+                p1.lifecounter > 60 -> Colors.LIME
+                p1.lifecounter > 30 -> Colors.YELLOW
                 else -> Colors.RED
             }
-            hudLives.text   = "Lives: ${world.player1.lives}"
-            hudScore.text   = "Score: ${world.player1.score}"
-            hudWeapon.text  = gunLabel
+            hudLives.text   = "x${p1.lives}"
+            hudScore.text   = "SC${p1.score.toString().padStart(7, '0')}"
+            hudAmmo.text    = ammoLabel
             hudWave.text    = if (waveSystem.isLevelComplete) "CLEARED" else "Wave ${waveSystem.waveNumber}/${waveSystem.totalWaves}"
             hudLevel.text   = "LEVEL $levelNumber"
             hudEnemies.text = "Enemies: ${world.enemySystem.activeCount}"
