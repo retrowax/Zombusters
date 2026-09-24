@@ -4,9 +4,11 @@ import com.retrowax.zombusters.game.model.GAME_HEIGHT
 import com.retrowax.zombusters.game.model.GAME_WIDTH
 import com.retrowax.zombusters.game.ui.ZombustersFonts
 import korlibs.event.Key
+import korlibs.event.MouseButton
 import korlibs.image.color.Colors
 import korlibs.image.color.RGBA
 import korlibs.image.format.readBitmap
+import korlibs.korge.input.touch
 import korlibs.korge.scene.Scene
 import korlibs.korge.view.SContainer
 import korlibs.korge.view.addUpdater
@@ -96,22 +98,40 @@ class CreditsScene(
         var canLeave = canLeaveImmediately
         var done = false
 
-        val hintText = text(if (canLeave) "ESC — Back" else "") {
+        val hintText = text(if (canLeave) "TAP / ESC — Back" else "") {
             textSize = 20.0; color = Colors.WHITE
             x = 128.0; y = GAME_HEIGHT - 50.0; zIndex = 3.0
             font = ZombustersFonts.menuInfo
         }
 
-        // Clip by adjusting visibility — simple approach without scissor
         val capturedViews = views
         val sceneScope = this@CreditsScene
 
+        fun tryLeave() {
+            if (canLeave && !done) {
+                done = true
+                sceneScope.launch {
+                    sceneContainer.changeTo {
+                        ExtrasMenuScene(exit, drawableResourcesPath, fontResourcesPath, filesResourcesPath)
+                    }
+                }
+            } else if (!canLeave) {
+                // Skip to end
+                scrollY = totalTextHeight + clipH + 1.0
+                canLeave = true
+                hintText.text = "TAP / ESC — Back"
+            }
+        }
+
+        touch { end { tryLeave() } }
+
+        var prevMouseDown = false
+
         addUpdater { dt: Duration ->
             val dtSec = dt.inWholeMilliseconds / 1000.0
-            scrollY += 30.0 * dtSec   // 30px/sec scroll speed
+            scrollY += 30.0 * dtSec
             scrollContainer.y = -scrollY
 
-            // Show all text lines but hide those outside clip area
             scrollContainer.children.forEachIndexed { i, child ->
                 val worldY = (clipY + clipH) + i * lineHeight - scrollY
                 child.visible = worldY > clipY - lineHeight && worldY < clipY + clipH + lineHeight
@@ -119,19 +139,16 @@ class CreditsScene(
 
             if (scrollY >= totalTextHeight + clipH && !canLeave) {
                 canLeave = true
-                hintText.text = "ESC — Back"
+                hintText.text = "TAP / ESC — Back"
             }
 
+            val mouseDown = capturedViews.input.mouseButtonPressed(MouseButton.LEFT)
+            if (!mouseDown && prevMouseDown) tryLeave()
+            prevMouseDown = mouseDown
+
             val ks = capturedViews.input.keys
-            if (canLeave && (ks.justPressed(Key.ESCAPE) || ks.justPressed(Key.RETURN) || ks.justPressed(Key.SPACE))) {
-                if (!done) {
-                    done = true
-                    sceneScope.launch {
-                        sceneContainer.changeTo {
-                            ExtrasMenuScene(exit, drawableResourcesPath, fontResourcesPath, filesResourcesPath)
-                        }
-                    }
-                }
+            if (ks.justPressed(Key.ESCAPE) || ks.justPressed(Key.RETURN) || ks.justPressed(Key.SPACE)) {
+                tryLeave()
             }
         }
     }

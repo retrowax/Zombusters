@@ -4,9 +4,11 @@ import com.retrowax.zombusters.game.model.GAME_HEIGHT
 import com.retrowax.zombusters.game.model.GAME_WIDTH
 import com.retrowax.zombusters.game.ui.ZombustersFonts
 import korlibs.event.Key
+import korlibs.event.MouseButton
 import korlibs.image.color.Colors
 import korlibs.image.color.RGBA
 import korlibs.image.format.readBitmap
+import korlibs.korge.input.touch
 import korlibs.korge.scene.Scene
 import korlibs.korge.view.SContainer
 import korlibs.korge.view.addUpdater
@@ -111,11 +113,74 @@ class OptionsScene(
         refresh()
 
         var prevSelected = selectedIndex
+        var done = false
         val capturedViews = views
         val sceneScope = this@OptionsScene
 
+        // Touch regions:
+        //   Option rows (x 50-900, y row-15 to row+45): select row; for volume rows x<500=decrease, x>=500=increase
+        //   SAVE AND EXIT row (i=4): navigate back
+        //   Bottom strip (y >= GAME_HEIGHT - 80): back to menu
+        val mSY = menuStartY
+        val mSp = menuSpacing
+        touch {
+            end { info ->
+                if (done) return@end
+                val tx = info.local.x; val ty = info.local.y
+                // Bottom back strip
+                if (ty >= GAME_HEIGHT - 80.0) {
+                    done = true
+                    sceneScope.launch { sceneContainer.changeTo { MenuScene(exit, drawableResourcesPath, fontResourcesPath, filesResourcesPath) }; done = false }
+                    return@end
+                }
+                for (i in optionLabels.indices) {
+                    val ry = mSY + i * mSp
+                    if (tx >= 50.0 && tx <= 900.0 && ty >= ry - 15 && ty <= ry + 45) {
+                        selectedIndex = i
+                        when (i) {
+                            0 -> if (tx >= 500.0) fxVolume = (fxVolume + 1).coerceAtMost(10)
+                                 else fxVolume = (fxVolume - 1).coerceAtLeast(0)
+                            1 -> if (tx >= 500.0) musicVolume = (musicVolume + 1).coerceAtMost(10)
+                                 else musicVolume = (musicVolume - 1).coerceAtLeast(0)
+                            4 -> { done = true; sceneScope.launch { sceneContainer.changeTo { MenuScene(exit, drawableResourcesPath, fontResourcesPath, filesResourcesPath) }; done = false } }
+                        }
+                        break
+                    }
+                }
+            }
+        }
+
+        var prevMouseDown = false
+
         addUpdater { _: Duration ->
             val ks = capturedViews.input.keys
+
+            // Mouse click: same hit regions as touch
+            val mouseDown = capturedViews.input.mouseButtonPressed(MouseButton.LEFT)
+            if (!mouseDown && prevMouseDown && !done) {
+                val mp = capturedViews.input.mousePos
+                val tx = mp.x; val ty = mp.y
+                if (ty >= GAME_HEIGHT - 80.0) {
+                    done = true
+                    sceneScope.launch { sceneContainer.changeTo { MenuScene(exit, drawableResourcesPath, fontResourcesPath, filesResourcesPath) }; done = false }
+                } else {
+                    for (i in optionLabels.indices) {
+                        val ry = menuStartY + i * menuSpacing
+                        if (tx >= 50.0 && tx <= 900.0 && ty >= ry - 15 && ty <= ry + 45) {
+                            selectedIndex = i
+                            when (i) {
+                                0 -> if (tx >= 500.0) fxVolume = (fxVolume + 1).coerceAtMost(10)
+                                     else fxVolume = (fxVolume - 1).coerceAtLeast(0)
+                                1 -> if (tx >= 500.0) musicVolume = (musicVolume + 1).coerceAtMost(10)
+                                     else musicVolume = (musicVolume - 1).coerceAtLeast(0)
+                                4 -> { done = true; sceneScope.launch { sceneContainer.changeTo { MenuScene(exit, drawableResourcesPath, fontResourcesPath, filesResourcesPath) }; done = false } }
+                            }
+                            break
+                        }
+                    }
+                }
+            }
+            prevMouseDown = mouseDown
 
             if (ks.justPressed(Key.UP) || ks.justPressed(Key.W)) {
                 selectedIndex = (selectedIndex - 1 + optionLabels.size) % optionLabels.size

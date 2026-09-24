@@ -7,12 +7,16 @@ import com.retrowax.zombusters.game.enemy.SteeringEntity
 import com.retrowax.zombusters.game.enemy.Vec2
 import com.retrowax.zombusters.game.enemy.Wolf
 import com.retrowax.zombusters.game.engine.CollisionSystem
+import com.retrowax.zombusters.game.input.DualVirtualStickState
+import com.retrowax.zombusters.game.input.GameInput
+import com.retrowax.zombusters.game.input.InputMode
+import com.retrowax.zombusters.game.input.VirtualThumbstickLogic
 import com.retrowax.zombusters.game.model.AVATAR_PIXELS_PER_SECOND
-import com.retrowax.zombusters.game.model.GAME_HEIGHT
-import com.retrowax.zombusters.game.model.GAME_WIDTH
+import com.retrowax.zombusters.game.model.EnemyType
 import com.retrowax.zombusters.game.model.FurnitureOrientation
 import com.retrowax.zombusters.game.model.FurnitureType
-import com.retrowax.zombusters.game.model.EnemyType
+import com.retrowax.zombusters.game.model.GAME_HEIGHT
+import com.retrowax.zombusters.game.model.GAME_WIDTH
 import com.retrowax.zombusters.game.model.GameSession
 import com.retrowax.zombusters.game.model.GunType
 import com.retrowax.zombusters.game.model.ObjectStatus
@@ -28,11 +32,12 @@ import korlibs.image.bitmap.Bitmap
 import korlibs.image.color.Colors
 import korlibs.image.color.RGBA
 import korlibs.image.format.readBitmap
+import korlibs.korge.input.touch
 import korlibs.korge.scene.Scene
 import korlibs.korge.view.SContainer
-import korlibs.korge.view.container
 import korlibs.korge.view.SpriteAnimation
 import korlibs.korge.view.addUpdater
+import korlibs.korge.view.container
 import korlibs.korge.view.cpuGraphics
 import korlibs.korge.view.image
 import korlibs.korge.view.solidRect
@@ -76,22 +81,22 @@ private const val WOLF_IDLE_COLS = 8
 private const val WOLF_RUN_COLS = 6
 private const val WOLF_FPS = 12
 
-// Debug level-jump shortcut range
-private const val DEBUG_MIN_JUMP_LEVEL = 1
-private const val DEBUG_MAX_JUMP_LEVEL = 10
+// Pause icon hit region from legacy GamePlayScreen.cs (1280×720 logical coords)
+private const val PAUSE_ICON_X1 = 1088f
+private const val PAUSE_ICON_Y1 = 39f
+private const val PAUSE_ICON_X2 = 1135f
+private const val PAUSE_ICON_Y2 = 83f
 
 /**
  * Main gameplay scene — driven by [GameSession].
  *
- * Step 6 additions vs Step 5:
- *   - Accepts [GameSession] with currentLevel and characterIndex
- *   - Loads level dynamically from session.currentLevel (not hardcoded Level 1)
- *   - Uses session.characterSpritePath for player sprite selection
- *   - Stage-clear advances session to next level via [GameplayScene] with updated session
- *   - Game-over shows [GameOverMenuScene]
- *   - Debug level-jump: F2+1..0 selects level 1-10 in debug mode
- *   - Pause menu improved per legacy GamePlayMenu.cs entries
- *   - HUD carries session score (accumulated across levels)
+ * Step 7: Input refactored.
+ *   - All production movement/aim/fire uses [GameInput] — no direct keyboard in gameplay logic.
+ *   - Touch: dual virtual thumbsticks via [DualVirtualStickState] (legacy VirtualThumbsticks.cs behavior).
+ *   - Keyboard: WASD/arrows + SPACE mapped to [GameInput] each frame.
+ *   - Debug keys (F1/F2/K/G/H/digits) remain as direct keyboard checks (developer tooling only).
+ *   - Virtual stick visuals rendered as circle placeholders when InputMode.TOUCH.
+ *   - Pause icon hit region (legacy coords 1088-1135, 39-83) for touch pause.
  */
 class GameplayScene(
     private val exit: () -> Unit = {},
@@ -121,22 +126,21 @@ class GameplayScene(
         }
 
         val world = GameplayWorld(levelDef)
-        // Carry session score and lives into the new world's player
         world.player1.score = session.score
         world.player1.lives = session.lives
 
         // Load bitmaps
         val levelPad = levelNumber.toString().padStart(2, '0')
-        val mapBitmap       = tryLoadBitmap("$assetBase/levels/level$levelPad/map.png")
-        val charPath        = session.characterSpritePath
-        val playerIdleBmp   = tryLoadBitmap("$assetBase/characters/$charPath/idle.png")
+        val mapBitmap        = tryLoadBitmap("$assetBase/levels/level$levelPad/map.png")
+        val charPath         = session.characterSpritePath
+        val playerIdleBmp    = tryLoadBitmap("$assetBase/characters/$charPath/idle.png")
         val furnitureBitmaps = loadFurnitureBitmaps()
-        val zombieBitmap    = tryLoadBitmap("$assetBase/enemies/zombie/walk1.png")
-        val ratIdleBitmap   = tryLoadBitmap("$assetBase/enemies/rat/idle.png")
-        val ratRunBitmap    = tryLoadBitmap("$assetBase/enemies/rat/run.png")
-        val wolfIdleBitmap  = tryLoadBitmap("$assetBase/enemies/wolf/idle.png")
-        val wolfRunBitmap   = tryLoadBitmap("$assetBase/enemies/wolf/run.png")
-        val minotaurBitmap  = tryLoadBitmap("$assetBase/enemies/minotaur/walk.png")
+        val zombieBitmap     = tryLoadBitmap("$assetBase/enemies/zombie/walk1.png")
+        val ratIdleBitmap    = tryLoadBitmap("$assetBase/enemies/rat/idle.png")
+        val ratRunBitmap     = tryLoadBitmap("$assetBase/enemies/rat/run.png")
+        val wolfIdleBitmap   = tryLoadBitmap("$assetBase/enemies/wolf/idle.png")
+        val wolfRunBitmap    = tryLoadBitmap("$assetBase/enemies/wolf/run.png")
+        val minotaurBitmap   = tryLoadBitmap("$assetBase/enemies/minotaur/walk.png")
 
         val zombieAnim   = zombieBitmap?.let { SpriteAnimation(it, ZOMBIE_FRAME_W, ZOMBIE_FRAME_H, ZOMBIE_COLS, 1) }
         val ratIdleAnim  = ratIdleBitmap?.let { SpriteAnimation(it, RAT_FRAME_W, RAT_FRAME_H, RAT_IDLE_COLS, 1) }
@@ -148,7 +152,6 @@ class GameplayScene(
         if (mapBitmap != null) {
             image(mapBitmap) { x = 0.0; y = 0.0; zIndex = 0.0; smoothing = false }
         } else {
-            // Placeholder for levels whose map hasn't been extracted yet
             solidRect(GAME_WIDTH.toDouble(), GAME_HEIGHT.toDouble(), RGBA(0x22, 0x33, 0x22, 0xFF))
             text("Level $levelNumber — map not extracted") {
                 textSize = 20.0; color = Colors.ORANGE; x = 20.0; y = 20.0; zIndex = 0.1
@@ -171,14 +174,18 @@ class GameplayScene(
         val bulletGraphics = cpuGraphics { }
         bulletGraphics.zIndex = 900.0
 
+        // Touch virtual stick overlay — redrawn each frame
+        val touchOverlayGraphics = cpuGraphics { }
+        touchOverlayGraphics.zIndex = 1050.0
+
         // HUD
-        val hudHealth = text("HP: 100") { textSize = 14.0; color = Colors.LIME; x = 8.0; y = 4.0; zIndex = 1000.0; font = ZombustersFonts.menuInfo }
-        val hudLives  = text("Lives: ${session.lives}") { textSize = 14.0; color = Colors.WHITE; x = 90.0; y = 4.0; zIndex = 1000.0; font = ZombustersFonts.menuInfo }
-        val hudScore  = text("Score: ${session.score}") { textSize = 14.0; color = Colors.YELLOW; x = 170.0; y = 4.0; zIndex = 1000.0; font = ZombustersFonts.menuInfo }
-        val hudWeapon = text("PISTOL (INF)") { textSize = 14.0; color = Colors.ORANGE; x = 270.0; y = 4.0; zIndex = 1000.0; font = ZombustersFonts.menuInfo }
-        val hudWave   = text("Wave 1") { textSize = 14.0; color = Colors.LIGHTGRAY; x = 430.0; y = 4.0; zIndex = 1000.0; font = ZombustersFonts.menuInfo }
-        val hudLevel  = text("LEVEL $levelNumber") { textSize = 14.0; color = Colors.WHITE; x = 580.0; y = 4.0; zIndex = 1000.0; font = ZombustersFonts.menuInfo }
-        val hudEnemies = text("Enemies: 0") { textSize = 14.0; color = Colors.LIGHTGRAY; x = 680.0; y = 4.0; zIndex = 1000.0; font = ZombustersFonts.menuInfo }
+        val hudHealth  = text("HP: 100")           { textSize = 14.0; color = Colors.LIME;      x = 8.0;   y = 4.0;  zIndex = 1000.0; font = ZombustersFonts.menuInfo }
+        val hudLives   = text("Lives: ${session.lives}") { textSize = 14.0; color = Colors.WHITE;     x = 90.0;  y = 4.0;  zIndex = 1000.0; font = ZombustersFonts.menuInfo }
+        val hudScore   = text("Score: ${session.score}") { textSize = 14.0; color = Colors.YELLOW;    x = 170.0; y = 4.0;  zIndex = 1000.0; font = ZombustersFonts.menuInfo }
+        val hudWeapon  = text("PISTOL (INF)")       { textSize = 14.0; color = Colors.ORANGE;    x = 270.0; y = 4.0;  zIndex = 1000.0; font = ZombustersFonts.menuInfo }
+        val hudWave    = text("Wave 1")             { textSize = 14.0; color = Colors.LIGHTGRAY; x = 430.0; y = 4.0;  zIndex = 1000.0; font = ZombustersFonts.menuInfo }
+        val hudLevel   = text("LEVEL $levelNumber") { textSize = 14.0; color = Colors.WHITE;     x = 580.0; y = 4.0;  zIndex = 1000.0; font = ZombustersFonts.menuInfo }
+        val hudEnemies = text("Enemies: 0")         { textSize = 14.0; color = Colors.LIGHTGRAY; x = 680.0; y = 4.0;  zIndex = 1000.0; font = ZombustersFonts.menuInfo }
 
         // Pause overlay (legacy GamePlayMenu entries)
         val pauseOverlay = solidRect(GAME_WIDTH.toDouble(), GAME_HEIGHT.toDouble(), RGBA(0, 0, 0, 160)).apply { zIndex = 1100.0; visible = false }
@@ -187,7 +194,6 @@ class GameplayScene(
             x = GAME_WIDTH / 2.0 - 80.0; y = GAME_HEIGHT / 2.0 - 80.0; zIndex = 1101.0; visible = false
             font = ZombustersFonts.menuHeader
         }
-        // Legacy pause menu entries
         val pauseEntries = listOf("RESUME", "HOW TO PLAY", "OPTIONS", "RESTART LEVEL", "QUIT TO MAIN MENU")
         var pauseMenuIndex = 0
         val pauseEntryViews = pauseEntries.mapIndexed { i, label ->
@@ -199,7 +205,7 @@ class GameplayScene(
             }
         }
 
-        // Game-over overlay (legacy GameOverMenu — shows gameover.png + menu)
+        // Game-over overlay (legacy GameOverMenu)
         val gameOverBmp = tryLoadBitmap("$assetBase/hud/gameover.png")
         val gameOverOverlay = solidRect(GAME_WIDTH.toDouble(), GAME_HEIGHT.toDouble(), RGBA(0, 0, 0, 200)).apply { zIndex = 1200.0; visible = false }
         val gameOverImgView = if (gameOverBmp != null) {
@@ -209,7 +215,6 @@ class GameplayScene(
                 zIndex = 1201.0; visible = false; smoothing = true
             }
         } else null
-        // Legacy GameOverMenu entries
         val gameOverEntries = listOf("RESTART THIS WAVE", "RESTART FROM BEGINNING", "RETURN TO MAIN MENU")
         var gameOverMenuIndex = 0
         val gameOverEntryViews = gameOverEntries.mapIndexed { i, label ->
@@ -294,12 +299,34 @@ class GameplayScene(
         debugOverlay.zIndex = 999.0
         debugOverlay.visible = false
 
-        // Music: random from pool (MusicComponent plays random in legacy)
         if (filesResourcesPath.isNotEmpty()) {
             try {
                 val music = resourcesVfs["$filesResourcesPath/music/BradSucks_BadAttraction.ogg"].readMusic()
                 music.playNoCancelForever()
             } catch (_: Exception) {}
+        }
+
+        // ── Input state ──────────────────────────────────────────────────────
+        val dualStick = DualVirtualStickState()
+        var pauseIconTouched = false  // set by touch handler, consumed by addUpdater
+
+        // Register touch event handlers (event-based, fires on the KorGE main thread)
+        touch {
+            start { info ->
+                val pos = Vec2(info.local.x.toFloat(), info.local.y.toFloat())
+                // Pause icon hit (legacy: 1088-1135, 39-83 in 1280×720 logical)
+                if (pos.x in PAUSE_ICON_X1..PAUSE_ICON_X2 && pos.y in PAUSE_ICON_Y1..PAUSE_ICON_Y2) {
+                    pauseIconTouched = true
+                    return@start
+                }
+                dualStick.onTouchDown(info.id, pos)
+            }
+            move { info ->
+                dualStick.onTouchMove(info.id, Vec2(info.local.x.toFloat(), info.local.y.toFloat()))
+            }
+            end { info ->
+                dualStick.onTouchUp(info.id)
+            }
         }
 
         var totalSeconds = 0f
@@ -311,6 +338,7 @@ class GameplayScene(
         var lastFireAngle = FacingDirection.angleFrom(0f, -1f)
         var lastMoveDx = 0f
         var lastMoveDy = -1f
+        var currentInputMode = InputMode.KEYBOARD_MOUSE
 
         val capturedViews = views
         val sceneScope = this@GameplayScene
@@ -318,7 +346,52 @@ class GameplayScene(
         addUpdater { dt: Duration ->
             val ks = capturedViews.input.keys
 
-            // Debug level-jump (F2 + digit)
+            // ── Determine input mode ─────────────────────────────────────────
+            currentInputMode = when {
+                capturedViews.input.isTouchDevice || dualStick.left.active || dualStick.right.active -> InputMode.TOUCH
+                else -> InputMode.KEYBOARD_MOUSE
+            }
+
+            // ── Build semantic GameInput ─────────────────────────────────────
+            val gameInput: GameInput = when (currentInputMode) {
+                InputMode.TOUCH -> {
+                    val consumed = pauseIconTouched
+                    pauseIconTouched = false
+                    GameInput(
+                        movement = dualStick.movementVector,
+                        aim = dualStick.aimVector,
+                        firing = dualStick.isFiring,
+                        pauseJustPressed = consumed,
+                        confirmJustPressed = false,
+                        cancelJustPressed = false,
+                        weaponNextJustPressed = false,
+                    )
+                }
+                else -> {
+                    pauseIconTouched = false
+                    var dx = 0f; var dy = 0f
+                    if (ks[Key.W] || ks[Key.UP])    dy -= 1f
+                    if (ks[Key.S] || ks[Key.DOWN])   dy += 1f
+                    if (ks[Key.A] || ks[Key.LEFT])   dx -= 1f
+                    if (ks[Key.D] || ks[Key.RIGHT])  dx += 1f
+                    val len = sqrt(dx * dx + dy * dy)
+                    if (len > 0f) { dx /= len; dy /= len }
+                    val movVec = Vec2(dx, dy)
+                    val firing = ks[Key.SPACE]
+                    val aimVec = if (firing && len > 0f) movVec else Vec2(0f, 0f)
+                    GameInput(
+                        movement = movVec,
+                        aim = aimVec,
+                        firing = firing,
+                        pauseJustPressed = ks.justPressed(Key.ESCAPE),
+                        confirmJustPressed = ks.justPressed(Key.RETURN) || ks.justPressed(Key.SPACE),
+                        cancelJustPressed = ks.justPressed(Key.ESCAPE),
+                        weaponNextJustPressed = ks.justPressed(Key.TAB),
+                    )
+                }
+            }
+
+            // ── Debug keys — direct keyboard only (developer tooling) ────────
             if (ks.justPressed(Key.F2)) debugF2 = !debugF2
             if (debugMode && debugF2) {
                 val jumpLevel = when {
@@ -345,27 +418,27 @@ class GameplayScene(
                 }
             }
 
-            // Game-over menu navigation
+            // ── Game-over menu ───────────────────────────────────────────────
             if (isGameOver) {
-                if (ks.justPressed(Key.UP) || ks.justPressed(Key.W)) {
+                if (gameInput.movement.y < -0.5f || ks.justPressed(Key.UP) || ks.justPressed(Key.W)) {
                     gameOverMenuIndex = (gameOverMenuIndex - 1 + gameOverEntries.size) % gameOverEntries.size
                     refreshGameOverColors()
                 }
-                if (ks.justPressed(Key.DOWN) || ks.justPressed(Key.S)) {
+                if (gameInput.movement.y > 0.5f || ks.justPressed(Key.DOWN) || ks.justPressed(Key.S)) {
                     gameOverMenuIndex = (gameOverMenuIndex + 1) % gameOverEntries.size
                     refreshGameOverColors()
                 }
-                if (ks.justPressed(Key.RETURN) || ks.justPressed(Key.SPACE)) {
+                if (gameInput.confirmJustPressed || ks.justPressed(Key.RETURN) || ks.justPressed(Key.SPACE)) {
                     sceneScope.launch {
                         when (gameOverMenuIndex) {
-                            0 -> sceneContainer.changeTo {   // Restart this wave
+                            0 -> sceneContainer.changeTo {
                                 GameplayScene(exit, drawableResourcesPath, fontResourcesPath, filesResourcesPath, session)
                             }
-                            1 -> sceneContainer.changeTo {   // Restart from beginning
+                            1 -> sceneContainer.changeTo {
                                 GameplayScene(exit, drawableResourcesPath, fontResourcesPath, filesResourcesPath,
                                     GameSession.newGame(session.characterIndex))
                             }
-                            2 -> sceneContainer.changeTo {   // Return to main menu
+                            2 -> sceneContainer.changeTo {
                                 MenuScene(exit, drawableResourcesPath, fontResourcesPath, filesResourcesPath)
                             }
                         }
@@ -374,39 +447,42 @@ class GameplayScene(
                 return@addUpdater
             }
 
-            // Pause menu navigation (legacy GamePlayMenu entries)
+            // ── Pause menu ───────────────────────────────────────────────────
             if (isPaused) {
-                if (ks.justPressed(Key.UP) || ks.justPressed(Key.W)) {
+                if (gameInput.movement.y < -0.5f || ks.justPressed(Key.UP) || ks.justPressed(Key.W)) {
                     pauseMenuIndex = (pauseMenuIndex - 1 + pauseEntries.size) % pauseEntries.size
                     refreshPauseColors()
                 }
-                if (ks.justPressed(Key.DOWN) || ks.justPressed(Key.S)) {
+                if (gameInput.movement.y > 0.5f || ks.justPressed(Key.DOWN) || ks.justPressed(Key.S)) {
                     pauseMenuIndex = (pauseMenuIndex + 1) % pauseEntries.size
                     refreshPauseColors()
                 }
-                if (ks.justPressed(Key.ESCAPE)) {
+                val resumeTouch = gameInput.pauseJustPressed || gameInput.cancelJustPressed || ks.justPressed(Key.ESCAPE)
+                if (resumeTouch) {
                     isPaused = false
+                    dualStick.resetAll()
                     pauseOverlay.visible = false; pauseLabel.visible = false
                     pauseEntryViews.forEach { it.visible = false }
                 }
-                if (ks.justPressed(Key.RETURN) || ks.justPressed(Key.SPACE)) {
+                if (gameInput.confirmJustPressed || ks.justPressed(Key.RETURN) || ks.justPressed(Key.SPACE)) {
                     sceneScope.launch {
                         when (pauseMenuIndex) {
-                            0 -> {   // Resume
+                            0 -> {
                                 isPaused = false
+                                dualStick.resetAll()
                                 pauseOverlay.visible = false; pauseLabel.visible = false
                                 pauseEntryViews.forEach { it.visible = false }
                             }
-                            1 -> sceneContainer.changeTo {   // How To Play
+                            1 -> sceneContainer.changeTo {
                                 HowToPlayScene(exit, drawableResourcesPath, fontResourcesPath, filesResourcesPath)
                             }
-                            2 -> sceneContainer.changeTo {   // Options
+                            2 -> sceneContainer.changeTo {
                                 OptionsScene(exit, drawableResourcesPath, fontResourcesPath, filesResourcesPath)
                             }
-                            3 -> sceneContainer.changeTo {   // Restart Level
+                            3 -> sceneContainer.changeTo {
                                 GameplayScene(exit, drawableResourcesPath, fontResourcesPath, filesResourcesPath, session)
                             }
-                            4 -> sceneContainer.changeTo {   // Quit to Main Menu
+                            4 -> sceneContainer.changeTo {
                                 MenuScene(exit, drawableResourcesPath, fontResourcesPath, filesResourcesPath)
                             }
                         }
@@ -415,10 +491,11 @@ class GameplayScene(
                 return@addUpdater
             }
 
-            // ESC → pause
-            if (ks.justPressed(Key.ESCAPE)) {
+            // ── Enter pause ──────────────────────────────────────────────────
+            if (gameInput.pauseJustPressed) {
                 isPaused = true
                 pauseMenuIndex = 0
+                dualStick.resetAll()   // clear sticks so no movement/fire resumes on unpause
                 pauseOverlay.visible = true; pauseLabel.visible = true
                 pauseEntryViews.forEach { it.visible = true }
                 refreshPauseColors()
@@ -427,10 +504,10 @@ class GameplayScene(
 
             if (isPaused || isGameOver) return@addUpdater
 
-            // Stage-clear countdown before advancing
+            // ── Stage-clear advance ──────────────────────────────────────────
             if (isStageClear) {
                 stageClearTimer += dt.inWholeMilliseconds / 1000f
-                if (stageClearTimer >= 2.5f || ks.justPressed(Key.RETURN) || ks.justPressed(Key.SPACE)) {
+                if (stageClearTimer >= 2.5f || gameInput.confirmJustPressed) {
                     val updatedSession = session.copy(
                         currentLevel = levelNumber,
                         score = world.player1.score,
@@ -438,7 +515,6 @@ class GameplayScene(
                     ).withNextLevel()
                     sceneScope.launch {
                         if (updatedSession.isCampaignComplete()) {
-                            // TODO Phase AH: proper ending screen
                             sceneContainer.changeTo {
                                 MenuScene(exit, drawableResourcesPath, fontResourcesPath, filesResourcesPath)
                             }
@@ -455,6 +531,7 @@ class GameplayScene(
             val dtSec = dt.inWholeMilliseconds / 1000f
             totalSeconds += dtSec
 
+            // ── Debug overlays ───────────────────────────────────────────────
             if (ks.justPressed(Key.F1)) { debugMode = !debugMode; debugOverlay.visible = debugMode }
             if (debugMode) {
                 if (ks.justPressed(Key.K)) world.enemySystem.enemies.forEach { if (it.isActive) it.crash(totalSeconds) }
@@ -472,26 +549,28 @@ class GameplayScene(
                 }
             }
 
-            if (ks.justPressed(Key.TAB)) world.player1.cycleWeapon()
+            // ── Weapon cycle ─────────────────────────────────────────────────
+            if (gameInput.weaponNextJustPressed) world.player1.cycleWeapon()
 
+            // ── Player movement (from GameInput) ─────────────────────────────
             val playerCanAct = world.player1.status == ObjectStatus.ACTIVE || world.player1.status == ObjectStatus.IMMUNE
-            var dx = 0f; var dy = 0f
-            if (ks[Key.W] || ks[Key.UP]) dy -= 1f
-            if (ks[Key.S] || ks[Key.DOWN]) dy += 1f
-            if (ks[Key.A] || ks[Key.LEFT]) dx -= 1f
-            if (ks[Key.D] || ks[Key.RIGHT]) dx += 1f
+            val mvx = gameInput.movement.x
+            val mvy = gameInput.movement.y
 
-            if (playerCanAct && (dx != 0f || dy != 0f)) {
-                val len = sqrt(dx * dx + dy * dy)
-                dx /= len; dy /= len
-                lastMoveDx = dx; lastMoveDy = dy
-                lastFireAngle = FacingDirection.angleFrom(dx, dy)
+            if (playerCanAct && (mvx != 0f || mvy != 0f)) {
+                lastMoveDx = mvx; lastMoveDy = mvy
+                lastFireAngle = FacingDirection.angleFrom(mvx, mvy)
                 val speed = world.player1.pixelsPerSecond * dtSec
-                val delta = Point(dx.toDouble() * speed, dy.toDouble() * speed)
+                val delta = Point(mvx.toDouble() * speed, mvy.toDouble() * speed)
                 world.player1.position = CollisionSystem.resolveMovement(world.player1.position, delta, world.walls, world.furnitures)
             }
 
-            if (world.player1.status == ObjectStatus.ACTIVE && ks[Key.SPACE]) {
+            // ── Player fire (from GameInput) ──────────────────────────────────
+            if (world.player1.status == ObjectStatus.ACTIVE && gameInput.firing) {
+                // For touch aim, update fire angle from aim vector if non-zero
+                if (gameInput.aim.length() > VirtualThumbstickLogic.DEAD_ZONE / VirtualThumbstickLogic.maxRadius) {
+                    lastFireAngle = FacingDirection.angleFrom(gameInput.aim.x, gameInput.aim.y)
+                }
                 CombatSystem.tryFire(world.player1, world.combatState, totalSeconds, lastFireAngle)
             }
 
@@ -536,7 +615,7 @@ class GameplayScene(
 
             world.player1.update(totalSeconds)
 
-            // Check game over
+            // ── Game over check ───────────────────────────────────────────────
             if (world.player1.status == ObjectStatus.INACTIVE && world.player1.lives <= 0) {
                 isGameOver = true
                 gameOverMenuIndex = 0
@@ -546,13 +625,13 @@ class GameplayScene(
                 refreshGameOverColors()
             }
 
-            // Stage cleared
+            // ── Stage cleared ─────────────────────────────────────────────────
             if (waveSystem.isLevelComplete && !isStageClear) {
                 isStageClear = true
                 stageClearedLabel.visible = true
             }
 
-            // Sync enemy views
+            // ── Enemy views sync ──────────────────────────────────────────────
             for ((enemy, view) in enemyViews) {
                 if (enemy.status == ObjectStatus.INACTIVE) { view.visible = false; continue }
                 if (enemy.status == ObjectStatus.DYING) {
@@ -572,7 +651,7 @@ class GameplayScene(
                 if (enemy.entity.velocity.x != 0f) { view.scaleX = if (enemy.entity.velocity.x > 0) 1.0 else -1.0 }
             }
 
-            // Player
+            // ── Player view sync ──────────────────────────────────────────────
             val blinkVisible = (totalSeconds * 10).toInt() % 2 == 0
             playerContainer.visible = when (world.player1.status) {
                 ObjectStatus.IMMUNE   -> blinkVisible
@@ -584,7 +663,7 @@ class GameplayScene(
             playerContainer.y = world.player1.position.y + PLAYER_RENDER_OFFSET_Y
             playerContainer.zIndex = world.player1.position.y
 
-            // Bullets
+            // ── Bullet rendering ──────────────────────────────────────────────
             bulletGraphics.updateShape {
                 for (bullet in world.combatState.bullets) {
                     val (bx, by) = bullet.positionAt(totalSeconds)
@@ -598,7 +677,46 @@ class GameplayScene(
                 }
             }
 
-            // HUD
+            // ── Touch overlay (virtual sticks + pause icon) ───────────────────
+            touchOverlayGraphics.updateShape {
+                if (currentInputMode == InputMode.TOUCH && !isPaused && !isGameOver) {
+                    val maxR = VirtualThumbstickLogic.maxRadius.toDouble()
+                    val knobR = 18.0
+
+                    // Left stick
+                    if (dualStick.left.active) {
+                        val cx = dualStick.left.center.x.toDouble()
+                        val cy = dualStick.left.center.y.toDouble()
+                        stroke(RGBA(200, 200, 200, 120), lineWidth = 2.0) { circle(Point(cx, cy), maxR) }
+                        val disp = dualStick.left.clampedDisplacement
+                        fill(RGBA(255, 255, 255, 180)) { circle(Point(cx + disp.x, cy + disp.y), knobR) }
+                    }
+
+                    // Right stick
+                    if (dualStick.right.active) {
+                        val cx = dualStick.right.center.x.toDouble()
+                        val cy = dualStick.right.center.y.toDouble()
+                        stroke(RGBA(200, 200, 200, 120), lineWidth = 2.0) { circle(Point(cx, cy), maxR) }
+                        val disp = dualStick.right.clampedDisplacement
+                        val knobColor = if (dualStick.isFiring) RGBA(255, 80, 80, 200) else RGBA(255, 255, 255, 180)
+                        fill(knobColor) { circle(Point(cx + disp.x, cy + disp.y), knobR) }
+                    }
+
+                    // Pause icon placeholder (legacy: UI/pause_iconWP, 1088-1135, 39-83)
+                    fill(RGBA(80, 80, 80, 160)) {
+                        rect(PAUSE_ICON_X1.toDouble(), PAUSE_ICON_Y1.toDouble(),
+                            (PAUSE_ICON_X2 - PAUSE_ICON_X1).toDouble(),
+                            (PAUSE_ICON_Y2 - PAUSE_ICON_Y1).toDouble())
+                    }
+                    // Two pause bars
+                    fill(RGBA(240, 240, 240, 220)) {
+                        rect(1096.0, 46.0, 10.0, 31.0)
+                        rect(1114.0, 46.0, 10.0, 31.0)
+                    }
+                }
+            }
+
+            // ── HUD update ────────────────────────────────────────────────────
             val gunLabel = when (world.player1.currentGun) {
                 GunType.PISTOL       -> "PISTOL (INF)"
                 GunType.SHOTGUN      -> "SHOTGUN (${world.player1.ammo[GunType.SHOTGUN.id]})"
@@ -612,11 +730,11 @@ class GameplayScene(
                 world.player1.lifecounter > 30 -> Colors.YELLOW
                 else -> Colors.RED
             }
-            hudLives.text  = "Lives: ${world.player1.lives}"
-            hudScore.text  = "Score: ${world.player1.score}"
-            hudWeapon.text = gunLabel
-            hudWave.text   = if (waveSystem.isLevelComplete) "CLEARED" else "Wave ${waveSystem.waveNumber}/${waveSystem.totalWaves}"
-            hudLevel.text  = "LEVEL $levelNumber"
+            hudLives.text   = "Lives: ${world.player1.lives}"
+            hudScore.text   = "Score: ${world.player1.score}"
+            hudWeapon.text  = gunLabel
+            hudWave.text    = if (waveSystem.isLevelComplete) "CLEARED" else "Wave ${waveSystem.waveNumber}/${waveSystem.totalWaves}"
+            hudLevel.text   = "LEVEL $levelNumber"
             hudEnemies.text = "Enemies: ${world.enemySystem.activeCount}"
         }
 
@@ -629,14 +747,14 @@ class GameplayScene(
     private suspend fun loadFurnitureBitmaps(): Map<Pair<FurnitureType, FurnitureOrientation?>, Bitmap?> {
         val base = "$assetBase/furniture"
         return mapOf(
-            Pair(FurnitureType.ARBOL, null)                            to tryLoadBitmap("$base/arbol.png"),
-            Pair(FurnitureType.BASURA, null)                           to tryLoadBitmap("$base/basura.png"),
-            Pair(FurnitureType.COCHE_ARDIENDO, null)                   to tryLoadBitmap("$base/coche_ardiendo.png"),
-            Pair(FurnitureType.PUENTE, null)                           to tryLoadBitmap("$base/puente.png"),
-            Pair(FurnitureType.BANCO, FurnitureOrientation.SOUTH_EAST) to tryLoadBitmap("$base/banco_se.png"),
-            Pair(FurnitureType.BANCO, FurnitureOrientation.SOUTH_WEST) to tryLoadBitmap("$base/banco_sw.png"),
-            Pair(FurnitureType.BANCO, FurnitureOrientation.NORTH_EAST) to tryLoadBitmap("$base/banco_se.png"),
-            Pair(FurnitureType.BANCO, FurnitureOrientation.NORTH_WEST) to tryLoadBitmap("$base/banco_sw.png"),
+            Pair(FurnitureType.ARBOL, null)                             to tryLoadBitmap("$base/arbol.png"),
+            Pair(FurnitureType.BASURA, null)                            to tryLoadBitmap("$base/basura.png"),
+            Pair(FurnitureType.COCHE_ARDIENDO, null)                    to tryLoadBitmap("$base/coche_ardiendo.png"),
+            Pair(FurnitureType.PUENTE, null)                            to tryLoadBitmap("$base/puente.png"),
+            Pair(FurnitureType.BANCO, FurnitureOrientation.SOUTH_EAST)  to tryLoadBitmap("$base/banco_se.png"),
+            Pair(FurnitureType.BANCO, FurnitureOrientation.SOUTH_WEST)  to tryLoadBitmap("$base/banco_sw.png"),
+            Pair(FurnitureType.BANCO, FurnitureOrientation.NORTH_EAST)  to tryLoadBitmap("$base/banco_se.png"),
+            Pair(FurnitureType.BANCO, FurnitureOrientation.NORTH_WEST)  to tryLoadBitmap("$base/banco_sw.png"),
             Pair(FurnitureType.FAROLA, FurnitureOrientation.NORTH_EAST) to tryLoadBitmap("$base/farola_ne.png"),
             Pair(FurnitureType.FAROLA, FurnitureOrientation.NORTH_WEST) to tryLoadBitmap("$base/farola_nw.png"),
             Pair(FurnitureType.FAROLA, FurnitureOrientation.SOUTH_EAST) to tryLoadBitmap("$base/farola_se.png"),

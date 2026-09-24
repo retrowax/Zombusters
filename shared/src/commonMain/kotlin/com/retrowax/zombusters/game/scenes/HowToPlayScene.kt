@@ -4,9 +4,11 @@ import com.retrowax.zombusters.game.model.GAME_HEIGHT
 import com.retrowax.zombusters.game.model.GAME_WIDTH
 import com.retrowax.zombusters.game.ui.ZombustersFonts
 import korlibs.event.Key
+import korlibs.event.MouseButton
 import korlibs.image.color.Colors
 import korlibs.image.color.RGBA
 import korlibs.image.format.readBitmap
+import korlibs.korge.input.touch
 import korlibs.korge.scene.Scene
 import korlibs.korge.view.SContainer
 import korlibs.korge.view.addUpdater
@@ -102,9 +104,8 @@ class HowToPlayScene(
         val capturedViews = views
         val sceneScope = this@HowToPlayScene
 
-        addUpdater { _: Duration ->
-            val ks = capturedViews.input.keys
-            if (!done && (ks.justPressed(Key.ESCAPE) || ks.justPressed(Key.RETURN) || ks.justPressed(Key.SPACE))) {
+        fun goBack() {
+            if (!done) {
                 done = true
                 sceneScope.launch {
                     sceneContainer.changeTo {
@@ -112,6 +113,20 @@ class HowToPlayScene(
                     }
                 }
             }
+        }
+
+        touch { end { goBack() } }
+
+        var prevMouseDown = false
+
+        addUpdater { _: Duration ->
+            val ks = capturedViews.input.keys
+            if (!done && (ks.justPressed(Key.ESCAPE) || ks.justPressed(Key.RETURN) || ks.justPressed(Key.SPACE))) {
+                goBack()
+            }
+            val mouseDown = capturedViews.input.mouseButtonPressed(MouseButton.LEFT)
+            if (!mouseDown && prevMouseDown) goBack()
+            prevMouseDown = mouseDown
         }
     }
 

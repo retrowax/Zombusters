@@ -4,9 +4,11 @@ import com.retrowax.zombusters.game.model.GAME_HEIGHT
 import com.retrowax.zombusters.game.model.GAME_WIDTH
 import com.retrowax.zombusters.game.ui.ZombustersFonts
 import korlibs.event.Key
+import korlibs.event.MouseButton
 import korlibs.image.color.Colors
 import korlibs.image.color.RGBA
 import korlibs.image.format.readBitmap
+import korlibs.korge.input.touch
 import korlibs.korge.scene.Scene
 import korlibs.korge.view.SContainer
 import korlibs.korge.view.addUpdater
@@ -114,8 +116,30 @@ class MenuScene(
         var scrollPos2 = -200.0
         var scrollDir = true
         var prevSelected = selectedIndex
+        var done = false
         val capturedViews = views
         val sceneScope = this@MenuScene
+
+        // Touch tap: hit-test each menu entry
+        touch {
+            end { info ->
+                if (done) return@end
+                val tx = info.local.x
+                val ty = info.local.y
+                for (i in entries.indices) {
+                    val entryY = menuStartY + i * menuSpacing
+                    if (tx >= menuX - 30 && tx <= menuX + 700 &&
+                        ty >= entryY - 15 && ty <= entryY + 55) {
+                        if (i != selectedIndex) { selectedIndex = i; refreshColors() }
+                        done = true
+                        sceneScope.launch { activateEntry(i); done = false }
+                        break
+                    }
+                }
+            }
+        }
+
+        var prevMouseDown = false
 
         addUpdater { dt: Duration ->
             val ks = capturedViews.input.keys
@@ -136,7 +160,24 @@ class MenuScene(
             scroll1View?.x = scrollPos1
             scroll2View?.x = scrollPos2
 
-            // Navigation
+            // Mouse click hit-test (desktop)
+            val mouseDown = capturedViews.input.mouseButtonPressed(MouseButton.LEFT)
+            if (!mouseDown && prevMouseDown && !done) {
+                val mp = capturedViews.input.mousePos
+                for (i in entries.indices) {
+                    val entryY = menuStartY + i * menuSpacing
+                    if (mp.x >= menuX - 30 && mp.x <= menuX + 700 &&
+                        mp.y >= entryY - 15 && mp.y <= entryY + 55) {
+                        if (i != selectedIndex) { selectedIndex = i; refreshColors() }
+                        done = true
+                        sceneScope.launch { activateEntry(i); done = false }
+                        break
+                    }
+                }
+            }
+            prevMouseDown = mouseDown
+
+            // Keyboard navigation
             if (ks.justPressed(Key.UP) || ks.justPressed(Key.W)) {
                 selectedIndex = (selectedIndex - 1 + entries.size) % entries.size
             }
@@ -149,7 +190,7 @@ class MenuScene(
             }
 
             if (ks.justPressed(Key.RETURN) || ks.justPressed(Key.SPACE)) {
-                sceneScope.launch { activateEntry(selectedIndex) }
+                if (!done) { done = true; sceneScope.launch { activateEntry(selectedIndex); done = false } }
             }
         }
     }

@@ -5,6 +5,7 @@ import com.retrowax.zombusters.game.model.GAME_WIDTH
 import com.retrowax.zombusters.game.ui.ZombustersFonts
 import korlibs.audio.sound.readMusic
 import korlibs.event.Key
+import korlibs.korge.input.touch
 import korlibs.image.color.Colors
 import korlibs.image.color.RGBA
 import korlibs.image.format.readBitmap
@@ -137,6 +138,9 @@ class StartScene(
             }
         }
 
+        // Touch tap anywhere = advance (legacy: any input advances StartScreen)
+        touch { end { advance() } }
+
         addUpdater { dt: Duration ->
             val ks = capturedViews.input.keys
             // Any key or mouse click advances
@@ -144,7 +148,7 @@ class StartScene(
                 ks.justPressed(Key.ESCAPE) || ks.justPressed(Key.UP) ||
                 ks.justPressed(Key.DOWN) || ks.justPressed(Key.W) ||
                 ks.justPressed(Key.S) || ks.justPressed(Key.A) ||
-                ks.justPressed(Key.D)) {
+                ks.justPressed(Key.D) || capturedViews.input.mouseButtonPressed(korlibs.event.MouseButton.LEFT)) {
                 advance()
                 return@addUpdater
             }

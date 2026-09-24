@@ -5,9 +5,11 @@ import com.retrowax.zombusters.game.model.GAME_WIDTH
 import com.retrowax.zombusters.game.model.GameSession
 import com.retrowax.zombusters.game.ui.ZombustersFonts
 import korlibs.event.Key
+import korlibs.event.MouseButton
 import korlibs.image.color.Colors
 import korlibs.image.color.RGBA
 import korlibs.image.format.readBitmap
+import korlibs.korge.input.touch
 import korlibs.korge.scene.Scene
 import korlibs.korge.view.SContainer
 import korlibs.korge.view.addUpdater
@@ -130,11 +132,100 @@ class SelectPlayerScene(
         }
         refreshView()
 
+        var done = false
         val capturedViews = views
         val sceneScope = this@SelectPlayerScene
 
+        // Touch regions:
+        //   Left half (x < 640), y 180-400  → cycle character
+        //   Right half, y 180-290            → level up
+        //   Right half, y 290-400            → level down
+        //   Bottom left (y >= 620, x < 640)  → confirm
+        //   Bottom right (y >= 620, x >= 640) → back
+        touch {
+            end { info ->
+                if (done) return@end
+                val tx = info.local.x
+                val ty = info.local.y
+                when {
+                    tx < GAME_WIDTH / 2.0 && ty in 180.0..400.0 -> {
+                        charIndex = (charIndex + 1) % GameSession.CHARACTER_NAMES.size
+                        refreshView()
+                    }
+                    tx >= GAME_WIDTH / 2.0 && ty in 180.0..290.0 -> {
+                        if (levelSelected < levelsUnlocked) levelSelected++ else levelSelected = 1
+                        refreshView()
+                    }
+                    tx >= GAME_WIDTH / 2.0 && ty in 290.0..400.0 -> {
+                        if (levelSelected > 1) levelSelected-- else levelSelected = levelsUnlocked
+                        refreshView()
+                    }
+                    ty >= GAME_HEIGHT - 100.0 && tx < GAME_WIDTH / 2.0 -> {
+                        done = true
+                        val effectiveCharIndex = if (GameSession.AVAILABLE_CHARACTER_INDICES.contains(charIndex)) charIndex else 0
+                        val sess = GameSession.newGame(effectiveCharIndex).copy(
+                            currentLevel = levelSelected, levelsUnlocked = levelsUnlocked
+                        )
+                        sceneScope.launch {
+                            sceneContainer.changeTo { GameplayScene(exit, drawableResourcesPath, fontResourcesPath, filesResourcesPath, session = sess) }
+                            done = false
+                        }
+                    }
+                    ty >= GAME_HEIGHT - 100.0 && tx >= GAME_WIDTH / 2.0 -> {
+                        done = true
+                        sceneScope.launch {
+                            sceneContainer.changeTo { MenuScene(exit, drawableResourcesPath, fontResourcesPath, filesResourcesPath) }
+                            done = false
+                        }
+                    }
+                }
+            }
+        }
+
+        var prevMouseDown = false
+
         addUpdater { _: Duration ->
             val ks = capturedViews.input.keys
+
+            // Mouse click: same hit regions as touch
+            val mouseDown = capturedViews.input.mouseButtonPressed(MouseButton.LEFT)
+            if (!mouseDown && prevMouseDown && !done) {
+                val mp = capturedViews.input.mousePos
+                val tx = mp.x; val ty = mp.y
+                when {
+                    tx < GAME_WIDTH / 2.0 && ty in 180.0..400.0 -> {
+                        charIndex = (charIndex + 1) % GameSession.CHARACTER_NAMES.size
+                        refreshView()
+                    }
+                    tx >= GAME_WIDTH / 2.0 && ty in 180.0..290.0 -> {
+                        if (levelSelected < levelsUnlocked) levelSelected++ else levelSelected = 1
+                        refreshView()
+                    }
+                    tx >= GAME_WIDTH / 2.0 && ty in 290.0..400.0 -> {
+                        if (levelSelected > 1) levelSelected-- else levelSelected = levelsUnlocked
+                        refreshView()
+                    }
+                    ty >= GAME_HEIGHT - 100.0 && tx < GAME_WIDTH / 2.0 -> {
+                        done = true
+                        val effectiveCharIndex = if (GameSession.AVAILABLE_CHARACTER_INDICES.contains(charIndex)) charIndex else 0
+                        val sess = GameSession.newGame(effectiveCharIndex).copy(
+                            currentLevel = levelSelected, levelsUnlocked = levelsUnlocked
+                        )
+                        sceneScope.launch {
+                            sceneContainer.changeTo { GameplayScene(exit, drawableResourcesPath, fontResourcesPath, filesResourcesPath, session = sess) }
+                            done = false
+                        }
+                    }
+                    ty >= GAME_HEIGHT - 100.0 && tx >= GAME_WIDTH / 2.0 -> {
+                        done = true
+                        sceneScope.launch {
+                            sceneContainer.changeTo { MenuScene(exit, drawableResourcesPath, fontResourcesPath, filesResourcesPath) }
+                            done = false
+                        }
+                    }
+                }
+            }
+            prevMouseDown = mouseDown
 
             if (ks.justPressed(Key.LEFT) || ks.justPressed(Key.A)) {
                 charIndex = (charIndex - 1 + GameSession.CHARACTER_NAMES.size) % GameSession.CHARACTER_NAMES.size

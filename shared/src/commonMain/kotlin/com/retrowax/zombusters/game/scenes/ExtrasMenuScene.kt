@@ -4,6 +4,8 @@ import com.retrowax.zombusters.game.model.GAME_HEIGHT
 import com.retrowax.zombusters.game.model.GAME_WIDTH
 import com.retrowax.zombusters.game.ui.ZombustersFonts
 import korlibs.event.Key
+import korlibs.event.MouseButton
+import korlibs.korge.input.touch
 import korlibs.image.color.Colors
 import korlibs.image.color.RGBA
 import korlibs.image.format.readBitmap
@@ -106,8 +108,65 @@ class ExtrasMenuScene(
         val capturedViews = views
         val sceneScope = this@ExtrasMenuScene
 
+        val menuStartY2 = menuStartY
+        val menuSpacing2 = menuSpacing
+
+        // Touch tap on menu entries
+        touch {
+            end { info ->
+                if (done) return@end
+                val tx = info.local.x; val ty = info.local.y
+                for (i in entries.indices) {
+                    val ey = menuStartY2 + i * menuSpacing2
+                    if (tx >= 50.0 && tx <= 900.0 && ty >= ey - 15 && ty <= ey + 50) {
+                        if (!entries[i].available) return@end
+                        selectedIndex = i; done = true
+                        sceneScope.launch {
+                            when (i) {
+                                0 -> sceneContainer.changeTo { HowToPlayScene(exit, drawableResourcesPath, fontResourcesPath, filesResourcesPath) }
+                                2 -> sceneContainer.changeTo { CreditsScene(exit, drawableResourcesPath, fontResourcesPath, filesResourcesPath, canLeaveImmediately = false) }
+                                else -> {}
+                            }
+                            done = false
+                        }
+                        break
+                    }
+                }
+                // Back area (bottom left)
+                if (ty >= GAME_HEIGHT - 80.0) {
+                    done = true
+                    sceneScope.launch { sceneContainer.changeTo { MenuScene(exit, drawableResourcesPath, fontResourcesPath, filesResourcesPath) }; done = false }
+                }
+            }
+        }
+
+        var prevMouseDown = false
+
         addUpdater { _: Duration ->
             val ks = capturedViews.input.keys
+
+            // Mouse click hit-test
+            val mouseDown = capturedViews.input.mouseButtonPressed(MouseButton.LEFT)
+            if (!mouseDown && prevMouseDown && !done) {
+                val mp = capturedViews.input.mousePos
+                for (i in entries.indices) {
+                    val ey = menuStartY2 + i * menuSpacing2
+                    if (mp.x >= 50.0 && mp.x <= 900.0 && mp.y >= ey - 15 && mp.y <= ey + 50) {
+                        if (!entries[i].available) break
+                        selectedIndex = i; done = true
+                        sceneScope.launch {
+                            when (i) {
+                                0 -> sceneContainer.changeTo { HowToPlayScene(exit, drawableResourcesPath, fontResourcesPath, filesResourcesPath) }
+                                2 -> sceneContainer.changeTo { CreditsScene(exit, drawableResourcesPath, fontResourcesPath, filesResourcesPath, canLeaveImmediately = false) }
+                                else -> {}
+                            }
+                            done = false
+                        }
+                        break
+                    }
+                }
+            }
+            prevMouseDown = mouseDown
 
             if (ks.justPressed(Key.UP) || ks.justPressed(Key.W)) {
                 selectedIndex = (selectedIndex - 1 + entries.size) % entries.size
