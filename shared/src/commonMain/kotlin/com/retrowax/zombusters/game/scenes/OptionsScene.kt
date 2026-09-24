@@ -2,6 +2,7 @@ package com.retrowax.zombusters.game.scenes
 
 import com.retrowax.zombusters.game.model.GAME_HEIGHT
 import com.retrowax.zombusters.game.model.GAME_WIDTH
+import com.retrowax.zombusters.game.persistence.GameSettings
 import com.retrowax.zombusters.game.ui.ZombustersFonts
 import korlibs.event.Key
 import korlibs.event.MouseButton
@@ -48,9 +49,12 @@ class OptionsScene(
         "FULLSCREEN",
         "SAVE AND EXIT"
     )
+    private val languages = listOf("EN", "DE", "ES", "FR", "IT")
     private var selectedIndex = 0
-    private var fxVolume = 7     // 0-10
-    private var musicVolume = 6  // 0-10
+    private var fxVolume = GameSettings.fxVolume
+    private var musicVolume = GameSettings.musicVolume
+    private var langIndex = languages.indexOfFirst { it.lowercase() == GameSettings.language }.coerceAtLeast(0)
+    private var fullscreen = GameSettings.fullscreen
 
     override suspend fun SContainer.sceneInit() {
         ZombustersFonts.loadFrom(fontResourcesPath)
@@ -81,7 +85,7 @@ class OptionsScene(
             }
         }
 
-        // Value displays for volume sliders
+        // Value displays for options
         val fxValueView = text("") {
             textSize = 28.0; color = Colors.CYAN
             x = 500.0; y = menuStartY; zIndex = 2.0
@@ -90,6 +94,16 @@ class OptionsScene(
         val musicValueView = text("") {
             textSize = 28.0; color = Colors.CYAN
             x = 500.0; y = menuStartY + menuSpacing; zIndex = 2.0
+            font = ZombustersFonts.menuInfo
+        }
+        val langValueView = text("") {
+            textSize = 28.0; color = Colors.CYAN
+            x = 500.0; y = menuStartY + 2 * menuSpacing; zIndex = 2.0
+            font = ZombustersFonts.menuInfo
+        }
+        val fullscreenValueView = text("") {
+            textSize = 28.0; color = Colors.CYAN
+            x = 500.0; y = menuStartY + 3 * menuSpacing; zIndex = 2.0
             font = ZombustersFonts.menuInfo
         }
 
@@ -106,9 +120,9 @@ class OptionsScene(
                 v.color = if (i == selectedIndex) Colors.YELLOW else Colors.WHITE
             }
             fxValueView.text = renderBars(fxVolume)
-            fxValueView.y = menuStartY
             musicValueView.text = renderBars(musicVolume)
-            musicValueView.y = menuStartY + menuSpacing
+            langValueView.text = "< ${languages[langIndex]} >"
+            fullscreenValueView.text = if (fullscreen) "ON" else "OFF"
         }
         refresh()
 
@@ -142,7 +156,7 @@ class OptionsScene(
                                  else fxVolume = (fxVolume - 1).coerceAtLeast(0)
                             1 -> if (tx >= 500.0) musicVolume = (musicVolume + 1).coerceAtMost(10)
                                  else musicVolume = (musicVolume - 1).coerceAtLeast(0)
-                            4 -> { done = true; sceneScope.launch { sceneContainer.changeTo { MenuScene(exit, drawableResourcesPath, fontResourcesPath, filesResourcesPath) }; done = false } }
+                            4 -> { done = true; sceneScope.launch { GameSettings.fxVolume = fxVolume; GameSettings.musicVolume = musicVolume; GameSettings.language = languages[langIndex].lowercase(); GameSettings.fullscreen = fullscreen; sceneContainer.changeTo { MenuScene(exit, drawableResourcesPath, fontResourcesPath, filesResourcesPath) }; done = false } }
                         }
                         break
                     }
@@ -173,7 +187,7 @@ class OptionsScene(
                                      else fxVolume = (fxVolume - 1).coerceAtLeast(0)
                                 1 -> if (tx >= 500.0) musicVolume = (musicVolume + 1).coerceAtMost(10)
                                      else musicVolume = (musicVolume - 1).coerceAtLeast(0)
-                                4 -> { done = true; sceneScope.launch { sceneContainer.changeTo { MenuScene(exit, drawableResourcesPath, fontResourcesPath, filesResourcesPath) }; done = false } }
+                                4 -> { done = true; sceneScope.launch { GameSettings.fxVolume = fxVolume; GameSettings.musicVolume = musicVolume; GameSettings.language = languages[langIndex].lowercase(); GameSettings.fullscreen = fullscreen; sceneContainer.changeTo { MenuScene(exit, drawableResourcesPath, fontResourcesPath, filesResourcesPath) }; done = false } }
                             }
                             break
                         }
@@ -198,6 +212,14 @@ class OptionsScene(
                     if (ks.justPressed(Key.RIGHT) || ks.justPressed(Key.D)) musicVolume = (musicVolume + 1).coerceAtMost(10)
                     if (ks.justPressed(Key.LEFT)  || ks.justPressed(Key.A)) musicVolume = (musicVolume - 1).coerceAtLeast(0)
                 }
+                2 -> {
+                    if (ks.justPressed(Key.RIGHT) || ks.justPressed(Key.D)) langIndex = (langIndex + 1) % languages.size
+                    if (ks.justPressed(Key.LEFT)  || ks.justPressed(Key.A)) langIndex = (langIndex - 1 + languages.size) % languages.size
+                }
+                3 -> {
+                    if (ks.justPressed(Key.RIGHT) || ks.justPressed(Key.D) || ks.justPressed(Key.LEFT) || ks.justPressed(Key.A)) fullscreen = !fullscreen
+                    if (ks.justPressed(Key.RETURN) || ks.justPressed(Key.SPACE)) fullscreen = !fullscreen
+                }
             }
 
             if (prevSelected != selectedIndex) {
@@ -213,10 +235,14 @@ class OptionsScene(
                 }
             }
             if (ks.justPressed(Key.RETURN) || ks.justPressed(Key.SPACE)) {
-                if (selectedIndex == 4) {  // Save and Exit
-                    sceneScope.launch {
-                        sceneContainer.changeTo {
-                            MenuScene(exit, drawableResourcesPath, fontResourcesPath, filesResourcesPath)
+                when (selectedIndex) {
+                    3 -> fullscreen = !fullscreen
+                    4 -> {
+                        sceneScope.launch {
+                            GameSettings.fxVolume = fxVolume; GameSettings.musicVolume = musicVolume; GameSettings.language = languages[langIndex].lowercase(); GameSettings.fullscreen = fullscreen;
+                            sceneContainer.changeTo {
+                                MenuScene(exit, drawableResourcesPath, fontResourcesPath, filesResourcesPath)
+                            }
                         }
                     }
                 }

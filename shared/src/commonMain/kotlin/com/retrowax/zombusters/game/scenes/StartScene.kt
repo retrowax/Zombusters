@@ -3,6 +3,7 @@ package com.retrowax.zombusters.game.scenes
 import com.retrowax.zombusters.game.model.GAME_HEIGHT
 import com.retrowax.zombusters.game.model.GAME_WIDTH
 import com.retrowax.zombusters.game.ui.ZombustersFonts
+import com.retrowax.zombusters.localization.getCurrentLocalization
 import korlibs.audio.sound.readMusic
 import korlibs.event.Key
 import korlibs.korge.input.touch
@@ -95,7 +96,7 @@ class StartScene(
         }
 
         // "PRESS ANY KEY" pulsing text — positioned like legacy (75% down uiBounds)
-        val pressKeyText = text("PRESS ANY KEY") {
+        val pressKeyText = text(getCurrentLocalization().pressAnyKey) {
             textSize = 32.0; color = Colors.WHITE
             x = GAME_WIDTH / 2.0 - 140; y = GAME_HEIGHT * 0.75
             zIndex = 11.0

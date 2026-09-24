@@ -3,6 +3,7 @@ package com.retrowax.zombusters.game.scenes
 import com.retrowax.zombusters.game.model.GAME_HEIGHT
 import com.retrowax.zombusters.game.model.GAME_WIDTH
 import com.retrowax.zombusters.game.ui.ZombustersFonts
+import com.retrowax.zombusters.localization.getCurrentLocalization
 import korlibs.event.Key
 import korlibs.event.MouseButton
 import korlibs.korge.input.touch
@@ -39,10 +40,11 @@ class ExtrasMenuScene(
     private val filesResourcesPath: String = ""
 ) : Scene() {
 
+    private val _loc = getCurrentLocalization()
     private val entries = listOf(
-        ExtrasEntry("HOW TO PLAY"),
-        ExtrasEntry("LEADERBOARD", available = false),  // DEFERRED: online
-        ExtrasEntry("CREDITS")
+        ExtrasEntry(_loc.extrasHowToPlay),
+        ExtrasEntry(_loc.extrasLeaderboard, available = false),  // DEFERRED: online
+        ExtrasEntry(_loc.extrasCredits)
     )
     private var selectedIndex = 0
 

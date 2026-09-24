@@ -14,7 +14,8 @@ data class ShotgunShell(
     val startY: Float,
     val firedAt: Float,
     val angle: Float,
-    val direction: FacingDirection = FacingDirection.classify(angle)
+    val direction: FacingDirection = FacingDirection.classify(angle),
+    val shooterIndex: Int = 0
 ) {
     fun pelletPositionAt(pelletIndex: Int, totalSec: Float): Pair<Float, Float> {
         val t = totalSec - firedAt

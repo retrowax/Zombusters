@@ -1,6 +1,7 @@
 package com.retrowax.zombusters.game.scenes
 
 import com.retrowax.zombusters.game.combat.FacingDirection
+import com.retrowax.zombusters.game.debug.GameDebugConfig
 import com.retrowax.zombusters.game.enemy.BaseEnemy
 import com.retrowax.zombusters.game.enemy.Rat
 import com.retrowax.zombusters.game.enemy.SteeringEntity
@@ -19,6 +20,7 @@ import com.retrowax.zombusters.game.model.GAME_HEIGHT
 import com.retrowax.zombusters.game.model.GAME_WIDTH
 import com.retrowax.zombusters.game.model.GameSession
 import com.retrowax.zombusters.game.model.GunType
+import com.retrowax.zombusters.game.persistence.GameSettings
 import com.retrowax.zombusters.game.model.ObjectStatus
 import com.retrowax.zombusters.game.systems.CombatSystem
 import com.retrowax.zombusters.game.systems.DamageSystem
@@ -125,7 +127,7 @@ class GameplayScene(
             return
         }
 
-        val world = GameplayWorld(levelDef)
+        val world = GameplayWorld(levelDef, session.numPlayers)
         world.player1.score = session.score
         world.player1.lives = session.lives
 
@@ -161,15 +163,20 @@ class GameplayScene(
 
         buildFurnitureViews(world.furnitures, furnitureBitmaps)
 
-        // Player container
-        val playerContainer = container { zIndex = world.player1.position.y }
-        if (playerIdleBmp != null) {
-            val idleAnim = SpriteAnimation(playerIdleBmp, JADE_IDLE_FRAME_W, JADE_IDLE_FRAME_H, JADE_IDLE_COLS, 1)
-            val playerSprite = playerContainer.sprite(idleAnim) { smoothing = false }
-            playerSprite.playAnimationLooped(idleAnim, (1.0 / JADE_IDLE_FPS).seconds)
-        } else {
-            playerContainer.solidRect(20.0, 20.0, Colors.CYAN).also { it.x = -10.0; it.y = -10.0 }
+        // Player containers — one per player
+        val playerContainers = List(session.numPlayers) { playerIdx ->
+            val c = container { zIndex = world.players[playerIdx].position.y }
+            if (playerIdleBmp != null) {
+                val idleAnim = SpriteAnimation(playerIdleBmp, JADE_IDLE_FRAME_W, JADE_IDLE_FRAME_H, JADE_IDLE_COLS, 1)
+                val s = c.sprite(idleAnim) { smoothing = false }
+                s.playAnimationLooped(idleAnim, (1.0 / JADE_IDLE_FPS).seconds)
+            } else {
+                val col = listOf(Colors.CYAN, Colors.LIME, Colors.YELLOW, Colors.ORANGE).getOrElse(playerIdx) { Colors.WHITE }
+                c.solidRect(20.0, 20.0, col).also { it.x = -10.0; it.y = -10.0 }
+            }
+            c
         }
+        val playerContainer = playerContainers[0]  // backward-compat alias for single-player HUD/refs
 
         val bulletGraphics = cpuGraphics { }
         bulletGraphics.zIndex = 900.0
@@ -335,9 +342,13 @@ class GameplayScene(
         var isStageClear = false
         var stageClearTimer = 0f
         var debugF2 = false
-        var lastFireAngle = FacingDirection.angleFrom(0f, -1f)
-        var lastMoveDx = 0f
-        var lastMoveDy = -1f
+        // Per-player direction tracking
+        val lastFireAngles = MutableList(session.numPlayers) { FacingDirection.angleFrom(0f, -1f) }
+        val lastMoveDxList = MutableList(session.numPlayers) { 0f }
+        val lastMoveDyList = MutableList(session.numPlayers) { -1f }
+        // Gamepad just-pressed prev state for P2-P4 (indices 0-2 = gamepads[0-2])
+        val prevGpStart = BooleanArray(3)
+        val prevGpR1    = BooleanArray(3)
         var currentInputMode = InputMode.KEYBOARD_MOUSE
 
         val capturedViews = views
@@ -392,29 +403,31 @@ class GameplayScene(
             }
 
             // ── Debug keys — direct keyboard only (developer tooling) ────────
-            if (ks.justPressed(Key.F2)) debugF2 = !debugF2
-            if (debugMode && debugF2) {
-                val jumpLevel = when {
-                    ks.justPressed(Key.N1) || ks.justPressed(Key.NUMPAD1) -> 1
-                    ks.justPressed(Key.N2) || ks.justPressed(Key.NUMPAD2) -> 2
-                    ks.justPressed(Key.N3) || ks.justPressed(Key.NUMPAD3) -> 3
-                    ks.justPressed(Key.N4) || ks.justPressed(Key.NUMPAD4) -> 4
-                    ks.justPressed(Key.N5) || ks.justPressed(Key.NUMPAD5) -> 5
-                    ks.justPressed(Key.N6) || ks.justPressed(Key.NUMPAD6) -> 6
-                    ks.justPressed(Key.N7) || ks.justPressed(Key.NUMPAD7) -> 7
-                    ks.justPressed(Key.N8) || ks.justPressed(Key.NUMPAD8) -> 8
-                    ks.justPressed(Key.N9) || ks.justPressed(Key.NUMPAD9) -> 9
-                    ks.justPressed(Key.N0) || ks.justPressed(Key.NUMPAD0) -> 10
-                    else -> -1
-                }
-                if (jumpLevel in 1..10) {
-                    val jumpSession = session.copy(currentLevel = jumpLevel, debugLevelJump = true)
-                    sceneScope.launch {
-                        sceneContainer.changeTo {
-                            GameplayScene(exit, drawableResourcesPath, fontResourcesPath, filesResourcesPath, jumpSession)
-                        }
+            if (GameDebugConfig.ENABLED) {
+                if (ks.justPressed(Key.F2)) debugF2 = !debugF2
+                if (debugMode && debugF2) {
+                    val jumpLevel = when {
+                        ks.justPressed(Key.N1) || ks.justPressed(Key.NUMPAD1) -> 1
+                        ks.justPressed(Key.N2) || ks.justPressed(Key.NUMPAD2) -> 2
+                        ks.justPressed(Key.N3) || ks.justPressed(Key.NUMPAD3) -> 3
+                        ks.justPressed(Key.N4) || ks.justPressed(Key.NUMPAD4) -> 4
+                        ks.justPressed(Key.N5) || ks.justPressed(Key.NUMPAD5) -> 5
+                        ks.justPressed(Key.N6) || ks.justPressed(Key.NUMPAD6) -> 6
+                        ks.justPressed(Key.N7) || ks.justPressed(Key.NUMPAD7) -> 7
+                        ks.justPressed(Key.N8) || ks.justPressed(Key.NUMPAD8) -> 8
+                        ks.justPressed(Key.N9) || ks.justPressed(Key.NUMPAD9) -> 9
+                        ks.justPressed(Key.N0) || ks.justPressed(Key.NUMPAD0) -> 10
+                        else -> -1
                     }
-                    return@addUpdater
+                    if (jumpLevel in 1..10) {
+                        val jumpSession = session.copy(currentLevel = jumpLevel, debugLevelJump = true)
+                        sceneScope.launch {
+                            sceneContainer.changeTo {
+                                GameplayScene(exit, drawableResourcesPath, fontResourcesPath, filesResourcesPath, jumpSession)
+                            }
+                        }
+                        return@addUpdater
+                    }
                 }
             }
 
@@ -491,8 +504,12 @@ class GameplayScene(
                 return@addUpdater
             }
 
-            // ── Enter pause ──────────────────────────────────────────────────
-            if (gameInput.pauseJustPressed) {
+            // ── Enter pause (P1 or any connected gamepad START) ──────────────
+            val anyGpPauseJP = (0 until minOf(session.numPlayers - 1, 3)).any { gpIdx ->
+                val gp = capturedViews.input.gamepads[gpIdx]
+                gp.connected && gp.start && !prevGpStart[gpIdx]
+            }
+            if (gameInput.pauseJustPressed || anyGpPauseJP) {
                 isPaused = true
                 pauseMenuIndex = 0
                 dualStick.resetAll()   // clear sticks so no movement/fire resumes on unpause
@@ -513,6 +530,9 @@ class GameplayScene(
                         score = world.player1.score,
                         lives = world.player1.lives
                     ).withNextLevel()
+                    if (updatedSession.currentLevel > GameSettings.levelsUnlocked) {
+                        GameSettings.levelsUnlocked = updatedSession.currentLevel.coerceAtMost(GameSession.MAX_CAMPAIGN_LEVELS)
+                    }
                     sceneScope.launch {
                         if (updatedSession.isCampaignComplete()) {
                             sceneContainer.changeTo {
@@ -532,59 +552,100 @@ class GameplayScene(
             totalSeconds += dtSec
 
             // ── Debug overlays ───────────────────────────────────────────────
-            if (ks.justPressed(Key.F1)) { debugMode = !debugMode; debugOverlay.visible = debugMode }
-            if (debugMode) {
-                if (ks.justPressed(Key.K)) world.enemySystem.enemies.forEach { if (it.isActive) it.crash(totalSeconds) }
-                if (ks.justPressed(Key.G)) {
-                    world.player1.ammo[GunType.MACHINEGUN.id] = 50
-                    world.player1.ammo[GunType.SHOTGUN.id] = 25
-                    world.player1.ammo[GunType.FLAMETHROWER.id] = 25
-                    world.player1.ammo[GunType.GRENADE.id] = 5
-                }
-                if (ks.justPressed(Key.H)) {
-                    world.player1.lifecounter -= 20
-                    if (world.player1.lifecounter <= 0) {
-                        world.player1.lives--; world.player1.lifecounter = 100; world.player1.destroy(totalSeconds)
+            if (GameDebugConfig.ENABLED) {
+                if (ks.justPressed(Key.F1)) { debugMode = !debugMode; debugOverlay.visible = debugMode }
+                if (debugMode) {
+                    if (ks.justPressed(Key.K)) world.enemySystem.enemies.forEach { if (it.isActive) it.crash(totalSeconds) }
+                    if (ks.justPressed(Key.G)) {
+                        world.player1.ammo[GunType.MACHINEGUN.id] = 50
+                        world.player1.ammo[GunType.SHOTGUN.id] = 25
+                        world.player1.ammo[GunType.FLAMETHROWER.id] = 25
+                        world.player1.ammo[GunType.GRENADE.id] = 5
+                    }
+                    if (ks.justPressed(Key.H)) {
+                        world.player1.lifecounter -= 20
+                        if (world.player1.lifecounter <= 0) {
+                            world.player1.lives--; world.player1.lifecounter = 100; world.player1.destroy(totalSeconds)
+                        }
                     }
                 }
             }
 
-            // ── Weapon cycle ─────────────────────────────────────────────────
-            if (gameInput.weaponNextJustPressed) world.player1.cycleWeapon()
-
-            // ── Player movement (from GameInput) ─────────────────────────────
-            val playerCanAct = world.player1.status == ObjectStatus.ACTIVE || world.player1.status == ObjectStatus.IMMUNE
-            val mvx = gameInput.movement.x
-            val mvy = gameInput.movement.y
-
-            if (playerCanAct && (mvx != 0f || mvy != 0f)) {
-                lastMoveDx = mvx; lastMoveDy = mvy
-                lastFireAngle = FacingDirection.angleFrom(mvx, mvy)
-                val speed = world.player1.pixelsPerSecond * dtSec
-                val delta = Point(mvx.toDouble() * speed, mvy.toDouble() * speed)
-                world.player1.position = CollisionSystem.resolveMovement(world.player1.position, delta, world.walls, world.furnitures)
-            }
-
-            // ── Player fire (from GameInput) ──────────────────────────────────
-            if (world.player1.status == ObjectStatus.ACTIVE && gameInput.firing) {
-                // For touch aim, update fire angle from aim vector if non-zero
-                if (gameInput.aim.length() > VirtualThumbstickLogic.DEAD_ZONE / VirtualThumbstickLogic.maxRadius) {
-                    lastFireAngle = FacingDirection.angleFrom(gameInput.aim.x, gameInput.aim.y)
+            // ── Per-player weapon / movement / fire ──────────────────────────
+            for ((idx, player) in world.players.withIndex()) {
+                // Build GameInput for this player
+                val pInput: GameInput = if (idx == 0) {
+                    gameInput  // P1: keyboard / touch (built above)
+                } else {
+                    val gpIdx = idx - 1  // P2 = gamepads[0], P3 = gamepads[1], P4 = gamepads[2]
+                    val gp = capturedViews.input.gamepads[gpIdx]
+                    if (!gp.connected) GameInput.EMPTY
+                    else {
+                        val lx = gp.lx
+                        val ly = gp.ly   // ly: -1=down, +1=up (XNA convention); negate for screen Y+down
+                        val rx = gp.rx
+                        val ry = gp.ry
+                        val movLen = sqrt(lx * lx + ly * ly)
+                        val movNormX = if (movLen > 0.1f) lx / movLen else 0f
+                        val movNormY = if (movLen > 0.1f) -ly / movLen else 0f
+                        val aimLen = sqrt(rx * rx + ry * ry)
+                        val firing = aimLen > 0.3f
+                        val startJP = gp.start && !prevGpStart[gpIdx]
+                        val r1JP    = gp.r1    && !prevGpR1[gpIdx]
+                        GameInput(
+                            movement = Vec2(movNormX, movNormY),
+                            aim = Vec2(rx, if (firing) -ry else 0f),
+                            firing = firing,
+                            pauseJustPressed = startJP,
+                            confirmJustPressed = gp.south,
+                            cancelJustPressed = gp.east,
+                            weaponNextJustPressed = r1JP,
+                        )
+                    }
                 }
-                CombatSystem.tryFire(world.player1, world.combatState, totalSeconds, lastFireAngle)
+
+                // Weapon cycle
+                if (pInput.weaponNextJustPressed) player.cycleWeapon()
+
+                // Movement
+                val playerCanAct = player.status == ObjectStatus.ACTIVE || player.status == ObjectStatus.IMMUNE
+                val mvx = pInput.movement.x
+                val mvy = pInput.movement.y
+                if (playerCanAct && (mvx != 0f || mvy != 0f)) {
+                    lastMoveDxList[idx] = mvx; lastMoveDyList[idx] = mvy
+                    lastFireAngles[idx] = FacingDirection.angleFrom(mvx, mvy)
+                    val speed = player.pixelsPerSecond * dtSec
+                    val delta = Point(mvx.toDouble() * speed, mvy.toDouble() * speed)
+                    player.position = CollisionSystem.resolveMovement(player.position, delta, world.walls, world.furnitures)
+                }
+
+                // Fire
+                if (player.status == ObjectStatus.ACTIVE && pInput.firing) {
+                    if (pInput.aim.length() > VirtualThumbstickLogic.DEAD_ZONE / VirtualThumbstickLogic.maxRadius) {
+                        lastFireAngles[idx] = FacingDirection.angleFrom(pInput.aim.x, pInput.aim.y)
+                    }
+                    CombatSystem.tryFire(player, world.combatStates[idx], totalSeconds, lastFireAngles[idx], shooterIndex = idx)
+                }
             }
 
-            CombatSystem.pruneOutOfBounds(world.combatState, totalSeconds)
-            val kills = DamageSystem.processBulletCollisions(world.combatState, world.enemySystem.enemies, world.player1, totalSeconds)
+            // Update gamepad prev state (after consuming above)
+            for (gpIdx in 0 until minOf(session.numPlayers - 1, 3)) {
+                val gp = capturedViews.input.gamepads[gpIdx]
+                prevGpStart[gpIdx] = gp.connected && gp.start
+                prevGpR1[gpIdx]    = gp.connected && gp.r1
+            }
+
+            // Prune out-of-bounds projectiles for all players
+            for (cs in world.combatStates) { CombatSystem.pruneOutOfBounds(cs, totalSeconds) }
+
+            // Multi-player bullet/contact damage
+            val kills = DamageSystem.processBulletCollisionsMulti(world.combatStates, world.enemySystem.enemies, world.players, totalSeconds)
             repeat(kills) {
                 world.powerUpSystem.trySpawnOnKill(world.player1.position.x.toFloat(), world.player1.position.y.toFloat(), totalSeconds)
             }
 
-            if (world.player1.status == ObjectStatus.ACTIVE) {
-                DamageSystem.processEnemyContact(world.enemySystem.enemies, world.player1, totalSeconds)
-            }
-
-            world.powerUpSystem.update(totalSeconds, world.player1)
+            DamageSystem.processEnemyContactMulti(world.enemySystem.enemies, world.players, totalSeconds)
+            world.powerUpSystem.update(totalSeconds, world.players)
 
             val waveSystem = world.waveSystem
             if (!waveSystem.isLevelComplete) {
@@ -603,20 +664,27 @@ class GameplayScene(
                     }
                 }
 
-                val playerPos = Vec2(world.player1.position.x.toFloat(), world.player1.position.y.toFloat())
-                val playerSteering = SteeringEntity(playerPos)
-                playerSteering.velocity = Vec2(lastMoveDx * AVATAR_PIXELS_PER_SECOND / 60f, lastMoveDy * AVATAR_PIXELS_PER_SECOND / 60f)
-                world.enemySystem.update(dtSec, playerPos, playerSteering, totalSeconds)
+                // Update per-player steering from current position/velocity
+                for ((idx, se) in world.playerSteeringEntities.withIndex()) {
+                    val p = world.players[idx]
+                    se.position = Vec2(p.position.x.toFloat(), p.position.y.toFloat())
+                    se.velocity = Vec2(
+                        lastMoveDxList[idx] * AVATAR_PIXELS_PER_SECOND / 60f,
+                        lastMoveDyList[idx] * AVATAR_PIXELS_PER_SECOND / 60f
+                    )
+                }
+                world.enemySystem.update(dtSec, world.players, world.playerSteeringEntities, totalSeconds)
 
                 if (waveSystem.spawned && world.enemySystem.activeCount == 0) {
                     waveSystem.advanceWave()
                 }
             }
 
-            world.player1.update(totalSeconds)
+            world.players.forEach { it.update(totalSeconds) }
 
-            // ── Game over check ───────────────────────────────────────────────
-            if (world.player1.status == ObjectStatus.INACTIVE && world.player1.lives <= 0) {
+            // ── Game over check (all players must be eliminated) ──────────────
+            val allDead = world.players.all { it.status == ObjectStatus.INACTIVE && it.lives <= 0 }
+            if (allDead && !isGameOver) {
                 isGameOver = true
                 gameOverMenuIndex = 0
                 gameOverOverlay.visible = true
@@ -651,28 +719,33 @@ class GameplayScene(
                 if (enemy.entity.velocity.x != 0f) { view.scaleX = if (enemy.entity.velocity.x > 0) 1.0 else -1.0 }
             }
 
-            // ── Player view sync ──────────────────────────────────────────────
+            // ── Player view sync (all players) ────────────────────────────────
             val blinkVisible = (totalSeconds * 10).toInt() % 2 == 0
-            playerContainer.visible = when (world.player1.status) {
-                ObjectStatus.IMMUNE   -> blinkVisible
-                ObjectStatus.DYING    -> false
-                ObjectStatus.INACTIVE -> false
-                else                  -> true
-            }
-            playerContainer.x = world.player1.position.x + PLAYER_RENDER_OFFSET_X
-            playerContainer.y = world.player1.position.y + PLAYER_RENDER_OFFSET_Y
-            playerContainer.zIndex = world.player1.position.y
-
-            // ── Bullet rendering ──────────────────────────────────────────────
-            bulletGraphics.updateShape {
-                for (bullet in world.combatState.bullets) {
-                    val (bx, by) = bullet.positionAt(totalSeconds)
-                    fill(Colors.YELLOW) { circle(Point(bx.toDouble(), by.toDouble()), 3.0) }
+            for ((idx, pc) in playerContainers.withIndex()) {
+                val p = world.players[idx]
+                pc.visible = when (p.status) {
+                    ObjectStatus.IMMUNE   -> blinkVisible
+                    ObjectStatus.DYING    -> false
+                    ObjectStatus.INACTIVE -> false
+                    else                  -> true
                 }
-                for (shell in world.combatState.shotgunShells) {
-                    for (pi in 0..2) {
-                        val (px, py) = shell.pelletPositionAt(pi, totalSeconds)
-                        fill(Colors.ORANGE) { circle(Point(px.toDouble(), py.toDouble()), 2.5) }
+                pc.x = p.position.x + PLAYER_RENDER_OFFSET_X
+                pc.y = p.position.y + PLAYER_RENDER_OFFSET_Y
+                pc.zIndex = p.position.y
+            }
+
+            // ── Bullet rendering (all players' projectiles) ───────────────────
+            bulletGraphics.updateShape {
+                for (cs in world.combatStates) {
+                    for (bullet in cs.bullets) {
+                        val (bx, by) = bullet.positionAt(totalSeconds)
+                        fill(Colors.YELLOW) { circle(Point(bx.toDouble(), by.toDouble()), 3.0) }
+                    }
+                    for (shell in cs.shotgunShells) {
+                        for (pi in 0..2) {
+                            val (px, py) = shell.pelletPositionAt(pi, totalSeconds)
+                            fill(Colors.ORANGE) { circle(Point(px.toDouble(), py.toDouble()), 2.5) }
+                        }
                     }
                 }
             }
@@ -738,8 +811,10 @@ class GameplayScene(
             hudEnemies.text = "Enemies: ${world.enemySystem.activeCount}"
         }
 
-        playerContainer.x = world.player1.position.x + PLAYER_RENDER_OFFSET_X
-        playerContainer.y = world.player1.position.y + PLAYER_RENDER_OFFSET_Y
+        for ((idx, pc) in playerContainers.withIndex()) {
+            pc.x = world.players[idx].position.x + PLAYER_RENDER_OFFSET_X
+            pc.y = world.players[idx].position.y + PLAYER_RENDER_OFFSET_Y
+        }
     }
 
     private suspend fun tryLoadBitmap(path: String): Bitmap? = try { resourcesVfs[path].readBitmap() } catch (_: Exception) { null }

@@ -94,6 +94,34 @@ object DamageSystem {
         return kills
     }
 
+    // Multi-player: awards score to the correct shooter via Projectile.shooterIndex
+    fun processBulletCollisionsMulti(
+        combatStates: List<CombatState>,
+        enemies: List<BaseEnemy>,
+        players: List<Avatar>,
+        totalSec: Float
+    ): Int {
+        var kills = 0
+        for ((idx, cs) in combatStates.withIndex()) {
+            val shooter = players.getOrNull(idx) ?: continue
+            kills += processBulletCollisions(cs, enemies, shooter, totalSec)
+        }
+        return kills
+    }
+
+    // Multi-player: checks all active players for enemy contact, damage is independent
+    fun processEnemyContactMulti(
+        enemies: List<BaseEnemy>,
+        players: List<Avatar>,
+        totalSec: Float
+    ): Boolean {
+        var anyDamaged = false
+        for (player in players) {
+            if (processEnemyContact(enemies, player, totalSec)) anyDamaged = true
+        }
+        return anyDamaged
+    }
+
     fun processEnemyContact(
         enemies: List<BaseEnemy>,
         avatar: Avatar,

@@ -40,4 +40,26 @@ class PowerUpSystem(private val random: Random = Random.Default) {
 
         powerUps.removeAll { it.status == ObjectStatus.INACTIVE }
     }
+
+    // Multi-player: first player to enter pickup radius collects it (legacy: proximity-based)
+    fun update(totalSec: Float, players: List<Avatar>) {
+        powerUps.forEach { it.update(totalSec) }
+
+        for (pu in powerUps) {
+            if (!pu.isActive) continue
+            for (player in players) {
+                if (!player.isPlayingTheGame) continue
+                val px = player.position.x.toFloat()
+                val py = player.position.y.toFloat()
+                val dx = px - pu.x
+                val dy = py - pu.y
+                if (dx * dx + dy * dy < 30f * 30f) {
+                    pu.applyTo(player, totalSec)
+                    break  // only one player collects per power-up
+                }
+            }
+        }
+
+        powerUps.removeAll { it.status == ObjectStatus.INACTIVE }
+    }
 }

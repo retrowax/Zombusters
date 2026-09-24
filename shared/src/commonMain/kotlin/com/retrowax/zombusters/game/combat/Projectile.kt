@@ -12,7 +12,8 @@ data class Projectile(
     val firedAt: Float,
     val angle: Float,
     val direction: FacingDirection = FacingDirection.classify(angle),
-    val speed: Float = BULLET_SPEED
+    val speed: Float = BULLET_SPEED,
+    val shooterIndex: Int = 0
 ) {
     fun positionAt(totalSec: Float): Pair<Float, Float> {
         val t = totalSec - firedAt

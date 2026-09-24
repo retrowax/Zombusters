@@ -9,7 +9,7 @@ fun main() = application {
     startKoin {
         modules(commonModule)
     }
-    Window(onCloseRequest = ::exitApplication) {
+    Window(onCloseRequest = ::exitApplication, title = "Zombusters") {
         ZombustersTheme {
             MainApp()
         }

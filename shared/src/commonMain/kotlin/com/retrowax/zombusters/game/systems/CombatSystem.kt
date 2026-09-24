@@ -58,7 +58,8 @@ object CombatSystem {
         avatar: Avatar,
         combatState: CombatState,
         totalSec: Float,
-        fireAngle: Float
+        fireAngle: Float,
+        shooterIndex: Int = 0
     ): Boolean {
         if (avatar.currentGun != GunType.PISTOL && avatar.ammo[avatar.currentGun.id] <= 0) {
             avatar.currentGun = GunType.PISTOL
@@ -75,21 +76,21 @@ object CombatSystem {
         when (avatar.currentGun) {
             GunType.PISTOL -> {
                 val (ox, oy) = PISTOL_MUZZLE[dir] ?: Pair(0f, 0f)
-                combatState.bullets.add(Projectile(playerX + ox, playerY + oy, totalSec, fireAngle, dir, BULLET_SPEED))
+                combatState.bullets.add(Projectile(playerX + ox, playerY + oy, totalSec, fireAngle, dir, BULLET_SPEED, shooterIndex))
             }
             GunType.MACHINEGUN -> {
                 val (ox, oy) = MACHINEGUN_MUZZLE[dir] ?: Pair(0f, 0f)
-                combatState.bullets.add(Projectile(playerX + ox, playerY + oy, totalSec, fireAngle, dir, BULLET_SPEED))
+                combatState.bullets.add(Projectile(playerX + ox, playerY + oy, totalSec, fireAngle, dir, BULLET_SPEED, shooterIndex))
                 avatar.ammo[GunType.MACHINEGUN.id]--
             }
             GunType.SHOTGUN -> {
                 val (ox, oy) = SHOTGUN_MUZZLE[dir] ?: Pair(0f, 0f)
-                combatState.shotgunShells.add(ShotgunShell(playerX + ox, playerY + oy, totalSec, fireAngle, dir))
+                combatState.shotgunShells.add(ShotgunShell(playerX + ox, playerY + oy, totalSec, fireAngle, dir, shooterIndex))
                 avatar.ammo[GunType.SHOTGUN.id]--
             }
             GunType.FLAMETHROWER -> {
                 val (ox, oy) = MACHINEGUN_MUZZLE[dir] ?: Pair(0f, 0f)
-                combatState.bullets.add(Projectile(playerX + ox, playerY + oy, totalSec, fireAngle, dir, BULLET_SPEED))
+                combatState.bullets.add(Projectile(playerX + ox, playerY + oy, totalSec, fireAngle, dir, BULLET_SPEED, shooterIndex))
                 avatar.ammo[GunType.FLAMETHROWER.id]--
             }
             GunType.GRENADE -> {

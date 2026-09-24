@@ -21,6 +21,57 @@ interface Localization {
     val gameExit: String
     val gameRestart: String
     val gameFinalScore: String
+
+    // Main menu
+    val menuNewGame: String
+    val menuExtras: String
+    val menuOptions: String
+    val menuQuit: String
+
+    // Select Player screen
+    val selectCharacter: String
+    val selectStartLevel: String
+    val selectCharUnavailable: String
+    val selectConfirm: String
+
+    // Options screen
+    val optionsSoundFxVolume: String
+    val optionsMusicVolume: String
+    val optionsLanguage: String
+    val optionsFullscreen: String
+    val optionsSaveAndExit: String
+
+    // Extras menu
+    val extrasHowToPlay: String
+    val extrasLeaderboard: String
+    val extrasCredits: String
+
+    // Pause menu
+    val pauseResume: String
+    val pauseHowToPlay: String
+    val pauseOptions: String
+    val pauseRestartLevel: String
+    val pauseQuitToMainMenu: String
+
+    // Game over
+    val gameOverRestartWave: String
+    val gameOverRestartBeginning: String
+    val gameOverReturnToMenu: String
+
+    // HUD labels
+    val hudHp: String
+    val hudLives: String
+    val hudScore: String
+    val hudWave: String
+    val hudCleared: String
+    val hudEnemies: String
+
+    // Input hint text
+    val pressAnyKey: String
+    val tapToContinue: String
+    val stageCleared: String
+    val back: String
+    val escBack: String
 }
 
 enum class AvailableLanguages {
