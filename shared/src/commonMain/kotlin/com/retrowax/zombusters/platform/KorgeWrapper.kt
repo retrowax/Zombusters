@@ -5,7 +5,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.Dp
 import com.retrowax.zombusters.game.model.GAME_HEIGHT
 import com.retrowax.zombusters.game.model.GAME_WIDTH
-import com.retrowax.zombusters.game.scenes.MainMenuScene
+import com.retrowax.zombusters.game.scenes.LogoScene
 import korlibs.image.color.RGBA
 import korlibs.korge.Korge
 import korlibs.math.geom.Size
@@ -23,12 +23,12 @@ class KorgeWrapper(
     filesResourcesPath: String = ""
 ) {
     private val korgeModule = Korge(
-        mainSceneClass = MainMenuScene::class,
+        mainSceneClass = LogoScene::class,
         virtualSize = Size(GAME_WIDTH, GAME_HEIGHT),
         windowSize = Size(windowWidth.value, windowHeight.value),
         configInjector = {
             mapPrototype {
-                MainMenuScene(
+                LogoScene(
                     exit = exit,
                     drawableResourcesPath = drawableResourcesPath,
                     fontResourcesPath = fontResourcesPath,
