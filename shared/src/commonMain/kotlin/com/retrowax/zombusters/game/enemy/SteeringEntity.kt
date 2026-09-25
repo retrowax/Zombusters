@@ -1,10 +1,5 @@
 package com.retrowax.zombusters.game.enemy
 
-import kotlin.math.abs
-import kotlin.math.atan2
-import kotlin.math.cos
-import kotlin.math.sin
-
 class SteeringEntity(
     initialPosition: Vec2,
     var maxSpeed: Float = 1.5f,
@@ -28,11 +23,11 @@ class SteeringEntity(
 
     val speed: Float get() = velocity.length()
 
-    // Matches legacy VectorHelper.GetAngle: atan2(prev.Y - cur.Y, prev.X - cur.X)
-    val angle: Float get() = atan2(_previousPosition.y - _position.y, _previousPosition.x - _position.x)
-
-    // Matches legacy SteeringEntity.Heading: |cos(angle)|, |sin(angle)|
-    val heading: Vec2 get() = Vec2(abs(cos(angle)), abs(sin(angle)))
+    // Heading derived from velocity direction; falls back to east (1,0) when stationary
+    val heading: Vec2 get() {
+        val len = velocity.length()
+        return if (len > 0.001f) Vec2(velocity.x / len, velocity.y / len) else Vec2(1f, 0f)
+    }
 
     // Perpendicular to heading (-heading.y, heading.x)
     val side: Vec2 get() { val h = heading; return Vec2(-h.y, h.x) }

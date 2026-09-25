@@ -80,15 +80,26 @@ private const val JADE_TRUNK_E_LY  =   4.0
 private const val JADE_TRUNK_SE_LY =   4.0
 private const val JADE_TRUNK_S_LY  =   4.0
 
-// Legs sprite offsets inside container (legacy: position.X+7, position.Y+3 → local +27, +58)
-private const val LEGS_LOCAL_X = 27.0
-private const val LEGS_LOCAL_Y = 58.0
+// Legs sprite offsets inside container
+// Legacy: position.X+7+offsetX(-20), position.Y+offsetY(-55)+3 → local (7, 3)
+private const val LEGS_LOCAL_X = 7.0
+private const val LEGS_LOCAL_Y = 3.0
 
-// Shadow offsets inside container (legacy: position.X + legsW/2 - 5, position.Y + legsH - 6)
-// legsW=26, legsH=52 → screen (position.X+8, position.Y+46) → local +28, +101
-private const val SHADOW_LOCAL_X   = 28.0
-private const val SHADOW_LOCAL_Y   = 101.0
-private const val SHADOW_ALPHA     = 0.20
+// Run (legs) animation — JadeRunEDef: 49×24, 8 cols, Speed=15
+private const val JADE_RUN_FRAME_W = 49
+private const val JADE_RUN_FRAME_H = 24
+private const val JADE_RUN_COLS = 8
+private const val JADE_RUN_FPS = 15
+// Run local positions in player container (east: x-7+offsetX, y-26 → local (-7,29))
+private const val RUN_LOCAL_X_E = -7.0
+private const val RUN_LOCAL_X_W = 18.0
+private const val RUN_LOCAL_Y   = 29.0
+
+// Shadow offsets inside container
+// Legacy: position.X+legsW/2-5+offsetX(-20), position.Y+legsH-6+offsetY(-55) → local (8, 46)
+private const val SHADOW_LOCAL_X = 8.0
+private const val SHADOW_LOCAL_Y = 46.0
+private const val SHADOW_ALPHA   = 0.6
 
 // Enemy shadow offsets relative to enemy container (at (ex, ey-50))
 // Legacy zombie: (entity.X-10, entity.Y-3) → local (-10, 47)
@@ -169,7 +180,9 @@ class GameplayScene(
         val charPath         = session.characterSpritePath
         val playerIdleBmp    = tryLoadBitmap("$assetBase/characters/$charPath/idle.png")
         val playerLegsBmp    = tryLoadBitmap("$assetBase/characters/$charPath/legs_idle.png")
+        val playerRunBmp     = tryLoadBitmap("$assetBase/characters/$charPath/run_e.png")
         val shadowBmp        = tryLoadBitmap("$assetBase/characters/shadow.png")
+        val hudPanelBmp      = tryLoadBitmap("$assetBase/hud/gameplay_gui_stats.png")
         val shotEBmp         = tryLoadBitmap("$assetBase/characters/$charPath/shot_e.png")
         val shotNEBmp        = tryLoadBitmap("$assetBase/characters/$charPath/shot_ne.png")
         val shotNBmp         = tryLoadBitmap("$assetBase/characters/$charPath/shot_n.png")
@@ -193,6 +206,8 @@ class GameplayScene(
         val shotSEAnim   = shotSEBmp?.let { SpriteAnimation(it, JADE_SHOT_SE_W, JADE_SHOT_SE_H, JADE_SHOT_SE_COLS, 1) }
         val shotSAnim    = shotSBmp?.let  { SpriteAnimation(it, JADE_SHOT_S_W,  JADE_SHOT_S_H,  JADE_SHOT_S_COLS,  1) }
 
+        val runEAnim     = playerRunBmp?.let { SpriteAnimation(it, JADE_RUN_FRAME_W, JADE_RUN_FRAME_H, JADE_RUN_COLS, 1) }
+
         val zombieAnim   = zombieBitmap?.let { SpriteAnimation(it, ZOMBIE_FRAME_W, ZOMBIE_FRAME_H, ZOMBIE_COLS, 1) }
         val ratIdleAnim  = ratIdleBitmap?.let { SpriteAnimation(it, RAT_FRAME_W, RAT_FRAME_H, RAT_IDLE_COLS, 1) }
         val ratRunAnim   = ratRunBitmap?.let { SpriteAnimation(it, RAT_FRAME_W, RAT_FRAME_H, RAT_RUN_COLS, 1) }
@@ -214,9 +229,13 @@ class GameplayScene(
 
         // Per-player trunk sprite references (for animation swapping based on fire direction)
         val playerTrunkSprites = mutableListOf<korlibs.korge.view.Sprite?>()
+        // Per-player legs views: idle image and run sprite
+        val playerLegsIdleViews  = mutableListOf<korlibs.korge.view.Image?>()
+        val playerLegsRunSprites = mutableListOf<korlibs.korge.view.Sprite?>()
         // Per-player last known facing direction (for animation dirty-check)
         val playerLastFacing = MutableList(session.numPlayers) { FacingDirection.E }
         val playerLastFiring = MutableList(session.numPlayers) { false }
+        val playerLastMoving = MutableList(session.numPlayers) { false }
 
         // Player containers — one per player
         val playerContainers = List(session.numPlayers) { playerIdx ->
@@ -228,13 +247,24 @@ class GameplayScene(
                     alpha = SHADOW_ALPHA; smoothing = false; zIndex = -0.1
                 }
             }
-            // Legs (static image, behind trunk)
-            if (playerLegsBmp != null) {
+            // Legs idle (static image, shown when player is not moving)
+            val legsIdleView: korlibs.korge.view.Image? = if (playerLegsBmp != null) {
                 c.image(playerLegsBmp) {
                     x = LEGS_LOCAL_X; y = LEGS_LOCAL_Y
                     smoothing = false; zIndex = 0.0
                 }
-            }
+            } else null
+            playerLegsIdleViews.add(legsIdleView)
+
+            // Legs run sprite (shown when player is moving)
+            val legsRunSprite: korlibs.korge.view.Sprite? = if (runEAnim != null) {
+                c.sprite(runEAnim) {
+                    x = RUN_LOCAL_X_E; y = RUN_LOCAL_Y
+                    smoothing = false; zIndex = 0.0; visible = false
+                }.also { it.playAnimationLooped(runEAnim, (1.0 / JADE_RUN_FPS).seconds) }
+            } else null
+            playerLegsRunSprites.add(legsRunSprite)
+
             // Trunk — start with idle animation
             val trunkSprite: korlibs.korge.view.Sprite? = if (idleAnim != null) {
                 c.sprite(idleAnim) {
@@ -257,26 +287,35 @@ class GameplayScene(
         val touchOverlayGraphics = cpuGraphics { }
         touchOverlayGraphics.zIndex = 1050.0
 
-        // HUD — bitmap elements + text overlay (legacy style: character portrait, heart, ammo)
-        // Panel background
-        solidRect(210.0, 55.0, RGBA(0, 0, 0, 160)).apply { x = 2.0; y = 2.0; zIndex = 999.0 }
-        // Character portrait
+        // HUD — bitmap panel + character portrait + stats text
+        // Panel background (gameplay_gui_stats.png, 214×69, at top-left)
+        if (hudPanelBmp != null) {
+            image(hudPanelBmp) { x = 10.0; y = 0.0; zIndex = 999.0; smoothing = false }
+        } else {
+            solidRect(214.0, 69.0, RGBA(0, 0, 0, 180)).apply { x = 10.0; y = 0.0; zIndex = 999.0 }
+        }
+        // Character portrait (partially off-screen left per legacy art style)
         if (hudPortraitBmp != null) {
-            image(hudPortraitBmp) { x = 0.0; y = -8.0; zIndex = 1000.0; smoothing = false }
+            image(hudPortraitBmp) {
+                x = 10.0 - hudPortraitBmp.width / 2.0 + 5.0  // ≈ -62
+                y = 20.0 - 34.0  // = -14
+                zIndex = 1000.0; smoothing = false
+            }
         }
-        // Heart icon
+        // Heart icon at (Pos.X+120, Pos.Y+3) = (130, 23)
         if (hudHeartBmp != null) {
-            image(hudHeartBmp) { x = 120.0; y = 8.0; zIndex = 1000.0; smoothing = false }
+            image(hudHeartBmp) { x = 130.0; y = 23.0; zIndex = 1000.0; smoothing = false }
         }
-        // Ammo icon
+        // Ammo icon at (Pos.X+124, Pos.Y+23) = (134, 43)
         if (hudAmmoBmp != null) {
-            image(hudAmmoBmp) { x = 124.0; y = 28.0; zIndex = 1000.0; smoothing = false }
+            image(hudAmmoBmp) { x = 134.0; y = 43.0; zIndex = 1000.0; smoothing = false }
         }
-        // Text overlays on HUD panel
-        val hudLives   = text("x${session.lives}") { textSize = 18.0; color = Colors.WHITE;     x = 50.0;  y = 6.0;  zIndex = 1001.0; font = ZombustersFonts.menuInfo }
-        val hudHealth  = text("100")              { textSize = 14.0; color = Colors.LIME;       x = 142.0; y = 6.0;  zIndex = 1001.0; font = ZombustersFonts.menuInfo }
-        val hudAmmo    = text("- - -")            { textSize = 12.0; color = Colors.WHITE;      x = 142.0; y = 24.0; zIndex = 1001.0; font = ZombustersFonts.menuInfo }
-        val hudScore   = text("SC${session.score.toString().padStart(7, '0')}") { textSize = 12.0; color = Colors.YELLOW; x = 4.0; y = 42.0; zIndex = 1001.0; font = ZombustersFonts.menuInfo }
+        val heartW = hudHeartBmp?.width?.toDouble() ?: 19.0
+        // Text overlays on HUD panel — positions match legacy (Pos.X=10, Pos.Y=20)
+        val hudLives   = text("x${session.lives}") { textSize = 18.0; color = Colors.WHITE;  x = 60.0;  y = 4.0;  zIndex = 1001.0; font = ZombustersFonts.menuInfo }
+        val hudHealth  = text("100")              { textSize = 14.0; color = Colors.LIME;    x = 10.0 + heartW + 125.0; y = 4.0;  zIndex = 1001.0; font = ZombustersFonts.menuInfo }
+        val hudAmmo    = text("- - -")            { textSize = 12.0; color = Colors.WHITE;   x = 10.0 + heartW + 130.0; y = 44.0; zIndex = 1001.0; font = ZombustersFonts.menuInfo }
+        val hudScore   = text("SC${session.score.toString().padStart(7, '0')}") { textSize = 11.0; color = Colors.YELLOW; x = 14.0; y = 54.0; zIndex = 1001.0; font = ZombustersFonts.menuInfo }
         // Wave / level / enemies info (center-top)
         val hudWave    = text("Wave 1")             { textSize = 14.0; color = Colors.LIGHTGRAY; x = 430.0; y = 4.0;  zIndex = 1000.0; font = ZombustersFonts.menuInfo }
         val hudLevel   = text("LEVEL $levelNumber") { textSize = 14.0; color = Colors.WHITE;     x = 590.0; y = 4.0;  zIndex = 1000.0; font = ZombustersFonts.menuInfo }
@@ -712,6 +751,8 @@ class GameplayScene(
                     val speed = player.pixelsPerSecond * dtSec
                     val delta = Point(mvx.toDouble() * speed, mvy.toDouble() * speed)
                     player.position = CollisionSystem.resolveMovement(player.position, delta, world.walls, world.furnitures)
+                } else if (playerCanAct) {
+                    lastMoveDxList[idx] = 0f; lastMoveDyList[idx] = 0f
                 }
 
                 // Fire
@@ -827,6 +868,33 @@ class GameplayScene(
                 pc.x = p.position.x + PLAYER_RENDER_OFFSET_X
                 pc.y = p.position.y + PLAYER_RENDER_OFFSET_Y
                 pc.zIndex = p.position.y
+
+                // ── Legs animation (idle vs run) ──────────────────────────────
+                val isMoving = lastMoveDxList[idx] != 0f || lastMoveDyList[idx] != 0f
+                if (isMoving != playerLastMoving[idx]) {
+                    playerLastMoving[idx] = isMoving
+                    playerLegsIdleViews.getOrNull(idx)?.visible  = !isMoving
+                    val runS = playerLegsRunSprites.getOrNull(idx)
+                    if (runS != null) {
+                        runS.visible = isMoving
+                        if (isMoving) {
+                            val movingLeft = lastMoveDxList[idx] < 0f
+                            runS.x = if (movingLeft) RUN_LOCAL_X_W else RUN_LOCAL_X_E
+                            runS.scaleX = if (movingLeft) -1.0 else 1.0
+                        }
+                    }
+                } else if (isMoving) {
+                    // Update flip direction while moving
+                    val runS = playerLegsRunSprites.getOrNull(idx)
+                    if (runS != null) {
+                        val movingLeft = lastMoveDxList[idx] < 0f
+                        val expectedScaleX = if (movingLeft) -1.0 else 1.0
+                        if (runS.scaleX != expectedScaleX) {
+                            runS.x = if (movingLeft) RUN_LOCAL_X_W else RUN_LOCAL_X_E
+                            runS.scaleX = expectedScaleX
+                        }
+                    }
+                }
 
                 // ── Directional trunk animation swap ─────────────────────────
                 val pInput0 = if (idx == 0) gameInput else GameInput.EMPTY
@@ -949,7 +1017,7 @@ class GameplayScene(
         }
     }
 
-    private suspend fun tryLoadBitmap(path: String): Bitmap? = try { resourcesVfs[path].readBitmap() } catch (_: Exception) { null }
+    private suspend fun tryLoadBitmap(path: String): Bitmap? = try { resourcesVfs[path].readBitmap() } catch (_: Throwable) { null }
 
     private suspend fun loadFurnitureBitmaps(): Map<Pair<FurnitureType, FurnitureOrientation?>, Bitmap?> {
         val base = "$assetBase/furniture"

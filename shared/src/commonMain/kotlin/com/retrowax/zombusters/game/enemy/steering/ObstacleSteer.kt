@@ -30,10 +30,9 @@ class ObstacleSteer(
             val offForwardOffset = localOffset - forwardOffset
 
             val inCylinder = offForwardOffset.length() < totalRadius
-            val nearby = forwardComponent < minDistToCenter
-            val inFront = forwardComponent > 0
+            val inFront = forwardComponent > 0 && forwardComponent < detectionBoxLength
 
-            if (inCylinder || inFront || nearby) {
+            if (inCylinder || inFront) {
                 val length = (-offForwardOffset).length()
                 if (length < nearestDist) {
                     nearestDist = length
