@@ -59,6 +59,7 @@ class OptionsScene(
     override suspend fun SContainer.sceneInit() {
         ZombustersFonts.loadFrom(fontResourcesPath)
 
+        val isMobile = views.input.isTouchDevice
         val assetBase = "$filesResourcesPath/zombusters/menu"
         val bgBitmap = tryLoad("$assetBase/background_title.png")
         if (bgBitmap != null) {
@@ -107,7 +108,8 @@ class OptionsScene(
             font = ZombustersFonts.menuInfo
         }
 
-        text("← / → to adjust values   ESC — Back") {
+        val hintText = if (isMobile) "Tap left/right side of a row to adjust values" else "← / → to adjust values   ESC — Back"
+        text(hintText) {
             textSize = 18.0; color = Colors.WHITE
             x = 128.0; y = GAME_HEIGHT - 50.0; zIndex = 2.0
             font = ZombustersFonts.menuInfo

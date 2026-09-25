@@ -86,9 +86,8 @@ class MenuScene(
             }
         }
 
-        // Adapt layout to touch (mobile) vs keyboard/mouse (desktop)
-        val isMobile = views.input.isTouchDevice
-        val menuX        = if (isMobile) GAME_WIDTH / 2.0 - 180.0 else 128.0
+        val isMobile     = views.input.isTouchDevice
+        val menuX        = 128.0
         val menuStartY   = if (isMobile) 320.0 else 360.0
         val menuSpacing  = if (isMobile) 64.0 else 88.0
         val menuFontSize = if (isMobile) 40.0 else 52.0

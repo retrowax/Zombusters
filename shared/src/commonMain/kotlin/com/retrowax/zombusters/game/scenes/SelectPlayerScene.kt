@@ -70,8 +70,10 @@ class SelectPlayerScene(
 
         val assetBase = "$filesResourcesPath/zombusters"
         val menuBase  = "$assetBase/menu"
+        val hudBase   = "$assetBase/hud"
 
-        val bgBitmap = tryLoad("$menuBase/background_title.png")
+        val bgBitmap  = tryLoad("$menuBase/background_title.png")
+        val jadeBmp   = tryLoad("$hudBase/jade_gui.png")
         if (bgBitmap != null) {
             image(bgBitmap) { x = 0.0; y = 0.0; zIndex = 0.0; smoothing = false }
         } else {
@@ -133,6 +135,20 @@ class SelectPlayerScene(
             }
         }
 
+        // ── Character portrait for P1 ────────────────────────────────────────
+        // All characters currently use jade sprites; always show this portrait when P1 is joined.
+        val isMobilePortrait = views.input.isTouchDevice
+        val portraitScale = if (isMobilePortrait) 1.5 else 1.0
+        val portraitX = colX[0]  // align with P1 text column on both mobile and desktop
+        val portraitY = slotY + 120.0
+        val portraitView0: korlibs.korge.view.Image? = if (jadeBmp != null) {
+            image(jadeBmp) {
+                x = portraitX; y = portraitY
+                scale = portraitScale
+                zIndex = 3.0; smoothing = true; visible = false
+            }
+        } else null
+
         // ── Level selection (right-side, above score area) ──────────────────
         text("START LEVEL") {
             textSize = 20.0; color = Colors.WHITE
@@ -144,7 +160,8 @@ class SelectPlayerScene(
             x = GAME_WIDTH - 170.0; y = 185.0; zIndex = 2.0
             font = ZombustersFonts.digitBig
         }
-        text("W/S or D-pad") {
+        val levelHintText = if (views.input.isTouchDevice) "Tap ▲/▼ to change" else "W/S or D-pad"
+        text(levelHintText) {
             textSize = 14.0; color = Colors.WHITE
             x = GAME_WIDTH - 220.0; y = 270.0; zIndex = 2.0
             font = ZombustersFonts.menuInfo
@@ -193,12 +210,15 @@ class SelectPlayerScene(
                 readyViews[i].color = if (slot.isReady) Colors.LIME else Colors.LIGHTGRAY
                 availViews[i].text  = if (!available) "(no sprites)" else ""
             }
+            if (i == 0) portraitView0?.visible = slot.isJoined
         }
 
         fun refreshAll() {
             for (i in 0..3) refreshSlot(i)
             levelView.text = "$levelSelected"
             hintView.text = when {
+                isMobile && canStartGame() -> "Tap bottom-left: START GAME   Tap bottom-right: Back"
+                isMobile -> "Tap bottom-left: GET READY   Tap bottom-right: Back"
                 canStartGame() && slots.filter { it.isJoined }.size > 1 -> "ENTER/SPACE or START — Begin"
                 canStartGame() -> "ENTER / SPACE — Start Game  |  ESC — Back"
                 else -> "SPACE — Ready  |  ESC — Back"

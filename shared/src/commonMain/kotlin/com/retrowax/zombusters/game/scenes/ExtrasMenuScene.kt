@@ -51,6 +51,7 @@ class ExtrasMenuScene(
     override suspend fun SContainer.sceneInit() {
         ZombustersFonts.loadFrom(fontResourcesPath)
 
+        val isMobile = views.input.isTouchDevice
         val menuBase = "$filesResourcesPath/zombusters/menu"
         val bgBitmap    = tryLoad("$menuBase/background_title.png")
         val titleBitmap = tryLoad("$menuBase/title.png")
@@ -88,10 +89,12 @@ class ExtrasMenuScene(
             }
         }
 
-        text("ESC — Back") {
-            textSize = 20.0; color = Colors.WHITE
-            x = 128.0; y = GAME_HEIGHT - 50.0; zIndex = 2.0
-            font = ZombustersFonts.menuInfo
+        if (!isMobile) {
+            text("ESC — Back") {
+                textSize = 20.0; color = Colors.WHITE
+                x = 128.0; y = GAME_HEIGHT - 50.0; zIndex = 2.0
+                font = ZombustersFonts.menuInfo
+            }
         }
 
         fun refreshColors() {
