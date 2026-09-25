@@ -34,6 +34,8 @@ import korlibs.image.bitmap.Bitmap
 import korlibs.image.color.Colors
 import korlibs.image.color.RGBA
 import korlibs.image.format.readBitmap
+import korlibs.korge.input.mouse
+import korlibs.korge.input.onClick
 import korlibs.korge.input.touch
 import korlibs.korge.scene.Scene
 import korlibs.korge.view.SContainer
@@ -91,8 +93,10 @@ private const val JADE_RUN_FRAME_H = 24
 private const val JADE_RUN_COLS = 8
 private const val JADE_RUN_FPS = 15
 // Run local positions in player container (east: x-7+offsetX, y-26 → local (-7,29))
+// West is flipped (scaleX=-1): x_west = x_east + frameWidth = -7+49 = 42 so sprite
+// stays at same screen position after flip (KorGE scaleX=-1 pivots at x=0).
 private const val RUN_LOCAL_X_E = -7.0
-private const val RUN_LOCAL_X_W = 18.0
+private const val RUN_LOCAL_X_W = 42.0
 private const val RUN_LOCAL_Y   = 29.0
 
 // Shadow offsets inside container
@@ -112,6 +116,12 @@ private const val ZOMBIE_FRAME_H = 55
 private const val ZOMBIE_COLS = 8
 private const val ZOMBIE_FPS = 10
 
+// Zombie death: ZombieDeathDef — 50×57, 12 cols, Speed=15
+private const val ZOMBIE_DEATH_W = 50
+private const val ZOMBIE_DEATH_H = 57
+private const val ZOMBIE_DEATH_COLS = 12
+private const val ZOMBIE_DEATH_FPS = 15
+
 // Rat: 48×48 per frame
 private const val RAT_FRAME_W = 48
 private const val RAT_FRAME_H = 48
@@ -119,12 +129,24 @@ private const val RAT_IDLE_COLS = 8
 private const val RAT_RUN_COLS = 6
 private const val RAT_FPS = 12
 
+// Rat death: 48×48, 5 cols
+private const val RAT_DEATH_COLS = 5
+
 // Wolf: 80×48 per frame
 private const val WOLF_FRAME_W = 80
 private const val WOLF_FRAME_H = 48
 private const val WOLF_IDLE_COLS = 8
 private const val WOLF_RUN_COLS = 6
 private const val WOLF_FPS = 12
+
+// Wolf death: 80×48, 6 cols
+private const val WOLF_DEATH_COLS = 6
+
+// Score values from Enemies.cs
+private const val SCORE_ZOMBIE    = 10
+private const val SCORE_RAT       = 15
+private const val SCORE_WOLF      = 30
+private const val SCORE_MINOTAUR  = 80
 
 // Pause icon hit region from legacy GamePlayScreen.cs (1280×720 logical coords)
 private const val PAUSE_ICON_X1 = 1088f
@@ -194,7 +216,12 @@ class GameplayScene(
         val ratRunBitmap     = tryLoadBitmap("$assetBase/enemies/rat/run.png")
         val wolfIdleBitmap   = tryLoadBitmap("$assetBase/enemies/wolf/idle.png")
         val wolfRunBitmap    = tryLoadBitmap("$assetBase/enemies/wolf/run.png")
+        val zombieDeathBmp   = tryLoadBitmap("$assetBase/enemies/zombie/death.png")
+        val ratDeathBmp      = tryLoadBitmap("$assetBase/enemies/rat/death.png")
+        val wolfDeathBmp     = tryLoadBitmap("$assetBase/enemies/wolf/death.png")
         val minotaurBitmap   = tryLoadBitmap("$assetBase/enemies/minotaur/walk.png")
+        val playerDiedBmp    = tryLoadBitmap("$assetBase/characters/$charPath/died.png")
+        val hudPanelRedBmp   = tryLoadBitmap("$assetBase/hud/gui_stats_bkg_red.png")
         val hudPortraitBmp   = tryLoadBitmap("$assetBase/hud/${charPath}_gui.png")
         val hudHeartBmp      = tryLoadBitmap("$assetBase/hud/heart.png")
         val hudAmmoBmp       = tryLoadBitmap("$assetBase/hud/pistol_ammo.png")
@@ -208,11 +235,14 @@ class GameplayScene(
 
         val runEAnim     = playerRunBmp?.let { SpriteAnimation(it, spriteWidth = JADE_RUN_FRAME_W, spriteHeight = JADE_RUN_FRAME_H, columns = JADE_RUN_COLS, rows = 1) }
 
-        val zombieAnim   = zombieBitmap?.let { SpriteAnimation(it, spriteWidth = ZOMBIE_FRAME_W, spriteHeight = ZOMBIE_FRAME_H, columns = ZOMBIE_COLS, rows = 1) }
-        val ratIdleAnim  = ratIdleBitmap?.let { SpriteAnimation(it, spriteWidth = RAT_FRAME_W, spriteHeight = RAT_FRAME_H, columns = RAT_IDLE_COLS, rows = 1) }
-        val ratRunAnim   = ratRunBitmap?.let { SpriteAnimation(it, spriteWidth = RAT_FRAME_W, spriteHeight = RAT_FRAME_H, columns = RAT_RUN_COLS, rows = 1) }
-        val wolfIdleAnim = wolfIdleBitmap?.let { SpriteAnimation(it, spriteWidth = WOLF_FRAME_W, spriteHeight = WOLF_FRAME_H, columns = WOLF_IDLE_COLS, rows = 1) }
-        val wolfRunAnim  = wolfRunBitmap?.let { SpriteAnimation(it, spriteWidth = WOLF_FRAME_W, spriteHeight = WOLF_FRAME_H, columns = WOLF_RUN_COLS, rows = 1) }
+        val zombieAnim      = zombieBitmap?.let { SpriteAnimation(it, spriteWidth = ZOMBIE_FRAME_W, spriteHeight = ZOMBIE_FRAME_H, columns = ZOMBIE_COLS, rows = 1) }
+        val zombieDeathAnim = zombieDeathBmp?.let { SpriteAnimation(it, spriteWidth = ZOMBIE_DEATH_W, spriteHeight = ZOMBIE_DEATH_H, columns = ZOMBIE_DEATH_COLS, rows = 1) }
+        val ratIdleAnim     = ratIdleBitmap?.let { SpriteAnimation(it, spriteWidth = RAT_FRAME_W, spriteHeight = RAT_FRAME_H, columns = RAT_IDLE_COLS, rows = 1) }
+        val ratRunAnim      = ratRunBitmap?.let { SpriteAnimation(it, spriteWidth = RAT_FRAME_W, spriteHeight = RAT_FRAME_H, columns = RAT_RUN_COLS, rows = 1) }
+        val ratDeathAnim    = ratDeathBmp?.let { SpriteAnimation(it, spriteWidth = RAT_FRAME_W, spriteHeight = RAT_FRAME_H, columns = RAT_DEATH_COLS, rows = 1) }
+        val wolfIdleAnim    = wolfIdleBitmap?.let { SpriteAnimation(it, spriteWidth = WOLF_FRAME_W, spriteHeight = WOLF_FRAME_H, columns = WOLF_IDLE_COLS, rows = 1) }
+        val wolfRunAnim     = wolfRunBitmap?.let { SpriteAnimation(it, spriteWidth = WOLF_FRAME_W, spriteHeight = WOLF_FRAME_H, columns = WOLF_RUN_COLS, rows = 1) }
+        val wolfDeathAnim   = wolfDeathBmp?.let { SpriteAnimation(it, spriteWidth = WOLF_FRAME_W, spriteHeight = WOLF_FRAME_H, columns = WOLF_DEATH_COLS, rows = 1) }
 
         // Map background
         if (mapBitmap != null) {
@@ -288,11 +318,15 @@ class GameplayScene(
         touchOverlayGraphics.zIndex = 1050.0
 
         // HUD — bitmap panel + character portrait + stats text
-        // Panel background (gameplay_gui_stats.png, 214×69, at top-left)
+        // Panel background: neutral frame first, then colored overlay on top (legacy: UIStats then UIStatsRed for player 1)
         if (hudPanelBmp != null) {
             image(hudPanelBmp) { x = 10.0; y = 0.0; zIndex = 999.0; smoothing = false }
         } else {
             solidRect(214.0, 69.0, RGBA(0, 0, 0, 180)).apply { x = 10.0; y = 0.0; zIndex = 999.0 }
+        }
+        // Colored background overlay (player 1 = red by default; drawn at same pos per legacy DrawUI)
+        if (hudPanelRedBmp != null) {
+            image(hudPanelRedBmp) { x = 10.0; y = 0.0; zIndex = 999.1; smoothing = false }
         }
         // Character portrait (partially off-screen left per legacy art style)
         if (hudPortraitBmp != null) {
@@ -361,12 +395,43 @@ class GameplayScene(
             }
         }
 
-        // Stage cleared overlay
+        // Wave/level transition overlay — matches legacy StageCleared + StartLevel states
+        val transitionLine1  = solidRect((GAME_WIDTH * 0.6).toInt().toDouble(), 3.0, Colors.WHITE).apply {
+            x = GAME_WIDTH * 0.2; y = GAME_HEIGHT / 2.0 - 10.0; zIndex = 1199.0; visible = false
+        }
+        val transitionLine2  = solidRect((GAME_WIDTH * 0.6).toInt().toDouble(), 3.0, Colors.WHITE).apply {
+            x = GAME_WIDTH * 0.2; y = GAME_HEIGHT / 2.0 + 90.0; zIndex = 1199.0; visible = false
+        }
+        val transitionLabel1 = text("CLEARED") {
+            textSize = 56.0; color = Colors.YELLOW
+            x = GAME_WIDTH / 2.0 - 120.0; y = GAME_HEIGHT / 2.0 - 40.0
+            zIndex = 1200.0; visible = false; font = ZombustersFonts.menuHeader
+        }
+        val transitionLabel2 = text("PREPARE NEXT WAVE") {
+            textSize = 28.0; color = Colors.WHITE
+            x = GAME_WIDTH / 2.0 - 160.0; y = GAME_HEIGHT / 2.0 + 50.0
+            zIndex = 1200.0; visible = false; font = ZombustersFonts.menuList
+        }
+        // Stage-complete overlay (all waves in level done)
         val stageClearedLabel = text("STAGE CLEARED!") {
             textSize = 56.0; color = Colors.YELLOW
             x = GAME_WIDTH / 2.0 - 200.0; y = GAME_HEIGHT / 2.0 - 40.0
-            zIndex = 1200.0; visible = false
-            font = ZombustersFonts.menuHeader
+            zIndex = 1200.0; visible = false; font = ZombustersFonts.menuHeader
+        }
+
+        fun showTransitionPhase1() {
+            transitionLabel1.text = "CLEARED"; transitionLabel2.text = "PREPARE NEXT WAVE"
+            transitionLine1.visible = true; transitionLine2.visible = true
+            transitionLabel1.visible = true; transitionLabel2.visible = true
+        }
+        fun showTransitionPhase2(lvl: Int, wave: Int) {
+            transitionLabel1.text = "LEVEL $lvl"; transitionLabel2.text = "WAVE $wave"
+            transitionLine1.visible = true; transitionLine2.visible = true
+            transitionLabel1.visible = true; transitionLabel2.visible = true
+        }
+        fun hideTransition() {
+            transitionLine1.visible = false; transitionLine2.visible = false
+            transitionLabel1.visible = false; transitionLabel2.visible = false
         }
 
         fun refreshPauseColors() {
@@ -378,6 +443,23 @@ class GameplayScene(
 
         // Enemy view pool
         val enemyViews = mutableListOf<Pair<BaseEnemy, korlibs.korge.view.Container>>()
+        // Per-enemy main sprite reference (for death animation swapping)
+        val enemyMainSprites = mutableMapOf<BaseEnemy, korlibs.korge.view.Sprite?>()
+        // Previous enemy status for transition detection
+        val prevEnemyStatuses = mutableMapOf<BaseEnemy, ObjectStatus>()
+        // Score popup list: (text view, creation time)
+        val scorePopups = mutableListOf<Pair<korlibs.korge.view.Text, Float>>()
+
+        // Player died static image (shown at death position, separate from animated container)
+        val playerDiedViews = List(session.numPlayers) { playerIdx ->
+            if (playerDiedBmp != null) {
+                image(playerDiedBmp) {
+                    zIndex = 500.0; visible = false; smoothing = false
+                    x = world.players[playerIdx].position.x + PLAYER_RENDER_OFFSET_X
+                    y = world.players[playerIdx].position.y + PLAYER_RENDER_OFFSET_Y
+                }
+            } else null
+        }
 
         fun spawnEnemyViews(newEnemies: List<BaseEnemy>) {
             for (enemy in newEnemies) {
@@ -389,30 +471,33 @@ class GameplayScene(
                         alpha = SHADOW_ALPHA; smoothing = false; zIndex = -0.1
                     }
                 }
+                var mainSprite: korlibs.korge.view.Sprite? = null
                 when (enemy.type) {
                     EnemyType.ZOMBIE -> {
                         val anim = zombieAnim
-                        if (anim != null) { val s = c.sprite(anim) { smoothing = false }; s.playAnimationLooped(anim, (1.0 / ZOMBIE_FPS).seconds) }
+                        if (anim != null) { val s = c.sprite(anim) { smoothing = false }; s.playAnimationLooped(anim, (1.0 / ZOMBIE_FPS).seconds); mainSprite = s }
                         else c.solidRect(20.0, 20.0, Colors.RED).also { it.x = -10.0; it.y = -10.0 }
                     }
                     EnemyType.RAT -> {
                         val anim = ratRunAnim ?: ratIdleAnim
-                        if (anim != null) { val s = c.sprite(anim) { smoothing = false }; s.playAnimationLooped(anim, (1.0 / RAT_FPS).seconds) }
+                        if (anim != null) { val s = c.sprite(anim) { smoothing = false }; s.playAnimationLooped(anim, (1.0 / RAT_FPS).seconds); mainSprite = s }
                         else c.solidRect(16.0, 16.0, Colors.YELLOW).also { it.x = -8.0; it.y = -8.0 }
                     }
                     EnemyType.WOLF -> {
                         val anim = wolfRunAnim ?: wolfIdleAnim
-                        if (anim != null) { val s = c.sprite(anim) { smoothing = false }; s.playAnimationLooped(anim, (1.0 / WOLF_FPS).seconds) }
+                        if (anim != null) { val s = c.sprite(anim) { smoothing = false }; s.playAnimationLooped(anim, (1.0 / WOLF_FPS).seconds); mainSprite = s }
                         else c.solidRect(24.0, 24.0, Colors.MAGENTA).also { it.x = -12.0; it.y = -12.0 }
                     }
                     EnemyType.MINOTAUR -> {
                         if (minotaurBitmap != null) {
                             val anim = SpriteAnimation(minotaurBitmap, spriteWidth = 80, spriteHeight = 80, columns = 6, rows = 1)
-                            val s = c.sprite(anim) { smoothing = false }; s.playAnimationLooped(anim, (1.0 / 10).seconds)
+                            val s = c.sprite(anim) { smoothing = false }; s.playAnimationLooped(anim, (1.0 / 10).seconds); mainSprite = s
                         } else c.solidRect(30.0, 30.0, Colors.BROWN).also { it.x = -15.0; it.y = -15.0 }
                     }
                     else -> c.solidRect(20.0, 20.0, Colors.ORANGE).also { it.x = -10.0; it.y = -10.0 }
                 }
+                enemyMainSprites[enemy] = mainSprite
+                prevEnemyStatuses[enemy] = enemy.status
                 enemyViews.add(Pair(enemy, c))
             }
         }
@@ -477,6 +562,9 @@ class GameplayScene(
         var gameOverConfirmed = false
         var isStageClear = false
         var stageClearTimer = 0f
+        // Wave transition phases: 0=none, 1=cleared (show CLEARED msg), 2=starting (show LEVEL/WAVE msg)
+        var waveTransitionPhase = 0
+        var waveTransitionTimer = 0f
         var debugF2 = false
         // Per-player direction tracking
         val lastFireAngles = MutableList(session.numPlayers) { FacingDirection.angleFrom(0f, -1f) }
@@ -790,7 +878,8 @@ class GameplayScene(
 
             val waveSystem = world.waveSystem
             if (!waveSystem.isLevelComplete) {
-                if (!waveSystem.spawned) {
+                // Spawn next wave only when not in a transition pause
+                if (!waveSystem.spawned && waveTransitionPhase == 0) {
                     val wave = waveSystem.currentWave
                     if (wave != null) {
                         val newEnemies = world.spawnSystem.spawnWave(
@@ -816,8 +905,31 @@ class GameplayScene(
                 }
                 world.enemySystem.update(dtSec, world.players, world.playerSteeringEntities, totalSeconds)
 
-                if (waveSystem.spawned && world.enemySystem.activeCount == 0) {
+                if (waveSystem.spawned && world.enemySystem.activeCount == 0 && waveTransitionPhase == 0) {
                     waveSystem.advanceWave()
+                    if (!waveSystem.isLevelComplete) {
+                        // More waves ahead: show CLEARED → LEVEL/WAVE transition
+                        waveTransitionPhase = 1
+                        waveTransitionTimer = 0f
+                        showTransitionPhase1()
+                    }
+                    // Level complete case: isStageClear handled below
+                }
+
+                // Wave transition timers
+                if (waveTransitionPhase == 1) {
+                    waveTransitionTimer += dtSec
+                    if (waveTransitionTimer >= 2f) {
+                        waveTransitionPhase = 2
+                        waveTransitionTimer = 0f
+                        showTransitionPhase2(levelNumber, waveSystem.waveNumber)
+                    }
+                } else if (waveTransitionPhase == 2) {
+                    waveTransitionTimer += dtSec
+                    if (waveTransitionTimer >= 2f) {
+                        waveTransitionPhase = 0
+                        hideTransition()
+                    }
                 }
             }
 
@@ -840,14 +952,57 @@ class GameplayScene(
                 stageClearedLabel.visible = true
             }
 
+            // ── Score popup update (move upward, fade, remove old) ────────────
+            val popupIter = scorePopups.iterator()
+            while (popupIter.hasNext()) {
+                val (tv, birth) = popupIter.next()
+                val age = totalSeconds - birth
+                if (age > 1.5f) { tv.removeFromParent(); popupIter.remove() }
+                else { tv.y -= dtSec * 40.0; tv.alpha = 1.0 - (age / 1.5f).toDouble() }
+            }
+
             // ── Enemy views sync ──────────────────────────────────────────────
             for ((enemy, view) in enemyViews) {
-                if (enemy.status == ObjectStatus.INACTIVE) { view.visible = false; continue }
-                if (enemy.status == ObjectStatus.DYING) {
-                    view.visible = true; view.colorMul = Colors.RED
-                } else {
-                    view.colorMul = Colors.WHITE; view.visible = true
+                val prev = prevEnemyStatuses[enemy]
+
+                // Detect transition to DYING: swap to death animation + show score popup
+                if (prev != ObjectStatus.DYING && enemy.status == ObjectStatus.DYING) {
+                    val deathAnim = when (enemy.type) {
+                        EnemyType.ZOMBIE   -> zombieDeathAnim
+                        EnemyType.RAT      -> ratDeathAnim
+                        EnemyType.WOLF     -> wolfDeathAnim
+                        else               -> null
+                    }
+                    val sprite = enemyMainSprites[enemy]
+                    if (deathAnim != null && sprite != null) {
+                        sprite.stopAnimation()
+                        sprite.playAnimation(deathAnim, (1.0 / ZOMBIE_DEATH_FPS).seconds)
+                    }
+                    // Floating score popup
+                    val scoreVal = when (enemy.type) {
+                        EnemyType.ZOMBIE   -> SCORE_ZOMBIE
+                        EnemyType.RAT      -> SCORE_RAT
+                        EnemyType.WOLF     -> SCORE_WOLF
+                        EnemyType.MINOTAUR -> SCORE_MINOTAUR
+                        else               -> 0
+                    }
+                    if (scoreVal > 0) {
+                        val ex0 = enemy.entity.position.x.toDouble()
+                        val ey0 = enemy.entity.position.y.toDouble() - 60.0
+                        val tv = text("+$scoreVal") {
+                            textSize = 20.0; color = Colors.YELLOW
+                            x = ex0; y = ey0; zIndex = 950.0
+                            font = ZombustersFonts.menuInfo
+                        }
+                        scorePopups.add(Pair(tv, totalSeconds))
+                    }
                 }
+
+                prevEnemyStatuses[enemy] = enemy.status
+
+                if (enemy.status == ObjectStatus.INACTIVE) { view.visible = false; continue }
+                view.colorMul = Colors.WHITE; view.visible = true
+
                 val ex = enemy.entity.position.x.toDouble()
                 val ey = enemy.entity.position.y.toDouble()
                 val yOffset = when (enemy.type) {
@@ -856,14 +1011,35 @@ class GameplayScene(
                     EnemyType.WOLF   -> Wolf.Y_OFFSET.toDouble()
                     else             -> 50.0
                 }
-                view.x = ex; view.y = ey - yOffset; view.zIndex = ey
-                if (enemy.entity.velocity.x != 0f) { view.scaleX = if (enemy.entity.velocity.x > 0) 1.0 else -1.0 }
+                // Flip compensation: scaleX=-1 pivots at x=0, shifting sprite left by frameWidth.
+                val enemyFrameW = when (enemy.type) {
+                    EnemyType.RAT      -> RAT_FRAME_W.toDouble()
+                    EnemyType.WOLF     -> WOLF_FRAME_W.toDouble()
+                    EnemyType.MINOTAUR -> 80.0
+                    else               -> ZOMBIE_FRAME_W.toDouble()
+                }
+                val facingLeft = enemy.entity.velocity.x < 0
+                view.scaleX = if (facingLeft) -1.0 else 1.0
+                view.x = if (facingLeft) ex + enemyFrameW else ex
+                view.y = ey - yOffset; view.zIndex = ey
             }
 
             // ── Player view sync (all players) ────────────────────────────────
             val blinkVisible = (totalSeconds * 10).toInt() % 2 == 0
             for ((idx, pc) in playerContainers.withIndex()) {
                 val p = world.players[idx]
+                val isDead = p.status == ObjectStatus.DYING || p.status == ObjectStatus.INACTIVE
+                val diedView = playerDiedViews.getOrNull(idx)
+                if (isDead && diedView != null) {
+                    // Freeze the died image at the death position (only move it once on first DYING frame)
+                    if (!diedView.visible) {
+                        diedView.x = p.position.x + PLAYER_RENDER_OFFSET_X
+                        diedView.y = p.position.y + PLAYER_RENDER_OFFSET_Y
+                        diedView.visible = true
+                    }
+                } else if (!isDead) {
+                    diedView?.visible = false
+                }
                 pc.visible = when (p.status) {
                     ObjectStatus.IMMUNE   -> blinkVisible
                     ObjectStatus.DYING    -> false
@@ -915,16 +1091,18 @@ class GameplayScene(
                         if (idleAnim != null) trunkS.playAnimationLooped(idleAnim, (1.0 / JADE_IDLE_FPS).seconds)
                     } else {
                         // Directional shot animation — pick sheet + local offset + flip for W-facing dirs
+                        // For flipped (scaleX=-1) sprites: x_flipped = x_normal + spriteWidth so
+                        // the sprite visually stays in the same position (KorGE pivots at x=0).
                         data class TrunkAnim(val anim: SpriteAnimation?, val lx: Double, val ly: Double, val flip: Boolean)
                         val ta: TrunkAnim = when (facing) {
-                            FacingDirection.N  -> TrunkAnim(shotNAnim,  JADE_TRUNK_SHOT_LX, JADE_TRUNK_N_LY,  false)
-                            FacingDirection.NE -> TrunkAnim(shotNEAnim, JADE_TRUNK_SHOT_LX, JADE_TRUNK_NE_LY, false)
-                            FacingDirection.E  -> TrunkAnim(shotEAnim,  JADE_TRUNK_SHOT_LX, JADE_TRUNK_E_LY,  false)
-                            FacingDirection.SE -> TrunkAnim(shotSEAnim, JADE_TRUNK_SHOT_LX, JADE_TRUNK_SE_LY, false)
-                            FacingDirection.S  -> TrunkAnim(shotSAnim,  JADE_TRUNK_SHOT_LX, JADE_TRUNK_S_LY,  false)
-                            FacingDirection.SW -> TrunkAnim(shotSEAnim, JADE_TRUNK_SHOT_LX, JADE_TRUNK_SE_LY, true)
-                            FacingDirection.W  -> TrunkAnim(shotEAnim,  JADE_TRUNK_SHOT_LX, JADE_TRUNK_E_LY,  true)
-                            FacingDirection.NW -> TrunkAnim(shotNEAnim, JADE_TRUNK_SHOT_LX, JADE_TRUNK_NE_LY, true)
+                            FacingDirection.N  -> TrunkAnim(shotNAnim,  JADE_TRUNK_SHOT_LX,                    JADE_TRUNK_N_LY,  false)
+                            FacingDirection.NE -> TrunkAnim(shotNEAnim, JADE_TRUNK_SHOT_LX,                    JADE_TRUNK_NE_LY, false)
+                            FacingDirection.E  -> TrunkAnim(shotEAnim,  JADE_TRUNK_SHOT_LX,                    JADE_TRUNK_E_LY,  false)
+                            FacingDirection.SE -> TrunkAnim(shotSEAnim, JADE_TRUNK_SHOT_LX,                    JADE_TRUNK_SE_LY, false)
+                            FacingDirection.S  -> TrunkAnim(shotSAnim,  JADE_TRUNK_SHOT_LX,                    JADE_TRUNK_S_LY,  false)
+                            FacingDirection.SW -> TrunkAnim(shotSEAnim, JADE_TRUNK_SHOT_LX + JADE_SHOT_SE_W,   JADE_TRUNK_SE_LY, true)
+                            FacingDirection.W  -> TrunkAnim(shotEAnim,  JADE_TRUNK_SHOT_LX + JADE_SHOT_E_W,    JADE_TRUNK_E_LY,  true)
+                            FacingDirection.NW -> TrunkAnim(shotNEAnim, JADE_TRUNK_SHOT_LX + JADE_SHOT_NE_W,   JADE_TRUNK_NE_LY, true)
                         }
                         if (ta.anim != null) {
                             trunkS.x = ta.lx; trunkS.y = ta.ly
@@ -1014,6 +1192,67 @@ class GameplayScene(
             hudWave.text    = if (waveSystem.isLevelComplete) "CLEARED" else "Wave ${waveSystem.waveNumber}/${waveSystem.totalWaves}"
             hudLevel.text   = "LEVEL $levelNumber"
             hudEnemies.text = "Enemies: ${world.enemySystem.activeCount}"
+        }
+
+        // ── Touch handlers for game-over menu entries ────────────────────────
+        // Each entry gets a direct onClick AND the overlay gets a tap-anywhere fallback.
+        gameOverEntryViews.forEachIndexed { i, view ->
+            view.onClick {
+                if (!gameOverConfirmed && gameOverOverlay.visible) {
+                    gameOverMenuIndex = i
+                    refreshGameOverColors()
+                    gameOverConfirmed = true
+                    sceneScope.launch {
+                        when (i) {
+                            0 -> sceneContainer.changeTo { GameplayScene(exit, drawableResourcesPath, fontResourcesPath, filesResourcesPath, session) }
+                            1 -> sceneContainer.changeTo { GameplayScene(exit, drawableResourcesPath, fontResourcesPath, filesResourcesPath, GameSession.newGame(session.characterIndex)) }
+                            2 -> sceneContainer.changeTo { MenuScene(exit, drawableResourcesPath, fontResourcesPath, filesResourcesPath) }
+                        }
+                    }
+                }
+            }
+        }
+        // Overlay tap-anywhere: confirms the currently highlighted entry
+        gameOverOverlay.onClick {
+            if (!gameOverConfirmed && gameOverOverlay.visible) {
+                gameOverConfirmed = true
+                sceneScope.launch {
+                    when (gameOverMenuIndex) {
+                        0 -> sceneContainer.changeTo { GameplayScene(exit, drawableResourcesPath, fontResourcesPath, filesResourcesPath, session) }
+                        1 -> sceneContainer.changeTo { GameplayScene(exit, drawableResourcesPath, fontResourcesPath, filesResourcesPath, GameSession.newGame(session.characterIndex)) }
+                        2 -> sceneContainer.changeTo { MenuScene(exit, drawableResourcesPath, fontResourcesPath, filesResourcesPath) }
+                    }
+                }
+            }
+        }
+
+        // ── Touch handlers for pause menu entries ────────────────────────────
+        pauseEntryViews.forEachIndexed { i, view ->
+            view.onClick {
+                if (!pauseConfirmed && pauseOverlay.visible) {
+                    pauseMenuIndex = i
+                    refreshPauseColors()
+                    when (i) {
+                        0 -> {
+                            isPaused = false; pauseConfirmed = false
+                            dualStick.resetAll()
+                            pauseOverlay.visible = false; pauseLabel.visible = false
+                            pauseEntryViews.forEach { it.visible = false }
+                        }
+                        else -> {
+                            pauseConfirmed = true
+                            sceneScope.launch {
+                                when (i) {
+                                    1 -> sceneContainer.changeTo { HowToPlayScene(exit, drawableResourcesPath, fontResourcesPath, filesResourcesPath) }
+                                    2 -> sceneContainer.changeTo { OptionsScene(exit, drawableResourcesPath, fontResourcesPath, filesResourcesPath) }
+                                    3 -> sceneContainer.changeTo { GameplayScene(exit, drawableResourcesPath, fontResourcesPath, filesResourcesPath, session) }
+                                    4 -> sceneContainer.changeTo { MenuScene(exit, drawableResourcesPath, fontResourcesPath, filesResourcesPath) }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
         }
 
         for ((idx, pc) in playerContainers.withIndex()) {
