@@ -86,14 +86,16 @@ class MenuScene(
             }
         }
 
-        // Determine menu area: left side, positioned ~center-left per legacy MenuComponent.CenterInXLeftMenu
-        val menuX = 128.0
-        val menuStartY = 320.0
-        val menuSpacing = 64.0
+        // Adapt layout to touch (mobile) vs keyboard/mouse (desktop)
+        val isMobile = views.input.isTouchDevice
+        val menuX        = if (isMobile) GAME_WIDTH / 2.0 - 180.0 else 128.0
+        val menuStartY   = if (isMobile) 320.0 else 360.0
+        val menuSpacing  = if (isMobile) 64.0 else 88.0
+        val menuFontSize = if (isMobile) 40.0 else 52.0
 
         val menuTextViews = entries.mapIndexed { i, entry ->
             text(entry.label) {
-                textSize = 40.0
+                textSize = menuFontSize
                 x = menuX; y = menuStartY + i * menuSpacing
                 zIndex = 11.0
                 font = ZombustersFonts.menuList
@@ -123,6 +125,7 @@ class MenuScene(
         val sceneScope = this@MenuScene
 
         // Touch tap: hit-test each menu entry
+        val touchHitH = if (isMobile) 55f else menuSpacing.toFloat()
         touch {
             end { info ->
                 if (done) return@end
@@ -130,8 +133,8 @@ class MenuScene(
                 val ty = info.local.y
                 for (i in entries.indices) {
                     val entryY = menuStartY + i * menuSpacing
-                    if (tx >= menuX - 30 && tx <= menuX + 700 &&
-                        ty >= entryY - 15 && ty <= entryY + 55) {
+                    if (tx >= menuX - 30 && tx <= menuX + 800 &&
+                        ty >= entryY - 10 && ty <= entryY + touchHitH) {
                         if (i != selectedIndex) { selectedIndex = i; refreshColors() }
                         done = true
                         sceneScope.launch { activateEntry(i); done = false }
@@ -168,8 +171,8 @@ class MenuScene(
                 val mp = capturedViews.input.mousePos
                 for (i in entries.indices) {
                     val entryY = menuStartY + i * menuSpacing
-                    if (mp.x >= menuX - 30 && mp.x <= menuX + 700 &&
-                        mp.y >= entryY - 15 && mp.y <= entryY + 55) {
+                    if (mp.x >= menuX - 30 && mp.x <= menuX + 800 &&
+                        mp.y >= entryY - 10 && mp.y <= entryY + touchHitH) {
                         if (i != selectedIndex) { selectedIndex = i; refreshColors() }
                         done = true
                         sceneScope.launch { activateEntry(i); done = false }

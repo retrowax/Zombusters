@@ -1,7 +1,7 @@
 {
   "images": [
     {
-      "filename": "logo_steel_vectors.png",
+      "filename": "zombusters_icon.png",
       "idiom": "universal",
       "platform": "ios",
       "size": "1024x1024"
@@ -13,7 +13,7 @@
           "value": "dark"
         }
       ],
-      "filename": "logo_steel_vectors 1.png",
+      "filename": "zombusters_icon_dark.png",
       "idiom": "universal",
       "platform": "ios",
       "size": "1024x1024"
@@ -25,7 +25,7 @@
           "value": "tinted"
         }
       ],
-      "filename": "logo_steel_vectors 2.png",
+      "filename": "zombusters_icon_tinted.png",
       "idiom": "universal",
       "platform": "ios",
       "size": "1024x1024"

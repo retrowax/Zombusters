@@ -42,14 +42,14 @@ class LogoScene(
         solidRect(GAME_WIDTH.toDouble(), GAME_HEIGHT.toDouble(), Colors.BLACK)
 
         val logoBitmap = if (filesResourcesPath.isNotEmpty()) {
-            try { resourcesVfs["$assetBase/menu/zombusters_logo.png"].readBitmap() }
+            try { resourcesVfs["$assetBase/menu/retrowax_logo.png"].readBitmap() }
             catch (_: Exception) { null }
         } else null
 
         val logoView = if (logoBitmap != null) {
             val scale = minOf(
-                GAME_WIDTH * 0.55 / logoBitmap.width,
-                GAME_HEIGHT * 0.4 / logoBitmap.height
+                GAME_WIDTH * 0.75 / logoBitmap.width,
+                GAME_HEIGHT * 0.6 / logoBitmap.height
             )
             image(logoBitmap) {
                 this.scale = scale
