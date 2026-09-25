@@ -266,7 +266,7 @@ compose.desktop {
 }
 
 tasks.withType<JavaExec>().configureEach {
-    if (name == "hotRunDesktop" || name == "hotDevDesktop" || name == "run") {
+    if (name == "hotRunDesktop" || name == "hotDevDesktop" || name == "run" || name == "desktopRun") {
         jvmArgs(korgeDesktopJvmArgs)
     }
 }
