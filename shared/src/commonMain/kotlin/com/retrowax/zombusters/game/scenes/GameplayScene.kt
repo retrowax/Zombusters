@@ -199,20 +199,20 @@ class GameplayScene(
         val hudHeartBmp      = tryLoadBitmap("$assetBase/hud/heart.png")
         val hudAmmoBmp       = tryLoadBitmap("$assetBase/hud/pistol_ammo.png")
 
-        val idleAnim     = playerIdleBmp?.let { SpriteAnimation(it, JADE_IDLE_FRAME_W, JADE_IDLE_FRAME_H, JADE_IDLE_COLS, 1) }
-        val shotEAnim    = shotEBmp?.let  { SpriteAnimation(it, JADE_SHOT_E_W,  JADE_SHOT_E_H,  JADE_SHOT_E_COLS,  1) }
-        val shotNEAnim   = shotNEBmp?.let { SpriteAnimation(it, JADE_SHOT_NE_W, JADE_SHOT_NE_H, JADE_SHOT_NE_COLS, 1) }
-        val shotNAnim    = shotNBmp?.let  { SpriteAnimation(it, JADE_SHOT_N_W,  JADE_SHOT_N_H,  JADE_SHOT_N_COLS,  1) }
-        val shotSEAnim   = shotSEBmp?.let { SpriteAnimation(it, JADE_SHOT_SE_W, JADE_SHOT_SE_H, JADE_SHOT_SE_COLS, 1) }
-        val shotSAnim    = shotSBmp?.let  { SpriteAnimation(it, JADE_SHOT_S_W,  JADE_SHOT_S_H,  JADE_SHOT_S_COLS,  1) }
+        val idleAnim     = playerIdleBmp?.let { SpriteAnimation(it, spriteWidth = JADE_IDLE_FRAME_W, spriteHeight = JADE_IDLE_FRAME_H, columns = JADE_IDLE_COLS, rows = 1) }
+        val shotEAnim    = shotEBmp?.let  { SpriteAnimation(it, spriteWidth = JADE_SHOT_E_W,  spriteHeight = JADE_SHOT_E_H,  columns = JADE_SHOT_E_COLS,  rows = 1) }
+        val shotNEAnim   = shotNEBmp?.let { SpriteAnimation(it, spriteWidth = JADE_SHOT_NE_W, spriteHeight = JADE_SHOT_NE_H, columns = JADE_SHOT_NE_COLS, rows = 1) }
+        val shotNAnim    = shotNBmp?.let  { SpriteAnimation(it, spriteWidth = JADE_SHOT_N_W,  spriteHeight = JADE_SHOT_N_H,  columns = JADE_SHOT_N_COLS,  rows = 1) }
+        val shotSEAnim   = shotSEBmp?.let { SpriteAnimation(it, spriteWidth = JADE_SHOT_SE_W, spriteHeight = JADE_SHOT_SE_H, columns = JADE_SHOT_SE_COLS, rows = 1) }
+        val shotSAnim    = shotSBmp?.let  { SpriteAnimation(it, spriteWidth = JADE_SHOT_S_W,  spriteHeight = JADE_SHOT_S_H,  columns = JADE_SHOT_S_COLS,  rows = 1) }
 
-        val runEAnim     = playerRunBmp?.let { SpriteAnimation(it, JADE_RUN_FRAME_W, JADE_RUN_FRAME_H, JADE_RUN_COLS, 1) }
+        val runEAnim     = playerRunBmp?.let { SpriteAnimation(it, spriteWidth = JADE_RUN_FRAME_W, spriteHeight = JADE_RUN_FRAME_H, columns = JADE_RUN_COLS, rows = 1) }
 
-        val zombieAnim   = zombieBitmap?.let { SpriteAnimation(it, ZOMBIE_FRAME_W, ZOMBIE_FRAME_H, ZOMBIE_COLS, 1) }
-        val ratIdleAnim  = ratIdleBitmap?.let { SpriteAnimation(it, RAT_FRAME_W, RAT_FRAME_H, RAT_IDLE_COLS, 1) }
-        val ratRunAnim   = ratRunBitmap?.let { SpriteAnimation(it, RAT_FRAME_W, RAT_FRAME_H, RAT_RUN_COLS, 1) }
-        val wolfIdleAnim = wolfIdleBitmap?.let { SpriteAnimation(it, WOLF_FRAME_W, WOLF_FRAME_H, WOLF_IDLE_COLS, 1) }
-        val wolfRunAnim  = wolfRunBitmap?.let { SpriteAnimation(it, WOLF_FRAME_W, WOLF_FRAME_H, WOLF_RUN_COLS, 1) }
+        val zombieAnim   = zombieBitmap?.let { SpriteAnimation(it, spriteWidth = ZOMBIE_FRAME_W, spriteHeight = ZOMBIE_FRAME_H, columns = ZOMBIE_COLS, rows = 1) }
+        val ratIdleAnim  = ratIdleBitmap?.let { SpriteAnimation(it, spriteWidth = RAT_FRAME_W, spriteHeight = RAT_FRAME_H, columns = RAT_IDLE_COLS, rows = 1) }
+        val ratRunAnim   = ratRunBitmap?.let { SpriteAnimation(it, spriteWidth = RAT_FRAME_W, spriteHeight = RAT_FRAME_H, columns = RAT_RUN_COLS, rows = 1) }
+        val wolfIdleAnim = wolfIdleBitmap?.let { SpriteAnimation(it, spriteWidth = WOLF_FRAME_W, spriteHeight = WOLF_FRAME_H, columns = WOLF_IDLE_COLS, rows = 1) }
+        val wolfRunAnim  = wolfRunBitmap?.let { SpriteAnimation(it, spriteWidth = WOLF_FRAME_W, spriteHeight = WOLF_FRAME_H, columns = WOLF_RUN_COLS, rows = 1) }
 
         // Map background
         if (mapBitmap != null) {
@@ -407,7 +407,7 @@ class GameplayScene(
                     }
                     EnemyType.MINOTAUR -> {
                         if (minotaurBitmap != null) {
-                            val anim = SpriteAnimation(minotaurBitmap, 80, 80, 6, 1)
+                            val anim = SpriteAnimation(minotaurBitmap, spriteWidth = 80, spriteHeight = 80, columns = 6, rows = 1)
                             val s = c.sprite(anim) { smoothing = false }; s.playAnimationLooped(anim, (1.0 / 10).seconds)
                         } else c.solidRect(30.0, 30.0, Colors.BROWN).also { it.x = -15.0; it.y = -15.0 }
                     }
@@ -472,7 +472,9 @@ class GameplayScene(
 
         var totalSeconds = 0f
         var isPaused = false
+        var pauseConfirmed = false
         var isGameOver = false
+        var gameOverConfirmed = false
         var isStageClear = false
         var stageClearTimer = 0f
         var debugF2 = false
@@ -575,7 +577,8 @@ class GameplayScene(
                     gameOverMenuIndex = (gameOverMenuIndex + 1) % gameOverEntries.size
                     refreshGameOverColors()
                 }
-                if (gameInput.confirmJustPressed || ks.justPressed(Key.RETURN) || ks.justPressed(Key.SPACE)) {
+                if (!gameOverConfirmed && (gameInput.confirmJustPressed || ks.justPressed(Key.RETURN) || ks.justPressed(Key.SPACE))) {
+                    gameOverConfirmed = true
                     sceneScope.launch {
                         when (gameOverMenuIndex) {
                             0 -> sceneContainer.changeTo {
@@ -611,11 +614,13 @@ class GameplayScene(
                     pauseOverlay.visible = false; pauseLabel.visible = false
                     pauseEntryViews.forEach { it.visible = false }
                 }
-                if (gameInput.confirmJustPressed || ks.justPressed(Key.RETURN) || ks.justPressed(Key.SPACE)) {
+                if (!pauseConfirmed && (gameInput.confirmJustPressed || ks.justPressed(Key.RETURN) || ks.justPressed(Key.SPACE))) {
+                    pauseConfirmed = true
                     sceneScope.launch {
                         when (pauseMenuIndex) {
                             0 -> {
                                 isPaused = false
+                                pauseConfirmed = false
                                 dualStick.resetAll()
                                 pauseOverlay.visible = false; pauseLabel.visible = false
                                 pauseEntryViews.forEach { it.visible = false }
@@ -1019,32 +1024,64 @@ class GameplayScene(
 
     private suspend fun tryLoadBitmap(path: String): Bitmap? = try { resourcesVfs[path].readBitmap() } catch (_: Throwable) { null }
 
-    private suspend fun loadFurnitureBitmaps(): Map<Pair<FurnitureType, FurnitureOrientation?>, Bitmap?> {
+    private data class FurnitureBitmaps(val main: Bitmap?, val shadow: Bitmap?, val shadowOffX: Double, val shadowOffY: Double)
+
+    private suspend fun loadFurnitureBitmaps(): Map<Pair<FurnitureType, FurnitureOrientation?>, FurnitureBitmaps> {
         val base = "$assetBase/furniture"
+        suspend fun load(name: String) = tryLoadBitmap("$base/$name")
         return mapOf(
-            Pair(FurnitureType.ARBOL, null)                             to tryLoadBitmap("$base/arbol.png"),
-            Pair(FurnitureType.BASURA, null)                            to tryLoadBitmap("$base/basura.png"),
-            Pair(FurnitureType.COCHE_ARDIENDO, null)                    to tryLoadBitmap("$base/coche_ardiendo.png"),
-            Pair(FurnitureType.PUENTE, null)                            to tryLoadBitmap("$base/puente.png"),
-            Pair(FurnitureType.BANCO, FurnitureOrientation.SOUTH_EAST)  to tryLoadBitmap("$base/banco_se.png"),
-            Pair(FurnitureType.BANCO, FurnitureOrientation.SOUTH_WEST)  to tryLoadBitmap("$base/banco_sw.png"),
-            Pair(FurnitureType.BANCO, FurnitureOrientation.NORTH_EAST)  to tryLoadBitmap("$base/banco_se.png"),
-            Pair(FurnitureType.BANCO, FurnitureOrientation.NORTH_WEST)  to tryLoadBitmap("$base/banco_sw.png"),
-            Pair(FurnitureType.FAROLA, FurnitureOrientation.NORTH_EAST) to tryLoadBitmap("$base/farola_ne.png"),
-            Pair(FurnitureType.FAROLA, FurnitureOrientation.NORTH_WEST) to tryLoadBitmap("$base/farola_nw.png"),
-            Pair(FurnitureType.FAROLA, FurnitureOrientation.SOUTH_EAST) to tryLoadBitmap("$base/farola_se.png"),
-            Pair(FurnitureType.FAROLA, FurnitureOrientation.SOUTH_WEST) to tryLoadBitmap("$base/farola_sw.png"),
+            Pair(FurnitureType.ARBOL, null) to FurnitureBitmaps(
+                load("arbol.png"), load("arbol_shadow.png"), 45.0, 138.0),
+            Pair(FurnitureType.BASURA, null) to FurnitureBitmaps(
+                load("basura.png"), load("basura_shadow.png"), 2.0, 26.0),
+            Pair(FurnitureType.COCHE_ARDIENDO, null) to FurnitureBitmaps(
+                load("coche_ardiendo.png"), null, 0.0, 0.0),
+            Pair(FurnitureType.PUENTE, null) to FurnitureBitmaps(
+                load("puente.png"), null, 0.0, 0.0),
+            Pair(FurnitureType.BANCO, FurnitureOrientation.SOUTH_EAST) to FurnitureBitmaps(
+                load("banco_se.png"), load("banco_se_shadow.png"), 6.0, 17.0),
+            Pair(FurnitureType.BANCO, FurnitureOrientation.SOUTH_WEST) to FurnitureBitmaps(
+                load("banco_sw.png"), load("banco_sw_shadow.png"), 3.0, 18.0),
+            Pair(FurnitureType.BANCO, FurnitureOrientation.NORTH_EAST) to FurnitureBitmaps(
+                load("banco_se.png"), load("banco_se_shadow.png"), 0.0, 0.0),
+            Pair(FurnitureType.BANCO, FurnitureOrientation.NORTH_WEST) to FurnitureBitmaps(
+                load("banco_sw.png"), load("banco_sw_shadow.png"), 0.0, 0.0),
+            Pair(FurnitureType.FAROLA, FurnitureOrientation.NORTH_EAST) to FurnitureBitmaps(
+                load("farola_ne.png"), load("farola_ne_shadow.png"), 2.0, 146.0),
+            Pair(FurnitureType.FAROLA, FurnitureOrientation.NORTH_WEST) to FurnitureBitmaps(
+                load("farola_nw.png"), load("farola_nw_shadow.png"), 44.0, 146.0),
+            Pair(FurnitureType.FAROLA, FurnitureOrientation.SOUTH_EAST) to FurnitureBitmaps(
+                load("farola_se.png"), load("farola_se_shadow.png"), 2.0, 122.0),
+            Pair(FurnitureType.FAROLA, FurnitureOrientation.SOUTH_WEST) to FurnitureBitmaps(
+                load("farola_sw.png"), load("farola_sw_shadow.png"), 44.0, 122.0),
         )
     }
 
-    private fun SContainer.buildFurnitureViews(furnitures: List<Furniture>, bitmaps: Map<Pair<FurnitureType, FurnitureOrientation?>, Bitmap?>) {
+    private fun SContainer.buildFurnitureViews(furnitures: List<Furniture>, bitmaps: Map<Pair<FurnitureType, FurnitureOrientation?>, FurnitureBitmaps>) {
         for (f in furnitures) {
-            val bmp = bitmaps[Pair(f.type, f.orientation)] ?: bitmaps[Pair(f.type, null)]
-            if (bmp != null) {
+            val entry = bitmaps[Pair(f.type, f.orientation)] ?: bitmaps[Pair(f.type, null)] ?: continue
+            val bmp = entry.main ?: continue
+            val fx = f.positionX.toDouble()
+            val fy = f.positionY.toDouble()
+            val zBase = fy + bmp.height
+
+            // Shadow drawn first (behind main sprite)
+            if (entry.shadow != null) {
+                image(entry.shadow) {
+                    x = fx + entry.shadowOffX; y = fy + entry.shadowOffY
+                    alpha = 60.0 / 255.0; zIndex = zBase - 0.1; smoothing = false
+                }
+            }
+
+            // Main sprite — animated for COCHE_ARDIENDO, static for all others
+            if (f.type == FurnitureType.COCHE_ARDIENDO) {
+                val anim = SpriteAnimation(bmp, spriteWidth = 99, spriteHeight = 60, columns = 3, rows = 1)
+                sprite(anim) {
+                    x = fx; y = fy; zIndex = zBase; smoothing = false
+                }.playAnimationLooped(anim, (1.0 / 10).seconds)
+            } else {
                 image(bmp) {
-                    x = f.positionX.toDouble(); y = f.positionY.toDouble()
-                    zIndex = (f.positionY + bmp.height).toDouble()
-                    smoothing = false
+                    x = fx; y = fy; zIndex = zBase; smoothing = false
                 }
             }
         }
