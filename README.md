@@ -69,7 +69,7 @@ If you want to build this project, this is what you are going to need:
 A bit of history
 ----------------
 
-[![Zombusters Trailer](https://img.youtube.com/vi/mYXBIZX9VgQ/0.jpg)](https://www.youtube.com/watch?v=mYXBIZX9VgQ)
+[![Zombusters Gameplay](https://img.youtube.com/vi/Mh_W8CyWntE/0.jpg)](https://www.youtube.com/watch?v=Mh_W8CyWntE)
 
 This game started its development by the end of 2010 as a personal project that quickly escalated to a commercial project. It was published for the Xbox360 on November 5th of 2011 on XBLIG. There were a Windows Phone port released later that year and finally the PC for the Windows Store and Desura on July 2014. After that the game was something like abandoned until now, it's been almost 10 years of the first release on Xbox360 so we though that would be cool to revive this project and make it open-source.
 
